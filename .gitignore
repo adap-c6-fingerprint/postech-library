@@ -1,0 +1,18 @@
+# macOS
+.DS_Store
+
+# Xcode user settings
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# Build output and Swift Package Manager cache
+DerivedData/
+build/
+.build/
+
+# Private career notes
+.career-log/
+
+# Keep project files, shared schemes, and Package.resolved tracked.
