@@ -14,9 +14,25 @@
 		000000000000000000000120 /* 2026-C6-M06-Fingerprint-library.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "2026-C6-M06-Fingerprint-library.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		1D9CC49B3080B000004505A9 /* Exceptions for placeholder files in "2026-C6-M06-Fingerprint-library" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Clients/.gitkeep,
+				Domain/.gitkeep,
+				Features/.gitkeep,
+				Shared/.gitkeep,
+			);
+			target = 000000000000000100000000 /* 2026-C6-M06-Fingerprint-library */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		000000000000000000000010 /* 2026-C6-M06-Fingerprint-library */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				1D9CC49B3080B000004505A9 /* Exceptions for placeholder files in "2026-C6-M06-Fingerprint-library" target */,
+			);
 			path = "2026-C6-M06-Fingerprint-library";
 			sourceTree = "<group>";
 		};
