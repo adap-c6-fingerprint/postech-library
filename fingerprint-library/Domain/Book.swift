@@ -6,3 +6,17 @@
 //
 
 import Foundation
+
+struct Book: Equatable, Identifiable, Sendable {
+    let isbn: String
+    let title: String
+    let author: String
+    let publisher: String?
+    let publicationYear: String?
+    let description: String?
+    let imageURL: URL?
+    
+    var id: String {
+        isbn
+    }
+}
