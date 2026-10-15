@@ -14,25 +14,9 @@
 		000000000000000000000120 /* fingerprint-library.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "fingerprint-library.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1D9CC49B3080B000004505A9 /* Exceptions for "fingerprint-library" folder in "fingerprint-library" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Clients/.gitkeep,
-				Domain/.gitkeep,
-				Features/.gitkeep,
-				Shared/.gitkeep,
-			);
-			target = 000000000000000100000000 /* fingerprint-library */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		000000000000000000000010 /* fingerprint-library */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				1D9CC49B3080B000004505A9 /* Exceptions for "fingerprint-library" folder in "fingerprint-library" target */,
-			);
 			path = "fingerprint-library";
 			sourceTree = "<group>";
 		};
