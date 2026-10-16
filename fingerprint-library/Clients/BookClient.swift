@@ -99,7 +99,7 @@ extension BookClient: DependencyKey {
         enum CodingKeys: String, CodingKey {
             case title = "titleInfo"
             case author = "authorInfo"
-            case publisher = "pub(nfo"
+            case publisher = "pubInfo"
             case publicationYear = "pubYearInfo"
             case isbn
             case controlNumber = "controlNo"
