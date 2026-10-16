@@ -15,4 +15,7 @@ build/
 # Private career notes
 .career-log/
 
+# C5 includes Apple sample data licensed only for internal evaluation.
+fingerprint-library/Resources/IndoorMaps/C5/
+
 # Keep project files, shared schemes, and Package.resolved tracked.
