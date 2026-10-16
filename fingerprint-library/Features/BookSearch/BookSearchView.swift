@@ -19,12 +19,6 @@ struct BookSearchView: View {
                 } else if let message = store.errorMessage {
                     Text(message)
                         .foregroundStyle(.red)
-                } else if !store.hasSearched {
-                    Text("검색할 책 이름을 입력해 주세요.")
-                        .foregroundStyle(.secondary)
-                } else if store.books.isEmpty {
-                    Text("검색 결과가 없어요.")
-                        .foregroundStyle(.secondary)
                 } else {
                     ForEach(store.books) { book in
                         VStack(alignment: .leading, spacing: 6) {
@@ -47,25 +41,14 @@ struct BookSearchView: View {
             .navigationTitle("책 검색")
             .searchable(
                 text: Binding(
-                    get: {
-                        return store.query
-                    },
-                    set: { newQuery in
-                        store.send(.queryChanged(newQuery))
-                    }
+                    get: { store.query },
+                    set: { store.send(.queryChanged($0)) }
                 ),
+                placement: .navigationBarDrawer(displayMode: .always),
                 prompt: "책 이름을 입력하세요"
             )
             .onSubmit(of: .search) {
                 store.send(.searchButtonTapped)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("검색") {
-                        store.send(.searchButtonTapped)
-                    }
-                    .disabled(store.isLoading)
-                }
             }
         }
     }

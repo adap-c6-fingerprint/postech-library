@@ -97,12 +97,12 @@ extension BookClient: DependencyKey {
         let controlNumber: String
 
         enum CodingKeys: String, CodingKey {
-            case title = "title_info"
-            case author = "author_info"
-            case publisher = "pub_info"
-            case publicationYear = "pub_year_info"
+            case title = "titleInfo"
+            case author = "authorInfo"
+            case publisher = "pub(nfo"
+            case publicationYear = "pubYearInfo"
             case isbn
-            case controlNumber = "control_no"
+            case controlNumber = "controlNo"
         }
     }
 
