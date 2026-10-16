@@ -1,29 +1,19 @@
 import SwiftUI
-import Playgrounds
+import ComposableArchitecture
 
 struct ContentView: View {
-    @State private var searchText = ""
-    
+
+    @State private var store = Store(
+        initialState: BookSearchFeature.State()
+    ) {
+        BookSearchFeature()
+    }
+
     var body: some View {
-        NavigationStack {
-            List {
-                Text("여기에 책 뜰 예정")
-                    .font(.largeTitle)
-            }
-            .navigationTitle("핑프")
-            .searchable(
-                text: $searchText,
-                placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "책 검색"
-            )
-        }
+        BookSearchView(store: store)
     }
 }
 
 #Preview {
     ContentView()
-}
-
-#Playground {
-    _ = 1 + 2
 }
