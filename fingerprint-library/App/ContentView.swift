@@ -7,13 +7,14 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                Text("검색 결과")
+                Text("여기에 책 뜰 예정")
+                    .font(.largeTitle)
             }
             .navigationTitle("핑프")
             .searchable(
                 text: $searchText,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "책 검색 해보삼"
+                prompt: "책 검색"
             )
         }
     }
