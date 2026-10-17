@@ -1,22 +1,22 @@
 import Foundation
 
 /// IMDF 전송 형식과 MapKit에 의존하지 않는 지도 모델.
-nonisolated struct IndoorMap: Sendable {
+nonisolated struct IndoorMap: Equatable, Sendable {
     let formatVersion: String
-    let venue: IndoorMapFeature
+    let venue: IndoorMapElement
     let floors: [IndoorMapFloor]
-    let features: [IndoorMapFeature]
+    let features: [IndoorMapElement]
     let diagnostics: [IndoorMapDiagnostic]
 }
 
-nonisolated struct IndoorMapFloor: Identifiable, Sendable {
+nonisolated struct IndoorMapFloor: Identifiable, Equatable, Sendable {
     let id: UUID
     let ordinal: Int
     let name: String
     let geometry: IndoorMapGeometry
 }
 
-nonisolated struct IndoorMapFeature: Identifiable, Sendable {
+nonisolated struct IndoorMapElement: Identifiable, Equatable, Sendable {
     enum Kind: String, Hashable, Sendable {
         case venue, footprint, unit, fixture, opening, amenity
     }

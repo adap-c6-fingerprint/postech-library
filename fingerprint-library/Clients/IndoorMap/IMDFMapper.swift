@@ -64,8 +64,8 @@ nonisolated struct IMDFMapper {
             throw invalid("venue", "하나의 venue가 필요합니다.")
         }
 
-        var features: [IndoorMapFeature] = []
-        for kind in [IndoorMapFeature.Kind.footprint, .unit, .fixture, .opening, .amenity] {
+        var features: [IndoorMapElement] = []
+        for kind in [IndoorMapElement.Kind.footprint, .unit, .fixture, .opening, .amenity] {
             for feature in try required(kind.rawValue, in: collections) {
                 let floorID: UUID?
                 if kind == .amenity {
@@ -119,9 +119,9 @@ nonisolated struct IMDFMapper {
     }
 
     private func map(
-        _ feature: IMDFFeatureDTO, kind: IndoorMapFeature.Kind, floorID: UUID? = nil
-    ) throws -> IndoorMapFeature {
-        IndoorMapFeature(
+        _ feature: IMDFFeatureDTO, kind: IndoorMapElement.Kind, floorID: UUID? = nil
+    ) throws -> IndoorMapElement {
+        IndoorMapElement(
             sourceID: feature.id, kind: kind, floorID: floorID,
             category: feature.properties.category, name: name(feature.properties.name),
             geometry: try geometry(feature.geometry, in: kind.rawValue)

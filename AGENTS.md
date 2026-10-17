@@ -23,3 +23,22 @@
 - M/L/XL에서는 AI가 `COMMENT`로 리뷰하며 `APPROVE`하거나 merge하지 않는다. 권한 있는 사람의 코드리뷰·승인과 사람이 수행하는 merge가 필요하다.
 - 리뷰 결과는 문서 7절의 형식을 사용한다. 검토한 head SHA, 비교 대상 branch/base SHA, 영향도, 확인하지 못한 사항, 검증 근거와 남은 조건을 명시한다.
 - 리뷰 대상이 아직 지정되지 않은 경우 임의의 변경을 리뷰하거나 구현을 시작하지 않는다.
+
+# Project structure
+
+Team agreement for this repository:
+
+| Folder | Responsibility |
+| --- | --- |
+| App | App entry point, Root Store, app-wide navigation |
+| Features | Screens and user-action features |
+| Domain | Pure models and rules, such as Book, Shelf, Route |
+| Clients | External system boundaries: API, location, AR, camera, file loading |
+| Shared | UI and utilities actually reused by at least two Features |
+| Resources | Assets, localization, JSON fixtures |
+
+- Keep SwiftUI, MapKit, CoreLocation and TCA out of Domain.
+- Put map presentation and map interactions in Features/IndoorMap.
+- Do not define another developer's shared Book contract before agreeing on it.
+- Keep the locally imported C5 Apple sample data out of Git. See Docs/IndoorMapData.md.
+- Follow the user-provided PR_REVIEW_RULES.md when reviewing and publishing changes.
