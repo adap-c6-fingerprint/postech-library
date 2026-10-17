@@ -54,6 +54,20 @@ struct BookSearchView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
+        .safeAreaInset(edge: .bottom) {
+            if store.hasSearched && !store.isLoading
+                && store.errorMessage == nil && !store.books.isEmpty {
+                Button(action: {}) {
+                    Label("책바구니 바로가기", systemImage: "basket")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(true)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(.bar)
+            }
+        }
         .navigationTitle(
             store.hasSearched ? "검색 결과" : "책 검색"
         )

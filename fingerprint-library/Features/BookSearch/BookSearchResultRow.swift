@@ -31,6 +31,8 @@ struct BookSearchResultRow: View {
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
+
+                actionButtons
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -41,6 +43,54 @@ struct BookSearchResultRow: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(Color.gray.opacity(0.15))
         }
+    }
+
+    private var actionButtons: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 6) {
+                favoriteButton
+                basketButton
+                directionsButton
+            }
+            .fixedSize(horizontal: true, vertical: false)
+
+            // 큰 글자나 좁은 화면에서는 버튼을 세로로 배치한다.
+            VStack(alignment: .trailing, spacing: 6) {
+                favoriteButton
+                basketButton
+                directionsButton
+            }
+        }
+        .font(.caption)
+        .controlSize(.small)
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        // 현재는 버튼 위치만 구성하며, 각 동작을 연결할 때 활성화한다.
+        .disabled(true)
+    }
+
+    private var favoriteButton: some View {
+        Button(action: {}) {
+            Image(systemName: "heart")
+                .frame(minWidth: 28, minHeight: 32)
+        }
+        .buttonStyle(.bordered)
+        .accessibilityLabel("찜")
+    }
+
+    private var basketButton: some View {
+        Button(action: {}) {
+            Text("책바구니 담기")
+                .frame(minHeight: 32)
+        }
+        .buttonStyle(.borderedProminent)
+    }
+
+    private var directionsButton: some View {
+        Button(action: {}) {
+            Text("길안내 받기")
+                .frame(minHeight: 32)
+        }
+        .buttonStyle(.bordered)
     }
 
     private var coverImage: some View {
