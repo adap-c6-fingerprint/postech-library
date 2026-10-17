@@ -18,11 +18,11 @@ extension BookClient: DependencyKey {
             guard let apiKey = await AppConfiguration.nationalLibraryAPIKey else {
                 throw BookClientError.missingAPIKey
             }
-
+            
             var components = URLComponents(
                 string: "https://www.nl.go.kr/NL/search/openApi/search.do"
-                )
-
+            )
+            
             components?.queryItems = [
                 URLQueryItem(name: "key", value: apiKey),
                 URLQueryItem(name: "apiType", value: "json"),
@@ -32,25 +32,25 @@ extension BookClient: DependencyKey {
                 URLQueryItem(name: "pageSize", value: "20"),
                 URLQueryItem(name: "category", value: "도서"),
             ]
-
+            
             guard let url = components?.url else {
                 throw BookClientError.invalidURL
             }
-
+            
             let (data, response) = try await URLSession.shared.data(from: url)
-
+            
             guard
                 let httpResponse = response as? HTTPURLResponse,
                 200..<300 ~= httpResponse.statusCode
-            else {
+                    else {
                 throw BookClientError.invalidResponse
             }
-
+            
             let decodedResponse = try JSONDecoder().decode(
                 LibraryResponse.self,
                 from: data
             )
-
+            
             return decodedResponse.result.map { item in
                 Book(
                     isbn: item.isbn ?? item.controlNumber,
@@ -59,35 +59,47 @@ extension BookClient: DependencyKey {
                     publisher: item.publisher,
                     publicationYear: item.publicationYear,
                     description: nil,
-                    imageURL: nil
+                    imageURL: item.imageURLString.flatMap { value -> URL? in
+                        let path = value.trimmingCharacters(in: .whitespacesAndNewlines)
+                        guard
+                            !path.isEmpty,
+                            let baseURL = URL(string: "https://cover.nl.go.kr/")
+                                else {
+                            return nil
+                        }
+                        return URL(
+                            string: path,
+                            relativeTo: baseURL
+                        )?.absoluteURL
+                    }
                 )
             }
         }
     )
-
+    
     static let testValue = BookClient(
         search: { _ in
             return []
         }
     )
-
+    
     private struct LibraryResponse: Decodable {
         let result: [LibraryBook]
-
+        
         enum CodingKeys: String, CodingKey {
             case result
         }
-
+        
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-
+            
             result = try container.decodeIfPresent(
                 [LibraryBook].self,
                 forKey: .result
             ) ?? []
         }
     }
-
+    
     private struct LibraryBook: Decodable {
         let title: String
         let author: String?
@@ -95,7 +107,8 @@ extension BookClient: DependencyKey {
         let publicationYear: String?
         let isbn: String?
         let controlNumber: String
-
+        let imageURLString: String?
+        
         enum CodingKeys: String, CodingKey {
             case title = "titleInfo"
             case author = "authorInfo"
@@ -103,22 +116,23 @@ extension BookClient: DependencyKey {
             case publicationYear = "pubYearInfo"
             case isbn
             case controlNumber = "controlNo"
+            case imageURLString = "imageUrl"
         }
     }
-
+    
     private enum BookClientError: LocalizedError {
         case missingAPIKey
         case invalidURL
         case invalidResponse
-
+        
         var errorDescription: String? {
             switch self {
             case .missingAPIKey:
                 return "API 키가 없습니다."
-
+                
             case .invalidURL:
                 return "검색 주소를 생성하지 못했습니다."
-
+                
             case .invalidResponse:
                 return "서버에서 올바르지 않은 응답을 받았습니다."
             }
@@ -126,10 +140,10 @@ extension BookClient: DependencyKey {
     }
 }
 
-    extension DependencyValues {
-        var bookClient: BookClient {
-            get { self[BookClient.self] }
-            set { self[BookClient.self] = newValue }
-        }
-
+extension DependencyValues {
+    var bookClient: BookClient {
+        get { self[BookClient.self] }
+        set { self[BookClient.self] = newValue }
+    }
+    
 }
