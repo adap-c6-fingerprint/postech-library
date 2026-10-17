@@ -12,6 +12,9 @@ DerivedData/
 build/
 .build/
 
+# Local API keys
+Secrets.xcconfig
+
 # Private career notes
 .career-log/
 

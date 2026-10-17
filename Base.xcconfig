@@ -1,0 +1,8 @@
+// Shared defaults. Keep real API keys in the local Secrets.xcconfig file.
+NATIONAL_LIBRARY_API_KEY =
+YES24_API_KEY =
+DATA4LIBRARY_API_KEY =
+PRIMO_API_KEY =
+
+// Load local keys when the file exists.
+#include? "Secrets.xcconfig"
