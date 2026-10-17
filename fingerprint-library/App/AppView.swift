@@ -5,4 +5,15 @@
 //  Created by Youngmin Cho on 10/15/26.
 //
 
-import Foundation
+import ComposableArchitecture
+import SwiftUI
+
+struct AppView: View {
+    let store: StoreOf<AppFeature>
+
+    var body: some View {
+        NavigationStack {
+            IndoorMapView(store: store.scope(state: \.indoorMap, action: \.indoorMap))
+        }
+    }
+}
