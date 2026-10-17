@@ -81,6 +81,13 @@ struct BookSearchFeature {
                 }
                 
             case let .searchSucceeded(books):
+                // 화면 ID가 모두 다른지 확인
+                assert(Set(books.map(\.id)).count == books.count)
+                
+                // 제어번호가 있는 항목끼리 중복되는지 확인
+                let controlNumber = books.compactMap(\.controlNumber)
+                assert(Set(controlNumber).count == controlNumber.count)
+                
                 state.isLoading = false
                 state.books = books
                 return .none
