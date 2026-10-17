@@ -8,6 +8,10 @@ struct IndoorMapFeature {
         var map: IndoorMap?
         var isLoading = false
         var loadError: String?
+        var navigation: IndoorNavigationData?
+        var navigationLoadError: String?
+        var isLoadingNavigation = false
+        var navigationRequestID = 0
         var selectedFloorID: UUID?
         var selectedFeatureID: IndoorMapElement.ID?
         var manualPosition: IndoorPosition?
@@ -42,6 +46,9 @@ struct IndoorMapFeature {
         case retryTapped
         case mapLoaded(IndoorMap)
         case mapFailed(String)
+        case retryNavigationTapped
+        case navigationLoaded(requestID: Int, IndoorNavigationData)
+        case navigationFailed(requestID: Int, String)
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(IndoorLocationEvent)
@@ -56,17 +63,19 @@ struct IndoorMapFeature {
     }
 
     @Dependency(\.indoorMapClient) var mapClient
+    @Dependency(\.indoorNavigationClient) var navigationClient
     @Dependency(\.indoorLocationClient) var locationClient
     @Dependency(\.date.now) var now
 
-    nonisolated private enum CancelID: Hashable, Sendable { case map, location }
+    nonisolated private enum CancelID: Hashable, Sendable { case map, navigation, location }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
                 state.isActive = true
-                return .merge(loadMap(&state), locationEvents())
+                let loading = state.map == nil || state.loadError != nil ? loadMap(&state) : loadNavigation(&state)
+                return .merge(loading, locationEvents())
 
             case .retryTapped:
                 return loadMap(&state)
@@ -80,11 +89,29 @@ struct IndoorMapFeature {
                 state.selectedFloorID = floor?.id
                 state.selectedFeatureID = nil
                 if let floor { state.requestCamera(.floor(floor.id)) }
-                return .none
+                state.navigation = nil
+                state.isLoadingNavigation = false
+                return loadNavigation(&state)
 
             case .mapFailed(let message):
                 state.isLoading = false
                 state.loadError = message
+                return .none
+
+            case .retryNavigationTapped:
+                return loadNavigation(&state)
+
+            case .navigationLoaded(let requestID, let data):
+                guard requestID == state.navigationRequestID else { return .none }
+                state.isLoadingNavigation = false
+                state.navigationLoadError = nil
+                state.navigation = data
+                return .none
+
+            case .navigationFailed(let requestID, let message):
+                guard requestID == state.navigationRequestID else { return .none }
+                state.isLoadingNavigation = false
+                state.navigationLoadError = message
                 return .none
 
             case .sceneActiveChanged(let active):
@@ -94,7 +121,11 @@ struct IndoorMapFeature {
 
             case .disappeared:
                 state.isActive = false
-                return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.map))
+                if state.isLoadingNavigation {
+                    state.isLoadingNavigation = false
+                    state.navigationRequestID += 1
+                }
+                return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.map), .cancel(id: CancelID.navigation))
 
             case .locationEvent(.authorization(let authorization)):
                 state.authorization = authorization
@@ -230,6 +261,25 @@ struct IndoorMapFeature {
                 await send(.locationEvent(event))
             }
         }.cancellable(id: CancelID.location, cancelInFlight: true)
+    }
+
+    private func loadNavigation(_ state: inout State) -> Effect<Action> {
+        guard let map = state.map, state.navigation == nil, !state.isLoadingNavigation else { return .none }
+        state.isLoadingNavigation = true
+        state.navigationLoadError = nil
+        state.navigationRequestID += 1
+        let requestID = state.navigationRequestID
+        return .run { send in
+            do {
+                let data = try await navigationClient.load(map)
+                try Task.checkCancellation()
+                await send(.navigationLoaded(requestID: requestID, data))
+            } catch is CancellationError { }
+            catch {
+                guard !Task.isCancelled else { return }
+                await send(.navigationFailed(requestID: requestID, error.localizedDescription))
+            }
+        }.cancellable(id: CancelID.navigation, cancelInFlight: true)
     }
 
     private func recenter(_ state: inout State, position: IndoorPosition) {
