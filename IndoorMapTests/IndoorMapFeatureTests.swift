@@ -31,6 +31,12 @@ struct IndoorMapFeatureTests {
             $0.map = map
             $0.selectedFloorID = IndoorMapTestData.groundID
             $0.cameraRequest = .init(id: 1, target: .floor(IndoorMapTestData.groundID))
+            $0.isLoadingNavigation = true
+            $0.navigationRequestID = 1
+        }
+        await store.receive(\.navigationFailed) {
+            $0.isLoadingNavigation = false
+            $0.navigationLoadError = IndoorMapLoadError.missingResource("test routing").localizedDescription
         }
         await store.finish()
     }
@@ -157,6 +163,12 @@ struct IndoorMapFeatureTests {
             $0.isLoading = false
             $0.selectedFloorID = IndoorMapTestData.groundID
             $0.cameraRequest = .init(id: 1, target: .floor(IndoorMapTestData.groundID))
+            $0.isLoadingNavigation = true
+            $0.navigationRequestID = 1
+        }
+        await store.receive(\.navigationFailed) {
+            $0.isLoadingNavigation = false
+            $0.navigationLoadError = IndoorMapLoadError.missingResource("test routing").localizedDescription
         }
         continuation.yield(.authorization(.denied))
         await store.receive(\.locationEvent) { $0.authorization = .denied }
@@ -172,7 +184,14 @@ struct IndoorMapFeatureTests {
         let store = TestStore(initialState: initial) { IndoorMapFeature() } withDependencies: {
             $0.indoorLocationClient.requestPermission = { await probe.request() }
         }
-        await store.send(.task)
+        await store.send(.task) {
+            $0.isLoadingNavigation = true
+            $0.navigationRequestID = 1
+        }
+        await store.receive(\.navigationFailed) {
+            $0.isLoadingNavigation = false
+            $0.navigationLoadError = IndoorMapLoadError.missingResource("test routing").localizedDescription
+        }
         await store.finish()
         #expect(await probe.requests == 0)
         let task = await store.send(.currentLocationTapped) { $0.wantsRecenter = true }

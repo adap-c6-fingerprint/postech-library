@@ -7,6 +7,15 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
     static let shared = LiveIndoorLocationProvider()
     private let manager = CLLocationManager()
     private var subscribers: [UUID: AsyncStream<IndoorLocationEvent>.Continuation] = [:]
+    private lazy var authorizationMonitor = IndoorLocationAuthorizationMonitor { [weak self] value in
+        guard let self else { return }
+        self.publish(.authorization(value))
+        if value.isAuthorized && !self.subscribers.isEmpty {
+            self.manager.startUpdatingLocation()
+        } else {
+            self.manager.stopUpdatingLocation()
+        }
+    }
 
     private override init() {
         super.init()
@@ -22,6 +31,7 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
             of: IndoorLocationEvent.self, bufferingPolicy: .bufferingNewest(10)
         )
         subscribers[id] = continuation
+        let authorization = authorizationMonitor.authorization
         continuation.yield(.authorization(authorization))
         continuation.onTermination = { [weak self] _ in
             guard let self else { return }
@@ -39,25 +49,9 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
         manager.requestWhenInUseAuthorization()
     }
 
-    private var authorization: IndoorLocationAuthorization {
-        guard CLLocationManager.locationServicesEnabled() else { return .servicesDisabled }
-        switch manager.authorizationStatus {
-        case .notDetermined: return .notDetermined
-        case .denied: return .denied
-        case .restricted: return .restricted
-        case .authorizedWhenInUse, .authorizedAlways:
-            return .authorized(precise: manager.accuracyAuthorization == .fullAccuracy)
-        @unknown default: return .restricted
-        }
-    }
-
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        publish(.authorization(authorization))
-        if authorization.isAuthorized && !subscribers.isEmpty {
-            manager.startUpdatingLocation()
-        } else {
-            manager.stopUpdatingLocation()
-        }
+        authorizationMonitor.update(status: manager.authorizationStatus,
+                                    precise: manager.accuracyAuthorization == .fullAccuracy)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -71,7 +65,9 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
-        if (error as? CLError)?.code == .denied { publish(.authorization(authorization)) }
+        if (error as? CLError)?.code == .denied {
+            authorizationMonitor.update(status: .denied, precise: false)
+        }
         else { publish(.unavailable("현재 위치를 확인할 수 없어요. 잠시 후 다시 시도하거나 출발점을 지정해주세요.")) }
     }
 
