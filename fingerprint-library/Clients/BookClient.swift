@@ -130,11 +130,29 @@ extension BookClient: DependencyKey {
         
         enum CodingKeys: String, CodingKey {
             case result
+            case errorCode
+            case errorMsg
         }
         
         init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             
+            let errorCode = BookClient.nonEmpty(
+                try container.decodeIfPresent(String.self, forKey: .errorCode)
+            )
+            let errorMessage = BookClient.nonEmpty(
+                try container.decodeIfPresent(String.self, forKey: .errorMsg)
+            )
+            
+            // API 오류가 있으면 검색 결과를 처리하기 전에 중단
+            if errorCode != nil || errorMessage != nil {
+                throw BookClientError.apiError(
+                    code: errorCode,
+                    message: errorMessage ?? "알 수 없는 API 오류"
+                )
+            }
+            
+            // api 오류가 없는 응답의 검색 결과 처리
             result = try container.decodeIfPresent(
                 [LibraryBook].self,
                 forKey: .result
@@ -166,6 +184,7 @@ extension BookClient: DependencyKey {
         case missingAPIKey
         case invalidURL
         case invalidResponse
+        case apiError(code: String?, message: String)
         
         var errorDescription: String? {
             switch self {
@@ -177,6 +196,9 @@ extension BookClient: DependencyKey {
                 
             case .invalidResponse:
                 return "서버에서 올바르지 않은 응답을 받았습니다."
+                
+            case .apiError:
+                return "도서 검색 서비스를 이용할 수 없습니다. 잠시 후 다시 시도해 주세요."
             }
         }
     }
