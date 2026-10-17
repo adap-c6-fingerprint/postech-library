@@ -10,6 +10,16 @@ import ComposableArchitecture
 
 struct BookClient: Sendable {
     var search: @Sendable (_ query: String) async throws -> [Book]
+    
+    private nonisolated static func nonEmpty(_ value: String?) -> String? {
+        guard let text = value?.trimmingCharacters(
+            in: .whitespacesAndNewlines
+        ), !text.isEmpty else {
+            return nil
+        }
+        
+        return text
+    }
 }
 
 extension BookClient: DependencyKey {
@@ -51,9 +61,41 @@ extension BookClient: DependencyKey {
                 from: data
             )
             
-            return decodedResponse.result.map { item in
-                Book(
-                    isbn: item.isbn ?? item.controlNumber,
+            var seen = Set<[String?]>()
+            
+            return decodedResponse.result.compactMap { item -> Book? in
+                let isbn = BookClient.nonEmpty(item.isbn)
+                let controlNumber = BookClient.nonEmpty(item.controlNumber)
+                
+                // 중복인지 판단할 기준
+                let key: [String?]
+                
+                if let controlNumber {
+                    key = ["control", controlNumber]
+                } else {
+                    key = [
+                        "metadata",
+                        isbn,
+                        BookClient.nonEmpty(item.title),
+                        BookClient.nonEmpty(item.author),
+                        BookClient.nonEmpty(item.publisher),
+                        BookClient.nonEmpty(item.publicationYear)
+                    ]
+                }
+                
+                // 이미 나온 레코드는 제외
+                guard seen.insert(key).inserted else {
+                    return nil
+                }
+                
+                // 제어번호가 없으면 생성 시 UUID를 한 번 부여
+                let id = controlNumber.map { "control:\($0)" }
+                    ?? "local:\(UUID().uuidString)"
+                
+                return Book(
+                    id: id,
+                    isbn: isbn,
+                    controlNumber: controlNumber,
                     title: item.title,
                     author: item.author ?? "저자 정보 없음",
                     publisher: item.publisher,
@@ -106,7 +148,7 @@ extension BookClient: DependencyKey {
         let publisher: String?
         let publicationYear: String?
         let isbn: String?
-        let controlNumber: String
+        let controlNumber: String?
         let imageURLString: String?
         
         enum CodingKeys: String, CodingKey {
