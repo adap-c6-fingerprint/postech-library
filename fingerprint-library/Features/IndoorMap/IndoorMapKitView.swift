@@ -22,8 +22,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         view.preferredConfiguration = configuration
         view.isPitchEnabled = true
         view.isRotateEnabled = true
-        view.showsCompass = true
-        view.showsScale = true
+        view.showsCompass = false
+        view.showsScale = false
         view.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 25, maxCenterCoordinateDistance: 5_000), animated: false)
         view.accessibilityIdentifier = "indoor-map"
         let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.tapped(_:)))
@@ -124,7 +124,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 guard let floor = parent.map.floors.first(where: { $0.id == id }) else { return }
                 let rect = MapKitGeometry.mapRect(for: floor.geometry)
                 guard !rect.isNull else { return }
-                view.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 55, left: 50, bottom: 190, right: 35), animated: false)
+                view.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 24, left: 80, bottom: 24, right: 24), animated: false)
                 let camera = view.camera.copy() as! MKMapCamera
                 camera.pitch = 0
                 view.setCamera(camera, animated: false)
