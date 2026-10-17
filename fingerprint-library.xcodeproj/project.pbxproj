@@ -10,9 +10,20 @@
 		1D9CC49A3080AFF7004505A9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 1D9CC4993080AFF7004505A9 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		C5000000000000000000000A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000000 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 000000000000000100000000;
+			remoteInfo = "fingerprint-library";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* fingerprint-library.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "fingerprint-library.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D392B3C3081B38F0060B244 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		C50000000000000000000001 /* IndoorMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IndoorMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -31,7 +42,15 @@
 			exceptions = (
 				1D8568C53081F84A00994B14 /* Exceptions for "fingerprint-library" folder in "fingerprint-library" target */,
 			);
+			explicitFolders = (
+				Resources/IndoorMaps,
+			);
 			path = "fingerprint-library";
+			sourceTree = "<group>";
+		};
+		C50000000000000000000002 /* IndoorMapTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = IndoorMapTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -43,6 +62,11 @@
 				1D9CC49A3080AFF7004505A9 /* ComposableArchitecture in Frameworks */,
 			);
 		};
+		C50000000000000000000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+			);
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -51,6 +75,7 @@
 			children = (
 				1D392B3C3081B38F0060B244 /* Secrets.xcconfig */,
 				000000000000000000000010 /* fingerprint-library */,
+				C50000000000000000000002 /* IndoorMapTests */,
 				000000000000000000000020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000120 /* fingerprint-library.app */,
+				C50000000000000000000001 /* IndoorMapTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,6 +113,27 @@
 			productReference = 000000000000000000000120 /* fingerprint-library.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C50000000000000000000006 /* IndoorMapTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C50000000000000000000007 /* Build configuration list for PBXNativeTarget "IndoorMapTests" */;
+			buildPhases = (
+				C50000000000000000000005 /* Sources */,
+				C50000000000000000000003 /* Frameworks */,
+				C50000000000000000000004 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C5000000000000000000000B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C50000000000000000000002 /* IndoorMapTests */,
+			);
+			name = IndoorMapTests;
+			productName = IndoorMapTests;
+			productReference = C50000000000000000000001 /* IndoorMapTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -99,6 +146,10 @@
 				TargetAttributes = {
 					000000000000000100000000 = {
 						CreatedOnToolsVersion = 26.3;
+					};
+					C50000000000000000000006 = {
+						CreatedOnToolsVersion = 27.1;
+						TestTargetID = 000000000000000100000000;
 					};
 				};
 			};
@@ -120,12 +171,18 @@
 			projectRoot = "";
 			targets = (
 				000000000000000100000000 /* fingerprint-library */,
+				C50000000000000000000006 /* IndoorMapTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		000000000000000140000000 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		C50000000000000000000004 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -138,7 +195,20 @@
 			files = (
 			);
 		};
+		C50000000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C5000000000000000000000B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000100000000 /* fingerprint-library */;
+			targetProxy = C5000000000000000000000A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		000000000000000011000000 /* Debug configuration for PBXProject "fingerprint-library" */ = {
@@ -357,6 +427,42 @@
 			};
 			name = Release;
 		};
+		C50000000000000000000008 /* Debug configuration for PBXNativeTarget "IndoorMapTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5R33532VPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.youngmin.fingerprint-library.IndoorMapTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/fingerprint-library.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/fingerprint-library";
+			};
+			name = Debug;
+		};
+		C50000000000000000000009 /* Release configuration for PBXNativeTarget "IndoorMapTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5R33532VPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.youngmin.fingerprint-library.IndoorMapTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/fingerprint-library.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/fingerprint-library";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -373,6 +479,14 @@
 			buildConfigurations = (
 				000000000000000111000000 /* Debug configuration for PBXNativeTarget "fingerprint-library" */,
 				000000000000000112000000 /* Release configuration for PBXNativeTarget "fingerprint-library" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		C50000000000000000000007 /* Build configuration list for PBXNativeTarget "IndoorMapTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C50000000000000000000008 /* Debug configuration for PBXNativeTarget "IndoorMapTests" */,
+				C50000000000000000000009 /* Release configuration for PBXNativeTarget "IndoorMapTests" */,
 			);
 			defaultConfigurationName = Release;
 		};
