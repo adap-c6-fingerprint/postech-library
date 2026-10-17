@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BookSearchResultRow: View {
     let book: Book
+    let onAddToBasket: () -> Void
 
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
@@ -64,8 +65,6 @@ struct BookSearchResultRow: View {
         .font(.caption)
         .controlSize(.small)
         .frame(maxWidth: .infinity, alignment: .trailing)
-        // 현재는 버튼 위치만 구성하며, 각 동작을 연결할 때 활성화한다.
-        .disabled(true)
     }
 
     private var favoriteButton: some View {
@@ -78,7 +77,7 @@ struct BookSearchResultRow: View {
     }
 
     private var basketButton: some View {
-        Button(action: {}) {
+        Button(action: onAddToBasket) {
             Text("책바구니 담기")
                 .frame(minHeight: 32)
         }

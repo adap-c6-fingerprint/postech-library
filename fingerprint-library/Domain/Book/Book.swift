@@ -17,4 +17,22 @@ struct Book: Equatable, Identifiable, Sendable {
     let publicationYear: String? // 출판 연도
     let description: String? // 설명
     let imageURL: URL? // 책 표지 URL
+    
+    var recordKey: [String?] {
+        if let controlNumber {
+            return ["control", controlNumber]
+        }
+        
+        let metadata: [String?] = [
+            isbn, title, author, publisher, publicationYear
+        ]
+        
+        return ["metadata"] + metadata.map { value -> String? in
+            guard let value else { return nil }
+            
+            let text = value.trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            return text.isEmpty ? nil : text
+        }
+    }
 }

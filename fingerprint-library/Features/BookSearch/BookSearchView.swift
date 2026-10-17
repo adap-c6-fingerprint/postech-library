@@ -44,7 +44,11 @@ struct BookSearchView: View {
                 ScrollView {
                     LazyVStack(spacing: 12) {
                         ForEach(store.books) { book in
-                            BookSearchResultRow(book: book)
+                            BookSearchResultRow(
+                                book: book,
+                                onAddToBasket: {
+                                    store.send(.addToBasket(book))
+                            })
                         }
                     }
                     .padding(16)
@@ -58,11 +62,13 @@ struct BookSearchView: View {
             if store.hasSearched && !store.isLoading
                 && store.errorMessage == nil && !store.books.isEmpty {
                 Button(action: {}) {
-                    Label("책바구니 바로가기", systemImage: "basket")
+                    Label(
+                        "책바구니 바로가기 (\(store.basketBooks.count)권)",
+                        systemImage: "basket"
+                    )
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(true)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(.bar)
