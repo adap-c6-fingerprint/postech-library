@@ -42,9 +42,6 @@
 			exceptions = (
 				1D8568C53081F84A00994B14 /* Exceptions for "fingerprint-library" folder in "fingerprint-library" target */,
 			);
-			explicitFolders = (
-				Resources/IndoorMaps,
-			);
 			path = "fingerprint-library";
 			sourceTree = "<group>";
 		};
