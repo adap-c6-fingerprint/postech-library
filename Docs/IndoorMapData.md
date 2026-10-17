@@ -33,7 +33,7 @@ Xcode는 `Resources/IndoorMaps`를 폴더 리소스로 복사한다. 앱 번들 
 
 원본 C5는 unit과 amenity 사이에 UUID 중복 1건이 있다. 일반 `load(directory:)`는 타입 간 중복도 거부한다. C5 진입점만 `c5Compatibility` 정책으로 읽고 `diagnostics`에 중복을 남긴다. 화면용 요소 ID는 종류와 원본 UUID의 조합으로 구분하며 원본 UUID를 재작성하지 않는다. 새 도서관 데이터에는 이 호환 정책을 적용하지 않는다.
 
-C5 fixture는 책상 등 시설이다. 표시 이름을 실제 도서관 서가 키로 사용하지 않는다. routing GeoJSON·ShelfDirectory 연결과 MapKit 화면은 #5의 후속 변경에서 진행한다.
+C5 fixture는 책상 등 시설이다. 표시 이름을 실제 도서관 서가 키로 사용하지 않는다. MapKit 화면·위치 기능은 [실내지도 구현 문서](IndoorMapFeature.md)를 참고한다. routing GeoJSON·ShelfDirectory 연결은 #5의 후속 범위다.
 
 ## 위치 데이터
 

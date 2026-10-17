@@ -5,4 +5,13 @@
 //  Created by Youngmin Cho on 10/15/26.
 //
 
-import Foundation
+import ComposableArchitecture
+import SwiftUI
+
+struct AppView: View {
+    let store: StoreOf<AppFeature>
+
+    var body: some View {
+        HomeView(mapStore: store.scope(state: \.indoorMap, action: \.indoorMap))
+    }
+}

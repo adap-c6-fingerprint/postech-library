@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct HomeView: View {
+    let mapStore: StoreOf<IndoorMapFeature>
 
     @State private var store = Store(
         initialState: BookSearchFeature.State()
@@ -16,6 +17,7 @@ struct HomeView: View {
                 // 누르면 검색 화면으로 이동
                 NavigationLink {
                     BookSearchView(store: store)
+                        .toolbar(.visible, for: .navigationBar)
                 } label: {
                     HStack(spacing: 10) {
                         Image(systemName: "magnifyingglass")
@@ -33,13 +35,7 @@ struct HomeView: View {
                 }
                 .buttonStyle(.plain)
 
-                // 실제 지도를 연결할 자리
-                ZStack {
-                    Color.gray.opacity(0.1)
-
-                    Text("실내지도 영역")
-                        .foregroundStyle(.secondary)
-                }
+                IndoorMapView(store: mapStore)
                 .clipShape(
                     RoundedRectangle(cornerRadius: 16)
                 )
@@ -52,5 +48,7 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(mapStore: Store(initialState: IndoorMapFeature.State()) {
+        IndoorMapFeature()
+    })
 }

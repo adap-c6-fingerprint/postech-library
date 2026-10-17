@@ -5,4 +5,20 @@
 //  Created by Youngmin Cho on 10/15/26.
 //
 
-import Foundation
+import ComposableArchitecture
+
+@Reducer
+struct AppFeature {
+    @ObservableState
+    struct State: Equatable {
+        var indoorMap = IndoorMapFeature.State()
+    }
+
+    enum Action {
+        case indoorMap(IndoorMapFeature.Action)
+    }
+
+    var body: some Reducer<State, Action> {
+        Scope(state: \.indoorMap, action: \.indoorMap) { IndoorMapFeature() }
+    }
+}
