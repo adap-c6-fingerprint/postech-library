@@ -14,57 +14,19 @@ struct IndoorMapKitView: UIViewRepresentable {
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
-    func makeUIView(context: Context) -> MKMapView {
-        let view = MKMapView()
-        view.delegate = context.coordinator
-        let configuration = MKStandardMapConfiguration(elevationStyle: .flat)
-        configuration.pointOfInterestFilter = .excludingAll
-        view.preferredConfiguration = configuration
-        view.isPitchEnabled = true
-        view.isRotateEnabled = true
-        view.showsCompass = false
-        view.showsScale = false
-        view.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 25, maxCenterCoordinateDistance: 5_000), animated: false)
-        view.accessibilityIdentifier = "indoor-map"
-        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.tapped(_:)))
-        tap.cancelsTouchesInView = false
-        tap.delegate = context.coordinator
-        view.addGestureRecognizer(tap)
-        let longPress = UILongPressGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.longPressed(_:)))
-        longPress.minimumPressDuration = 0.6
-        longPress.cancelsTouchesInView = false
-        longPress.delegate = context.coordinator
-        view.addGestureRecognizer(longPress)
-        context.coordinator.mapView = view
-        return view
+    func makeUIView(context: Context) -> IndoorMapSurface {
+        context.coordinator.makeMapView()
     }
 
-    func updateUIView(_ view: MKMapView, context: Context) {
-        let coordinator = context.coordinator
-        coordinator.parent = self
-        if coordinator.renderedMap != map || coordinator.renderedFloorID != floor.id {
-            coordinator.render(in: view)
-        }
-        view.showsUserLocation = showsUserLocation
-        coordinator.updatePosition(in: view)
-        if coordinator.selectedID != selectedFeatureID {
-            coordinator.selectedID = selectedFeatureID
-            for overlay in view.overlays {
-                if let renderer = view.renderer(for: overlay) as? MKOverlayPathRenderer {
-                    coordinator.style(renderer, overlay: overlay)
-                }
-            }
-        }
-        if let request = cameraRequest, coordinator.lastCameraRequest != request {
-            coordinator.lastCameraRequest = request
-            coordinator.moveCamera(request, in: view)
-        }
+    func updateUIView(_ view: IndoorMapSurface, context: Context) {
+        context.coordinator.update(parent: self, in: view)
     }
 
-    static func dismantleUIView(_ view: MKMapView, coordinator: Coordinator) {
+    static func dismantleUIView(_ view: IndoorMapSurface, coordinator: Coordinator) {
         view.showsUserLocation = false
+        view.onLayout = nil
         view.delegate = nil
-        coordinator.mapView = nil
+        coordinator.detachMapView()
     }
 
     final class Coordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
@@ -74,11 +36,73 @@ struct IndoorMapKitView: UIViewRepresentable {
         var renderedFloorID: UUID?
         var selectedID: IndoorMapElement.ID?
         var lastCameraRequest: IndoorMapCameraRequest?
+        private(set) var pendingCameraRequest: IndoorMapCameraRequest?
+        private var isApplyingCamera = false
         private var overlayFeatures: [ObjectIdentifier: IndoorMapElement] = [:]
         private var positionAnnotation: PositionAnnotation?
         private var renderedPosition: IndoorPosition?
 
         init(parent: IndoorMapKitView) { self.parent = parent }
+
+        func makeMapView() -> IndoorMapSurface {
+            let view = IndoorMapSurface()
+            view.delegate = self
+            let configuration = MKStandardMapConfiguration(elevationStyle: .flat)
+            configuration.pointOfInterestFilter = .excludingAll
+            view.preferredConfiguration = configuration
+            view.isPitchEnabled = true
+            view.isRotateEnabled = true
+            view.showsCompass = false
+            view.showsScale = false
+            view.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 25, maxCenterCoordinateDistance: 5_000), animated: false)
+            view.accessibilityIdentifier = "indoor-map"
+            let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))
+            tap.cancelsTouchesInView = false
+            tap.delegate = self
+            view.addGestureRecognizer(tap)
+            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(_:)))
+            longPress.minimumPressDuration = 0.6
+            longPress.cancelsTouchesInView = false
+            longPress.delegate = self
+            view.addGestureRecognizer(longPress)
+            view.onLayout = { [weak self] view in self?.applyPendingCamera(in: view) }
+            mapView = view
+            return view
+        }
+
+        func update(parent: IndoorMapKitView, in view: MKMapView) {
+            self.parent = parent
+            if renderedMap != parent.map || renderedFloorID != parent.floor.id {
+                render(in: view)
+            }
+            view.showsUserLocation = parent.showsUserLocation
+            updatePosition(in: view)
+            if selectedID != parent.selectedFeatureID {
+                selectedID = parent.selectedFeatureID
+                for overlay in view.overlays {
+                    if let renderer = view.renderer(for: overlay) as? MKOverlayPathRenderer {
+                        style(renderer, overlay: overlay)
+                    }
+                }
+            }
+            pendingCameraRequest = parent.cameraRequest == lastCameraRequest ? nil : parent.cameraRequest
+            if pendingCameraRequest != nil { view.setNeedsLayout() }
+        }
+
+        private func applyPendingCamera(in view: MKMapView) {
+            guard !isApplyingCamera, view.window != nil, view.bounds.width > 0, view.bounds.height > 0,
+                  let request = pendingCameraRequest else { return }
+            isApplyingCamera = true
+            defer { isApplyingCamera = false }
+            guard moveCamera(request, in: view) else { return }
+            lastCameraRequest = request
+            pendingCameraRequest = nil
+        }
+
+        func detachMapView() {
+            mapView = nil
+            pendingCameraRequest = nil
+        }
 
         func render(in view: MKMapView) {
             view.removeOverlays(view.overlays)
@@ -118,19 +142,25 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = positionAnnotation { view.addAnnotation(annotation) }
         }
 
-        func moveCamera(_ request: IndoorMapCameraRequest, in view: MKMapView) {
+        @discardableResult
+        func moveCamera(_ request: IndoorMapCameraRequest, in view: MKMapView) -> Bool {
             switch request.target {
             case .floor(let id):
-                guard let floor = parent.map.floors.first(where: { $0.id == id }) else { return }
+                let padding = UIEdgeInsets(top: 24, left: 80, bottom: 24, right: 24)
+                guard view.bounds.width > padding.left + padding.right,
+                      view.bounds.height > padding.top + padding.bottom,
+                      let floor = parent.map.floors.first(where: { $0.id == id }) else { return false }
                 let rect = MapKitGeometry.mapRect(for: floor.geometry)
-                guard !rect.isNull else { return }
-                view.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 24, left: 80, bottom: 24, right: 24), animated: false)
+                guard !rect.isNull else { return false }
                 let camera = view.camera.copy() as! MKMapCamera
                 camera.pitch = 0
                 view.setCamera(camera, animated: false)
+                view.setVisibleMapRect(rect, edgePadding: padding, animated: false)
             case .position(let coordinate):
+                guard coordinate.isValid else { return false }
                 view.setCenter(coordinate.clCoordinate, animated: true)
             }
+            return true
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
@@ -257,6 +287,21 @@ struct IndoorMapKitView: UIViewRepresentable {
             default: "mappin"
             }
         }
+    }
+}
+
+/// SwiftUI의 배치가 끝나 실제 화면 크기를 사용할 수 있을 때 보류한 카메라 요청을 적용한다.
+final class IndoorMapSurface: MKMapView {
+    var onLayout: ((IndoorMapSurface) -> Void)?
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        onLayout?(self)
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window != nil { setNeedsLayout() }
     }
 }
 
