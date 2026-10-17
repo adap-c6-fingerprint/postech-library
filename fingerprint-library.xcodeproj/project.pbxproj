@@ -22,7 +22,7 @@
 
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* fingerprint-library.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "fingerprint-library.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1D392B3C3081B38F0060B244 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		1D392B3C3081B38F0060B244 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
 		C50000000000000000000001 /* IndoorMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IndoorMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -70,7 +70,7 @@
 		000000000000000000000001 = {
 			isa = PBXGroup;
 			children = (
-				1D392B3C3081B38F0060B244 /* Secrets.xcconfig */,
+				1D392B3C3081B38F0060B244 /* Base.xcconfig */,
 				000000000000000000000010 /* fingerprint-library */,
 				C50000000000000000000002 /* IndoorMapTests */,
 				000000000000000000000020 /* Products */,
@@ -344,7 +344,7 @@
 		};
 		000000000000000111000000 /* Debug configuration for PBXNativeTarget "fingerprint-library" */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Secrets.xcconfig */;
+			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Base.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -385,7 +385,7 @@
 		};
 		000000000000000112000000 /* Release configuration for PBXNativeTarget "fingerprint-library" */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Secrets.xcconfig */;
+			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Base.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
