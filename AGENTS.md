@@ -40,5 +40,5 @@ Team agreement for this repository:
 - Keep SwiftUI, MapKit, CoreLocation and TCA out of Domain.
 - Put map presentation and map interactions in Features/IndoorMap.
 - Do not define another developer's shared Book contract before agreeing on it.
-- Keep the locally imported C5 Apple sample data out of Git. See Docs/IndoorMapData.md.
+- C5 development data is tracked at the user's explicit request. Preserve its original license and provenance. This repository policy does not grant redistribution rights; see Docs/IndoorMapData.md. Keep API credentials out of Git.
 - Follow the user-provided PR_REVIEW_RULES.md when reviewing and publishing changes.
