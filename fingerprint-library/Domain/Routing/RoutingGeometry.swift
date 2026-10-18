@@ -10,13 +10,6 @@ import Foundation
 nonisolated enum RoutingGeometry {
     private static let earthRadiusMeters = 6_371_008.8
 
-    static func isValid(_ coordinate: IndoorMapCoordinate) -> Bool {
-        coordinate.latitude.isFinite
-            && coordinate.longitude.isFinite
-            && (-90.0...90.0).contains(coordinate.latitude)
-            && (-180.0...180.0).contains(coordinate.longitude)
-    }
-
     /// Great-circle distance in meters using the haversine formula.
     static func distanceMeters(
         from start: IndoorMapCoordinate,

@@ -7,12 +7,13 @@ nonisolated struct ResolvedRouteStart: Sendable {
 
 nonisolated enum RouteStartResolver {
     static func resolve(_ position: IndoorPosition, in index: inout RoutingGraphIndex) throws -> ResolvedRouteStart {
-        guard position.coordinate.isValid, let accuracy = position.horizontalAccuracy,
+        let reportedAccuracy = position.source == .manual ? 0 : position.horizontalAccuracy
+        guard position.coordinate.isValid, let accuracy = reportedAccuracy,
             accuracy.isFinite, accuracy >= 0
         else { throw IndoorRoutingError.invalidPosition }
         guard let level = position.floorOrdinal else { throw IndoorRoutingError.unknownFloor }
         let nodes = index.graph.nodes.filter { $0.level == level }.sorted { $0.id < $1.id }
-        guard let floorID = nodes.first?.floorID else { throw IndoorRoutingError.unknownFloor }
+        guard let floorID = nodes.first?.floorID else { throw IndoorRoutingError.noRoutingDataForFloor }
         guard accuracy <= index.graph.hardSearchRadiusMeters else { throw IndoorRoutingError.invalidPosition }
         if let exact = nodes.first(where: {
             RoutingGeometry.distanceMeters(from: $0.coordinate, to: position.coordinate) < 0.000_001

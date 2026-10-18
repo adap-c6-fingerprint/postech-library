@@ -16,7 +16,8 @@ nonisolated struct RoutePolylineSegment: Equatable, Sendable {
 }
 
 nonisolated struct RouteFloorChange: Equatable, Sendable {
-    let edgeID: String
+    /// 한 번의 연속 탑승에 사용한 원본 간선들. 경로 비용·전체 edgeIDs는 바꾸지 않는다.
+    let edgeIDs: [String]
     let category: RouteEdgeCategory
     let fromFloorID: UUID
     let toFloorID: UUID
@@ -58,14 +59,15 @@ nonisolated enum IndoorRouteSearchOutcome: Equatable, Sendable {
 }
 
 nonisolated enum IndoorRoutingError: Error, Equatable, Sendable, LocalizedError {
-    case invalidGraph, invalidDestination, unknownFloor, invalidPosition, farFromGraph
+    case invalidGraph, invalidDestination, unknownFloor, noRoutingDataForFloor, invalidPosition, farFromGraph
     case missingTransitionDistances, noRoute
 
     var errorDescription: String? {
         switch self {
         case .invalidGraph: "길찾기 데이터가 올바르지 않아요. 도면과 노드 데이터를 확인해주세요."
         case .invalidDestination: "이 서가의 도착 지점을 찾을 수 없어요."
-        case .unknownFloor: "현재 층을 확인할 수 없어요. 시뮬레이터의 층을 확인해주세요."
+        case .unknownFloor: "현재 위치의 층을 확인할 수 없어요."
+        case .noRoutingDataForFloor: "이 층에는 길찾기 데이터가 없어요."
         case .invalidPosition: "현재 위치를 확인한 뒤 다시 시도해주세요."
         case .farFromGraph: "현재 위치가 등록된 통로에서 너무 멀어요. 통로로 이동한 뒤 다시 시도해주세요."
         case .missingTransitionDistances: "층간 이동거리 자료가 필요해요."

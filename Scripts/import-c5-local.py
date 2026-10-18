@@ -4,6 +4,7 @@
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import shutil
 import subprocess
@@ -31,6 +32,17 @@ def git_output(source, *arguments):
     return subprocess.check_output(["git", "-C", str(source), *arguments], text=True).strip()
 
 
+def horizontal_distance_meters(start, end):
+    """RoutingGeometry와 같은 WGS84 수평 직선거리 하한이다."""
+    lon1, lat1 = start[:2]
+    lon2, lat2 = end[:2]
+    latitude_delta = math.radians(lat2 - lat1)
+    lat1, lat2 = math.radians(lat1), math.radians(lat2)
+    value = (math.sin(latitude_delta / 2) ** 2
+             + math.cos(lat1) * math.cos(lat2) * math.sin(math.radians(lon2 - lon1) / 2) ** 2)
+    return 6_371_008.8 * 2 * math.atan2(math.sqrt(value), math.sqrt(max(0, 1 - value)))
+
+
 def estimated_cross_floor_distances(graph):
     """사용자가 허용한 C5 시연용 가정이다. 실측 거리나 이동 시간으로 취급하지 않는다."""
     nodes = {f["id"]: f for f in graph["features"] if f["properties"]["role"] == "node"}
@@ -48,7 +60,12 @@ def estimated_cross_floor_distances(graph):
             per_floor = 10.0
         else:
             raise ValueError("층간 이동 수단을 확인하세요.")
-        entries.append({"edge_id": edge["id"], "meters": floors * per_floor, "source": "estimated",
+        meters = floors * per_floor
+        horizontal = horizontal_distance_meters(nodes[p["from"]]["geometry"]["coordinates"],
+                                                nodes[p["to"]]["geometry"]["coordinates"])
+        if not math.isfinite(meters) or not math.isfinite(horizontal) or meters < horizontal:
+            raise ValueError(f"층간 연결 {edge['id']}의 추정 거리({meters:g}m)가 수평 직선거리({horizontal:g}m)보다 짧습니다. 거리 가정을 검토해주세요.")
+        entries.append({"edge_id": edge["id"], "meters": meters, "source": "estimated",
                         "basis": f"C5 시연용 임시 가정: {p['category']} {per_floor:g}m/층 × {floors}층. 실측 후 교체."})
     return {"schema_version": 1, "dataset_id": "c5-demo", "layout_version": graph["layout_version"], "edges": entries}
 
@@ -133,8 +150,11 @@ def main():
     graph = json.loads(routing.read_bytes())
     if graph.get("schema_version") != 1 or not str(graph.get("layout_version", "")).strip():
         parser.error("routing GeoJSON에 schema_version 1과 layout_version이 필요합니다.")
-    shelves = mock_shelves(original, graph)
-    distances = estimated_cross_floor_distances(graph)
+    try:
+        shelves = mock_shelves(original, graph)
+        distances = estimated_cross_floor_distances(graph)
+    except ValueError as error:
+        parser.error(str(error))
     record = {
         "dataset_id": "c5",
         "source_project": source.name,

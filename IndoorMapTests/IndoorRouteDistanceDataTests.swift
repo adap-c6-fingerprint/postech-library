@@ -72,4 +72,28 @@ struct IndoorRouteDistanceDataTests {
             Issue.record("잘못된 거리 자료를 수용했습니다: \(kind)")
         } catch is IndoorMapLoadError {}
     }
+
+    @Test("수평 직선거리보다 짧은 층간 거리는 탐색 전에 로딩 단계에서 거부한다")
+    func rejectsImpossibleTransitionAtLoad() async throws {
+        let root = try fixture()
+        defer { try? FileManager.default.removeItem(at: root) }
+        try NavigationTestFixture.edit("routing-graph.geojson", at: root) { object in
+            var features = object["features"] as! [[String: Any]]
+            let upper = features.firstIndex { $0["id"] as? String == "upper" }!
+            features[upper]["geometry"] = ["type": "Point", "coordinates": NavigationTestFixture.a]
+            let lift = features.firstIndex { $0["id"] as? String == "lift" }!
+            features[lift]["geometry"] = [
+                "type": "LineString", "coordinates": [NavigationTestFixture.b, NavigationTestFixture.a]
+            ]
+            object["features"] = features
+        }
+        try NavigationTestFixture.pin(root)
+        do {
+            _ = try await NavigationTestFixture.load(root)
+            Issue.record("수평 직선거리보다 짧은 층간 거리 자료를 수용했습니다.")
+        } catch let IndoorMapLoadError.invalidData(file, reason) {
+            #expect(file == "cross-floor-distances.json")
+            #expect(reason.contains("수평 직선거리"))
+        }
+    }
 }

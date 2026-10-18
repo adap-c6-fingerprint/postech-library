@@ -6,6 +6,30 @@ import Testing
 
 @MainActor
 struct IndoorRouteOverlayTests {
+    @Test("연속 엘리베이터의 중간 층에는 내리거나 갈아타는 원을 표시하지 않는다")
+    func hidesIntermediateElevatorTransferMarkers() throws {
+        typealias F = IndoorRoutingTestFactory
+        let a = F.node("a"), b = F.node("b", level: 4), c = F.node("c", level: 5)
+        let request = F.request(
+            graph: F.graph([a, b, c], [F.edge("ab", a, b, category: .elevator), F.edge("bc", b, c, category: .elevator)]),
+            start: a.coordinate, target: c.id,
+            distances: ["ab": .init(meters: 14, source: .estimated), "bc": .init(meters: 3.5, source: .estimated)])
+        guard case .route(let route) = try IndoorRouteSearchEngine().search(request) else {
+            throw IndoorRoutingError.noRoute
+        }
+        let original = IndoorMapTestData.map()
+        let floor = IndoorMapFloor(id: b.floorID, ordinal: b.level, name: "5층", geometry: original.floors[0].geometry)
+        let map = IndoorMap(formatVersion: "1", venue: original.venue, floors: [floor], features: [], diagnostics: [])
+        let parent = IndoorMapKitView(map: map, floor: floor, selectedFeatureID: nil, position: nil,
+            showsUserLocation: false, isPlacingOrigin: false, cameraRequest: nil,
+            onSelect: { _ in }, onPlaceOrigin: { _ in }, route: route)
+        let coordinator = parent.makeCoordinator()
+        let view = coordinator.makeMapView()
+        defer { view.delegate = nil }
+        coordinator.update(parent: parent, in: view)
+        #expect(view.overlays.compactMap { $0 as? MKCircle }.isEmpty)
+    }
+
     @Test("경로 닫기로 서가 선택이 해제되면 native 핀도 해제해 같은 핀을 다시 선택할 수 있다")
     func deselectsNativePin() throws {
         typealias F = IndoorRoutingTestFactory

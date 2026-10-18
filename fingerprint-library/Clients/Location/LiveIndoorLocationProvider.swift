@@ -65,10 +65,20 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
-        if (error as? CLError)?.code == .denied {
+        let event = Self.failureEvent(for: error)
+        if case .authorization(.denied) = event {
             authorizationMonitor.update(status: .denied, precise: false)
         }
-        else { publish(.unavailable("현재 위치를 확인할 수 없어요. 잠시 후 다시 시도하거나 출발점을 지정해주세요.")) }
+        else { publish(event) }
+    }
+
+    nonisolated static func failureEvent(for error: any Error) -> IndoorLocationEvent {
+        switch (error as? CLError)?.code {
+        case .denied: .authorization(.denied)
+        case .locationUnknown:
+            .temporarilyUnavailable("위치 신호를 다시 확인하고 있어요. 표시된 경로는 계산 당시 출발 위치 기준이에요.")
+        default: .unavailable("현재 위치를 확인할 수 없어요. 잠시 후 다시 시도해주세요.")
+        }
     }
 
     private func publish(_ event: IndoorLocationEvent) {

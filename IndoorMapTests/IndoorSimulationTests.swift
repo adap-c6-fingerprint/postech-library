@@ -130,6 +130,7 @@ extension IndoorMapSerialTests {
             #expect(positions.map { $0.coordinate.latitude } == [36.001, 36.002, 36.003])
             #expect(positions.map(\.floorOrdinal) == [4, 4, 0])
             #expect(positions.allSatisfy { $0.source == .simulation })
+            #expect(events.contains(.temporarilyUnavailable("시뮬레이터 연결을 기다리고 있어요.")))
             #expect(events.contains(.unavailable(IndoorSimulationError.disconnected.localizedDescription)))
             #expect(server.connectionCount == 2)
             // 소비자가 종료되면 AsyncStream의 termination이 실제 연결도 취소한다.

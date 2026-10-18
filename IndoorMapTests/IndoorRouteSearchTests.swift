@@ -140,7 +140,7 @@ struct IndoorRouteSearchTests {
             try IndoorRouteSearchEngine().search(
                 F.request(graph: graph, start: F.node("far", y: 100).coordinate, target: b.id))
         }
-        #expect(throws: IndoorRoutingError.unknownFloor) {
+        #expect(throws: IndoorRoutingError.noRoutingDataForFloor) {
             try IndoorRouteSearchEngine().search(F.request(graph: graph, start: a.coordinate, level: 99, target: b.id))
         }
         let upper = F.node("upper", level: 1)

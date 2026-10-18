@@ -33,8 +33,10 @@ nonisolated struct IndoorRouteSearchEngine: Sendable {
     ) -> IndoorRoute {
         var segments: [RoutePolylineSegment] = []
         var changes: [RouteFloorChange] = []
+        var previousArc: RouteTraversal?
         for arc in path {
             guard let from = index.nodesByID[arc.fromNodeID], let to = index.nodesByID[arc.toNodeID] else { continue }
+            defer { previousArc = arc }
             if from.floorID == to.floorID {
                 if let last = segments.last, last.floorID == from.floorID,
                     last.coordinates.last == arc.coordinates.first
@@ -46,11 +48,23 @@ nonisolated struct IndoorRouteSearchEngine: Sendable {
                     segments.append(.init(floorID: from.floorID, coordinates: arc.coordinates))
                 }
             } else {
-                changes.append(
-                    .init(
-                        edgeID: arc.edgeID, category: arc.category,
+                // 같은 graph node에서 같은 방향으로 이어지는 엘리베이터는 내리지 않는 탑승이다.
+                // 도보 간선이 끼거나 이동 방향이 바뀌면 별도 이동으로 남긴다.
+                if arc.category == .elevator, let previousArc, previousArc.category == .elevator,
+                    previousArc.toNodeID == from.id,
+                    let previousFrom = index.nodesByID[previousArc.fromNodeID], previousFrom.level != from.level,
+                    (from.level > previousFrom.level) == (to.level > from.level),
+                    let last = changes.last, last.toFloorID == from.floorID {
+                    changes[changes.count - 1] = .init(
+                        edgeIDs: last.edgeIDs + [arc.edgeID], category: .elevator,
+                        fromFloorID: last.fromFloorID, toFloorID: to.floorID,
+                        fromCoordinate: last.fromCoordinate, toCoordinate: to.coordinate)
+                } else {
+                    changes.append(.init(
+                        edgeIDs: [arc.edgeID], category: arc.category,
                         fromFloorID: from.floorID, toFloorID: to.floorID,
                         fromCoordinate: from.coordinate, toCoordinate: to.coordinate))
+                }
             }
         }
         let realIDs = Set(index.graph.nodes.map(\.id))

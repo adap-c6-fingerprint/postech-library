@@ -159,7 +159,7 @@ struct IndoorMapFeature {
             case .sceneActiveChanged(let active):
                 guard state.isActive != active else { return .none }
                 state.isActive = active
-                return active ? locationEvents() : .merge(.cancel(id: CancelID.location), invalidateRoute(&state))
+                return active ? locationEvents() : .merge(.cancel(id: CancelID.location), cancelRouteSearch(&state))
 
             case .disappeared:
                 state.isActive = false
@@ -183,6 +183,12 @@ struct IndoorMapFeature {
                 if state.latestPosition?.source == .simulation { state.latestPosition = nil }
                 if state.manualPosition == nil && !state.isPlacingOrigin { state.locationMessage = message }
                 return invalidateRoute(&state)
+
+            case .locationEvent(.temporarilyUnavailable(let message)):
+                state.latestPosition = nil
+                guard state.manualPosition == nil, !state.isPlacingOrigin else { return .none }
+                state.locationMessage = message
+                return cancelRouteSearch(&state)
 
             case .locationEvent(.position(let position)):
                 guard position.isRecent(at: now), position.source != .manual else { return .none }
@@ -341,6 +347,7 @@ struct IndoorMapFeature {
                 return .none
 
             case .useStairsTapped:
+                guard state.requiresStairConfirmation else { return .none }
                 return searchRoute(&state, allowingStairs: true)
 
             case .dismissStairConfirmation:
@@ -360,6 +367,15 @@ struct IndoorMapFeature {
                 return .none
             }
         }
+    }
+
+    /// 일시적인 위치 수신 중단은 계산 결과를 무효화하는 사유와 구분한다.
+    private func cancelRouteSearch(_ state: inout State) -> Effect<Action> {
+        guard state.isRouting || state.requiresStairConfirmation else { return .none }
+        state.routeRequestID += 1
+        state.isRouting = false
+        state.requiresStairConfirmation = false
+        return .cancel(id: CancelID.route)
     }
 
     private func invalidateRoute(_ state: inout State, clearDestination: Bool = false) -> Effect<Action> {

@@ -18,7 +18,7 @@ nonisolated enum IndoorSimulationLocationProvider {
         guard let port = NWEndpoint.Port(rawValue: port) else { continuation.finish(); return }
         // 합성 위치 공급의 사용 가능 상태이며 시스템 위치 권한을 요청하지 않는다.
         continuation.yield(.authorization(.authorized(precise: true)))
-        continuation.yield(.unavailable("시뮬레이터 연결을 기다리고 있어요."))
+        continuation.yield(.temporarilyUnavailable("시뮬레이터 연결을 기다리고 있어요."))
         while !Task.isCancelled {
             let connection = NWConnection(host: "127.0.0.1", port: port, using: .tcp)
             connection.start(queue: queue)

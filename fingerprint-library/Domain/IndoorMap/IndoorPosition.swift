@@ -30,5 +30,7 @@ nonisolated enum IndoorLocationAuthorization: Equatable, Sendable {
 nonisolated enum IndoorLocationEvent: Equatable, Sendable {
     case authorization(IndoorLocationAuthorization)
     case position(IndoorPosition)
+    /// 위치 재수신을 기다리는 동안 완료된 경로 미리보기는 유지한다.
+    case temporarilyUnavailable(String)
     case unavailable(String)
 }

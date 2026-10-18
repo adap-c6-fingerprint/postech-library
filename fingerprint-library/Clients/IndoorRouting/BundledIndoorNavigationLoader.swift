@@ -44,6 +44,7 @@ nonisolated struct BundledIndoorNavigationLoader {
             let file = "cross-floor-distances.json"
             let dto: DistanceManifest = try decode(verified(file, at: directory, hash: hash), file: file)
             let nodes = Dictionary(uniqueKeysWithValues: graph.nodes.map { ($0.id, $0) })
+            let edges = Dictionary(uniqueKeysWithValues: graph.edges.map { ($0.id, $0) })
             let crossFloorIDs = Set(graph.edges.filter { nodes[$0.fromNodeID]?.floorID != nodes[$0.toNodeID]?.floorID }.map(\.id))
             guard dto.schemaVersion == 1, dto.datasetID == manifest.datasetID,
                   dto.layoutVersion == graph.layoutVersion,
@@ -54,6 +55,10 @@ nonisolated struct BundledIndoorNavigationLoader {
             for entry in dto.edges {
                 guard entry.meters.isFinite, entry.meters > 0, !entry.basis.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
                     throw invalid(file, "층간 거리와 근거를 확인하세요.")
+                }
+                guard let edge = edges[entry.edgeID], let from = nodes[edge.fromNodeID], let to = nodes[edge.toNodeID],
+                      entry.meters >= RoutingGeometry.distanceMeters(from: from.coordinate, to: to.coordinate) else {
+                    throw invalid(file, "층간 이동거리는 양 끝점의 수평 직선거리 이상이어야 합니다.")
                 }
                 distances[entry.edgeID] = .init(meters: entry.meters, source: entry.source)
             }

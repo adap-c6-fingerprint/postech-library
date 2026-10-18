@@ -179,6 +179,21 @@ class C5ImportTests(unittest.TestCase):
             manifest = json.loads((fixture.destination / "dataset.json").read_text())
             self.assertEqual(manifest["cross_floor_distances_sha256"], hashlib.sha256(file.read_bytes()).hexdigest())
 
+    def test_impossible_estimates_are_rejected_before_replacing_data(self):
+        for category in ("elevator", "stairs", "ramp", "escalator", "platform_lift"):
+            with self.subTest(category=category), self.fixture() as fixture:
+                path = fixture.source / ROUTING_PATH
+                graph = json.loads(path.read_text())
+                graph["features"][2]["geometry"]["coordinates"][0] += 0.0002
+                graph["features"].append({"id": "cross", "properties": {
+                    "role": "edge", "from": "node-0", "to": "node-2", "category": category}})
+                write_json(path, graph)
+                before = snapshot(fixture.destination)
+                result = fixture.run("--replace")
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn("수평 직선거리", result.stderr)
+                self.assertEqual(snapshot(fixture.destination), before)
+
 
 if __name__ == "__main__":
     unittest.main()
