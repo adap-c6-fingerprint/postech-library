@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "dataset_id": "c5-demo",
+  "layout_version": "2025-11-14T14:35:25.142Z",
+  "map_files_sha256": {
+    "amenity.geojson": "0702d724829242cf85b59554fc552115dbbd5037f3fdd64d39adb4f567810256",
+    "fixture.geojson": "6b54989edbad6c95c762a0b110f2cd05544a5bd2b13f2c27b9052348757a0fe5",
+    "footprint.geojson": "82d854fae714b831b3eaab54857f26f869f3cc2d4b03b02aa816e3923bb64c0f",
+    "level.geojson": "80f4bd467da33d9f57c549fabac6b3d33a5717c1374b9c95ebb8dfa823178e8c",
+    "manifest.json": "580264964c921e7d836ed03720f0916f76843773794218f83c2b9f54cc189c9c",
+    "opening.geojson": "b8b1de705ad2b75c8b99ac25efb24a0a8b3c9eaed13435c6146cf2fa01237a8d",
+    "unit.geojson": "8071f4bbcbc29566a3f5f9fc72645a9ad27761370b12804b09434581db4f0049",
+    "venue.geojson": "592f631f0a59c3c020bac5363fea21ea131d7d87d1d01cadb4ade658eae7eb0f"
+  },
+  "routing_sha256": "0d0271c5933d9efdd1d470171103c94f3b73e585e3a488182e5e8123ad8209f8",
+  "shelves_sha256": "af97da696de03411fb405bea697425d1f1292abee57ae2e43c4f10ead58057cc",
+  "source_commit": "ec34f3412694f9afd2bd710302369a4d92cf1201",
+  "source_routing_path": "Fingerprint/Debug/RoutingGraphTest/Resources/routing-graph.geojson",
+  "source_worktree_changes": [
+    "Fingerprint/App/Domain/IMDF/C5/IMDFData/LICENSE/LICENSE.txt",
+    "Fingerprint/App/Domain/IMDF/C5/IMDFData/amenity.geojson",
+    "Fingerprint/Debug/RoutingGraphTest/Resources/routing-graph.geojson"
+  ]
+}

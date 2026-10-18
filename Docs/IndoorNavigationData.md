@@ -4,6 +4,8 @@ Refs #5. #7 탐색기를 붙이기 전에 필요한 데이터 로딩과 목적�
 
 ## 로컬 C5 준비
 
+현재 체크아웃에는 개발용 C5 데이터 묶음이 포함되어 있다. 다음 명령은 원본 프로젝트에서 이를 갱신할 때 사용한다. [사용 범위와 라이선스](IndoorMapData.md)를 먼저 확인한다.
+
 ```sh
 python3 Scripts/import-c5-local.py
 ```
@@ -11,7 +13,7 @@ python3 Scripts/import-c5-local.py
 기존 13개 IMDF·라이선스를 보존하고, Fingerprint의 현재 working tree에 있는 `Fingerprint/Debug/RoutingGraphTest/Resources/routing-graph.geojson`을 바이트 그대로 복사한다. 두 층 이상에서 destination 노드가 포함된 unit 3개를 결정적으로 골라 `shelves.json`에 시연용 구역으로 연결한다. 가까운 노드나 문자열 유사도로 실제 서가를 추정하지 않는다. 생성한 JSON에서 키·구역·도착점을 검토한다. 이미 수정된 로컬 도면·그래프·목업 매핑은 기본 실행으로 덮어쓰지 않으며, 검토 후 `--replace`로 교체한다.
 
 ```text
-Resources/IndoorMaps/C5/  (폴더 전체 Git 제외)
+Resources/IndoorMaps/C5/  (임시 개발용 데이터로 Git 추적)
   IMDFData/             기존 원본과 라이선스
   source.json           13개 원본 해시와 출처
   routing-graph.geojson  원본 그래프
@@ -21,7 +23,7 @@ Resources/IndoorMaps/C5/  (폴더 전체 Git 제외)
 
 layout_version은 그래프의 값을 그대로 쓴다. IMDF manifest.version은 형식 버전이며 지도 개정 번호로 사용하지 않는다. 해시는 가져온 파일이 이후 섞이거나 바뀌는 것을 탐지한다. 두 파일이 동일한 편집 개정에서 export됐음을 인증하거나 실제 보행 가능성을 보장하지는 않는다. 새 도면·그래프·매핑을 함께 검토하고 다시 가져와야 한다.
 
-기준 원본 HEAD는 `ec34f3412694f9afd2bd710302369a4d92cf1201`이며 그래프를 포함한 미커밋 수정이 있다. 실제 재현 기준은 로컬 기록의 SHA-256과 source_worktree_changes다. 데이터와 `.imdfrnt` 원본을 수정하지 않는다. Apple 샘플을 포함하므로 C5 폴더·원본 좌표·캡처를 PR에 첨부하지 않는다.
+기준 원본 HEAD는 `ec34f3412694f9afd2bd710302369a4d92cf1201`이며 그래프를 포함한 미커밋 수정이 있다. 실제 재현 기준은 `source.json`·`dataset.json`의 SHA-256과 source_worktree_changes다. 데이터와 `.imdfrnt` 원본을 수정하지 않는다. 사용자 요청으로 데이터 묶음을 Git에 포함하며 동봉된 Apple 라이선스는 보존한다. 공유 범위 확인은 별도이며, PR 설명에 추가 좌표나 캡처를 첨부할 필요는 없다.
 
 ## 책임과 검증
 

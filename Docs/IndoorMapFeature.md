@@ -9,13 +9,13 @@ Refs #5. 기본 카메라는 기울기 0도의 평면이다. 지도 화면에는
 - Domain/IndoorMap: 지도 요소·좌표·현재 위치, 도형 포함 관계와 샘플 유효성 규칙을 둔다. SwiftUI·MapKit·CoreLocation·TCA에 의존하지 않는다.
 - Clients/IndoorMap: 번들 파일 로더와 IMDF DTO·Mapper, 테스트 가능한 지도 의존성을 둔다.
 - Clients/Location: Core Location을 비동기 이벤트로 제공한다. Feature는 같은 인터페이스의 재생 위치로 교체할 수 있다.
-- Resources: 로컬 C5 도면을 둔다. [가져오기와 라이선스](IndoorMapData.md)를 따른다.
+- Resources: Git에 포함한 개발용 C5 도면을 둔다. [가져오기와 라이선스](IndoorMapData.md)를 따른다.
 
 기존 도메인 `IndoorMapFeature`는 지도 요소를 뜻하는 `IndoorMapElement`로 이름을 바꿨다. 사용자 행동 단위인 TCA `IndoorMapFeature`와 구분하기 위한 변경이다.
 
 ## 사용과 상태
 
-1. 로컬 C5 데이터를 가져온 뒤 앱을 실행한다. 지도 초기 층은 수신된 위치의 ordinal에 해당하는 층이며, 위치가 없으면 도면의 첫 층이다.
+1. C5 데이터가 포함된 현재 브랜치를 받은 뒤 앱을 실행한다. 지도 초기 층은 수신된 위치의 ordinal에 해당하는 층이며, 위치가 없으면 도면의 첫 층이다.
 2. 왼쪽 층 목록으로 보는 층을 바꾼다. 층 조회는 현재 위치의 층을 변경하지 않는다.
 3. 도면·fixture·시설 마커를 표시한다. C5 fixture를 도서관 서가로 간주하지 않는다.
 4. 현재 화면에서는 제목·현재 위치·전체 보기·하단 정보 패널·수동 지정 UI와 나침반·축척을 표시하지 않는다. 시설 선택과 길게 누르기로 수동 출발점을 만드는 동작도 화면에서 연결하지 않는다.

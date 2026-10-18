@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy the locally held C5 evaluation data without redistributing it in Git."""
+"""Refresh C5 development data while preserving its original license and provenance."""
 
 import argparse
 import hashlib
@@ -164,7 +164,8 @@ def main():
             staged.rename(destination)
     print(f"C5 {len(hashes)}개 파일을 로컬 평가용으로 가져왔습니다: {destination}")
     print("routing 원본, 목업 목적지 3개와 데이터셋 해시를 함께 기록했습니다.")
-    print("C5 전체 폴더는 Git 제외 대상입니다. 외부 배포물에 포함하지 마세요.")
+    print("개발용 C5 데이터는 Git 추적 대상입니다. 갱신 diff와 원본 라이선스를 함께 검토하세요.")
+    print("정식 배포 전 별도 도서관 데이터로 교체해야 합니다.")
 
 
 if __name__ == "__main__":

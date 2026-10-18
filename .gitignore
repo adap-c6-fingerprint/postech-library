@@ -18,7 +18,7 @@ Secrets.xcconfig
 # Private career notes
 .career-log/
 
-# C5 includes Apple sample data licensed only for internal evaluation.
-fingerprint-library/Resources/IndoorMaps/C5/
+# C5 development data is tracked at the project owner's request.
+# Preserve its bundled Apple sample-data license; see Docs/IndoorMapData.md.
 
 # Keep project files, shared schemes, and Package.resolved tracked.
