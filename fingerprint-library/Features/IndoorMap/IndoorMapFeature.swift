@@ -14,6 +14,7 @@ struct IndoorMapFeature {
         var navigationRequestID = 0
         var selectedFloorID: UUID?
         var selectedFeatureID: IndoorMapElement.ID?
+        var selectedShelfKey: ShelfKey?
         var manualPosition: IndoorPosition?
         var latestPosition: IndoorPosition?
         var authorization: IndoorLocationAuthorization = .notDetermined
@@ -26,10 +27,13 @@ struct IndoorMapFeature {
         var selectedFloor: IndoorMapFloor? { map?.floors.first { $0.id == selectedFloorID } }
         var selectedFeature: IndoorMapElement? { map?.features.first { $0.id == selectedFeatureID } }
         var currentPosition: IndoorPosition? { manualPosition ?? latestPosition }
+        var mockShelves: [ShelfDestination] {
+            navigation?.shelves.mode == .mock ? navigation?.shelves.destinations ?? [] : []
+        }
 
         var showsNativeUserLocation: Bool {
             guard isActive, manualPosition == nil, authorization.isAuthorized,
-                  latestPosition?.source != .replay else { return false }
+                  latestPosition?.source == .sensor else { return false }
             if let currentFloor = latestPosition?.floorOrdinal, let viewedFloor = selectedFloor?.ordinal {
                 return currentFloor == viewedFloor
             }
@@ -59,6 +63,7 @@ struct IndoorMapFeature {
         case manualPointSelected(IndoorMapCoordinate)
         case manualFloorSelected(UUID)
         case featureSelected(IndoorMapElement.ID?)
+        case shelfSelected(ShelfKey?)
         case dismissMessage
     }
 
@@ -88,6 +93,12 @@ struct IndoorMapFeature {
                 let floor = map.floors.first { $0.ordinal == reportedFloor } ?? map.floors.first
                 state.selectedFloorID = floor?.id
                 state.selectedFeatureID = nil
+                state.selectedShelfKey = nil
+                if let position = state.latestPosition, position.source == .simulation,
+                   !acceptsSimulation(position, on: map) {
+                    state.latestPosition = nil
+                    state.locationMessage = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+                }
                 if let floor { state.requestCamera(.floor(floor.id)) }
                 state.navigation = nil
                 state.isLoadingNavigation = false
@@ -106,6 +117,7 @@ struct IndoorMapFeature {
                 state.isLoadingNavigation = false
                 state.navigationLoadError = nil
                 state.navigation = data
+                state.selectedShelfKey = nil
                 return .none
 
             case .navigationFailed(let requestID, let message):
@@ -136,15 +148,29 @@ struct IndoorMapFeature {
                 return .none
 
             case .locationEvent(.unavailable(let message)):
+                if state.latestPosition?.source == .simulation { state.latestPosition = nil }
                 if state.manualPosition == nil && !state.isPlacingOrigin { state.locationMessage = message }
                 return .none
 
             case .locationEvent(.position(let position)):
                 guard position.isRecent(at: now), position.source != .manual else { return .none }
                 if let latest = state.latestPosition, position.timestamp < latest.timestamp { return .none }
+                if position.source == .simulation, let map = state.map, !acceptsSimulation(position, on: map) {
+                    state.latestPosition = nil
+                    state.locationMessage = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+                    return .none
+                }
+                let previousFloor = state.latestPosition?.floorOrdinal
                 state.latestPosition = position
                 if state.manualPosition == nil && !state.isPlacingOrigin {
                     state.locationMessage = nil
+                    if position.source == .simulation, previousFloor != position.floorOrdinal,
+                       let floor = state.map?.floors.first(where: { $0.ordinal == position.floorOrdinal }),
+                       floor.id != state.selectedFloorID {
+                        state.selectedFloorID = floor.id
+                        state.selectedShelfKey = nil
+                        state.requestCamera(.floor(floor.id))
+                    }
                     if state.wantsRecenter { recenter(&state, position: position) }
                 }
                 return .none
@@ -178,6 +204,7 @@ struct IndoorMapFeature {
                 guard state.map?.floors.contains(where: { $0.id == id }) == true else { return .none }
                 state.selectedFloorID = id
                 state.selectedFeatureID = nil
+                state.selectedShelfKey = nil
                 state.requestCamera(.floor(id))
                 return .none
 
@@ -236,11 +263,22 @@ struct IndoorMapFeature {
                 }
                 return .none
 
+            case .shelfSelected(let key):
+                state.selectedShelfKey = key.flatMap { key in
+                    state.mockShelves.first { $0.key == key && $0.floorID == state.selectedFloorID }?.key
+                }
+                return .none
+
             case .dismissMessage:
                 state.locationMessage = nil
                 return .none
             }
         }
+    }
+
+    private func acceptsSimulation(_ position: IndoorPosition, on map: IndoorMap) -> Bool {
+        guard let floor = map.floors.first(where: { $0.ordinal == position.floorOrdinal }) else { return false }
+        return floor.geometry.contains(position.coordinate)
     }
 
     private func loadMap(_ state: inout State) -> Effect<Action> {

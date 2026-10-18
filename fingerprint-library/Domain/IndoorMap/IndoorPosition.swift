@@ -1,7 +1,7 @@
 import Foundation
 
 nonisolated struct IndoorPosition: Equatable, Sendable {
-    enum Source: Equatable, Sendable { case sensor, manual, replay }
+    enum Source: Equatable, Sendable { case sensor, manual, replay, simulation }
 
     let coordinate: IndoorMapCoordinate
     let floorOrdinal: Int?

@@ -36,7 +36,10 @@ struct IndoorMapView: View {
                 position: store.currentPosition, showsUserLocation: store.showsNativeUserLocation,
                 isPlacingOrigin: false, cameraRequest: store.cameraRequest,
                 onSelect: { _ in },
-                onPlaceOrigin: { _ in }
+                onPlaceOrigin: { _ in },
+                shelves: store.mockShelves,
+                selectedShelfKey: store.selectedShelfKey,
+                onSelectShelf: { store.send(.shelfSelected($0)) }
             )
             .ignoresSafeArea()
 
@@ -67,6 +70,21 @@ struct IndoorMapView: View {
                 Spacer()
             }
             .padding(.horizontal, 12)
+
+            #if DEBUG && targetEnvironment(simulator)
+            if IndoorLocationClient.usesSimulation {
+                VStack {
+                    Spacer()
+                    Text(store.locationMessage ?? "시뮬레이션 위치")
+                        .font(.caption)
+                        .padding(8)
+                        .background(.regularMaterial, in: Capsule())
+                        .padding(.bottom, 12)
+                        .accessibilityIdentifier("simulation-location-status")
+                }
+                .allowsHitTesting(false)
+            }
+            #endif
         }
     }
 }

@@ -13,7 +13,7 @@
     "venue.geojson": "592f631f0a59c3c020bac5363fea21ea131d7d87d1d01cadb4ade658eae7eb0f"
   },
   "routing_sha256": "0d0271c5933d9efdd1d470171103c94f3b73e585e3a488182e5e8123ad8209f8",
-  "shelves_sha256": "af97da696de03411fb405bea697425d1f1292abee57ae2e43c4f10ead58057cc",
+  "shelves_sha256": "5e86909c574ad304283c269b8aaff0fa3285aa2ef99e0ef8584755320393aa7b",
   "source_commit": "ec34f3412694f9afd2bd710302369a4d92cf1201",
   "source_routing_path": "Fingerprint/Debug/RoutingGraphTest/Resources/routing-graph.geojson",
   "source_worktree_changes": [

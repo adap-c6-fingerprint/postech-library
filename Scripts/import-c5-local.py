@@ -79,7 +79,7 @@ def mock_shelves(original, graph):
     if len(selected) != 3 or len({n["properties"]["level"] for n, _ in selected}) < 2:
         raise ValueError("서로 다른 층을 포함한 C5 목업 구역 3개를 정할 수 없습니다. 매핑을 검토하세요.")
     return {"schema_version": 1, "dataset_id": "c5-demo", "layout_version": graph["layout_version"], "mode": "mock",
-            "shelves": [{"key": f"mock-{i:02}", "name": f"C5 시연용 목적지 {i:02}",
+            "shelves": [{"key": f"mock-{i:02}", "name": f"가상 서가 {i:02}",
                          "level_id": node["properties"]["level_id"], "element_kind": "unit",
                          "element_id": unit["id"], "arrival_node_id": node["id"]}
                         for i, (node, unit) in enumerate(selected, 1)]}

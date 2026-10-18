@@ -51,7 +51,7 @@ let destination = try data.shelves.destination(
 // arrivalNodeID / arrivalCoordinate: #7 탐색 입력용
 ```
 
-TCA 화면에서는 store.navigation을 사용한다. 준비 전/실패는 isLoadingNavigation·navigationLoadError로 구분하며 재시도는 `.retryNavigationTapped`다. 외부 도서의 위치 표시 문자열을 이 키로 해석하지 않는다. 매핑되지 않은 키는 unmappedShelf 오류다. 실제 도서관 소장본·서가 계약은 #6에서 도서 담당과 합의한다.
+TCA 화면에서는 store.navigation을 사용한다. `mode: mock`인 목적지는 해당 층에서 가상 서가 핀으로 표시하며 선택한 키는 `selectedShelfKey`에 보관한다. 핀 위치는 기존 도착 노드의 좌표이며 실제 서가 도형의 중심이 아니다. 준비 전/실패는 isLoadingNavigation·navigationLoadError로 구분하며 재시도는 `.retryNavigationTapped`다. 외부 도서의 위치 표시 문자열을 이 키로 해석하지 않는다. 매핑되지 않은 키는 unmappedShelf 오류다. 실제 도서관 소장본·서가 계약은 #6에서 도서 담당과 합의한다.
 
 현재 위치 스냅·A*·최단 방문 순서·경로 표시·실시간 안내는 후속 범위다. 이 변경만으로 #5 전체를 완료 처리하지 않는다.
 
