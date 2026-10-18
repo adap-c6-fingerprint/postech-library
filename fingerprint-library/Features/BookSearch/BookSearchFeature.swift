@@ -21,6 +21,7 @@ struct BookSearchFeature {
         var hasSearched: Bool = false
         
         var basketBooks: [Book] = []
+        @Presents var detail: BookDetailFeature.State?
     }
     
     // 이 기능에서 발생할 수 있는 이벤트
@@ -31,6 +32,8 @@ struct BookSearchFeature {
         case searchFailed(String)
         
         case addToBasket(Book)
+        case bookSelected(Book)
+        case detail(PresentationAction<BookDetailFeature.Action>)
     }
     
     // 검색에 사용할 BookClient 값
@@ -41,6 +44,12 @@ struct BookSearchFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case let .bookSelected(book):
+                state.detail = BookDetailFeature.State(book: book)
+                return .none
+
+            case .detail:
+                return .none
                 
             case let .addToBasket(book):
                 guard !state.basketBooks.contains(where: {
@@ -111,6 +120,9 @@ struct BookSearchFeature {
                 state.errorMessage = message
                 return .none
             }
+        }
+        .ifLet(\.$detail, action: \.detail) {
+            BookDetailFeature()
         }
     }
 }

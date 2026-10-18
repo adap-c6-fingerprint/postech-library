@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct BookSearchView: View {
-    let store: StoreOf<BookSearchFeature>
+    @Bindable var store: StoreOf<BookSearchFeature>
 
     var body: some View {
         Group {
@@ -46,6 +46,9 @@ struct BookSearchView: View {
                         ForEach(store.books) { book in
                             BookSearchResultRow(
                                 book: book,
+                                onShowDetail: {
+                                    store.send(.bookSelected(book))
+                                },
                                 onAddToBasket: {
                                     store.send(.addToBasket(book))
                             })
@@ -78,6 +81,9 @@ struct BookSearchView: View {
             store.hasSearched ? "검색 결과" : "책 검색"
         )
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(item: $store.scope(state: \.detail, action: \.detail)) { detailStore in
+            BookDetailView(store: detailStore)
+        }
         .searchable(
             text: Binding(
                 get: {

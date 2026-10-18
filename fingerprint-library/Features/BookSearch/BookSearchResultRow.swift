@@ -9,33 +9,44 @@ import SwiftUI
 
 struct BookSearchResultRow: View {
     let book: Book
+    let onShowDetail: () -> Void
     let onAddToBasket: () -> Void
 
     var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            coverImage
+        VStack(spacing: 12) {
+            Button(action: onShowDetail) {
+                HStack(alignment: .top, spacing: 16) {
+                    coverImage
 
-            VStack(alignment: .leading, spacing: 8) {
-                Text(cleaned(book.title))
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                    .lineLimit(3)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(cleaned(book.title))
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                            .lineLimit(3)
 
-                Text(cleaned(book.author))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(2)
+                        Text(cleaned(book.author))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
 
-                if !publicationInfo.isEmpty {
-                    Text(publicationInfo)
+                        if !publicationInfo.isEmpty {
+                            Text(publicationInfo)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(2)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Image(systemName: "chevron.right")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                        .lineLimit(2)
                 }
-
-                actionButtons
+                .contentShape(Rectangle())
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .buttonStyle(.plain)
+            .accessibilityHint("책 소개 보기")
+
+            actionButtons
         }
         .padding(16)
         .background(Color(.secondarySystemGroupedBackground))
@@ -125,21 +136,6 @@ struct BookSearchResultRow: View {
     }
 
     private func cleaned(_ text: String) -> String {
-        return text
-            .replacingOccurrences(
-                of: #"</?span\b[^>]*>"#,
-                with: "",
-                options: [.regularExpression, .caseInsensitive]
-            )
-            .replacingOccurrences(
-                of: #"<br\s*/?>"#,
-                with: " ",
-                options: [.regularExpression, .caseInsensitive]
-            )
-            .replacingOccurrences(of: "&nbsp;", with: " ")
-            .replacingOccurrences(of: "&quot;", with: "\"")
-            .replacingOccurrences(of: "&#39;", with: "'")
-            .replacingOccurrences(of: "&amp;", with: "&")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+        BookText.plainText(text)
     }
 }
