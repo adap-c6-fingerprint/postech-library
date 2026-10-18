@@ -39,7 +39,8 @@ struct IndoorMapView: View {
                 onPlaceOrigin: { _ in },
                 shelves: store.mockShelves,
                 selectedShelfKey: store.selectedShelfKey,
-                onSelectShelf: { store.send(.shelfSelected($0)) }
+                onSelectShelf: { store.send(.shelfSelected($0)) },
+                route: store.route
             )
             .ignoresSafeArea()
 
@@ -70,6 +71,13 @@ struct IndoorMapView: View {
                 Spacer()
             }
             .padding(.horizontal, 12)
+
+            VStack {
+                Spacer()
+                IndoorRouteControls(store: store)
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, IndoorLocationClient.usesSimulation ? 60 : 12)
+            }
 
             #if DEBUG && targetEnvironment(simulator)
             if IndoorLocationClient.usesSimulation {

@@ -20,5 +20,6 @@
     "Fingerprint/App/Domain/IMDF/C5/IMDFData/LICENSE/LICENSE.txt",
     "Fingerprint/App/Domain/IMDF/C5/IMDFData/amenity.geojson",
     "Fingerprint/Debug/RoutingGraphTest/Resources/routing-graph.geojson"
-  ]
+  ],
+  "cross_floor_distances_sha256": "02d4b6441e420111c9733cff937d4c8ef6e95030617255220e6ad0fc5568758f"
 }

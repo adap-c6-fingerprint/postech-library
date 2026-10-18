@@ -91,8 +91,10 @@ class C5ImportTests(unittest.TestCase):
         value = json.loads(path.read_text())
         if filename == "routing-graph.geojson":
             value["features"][0]["properties"]["name"] = "local edit"
-        else:
+        elif filename == "shelves.json":
             value["shelves"][0]["name"] = "local edit"
+        else:
+            value["layout_version"] = "local edit"
         write_json(path, value)
 
     def assert_source_preserved(self, fixture):
@@ -105,12 +107,12 @@ class C5ImportTests(unittest.TestCase):
 
     def test_initial_import_preserves_source(self):
         with self.fixture() as fixture:
-            self.assertEqual(len(snapshot(fixture.destination)), 17)
+            self.assertEqual(len(snapshot(fixture.destination)), 18)
             self.assert_source_preserved(fixture)
 
     def test_modified_sidecars_require_replace_with_or_without_imdf(self):
         for has_imdf in (False, True):
-            for filename in ("routing-graph.geojson", "shelves.json"):
+            for filename in ("routing-graph.geojson", "shelves.json", "cross-floor-distances.json"):
                 with self.subTest(imdf=has_imdf, file=filename), self.fixture() as fixture:
                     if not has_imdf:
                         shutil.rmtree(fixture.destination / "IMDFData")
@@ -123,7 +125,7 @@ class C5ImportTests(unittest.TestCase):
 
     def test_explicit_replace_updates_modified_sidecars(self):
         for has_imdf in (False, True):
-            for filename in ("routing-graph.geojson", "shelves.json"):
+            for filename in ("routing-graph.geojson", "shelves.json", "cross-floor-distances.json"):
                 with self.subTest(imdf=has_imdf, file=filename), self.fixture() as fixture:
                     if not has_imdf:
                         shutil.rmtree(fixture.destination / "IMDFData")
@@ -159,6 +161,23 @@ class C5ImportTests(unittest.TestCase):
             result = fixture.run()
             self.assertEqual(result.returncode, 2, result.stderr)
             self.assertEqual(snapshot(fixture.destination), before)
+
+    def test_estimated_cross_floor_distances_are_pinned(self):
+        with self.fixture() as fixture:
+            path = fixture.source / ROUTING_PATH
+            graph = json.loads(path.read_text())
+            for category in ("stairs", "elevator"):
+                graph["features"].append({"id": category, "properties": {
+                    "role": "edge", "from": "node-0", "to": "node-2", "category": category}})
+            write_json(path, graph)
+            result = fixture.run("--replace")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            file = fixture.destination / "cross-floor-distances.json"
+            distances = json.loads(file.read_text())
+            self.assertEqual({e["edge_id"]: e["meters"] for e in distances["edges"]}, {"stairs": 10, "elevator": 3.5})
+            self.assertTrue(all(e["source"] == "estimated" and e["basis"] for e in distances["edges"]))
+            manifest = json.loads((fixture.destination / "dataset.json").read_text())
+            self.assertEqual(manifest["cross_floor_distances_sha256"], hashlib.sha256(file.read_bytes()).hexdigest())
 
 
 if __name__ == "__main__":

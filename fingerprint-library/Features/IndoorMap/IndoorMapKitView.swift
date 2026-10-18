@@ -14,6 +14,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var shelves: [ShelfDestination] = []
     var selectedShelfKey: ShelfKey?
     var onSelectShelf: (ShelfKey?) -> Void = { _ in }
+    var route: IndoorRoute?
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -45,6 +46,10 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var positionAnnotation: PositionAnnotation?
         private var renderedPosition: IndoorPosition?
         private var renderedShelves: [ShelfDestination] = []
+        private var renderedRoute: IndoorRoute?
+        private var routeFloorID: UUID?
+        private var routeOverlays: [any MKOverlay] = []
+        private var routeOverlayIDs = Set<ObjectIdentifier>()
 
         init(parent: IndoorMapKitView) { self.parent = parent }
 
@@ -82,6 +87,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.showsUserLocation = parent.showsUserLocation
             updatePosition(in: view)
             updateShelves(in: view)
+            updateRoute(in: view)
             if selectedID != parent.selectedFeatureID {
                 selectedID = parent.selectedFeatureID
                 for overlay in view.overlays {
@@ -94,6 +100,33 @@ struct IndoorMapKitView: UIViewRepresentable {
             if pendingCameraRequest != nil { view.setNeedsLayout() }
         }
 
+        private func updateRoute(in view: MKMapView) {
+            guard renderedRoute != parent.route || routeFloorID != parent.floor.id else { return }
+            view.removeOverlays(routeOverlays)
+            routeOverlays.removeAll()
+            routeOverlayIDs.removeAll()
+            renderedRoute = parent.route
+            routeFloorID = parent.floor.id
+            guard let route = parent.route else { return }
+            for segment in route.segments where segment.floorID == parent.floor.id && segment.coordinates.count >= 2 {
+                let points = segment.coordinates.map(\.clCoordinate)
+                routeOverlays.append(MKPolyline(coordinates: points, count: points.count))
+            }
+            if route.start.floorID == parent.floor.id {
+                routeOverlays.append(MKCircle(center: route.start.routeCoordinate.clCoordinate, radius: 1))
+            }
+            for change in route.floorChanges {
+                if change.fromFloorID == parent.floor.id {
+                    routeOverlays.append(MKCircle(center: change.fromCoordinate.clCoordinate, radius: 1.5))
+                }
+                if change.toFloorID == parent.floor.id {
+                    routeOverlays.append(MKCircle(center: change.toCoordinate.clCoordinate, radius: 1.5))
+                }
+            }
+            routeOverlayIDs = Set(routeOverlays.map { ObjectIdentifier($0) })
+            view.addOverlays(routeOverlays, level: .aboveLabels)
+        }
+
         private func updateShelves(in view: MKMapView) {
             let shelves = parent.shelves.filter { $0.floorID == parent.floor.id }
             if renderedShelves != shelves {
@@ -104,6 +137,10 @@ struct IndoorMapKitView: UIViewRepresentable {
             for case let annotation as IndoorShelfAnnotation in view.annotations {
                 (view.view(for: annotation) as? MKMarkerAnnotationView)?.markerTintColor =
                     annotation.destination.key == parent.selectedShelfKey ? .systemOrange : .systemIndigo
+            }
+            for case let annotation as IndoorShelfAnnotation in view.selectedAnnotations
+                where annotation.destination.key != parent.selectedShelfKey {
+                view.deselectAnnotation(annotation, animated: false)
             }
         }
 
@@ -124,6 +161,9 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func render(in view: MKMapView) {
             view.removeOverlays(view.overlays)
+            routeOverlays.removeAll()
+            routeOverlayIDs.removeAll()
+            routeFloorID = nil
             view.removeAnnotations(view.annotations.filter { $0 is FeatureAnnotation })
             overlayFeatures.removeAll()
             renderedMap = parent.map
@@ -189,12 +229,21 @@ struct IndoorMapKitView: UIViewRepresentable {
             let renderer: MKOverlayPathRenderer
             if let polygon = overlay as? MKPolygon { renderer = MKPolygonRenderer(polygon: polygon) }
             else if let line = overlay as? MKPolyline { renderer = MKPolylineRenderer(polyline: line) }
+            else if let circle = overlay as? MKCircle { renderer = MKCircleRenderer(circle: circle) }
             else { return MKOverlayRenderer(overlay: overlay) }
             style(renderer, overlay: overlay)
             return renderer
         }
 
         func style(_ renderer: MKOverlayPathRenderer, overlay: any MKOverlay) {
+            if routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
+                renderer.strokeColor = .systemBlue
+                renderer.fillColor = UIColor.systemBlue.withAlphaComponent(0.25)
+                renderer.lineWidth = overlay is MKPolyline ? 5 : 2
+                renderer.lineCap = .round
+                renderer.lineJoin = .round
+                return
+            }
             let feature = overlayFeatures[ObjectIdentifier(overlay)]
             renderer.lineWidth = feature?.kind == .opening ? 2 : 0.8
             renderer.strokeColor = .systemGray2
