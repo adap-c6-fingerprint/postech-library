@@ -30,6 +30,7 @@ struct IndoorMapFeature {
         var isRouting = false
         var routeRequestID = 0
         var requiresStairConfirmation = false
+        var isRouteSheetExpanded = false
 
         var routeDestination: ShelfDestination? {
             let key = selectedShelfKey ?? routeDestinationKey
@@ -76,6 +77,8 @@ struct IndoorMapFeature {
         case manualFloorSelected(UUID)
         case featureSelected(IndoorMapElement.ID?)
         case shelfSelected(ShelfKey?)
+        case routeSettingsTapped
+        case routeSheetExpansionChanged(Bool)
         case routeRequested
         case routePreferenceChanged(RoutePreference)
         case routeLoaded(requestID: Int, IndoorRouteSearchOutcome)
@@ -84,6 +87,11 @@ struct IndoorMapFeature {
         case useStairsTapped
         case dismissStairConfirmation
         case dismissMessage
+        case delegate(Delegate)
+
+        enum Delegate: Equatable {
+            case showRouteSettings
+        }
     }
 
     @Dependency(\.indoorMapClient) var mapClient
@@ -212,17 +220,17 @@ struct IndoorMapFeature {
                     state.wantsRecenter = true
                     return .run { _ in await locationClient.requestPermission() }
                 case .denied:
-                    state.locationMessage = "위치 권한이 꺼져 있어요. 설정에서 위치 접근을 허용하거나 출발점을 직접 지정해주세요."
+                    state.locationMessage = "위치 권한이 꺼져 있어요. 설정에서 위치 접근을 허용해주세요."
                 case .restricted:
-                    state.locationMessage = "위치 접근이 제한되어 있어요. 층과 출발점을 직접 지정해주세요."
+                    state.locationMessage = "기기 설정에서 위치 접근이 제한되어 있어요."
                 case .servicesDisabled:
-                    state.locationMessage = "기기의 위치 서비스가 꺼져 있어요. 위치 서비스를 켜거나 출발점을 직접 지정해주세요."
+                    state.locationMessage = "기기의 위치 서비스가 꺼져 있어요. 설정에서 위치 서비스를 켜주세요."
                 case .authorized:
                     if let position = state.latestPosition, position.isRecent(at: now) {
                         recenter(&state, position: position)
                     } else {
                         state.wantsRecenter = true
-                        state.locationMessage = "현재 위치를 확인하고 있어요. 위치가 잡히지 않으면 출발점을 직접 지정해주세요."
+                        state.locationMessage = "현재 위치를 확인하고 있어요. 위치가 확인되면 지도를 이동할게요."
                     }
                 }
                 return .none
@@ -302,10 +310,20 @@ struct IndoorMapFeature {
             case .routeRequested:
                 return searchRoute(&state)
 
+            case .routeSettingsTapped:
+                guard let destination = state.routeDestination else { return .none }
+                state.routeDestinationKey = destination.key
+                state.isRouteSheetExpanded = false
+                return .send(.delegate(.showRouteSettings))
+
+            case .routeSheetExpansionChanged(let isExpanded):
+                state.isRouteSheetExpanded = isExpanded
+                return .none
+
             case .routePreferenceChanged(let preference):
                 guard state.routePreference != preference else { return .none }
                 state.routePreference = preference
-                return invalidateRoute(&state)
+                return state.routeDestinationKey == nil ? invalidateRoute(&state) : searchRoute(&state)
 
             case .routeLoaded(let requestID, let outcome):
                 guard state.isRouting, state.routeRequestID == requestID else { return .none }
@@ -331,10 +349,14 @@ struct IndoorMapFeature {
 
             case .routeCleared:
                 state.selectedShelfKey = nil
+                state.isRouteSheetExpanded = false
                 return invalidateRoute(&state, clearDestination: true)
 
             case .dismissMessage:
                 state.locationMessage = nil
+                return .none
+
+            case .delegate:
                 return .none
             }
         }
@@ -422,6 +444,7 @@ struct IndoorMapFeature {
     private func recenter(_ state: inout State, position: IndoorPosition) {
         if let ordinal = position.floorOrdinal,
            let floor = state.map?.floors.first(where: { $0.ordinal == ordinal }) {
+            if state.selectedFloorID != floor.id { state.selectedShelfKey = nil }
             state.selectedFloorID = floor.id
         }
         state.requestCamera(.position(position.coordinate))

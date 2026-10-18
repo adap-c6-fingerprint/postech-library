@@ -15,6 +15,8 @@ struct IndoorMapKitView: UIViewRepresentable {
     var selectedShelfKey: ShelfKey?
     var onSelectShelf: (ShelfKey?) -> Void = { _ in }
     var route: IndoorRoute?
+    /// 경로 시트와 상단 위치 버튼을 제외한 영역에 도면·현재 위치를 맞춘다.
+    var viewportInsets: UIEdgeInsets = .zero
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -205,10 +207,13 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         @discardableResult
-        func moveCamera(_ request: IndoorMapCameraRequest, in view: MKMapView) -> Bool {
+        func moveCamera(_ request: IndoorMapCameraRequest, in view: MKMapView, animated: Bool = true) -> Bool {
             switch request.target {
             case .floor(let id):
-                let padding = UIEdgeInsets(top: 24, left: 80, bottom: 24, right: 24)
+                let padding = UIEdgeInsets(
+                    top: 24 + parent.viewportInsets.top, left: 80 + parent.viewportInsets.left,
+                    bottom: 24 + parent.viewportInsets.bottom, right: 24 + parent.viewportInsets.right
+                )
                 guard view.bounds.width > padding.left + padding.right,
                       view.bounds.height > padding.top + padding.bottom,
                       let floor = parent.map.floors.first(where: { $0.id == id }) else { return false }
@@ -220,7 +225,20 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.setVisibleMapRect(rect, edgePadding: padding, animated: false)
             case .position(let coordinate):
                 guard coordinate.isValid else { return false }
-                view.setCenter(coordinate.clCoordinate, animated: true)
+                let viewport = view.bounds.inset(by: parent.viewportInsets)
+                guard viewport.width > 0, viewport.height > 0 else { return false }
+                // 평면으로 돌린 뒤, 시트에 가리지 않는 화면 중심으로 좌표를 이동한다.
+                let flatCamera = view.camera.copy() as! MKMapCamera
+                flatCamera.pitch = 0
+                view.setCamera(flatCamera, animated: false)
+                let point = view.convert(coordinate.clCoordinate, toPointTo: view)
+                // MKMapView의 카메라 중심은 safe area에 따라 bounds의 중심과 다를 수 있다.
+                let cameraCenter = view.convert(view.centerCoordinate, toPointTo: view)
+                let center = CGPoint(
+                    x: point.x + cameraCenter.x - viewport.midX,
+                    y: point.y + cameraCenter.y - viewport.midY
+                )
+                view.setCenter(view.convert(center, toCoordinateFrom: view), animated: animated)
             }
             return true
         }

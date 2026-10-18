@@ -18,71 +18,23 @@ struct IndoorRouteControls: View {
                     }
                     .accessibilityLabel("경로 닫기")
                 }
-                Picker(
-                    "이동 방법",
-                    selection: Binding(
-                        get: { store.routePreference }, set: { store.send(.routePreferenceChanged($0)) }
-                    )
-                ) {
-                    Text("최단 거리").tag(RoutePreference.shortestDistance)
-                    Text("엘리베이터 우선").tag(RoutePreference.elevatorPreferred)
-                }
-                .pickerStyle(.segmented)
-
-                if let route = store.route {
-                    Text(
-                        route.isAlreadyAtDestination
-                            ? "등록된 서가 도착점과 출발점이 같아요."
-                            : "\(route.usesEstimatedDistances ? "예상 거리" : "경로 거리") 약 \(route.distanceMeters.formatted(.number.precision(.fractionLength(0))))m"
-                    )
-                    .font(.subheadline.weight(.semibold))
-                    .accessibilityIdentifier("route-distance")
-                    if !route.floorChanges.isEmpty {
-                        Text("층 이동 \(route.floorChanges.count)회 · 층 버튼으로 각 층의 경로를 확인하세요.")
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    if route.usesEstimatedDistances {
-                        Text("층간 거리는 C5 시연용 추정값입니다.")
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    if route.start.distanceToGraphMeters >= 1 {
-                        Text("현재 위치에서 약 \(Int(route.start.distanceToGraphMeters.rounded()))m 떨어진 통로부터 계산했어요.")
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    Text("계산 당시 출발점 기준의 경로 미리보기입니다.")
-                        .font(.caption).foregroundStyle(.secondary)
-                }
-                if let error = store.routeError {
-                    Text(error).font(.caption).foregroundStyle(.red).accessibilityIdentifier("route-error")
-                }
-                if store.currentPosition == nil {
-                    Text("현재 위치를 확인하고 있어요.").font(.caption).foregroundStyle(.secondary)
-                }
+                Text(store.map?.floors.first { $0.id == destination.floorID }?.name ?? "서가 위치")
+                    .font(.caption).foregroundStyle(.secondary)
                 Button {
-                    store.send(.routeRequested)
+                    store.send(.routeSettingsTapped)
                 } label: {
-                    HStack {
-                        if store.isRouting { ProgressView() }
-                        Text(store.route == nil ? "경로 보기" : "현재 위치에서 다시 계산")
-                    }.frame(maxWidth: .infinity)
+                    Text("경로 보기")
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 48)
+                        .foregroundStyle(Color(uiColor: .systemBackground))
+                        .background(Color(uiColor: .label))
                 }
-                .buttonStyle(.borderedProminent)
-                .disabled(store.isRouting || store.currentPosition == nil)
-                .accessibilityIdentifier("calculate-route")
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("open-route-settings")
             }
-            .padding(14)
-            .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
-            .confirmationDialog(
-                "엘리베이터 우선 경로가 없어요. 계단을 포함해 다시 찾을까요?",
-                isPresented: Binding(
-                    get: { store.requiresStairConfirmation },
-                    set: {
-                        if !$0 { store.send(.dismissStairConfirmation) }
-                    }), titleVisibility: .visible
-            ) {
-                Button("계단 포함해서 찾기") { store.send(.useStairsTapped) }
-                Button("취소", role: .cancel) { store.send(.dismissStairConfirmation) }
-            }
+            .padding(16)
+            .background(Color(uiColor: .systemBackground), in: RoundedRectangle(cornerRadius: 20))
+            .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
         }
     }
 }
