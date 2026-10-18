@@ -58,3 +58,11 @@ TCA 화면에서는 store.navigation을 사용한다. 준비 전/실패는 isLoa
 ## 테스트
 
 IndoorNavigationTests는 합성 IMDF·GeoJSON·매핑으로 해시·버전·참조 오류와 진단을 검증한다. IndoorNavigationFeatureTests는 실패 시 지도 유지·재시도·이탈 뒤 늦은 응답 무시·재진입을 확인한다. 실제 C5 번들 검사는 C5가 없으면 이유를 남기고 건너뛴다.
+
+TestStore를 사용하는 suite와 실제 스레드 검사는 `IndoorMapSerialTests`의 `.serialized` 범위 안에서 실행한다. 전역 main executor hook의 간섭을 피하기 위한 구조이며, 새 TestStore 테스트도 이 상위 suite에 둔다. 관련 없는 도면·geometry 테스트는 병렬 실행할 수 있다.
+
+가져오기 스크립트는 IMDFData 존재 여부와 독립적으로 기존 routing·서가 파일을 검사한다. `--replace`가 없으면 변경 파일을 보존하고 중단한다. 합성 데이터로 초기 가져오기·부분 폴더·덮어쓰기 방지·명시적 교체·반복 실행을 검증한다.
+
+```sh
+python3 -m unittest discover -s Scripts/tests -p 'test_*.py' -v
+```

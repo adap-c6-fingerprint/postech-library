@@ -11,6 +11,8 @@ xcuserdata/
 DerivedData/
 build/
 .build/
+__pycache__/
+*.pyc
 
 # Local API keys
 Secrets.xcconfig

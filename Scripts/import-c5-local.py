@@ -123,10 +123,11 @@ def main():
     existing = destination / "IMDFData"
     if destination.is_symlink() or existing.is_symlink():
         parser.error("대상 C5 폴더에 심볼릭 링크를 사용할 수 없습니다.")
-    if existing.exists() and not args.replace:
-        existing_files = {str(path.relative_to(existing)) for path in existing.rglob("*") if path.is_file()}
-        if existing_files != EXPECTED_FILES or any(digest(existing / name) != value for name, value in hashes.items()):
-            parser.error("로컬 복사본이 원본과 다릅니다. 내용을 확인한 뒤 --replace로 교체해주세요.")
+    if not args.replace:
+        if existing.exists():
+            existing_files = {str(path.relative_to(existing)) for path in existing.rglob("*") if path.is_file()}
+            if existing_files != EXPECTED_FILES or any(digest(existing / name) != value for name, value in hashes.items()):
+                parser.error("로컬 복사본이 원본과 다릅니다. 내용을 확인한 뒤 --replace로 교체해주세요.")
         old_routing = destination / "routing-graph.geojson"
         if old_routing.exists() and digest(old_routing) != routing_hash:
             parser.error("로컬 routing 복사본이 원본과 다릅니다. 검토 후 --replace로 교체해주세요.")
