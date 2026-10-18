@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "9da10650-399f-428e-b43a-1c727bfa41dc",
+      "feature_type": "building",
+      "properties": {
+        "name": {"en": "Building C5", "ko": "C5"},
+        "alt_name": null,
+        "category": "unspecified",
+        "restriction": null,
+        "display_point": {
+          "type": "Point",
+          "coordinates": [129.325778, 36.014267]
+        },
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112"
+      },
+      "geometry": null
+    }
+  ]
+}

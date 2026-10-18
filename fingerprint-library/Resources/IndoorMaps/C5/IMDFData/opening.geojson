@@ -1,0 +1,1835 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "b5c4842d-3bc3-4d40-9387-3dc852b9a11a",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "EV1"
+        },
+        "alt_name": null,
+        "level_id": "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258293,
+            36.0141502
+          ],
+          [
+            129.3258198,
+            36.014147
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "2efe67bf-64f5-4816-a97b-403149f50c68",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "EV2"
+        },
+        "alt_name": null,
+        "level_id": "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258543,
+            36.0141588
+          ],
+          [
+            129.3258442,
+            36.0141554
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "1bf8e290-615d-4da5-994f-cc1573d35fba",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "BuildingEntrance"
+        },
+        "alt_name": null,
+        "level_id": "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259438,
+            36.014221
+          ],
+          [
+            129.3259302,
+            36.0142476
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "05fa1e5d-f023-4402-bd35-4615c730191b",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "BuildingEntrance"
+        },
+        "alt_name": null,
+        "level_id": "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3256894,
+            36.0141647
+          ],
+          [
+            129.325703,
+            36.0141386
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6ea513f3-bd02-4bec-971f-9d5a0e1a18d8",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Stairs"
+        },
+        "alt_name": null,
+        "level_id": "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259094,
+            36.0141183
+          ],
+          [
+            129.3259015,
+            36.0141333
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dbdf18a1-dfff-4d4d-ac7e-b3883c5aa0f4",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "EV1"
+        },
+        "alt_name": null,
+        "level_id": "3bf68384-6c73-4b9a-a396-cf4be4081a16",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258293,
+            36.0141502
+          ],
+          [
+            129.3258198,
+            36.014147
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "07465a37-709e-4e5f-9847-d5daaff53b71",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "EV2"
+        },
+        "alt_name": null,
+        "level_id": "3bf68384-6c73-4b9a-a396-cf4be4081a16",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258543,
+            36.0141588
+          ],
+          [
+            129.3258442,
+            36.0141554
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "8a47e12f-8c81-4a29-9f28-8a40f9c3f6b8",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "BuildingEntrance"
+        },
+        "alt_name": null,
+        "level_id": "3bf68384-6c73-4b9a-a396-cf4be4081a16",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259438,
+            36.014221
+          ],
+          [
+            129.3259302,
+            36.0142476
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fbdae1a5-375f-437f-a73a-e51fe104eb4c",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "BuildingEntrance"
+        },
+        "alt_name": null,
+        "level_id": "3bf68384-6c73-4b9a-a396-cf4be4081a16",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3256894,
+            36.0141647
+          ],
+          [
+            129.325703,
+            36.0141386
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "18e207d5-7216-48ef-bcf2-d44dc7b17054",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Stairs"
+        },
+        "alt_name": null,
+        "level_id": "3bf68384-6c73-4b9a-a396-cf4be4081a16",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259094,
+            36.0141183
+          ],
+          [
+            129.3259015,
+            36.0141333
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "2bd26297-864a-47cb-ad9b-359a79781951",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "EV1"
+        },
+        "alt_name": null,
+        "level_id": "858b3048-0671-4922-8d1b-5238dd98044d",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258293,
+            36.0141502
+          ],
+          [
+            129.3258198,
+            36.014147
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "042512f3-c9c6-4b26-95b1-e5a4aa1284eb",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "EV2"
+        },
+        "alt_name": null,
+        "level_id": "858b3048-0671-4922-8d1b-5238dd98044d",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258543,
+            36.0141588
+          ],
+          [
+            129.3258442,
+            36.0141554
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6a3fda1c-88d5-4c75-a467-af6b97001bd2",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "BuildingEntrance"
+        },
+        "alt_name": null,
+        "level_id": "858b3048-0671-4922-8d1b-5238dd98044d",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259438,
+            36.014221
+          ],
+          [
+            129.3259302,
+            36.0142476
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ed4d30a6-ca3d-4e50-ab92-de989978735d",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "BuildingEntrance"
+        },
+        "alt_name": null,
+        "level_id": "858b3048-0671-4922-8d1b-5238dd98044d",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3256894,
+            36.0141647
+          ],
+          [
+            129.325703,
+            36.0141386
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5bb86874-ffa7-41e4-bcb3-6bef98f9cc76",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Stairs"
+        },
+        "alt_name": null,
+        "level_id": "858b3048-0671-4922-8d1b-5238dd98044d",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259094,
+            36.0141183
+          ],
+          [
+            129.3259015,
+            36.0141333
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "419ff7d7-06bb-4c8e-9740-3118d7183ac8",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "EV1"
+        },
+        "alt_name": null,
+        "level_id": "a9b7f6ca-56fa-44d2-9b54-85d152b3d892",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258293,
+            36.0141502
+          ],
+          [
+            129.3258198,
+            36.014147
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "22ce11d0-a33d-410e-9026-20049fc345c2",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "EV2"
+        },
+        "alt_name": null,
+        "level_id": "a9b7f6ca-56fa-44d2-9b54-85d152b3d892",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258543,
+            36.0141588
+          ],
+          [
+            129.3258442,
+            36.0141554
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "09a50e6a-0196-4906-9e2b-5e2d47962727",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "BuildingEntrance"
+        },
+        "alt_name": null,
+        "level_id": "a9b7f6ca-56fa-44d2-9b54-85d152b3d892",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259438,
+            36.014221
+          ],
+          [
+            129.3259302,
+            36.0142476
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "80f40ec6-15cc-4aa9-bdc0-09485aa0d799",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "BuildingEntrance"
+        },
+        "alt_name": null,
+        "level_id": "a9b7f6ca-56fa-44d2-9b54-85d152b3d892",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3256894,
+            36.0141647
+          ],
+          [
+            129.325703,
+            36.0141386
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "13369d7e-2027-4bd5-8165-e4cfc3d27bf2",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Stairs"
+        },
+        "alt_name": null,
+        "level_id": "a9b7f6ca-56fa-44d2-9b54-85d152b3d892",
+        "display_point": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259094,
+            36.0141183
+          ],
+          [
+            129.3259015,
+            36.0141333
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "bcf70d9c-be77-4910-8940-97a325e99a79",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Entry"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258293,
+            36.0141502
+          ],
+          [
+            129.3258198,
+            36.014147
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "3844384f-221c-43b5-bad1-04238bf73312",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Entry"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258543,
+            36.0141588
+          ],
+          [
+            129.3258442,
+            36.0141554
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "70a497b0-edf2-4172-8af9-b192cdff0510",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "MainlabEntrance"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.32572,
+            36.0142482
+          ],
+          [
+            129.3257356,
+            36.0142535
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "a3ddf75d-9323-4de1-9bc3-15dfde7d2508",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "MainlabEntrance"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258356,
+            36.0142878
+          ],
+          [
+            129.3258196,
+            36.0142823
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "d3f1e9d1-8495-4d28-8a04-5e36d71bfeae",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "nonpublic"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259149,
+            36.0141649
+          ],
+          [
+            129.3259148,
+            36.0141649
+          ],
+          [
+            129.3259115,
+            36.0141713
+          ],
+          [
+            129.3259112,
+            36.0141719
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "723227cf-3aa4-4708-aa2a-945739b0bece",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259094,
+            36.0141183
+          ],
+          [
+            129.3259015,
+            36.0141333
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fafb2e80-9d8b-470d-b2d8-8035c2fb6167",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "RestroomDoor(W)"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258403,
+            36.014067
+          ],
+          [
+            129.3258404,
+            36.014067
+          ],
+          [
+            129.3258485,
+            36.0140698
+          ],
+          [
+            129.3258487,
+            36.0140699
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6f72f7ff-aadc-48d8-9c86-5fd778203d7c",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258363,
+            36.0140301
+          ],
+          [
+            129.3258287,
+            36.0140445
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "beed1fbf-c39a-46af-bb87-f93463aeff3f",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "RestroomDoor(M)"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259025,
+            36.0140883
+          ],
+          [
+            129.3259028,
+            36.0140884
+          ],
+          [
+            129.3259103,
+            36.014091
+          ],
+          [
+            129.3259105,
+            36.0140911
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "cf50f410-f50f-41b0-97c3-c31dfccf39fb",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.325964,
+            36.01403
+          ],
+          [
+            129.3259673,
+            36.0140236
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "e95410cd-43a1-442d-a41a-7e68b70a97e3",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259897,
+            36.0140191
+          ],
+          [
+            129.3259895,
+            36.0140195
+          ],
+          [
+            129.3259858,
+            36.0140266
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "7c5cbb70-7f96-4087-a9d3-7d10f30158a7",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258917,
+            36.0140314
+          ],
+          [
+            129.3258916,
+            36.0140314
+          ],
+          [
+            129.325888,
+            36.0140385
+          ],
+          [
+            129.3258879,
+            36.0140385
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "70235082-1ec7-4b46-b66f-3de37e61ca93",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258679,
+            36.0140165
+          ],
+          [
+            129.3258767,
+            36.0140193
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "79973c59-04bf-42c7-b600-037074b8accc",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3256743,
+            36.014232
+          ],
+          [
+            129.3256666,
+            36.0142294
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "25ec5d4a-3222-4c83-ba82-692e4d59aee1",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258814,
+            36.0143035
+          ],
+          [
+            129.3258891,
+            36.014306
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "4e409382-f474-44ae-b51f-2566a12ef9e1",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Entrance"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3257911,
+            36.0141898
+          ],
+          [
+            129.3257914,
+            36.0141899
+          ],
+          [
+            129.3258062,
+            36.014195
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "2a13ad0b-ae95-4fcc-9669-e146a3abaaa1",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Entrance"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258218,
+            36.0142003
+          ],
+          [
+            129.3258221,
+            36.0142004
+          ],
+          [
+            129.325837,
+            36.0142055
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "de195281-cd14-44e1-92ff-98ff875bf609",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.325775,
+            36.01406
+          ],
+          [
+            129.3257656,
+            36.0140568
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6e49a2f1-c3b1-4f22-9a41-6cb0b5c9b468",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3257795,
+            36.0140614
+          ],
+          [
+            129.3257889,
+            36.0140647
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "b6f13cd9-42e8-4061-8266-2877fcf018da",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3257839,
+            36.0140947
+          ],
+          [
+            129.3257811,
+            36.0141001
+          ],
+          [
+            129.3257806,
+            36.0141011
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "8c669914-1a65-48c6-a4e3-2ddfb635db6b",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "MeetingRoom7Door"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3256571,
+            36.0143423
+          ],
+          [
+            129.3256534,
+            36.0143494
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "d0064cee-96c8-4520-a6ac-d19c62abf783",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "AuditoriumDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3256905,
+            36.0143518
+          ],
+          [
+            129.325698,
+            36.0143372
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "d56d2158-246d-4432-a489-7b42a5806eaa",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "MeetingRoom6Door"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.325675,
+            36.0143079
+          ],
+          [
+            129.3256715,
+            36.0143149
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "78088414-a086-4ca7-aa95-5a9a6c2de78d",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "MeetingRoom4Door"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3257144,
+            36.0142313
+          ],
+          [
+            129.3257106,
+            36.0142387
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "3a9042ad-efca-4a44-a32f-ed29840759c5",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "AuditoriumDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3257505,
+            36.0142356
+          ],
+          [
+            129.3257609,
+            36.0142154
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "192a6d8b-a380-4b21-969e-1308f97df991",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Entrance"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3257917,
+            36.0141894
+          ],
+          [
+            129.3258069,
+            36.0141947
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "390093f5-6f4d-4a16-bf2b-fcd126522955",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Entrance"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258223,
+            36.0141999
+          ],
+          [
+            129.3258374,
+            36.0142051
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "fdfe2ad0-6321-4804-87b2-8a24b09195ca",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "ElevatorDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258293,
+            36.0141502
+          ],
+          [
+            129.3258198,
+            36.014147
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5554a19d-1239-4c8a-8682-02c4f6711230",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "ElevatorDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258543,
+            36.0141588
+          ],
+          [
+            129.3258442,
+            36.0141554
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "16fa3d44-76cf-4778-85c9-d66e7bcc2460",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "StairsDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259094,
+            36.0141183
+          ],
+          [
+            129.3259015,
+            36.0141333
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "81c152ad-7928-4764-a68e-1201eca89ed8",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "PhoneBooth6Door"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259593,
+            36.0140999
+          ],
+          [
+            129.3259687,
+            36.0141031
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "b772d121-4c6f-4588-ba1b-b892de967fa2",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "PhoneBooth5Door"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259727,
+            36.0141047
+          ],
+          [
+            129.3259822,
+            36.0141079
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "3d1f567f-9300-43ee-9257-529fcc05527f",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "Door"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258788,
+            36.0140199
+          ],
+          [
+            129.325887,
+            36.0140226
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6c39853c-c66f-487d-aa58-1a6bd86f3489",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "RestroomDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258403,
+            36.0140673
+          ],
+          [
+            129.3258483,
+            36.0140701
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "797eb2c7-ce6c-45c1-9201-27c86c63be35",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "RestroomDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3259026,
+            36.0140888
+          ],
+          [
+            129.3259101,
+            36.0140914
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "c15a2d6c-c87a-4331-9338-839bdd7d527b",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "OpsDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258106,
+            36.0140431
+          ],
+          [
+            129.3258071,
+            36.0140498
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "82643e6e-7613-4e22-a62b-b91fd9d97fca",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "MeetingRoom3Door"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3257848,
+            36.0140929
+          ],
+          [
+            129.3257839,
+            36.0140947
+          ],
+          [
+            129.3257811,
+            36.0141001
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "217a6478-b1a7-467c-b92f-4a0104074864",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "MeetingRoom5Door"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3256929,
+            36.0142731
+          ],
+          [
+            129.3256894,
+            36.0142799
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "089c65f5-7aa8-4739-bafc-560057c50257",
+      "feature_type": "opening",
+      "properties": {
+        "category": "pedestrian",
+        "accessibility": null,
+        "access_control": null,
+        "door": null,
+        "name": {
+          "en": "RestroomDoor"
+        },
+        "alt_name": null,
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": null
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            129.3258918,
+            36.014031
+          ],
+          [
+            129.3258917,
+            36.0140314
+          ],
+          [
+            129.3258916,
+            36.0140314
+          ],
+          [
+            129.325888,
+            36.0140385
+          ]
+        ]
+      }
+    }
+  ]
+}

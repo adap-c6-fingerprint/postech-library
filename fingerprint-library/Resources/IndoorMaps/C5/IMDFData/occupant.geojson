@@ -1,0 +1,401 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "6d2d505a-70d4-4365-8d2c-c14ea8da3888",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MeetingRoom7"},
+        "unit_id": "751de579-660e-4c6a-a49a-986d5f5ba11e",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "deb57748-87ad-42ba-866c-862f9883d728",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "4c6303e1-e34c-43ae-aa47-fcbad54d5d3e",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MeetingRoom6"},
+        "unit_id": "7e573f15-c446-4671-ba57-719824b9da25",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "02e458a9-885c-4b4b-9c28-50db5868647b",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "718ee287-1789-4026-a0ce-37f9b74dedd2",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MeetingRoom5"},
+        "unit_id": "9c58a959-cf7d-4227-99e1-66c1c5ffede6",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "ec16485e-be60-44ae-bc45-72563bf9bb3f",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "acf8306d-5765-4e08-985d-b3ea93cdde68",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MeetingRoom4"},
+        "unit_id": "16b55b0c-b741-4b5d-be67-53a650e373f0",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "d3ffc30d-7b78-40d3-847d-2ae952c74506",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "65abd56c-7233-4d4e-9924-cde7fe29315c",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MeetingRoom3"},
+        "unit_id": "385fe5ae-00f2-4089-a016-6ac468f89ddd",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "493be3e0-fca2-407d-ac55-e6a196b941cf",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "b45c601e-70ed-437a-be9d-9dc6d576a804",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "corporateoffices",
+        "name": {"en": "Ops", "ko": "옵스"},
+        "unit_id": "9e6f1b83-0496-4184-b2bf-45e2354d1d49",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "283f02f7-6ca0-44e5-bebf-aaa440ae101b",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "9f8f2090-2952-4b1b-b053-79aa28fa8cfa",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "Collab3", "ko": "콜랩3"},
+        "unit_id": "b95628d5-6431-47e9-9e1a-58f5d9be1eb7",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "71e3173c-fc7b-4f22-b428-5d49df8ceddb",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "456732c1-2db2-4b5e-ad88-bd032efbb0ea",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "Collab1", "ko": "콜랩1"},
+        "unit_id": "673c1e75-4b45-476f-b0c0-25f759f1fb92",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "ebcdf01c-ce8e-484d-a3c5-e9413bce69e6",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "e00b10ea-6227-4e9a-9ebc-8f21c1ca3aaf",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "Collab4"},
+        "unit_id": "56db88ff-d612-4fde-898f-dd971f5934fe",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "bd4bdc06-b3b9-4eb8-9f72-132f0872e68d",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "3b28da4d-6e04-4e74-80c5-eb6e678b750c",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "Collab5"},
+        "unit_id": "0a6d7497-6c2d-46f3-8753-d6f86529c4b1",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "fc2d16a5-f8d9-42e1-b380-8f2c78bbd921",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "c3333340-edaf-44a8-b845-13e3cc051bfe",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MeetingRoom1"},
+        "unit_id": "a49f6974-03ef-4f4e-b181-1d61d3857e66",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "5ff82944-1433-48fd-8378-ce470f0d8883",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "c1c75213-8e84-4f8d-900e-9562b498c583",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MeetingRoom2"},
+        "unit_id": "0f9431f9-cd09-4552-9b70-5abd75315be8",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "e44a85ff-3af1-4d72-aedd-fb8d3b4ab837",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "2f4d8eb8-c09b-4dec-b673-83ba55a8b7bf",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "Collab2", "ko": "콜랩2"},
+        "unit_id": "013c3911-08f5-4682-a15c-ff682c23d2bd",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "1f87931c-27d6-4766-a5c1-07a1ce890268",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "4db4fa6d-7fb0-4300-afcb-a419a277d33d",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "eventspace",
+        "name": {"en": "Auditorium"},
+        "unit_id": "359cdf45-0adf-4d01-8f3d-513a3cef0f66",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "fba3085c-efc3-4d2d-b634-2e879fe84f95",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "a2674e43-2d2b-491c-b080-e825b7e48b5b",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MainLab", "ko": "메인랩"},
+        "unit_id": "54dceed1-c8fa-4625-aa85-bea9d7d9e488",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "75008a41-4d0f-4645-888a-279f9db58cb1",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "c9a3e7de-1f3b-4c04-b4a5-4f07f927ba3f",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "sharedofficespace",
+        "name": {"en": "MaruLab", "ko": "마루랩"},
+        "unit_id": "e6834d84-3bfc-45ef-890a-6a21f9715c4a",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "c4d2c3e1-b27e-4cc1-9fca-6a5e9d7f30ef",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "cb727365-0099-4b85-9292-99bc4f3b8324",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "visitorcenter",
+        "name": {"en": "Lobby"},
+        "unit_id": "b500526a-7fa2-480b-8e1a-010f2e165731",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "1f3b8656-ec05-4fbc-ab15-c7834dbfd931",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "7e2a6388-ef30-45b2-969a-111d5db36716",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "visitorcenter",
+        "name": {"en": "LockupLogo", "ko": "락업로고"},
+        "unit_id": "60520da7-e3d8-4280-9ba9-d69069343d45",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "391d2e76-6e40-4c2e-ac34-35527c62e443",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "9d7eaecc-96bb-4476-af70-a18f0d1b43cf",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "visitorcenter",
+        "name": {"en": "Lobby"},
+        "unit_id": "ef4cf5eb-7c99-43eb-9e71-46f2891becca",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "3b20de6a-324f-498d-99c0-3ec7e35fcec1",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "c0cdc6e0-33fb-4c3f-9f7b-3a4ba41f1a0b",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "cafeteria",
+        "name": {"en": "Cafeteria", "ko": "카페테리아"},
+        "unit_id": "0c9b5087-ec9d-4d29-abad-d96319fa814d",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "correlation_id": null,
+        "anchor_id": "c4fbd3ad-9b8f-4a10-8b43-0f5f6b7f0f87",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "8f0ddc4b-39b5-44cb-8c23-1b0c86d1a4cb",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "cafeteria",
+        "name": {"en": "Cafeteria"},
+        "unit_id": "4db88769-15ea-41e9-89f2-f6595c8a0b50",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "c6bfb2c0-9279-4a77-aa1a-bdf6ee71d3ce",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    },
+    {
+      "type": "Feature",
+      "id": "0d8ac2e0-b1ae-4c90-a0cf-9bb01b0980da",
+      "feature_type": "occupant",
+      "properties": {
+        "category": "corporateoffices",
+        "name": {"en": "IT Room"},
+        "unit_id": "a799bbed-4a12-40dc-8643-63bfa74a154f",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "correlation_id": null,
+        "anchor_id": "7f3b91b8-4a0e-40d5-b7ce-49cb4da1c9fb",
+        "hours": null,
+        "phone": null,
+        "validity": null,
+        "website": null
+      },
+      "geometry": null
+    }
+  ]
+}
