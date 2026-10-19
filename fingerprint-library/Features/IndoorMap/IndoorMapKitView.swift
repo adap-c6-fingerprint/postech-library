@@ -52,6 +52,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var routeFloorID: UUID?
         private var routeOverlays: [any MKOverlay] = []
         private var routeOverlayIDs = Set<ObjectIdentifier>()
+        private var routeTransitionAnnotations: [IndoorRouteTransitionAnnotation] = []
 
         init(parent: IndoorMapKitView) { self.parent = parent }
 
@@ -105,8 +106,10 @@ struct IndoorMapKitView: UIViewRepresentable {
         private func updateRoute(in view: MKMapView) {
             guard renderedRoute != parent.route || routeFloorID != parent.floor.id else { return }
             view.removeOverlays(routeOverlays)
+            view.removeAnnotations(routeTransitionAnnotations)
             routeOverlays.removeAll()
             routeOverlayIDs.removeAll()
+            routeTransitionAnnotations.removeAll()
             renderedRoute = parent.route
             routeFloorID = parent.floor.id
             guard let route = parent.route else { return }
@@ -119,14 +122,15 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
             for change in route.floorChanges {
                 if change.fromFloorID == parent.floor.id {
-                    routeOverlays.append(MKCircle(center: change.fromCoordinate.clCoordinate, radius: 1.5))
+                    routeTransitionAnnotations.append(.init(change: change, isEntry: true))
                 }
                 if change.toFloorID == parent.floor.id {
-                    routeOverlays.append(MKCircle(center: change.toCoordinate.clCoordinate, radius: 1.5))
+                    routeTransitionAnnotations.append(.init(change: change, isEntry: false))
                 }
             }
             routeOverlayIDs = Set(routeOverlays.map { ObjectIdentifier($0) })
             view.addOverlays(routeOverlays, level: .aboveLabels)
+            view.addAnnotations(routeTransitionAnnotations)
         }
 
         private func updateShelves(in view: MKMapView) {
@@ -163,6 +167,8 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func render(in view: MKMapView) {
             view.removeOverlays(view.overlays)
+            view.removeAnnotations(routeTransitionAnnotations)
+            routeTransitionAnnotations.removeAll()
             routeOverlays.removeAll()
             routeOverlayIDs.removeAll()
             routeFloorID = nil
@@ -284,6 +290,22 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
+            if let annotation = annotation as? IndoorRouteTransitionAnnotation {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-transition")
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-transition")
+                view.annotation = annotation
+                view.image = annotation.markerImage
+                view.centerOffset = .zero
+                view.collisionMode = .circle
+                view.displayPriority = .required
+                view.clusteringIdentifier = nil
+                view.isEnabled = false
+                view.isAccessibilityElement = true
+                view.accessibilityLabel = annotation.title
+                view.accessibilityValue = annotation.subtitle
+                view.accessibilityIdentifier = "route-transition-\(annotation.category.rawValue)"
+                return view
+            }
             if let annotation = annotation as? PositionAnnotation, annotation.position.source == .simulation {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "simulation-dot")
                     ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "simulation-dot")
