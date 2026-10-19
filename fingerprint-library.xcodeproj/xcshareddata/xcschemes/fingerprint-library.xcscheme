@@ -39,6 +39,15 @@
                ReferencedContainer = "container:fingerprint-library.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B40000000000000000000006"
+               BuildableName = "BookDetailTests.xctest"
+               BlueprintName = "BookDetailTests"
+               ReferencedContainer = "container:fingerprint-library.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

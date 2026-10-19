@@ -14,8 +14,19 @@ cp Secrets.example.xcconfig Secrets.xcconfig
 ```
 
 생성한 `Secrets.xcconfig`의 `NATIONAL_LIBRARY_API_KEY`에 국립중앙도서관 API 키를 입력합니다.
-현재 도서 검색에는 이 키만 필요하며, 나머지 서비스의 키는 설정하지 않아도 됩니다.
+도서 상세 화면의 책 소개를 사용하려면 `YES24_API_KEY`도 입력합니다.
 키가 없으면 검색 시 API 키 누락 오류로 처리합니다.
 
 `Secrets.xcconfig`는 `.gitignore`에 등록된 개인 설정 파일입니다.
 실제 키는 `Base.xcconfig`나 `Secrets.example.xcconfig`에 작성하지 않습니다.
+
+## 도서 상세와 책 소개
+
+홈 → 도서 검색 → 검색 결과의 표지나 책 정보를 누르면 기본 상세 화면이 열립니다.
+선택한 책의 ISBN으로 Yes24 상품 상세 API를 조회하고 책 소개와 원문 링크를 표시합니다.
+ISBN13을 우선하며 ISBN10은 ISBN13으로 변환합니다. ISBN이 없거나 유효하지 않으면 요청하지 않습니다.
+소개 없음과 조회 실패를 구분하며, 실패한 요청은 상세 화면에서 다시 시도할 수 있습니다.
+검색 결과로 돌아오면 진행 중인 상세 조회를 취소하고 검색 결과와 책바구니를 보존합니다.
+
+API 형식과 출처 표시는 [Yes24 상품 상세 API](https://developers.yes24.com/api-doc/goods-item-detail)와
+[이용약관](https://developers.yes24.com/support/terms)을 기준으로 합니다.

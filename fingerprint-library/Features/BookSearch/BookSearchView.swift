@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct BookSearchView: View {
-    let store: StoreOf<BookSearchFeature>
+    @Bindable var store: StoreOf<BookSearchFeature>
 
     var body: some View {
         Group {
@@ -44,7 +44,14 @@ struct BookSearchView: View {
                 ScrollView {
                     LazyVStack(spacing: 12) {
                         ForEach(store.books) { book in
-                            BookSearchResultRow(book: book)
+                            BookSearchResultRow(
+                                book: book,
+                                onShowDetail: {
+                                    store.send(.bookSelected(book))
+                                },
+                                onAddToBasket: {
+                                    store.send(.addToBasket(book))
+                            })
                         }
                     }
                     .padding(16)
@@ -54,10 +61,29 @@ struct BookSearchView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
+        .safeAreaInset(edge: .bottom) {
+            if store.hasSearched && !store.isLoading
+                && store.errorMessage == nil && !store.books.isEmpty {
+                Button(action: {}) {
+                    Label(
+                        "책바구니 바로가기 (\(store.basketBooks.count)권)",
+                        systemImage: "basket"
+                    )
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(.bar)
+            }
+        }
         .navigationTitle(
             store.hasSearched ? "검색 결과" : "책 검색"
         )
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(item: $store.scope(state: \.detail, action: \.detail)) { detailStore in
+            BookDetailView(store: detailStore)
+        }
         .searchable(
             text: Binding(
                 get: {
