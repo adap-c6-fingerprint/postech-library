@@ -4,6 +4,7 @@
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import shutil
 import subprocess
@@ -29,6 +30,44 @@ def digest(path):
 
 def git_output(source, *arguments):
     return subprocess.check_output(["git", "-C", str(source), *arguments], text=True).strip()
+
+
+def horizontal_distance_meters(start, end):
+    """RoutingGeometry와 같은 WGS84 수평 직선거리 하한이다."""
+    lon1, lat1 = start[:2]
+    lon2, lat2 = end[:2]
+    latitude_delta = math.radians(lat2 - lat1)
+    lat1, lat2 = math.radians(lat1), math.radians(lat2)
+    value = (math.sin(latitude_delta / 2) ** 2
+             + math.cos(lat1) * math.cos(lat2) * math.sin(math.radians(lon2 - lon1) / 2) ** 2)
+    return 6_371_008.8 * 2 * math.atan2(math.sqrt(value), math.sqrt(max(0, 1 - value)))
+
+
+def estimated_cross_floor_distances(graph):
+    """사용자가 허용한 C5 시연용 가정이다. 실측 거리나 이동 시간으로 취급하지 않는다."""
+    nodes = {f["id"]: f for f in graph["features"] if f["properties"]["role"] == "node"}
+    entries = []
+    for edge in sorted(graph["features"], key=lambda f: f["id"]):
+        p = edge["properties"]
+        if p["role"] != "edge":
+            continue
+        floors = abs(nodes[p["from"]]["properties"]["level"] - nodes[p["to"]]["properties"]["level"])
+        if not floors:
+            continue
+        if p["category"] in {"elevator", "platform_lift"}:
+            per_floor = 3.5
+        elif p["category"] in {"stairs", "escalator", "ramp"}:
+            per_floor = 10.0
+        else:
+            raise ValueError("층간 이동 수단을 확인하세요.")
+        meters = floors * per_floor
+        horizontal = horizontal_distance_meters(nodes[p["from"]]["geometry"]["coordinates"],
+                                                nodes[p["to"]]["geometry"]["coordinates"])
+        if not math.isfinite(meters) or not math.isfinite(horizontal) or meters < horizontal:
+            raise ValueError(f"층간 연결 {edge['id']}의 추정 거리({meters:g}m)가 수평 직선거리({horizontal:g}m)보다 짧습니다. 거리 가정을 검토해주세요.")
+        entries.append({"edge_id": edge["id"], "meters": meters, "source": "estimated",
+                        "basis": f"C5 시연용 임시 가정: {p['category']} {per_floor:g}m/층 × {floors}층. 실측 후 교체."})
+    return {"schema_version": 1, "dataset_id": "c5-demo", "layout_version": graph["layout_version"], "edges": entries}
 
 
 def contains(point, geometry):
@@ -79,7 +118,7 @@ def mock_shelves(original, graph):
     if len(selected) != 3 or len({n["properties"]["level"] for n, _ in selected}) < 2:
         raise ValueError("서로 다른 층을 포함한 C5 목업 구역 3개를 정할 수 없습니다. 매핑을 검토하세요.")
     return {"schema_version": 1, "dataset_id": "c5-demo", "layout_version": graph["layout_version"], "mode": "mock",
-            "shelves": [{"key": f"mock-{i:02}", "name": f"C5 시연용 목적지 {i:02}",
+            "shelves": [{"key": f"mock-{i:02}", "name": f"가상 서가 {i:02}",
                          "level_id": node["properties"]["level_id"], "element_kind": "unit",
                          "element_id": unit["id"], "arrival_node_id": node["id"]}
                         for i, (node, unit) in enumerate(selected, 1)]}
@@ -111,7 +150,11 @@ def main():
     graph = json.loads(routing.read_bytes())
     if graph.get("schema_version") != 1 or not str(graph.get("layout_version", "")).strip():
         parser.error("routing GeoJSON에 schema_version 1과 layout_version이 필요합니다.")
-    shelves = mock_shelves(original, graph)
+    try:
+        shelves = mock_shelves(original, graph)
+        distances = estimated_cross_floor_distances(graph)
+    except ValueError as error:
+        parser.error(str(error))
     record = {
         "dataset_id": "c5",
         "source_project": source.name,
@@ -134,6 +177,9 @@ def main():
         old_shelves = destination / "shelves.json"
         if old_shelves.exists() and json.loads(old_shelves.read_text()) != shelves:
             parser.error("로컬 목업 매핑이 생성 규칙과 다릅니다. 검토 후 --replace로 교체해주세요.")
+        old_distances = destination / "cross-floor-distances.json"
+        if old_distances.exists() and json.loads(old_distances.read_text()) != distances:
+            parser.error("로컬 층간 거리 자료가 생성 규칙과 다릅니다. 검토 후 --replace로 교체해주세요.")
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="c5-import-", dir=destination.parent) as temporary:
@@ -141,6 +187,7 @@ def main():
         shutil.copytree(original, staged / "IMDFData")
         shutil.copy2(routing, staged / "routing-graph.geojson")
         (staged / "shelves.json").write_text(json.dumps(shelves, ensure_ascii=False, indent=2) + "\n")
+        (staged / "cross-floor-distances.json").write_text(json.dumps(distances, ensure_ascii=False, indent=2) + "\n")
         if any(digest(staged / "IMDFData" / name) != value or digest(original / name) != value
                for name, value in hashes.items()) or digest(staged / "routing-graph.geojson") != routing_hash or digest(routing) != routing_hash:
             raise RuntimeError("복사 중 원본이 바뀌었습니다. 가져오기를 다시 실행해주세요.")
@@ -149,6 +196,7 @@ def main():
             "schema_version": 1, "dataset_id": "c5-demo", "layout_version": graph["layout_version"],
             "map_files_sha256": {name: hashes[name] for name in sorted(MAP_FILES)},
             "routing_sha256": routing_hash, "shelves_sha256": digest(staged / "shelves.json"),
+            "cross_floor_distances_sha256": digest(staged / "cross-floor-distances.json"),
             "source_commit": record["source_commit"], "source_routing_path": str(ROUTING_FILE),
             "source_worktree_changes": git_output(source, "diff", "HEAD", "--name-only", "--", str(SOURCE_DIRECTORY), str(ROUTING_FILE)).splitlines(),
         }

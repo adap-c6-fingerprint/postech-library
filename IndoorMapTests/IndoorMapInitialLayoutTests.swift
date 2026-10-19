@@ -118,4 +118,26 @@ struct IndoorMapInitialLayoutTests {
         #expect(abs(view.centerCoordinate.latitude - userCenter.latitude) < 0.00001)
         #expect(abs(view.centerCoordinate.longitude - userCenter.longitude) < 0.00001)
     }
+
+    @Test("현재 위치 포커스는 하단 경로 시트에 가리지 않는 영역의 중심으로 이동한다",
+          arguments: [0.0, 320.0, 560.0], [0.0, 60.0])
+    func recentersAboveRouteSheet(bottomInset: Double, heading: Double) throws {
+        var parent = parent()
+        parent.viewportInsets = .init(top: 60, left: 0, bottom: bottomInset, right: 0)
+        let coordinator = IndoorMapKitView.Coordinator(parent: parent)
+        let view = coordinator.makeMapView()
+        coordinator.update(parent: parent, in: view)
+        let window = try host(view, size: size)
+        defer { window.isHidden = true }
+        let camera = view.camera.copy() as! MKMapCamera
+        camera.heading = heading
+        view.setCamera(camera, animated: false)
+        let coordinate = parent.floor.geometry.coordinates[0]
+        #expect(coordinator.moveCamera(.init(id: 2, target: .position(coordinate)), in: view, animated: false))
+        let point = view.convert(coordinate.clCoordinate, toPointTo: view)
+        let viewport = view.bounds.inset(by: parent.viewportInsets)
+        #expect(abs(point.x - viewport.midX) < 2)
+        #expect(abs(point.y - viewport.midY) < 2)
+        #expect(view.camera.pitch == 0)
+    }
 }

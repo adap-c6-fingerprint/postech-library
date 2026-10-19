@@ -39,8 +39,32 @@ nonisolated struct BundledIndoorNavigationLoader {
         let (graph, diagnostics) = try RoutingGraphMapper().map(graphDTO, on: map, layoutVersion: manifest.layoutVersion)
         let shelfDTO: ShelfDirectoryDTO = try decode(shelfData, file: "shelves.json")
         let shelves = try ShelfDirectoryMapper().map(shelfDTO, on: map, graph: graph, datasetID: manifest.datasetID)
+        var distances: [String: RouteEdgeDistance] = [:]
+        if let hash = manifest.crossFloorDistancesSHA256 {
+            let file = "cross-floor-distances.json"
+            let dto: DistanceManifest = try decode(verified(file, at: directory, hash: hash), file: file)
+            let nodes = Dictionary(uniqueKeysWithValues: graph.nodes.map { ($0.id, $0) })
+            let edges = Dictionary(uniqueKeysWithValues: graph.edges.map { ($0.id, $0) })
+            let crossFloorIDs = Set(graph.edges.filter { nodes[$0.fromNodeID]?.floorID != nodes[$0.toNodeID]?.floorID }.map(\.id))
+            guard dto.schemaVersion == 1, dto.datasetID == manifest.datasetID,
+                  dto.layoutVersion == graph.layoutVersion,
+                  Set(dto.edges.map(\.edgeID)) == crossFloorIDs,
+                  Set(dto.edges.map(\.edgeID)).count == dto.edges.count else {
+                throw invalid(file, "거리 자료의 버전·층간 연결 ID가 일치하지 않습니다.")
+            }
+            for entry in dto.edges {
+                guard entry.meters.isFinite, entry.meters > 0, !entry.basis.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    throw invalid(file, "층간 거리와 근거를 확인하세요.")
+                }
+                guard let edge = edges[entry.edgeID], let from = nodes[edge.fromNodeID], let to = nodes[edge.toNodeID],
+                      entry.meters >= RoutingGeometry.distanceMeters(from: from.coordinate, to: to.coordinate) else {
+                    throw invalid(file, "층간 이동거리는 양 끝점의 수평 직선거리 이상이어야 합니다.")
+                }
+                distances[entry.edgeID] = .init(meters: entry.meters, source: entry.source)
+            }
+        }
         try Task.checkCancellation()
-        return IndoorNavigationData(graph: graph, shelves: shelves, diagnostics: diagnostics)
+        return IndoorNavigationData(graph: graph, shelves: shelves, diagnostics: diagnostics, transitionDistances: distances)
     }
 
     private func read(_ file: String, at directory: URL) throws -> Data {
@@ -73,6 +97,7 @@ nonisolated struct BundledIndoorNavigationLoader {
         let mapFilesSHA256: [String: String]
         let routingSHA256: String
         let shelvesSHA256: String
+        let crossFloorDistancesSHA256: String?
 
         enum CodingKeys: String, CodingKey {
             case schemaVersion = "schema_version"
@@ -81,6 +106,27 @@ nonisolated struct BundledIndoorNavigationLoader {
             case mapFilesSHA256 = "map_files_sha256"
             case routingSHA256 = "routing_sha256"
             case shelvesSHA256 = "shelves_sha256"
+            case crossFloorDistancesSHA256 = "cross_floor_distances_sha256"
+        }
+    }
+
+    private struct DistanceManifest: Decodable {
+        let schemaVersion: Int
+        let datasetID: String
+        let layoutVersion: String
+        let edges: [Entry]
+        struct Entry: Decodable {
+            let edgeID: String
+            let meters: Double
+            let source: RouteEdgeDistance.Source
+            let basis: String
+            enum CodingKeys: String, CodingKey { case meters, source, basis; case edgeID = "edge_id" }
+        }
+        enum CodingKeys: String, CodingKey {
+            case edges
+            case schemaVersion = "schema_version"
+            case datasetID = "dataset_id"
+            case layoutVersion = "layout_version"
         }
     }
 }

@@ -1,0 +1,122 @@
+{
+  "head": "ec34f3412694f9afd2bd710302369a4d92cf1201",
+  "files": [
+    {
+      "path": "Fingerprint/App/Domain/Routing/Configuration/RoutingConstants.swift",
+      "sha256": "a647cc2cfd36f884cf570d1fdd9c96917c959394caf2b646d7b677f3977a0350"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Engine/IndoorRouteSearchEngine.swift",
+      "sha256": "a17ceee9fe6b479141329bcddf0eca98ab26da70be9fbb1013461d4b68c7b6ca"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Geometry/RoutingGeometry.swift",
+      "sha256": "b46d96d4003863ff0b4ecd38a9b528d99098494d3f5901bcfe78ffca17b43f13"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Graph/RoutingGraphIndex.swift",
+      "sha256": "46090fcfff2bf1ba0d618d056e934ac4e01bab2e94991a93067fd0e9362de8c0"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Import/RoutingGraphGeoJSONDecoder.swift",
+      "sha256": "aae143f14da99eecf2ae1f6c92380b8b30b3320b0d01503d757ff83880dd9493"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Models/RouteGraph.swift",
+      "sha256": "2ff28e8c369d203d012b3734320d39b1b00c53e092425ad8869acdf87052c6ef"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Models/RouteProfile.swift",
+      "sha256": "7743aa20513d363a14adcd97fd98c4bc455bf779b68fa06020a9333b6396e4fd"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Models/RouteRequest.swift",
+      "sha256": "a03a9e8e55f2fb9f883041b631744f3bb825bf01628470b9578cd5d74987c980"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Models/RouteResult.swift",
+      "sha256": "cd1c56a718cfbcb9c8a3ae797a41e335c9df49d991c5c19bd0bfeb830264165f"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Models/RoutingError.swift",
+      "sha256": "aef6c1d9036ce13b8fe7bd46615a85e11878571dfdf948e95f4899ef4d82fd0b"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Policy/AccessibilityRouteAnalyzer.swift",
+      "sha256": "509b626de5d2cab46738897da6ca05af45ba150aaa03b1cb61354b83e2a9c62f"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Policy/RouteCostPolicy.swift",
+      "sha256": "841aec999b6dd7b7ef27e709f28bed688ba8d871832d273db7d28cdafe44e610"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Search/AStarSearcher.swift",
+      "sha256": "9f7be9308447c6fcf7504fddba160fde1cdac940947ad7b3a00640bc9e73fb9a"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Search/BinaryHeap.swift",
+      "sha256": "28653a5085dc9b2c7c2ef6f56a90045fbe8f098653bed12bd9e4d323034e269b"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Search/DijkstraReferenceSearcher.swift",
+      "sha256": "f08bb512d1da57998937d1b95cc48fcdf1d8ff97a20fc9d08946d0d49527a888"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Search/GraphPathReconstructor.swift",
+      "sha256": "cd3bdf880a14ee358f2f0c477a166bf55aa949fa1f070fd787688480ac097a4c"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Search/GraphSearchPath.swift",
+      "sha256": "ce7130833dbf9eea6526274a7c3a1cb84dd076a99140b9c47c6da9c9d4ce1232"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Routing/Validation/RoutingGraphValidator.swift",
+      "sha256": "cca27ca13dfe1ba7ae10d1d1f910681308b734f60e39fea64e7bf360885443cd"
+    },
+    {
+      "path": "FingerprintTests/RoutingTestFactory.swift",
+      "sha256": "f867f5f33ec06999e4a8ddd404b2eedd27af83cc5a72daae5e73266d72a1fc13"
+    },
+    {
+      "path": "FingerprintTests/RouteSearchAlgorithmTests.swift",
+      "sha256": "b479ad9370b19d76de37d88282c51aa9d38f550c88945415ecd40928c5ce66cd"
+    },
+    {
+      "path": "FingerprintTests/IndoorRouteSearchEngineTests.swift",
+      "sha256": "b33406585c04f8e374ce9b280eaa48f3b5e823b689e3398d8172f52387595f80"
+    },
+    {
+      "path": "FingerprintTests/RouteCostPolicyTests.swift",
+      "sha256": "06fce19303cc48ee2c4622f70e11e9fd3dc3d24d10d6c1c140b86719bf0583e8"
+    },
+    {
+      "path": "FingerprintTests/RoutingGraphIndexTests.swift",
+      "sha256": "2131326dd6edca4721a30d4a208cfeaad312548f49c5a7dbb63989b7120124b2"
+    },
+    {
+      "path": "FingerprintTests/RoutingGraphValidatorTests.swift",
+      "sha256": "8ba2a14dfe4a1728a5c974a219a834a325967a98e79a2681bdafd4b3b0a2df50"
+    },
+    {
+      "path": "FingerprintTests/RoutingGeometryTests.swift",
+      "sha256": "b005776212b2333a0a627114a5e986ba6a2f2e6fd48863040cdfe83531dfe140"
+    },
+    {
+      "path": "FingerprintTests/RouteItineraryTests.swift",
+      "sha256": "98dfac89a2e1caf8a029d12af2618cead6cdd718b7388ab533ea3884d1132478"
+    },
+    {
+      "path": "Fingerprint/App/Domain/Models/MapGeometry.swift",
+      "sha256": "bb7f8a9a323cc2f8b3f3480333792ea0ce488fcd0c9c36a107fae3685b891f63"
+    }
+  ],
+  "repository": "https://github.com/DeveloperAcademy-POSTECH/2026-C6-M06-Fingerprint",
+  "baseline": {
+    "functions_passed": 32,
+    "suites_passed": 6,
+    "cost_unit": "seconds",
+    "excluded_tests": [
+      "RouteItineraryTests.swift (UI resource dependency; #11 scope)"
+    ]
+  }
+}

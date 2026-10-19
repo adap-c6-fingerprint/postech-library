@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "dataset_id": "c5-demo",
+  "layout_version": "2025-11-14T14:35:25.142Z",
+  "edges": [
+    {
+      "edge_id": "2c6725b6-a4b1-4cfe-b922-41587614a01d",
+      "meters": 3.5,
+      "source": "estimated",
+      "basis": "C5 시연용 임시 가정: elevator 3.5m/층 × 1층. 실측 후 교체."
+    },
+    {
+      "edge_id": "5a904676-0472-4bb3-858a-547afe6adb1a",
+      "meters": 40.0,
+      "source": "estimated",
+      "basis": "C5 시연용 임시 가정: stairs 10m/층 × 4층. 실측 후 교체."
+    },
+    {
+      "edge_id": "8808ce41-7c65-40cf-99a1-7ad1fc07f418",
+      "meters": 17.5,
+      "source": "estimated",
+      "basis": "C5 시연용 임시 가정: elevator 3.5m/층 × 5층. 실측 후 교체."
+    },
+    {
+      "edge_id": "a5438f11-e574-4ade-81b8-5dc7267724ed",
+      "meters": 14.0,
+      "source": "estimated",
+      "basis": "C5 시연용 임시 가정: elevator 3.5m/층 × 4층. 실측 후 교체."
+    },
+    {
+      "edge_id": "f65565dd-8c40-4ddf-bcb7-2ef7aa95a3a8",
+      "meters": 10.0,
+      "source": "estimated",
+      "basis": "C5 시연용 임시 가정: stairs 10m/층 × 1층. 실측 후 교체."
+    }
+  ]
+}

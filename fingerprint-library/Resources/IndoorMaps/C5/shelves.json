@@ -6,7 +6,7 @@
   "shelves": [
     {
       "key": "mock-01",
-      "name": "C5 시연용 목적지 01",
+      "name": "가상 서가 01",
       "level_id": "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
       "element_kind": "unit",
       "element_id": "0cf2112c-310c-4f62-bf2b-a4a807845bdb",
@@ -14,7 +14,7 @@
     },
     {
       "key": "mock-02",
-      "name": "C5 시연용 목적지 02",
+      "name": "가상 서가 02",
       "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
       "element_kind": "unit",
       "element_id": "673c1e75-4b45-476f-b0c0-25f759f1fb92",
@@ -22,7 +22,7 @@
     },
     {
       "key": "mock-03",
-      "name": "C5 시연용 목적지 03",
+      "name": "가상 서가 03",
       "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
       "element_kind": "unit",
       "element_id": "16b55b0c-b741-4b5d-be67-53a650e373f0",
