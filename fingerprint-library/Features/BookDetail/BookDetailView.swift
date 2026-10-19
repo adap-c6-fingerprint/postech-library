@@ -101,5 +101,6 @@ struct BookDetailView: View {
         .navigationTitle("도서 상세")
         .navigationBarTitleDisplayMode(.inline)
         .task { await store.send(.loadDescription).finish() }
+        .task { await store.send(.loadRelatedBooks).finish() }
     }
 }
