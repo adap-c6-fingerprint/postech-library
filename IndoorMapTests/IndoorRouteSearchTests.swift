@@ -130,7 +130,7 @@ struct IndoorRouteSearchTests {
         let b = F.node("b", x: 100)
         let disconnected = F.graph([a, b], [])
         let same = try route(F.request(graph: disconnected, start: a.coordinate, target: a.id))
-        #expect(same.isAlreadyAtDestination)
+        #expect(same.startsAtDestinationNode)
         #expect(same.distanceMeters == 0)
         #expect(throws: IndoorRoutingError.noRoute) {
             try IndoorRouteSearchEngine().search(F.request(graph: disconnected, start: a.coordinate, target: b.id))

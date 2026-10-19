@@ -42,7 +42,8 @@ nonisolated struct IndoorRoute: Equatable, Sendable {
     let distanceMeters: Double
     let usesEstimatedDistances: Bool
     let start: RouteStartAttachment
-    var isAlreadyAtDestination: Bool { edgeIDs.isEmpty }
+    /// 그래프에 연결한 출발 노드가 목적지와 같다는 뜻이다. 실제 위치의 도착 판정은 아니다.
+    var startsAtDestinationNode: Bool { edgeIDs.isEmpty }
 }
 
 nonisolated struct IndoorRouteRequest: Equatable, Sendable {

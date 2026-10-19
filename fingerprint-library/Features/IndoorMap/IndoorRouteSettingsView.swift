@@ -73,7 +73,7 @@ struct IndoorRouteSettingsView: View {
             Text("방문 순서").font(.title3.bold())
             HStack(spacing: 8) {
                 if store.isRouting { ProgressView().controlSize(.small) }
-                Text(summary).font(.subheadline).foregroundStyle(.secondary)
+                Text(store.routeSummary).font(.subheadline).foregroundStyle(.secondary)
             }
             .padding(.top, 6)
             .padding(.bottom, 16)
@@ -150,14 +150,6 @@ struct IndoorRouteSettingsView: View {
         )
         .shadow(color: .black.opacity(0.06), radius: 12, y: -3)
         .accessibilityIdentifier("route-settings-sheet")
-    }
-
-    private var summary: String {
-        if store.isRouting { return "서가까지의 경로를 찾고 있어요" }
-        guard let route = store.route else { return "서가까지의 경로를 설정해요" }
-        if route.isAlreadyAtDestination { return "서가 도착 지점에 있어요" }
-        return
-            "\(route.usesEstimatedDistances ? "예상 거리" : "이동 거리") 약 \(route.distanceMeters.formatted(.number.precision(.fractionLength(0))))m"
     }
 
     private var visitOrder: some View {

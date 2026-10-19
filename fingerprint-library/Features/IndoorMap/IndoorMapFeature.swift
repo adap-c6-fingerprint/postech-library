@@ -37,6 +37,13 @@ struct IndoorMapFeature {
             return navigation?.shelves.destinations.first { $0.key == key }
         }
 
+        var routeSummary: String {
+            if isRouting { return "서가까지의 경로를 찾고 있어요" }
+            guard let route else { return "서가까지의 경로를 설정해요" }
+            if route.startsAtDestinationNode { return "통로 연결 지점이 서가 도착점과 같아요" }
+            return "\(route.usesEstimatedDistances ? "예상 거리" : "이동 거리") 약 \(route.distanceMeters.formatted(.number.precision(.fractionLength(0))))m"
+        }
+
         var selectedFloor: IndoorMapFloor? { map?.floors.first { $0.id == selectedFloorID } }
         var selectedFeature: IndoorMapElement? { map?.features.first { $0.id == selectedFeatureID } }
         var currentPosition: IndoorPosition? { manualPosition ?? latestPosition }
@@ -180,8 +187,9 @@ struct IndoorMapFeature {
                 return .none
 
             case .locationEvent(.unavailable(let message)):
-                if state.latestPosition?.source == .simulation { state.latestPosition = nil }
-                if state.manualPosition == nil && !state.isPlacingOrigin { state.locationMessage = message }
+                state.latestPosition = nil
+                guard state.manualPosition == nil else { return .none }
+                if !state.isPlacingOrigin { state.locationMessage = message }
                 return invalidateRoute(&state)
 
             case .locationEvent(.temporarilyUnavailable(let message)):
