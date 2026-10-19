@@ -34,15 +34,11 @@ struct BookDetailView: View {
                         }
                     }
                 }
-                if let isbn13 = store.isbn13 {
-                    LabeledContent("ISBN", value: isbn13)
-                        .font(.caption).foregroundStyle(.secondary)
-                }
             }
 
-            Section("책 소개") {
+            Section("책 정보") {
                 if store.isLoading || !store.hasLoaded {
-                    ProgressView("책 소개를 불러오고 있어요")
+                    ProgressView("책 정보를 불러오고 있어요")
                         .frame(maxWidth: .infinity, minHeight: 80)
                 } else if let message = store.errorMessage {
                     VStack(alignment: .leading, spacing: 12) {
@@ -60,7 +56,7 @@ struct BookDetailView: View {
                             .font(.footnote)
                     }
                 } else {
-                    Text("이 책의 소개가 아직 제공되지 않아요.")
+                    Text("이 책의 정보가 아직 제공되지 않아요.")
                         .foregroundStyle(.secondary)
                 }
             }
