@@ -60,6 +60,43 @@ struct BookDetailView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            
+            Section("연관 도서") {
+                switch store.relatedBooksState {
+                case .idle:
+                    Text("연관 도서 조회를 기다리고 있어요.")
+                        .foregroundStyle(.secondary)
+                    
+                case .loading:
+                    ProgressView("연관 도서를 불러오고 있어요.")
+                    
+                case let .loaded(books):
+                    if books.isEmpty {
+                        Text("연관 도서가 아직 없어요.")
+                    } else {
+                        ForEach(books) { book in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(BookText.plainText(book.title))
+                                    .font(.headline)
+                                
+                                Text(BookText.plainText(book.author))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                case let .failed(message):
+                    VStack {
+                        Text(message)
+                            .foregroundStyle(.secondary)
+                        
+                        Button("다시 시도") {
+                            store.send(.retryRelatedBooksButtonTapped)
+                        }
+                        .buttonStyle(.bordered)
+                    }
+                }
+            }
         }
         .navigationTitle("도서 상세")
         .navigationBarTitleDisplayMode(.inline)
