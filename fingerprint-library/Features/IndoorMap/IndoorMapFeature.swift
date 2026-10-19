@@ -14,6 +14,7 @@ struct IndoorMapFeature {
         var navigationRequestID = 0
         var selectedFloorID: UUID?
         var selectedFeatureID: IndoorMapElement.ID?
+        var selectedShelfKey: ShelfKey?
         var manualPosition: IndoorPosition?
         var latestPosition: IndoorPosition?
         var authorization: IndoorLocationAuthorization = .notDetermined
@@ -22,14 +23,37 @@ struct IndoorMapFeature {
         var wantsRecenter = false
         var locationMessage: String?
         var cameraRequest: IndoorMapCameraRequest?
+        var route: IndoorRoute?
+        var routeDestinationKey: ShelfKey?
+        var routePreference: RoutePreference = .shortestDistance
+        var routeError: String?
+        var isRouting = false
+        var routeRequestID = 0
+        var requiresStairConfirmation = false
+        var isRouteSheetExpanded = false
+
+        var routeDestination: ShelfDestination? {
+            let key = selectedShelfKey ?? routeDestinationKey
+            return navigation?.shelves.destinations.first { $0.key == key }
+        }
+
+        var routeSummary: String {
+            if isRouting { return "서가까지의 경로를 찾고 있어요" }
+            guard let route else { return "서가까지의 경로를 설정해요" }
+            if route.startsAtDestinationNode { return "통로 연결 지점이 서가 도착점과 같아요" }
+            return "\(route.usesEstimatedDistances ? "예상 거리" : "이동 거리") 약 \(route.distanceMeters.formatted(.number.precision(.fractionLength(0))))m"
+        }
 
         var selectedFloor: IndoorMapFloor? { map?.floors.first { $0.id == selectedFloorID } }
         var selectedFeature: IndoorMapElement? { map?.features.first { $0.id == selectedFeatureID } }
         var currentPosition: IndoorPosition? { manualPosition ?? latestPosition }
+        var mockShelves: [ShelfDestination] {
+            navigation?.shelves.mode == .mock ? navigation?.shelves.destinations ?? [] : []
+        }
 
         var showsNativeUserLocation: Bool {
             guard isActive, manualPosition == nil, authorization.isAuthorized,
-                  latestPosition?.source != .replay else { return false }
+                  latestPosition?.source == .sensor else { return false }
             if let currentFloor = latestPosition?.floorOrdinal, let viewedFloor = selectedFloor?.ordinal {
                 return currentFloor == viewedFloor
             }
@@ -59,15 +83,31 @@ struct IndoorMapFeature {
         case manualPointSelected(IndoorMapCoordinate)
         case manualFloorSelected(UUID)
         case featureSelected(IndoorMapElement.ID?)
+        case shelfSelected(ShelfKey?)
+        case routeSettingsTapped
+        case routeSheetExpansionChanged(Bool)
+        case routeRequested
+        case routePreferenceChanged(RoutePreference)
+        case routeLoaded(requestID: Int, IndoorRouteSearchOutcome)
+        case routeFailed(requestID: Int, String)
+        case routeCleared
+        case useStairsTapped
+        case dismissStairConfirmation
         case dismissMessage
+        case delegate(Delegate)
+
+        enum Delegate: Equatable {
+            case showRouteSettings
+        }
     }
 
     @Dependency(\.indoorMapClient) var mapClient
     @Dependency(\.indoorNavigationClient) var navigationClient
     @Dependency(\.indoorLocationClient) var locationClient
     @Dependency(\.date.now) var now
+    @Dependency(\.indoorRouteClient) var routeClient
 
-    nonisolated private enum CancelID: Hashable, Sendable { case map, navigation, location }
+    nonisolated private enum CancelID: Hashable, Sendable { case map, navigation, location, route }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -81,6 +121,7 @@ struct IndoorMapFeature {
                 return loadMap(&state)
 
             case .mapLoaded(let map):
+                let cancellation = invalidateRoute(&state, clearDestination: true)
                 state.isLoading = false
                 state.loadError = nil
                 state.map = map
@@ -88,10 +129,16 @@ struct IndoorMapFeature {
                 let floor = map.floors.first { $0.ordinal == reportedFloor } ?? map.floors.first
                 state.selectedFloorID = floor?.id
                 state.selectedFeatureID = nil
+                state.selectedShelfKey = nil
+                if let position = state.latestPosition, position.source == .simulation,
+                   !acceptsSimulation(position, on: map) {
+                    state.latestPosition = nil
+                    state.locationMessage = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+                }
                 if let floor { state.requestCamera(.floor(floor.id)) }
                 state.navigation = nil
                 state.isLoadingNavigation = false
-                return loadNavigation(&state)
+                return .merge(cancellation, loadNavigation(&state))
 
             case .mapFailed(let message):
                 state.isLoading = false
@@ -103,10 +150,12 @@ struct IndoorMapFeature {
 
             case .navigationLoaded(let requestID, let data):
                 guard requestID == state.navigationRequestID else { return .none }
+                let cancellation = invalidateRoute(&state, clearDestination: true)
                 state.isLoadingNavigation = false
                 state.navigationLoadError = nil
                 state.navigation = data
-                return .none
+                state.selectedShelfKey = nil
+                return cancellation
 
             case .navigationFailed(let requestID, let message):
                 guard requestID == state.navigationRequestID else { return .none }
@@ -117,7 +166,7 @@ struct IndoorMapFeature {
             case .sceneActiveChanged(let active):
                 guard state.isActive != active else { return .none }
                 state.isActive = active
-                return active ? locationEvents() : .cancel(id: CancelID.location)
+                return active ? locationEvents() : .merge(.cancel(id: CancelID.location), cancelRouteSearch(&state))
 
             case .disappeared:
                 state.isActive = false
@@ -125,27 +174,53 @@ struct IndoorMapFeature {
                     state.isLoadingNavigation = false
                     state.navigationRequestID += 1
                 }
-                return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.map), .cancel(id: CancelID.navigation))
+                return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.map),
+                              .cancel(id: CancelID.navigation), invalidateRoute(&state))
 
             case .locationEvent(.authorization(let authorization)):
                 state.authorization = authorization
                 if !authorization.isAuthorized {
                     state.latestPosition = nil
                     if authorization != .notDetermined { state.wantsRecenter = false }
+                    return invalidateRoute(&state)
                 }
                 return .none
 
             case .locationEvent(.unavailable(let message)):
-                if state.manualPosition == nil && !state.isPlacingOrigin { state.locationMessage = message }
-                return .none
+                state.latestPosition = nil
+                guard state.manualPosition == nil else { return .none }
+                if !state.isPlacingOrigin { state.locationMessage = message }
+                return invalidateRoute(&state)
+
+            case .locationEvent(.temporarilyUnavailable(let message)):
+                state.latestPosition = nil
+                guard state.manualPosition == nil, !state.isPlacingOrigin else { return .none }
+                state.locationMessage = message
+                return cancelRouteSearch(&state)
 
             case .locationEvent(.position(let position)):
                 guard position.isRecent(at: now), position.source != .manual else { return .none }
                 if let latest = state.latestPosition, position.timestamp < latest.timestamp { return .none }
+                if position.source == .simulation, let map = state.map, !acceptsSimulation(position, on: map) {
+                    state.latestPosition = nil
+                    state.locationMessage = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+                    return invalidateRoute(&state)
+                }
+                let previousFloor = state.latestPosition?.floorOrdinal
                 state.latestPosition = position
                 if state.manualPosition == nil && !state.isPlacingOrigin {
                     state.locationMessage = nil
+                    if position.source == .simulation, previousFloor != position.floorOrdinal,
+                       let floor = state.map?.floors.first(where: { $0.ordinal == position.floorOrdinal }),
+                       floor.id != state.selectedFloorID {
+                        state.selectedFloorID = floor.id
+                        state.selectedShelfKey = nil
+                        state.requestCamera(.floor(floor.id))
+                    }
                     if state.wantsRecenter { recenter(&state, position: position) }
+                }
+                if previousFloor != position.floorOrdinal && (state.isRouting || state.requiresStairConfirmation) {
+                    return invalidateRoute(&state)
                 }
                 return .none
 
@@ -159,17 +234,17 @@ struct IndoorMapFeature {
                     state.wantsRecenter = true
                     return .run { _ in await locationClient.requestPermission() }
                 case .denied:
-                    state.locationMessage = "위치 권한이 꺼져 있어요. 설정에서 위치 접근을 허용하거나 출발점을 직접 지정해주세요."
+                    state.locationMessage = "위치 권한이 꺼져 있어요. 설정에서 위치 접근을 허용해주세요."
                 case .restricted:
-                    state.locationMessage = "위치 접근이 제한되어 있어요. 층과 출발점을 직접 지정해주세요."
+                    state.locationMessage = "기기 설정에서 위치 접근이 제한되어 있어요."
                 case .servicesDisabled:
-                    state.locationMessage = "기기의 위치 서비스가 꺼져 있어요. 위치 서비스를 켜거나 출발점을 직접 지정해주세요."
+                    state.locationMessage = "기기의 위치 서비스가 꺼져 있어요. 설정에서 위치 서비스를 켜주세요."
                 case .authorized:
                     if let position = state.latestPosition, position.isRecent(at: now) {
                         recenter(&state, position: position)
                     } else {
                         state.wantsRecenter = true
-                        state.locationMessage = "현재 위치를 확인하고 있어요. 위치가 잡히지 않으면 출발점을 직접 지정해주세요."
+                        state.locationMessage = "현재 위치를 확인하고 있어요. 위치가 확인되면 지도를 이동할게요."
                     }
                 }
                 return .none
@@ -178,6 +253,7 @@ struct IndoorMapFeature {
                 guard state.map?.floors.contains(where: { $0.id == id }) == true else { return .none }
                 state.selectedFloorID = id
                 state.selectedFeatureID = nil
+                state.selectedShelfKey = nil
                 state.requestCamera(.floor(id))
                 return .none
 
@@ -236,11 +312,118 @@ struct IndoorMapFeature {
                 }
                 return .none
 
+            case .shelfSelected(let key):
+                state.selectedShelfKey = key.flatMap { key in
+                    state.mockShelves.first { $0.key == key && $0.floorID == state.selectedFloorID }?.key
+                }
+                if let key = state.selectedShelfKey, key != state.routeDestinationKey {
+                    return invalidateRoute(&state, clearDestination: true)
+                }
+                return .none
+
+            case .routeRequested:
+                return searchRoute(&state)
+
+            case .routeSettingsTapped:
+                guard let destination = state.routeDestination else { return .none }
+                state.routeDestinationKey = destination.key
+                state.isRouteSheetExpanded = false
+                return .send(.delegate(.showRouteSettings))
+
+            case .routeSheetExpansionChanged(let isExpanded):
+                state.isRouteSheetExpanded = isExpanded
+                return .none
+
+            case .routePreferenceChanged(let preference):
+                guard state.routePreference != preference else { return .none }
+                state.routePreference = preference
+                return state.routeDestinationKey == nil ? invalidateRoute(&state) : searchRoute(&state)
+
+            case .routeLoaded(let requestID, let outcome):
+                guard state.isRouting, state.routeRequestID == requestID else { return .none }
+                state.isRouting = false
+                switch outcome {
+                case .route(let route): state.route = route
+                case .requiresStairConfirmation: state.requiresStairConfirmation = true
+                }
+                return .none
+
+            case .routeFailed(let requestID, let message):
+                guard state.isRouting, state.routeRequestID == requestID else { return .none }
+                state.isRouting = false
+                state.routeError = message
+                return .none
+
+            case .useStairsTapped:
+                guard state.requiresStairConfirmation else { return .none }
+                return searchRoute(&state, allowingStairs: true)
+
+            case .dismissStairConfirmation:
+                state.requiresStairConfirmation = false
+                return .none
+
+            case .routeCleared:
+                state.selectedShelfKey = nil
+                state.isRouteSheetExpanded = false
+                return invalidateRoute(&state, clearDestination: true)
+
             case .dismissMessage:
                 state.locationMessage = nil
                 return .none
+
+            case .delegate:
+                return .none
             }
         }
+    }
+
+    /// 일시적인 위치 수신 중단은 계산 결과를 무효화하는 사유와 구분한다.
+    private func cancelRouteSearch(_ state: inout State) -> Effect<Action> {
+        guard state.isRouting || state.requiresStairConfirmation else { return .none }
+        state.routeRequestID += 1
+        state.isRouting = false
+        state.requiresStairConfirmation = false
+        return .cancel(id: CancelID.route)
+    }
+
+    private func invalidateRoute(_ state: inout State, clearDestination: Bool = false) -> Effect<Action> {
+        guard state.isRouting || state.route != nil || state.routeError != nil || state.requiresStairConfirmation
+                || (clearDestination && state.routeDestinationKey != nil) else { return .none }
+        state.routeRequestID += 1
+        state.isRouting = false
+        state.route = nil
+        state.routeError = nil
+        state.requiresStairConfirmation = false
+        if clearDestination { state.routeDestinationKey = nil }
+        return .cancel(id: CancelID.route)
+    }
+
+    private func searchRoute(_ state: inout State, allowingStairs: Bool = false) -> Effect<Action> {
+        guard let data = state.navigation, let key = state.routeDestination?.key else { return .none }
+        state.route = nil
+        state.routeError = nil
+        state.requiresStairConfirmation = false
+        state.routeDestinationKey = key
+        state.routeRequestID += 1
+        let requestID = state.routeRequestID
+        guard state.isActive, let position = state.currentPosition, position.isRecent(at: now) else {
+            state.isRouting = false
+            state.routeError = IndoorRoutingError.invalidPosition.localizedDescription
+            return .cancel(id: CancelID.route)
+        }
+        state.isRouting = true
+        let request = IndoorRouteRequest(navigation: data, start: position, destination: key,
+            preference: state.routePreference, allowsStairFallback: allowingStairs)
+        return .run { send in
+            do { await send(.routeLoaded(requestID: requestID, try await routeClient.search(request))) }
+            catch is CancellationError { }
+            catch { await send(.routeFailed(requestID: requestID, error.localizedDescription)) }
+        }.cancellable(id: CancelID.route, cancelInFlight: true)
+    }
+
+    private func acceptsSimulation(_ position: IndoorPosition, on map: IndoorMap) -> Bool {
+        guard let floor = map.floors.first(where: { $0.ordinal == position.floorOrdinal }) else { return false }
+        return floor.geometry.contains(position.coordinate)
     }
 
     private func loadMap(_ state: inout State) -> Effect<Action> {
@@ -285,6 +468,7 @@ struct IndoorMapFeature {
     private func recenter(_ state: inout State, position: IndoorPosition) {
         if let ordinal = position.floorOrdinal,
            let floor = state.map?.floors.first(where: { $0.ordinal == ordinal }) {
+            if state.selectedFloorID != floor.id { state.selectedShelfKey = nil }
             state.selectedFloorID = floor.id
         }
         state.requestCamera(.position(position.coordinate))

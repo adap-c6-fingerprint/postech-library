@@ -1,7 +1,7 @@
 import Foundation
 
 nonisolated struct IndoorPosition: Equatable, Sendable {
-    enum Source: Equatable, Sendable { case sensor, manual, replay }
+    enum Source: Equatable, Sendable { case sensor, manual, replay, simulation }
 
     let coordinate: IndoorMapCoordinate
     let floorOrdinal: Int?
@@ -30,5 +30,7 @@ nonisolated enum IndoorLocationAuthorization: Equatable, Sendable {
 nonisolated enum IndoorLocationEvent: Equatable, Sendable {
     case authorization(IndoorLocationAuthorization)
     case position(IndoorPosition)
+    /// 위치 재수신을 기다리는 동안 완료된 경로 미리보기는 유지한다.
+    case temporarilyUnavailable(String)
     case unavailable(String)
 }

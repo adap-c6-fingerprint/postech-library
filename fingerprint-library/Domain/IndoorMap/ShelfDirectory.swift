@@ -38,4 +38,5 @@ nonisolated struct IndoorNavigationData: Equatable, Sendable {
     let graph: RoutingGraph
     let shelves: ShelfDirectory
     let diagnostics: RoutingGraphDiagnostics
+    var transitionDistances: [String: RouteEdgeDistance] = [:]
 }

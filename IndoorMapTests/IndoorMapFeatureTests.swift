@@ -95,7 +95,7 @@ extension IndoorMapSerialTests {
             }
             await store.send(.currentLocationTapped) {
                 $0.manualPosition = nil
-                $0.locationMessage = "위치 권한이 꺼져 있어요. 설정에서 위치 접근을 허용하거나 출발점을 직접 지정해주세요."
+                $0.locationMessage = "위치 권한이 꺼져 있어요. 설정에서 위치 접근을 허용해주세요."
             }
         }
 

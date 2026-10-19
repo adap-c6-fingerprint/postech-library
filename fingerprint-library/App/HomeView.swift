@@ -1,54 +1,70 @@
-import SwiftUI
 import ComposableArchitecture
+import SwiftUI
 
 struct HomeView: View {
-    let mapStore: StoreOf<IndoorMapFeature>
+    @Bindable var store: StoreOf<AppFeature>
 
-    @State private var store = Store(
+    @State private var searchStore = Store(
         initialState: BookSearchFeature.State()
     ) {
         BookSearchFeature()
     }
 
+    private var mapStore: StoreOf<IndoorMapFeature> {
+        store.scope(state: \.indoorMap, action: \.indoorMap)
+    }
+
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
+            VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 18) {
+                    Text("Fingerprint")
+                        .font(.title2.weight(.semibold))
 
-                // 누르면 검색 화면으로 이동
-                NavigationLink {
-                    BookSearchView(store: store)
-                        .toolbar(.visible, for: .navigationBar)
-                } label: {
-                    HStack(spacing: 10) {
-                        Image(systemName: "magnifyingglass")
-
-                        Text("어떤 책을 찾으시나요?")
-
-                        Spacer()
+                    NavigationLink {
+                        BookSearchView(store: searchStore)
+                            .toolbar(.visible, for: .navigationBar)
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "magnifyingglass")
+                                .font(.title3)
+                                .foregroundStyle(.primary)
+                            Text("어떤 책을 찾으시나요?")
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                        }
+                        .padding(.horizontal, 18)
+                        .frame(minHeight: 52)
+                        .background(Color(uiColor: .systemBackground), in: Capsule())
+                        .overlay(Capsule().strokeBorder(Color(uiColor: .separator), lineWidth: 1))
+                        .contentShape(Capsule())
                     }
-                    .foregroundStyle(.secondary)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 24)
-                            .fill(Color.gray.opacity(0.1))
-                    )
+                    .buttonStyle(.plain)
+                    .accessibilityIdentifier("home-book-search")
                 }
-                .buttonStyle(.plain)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+                .padding(.bottom, 18)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(uiColor: .systemBackground))
 
                 IndoorMapView(store: mapStore)
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 16)
-                )
             }
-            .padding()
-            .navigationTitle("Fingerprint")
-            .navigationBarTitleDisplayMode(.inline)
+            .background(Color(uiColor: .systemGroupedBackground))
+            .toolbar(.hidden, for: .navigationBar)
+            .navigationDestination(
+                isPresented: Binding(
+                    get: { store.isRouteSettingsPresented },
+                    set: { store.send(.routeSettingsPresentationChanged($0)) }
+                )
+            ) {
+                IndoorRouteSettingsView(store: mapStore)
+            }
         }
+        .tint(.primary)
     }
 }
 
 #Preview {
-    HomeView(mapStore: Store(initialState: IndoorMapFeature.State()) {
-        IndoorMapFeature()
-    })
+    AppView(store: Store(initialState: AppFeature.State()) { AppFeature() })
 }
