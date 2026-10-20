@@ -35,8 +35,8 @@ extension BookClient: DependencyKey {
                 string: "\(primoGateway)/primo/v1/search"
             )
             
-            // name은 Primo 서버가 정한 항목 이름이고, value는 그 항목에 보낼 값이다.
-            // 예: name이 limit이고 value가 20이면 URL에 limit=20이 붙는다.
+            // name은 Primo 서버가 정한 항목 이름이고, value는 그 항목에 보낼 값
+            // 예: name이 limit이고 value가 20이면 URL에 limit=20이 붙음
             components?.queryItems = [
                 // vid = view ID. 어떤 Primo 검색 화면의 설정을 사용할지 지정
                 // 이 값은 POSTECH 검색 화면의 식별자
@@ -117,6 +117,28 @@ extension BookClient: DependencyKey {
                     return nil
                 }
 
+                let imageURL = document.delivery?.link?
+                    .filter {
+                        $0.linkType == "thumbnail"
+                            || $0.linkType?.hasSuffix("/thumbnail") == true
+                    }
+                    .compactMap { link -> URL? in
+                        guard
+                            let address = link.linkURL,
+                            let parts = URLComponents(string: address),
+                            parts.scheme?.lowercased() == "https",
+                            let host = parts.host, !host.isEmpty
+                        else { return nil }
+
+                        // 이미지 대신 정보를 반환하는 조회용 주소는 제외
+                        let isLookup = parts.queryItems?.contains {
+                            $0.name == "jscmd" && $0.value == "viewapi"
+                        } ?? false
+
+                        return isLookup ? nil : parts.url
+                    }
+                    .first
+
                 let identity = "primo:\(recordID)"
 
                 return Book(
@@ -124,11 +146,24 @@ extension BookClient: DependencyKey {
                     isbn: BookISBN.isbn13(from: document.pnx.addata?.isbn?.joined(separator: " ")),
                     controlNumber: identity,
                     title: title,
-                    author: "저자 정보 없음",
-                    publisher: nil,
-                    publicationYear: nil,
+                    author: BookClient.nonEmpty(
+                        document.pnx.display.creator?
+                            .map {
+                                // $$Q 앞의 화면 표시용 정보만 사용한다.
+                                let displayText = $0.components(separatedBy: "$$Q").first ?? $0
+                                return BookText.plainText(displayText)
+                            }
+                        .filter { !$0.isEmpty }
+                        .joined(separator: ", ")
+                    ) ?? "저자 정보 없음",
+                    publisher: BookClient.nonEmpty(
+                        document.pnx.addata?.publisher?.joined(separator: ", ")
+                    ),
+                    publicationYear: BookClient.nonEmpty(
+                        document.pnx.addata?.date?.first
+                    ),
                     description: nil,
-                    imageURL: nil
+                    imageURL: imageURL
                 )
             }
 
@@ -152,6 +187,16 @@ extension BookClient: DependencyKey {
 
     private nonisolated struct PrimoDocument: Decodable {
         let pnx: PrimoPNX
+        let delivery: PrimoDelivery?
+    }
+
+    private nonisolated struct PrimoDelivery: Decodable {
+        let link: [PrimoLink]?
+    }
+
+    private nonisolated struct PrimoLink: Decodable {
+        let linkType: String?
+        let linkURL: String?
     }
 
     private nonisolated struct PrimoPNX: Decodable {
@@ -162,6 +207,14 @@ extension BookClient: DependencyKey {
     
     private nonisolated struct PrimoAddData: Decodable {
         let isbn: [String]?
+        let publisher: [String]?
+        let date: [String]?
+        
+
+        private enum CodingKeys: String, CodingKey {
+            case isbn, date
+            case publisher = "pub"
+        }
     }
     
     private nonisolated struct PrimoControl: Decodable {
@@ -170,6 +223,7 @@ extension BookClient: DependencyKey {
 
     private nonisolated struct PrimoDisplay: Decodable {
         let title: [String]
+        let creator: [String]?
     }
     
     private struct LibraryResponse: Decodable {
