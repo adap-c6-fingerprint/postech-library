@@ -25,29 +25,40 @@ struct BookClient: Sendable {
 extension BookClient: DependencyKey {
     static let liveValue = BookClient(
         search: { query in
-            guard let apiKey = await AppConfiguration.nationalLibraryAPIKey else {
+            guard let apiKey = await AppConfiguration.primoAPIKey else {
                 throw BookClientError.missingAPIKey
             }
             
+            let primoGateway = "https://api-ap.hosted.exlibrisgroup.com"
+
             var components = URLComponents(
-                string: "https://www.nl.go.kr/NL/search/openApi/search.do"
+                string: "\(primoGateway)/primo/v1/search"
             )
             
             components?.queryItems = [
-                URLQueryItem(name: "key", value: apiKey),
-                URLQueryItem(name: "apiType", value: "json"),
-                URLQueryItem(name: "srchTarget", value: "total"),
-                URLQueryItem(name: "kwd", value: query),
-                URLQueryItem(name: "pageNum", value: "1"),
-                URLQueryItem(name: "pageSize", value: "20"),
-                URLQueryItem(name: "category", value: "도서"),
+                URLQueryItem(name: "vid", value: "82POSTECH_INST:82POSTECH"),
+                URLQueryItem(name: "tab", value: "LibraryCatalog"),
+                URLQueryItem(name: "scope", value: "MyInstitution"),
+                URLQueryItem(name: "q", value: "any,contains,\(query)"),
+                URLQueryItem(name: "qInclude", value: "facet_rtype,exact,books"),
+                URLQueryItem(name: "lang", value: "ko"),
+                URLQueryItem(name: "offset", value: "0"),
+                URLQueryItem(name: "limit", value: "20"),
+                URLQueryItem(name: "skipDelivery", value: "false")
             ]
+
             
             guard let url = components?.url else {
                 throw BookClientError.invalidURL
             }
             
-            let (data, response) = try await URLSession.shared.data(from: url)
+            var request = URLRequest(url: url)
+            request.setValue(
+                "apikey \(apiKey)",
+                forHTTPHeaderField: "Authorization"
+            )
+
+            let (data, response) = try await URLSession.shared.data(for: request)
             
             guard
                 let httpResponse = response as? HTTPURLResponse,
