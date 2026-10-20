@@ -11,14 +11,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C5000000000000000000000A /* PBXContainerItemProxy */ = {
+		B4000000000000000000000A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 000000000000000000000000 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 000000000000000100000000;
 			remoteInfo = "fingerprint-library";
 		};
-		B4000000000000000000000A /* PBXContainerItemProxy */ = {
+		C5000000000000000000000A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 000000000000000000000000 /* Project object */;
 			proxyType = 1;
@@ -30,8 +30,8 @@
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* fingerprint-library.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "fingerprint-library.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D392B3C3081B38F0060B244 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
-		C50000000000000000000001 /* IndoorMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IndoorMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B40000000000000000000001 /* BookDetailTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookDetailTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C50000000000000000000001 /* IndoorMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IndoorMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -56,14 +56,14 @@
 			path = "fingerprint-library";
 			sourceTree = "<group>";
 		};
-		C50000000000000000000002 /* IndoorMapTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = IndoorMapTests;
-			sourceTree = "<group>";
-		};
 		B40000000000000000000002 /* BookDetailTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = BookDetailTests;
+			sourceTree = "<group>";
+		};
+		C50000000000000000000002 /* IndoorMapTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = IndoorMapTests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,12 +75,12 @@
 				1D9CC49A3080AFF7004505A9 /* ComposableArchitecture in Frameworks */,
 			);
 		};
-		C50000000000000000000003 /* Frameworks */ = {
+		B40000000000000000000003 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
 			);
 		};
-		B40000000000000000000003 /* Frameworks */ = {
+		C50000000000000000000003 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			files = (
 			);
@@ -133,27 +133,6 @@
 			productReference = 000000000000000000000120 /* fingerprint-library.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C50000000000000000000006 /* IndoorMapTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C50000000000000000000007 /* Build configuration list for PBXNativeTarget "IndoorMapTests" */;
-			buildPhases = (
-				C50000000000000000000005 /* Sources */,
-				C50000000000000000000003 /* Frameworks */,
-				C50000000000000000000004 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C5000000000000000000000B /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				C50000000000000000000002 /* IndoorMapTests */,
-			);
-			name = IndoorMapTests;
-			productName = IndoorMapTests;
-			productReference = C50000000000000000000001 /* IndoorMapTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		B40000000000000000000006 /* BookDetailTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B40000000000000000000007 /* Build configuration list for PBXNativeTarget "BookDetailTests" */;
@@ -175,6 +154,27 @@
 			productReference = B40000000000000000000001 /* BookDetailTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		C50000000000000000000006 /* IndoorMapTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C50000000000000000000007 /* Build configuration list for PBXNativeTarget "IndoorMapTests" */;
+			buildPhases = (
+				C50000000000000000000005 /* Sources */,
+				C50000000000000000000003 /* Frameworks */,
+				C50000000000000000000004 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C5000000000000000000000B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C50000000000000000000002 /* IndoorMapTests */,
+			);
+			name = IndoorMapTests;
+			productName = IndoorMapTests;
+			productReference = C50000000000000000000001 /* IndoorMapTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -188,11 +188,11 @@
 					000000000000000100000000 = {
 						CreatedOnToolsVersion = 26.3;
 					};
-					C50000000000000000000006 = {
+					B40000000000000000000006 = {
 						CreatedOnToolsVersion = 27.1;
 						TestTargetID = 000000000000000100000000;
 					};
-					B40000000000000000000006 = {
+					C50000000000000000000006 = {
 						CreatedOnToolsVersion = 27.1;
 						TestTargetID = 000000000000000100000000;
 					};
@@ -228,12 +228,12 @@
 			files = (
 			);
 		};
-		C50000000000000000000004 /* Resources */ = {
+		B40000000000000000000004 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
 		};
-		B40000000000000000000004 /* Resources */ = {
+		C50000000000000000000004 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			files = (
 			);
@@ -246,12 +246,12 @@
 			files = (
 			);
 		};
-		C50000000000000000000005 /* Sources */ = {
+		B40000000000000000000005 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
 			);
 		};
-		B40000000000000000000005 /* Sources */ = {
+		C50000000000000000000005 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			files = (
 			);
@@ -259,15 +259,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		C5000000000000000000000B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 000000000000000100000000 /* fingerprint-library */;
-			targetProxy = C5000000000000000000000A /* PBXContainerItemProxy */;
-		};
 		B4000000000000000000000B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 000000000000000100000000 /* fingerprint-library */;
 			targetProxy = B4000000000000000000000A /* PBXContainerItemProxy */;
+		};
+		C5000000000000000000000B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 000000000000000100000000 /* fingerprint-library */;
+			targetProxy = C5000000000000000000000A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -492,24 +492,6 @@
 			};
 			name = Release;
 		};
-		C50000000000000000000008 /* Debug configuration for PBXNativeTarget "IndoorMapTests" */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5R33532VPH;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.youngmin.fingerprint-library.IndoorMapTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/fingerprint-library.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/fingerprint-library";
-			};
-			name = Debug;
-		};
 		B40000000000000000000008 /* Debug configuration for PBXNativeTarget "BookDetailTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -528,7 +510,25 @@
 			};
 			name = Debug;
 		};
-		C50000000000000000000009 /* Release configuration for PBXNativeTarget "IndoorMapTests" */ = {
+		B40000000000000000000009 /* Release configuration for PBXNativeTarget "BookDetailTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5R33532VPH;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.youngmin.fingerprint-library.BookDetailTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/fingerprint-library.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/fingerprint-library";
+			};
+			name = Release;
+		};
+		C50000000000000000000008 /* Debug configuration for PBXNativeTarget "IndoorMapTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -544,9 +544,9 @@
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/fingerprint-library.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/fingerprint-library";
 			};
-			name = Release;
+			name = Debug;
 		};
-		B40000000000000000000009 /* Release configuration for PBXNativeTarget "BookDetailTests" */ = {
+		C50000000000000000000009 /* Release configuration for PBXNativeTarget "IndoorMapTests" */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -554,7 +554,7 @@
 				DEVELOPMENT_TEAM = 5R33532VPH;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.youngmin.fingerprint-library.BookDetailTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.youngmin.fingerprint-library.IndoorMapTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -583,19 +583,19 @@
 			);
 			defaultConfigurationName = Release;
 		};
-		C50000000000000000000007 /* Build configuration list for PBXNativeTarget "IndoorMapTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C50000000000000000000008 /* Debug configuration for PBXNativeTarget "IndoorMapTests" */,
-				C50000000000000000000009 /* Release configuration for PBXNativeTarget "IndoorMapTests" */,
-			);
-			defaultConfigurationName = Release;
-		};
 		B40000000000000000000007 /* Build configuration list for PBXNativeTarget "BookDetailTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B40000000000000000000008 /* Debug configuration for PBXNativeTarget "BookDetailTests" */,
 				B40000000000000000000009 /* Release configuration for PBXNativeTarget "BookDetailTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		C50000000000000000000007 /* Build configuration list for PBXNativeTarget "IndoorMapTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C50000000000000000000008 /* Debug configuration for PBXNativeTarget "IndoorMapTests" */,
+				C50000000000000000000009 /* Release configuration for PBXNativeTarget "IndoorMapTests" */,
 			);
 			defaultConfigurationName = Release;
 		};

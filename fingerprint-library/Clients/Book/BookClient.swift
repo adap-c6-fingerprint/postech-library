@@ -25,29 +25,67 @@ struct BookClient: Sendable {
 extension BookClient: DependencyKey {
     static let liveValue = BookClient(
         search: { query in
-            guard let apiKey = await AppConfiguration.nationalLibraryAPIKey else {
+            guard let apiKey = await AppConfiguration.primoAPIKey else {
                 throw BookClientError.missingAPIKey
             }
             
+            let primoGateway = "https://api-ap.hosted.exlibrisgroup.com"
+
             var components = URLComponents(
-                string: "https://www.nl.go.kr/NL/search/openApi/search.do"
+                string: "\(primoGateway)/primo/v1/search"
             )
             
+            // name은 Primo 서버가 정한 항목 이름이고, value는 그 항목에 보낼 값이다.
+            // 예: name이 limit이고 value가 20이면 URL에 limit=20이 붙는다.
             components?.queryItems = [
-                URLQueryItem(name: "key", value: apiKey),
-                URLQueryItem(name: "apiType", value: "json"),
-                URLQueryItem(name: "srchTarget", value: "total"),
-                URLQueryItem(name: "kwd", value: query),
-                URLQueryItem(name: "pageNum", value: "1"),
-                URLQueryItem(name: "pageSize", value: "20"),
-                URLQueryItem(name: "category", value: "도서"),
+                // vid = view ID. 어떤 Primo 검색 화면의 설정을 사용할지 지정
+                // 이 값은 POSTECH 검색 화면의 식별자
+                URLQueryItem(name: "vid", value: "82POSTECH_INST:82POSTECH"),
+
+                // tab: 검색 화면 안에서 사용할 탭의 설정 이름
+                // LibraryCatalog는 소장자료 검색 탭
+                URLQueryItem(name: "tab", value: "LibraryCatalog"),
+
+                // scope: 실제로 어느 자료 범위에서 검색할지 지정
+                // MyInstitution은 해당 기관(여기서는 POSTECH)의 자료 범위
+                URLQueryItem(name: "scope", value: "MyInstitution"),
+
+                // q = query. 검색 조건을 "검색 필드,검색 방식,검색어" 순서로 보냄
+                // any는 통합검색 필드, contains는 포함 검색, query는 사용자가 입력한 검색어
+                // 예: query가 사피엔스이면 "any,contains,사피엔스"를 보냄
+                URLQueryItem(name: "q", value: "any,contains,\(query)"),
+
+                // qInclude: 검색 결과에 포함할 자료를 필터로 제한
+                // facet_rtype는 자료 유형, exact는 정확히 일치, books는 도서
+                URLQueryItem(name: "qInclude", value: "facet_rtype,exact,books"),
+
+                // lang = language. ko는 표시 언어를 한국어로 지정하는 값
+                URLQueryItem(name: "lang", value: "ko"),
+
+                // offset: 검색 결과의 앞에서 몇 건을 건너뛸지 지정
+                URLQueryItem(name: "offset", value: "0"),
+
+                // limit: 이번 요청에서 받을 검색 결과의 최대 개수
+                URLQueryItem(name: "limit", value: "20"),
+
+                // skipDelivery: 소장·이용가능정보 조회를 건너뛸지 지정(Primo VE)
+                // true는 생략, false는 생략하지 않고 함께 조회하도록 요청한
+                // 여기서 delivery는 배송이 아니라 자료의 소장·이용 정보 조회
+                URLQueryItem(name: "skipDelivery", value: "false")
             ]
+
             
             guard let url = components?.url else {
                 throw BookClientError.invalidURL
             }
             
-            let (data, response) = try await URLSession.shared.data(from: url)
+            var request = URLRequest(url: url)
+            request.setValue(
+                "apikey \(apiKey)",
+                forHTTPHeaderField: "Authorization"
+            )
+
+            let (data, response) = try await URLSession.shared.data(for: request)
             
             guard
                 let httpResponse = response as? HTTPURLResponse,
@@ -57,65 +95,48 @@ extension BookClient: DependencyKey {
             }
             
             let decodedResponse = try JSONDecoder().decode(
-                LibraryResponse.self,
+                PrimoResponse.self,
                 from: data
             )
             
-            var seen = Set<[String?]>()
-            
-            return decodedResponse.result.compactMap { item -> Book? in
-                let isbn = BookClient.nonEmpty(item.isbn)
-                let controlNumber = BookClient.nonEmpty(item.controlNumber)
-                
-                // 중복인지 판단할 기준
-                let key: [String?]
-                
-                if let controlNumber {
-                    key = ["control", controlNumber]
-                } else {
-                    key = [
-                        "metadata",
-                        isbn,
-                        BookClient.nonEmpty(item.title),
-                        BookClient.nonEmpty(item.author),
-                        BookClient.nonEmpty(item.publisher),
-                        BookClient.nonEmpty(item.publicationYear)
-                    ]
-                }
-                
-                // 이미 나온 레코드는 제외
-                guard seen.insert(key).inserted else {
+            var seen = Set<String>()
+
+            let books = decodedResponse.docs.compactMap { document -> Book? in
+                guard
+                    let recordID = BookClient.nonEmpty(
+                        document.pnx.control.recordid.first
+                    ),
+                    let rawTitle = document.pnx.display.title.first
+                else {
                     return nil
                 }
-                
-                // 제어번호가 없으면 생성 시 UUID를 한 번 부여
-                let id = controlNumber.map { "control:\($0)" }
-                    ?? "local:\(UUID().uuidString)"
-                
+
+                let title = BookText.plainText(rawTitle)
+
+                guard !title.isEmpty, seen.insert(recordID).inserted else {
+                    return nil
+                }
+
+                let identity = "primo:\(recordID)"
+
                 return Book(
-                    id: id,
-                    isbn: isbn,
-                    controlNumber: controlNumber,
-                    title: item.title,
-                    author: item.author ?? "저자 정보 없음",
-                    publisher: item.publisher,
-                    publicationYear: item.publicationYear,
+                    id: identity,
+                    isbn: BookISBN.isbn13(from: document.pnx.addata?.isbn?.joined(separator: " ")),
+                    controlNumber: identity,
+                    title: title,
+                    author: "저자 정보 없음",
+                    publisher: nil,
+                    publicationYear: nil,
                     description: nil,
-                    imageURL: item.imageURLString.flatMap { value -> URL? in
-                        let path = value.trimmingCharacters(in: .whitespacesAndNewlines)
-                        guard
-                            !path.isEmpty,
-                            let baseURL = URL(string: "https://cover.nl.go.kr/")
-                                else {
-                            return nil
-                        }
-                        return URL(
-                            string: path,
-                            relativeTo: baseURL
-                        )?.absoluteURL
-                    }
+                    imageURL: nil
                 )
             }
+
+            if !decodedResponse.docs.isEmpty && books.isEmpty {
+                throw BookClientError.invalidResponse
+            }
+
+            return books
         }
     )
     
@@ -124,6 +145,32 @@ extension BookClient: DependencyKey {
             return []
         }
     )
+    
+    private nonisolated struct PrimoResponse: Decodable {
+        let docs: [PrimoDocument]
+    }
+
+    private nonisolated struct PrimoDocument: Decodable {
+        let pnx: PrimoPNX
+    }
+
+    private nonisolated struct PrimoPNX: Decodable {
+        let control: PrimoControl
+        let display: PrimoDisplay
+        let addata: PrimoAddData?
+    }
+    
+    private nonisolated struct PrimoAddData: Decodable {
+        let isbn: [String]?
+    }
+    
+    private nonisolated struct PrimoControl: Decodable {
+        let recordid: [String]
+    }
+
+    private nonisolated struct PrimoDisplay: Decodable {
+        let title: [String]
+    }
     
     private struct LibraryResponse: Decodable {
         let result: [LibraryBook]
