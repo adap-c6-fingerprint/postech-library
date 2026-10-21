@@ -64,7 +64,9 @@ struct BookSearchView: View {
         .safeAreaInset(edge: .bottom) {
             if store.hasSearched && !store.isLoading
                 && store.errorMessage == nil && !store.books.isEmpty {
-                Button(action: {}) {
+                NavigationLink {
+                    BookBasketView(books: store.basketBooks)
+                } label: {
                     Label(
                         "책바구니 바로가기 (\(store.basketBooks.count)권)",
                         systemImage: "basket"
