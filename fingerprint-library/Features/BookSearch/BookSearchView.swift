@@ -65,7 +65,12 @@ struct BookSearchView: View {
             if store.hasSearched && !store.isLoading
                 && store.errorMessage == nil && !store.books.isEmpty {
                 NavigationLink {
-                    BookBasketView(books: store.basketBooks)
+                    BookBasketView(
+                        books: store.basketBooks,
+                        onDeletedSelected: { bookIDs in
+                            store.send(.removeFromBasket(bookIDs))
+                        }
+                    )
                 } label: {
                     Label(
                         "책바구니 바로가기 (\(store.basketBooks.count)권)",
@@ -73,7 +78,8 @@ struct BookSearchView: View {
                     )
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
-                .buttonStyle(.borderedProminent)
+                .glassEffect()
+                .buttonStyle(.glassProminent)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(.bar)
