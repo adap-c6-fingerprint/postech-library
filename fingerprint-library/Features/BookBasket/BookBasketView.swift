@@ -55,6 +55,17 @@ struct BookBasketView: View {
                 }
             }
         }
+        .overlay {
+            if books.isEmpty {
+                ContentUnavailableView(
+                    "책바구니가 비어 있어요",
+                    systemImage: "basket",
+                    description: Text(
+                        "검색 화면에서 책을 담아 주세요."
+                    )
+                )
+            }
+        }
         .navigationTitle("책바구니")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .top, spacing: 0) {
