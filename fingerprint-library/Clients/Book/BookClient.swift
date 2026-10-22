@@ -157,6 +157,8 @@ extension BookClient: DependencyKey {
                         .joined(separator: ", ")
                     ) ?? "저자 정보 없음",
                     publisher: BookClient.nonEmpty(
+                        document.pnx.addata?.pub?.joined(separator: ", ")
+                    ) ?? BookClient.nonEmpty(
                         document.pnx.addata?.publisher?.joined(separator: ", ")
                     ),
                     publicationYear: BookClient.nonEmpty(
@@ -207,14 +209,9 @@ extension BookClient: DependencyKey {
     
     private nonisolated struct PrimoAddData: Decodable {
         let isbn: [String]?
+        let pub: [String]?
         let publisher: [String]?
         let date: [String]?
-        
-
-        private enum CodingKeys: String, CodingKey {
-            case isbn, date
-            case publisher = "pub"
-        }
     }
     
     private nonisolated struct PrimoControl: Decodable {

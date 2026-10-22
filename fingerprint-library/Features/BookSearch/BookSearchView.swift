@@ -64,9 +64,7 @@ struct BookSearchView: View {
         .background(Color(.systemGroupedBackground))
         .safeAreaInset(edge: .bottom) {
             
-            if store.hasSearched && !store.isLoading
-                && store.errorMessage == nil && !store.books.isEmpty
-                && !store.basketBooks.isEmpty {
+            if !store.basketBooks.isEmpty {
                 Button {
                     isBasketPresented = true
                 } label: {
