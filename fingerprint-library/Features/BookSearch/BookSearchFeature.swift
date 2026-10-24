@@ -134,21 +134,3 @@ struct BookSearchFeature {
         }
     }
 }
-
-struct BookSearch {
-    @Dependency(\.bookClient) var bookClient: BookClient
-    
-    func searchBooks(query: String) async throws -> [Book] {
-        let keyword: String = query.trimmingCharacters(
-            in: .whitespacesAndNewlines
-        )
-        
-        if keyword.isEmpty {
-            return []
-        }
-        
-        let books: [Book] = try await bookClient.search(keyword)
-        
-        return books
-    }
-}
