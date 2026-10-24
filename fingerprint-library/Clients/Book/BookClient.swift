@@ -55,9 +55,11 @@ extension BookClient: DependencyKey {
                 // 예: query가 사피엔스이면 "any,contains,사피엔스"를 보냄
                 URLQueryItem(name: "q", value: "any,contains,\(query)"),
 
-                // qInclude: 검색 결과에 포함할 자료를 필터로 제한
-                // facet_rtype는 자료 유형, exact는 정확히 일치, books는 도서
-                URLQueryItem(name: "qInclude", value: "facet_rtype,exact,books"),
+                // 같은 자료 유형의 값은 OR로 묶어 기존 도서와 종이책을 함께 검색한다.
+                URLQueryItem(
+                    name: "multiFacets",
+                    value: "facet_rtype,include,books|,|facet_rtype,include,printed_book"
+                ),
 
                 // lang = language. ko는 표시 언어를 한국어로 지정하는 값
                 URLQueryItem(name: "lang", value: "ko"),
