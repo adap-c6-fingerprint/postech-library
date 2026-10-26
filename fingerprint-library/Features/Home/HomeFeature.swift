@@ -6,7 +6,7 @@ struct HomeFeature {
     struct State: Equatable {
         var recommendedBooks: [Book] = []
         var popularBooks: [Book] = []
-        var departmentName = "반도체공학과"
+        var departmentName = ""
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
 
         @Presents var detail: BookDetailFeature.State?
