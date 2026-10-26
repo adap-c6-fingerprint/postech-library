@@ -108,7 +108,7 @@ struct LibraryMapView: View {
     
     private var homeHeader: some View {
         HStack(spacing: 8) {
-            Text("추천")
+            Text("오늘은 어떤 책을\n읽어볼까요?")
                 .font(.system(size: 28, weight: .bold))
 
             Spacer()
