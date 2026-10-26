@@ -23,6 +23,17 @@ struct BookClient: Sendable {
         return String(value[range])
     }
 
+    nonisolated static func publisher(
+        from values: [String]?,
+        fallback: [String]?
+    ) -> String? {
+        nonEmpty(
+            values?.compactMap { nonEmpty($0) }.joined(separator: ", ")
+        ) ?? nonEmpty(
+            fallback?.compactMap { nonEmpty($0) }.joined(separator: ", ")
+        )
+    }
+
     private nonisolated static func nonEmpty(_ value: String?) -> String? {
         guard let text = value?.trimmingCharacters(
             in: .whitespacesAndNewlines
@@ -168,10 +179,9 @@ extension BookClient: DependencyKey {
                         .filter { !$0.isEmpty }
                         .joined(separator: ", ")
                     ) ?? "저자 정보 없음",
-                    publisher: BookClient.nonEmpty(
-                        document.pnx.addata?.pub?.joined(separator: ", ")
-                    ) ?? BookClient.nonEmpty(
-                        document.pnx.addata?.publisher?.joined(separator: ", ")
+                    publisher: BookClient.publisher(
+                        from: document.pnx.addata?.pub,
+                        fallback: document.pnx.addata?.publisher
                     ),
                     publicationYear: BookClient.publicationYear(from:
                         document.pnx.addata?.date?.first
