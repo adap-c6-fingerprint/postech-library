@@ -47,8 +47,12 @@ struct BookSearchView: View {
                         ForEach(store.books) { book in
                             BookSearchResultRow(
                                 book: book,
+                                isFavorite: store.favoriteBookKeys.contains(book.recordKey),
                                 onShowDetail: {
                                     store.send(.bookSelected(book))
+                                },
+                                onToggleFavorite: {
+                                    store.send(.favoriteButtonTapped(book))
                                 },
                                 onAddToBasket: {
                                     store.send(.addToBasket(book))

@@ -16,6 +16,7 @@ struct BookSearchFeature {
     struct State: Equatable {
         var query: String = ""
         var recentQueries: [String] = []
+        var favoriteBookKeys: Set<[String?]> = []
         var books: [Book] = []
         var isLoading: Bool = false
         var errorMessage: String? = nil
@@ -32,6 +33,7 @@ struct BookSearchFeature {
         case searchButtonTapped
         case searchSucceeded([Book])
         case searchFailed(String)
+        case favoriteButtonTapped(Book)
         
         case addToBasket(Book)
         case removeFromBasket(Set<Book.ID>)
@@ -45,6 +47,9 @@ struct BookSearchFeature {
 
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
+
+    @Dependency(\.bookFavoritesClient)
+    var bookFavoritesClient: BookFavoritesClient
     
     // Action을 받아 State를 바꾸고, 필요한 Effect를 반환
     var body: some Reducer<State, Action> {
@@ -52,6 +57,17 @@ struct BookSearchFeature {
             switch action {
             case .task:
                 state.recentQueries = searchHistoryClient.load()
+                state.favoriteBookKeys = bookFavoritesClient.load()
+                return .none
+
+            case let .favoriteButtonTapped(book):
+                let key = book.recordKey
+                if state.favoriteBookKeys.contains(key) {
+                    state.favoriteBookKeys.remove(key)
+                } else {
+                    state.favoriteBookKeys.insert(key)
+                }
+                bookFavoritesClient.save(state.favoriteBookKeys)
                 return .none
 
             case let .bookSelected(book):
