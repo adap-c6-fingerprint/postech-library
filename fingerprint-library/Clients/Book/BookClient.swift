@@ -11,6 +11,18 @@ import ComposableArchitecture
 struct BookClient: Sendable {
     var search: @Sendable (_ query: String) async throws -> [Book]
     
+    nonisolated static func publicationYear(from value: String?) -> String? {
+        guard let value,
+              let range = value.range(
+                of: #"(?<![0-9])(?!0000)[0-9]{4}(?![0-9])"#,
+                options: .regularExpression
+              ) else {
+            return nil
+        }
+
+        return String(value[range])
+    }
+
     private nonisolated static func nonEmpty(_ value: String?) -> String? {
         guard let text = value?.trimmingCharacters(
             in: .whitespacesAndNewlines
@@ -161,7 +173,7 @@ extension BookClient: DependencyKey {
                     ) ?? BookClient.nonEmpty(
                         document.pnx.addata?.publisher?.joined(separator: ", ")
                     ),
-                    publicationYear: BookClient.nonEmpty(
+                    publicationYear: BookClient.publicationYear(from:
                         document.pnx.addata?.date?.first
                     ),
                     description: nil,
