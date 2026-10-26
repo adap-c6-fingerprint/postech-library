@@ -103,8 +103,19 @@ struct BookSearchView: View {
             placement: .navigationBarDrawer(displayMode: .always),
             prompt: "제목이나 저자 이름"
         )
+        .searchSuggestions {
+            Section("최근 검색어") {
+                ForEach(store.recentQueries, id: \.self) { keyword in
+                    Text(keyword)
+                        .searchCompletion(keyword)
+                }
+            }
+        }
         .onSubmit(of: .search) {
             store.send(.searchButtonTapped)
+        }
+        .task {
+            store.send(.task)
         }
     }
 }
