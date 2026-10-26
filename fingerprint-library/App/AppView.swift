@@ -13,12 +13,25 @@ struct AppView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        HomeView(store: store)
-            // 위치 스트림은 홈의 push/pop이 아닌 전체 navigation 수명에 맞춘다.
-            .task { await store.send(.indoorMap(.task)).finish() }
-            .onDisappear { store.send(.indoorMap(.disappeared)) }
-            .onChange(of: scenePhase) { _, phase in
-                store.send(.indoorMap(.sceneActiveChanged(phase == .active)))
+        TabView {
+            Tab("홈", systemImage: "house") {
+                NavigationStack {
+                    HomeView(
+                        store: store.scope(state: \.home, action: \.home)
+                    )
+                }
             }
+
+            Tab("지도", systemImage: "map") {
+                LibraryMapView(store: store)
+            }
+        }
+        .tint(Color(red: 0.88, green: 0.95, blue: 0.19))
+        // 위치 스트림은 탭 전환이 아닌 앱 루트 수명에 맞춘다.
+        .task { await store.send(.indoorMap(.task)).finish() }
+        .onDisappear { store.send(.indoorMap(.disappeared)) }
+        .onChange(of: scenePhase) { _, phase in
+            store.send(.indoorMap(.sceneActiveChanged(phase == .active)))
+        }
     }
 }

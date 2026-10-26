@@ -30,6 +30,7 @@ struct BookSearchFeature {
     enum Action {
         case task
         case queryChanged(String)
+        case searchCancelled
         case searchButtonTapped
         case searchSucceeded([Book])
         case searchFailed(String)
@@ -50,6 +51,10 @@ struct BookSearchFeature {
 
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient: BookFavoritesClient
+
+    private nonisolated enum CancelID: Hashable, Sendable {
+        case search
+    }
     
     // Action을 받아 State를 바꾸고, 필요한 Effect를 반환
     var body: some Reducer<State, Action> {
@@ -90,6 +95,14 @@ struct BookSearchFeature {
             case let .queryChanged(query):
                 state.query = query
                 return .none
+
+            case .searchCancelled:
+                state.query = ""
+                state.books = []
+                state.isLoading = false
+                state.errorMessage = nil
+                state.hasSearched = false
+                return .cancel(id: CancelID.search)
                 
             case .searchButtonTapped:
                 // 이미 검색 중이면 추가 요청을 보내지 않음
@@ -124,15 +137,20 @@ struct BookSearchFeature {
                     do {
                         // Store가 Effect를 실행하면 이 코드가 동작
                         let books = try await bookClient.search(keyword)
+                        try Task.checkCancellation()
                         
                         // 검색 결과를 새로운 Action으로 보냄
                         await send(.searchSucceeded(books))
+                    } catch is CancellationError {
+                        return
                     } catch {
+                        guard !Task.isCancelled else { return }
                         await send(
                             .searchFailed(error.localizedDescription)
                         )
                     }
                 }
+                .cancellable(id: CancelID.search, cancelInFlight: true)
                 
             case let .searchSucceeded(books):
                 // 화면 ID가 모두 다른지 확인
