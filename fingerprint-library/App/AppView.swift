@@ -15,15 +15,15 @@ struct AppView: View {
     var body: some View {
         TabView {
             Tab("홈", systemImage: "house") {
+                LibraryMapView(store: store)
+            }
+
+            Tab("추천", systemImage: "books.vertical") {
                 NavigationStack {
                     HomeView(
                         store: store.scope(state: \.home, action: \.home)
                     )
                 }
-            }
-
-            Tab("지도", systemImage: "map") {
-                LibraryMapView(store: store)
             }
         }
         .tint(Color(red: 0.88, green: 0.95, blue: 0.19))
