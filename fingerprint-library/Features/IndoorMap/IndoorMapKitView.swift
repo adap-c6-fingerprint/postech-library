@@ -1,6 +1,9 @@
 import MapKit
 import SwiftUI
 
+/// 순수 지도·위치·경로 값을 MapKit에 표시하는 SwiftUI와 UIKit 사이의 어댑터.
+///
+/// 선택과 카메라 이동 의도는 값·콜백으로 주고받고, MKMapView와 overlay의 수명은 Coordinator가 관리한다.
 struct IndoorMapKitView: UIViewRepresentable {
     let map: IndoorMap
     let floor: IndoorMapFloor
@@ -35,15 +38,20 @@ struct IndoorMapKitView: UIViewRepresentable {
         coordinator.detachMapView()
     }
 
+    /// MapKit delegate·제스처를 처리하고 마지막 렌더링 값을 기억해 필요한 부분만 갱신한다.
     final class Coordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
         var parent: IndoorMapKitView
         weak var mapView: MKMapView?
+        /// 마지막으로 도형을 그린 지도·층. 위치 갱신마다 전체 도형을 다시 만드는 것을 피한다.
         var renderedMap: IndoorMap?
         var renderedFloorID: UUID?
         var selectedID: IndoorMapElement.ID?
+        /// 적용을 마친 요청. 같은 요청의 반복 갱신이 사용자의 수동 이동을 덮어쓰지 않게 한다.
         var lastCameraRequest: IndoorMapCameraRequest?
+        /// 화면 부착·크기 결정까지 보류한 최신 카메라 요청.
         private(set) var pendingCameraRequest: IndoorMapCameraRequest?
         private var isApplyingCamera = false
+        /// MapKit overlay 객체와 원본 요소를 연결해 색상·선택 스타일을 결정한다.
         private var overlayFeatures: [ObjectIdentifier: IndoorMapElement] = [:]
         private var positionAnnotation: PositionAnnotation?
         private var renderedPosition: IndoorPosition?
@@ -56,6 +64,12 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         init(parent: IndoorMapKitView) { self.parent = parent }
 
+        /// 기본 지도·줌 허용 범위·제스처와 배치 콜백을 설정한다.
+        ///
+        /// 카메라 거리의 최소·최대값은 아래 `setCameraZoomRange`에서 미터 단위로 설정한다.
+        /// 이 값은 확대·축소의 제한이며,
+        /// 최초·층 변경 때의 실제 줌은 `moveCamera(_:in:animated:)`의 도면 맞춤에서 정한다.
+        /// - Returns: SwiftUI 배치가 끝난 시점을 알려줄 수 있는 ``IndoorMapSurface``.
         func makeMapView() -> IndoorMapSurface {
             let view = IndoorMapSurface()
             view.delegate = self
@@ -82,6 +96,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             return view
         }
 
+        /// 새 SwiftUI 값과 캐시를 비교해 도면·위치·서가·경로·선택을 갱신한다.
+        /// 카메라는 새 요청일 때만 배치 이후 적용하도록 보류한다.
         func update(parent: IndoorMapKitView, in view: MKMapView) {
             self.parent = parent
             if renderedMap != parent.map || renderedFloorID != parent.floor.id {
@@ -103,6 +119,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             if pendingCameraRequest != nil { view.setNeedsLayout() }
         }
 
+        /// 계산된 경로 중 조회 층의 선·통로 연결점·층 이동 진입 및 출구만 표시한다.
+        /// 이 메서드는 경로를 계산하거나 도착을 판정하지 않는다.
         private func updateRoute(in view: MKMapView) {
             guard renderedRoute != parent.route || routeFloorID != parent.floor.id else { return }
             view.removeOverlays(routeOverlays)
@@ -133,6 +151,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.addAnnotations(routeTransitionAnnotations)
         }
 
+        /// 조회 층의 서가 핀을 갱신하고 선택 색상과 MapKit의 선택 상태를 맞춘다.
         private func updateShelves(in view: MKMapView) {
             let shelves = parent.shelves.filter { $0.floorID == parent.floor.id }
             if renderedShelves != shelves {
@@ -150,6 +169,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
         }
 
+        /// 화면에 붙고 유효한 크기를 가진 뒤 최신 보류 요청을 한 번 적용한다.
+        /// 적용할 수 없으면 요청을 소비하지 않아 다음 layout에서 다시 처리할 수 있다.
         private func applyPendingCamera(in view: MKMapView) {
             guard !isApplyingCamera, view.window != nil, view.bounds.width > 0, view.bounds.height > 0,
                   let request = pendingCameraRequest else { return }
@@ -160,11 +181,14 @@ struct IndoorMapKitView: UIViewRepresentable {
             pendingCameraRequest = nil
         }
 
+        /// View 제거 시 참조와 보류 요청을 해제해 종료된 화면에 카메라 작업이 남지 않게 한다.
         func detachMapView() {
             mapView = nil
             pendingCameraRequest = nil
         }
 
+        /// 조회 층이 바뀌면 층 외곽·unit·section·fixture·opening과 시설 핀을 다시 구성한다.
+        /// 서가·현재 위치·경로 표시는 별도의 갱신 메서드에서 이어서 반영한다.
         func render(in view: MKMapView) {
             view.removeOverlays(view.overlays)
             view.removeAnnotations(routeTransitionAnnotations)
@@ -181,7 +205,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.addOverlay(overlay, level: .aboveRoads)
             }
             let features = parent.map.features.filter { $0.floorID == parent.floor.id }
-            // 넓은 구역부터 그리고 그 위에 fixture와 opening을 올린다.
+            // unit과 section을 먼저 그리고 그 위에 fixture와 opening을 올린다.
             for kind in [IndoorMapElement.Kind.unit, .section, .fixture, .opening] {
                 for feature in features where feature.kind == kind {
                     for overlay in MapKitGeometry.overlays(for: feature.geometry) {
@@ -196,6 +220,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             })
         }
 
+        /// 조회 층의 합성·재생·수동 위치만 별도 마커로 표시한다.
+        /// 센서 위치는 MapKit 기본 사용자 위치에 맡기며 같은 출처의 이동은 기존 annotation을 갱신한다.
         func updatePosition(in view: MKMapView) {
             let visible = parent.position.flatMap { position -> IndoorPosition? in
                 guard position.source != .sensor, position.floorOrdinal == parent.floor.ordinal else { return nil }
@@ -212,6 +238,15 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = positionAnnotation { view.addAnnotation(annotation) }
         }
 
+        /// 층 전체를 맞추거나 특정 좌표를 조작 UI에 가리지 않는 영역의 중심으로 이동한다.
+        ///
+        /// 층 맞춤은 도형 범위와 padding으로 줌을 자동 계산한다. 위치 이동은 기존 줌을 유지한다.
+        /// 두 경우 모두 카메라를 평면으로 돌리며, 줌 허용 범위는 `makeMapView()`에서 설정한다.
+        /// - Parameters:
+        ///   - request: TCA에서 전달한 층 맞춤 또는 좌표 이동 요청.
+        ///   - view: 이동할 MapKit 화면.
+        ///   - animated: 좌표 중심 이동의 애니메이션 여부. 층 전체 맞춤은 즉시 적용한다.
+        /// - Returns: 요청을 적용했으면 true, 공간·대상·좌표가 유효하지 않아 보류해야 하면 false.
         @discardableResult
         func moveCamera(_ request: IndoorMapCameraRequest, in view: MKMapView, animated: Bool = true) -> Bool {
             switch request.target {
@@ -249,6 +284,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             return true
         }
 
+        /// overlay의 도형 종류에 맞는 renderer를 만들고 경로·시설·선택 스타일을 적용한다.
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
             let renderer: MKOverlayPathRenderer
             if let polygon = overlay as? MKPolygon { renderer = MKPolygonRenderer(polygon: polygon) }
@@ -259,6 +295,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             return renderer
         }
 
+        /// 경로는 파란색으로 구분하고 도면 요소에는 종류별 색상과 선택 강조를 적용한다.
         func style(_ renderer: MKOverlayPathRenderer, overlay: any MKOverlay) {
             if routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
                 renderer.strokeColor = .systemBlue
@@ -290,6 +327,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
         }
 
+        /// 층 이동·시뮬레이션 위치·서가·일반 시설을 서로 다른 마커로 표시한다.
+        /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
             if let annotation = annotation as? IndoorRouteTransitionAnnotation {
@@ -384,6 +423,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                parent.selectedShelfKey == annotation.destination.key { parent.onSelectShelf(nil) }
         }
 
+        /// 지도 탭을 좌표로 바꾸고 가까운 시설 핀, 포함하는 fixture, unit 순으로 선택 대상을 찾는다.
+        /// 수동 출발점 배치 모드에서는 요소 선택 대신 좌표 콜백만 전달한다.
         @objc func tapped(_ gesture: UITapGestureRecognizer) {
             guard let view = mapView else { return }
             let location = gesture.location(in: view)
@@ -417,6 +458,7 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool { true }
 
+        /// annotation 주변의 탭이 지도 바닥 선택으로 중복 처리되지 않도록 제외한다.
         func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
             var view = touch.view
             while let current = view {
@@ -452,6 +494,7 @@ struct IndoorMapKitView: UIViewRepresentable {
 
 /// SwiftUI의 배치가 끝나 실제 화면 크기를 사용할 수 있을 때 보류한 카메라 요청을 적용한다.
 final class IndoorMapSurface: MKMapView {
+    /// 유효한 window·크기 여부를 Coordinator가 판단할 수 있도록 배치 이후 호출한다.
     var onLayout: ((IndoorMapSurface) -> Void)?
 
     override func layoutSubviews() {
@@ -465,6 +508,7 @@ final class IndoorMapSurface: MKMapView {
     }
 }
 
+/// 점 geometry로 제공된 시설의 원본 요소와 MapKit 표시 좌표를 연결한다.
 private final class FeatureAnnotation: NSObject, MKAnnotation {
     let feature: IndoorMapElement
     let coordinate: CLLocationCoordinate2D
@@ -475,6 +519,7 @@ private final class FeatureAnnotation: NSObject, MKAnnotation {
     }
 }
 
+/// 센서의 기본 사용자 위치와 구분해 합성·재생·수동 위치를 표시하는 annotation.
 private final class PositionAnnotation: NSObject, MKAnnotation {
     private(set) var position: IndoorPosition
     @objc dynamic var coordinate: CLLocationCoordinate2D

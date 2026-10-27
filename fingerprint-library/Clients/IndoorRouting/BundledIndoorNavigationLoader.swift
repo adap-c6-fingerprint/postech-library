@@ -1,10 +1,24 @@
 import CryptoKit
 import Foundation
 
+/// 도면과 함께 사용할 길찾기 그래프·서가 목적지·층간 거리 자료를 읽고 일치 여부를 검사한다.
+///
+/// 지도 표시 로딩과 분리되어 있으므로 이 자료가 없어도 도면과 층 선택은 유지할 수 있다.
 nonisolated struct BundledIndoorNavigationLoader {
+    /// 현재 지원하는 schema 1 데이터셋에서 해시로 고정하는 지도 파일 목록.
+    /// 도서관의 새 export 자료를 받으면 해당 계약과의 호환성을 별도로 확인해야 한다.
     static let mapFiles = ["manifest.json", "venue.geojson", "level.geojson", "footprint.geojson",
                            "unit.geojson", "fixture.geojson", "opening.geojson", "amenity.geojson"]
 
+    /// 현재 화면의 도서관 지도와 연결할 번들 길찾기 자료를 읽는다.
+    ///
+    /// `dataset.json`이 아직 없으면 다른 건물의 자료로 대체하지 않고 준비 전 상태를 반환한다.
+    /// 파일 확인과 후속 로딩은 MainActor 밖에서 실행한다.
+    /// - Parameters:
+    ///   - map: 이미 화면에 표시 중인 도서관 지도.
+    ///   - bundle: `IndoorMaps/POSTECHLibrary`를 포함하는 번들.
+    /// - Returns: 화면 지도와 일치하는 그래프·서가·거리 자료.
+    /// - Throws: ``IndoorNavigationLoadError/notPrepared``, 자료 오류 또는 `CancellationError`.
     @concurrent
     func loadLibrary(on map: IndoorMap, in bundle: Bundle = .main) async throws -> IndoorNavigationData {
         try Task.checkCancellation()
@@ -18,6 +32,14 @@ nonisolated struct BundledIndoorNavigationLoader {
         return try await load(directory: directory, on: map)
     }
 
+    /// 기존 개발 도면의 목업 길찾기 자료를 회귀 검증용으로 읽는다.
+    ///
+    /// 호환 정책과 시연 데이터셋 식별자를 함께 검사한다. 앱 기본 의존성은 이 진입점을 사용하지 않는다.
+    /// - Parameters:
+    ///   - map: 함께 검증할 기존 개발 지도.
+    ///   - bundle: C5 데이터셋을 포함하는 번들.
+    /// - Returns: `c5-demo`의 목업 서가와 경로 자료.
+    /// - Throws: 파일·해시·참조·데이터셋 모드 오류 또는 작업 취소 오류.
     func loadC5(on map: IndoorMap, in bundle: Bundle = .main) async throws -> IndoorNavigationData {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
             throw IndoorMapLoadError.missingResource("IndoorMaps/C5/dataset.json")
@@ -29,7 +51,17 @@ nonisolated struct BundledIndoorNavigationLoader {
         return data
     }
 
-    /// 해시가 맞는 리소스 묶음만 해석한다. IMDF 형식 버전을 지도 개정 번호로 사용하지 않는다.
+    /// 해시·지도 내용·개정 식별자가 일치하는 데이터셋만 해석한다.
+    ///
+    /// 파일 해시를 확인한 뒤 고정된 도면을 다시 읽어 `map`과 비교하고, 그래프와 서가 참조를 검사한다.
+    /// 층간 거리 자료가 있으면 모든 층간 연결의 거리·출처·근거도 확인한다.
+    /// 해시 일치는 실제 보행 가능성이나 실측 정확도를 보증하지 않으며, IMDF 형식 버전도 지도 개정 번호가 아니다.
+    /// - Parameters:
+    ///   - directory: `dataset.json`, `IMDFData`, 그래프·서가 파일을 포함하는 데이터셋 폴더.
+    ///   - map: 데이터셋 도면과 비교할 화면 지도.
+    ///   - policy: 고정된 IMDF를 읽을 때 적용할 UUID 충돌 정책.
+    /// - Returns: 탐색과 서가 조회에 사용할 검증된 ``IndoorNavigationData``.
+    /// - Throws: 파일·해시·참조·거리 자료 오류 또는 `CancellationError`.
     @concurrent
     func load(directory: URL, on map: IndoorMap, policy: IMDFImportPolicy = .strict) async throws -> IndoorNavigationData {
         try Task.checkCancellation()
@@ -80,6 +112,7 @@ nonisolated struct BundledIndoorNavigationLoader {
         return IndoorNavigationData(graph: graph, shelves: shelves, diagnostics: diagnostics, transitionDistances: distances)
     }
 
+    /// 파일을 읽고 누락과 그 밖의 읽기 실패를 파일명과 함께 구분한다.
     private func read(_ file: String, at directory: URL) throws -> Data {
         do { return try Data(contentsOf: directory.appendingPathComponent(file)) }
         catch let error as CocoaError where error.code == .fileReadNoSuchFile {
@@ -87,6 +120,7 @@ nonisolated struct BundledIndoorNavigationLoader {
         } catch { throw invalid(file, error.localizedDescription) }
     }
 
+    /// 파일의 SHA-256이 manifest에 기록한 값과 같을 때만 원본 바이트를 반환한다.
     private func verified(_ file: String, at directory: URL, hash: String) throws -> Data {
         let data = try read(file, at: directory)
         let actual = SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
@@ -94,6 +128,7 @@ nonisolated struct BundledIndoorNavigationLoader {
         return data
     }
 
+    /// DTO 해석 실패를 원본 파일의 자료 오류로 변환한다.
     private func decode<T: Decodable>(_ data: Data, file: String) throws -> T {
         do { return try JSONDecoder().decode(T.self, from: data) }
         catch { throw invalid(file, error.localizedDescription) }
@@ -103,6 +138,7 @@ nonisolated struct BundledIndoorNavigationLoader {
         .invalidData(file: file, reason: reason)
     }
 
+    /// 도면·그래프·서가·선택적 층간 거리 파일을 하나의 데이터셋으로 묶는 manifest.
     private struct Manifest: Decodable {
         let schemaVersion: Int
         let datasetID: String
@@ -123,11 +159,13 @@ nonisolated struct BundledIndoorNavigationLoader {
         }
     }
 
+    /// 층간 연결별 거리와 측정·추정 출처를 보관하는 별도 자료.
     private struct DistanceManifest: Decodable {
         let schemaVersion: Int
         let datasetID: String
         let layoutVersion: String
         let edges: [Entry]
+        /// 그래프의 한 층간 연결에 대응하는 거리·출처·근거.
         struct Entry: Decodable {
             let edgeID: String
             let meters: Double

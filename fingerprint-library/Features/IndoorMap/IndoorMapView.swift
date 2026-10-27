@@ -1,9 +1,13 @@
 import ComposableArchitecture
 import SwiftUI
 
+/// TCA 상태로 지도·층 선택·위치 포커싱과 로딩 상태를 표시한다.
+/// MapKit 객체의 생성·갱신은 ``IndoorMapKitView``에 위임한다.
 struct IndoorMapView: View {
     let store: StoreOf<IndoorMapFeature>
+    /// 홈에서는 선택한 서가 카드를, 경로 화면에서는 계산한 경로와 목적지를 표시하도록 구분한다.
     var showsDestinationCard = true
+    /// 경로 시트가 차지하는 하단 영역. 카메라 맞춤과 지도 조작 UI의 배치에 함께 적용한다.
     var bottomContentInset: CGFloat = 0
 
     var body: some View {
@@ -27,6 +31,7 @@ struct IndoorMapView: View {
         .background(Color(uiColor: .systemGroupedBackground))
     }
 
+    /// 지도 위에 조작 UI를 배치하고, 실제 위치의 층과 별개인 조회 층을 전달한다.
     private func mapContent(map: IndoorMap, floor: IndoorMapFloor) -> some View {
         GeometryReader { geometry in
             ZStack {
@@ -101,6 +106,7 @@ struct IndoorMapView: View {
         }
     }
 
+    /// 실제 위치의 ordinal에 대응하는 표시 이름을 사용한다. 조회 중인 층을 현재 위치로 표시하지 않는다.
     private var currentFloorLabel: String {
         guard let ordinal = store.currentPosition?.floorOrdinal,
             let floor = store.map?.floors.first(where: { $0.ordinal == ordinal })
@@ -110,6 +116,7 @@ struct IndoorMapView: View {
         return "현재위치 · \(floor.name)"
     }
 
+    /// 위층부터 층 버튼을 표시하고 작은 표시 영역에서는 선택한 층을 스크롤로 드러낸다.
     private func floorPicker(map: IndoorMap, floor: IndoorMapFloor, maxHeight: CGFloat) -> some View
     {
         ScrollViewReader { proxy in
