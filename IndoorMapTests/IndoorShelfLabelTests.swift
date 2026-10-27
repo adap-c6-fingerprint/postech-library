@@ -35,7 +35,9 @@ struct IndoorShelfLabelTests {
         let map = try await BundledIndoorMapLoader().loadLibrary()
         let root = try #require(Bundle.main.url(forResource: "IndoorMaps", withExtension: nil))
         let data = try Data(contentsOf: root.appendingPathComponent("POSTECHLibrary/shelfdata.json"))
-        var rows = try JSONSerialization.jsonObject(with: data) as! [[String: Any]]
+        let object = try JSONSerialization.jsonObject(with: data)
+        var rows = try #require(object as? [[String: Any]])
+        try #require(!rows.isEmpty)
         switch corruption {
         case .unknownFixture: rows[0]["fixtureNumber"] = "S-3F-unknown-A"
         case .wrongFloor: rows[0]["floor"] = "4F"

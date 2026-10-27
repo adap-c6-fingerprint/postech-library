@@ -86,5 +86,69 @@ extension IndoorMapSerialTests {
             #expect(store.state.shelfLabelError == nil)
             await store.finish()
         }
+
+        @Test("화면 재진입 시 중단된 서가 레이블을 새 요청으로 복구하고 이후에는 재사용한다")
+        func reloadsLabelsAfterReentry() async throws {
+            let map = try await BundledIndoorMapLoader().loadLibrary()
+            let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
+            let resume = AsyncStream<Void>.makeStream()
+            defer { resume.continuation.finish() }
+            var initial = IndoorMapFeature.State()
+            initial.map = map
+            initial.selectedFloorID = map.floors[2].id
+            initial.cameraRequest = .init(id: 1, target: .initialFloor(map.floors[0].id))
+            initial.isActive = true
+            initial.isLoadingShelfLabels = true
+            initial.shelfLabelRequestID = 1
+            let store = TestStore(initialState: initial) { IndoorMapFeature() } withDependencies: {
+                $0.indoorShelfLabelClient = .init(supports: { _ in true }, load: { _ in
+                    var iterator = resume.stream.makeAsyncIterator()
+                    _ = await iterator.next()
+                    return labels
+                })
+                $0.indoorNavigationClient.load = { _ in throw IndoorNavigationLoadError.notPrepared }
+            }
+
+            await store.send(.disappeared) {
+                $0.isActive = false
+                $0.isLoadingShelfLabels = false
+                $0.shelfLabelRequestID = 2
+            }
+            await store.send(.task) {
+                $0.isActive = true
+                $0.isLoadingNavigation = true
+                $0.navigationRequestID = 1
+                $0.isLoadingShelfLabels = true
+                $0.shelfLabelRequestID = 3
+            }
+            await store.receive(\.navigationFailed) {
+                $0.isLoadingNavigation = false
+                $0.navigationLoadError = IndoorNavigationLoadError.notPrepared.localizedDescription
+            }
+            resume.continuation.yield(())
+            await store.receive(.shelfLabelsLoaded(requestID: 3, labels)) {
+                $0.isLoadingShelfLabels = false
+                $0.shelfLabels = labels
+            }
+            #expect(store.state.map == map)
+            #expect(store.state.selectedFloorID == initial.selectedFloorID)
+            #expect(store.state.cameraRequest == initial.cameraRequest)
+
+            await store.send(.disappeared) { $0.isActive = false }
+            await store.send(.task) {
+                $0.isActive = true
+                $0.isLoadingNavigation = true
+                $0.navigationLoadError = nil
+                $0.navigationRequestID = 2
+            }
+            await store.receive(\.navigationFailed) {
+                $0.isLoadingNavigation = false
+                $0.navigationLoadError = IndoorNavigationLoadError.notPrepared.localizedDescription
+            }
+            #expect(store.state.shelfLabelRequestID == 3)
+            #expect(store.state.shelfLabels == labels)
+            await store.send(.disappeared) { $0.isActive = false }
+            await store.finish()
+        }
     }
 }
