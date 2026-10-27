@@ -5,12 +5,14 @@ Refs #53. 사용자가 제공한 `shelfdata.json`과 2026-10-27 활용 가이드
 
 ## 확인한 자료
 
-- 제공 파일: `/Users/dd/Downloads/shelfdata.json`, UTF-8 JSON 배열, 308개 항목.
+- 제공 자료: 사용자가 제공한 `shelfdata.json`, UTF-8 JSON 배열, 308개 항목.
+- 저장소 위치: [fingerprint-library/Resources/IndoorMaps/POSTECHLibrary/shelfdata.json](../fingerprint-library/Resources/IndoorMaps/POSTECHLibrary/shelfdata.json).
 - SHA-256: `972d397b5b68884c5fa48c971320cc400c422dea7914673d060a6c8b5f372e70`.
 - 3F·4F 각각 154개 항목이며 각 층의 A·B 면을 구분한다.
 - 현재 번들의 도서관 IMDF에서 `fixtureNumber` 308개 모두 이름이 유일하게 일치하고 층도 일치한다.
-- 원본 바이트를 변경하지 않고 `Resources/IndoorMaps/POSTECHLibrary/shelfdata.json`에 포함했다.
-- 앱은 인덱스의 번호·범위·기타 분류·빈 서가를 지도 레이블로 표시한다. 실제 도서의 범위 검색은 별도 확인 대기다.
+- 원본 바이트를 변경하지 않고 위 저장소 경로에 번들 자료로 포함했다.
+- 앱은 인덱스의 번호·범위·기타 분류·빈 서가를 지도 레이블로 표시한다. 책마다 고정 서가 하나를 연결하는 목업은
+  [책과 서가 연결](BookShelfMapping.md)에서 다루며, 실제 도서의 확정 판정은 별도 확인 대기다.
 
 ## 필드의 역할
 
