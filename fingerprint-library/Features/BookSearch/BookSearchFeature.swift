@@ -24,6 +24,7 @@ struct BookSearchFeature {
         
         var basketBooks: [Book] = []
         @Presents var detail: BookDetailFeature.State?
+        @Presents var shelfMap: BookShelfMapFeature.State?
     }
     
     // 이 기능에서 발생할 수 있는 이벤트
@@ -40,6 +41,9 @@ struct BookSearchFeature {
         case removeFromBasket(Set<Book.ID>)
         case bookSelected(Book)
         case detail(PresentationAction<BookDetailFeature.Action>)
+        case directionsButtonTapped(Book)
+        case basketDirectionsButtonTapped(Set<Book.ID>)
+        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
     }
     
     // 검색에 사용할 BookClient 값
@@ -80,6 +84,20 @@ struct BookSearchFeature {
                 return .none
 
             case .detail:
+                return .none
+
+            case .directionsButtonTapped(let book):
+                state.shelfMap = BookShelfMapFeature.State(book: book)
+                return .none
+
+            case .basketDirectionsButtonTapped(let bookIDs):
+                let books = state.basketBooks.filter { bookIDs.contains($0.id) }
+                guard books.count == bookIDs.count,
+                      let shelfMap = BookShelfMapFeature.State(books: books) else { return .none }
+                state.shelfMap = shelfMap
+                return .none
+
+            case .shelfMap:
                 return .none
                 
             case let .addToBasket(book):
@@ -179,6 +197,9 @@ struct BookSearchFeature {
         }
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
+        }
+        .ifLet(\.$shelfMap, action: \.shelfMap) {
+            BookShelfMapFeature()
         }
     }
 }

@@ -584,6 +584,8 @@ nonisolated struct IndoorMapCameraRequest: Equatable, Sendable {
         case floor(UUID)
         /// 현재 줌을 유지한 채 해당 좌표를 가려지지 않는 영역의 중심으로 이동한다.
         case position(IndoorMapCoordinate)
+        /// 같은 층의 서가 후보들을 함께 볼 수 있도록 도형 전체에 맞춘다.
+        case features([IndoorMapElement.ID])
     }
     let id: Int
     let target: Target

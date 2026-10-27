@@ -27,6 +27,7 @@ final class IndoorShelfLabelView: MKAnnotationView {
     static let reuseID = "indoor-shelf-label"
     private let numberLabel = UILabel()
     private let rangeLabel = UILabel()
+    private var highlightsShelf = false
 
     override init(annotation: (any MKAnnotation)?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -44,7 +45,9 @@ final class IndoorShelfLabelView: MKAnnotationView {
         isEnabled = false
         isAccessibilityElement = true
         registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: IndoorShelfLabelView, _: UITraitCollection) in
-            if let annotation = view.annotation as? IndoorShelfLabelAnnotation { view.configure(annotation) }
+            if let annotation = view.annotation as? IndoorShelfLabelAnnotation {
+                view.configure(annotation, highlighted: view.highlightsShelf)
+            }
         }
     }
 
@@ -60,8 +63,10 @@ final class IndoorShelfLabelView: MKAnnotationView {
         return CGSize(width: width + 12, height: 22 + range.sizeThatFits(CGSize(width: width, height: 100)).height)
     }
 
-    func configure(_ annotation: IndoorShelfLabelAnnotation) {
+    func configure(_ annotation: IndoorShelfLabelAnnotation, highlighted: Bool = false) {
         self.annotation = annotation
+        highlightsShelf = highlighted
+        displayPriority = highlighted ? .required : .defaultHigh
         numberLabel.text = annotation.title
         rangeLabel.text = annotation.subtitle
         numberLabel.textColor = UIColor.label.resolvedColor(with: traitCollection)
@@ -77,8 +82,12 @@ final class IndoorShelfLabelView: MKAnnotationView {
             let card = UIBezierPath(roundedRect: rect, cornerRadius: 5)
             UIColor.systemBackground.resolvedColor(with: traitCollection).setFill()
             card.fill()
-            UIColor.separator.resolvedColor(with: traitCollection).setStroke()
-            card.lineWidth = 0.5
+            if highlighted {
+                UIColor.systemOrange.withAlphaComponent(0.2).resolvedColor(with: traitCollection).setFill()
+                card.fill()
+            }
+            (highlighted ? UIColor.systemOrange : UIColor.separator).resolvedColor(with: traitCollection).setStroke()
+            card.lineWidth = highlighted ? 2 : 0.5
             card.stroke()
             context.cgContext.saveGState()
             context.cgContext.translateBy(x: 6, y: 3)
@@ -91,5 +100,6 @@ final class IndoorShelfLabelView: MKAnnotationView {
         accessibilityIdentifier = "shelf-label-\(annotation.label.fixtureNumber)"
         accessibilityLabel = "서가 \(annotation.label.realNumber), \(annotation.label.side.rawValue)면"
         accessibilityValue = annotation.subtitle
+        accessibilityTraits = highlighted ? [.staticText, .selected] : [.staticText]
     }
 }
