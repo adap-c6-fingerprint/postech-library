@@ -15,6 +15,7 @@ struct BookSearchFeature {
     @ObservableState
     struct State: Equatable {
         var query: String = ""
+        var recentQueries: [String] = []
         var books: [Book] = []
         var isLoading: Bool = false
         var errorMessage: String? = nil
@@ -26,6 +27,7 @@ struct BookSearchFeature {
     
     // 이 기능에서 발생할 수 있는 이벤트
     enum Action {
+        case task
         case queryChanged(String)
         case searchButtonTapped
         case searchSucceeded([Book])
@@ -40,11 +42,18 @@ struct BookSearchFeature {
     // 검색에 사용할 BookClient 값
     @Dependency(\.bookClient)
     var bookClient: BookClient
+
+    @Dependency(\.searchHistoryClient)
+    var searchHistoryClient: SearchHistoryClient
     
     // Action을 받아 State를 바꾸고, 필요한 Effect를 반환
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .task:
+                state.recentQueries = searchHistoryClient.load()
+                return .none
+
             case let .bookSelected(book):
                 state.detail = BookDetailFeature.State(book: book)
                 return .none
@@ -89,6 +98,11 @@ struct BookSearchFeature {
                 state.books = []
                 state.hasSearched = true
                 
+                state.recentQueries.removeAll { $0 == keyword }
+                state.recentQueries.insert(keyword, at: 0)
+                state.recentQueries = Array(state.recentQueries.prefix(20))
+                searchHistoryClient.save(state.recentQueries)
+
                 // 검색할 작업을 담은 Effect 값을 만들어 반환
                 return .run { [bookClient] send in
                     do {
@@ -132,23 +146,5 @@ struct BookSearchFeature {
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
         }
-    }
-}
-
-struct BookSearch {
-    @Dependency(\.bookClient) var bookClient: BookClient
-    
-    func searchBooks(query: String) async throws -> [Book] {
-        let keyword: String = query.trimmingCharacters(
-            in: .whitespacesAndNewlines
-        )
-        
-        if keyword.isEmpty {
-            return []
-        }
-        
-        let books: [Book] = try await bookClient.search(keyword)
-        
-        return books
     }
 }
