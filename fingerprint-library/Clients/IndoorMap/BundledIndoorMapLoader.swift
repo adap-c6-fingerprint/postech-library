@@ -5,6 +5,19 @@ import Foundation
 /// JSON 해석은 DTO가, 좌표·층 참조 검증은 ``IMDFMapper``가 담당한다.
 /// 노드와 서가 매핑은 별도 자료이므로 이 로더의 결과만으로 길찾기가 준비되지는 않는다.
 nonisolated struct BundledIndoorMapLoader {
+    /// 화면 지도와 navigation이 함께 고정해야 하는 필수·선택 파일 계약.
+    private static let requiredFiles = ["manifest.json", "venue.geojson", "level.geojson", "footprint.geojson",
+                                        "unit.geojson", "fixture.geojson", "opening.geojson"]
+    private static let optionalFiles = ["amenity.geojson", "section.geojson"]
+
+    /// 필수 파일과 실제로 존재하는 선택 파일을 반환한다.
+    /// 필수 파일이 없더라도 목록에서 빼지 않아 후속 읽기에서 누락을 오류로 보고한다.
+    static func fileNames(in directory: URL) -> [String] {
+        requiredFiles + optionalFiles.filter {
+            FileManager.default.fileExists(atPath: directory.appendingPathComponent($0).path)
+        }
+    }
+
     /// 앱 기본 리소스인 포스텍 도서관 도면을 엄격한 검증 정책으로 읽는다.
     ///
     /// - Parameter bundle: `IndoorMaps/POSTECHLibrary/IMDFData`를 포함하는 번들.
@@ -54,16 +67,10 @@ nonisolated struct BundledIndoorMapLoader {
             )
         }
         var collections: [String: IMDFFeatureCollectionDTO] = [:]
-        for file in ["venue", "level", "footprint", "unit", "fixture", "opening"] {
+        for file in Self.fileNames(in: directory) where file != "manifest.json" {
             try Task.checkCancellation()
-            collections[file] = try decode("\(file).geojson", in: directory)
-        }
-        for file in ["amenity", "section"] {
-            try Task.checkCancellation()
-            let url = directory.appendingPathComponent("\(file).geojson")
-            if FileManager.default.fileExists(atPath: url.path) {
-                collections[file] = try decode("\(file).geojson", in: directory)
-            }
+            let kind = String(file.dropLast(".geojson".count))
+            collections[kind] = try decode(file, in: directory)
         }
         return try IMDFMapper().map(version: manifest.version, collections: collections, policy: policy)
     }

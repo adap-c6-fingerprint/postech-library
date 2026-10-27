@@ -1,10 +1,40 @@
 # 지도·routing·목적지 데이터 묶음
 
 현재 앱의 기본 지도는 [포스텍 도서관 IMDF](LibraryIndoorMap.md)다. 도서관 노드·서가 자료는
-추후 전달 예정이며 준비 전에는 지도·층 선택을 유지하고 상태를 표시한다. 아래 C5 데이터셋 계약은
-회귀 검증용이며 새 도서관 export 형식이 동일하다고 가정하지 않는다.
+추후 전달 예정이며 준비 전에는 지도·층 선택을 유지하고 상태를 표시한다. 아래 schema 1은 앱이
+지원하는 데이터셋 계약이다. IM-DFrnt에서 추후 전달될 export가 이 형식과 같은지는 별도로 확인한다.
 
 Refs #5. #7 탐색기를 붙이기 전에 필요한 데이터 로딩과 목적지 조회를 제공한다.
+
+## 지도 해시 파일 계약과 생성
+
+`dataset.json`의 `map_files_sha256`에는 다음 파일들의 해시를 정확히 기록한다.
+
+- 필수 7개: `manifest.json`, `venue.geojson`, `level.geojson`, `footprint.geojson`, `unit.geojson`, `fixture.geojson`, `opening.geojson`.
+- 선택 파일: `amenity.geojson`, `section.geojson`. 실제 `IMDFData`에 존재하는 파일은 반드시 포함하고, 없는 파일은 포함하지 않는다.
+
+현재 C5는 필수 7개와 amenity의 기존 8개 해시를 그대로 사용할 수 있다. 도서관은 필수 7개와
+section을 고정한다. 둘 다 있으면 9개, 둘 다 없으면 7개다. JSON의 schema 1과 필드 구조는 유지하며
+기존 C5 파일을 다시 생성할 필요는 없다. 이전 클라이언트의 고정 8개 목록으로는 도서관 구성을 읽을 수 없다.
+
+앱은 화면 로더와 navigation 로더가 같은 파일 목록을 사용한다. 해시 누락·불필요한 키·임의 경로,
+선택 파일의 추가·삭제·내용 변경은 거부한다. section도 지도 일부이므로 길찾기 자료와 함께 고정한다.
+address·building 등 현재 화면에서 해석하지 않는 원본은 보관하되 이 해시 목록에는 포함하지 않는다.
+
+IMDF·그래프·서가 매핑이 **모두 준비된 데이터셋 폴더**에서 다음 명령으로 manifest를 생성한다.
+
+```sh
+python3 Scripts/indoor_navigation_dataset.py --directory /path/to/dataset
+# 기존 자료 변경을 검토한 뒤 해시를 갱신할 때만:
+python3 Scripts/indoor_navigation_dataset.py --directory /path/to/dataset --replace
+```
+
+폴더에는 `IMDFData/`, `routing-graph.geojson`, `shelves.json`이 있어야 한다. 그래프의
+layout_version과 서가의 dataset_id·layout_version에서 식별자를 가져오고, 선택적 층간 거리 파일도
+있으면 같은 식별자를 확인해 해시를 기록한다. 원본 도면·그래프·서가는 수정하지 않는다.
+기존 manifest가 다르면 `--replace` 없이 덮어쓰지 않으며 출처 등 추가 메타데이터는 보존한다.
+이 도구는 해시 생성과 식별자 확인을 담당하고 전체 그래프·서가 참조 검증은 앱 로더가 수행한다.
+현재 도서관은 노드·서가 자료가 없어 이 명령으로 완성된 데이터셋을 만들 수 있는 상태가 아니다.
 
 ## 로컬 C5 준비
 
@@ -66,6 +96,10 @@ IndoorNavigationTests는 합성 IMDF·GeoJSON·매핑으로 해시·버전·참�
 TestStore를 사용하는 suite와 실제 스레드 검사는 `IndoorMapSerialTests`의 `.serialized` 범위 안에서 실행한다. 전역 main executor hook의 간섭을 피하기 위한 구조이며, 새 TestStore 테스트도 이 상위 suite에 둔다. 관련 없는 도면·geometry 테스트는 병렬 실행할 수 있다.
 
 가져오기 스크립트는 IMDFData 존재 여부와 독립적으로 기존 routing·서가 파일을 검사한다. `--replace`가 없으면 변경 파일을 보존하고 중단한다. 합성 데이터로 초기 가져오기·부분 폴더·덮어쓰기 방지·명시적 교체·반복 실행을 검증한다.
+
+C5 가져오기와 일반 manifest 생성은 `indoor_navigation_dataset.py`의 같은 생성 함수를 사용한다.
+`IndoorNavigationMapFilesTests`는 amenity·section의 네 가지 조합과 선택 파일 추가·삭제·변경·해시 누락을
+검증한다. Python 검사는 같은 조합의 생성 결과, 현재 도서관 파일 목록과 기존 파일 보존을 확인한다.
 
 ```sh
 python3 -m unittest discover -s Scripts/tests -p 'test_*.py' -v

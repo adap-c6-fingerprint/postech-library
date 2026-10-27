@@ -5,11 +5,6 @@ import Foundation
 ///
 /// 지도 표시 로딩과 분리되어 있으므로 이 자료가 없어도 도면과 층 선택은 유지할 수 있다.
 nonisolated struct BundledIndoorNavigationLoader {
-    /// 현재 지원하는 schema 1 데이터셋에서 해시로 고정하는 지도 파일 목록.
-    /// 도서관의 새 export 자료를 받으면 해당 계약과의 호환성을 별도로 확인해야 한다.
-    static let mapFiles = ["manifest.json", "venue.geojson", "level.geojson", "footprint.geojson",
-                           "unit.geojson", "fixture.geojson", "opening.geojson", "amenity.geojson"]
-
     /// 현재 화면의 도서관 지도와 연결할 번들 길찾기 자료를 읽는다.
     ///
     /// `dataset.json`이 아직 없으면 다른 건물의 자료로 대체하지 않고 준비 전 상태를 반환한다.
@@ -66,10 +61,12 @@ nonisolated struct BundledIndoorNavigationLoader {
     func load(directory: URL, on map: IndoorMap, policy: IMDFImportPolicy = .strict) async throws -> IndoorNavigationData {
         try Task.checkCancellation()
         let manifest: Manifest = try decode(read("dataset.json", at: directory), file: "dataset.json")
-        guard manifest.schemaVersion == 1, Set(manifest.mapFilesSHA256.keys) == Set(Self.mapFiles) else {
+        // 표시 로더와 같은 목록을 사용해 해시로 고정하지 않은 section 등을 읽지 않게 한다.
+        let mapFiles = BundledIndoorMapLoader.fileNames(in: directory.appendingPathComponent("IMDFData"))
+        guard manifest.schemaVersion == 1, Set(manifest.mapFilesSHA256.keys) == Set(mapFiles) else {
             throw invalid("dataset.json", "지원하지 않는 데이터셋 schema 또는 지도 파일 목록입니다.")
         }
-        for name in Self.mapFiles {
+        for name in mapFiles {
             try Task.checkCancellation()
             _ = try verified("IMDFData/" + name, at: directory, hash: manifest.mapFilesSHA256[name]!)
         }
