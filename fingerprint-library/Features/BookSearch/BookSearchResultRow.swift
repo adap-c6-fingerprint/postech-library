@@ -109,17 +109,7 @@ struct BookSearchResultRow: View {
     }
 
     private var coverImage: some View {
-        AsyncImage(url: book.imageURL) { phase in
-            if let image = phase.image {
-                image
-                    .resizable()
-                    .scaledToFit()
-            } else {
-                Image(systemName: "book.closed")
-                    .font(.title)
-                    .foregroundStyle(.secondary)
-            }
-        }
+        BookCoverView(url: book.imageURL)
         .frame(width: 72, height: 104)
         .background(Color.gray.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: 6))

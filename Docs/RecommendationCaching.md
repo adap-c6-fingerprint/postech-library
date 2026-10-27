@@ -58,7 +58,7 @@ await send(.recommendationsLoaded(sessionID, prepared))
 - 이전 작업에서 작성되어 있던 공통 표지 로더·모델·뷰를 재사용했다. URL별 NSCache·진행 중 요청 공유·구독자별 취소·250ms 유예를 그대로 유지했다.
 - 선택적인 `readLocalImage`를 추가해 로컬 표지를 첫 표시 상태를 만들 때 읽고 메모리에 보관한다. 정상 파일이 있으면 네트워크용 로딩 표시를 거치지 않는다.
 - Pipeline은 파일 URL도 읽는다. HomeView와 BookDetailView의 독립 AsyncImage를 공통 BookCoverView 호출로 교체했다.
-- 기존 검색 결과 캐시와 검색 화면 변경은 이 브랜치에 포함하지 않았다.
+- 후속 통합에서 기존 검색 결과 캐시·검색 화면과 추천 표지 사전 로딩을 같은 브랜치에 연결했다. 원래 프로젝트 폴더가 현재 작업 기준이다.
 
 ## 3. 다음 추천 준비
 
@@ -111,7 +111,7 @@ if let data = try await store.coverData(for: url) {
 | 추가 | 저장소·준비·Home·앱 접속 테스트와 Scripts/validate_recommendation_cache.py |
 | 제거한 코드 | HomeView와 BookDetailView의 독립 AsyncImage 처리. 캐시 없이 추천 결과를 바로 화면 배열에 덮어쓰던 경로 |
 
-전체 파일을 삭제하지 않았다. Book 도메인 계약·API 인증 코드·검색 결과 캐시·다른 지도 동작은 수정하지 않았다.
+전체 파일을 삭제하지 않았다. Book 도메인 계약·API 인증 코드·다른 지도 동작은 유지했다. 검색 결과 캐시는 후속 통합에서 기존 구현을 반영했다.
 
 ## 검증과 실행 방법
 
@@ -124,6 +124,8 @@ python3 Scripts/validate_recommendation_cache.py
 - Home 추천 7개와 App 접속 1개 TCA 테스트는 타입 검사만 했다. 실제 iOS test runner에서 실행한 결과는 아니다.
 - 전체 `xcodebuild build-for-testing`은 package manifest의 sandbox 실행 오류로 완료하지 못했다. CoreSimulator 서비스 연결도 실패했다. 앱 소스 모듈 생성과 전체 빌드 성공을 동일하게 취급하지 않는다.
 - UIKit 실제 화면·실기기 접속 왕복·변경 후 첫 표시 시간·메모리·실서비스 응답은 측정하지 않았다. 기존 IndoorRouteClient의 Sendable 경고도 이번 범위에서 수정하지 않았다.
+
+후속 통합에서는 검색 결과 캐시 4개를 더해 **총 24개 테스트**가 통과했다. 현재 소스가 검증한 통합 사본과 같음을 확인했으며, 커밋만 생성하는 과정에서는 테스트를 다시 실행하지 않았다.
 
 ## 남은 통합 확인
 

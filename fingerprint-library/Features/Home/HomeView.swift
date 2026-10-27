@@ -22,6 +22,9 @@ struct HomeView: View {
         .background(Color(uiColor: .systemBackground))
         .toolbar(.hidden, for: .navigationBar)
         .task { store.send(.task) }
+        .task(id: upcomingCoverURLs) {
+            await BookCoverPipeline.shared.prefetch(upcomingCoverURLs)
+        }
         .navigationDestination(
             item: $store.scope(state: \.detail, action: \.detail)
         ) { detailStore in
@@ -43,6 +46,11 @@ struct HomeView: View {
         .padding(.leading, 16)
         .padding(.trailing, 8)
         .padding(.vertical, 8)
+    }
+
+    private var upcomingCoverURLs: [URL] {
+        let nextIndex = max(0, (recommendationPosition ?? 0) + 1)
+        return store.recommendedBooks.dropFirst(nextIndex).prefix(2).compactMap(\.imageURL)
     }
     
     private var recommendationSection: some View {
