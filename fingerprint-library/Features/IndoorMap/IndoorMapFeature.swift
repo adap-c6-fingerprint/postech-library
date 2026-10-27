@@ -1,17 +1,27 @@
 import ComposableArchitecture
 import Foundation
 
+/// 지도 로딩·층 조회·위치 수신·단일 서가 경로 요청을 연결하는 TCA 기능.
+///
+/// 파일과 위치 시스템은 Clients를 통해 사용하고, MapKit 객체는 View에서 관리한다.
+/// 지도와 navigation 로딩 상태를 분리해 노드 자료가 준비되지 않아도 지도를 표시한다.
 @Reducer
 struct IndoorMapFeature {
+    /// 지도 화면에 필요한 값 상태. 표시 중인 층과 실제 위치의 층은 서로 다를 수 있다.
     @ObservableState
     struct State: Equatable {
+        /// 검증을 마친 도면. navigation의 성공 여부와 독립적으로 유지한다.
         var map: IndoorMap?
         var isLoading = false
         var loadError: String?
+        /// 도면에 맞춰 읽은 노드·서가·거리 자료. 자료 준비 전이나 로딩 실패 시 nil이다.
         var navigation: IndoorNavigationData?
+        /// 길찾기 자료 준비 전·실패 상태의 안내. 지도 자체의 loadError와 구분한다.
         var navigationLoadError: String?
         var isLoadingNavigation = false
+        /// 현재 요청의 결과만 수용하기 위한 번호. 취소·재요청 뒤의 늦은 응답을 구분한다.
         var navigationRequestID = 0
+        /// 사용자가 조회하는 층의 원본 ID. 위치의 floorOrdinal을 덮어쓰는 값이 아니다.
         var selectedFloorID: UUID?
         var selectedFeatureID: IndoorMapElement.ID?
         var selectedShelfKey: ShelfKey?
@@ -22,21 +32,25 @@ struct IndoorMapFeature {
         var isActive = false
         var wantsRecenter = false
         var locationMessage: String?
+        /// 가장 최근의 지도 이동 의도. 실제 적용 여부는 View의 Coordinator가 별도로 기억한다.
         var cameraRequest: IndoorMapCameraRequest?
         var route: IndoorRoute?
         var routeDestinationKey: ShelfKey?
         var routePreference: RoutePreference = .shortestDistance
         var routeError: String?
         var isRouting = false
+        /// 이전 경로 탐색의 늦은 성공·실패가 현재 상태를 덮어쓰지 않게 한다.
         var routeRequestID = 0
         var requiresStairConfirmation = false
         var isRouteSheetExpanded = false
 
+        /// 새로 선택한 서가를 우선하고, 선택이 없으면 경로에 보관한 서가를 조회한다.
         var routeDestination: ShelfDestination? {
             let key = selectedShelfKey ?? routeDestinationKey
             return navigation?.shelves.destinations.first { $0.key == key }
         }
 
+        /// 계산 상태와 거리 출처를 표시한다. 통로 연결점과 목적지가 같아도 실제 도착으로 단정하지 않는다.
         var routeSummary: String {
             if isRouting { return "서가까지의 경로를 찾고 있어요" }
             guard let route else { return "서가까지의 경로를 설정해요" }
@@ -46,11 +60,15 @@ struct IndoorMapFeature {
 
         var selectedFloor: IndoorMapFloor? { map?.floors.first { $0.id == selectedFloorID } }
         var selectedFeature: IndoorMapElement? { map?.features.first { $0.id == selectedFeatureID } }
+        /// 내부 수동 위치 정책을 우선한 위치 후보. 탐색 시에는 별도로 유효 시간도 검사한다.
         var currentPosition: IndoorPosition? { manualPosition ?? latestPosition }
+        /// 목업 모드로 명시된 목적지만 테스트용 서가 핀으로 표시한다.
         var mockShelves: [ShelfDestination] {
             navigation?.shelves.mode == .mock ? navigation?.shelves.destinations ?? [] : []
         }
 
+        /// 센서 위치일 때만 MapKit 기본 사용자 위치를 켜 합성 위치 마커와 중복을 피한다.
+        /// 실제 위치와 조회 층을 모두 아는 경우에는 같은 층에서만 표시한다.
         var showsNativeUserLocation: Bool {
             guard isActive, manualPosition == nil, authorization.isAuthorized,
                   latestPosition?.source == .sensor else { return false }
@@ -60,11 +78,15 @@ struct IndoorMapFeature {
             return true
         }
 
+        /// 같은 목적지의 재요청도 새 의도로 구분하도록 번호를 증가시켜 카메라 요청을 만든다.
+        ///
+        /// - Parameter target: 최초 확대 표시, 층 전체 맞춤 또는 특정 위치 중심 이동.
         mutating func requestCamera(_ target: IndoorMapCameraRequest.Target) {
             cameraRequest = IndoorMapCameraRequest(id: (cameraRequest?.id ?? 0) + 1, target: target)
         }
     }
 
+    /// 사용자 조작과 Clients의 비동기 결과를 처리하고, 앱 전체 화면 이동은 delegate로 전달한다.
     enum Action: Equatable {
         case task
         case retryTapped
@@ -133,9 +155,9 @@ struct IndoorMapFeature {
                 if let position = state.latestPosition, position.source == .simulation,
                    !acceptsSimulation(position, on: map) {
                     state.latestPosition = nil
-                    state.locationMessage = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+                    state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
                 }
-                if let floor { state.requestCamera(.floor(floor.id)) }
+                if let floor { state.requestCamera(.initialFloor(floor.id)) }
                 state.navigation = nil
                 state.isLoadingNavigation = false
                 return .merge(cancellation, loadNavigation(&state))
@@ -203,7 +225,7 @@ struct IndoorMapFeature {
                 if let latest = state.latestPosition, position.timestamp < latest.timestamp { return .none }
                 if position.source == .simulation, let map = state.map, !acceptsSimulation(position, on: map) {
                     state.latestPosition = nil
-                    state.locationMessage = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+                    state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
                     return invalidateRoute(&state)
                 }
                 let previousFloor = state.latestPosition?.floorOrdinal
@@ -215,7 +237,6 @@ struct IndoorMapFeature {
                        floor.id != state.selectedFloorID {
                         state.selectedFloorID = floor.id
                         state.selectedShelfKey = nil
-                        state.requestCamera(.floor(floor.id))
                     }
                     if state.wantsRecenter { recenter(&state, position: position) }
                 }
@@ -254,7 +275,7 @@ struct IndoorMapFeature {
                 state.selectedFloorID = id
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
-                state.requestCamera(.floor(id))
+                // 층별 외곽 크기가 달라도 사용자가 보고 있던 중심·줌·회전을 유지한다.
                 return .none
 
             case .fitMapTapped:
@@ -302,7 +323,6 @@ struct IndoorMapFeature {
                     state.isPlacingOrigin = true
                     state.locationMessage = "현재 위치를 지정할 수 없어요. 선택한 층의 도면에서 출발점을 눌러주세요."
                 }
-                state.requestCamera(.floor(id))
                 return .none
 
             case .featureSelected(let id):
@@ -377,7 +397,8 @@ struct IndoorMapFeature {
         }
     }
 
-    /// 일시적인 위치 수신 중단은 계산 결과를 무효화하는 사유와 구분한다.
+    /// 진행 중인 경로 탐색과 계단 확인만 취소하고 이미 계산한 미리보기는 보존한다.
+    /// 일시적인 위치 수신 중단은 경로 자체를 무효화하는 사유와 구분한다.
     private func cancelRouteSearch(_ state: inout State) -> Effect<Action> {
         guard state.isRouting || state.requiresStairConfirmation else { return .none }
         state.routeRequestID += 1
@@ -386,6 +407,11 @@ struct IndoorMapFeature {
         return .cancel(id: CancelID.route)
     }
 
+    /// 이전 탐색 결과를 무효화하고 진행 중 작업·완료 경로·오류·계단 확인 상태를 정리한다.
+    ///
+    /// - Parameters:
+    ///   - state: 정리할 화면 상태.
+    ///   - clearDestination: 도면이나 선택 대상이 바뀌어 기존 목적지 키도 버려야 하는지 여부.
     private func invalidateRoute(_ state: inout State, clearDestination: Bool = false) -> Effect<Action> {
         guard state.isRouting || state.route != nil || state.routeError != nil || state.requiresStairConfirmation
                 || (clearDestination && state.routeDestinationKey != nil) else { return .none }
@@ -398,6 +424,13 @@ struct IndoorMapFeature {
         return .cancel(id: CancelID.route)
     }
 
+    /// 활성 화면의 최근 위치와 선택한 서가로 경로 요청을 만들고 이전 요청을 취소한다.
+    ///
+    /// 위치가 유효하지 않으면 탐색 Client를 호출하지 않는다. 응답에는 요청 번호를 붙여
+    /// 뒤늦은 결과가 새 요청에 섞이는 것을 막는다.
+    /// - Parameters:
+    ///   - state: 도면·navigation·출발 위치와 목적지를 가진 화면 상태.
+    ///   - allowingStairs: 사용자가 계단 포함 재탐색을 확인했는지 여부.
     private func searchRoute(_ state: inout State, allowingStairs: Bool = false) -> Effect<Action> {
         guard let data = state.navigation, let key = state.routeDestination?.key else { return .none }
         state.route = nil
@@ -421,11 +454,14 @@ struct IndoorMapFeature {
         }.cancellable(id: CancelID.route, cancelInFlight: true)
     }
 
+    /// 합성 위치가 알려진 층과 그 층의 도면 경계 안에 있는지 확인한다.
+    /// 도면 개정의 동일성, 벽 통과 여부, 실제 측위 정확도를 인증하는 검사는 아니다.
     private func acceptsSimulation(_ position: IndoorPosition, on map: IndoorMap) -> Bool {
         guard let floor = map.floors.first(where: { $0.ordinal == position.floorOrdinal }) else { return false }
         return floor.geometry.contains(position.coordinate)
     }
 
+    /// 지도가 없거나 이전 로딩이 실패한 경우 도면 로딩을 시작하고 성공·실패 Action으로 전달한다.
     private func loadMap(_ state: inout State) -> Effect<Action> {
         guard state.map == nil || state.loadError != nil else { return .none }
         state.isLoading = true
@@ -437,6 +473,7 @@ struct IndoorMapFeature {
         }.cancellable(id: CancelID.map, cancelInFlight: true)
     }
 
+    /// 화면 수명에 맞춰 위치 스트림을 구독하고 재구독 시 이전 구독을 취소한다.
     private func locationEvents() -> Effect<Action> {
         .run { send in
             for await event in await locationClient.events() {
@@ -446,6 +483,10 @@ struct IndoorMapFeature {
         }.cancellable(id: CancelID.location, cancelInFlight: true)
     }
 
+    /// 지도 로딩 이후 그 지도에 맞는 길찾기 자료를 읽는다.
+    ///
+    /// 이미 자료가 있거나 읽는 중이면 중복 요청하지 않는다. 준비 전·실패 응답은 navigation 상태에만
+    /// 반영하므로 도면을 유지할 수 있으며, 요청 번호로 이탈·재시도 이전의 응답을 구분한다.
     private func loadNavigation(_ state: inout State) -> Effect<Action> {
         guard let map = state.map, state.navigation == nil, !state.isLoadingNavigation else { return .none }
         state.isLoadingNavigation = true
@@ -465,6 +506,7 @@ struct IndoorMapFeature {
         }.cancellable(id: CancelID.navigation, cancelInFlight: true)
     }
 
+    /// 호출부에서 수락한 현재 위치로 조회 층과 카메라를 이동하고 한 번의 포커싱 요청을 마친다.
     private func recenter(_ state: inout State, position: IndoorPosition) {
         if let ordinal = position.floorOrdinal,
            let floor = state.map?.floors.first(where: { $0.ordinal == ordinal }) {
@@ -477,9 +519,15 @@ struct IndoorMapFeature {
     }
 }
 
+/// TCA에서 MapKit으로 전달하는 값 기반 카메라 이동 요청.
+/// View는 요청 ID를 기억해 일반 상태 갱신이 사용자의 지도 이동을 덮어쓰지 않게 한다.
 nonisolated struct IndoorMapCameraRequest: Equatable, Sendable {
     enum Target: Equatable, Sendable {
+        /// 최초 표시 층의 중심을 기준으로 도면을 확대한다. 일반 층 전환에서는 요청하지 않는다.
+        case initialFloor(UUID)
+        /// 지정 층의 도형 전체를 표시 영역에 맞춘다.
         case floor(UUID)
+        /// 현재 줌을 유지한 채 해당 좌표를 가려지지 않는 영역의 중심으로 이동한다.
         case position(IndoorMapCoordinate)
     }
     let id: Int

@@ -1,0 +1,79 @@
+{
+  "features": [
+    {
+      "feature_type": "venue",
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              129.3253352,
+              36.0124174
+            ],
+            [
+              129.3258351,
+              36.0128025
+            ],
+            [
+              129.3255513,
+              36.0132428
+            ],
+            [
+              129.3246367,
+              36.0129145
+            ],
+            [
+              129.324551,
+              36.0128092
+            ],
+            [
+              129.3245938,
+              36.0127743
+            ],
+            [
+              129.3249012,
+              36.0122516
+            ],
+            [
+              129.3249733,
+              36.0122791
+            ],
+            [
+              129.3253352,
+              36.0124174
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "a1dc84ab-1569-4c1b-a024-5a89ec75e564",
+      "properties": {
+        "address_id": "0c6923f2-312d-46b5-a021-39d68506a27c",
+        "alt_name": {
+          "en": "POSTECH Library",
+          "ko": "포스텍 도서관"
+        },
+        "building_ids": [
+          "f9531234-a61b-4c27-9f0f-350526a32e5e"
+        ],
+        "category": "university",
+        "display_point": {
+          "coordinates": [
+            129.3251348,
+            36.0127633
+          ],
+          "type": "Point"
+        },
+        "hours": "24/7",
+        "name": {
+          "en": "Tae-Joon Park Digital Library\nTae-Joon Park Digital Library",
+          "ko": "박태준 학술정보관"
+        },
+        "phone": "+820542792900",
+        "restriction": null,
+        "website": "https://library.postech.ac.kr"
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}

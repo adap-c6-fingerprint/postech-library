@@ -1,14 +1,28 @@
 import Foundation
 
+/// 원본 IMDF의 타입 간 UUID 중복을 처리하는 정책.
 nonisolated enum IMDFImportPolicy: Sendable {
+    /// 같은 파일 내부와 서로 다른 타입 사이의 UUID 중복을 모두 거부한다.
     case strict
-    /// 원본 C5의 타입 간 UUID 중복만 허용하고 diagnostics로 보고한다.
+    /// 기존 C5 회귀 데이터의 타입 간 UUID 중복을 허용하고 진단으로 남긴다.
+    /// 같은 파일 내부의 UUID 중복은 이 정책에서도 오류다.
     case c5Compatibility
 }
 
-/// 현재 렌더링 대상: venue, level, footprint, unit, fixture, opening, amenity.
+/// 현재 렌더링 대상: venue, level, footprint, unit, section, fixture, opening, amenity.
 /// 나머지 IMDF 파일은 원본 그대로 보관하며 필요한 기능에서 별도로 해석한다.
+/// 좌표·도형·참조를 검증하는 변환기이며 전체 IMDF 규격 인증이나 통행 가능성 검사는 수행하지 않는다.
 nonisolated struct IMDFMapper {
+    /// 디코딩한 FeatureCollection을 순수 지도 모델로 변환한다.
+    ///
+    /// Feature의 타입·UUID, 층 참조, 도형의 좌표와 ring을 검사한다.
+    /// 시설의 층은 `level_id` 또는 연결된 unit에서 확인하며, 모순되면 임의로 선택하지 않는다.
+    /// - Parameters:
+    ///   - version: 로더에서 확인한 IMDF 형식 버전. 지도 개정 번호와는 다르다.
+    ///   - collections: 확장자를 제외한 파일명으로 구분한 DTO 묶음.
+    ///   - policy: 타입 간 UUID 충돌 처리 정책.
+    /// - Returns: 지도·층별 요소·호환 진단을 포함하는 ``IndoorMap``.
+    /// - Throws: 누락되거나 잘못된 자료의 파일명을 포함하는 ``IndoorMapLoadError``.
     func map(
         version: String,
         collections: [String: IMDFFeatureCollectionDTO],
@@ -65,8 +79,14 @@ nonisolated struct IMDFMapper {
         }
 
         var features: [IndoorMapElement] = []
-        for kind in [IndoorMapElement.Kind.footprint, .unit, .fixture, .opening, .amenity] {
-            for feature in try required(kind.rawValue, in: collections) {
+        for kind in [IndoorMapElement.Kind.footprint, .unit, .section, .fixture, .opening, .amenity] {
+            let elements: [IMDFFeatureDTO]
+            if kind == .amenity || kind == .section {
+                elements = collections[kind.rawValue]?.features ?? []
+            } else {
+                elements = try required(kind.rawValue, in: collections)
+            }
+            for feature in elements {
                 let floorID: UUID?
                 if kind == .amenity {
                     floorID = try amenityFloor(feature, unitFloors: unitFloors, floorIDs: floorIDs)
@@ -87,6 +107,7 @@ nonisolated struct IMDFMapper {
         )
     }
 
+    /// 필요한 컬렉션이 전달됐는지 확인한다. 선택 파일의 부재 처리는 호출부에서 구분한다.
     private func required(
         _ file: String, in collections: [String: IMDFFeatureCollectionDTO]
     ) throws -> [IMDFFeatureDTO] {
@@ -96,6 +117,9 @@ nonisolated struct IMDFMapper {
         return collection.features
     }
 
+    /// 시설이 참조하는 모든 unit과 명시된 level이 하나의 층을 가리킬 때만 그 층을 반환한다.
+    ///
+    /// 알 수 없는 참조·층 정보 누락·서로 다른 층의 혼합은 모두 자료 오류다.
     private func amenityFloor(
         _ feature: IMDFFeatureDTO, unitFloors: [UUID: UUID], floorIDs: Set<UUID>
     ) throws -> UUID {
@@ -118,6 +142,7 @@ nonisolated struct IMDFMapper {
         return floorID
     }
 
+    /// 검증할 원본 Feature의 ID·종류·층·표시 정보를 보존하고 도형을 변환한다.
     private func map(
         _ feature: IMDFFeatureDTO, kind: IndoorMapElement.Kind, floorID: UUID? = nil
     ) throws -> IndoorMapElement {
@@ -128,10 +153,12 @@ nonisolated struct IMDFMapper {
         )
     }
 
+    /// 한국어, 영어, 언어 키 정렬 순으로 표시 이름을 선택한다.
     private func name(_ names: [String: String]?) -> String? {
         names?["ko"] ?? names?["en"] ?? names?.sorted(by: { $0.key < $1.key }).first?.value
     }
 
+    /// 요소 종류에 허용된 geometry만 변환하고 Polygon의 내부 ring과 MultiPolygon을 보존한다.
     private func geometry(_ dto: IMDFGeometryDTO?, in file: String) throws -> IndoorMapGeometry {
         guard let dto else { throw invalid(file, "geometry가 없습니다.") }
         switch (file, dto) {
@@ -142,11 +169,11 @@ nonisolated struct IMDFMapper {
             return .lineString(try values.map { try coordinate($0, in: file) })
         case ("venue", .polygon(let rings)), ("level", .polygon(let rings)),
              ("footprint", .polygon(let rings)), ("unit", .polygon(let rings)),
-             ("fixture", .polygon(let rings)):
+             ("section", .polygon(let rings)), ("fixture", .polygon(let rings)):
             return .polygon(try polygon(rings, in: file))
         case ("venue", .multiPolygon(let polygons)), ("level", .multiPolygon(let polygons)),
              ("footprint", .multiPolygon(let polygons)), ("unit", .multiPolygon(let polygons)),
-             ("fixture", .multiPolygon(let polygons)):
+             ("section", .multiPolygon(let polygons)), ("fixture", .multiPolygon(let polygons)):
             guard !polygons.isEmpty else { throw invalid(file, "MultiPolygon이 비어 있습니다.") }
             return .multiPolygon(try polygons.map { try polygon($0, in: file) })
         default:
@@ -154,6 +181,9 @@ nonisolated struct IMDFMapper {
         }
     }
 
+    /// GeoJSON의 `[경도, 위도, 선택적 고도]`를 유효 범위 검사 후 지도 좌표로 변환한다.
+    ///
+    /// 현재 평면 지도 모델에는 위도와 경도만 저장하며 고도는 사용하지 않는다.
     private func coordinate(_ values: [Double], in file: String) throws -> IndoorMapCoordinate {
         guard (2...3).contains(values.count), values.allSatisfy(\.isFinite),
               (-180...180).contains(values[0]), (-90...90).contains(values[1]) else {
@@ -162,6 +192,7 @@ nonisolated struct IMDFMapper {
         return IndoorMapCoordinate(latitude: values[1], longitude: values[0])
     }
 
+    /// 각 ring의 최소 좌표 수와 폐쇄 여부를 검사한다. 첫 ring은 외곽, 이후 ring은 구멍이다.
     private func polygon(_ rings: [[[Double]]], in file: String) throws -> [[IndoorMapCoordinate]] {
         guard !rings.isEmpty else { throw invalid(file, "Polygon이 비어 있습니다.") }
         return try rings.map { ring in

@@ -10,12 +10,12 @@ import shutil
 import subprocess
 import tempfile
 
+from indoor_navigation_dataset import build_manifest
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIRECTORY = Path("Fingerprint/App/Domain/IMDF/C5/IMDFData")
 ROUTING_FILE = Path("Fingerprint/Debug/RoutingGraphTest/Resources/routing-graph.geojson")
-MAP_FILES = {"manifest.json", "venue.geojson", "level.geojson", "footprint.geojson",
-             "unit.geojson", "fixture.geojson", "opening.geojson", "amenity.geojson"}
 EXPECTED_FILES = {
     "manifest.json", "address.geojson", "venue.geojson", "building.geojson",
     "footprint.geojson", "level.geojson", "unit.geojson", "fixture.geojson",
@@ -192,14 +192,11 @@ def main():
                for name, value in hashes.items()) or digest(staged / "routing-graph.geojson") != routing_hash or digest(routing) != routing_hash:
             raise RuntimeError("복사 중 원본이 바뀌었습니다. 가져오기를 다시 실행해주세요.")
         (staged / "source.json").write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n")
-        dataset = {
-            "schema_version": 1, "dataset_id": "c5-demo", "layout_version": graph["layout_version"],
-            "map_files_sha256": {name: hashes[name] for name in sorted(MAP_FILES)},
-            "routing_sha256": routing_hash, "shelves_sha256": digest(staged / "shelves.json"),
-            "cross_floor_distances_sha256": digest(staged / "cross-floor-distances.json"),
+        dataset = build_manifest(staged)
+        dataset.update({
             "source_commit": record["source_commit"], "source_routing_path": str(ROUTING_FILE),
             "source_worktree_changes": git_output(source, "diff", "HEAD", "--name-only", "--", str(SOURCE_DIRECTORY), str(ROUTING_FILE)).splitlines(),
-        }
+        })
         (staged / "dataset.json").write_text(json.dumps(dataset, ensure_ascii=False, indent=2) + "\n")
         if destination.exists():
             backup = Path(temporary) / "previous"

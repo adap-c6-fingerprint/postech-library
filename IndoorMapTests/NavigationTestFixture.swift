@@ -66,7 +66,13 @@ enum NavigationTestFixture {
         func hash(_ file: String) throws -> String {
             SHA256.hash(data: try Data(contentsOf: root.appendingPathComponent(file))).map { String(format: "%02x", $0) }.joined()
         }
-        let hashes = try Dictionary(uniqueKeysWithValues: BundledIndoorNavigationLoader.mapFiles.map { ($0, try hash("IMDFData/" + $0)) })
+        // 로더의 상수를 재사용하지 않아 읽기·생성 양쪽이 같은 목록 오류를 공유하지 않게 한다.
+        let required = ["manifest.json", "venue.geojson", "level.geojson", "footprint.geojson",
+                        "unit.geojson", "fixture.geojson", "opening.geojson"]
+        let optional = ["amenity.geojson", "section.geojson"].filter {
+            FileManager.default.fileExists(atPath: root.appendingPathComponent("IMDFData/" + $0).path)
+        }
+        let hashes = try Dictionary(uniqueKeysWithValues: (required + optional).map { ($0, try hash("IMDFData/" + $0)) })
         let graph = try hash("routing-graph.geojson")
         let shelves = try hash("shelves.json")
         try edit("dataset.json", at: root) {

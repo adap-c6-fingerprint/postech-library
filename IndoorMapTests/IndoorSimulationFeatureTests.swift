@@ -16,6 +16,7 @@ extension IndoorMapSerialTests {
             var initial = IndoorMapFeature.State()
             initial.map = IndoorMapTestData.map()
             initial.selectedFloorID = IndoorMapTestData.groundID
+            initial.cameraRequest = .init(id: 1, target: .initialFloor(IndoorMapTestData.groundID))
             initial.isActive = true
             initial.authorization = .authorized(precise: true)
             let store = TestStore(initialState: initial) { IndoorMapFeature() } withDependencies: {
@@ -25,12 +26,10 @@ extension IndoorMapSerialTests {
             await store.send(.locationEvent(.position(upper))) {
                 $0.latestPosition = upper
                 $0.selectedFloorID = IndoorMapTestData.upperID
-                $0.cameraRequest = .init(id: 1, target: .floor(IndoorMapTestData.upperID))
             }
             #expect(!store.state.showsNativeUserLocation)
             await store.send(.floorSelected(IndoorMapTestData.groundID)) {
                 $0.selectedFloorID = IndoorMapTestData.groundID
-                $0.cameraRequest = .init(id: 2, target: .floor(IndoorMapTestData.groundID))
             }
             await store.send(.locationEvent(.position(upper)))
             #expect(store.state.currentPosition?.floorOrdinal == 4)
@@ -40,8 +39,8 @@ extension IndoorMapSerialTests {
             await store.send(.locationEvent(.position(upper))) {
                 $0.latestPosition = upper
                 $0.selectedFloorID = IndoorMapTestData.upperID
-                $0.cameraRequest = .init(id: 3, target: .floor(IndoorMapTestData.upperID))
             }
+            #expect(store.state.cameraRequest == initial.cameraRequest)
         }
 
         @Test("알 수 없는 층·도면 바깥 위치와 연결 단절을 현재 출발점으로 유지하지 않는다")
@@ -53,7 +52,7 @@ extension IndoorMapSerialTests {
             let store = TestStore(initialState: initial) { IndoorMapFeature() } withDependencies: {
                 $0.date.now = IndoorMapTestData.now
             }
-            let mismatch = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+            let mismatch = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
             let olderMismatch = IndoorPosition(coordinate: .init(latitude: 37, longitude: 129),
                 floorOrdinal: 99, horizontalAccuracy: 0,
                 timestamp: IndoorMapTestData.now.addingTimeInterval(-1), source: .simulation)
@@ -95,7 +94,6 @@ extension IndoorMapSerialTests {
             await store.send(.shelfSelected(shelf.key)) { $0.selectedShelfKey = shelf.key }
             await store.send(.floorSelected(shelf.floorID)) {
                 $0.selectedShelfKey = nil
-                $0.cameraRequest = .init(id: 1, target: .floor(shelf.floorID))
             }
         }
     }

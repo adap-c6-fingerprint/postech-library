@@ -1,0 +1,31 @@
+{
+  "features": [
+    {
+      "feature_type": "building",
+      "geometry": null,
+      "id": "f9531234-a61b-4c27-9f0f-350526a32e5e",
+      "properties": {
+        "address_id": "0c6923f2-312d-46b5-a021-39d68506a27c",
+        "alt_name": {
+          "en": "POSTECH Library",
+          "ko": "포스텍 도서관"
+        },
+        "category": "unspecified",
+        "display_point": {
+          "coordinates": [
+            129.3251434,
+            36.0127546
+          ],
+          "type": "Point"
+        },
+        "name": {
+          "en": "Tae-Joon Park Digital Library",
+          "ko": "박태준 학술정보관"
+        },
+        "restriction": null
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}

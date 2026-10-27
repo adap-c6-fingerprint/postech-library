@@ -76,6 +76,7 @@ class C5ImportTests(unittest.TestCase):
             script = project / "Scripts/import-c5-local.py"
             script.parent.mkdir(parents=True)
             shutil.copy2(IMPORT_SCRIPT, script)
+            shutil.copy2(IMPORT_SCRIPT.with_name("indoor_navigation_dataset.py"), script.parent)
             destination = project / "fingerprint-library/Resources/IndoorMaps/C5"
 
             def run(*args):
@@ -109,6 +110,11 @@ class C5ImportTests(unittest.TestCase):
         with self.fixture() as fixture:
             self.assertEqual(len(snapshot(fixture.destination)), 18)
             self.assert_source_preserved(fixture)
+            manifest = json.loads((fixture.destination / "dataset.json").read_text())
+            expected = {"manifest.json", "venue.geojson", "level.geojson", "footprint.geojson",
+                        "unit.geojson", "fixture.geojson", "opening.geojson", "amenity.geojson"}
+            self.assertEqual(set(manifest["map_files_sha256"]), expected)
+            self.assertEqual(manifest["schema_version"], 1)
 
     def test_modified_sidecars_require_replace_with_or_without_imdf(self):
         for has_imdf in (False, True):
