@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Foundation
 
 @Reducer
 struct HomeFeature {
@@ -8,6 +9,8 @@ struct HomeFeature {
         var popularBooks: [Book] = []
         var departmentName = ""
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
+        var coldStartBooks: [RecommendedBook] = []
+        // 찜·검색 기록이 없을 때 보여 줄 첫 추천 결과 (최대 6권).
 
         @Presents var detail: BookDetailFeature.State?
 
@@ -28,6 +31,8 @@ struct HomeFeature {
         case popularBooksLoaded([Book])
         case libraryInfoLoaded([Book.ID: LibraryInfo])
         case departmentChanged(String)
+        case coldStartLoaded([RecommendedBook])
+        case coldStartFailed(String)
 
         case bookSelected(Book)
         case basketButtonTapped
@@ -43,11 +48,35 @@ struct HomeFeature {
         }
     }
 
+    @Dependency(\.bookFavoritesClient) var bookFavoritesClient
+    @Dependency(\.searchHistoryClient) var searchHistoryClient
+    // 검색 화면과 같은 저장소(UserDefaults)를 읽어 기록이 있는지 확인한다.
+    @Dependency(\.coldStartRecommendationClient) var coldStartClient
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
                 // TODO: 홈 도서 API Client를 연결하고 조회 결과 액션을 보낸다.
+                guard ColdStartRecommendation.shouldApply(
+                    favoriteKeys: bookFavoritesClient.load(),
+                    recentQueries: searchHistoryClient.load()
+                ) else { return .none }
+                // 찜이나 검색 기록이 하나라도 있으면 첫 추천을 쓰지 않는다.
+                let interests = ColdStartRecommendation.placeholderInterests
+                // TODO: 온보딩 완성 후 저장된 UserProfile.interests로 교체한다.
+                return .run { [coldStartClient] send in
+                    await send(.coldStartLoaded(try await coldStartClient.fetch(interests)))
+                } catch: { error, send in
+                    await send(.coldStartFailed(error.localizedDescription))
+                }
+
+            case let .coldStartLoaded(books):
+                state.coldStartBooks = books
+                return .none
+
+            case .coldStartFailed:
+                state.coldStartBooks = []
                 return .none
 
             case let .recommendationsLoaded(books):
