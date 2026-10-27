@@ -31,7 +31,7 @@ extension IndoorMapSerialTests {
                 $0.isLoading = false
                 $0.map = map
                 $0.selectedFloorID = IndoorMapTestData.groundID
-                $0.cameraRequest = .init(id: 1, target: .floor(IndoorMapTestData.groundID))
+                $0.cameraRequest = .init(id: 1, target: .initialFloor(IndoorMapTestData.groundID))
                 $0.isLoadingNavigation = true
                 $0.navigationRequestID = 1
             }
@@ -59,13 +59,12 @@ extension IndoorMapSerialTests {
             await store.send(.locationEvent(.position(sensor))) { $0.latestPosition = sensor }
             await store.send(.floorSelected(IndoorMapTestData.groundID)) {
                 $0.selectedFloorID = IndoorMapTestData.groundID
-                $0.cameraRequest = .init(id: 2, target: .floor(IndoorMapTestData.groundID))
             }
             #expect(store.state.currentPosition == manual)
             #expect(!store.state.showsNativeUserLocation)
             await store.send(.currentLocationTapped) {
                 $0.manualPosition = nil
-                $0.cameraRequest = .init(id: 3, target: .position(sensor.coordinate))
+                $0.cameraRequest = .init(id: 2, target: .position(sensor.coordinate))
             }
             #expect(store.state.showsNativeUserLocation)
             #expect(store.state.currentPosition == sensor)
@@ -112,12 +111,11 @@ extension IndoorMapSerialTests {
             await store.send(.locationEvent(.position(IndoorMapTestData.position(accuracy: -1))))
             await store.send(.floorSelected(IndoorMapTestData.groundID)) {
                 $0.selectedFloorID = IndoorMapTestData.groundID
-                $0.cameraRequest = .init(id: 1, target: .floor(IndoorMapTestData.groundID))
             }
             #expect(!store.state.showsNativeUserLocation)
             await store.send(.currentLocationTapped) {
                 $0.selectedFloorID = IndoorMapTestData.upperID
-                $0.cameraRequest = .init(id: 2, target: .position(IndoorMapTestData.point))
+                $0.cameraRequest = .init(id: 1, target: .position(IndoorMapTestData.point))
             }
         }
 
@@ -145,7 +143,6 @@ extension IndoorMapSerialTests {
                 $0.selectedFloorID = IndoorMapTestData.groundID
                 $0.isPlacingOrigin = true
                 $0.locationMessage = "현재 위치를 지정할 수 없어요. 선택한 층의 도면에서 출발점을 눌러주세요."
-                $0.cameraRequest = .init(id: 1, target: .floor(IndoorMapTestData.groundID))
             }
             #expect(store.state.manualPosition == nil)
         }
@@ -163,7 +160,7 @@ extension IndoorMapSerialTests {
                 $0.map = map
                 $0.isLoading = false
                 $0.selectedFloorID = IndoorMapTestData.groundID
-                $0.cameraRequest = .init(id: 1, target: .floor(IndoorMapTestData.groundID))
+                $0.cameraRequest = .init(id: 1, target: .initialFloor(IndoorMapTestData.groundID))
                 $0.isLoadingNavigation = true
                 $0.navigationRequestID = 1
             }
@@ -217,7 +214,6 @@ extension IndoorMapSerialTests {
                 $0.selectedFloorID = IndoorMapTestData.groundID
                 $0.isPlacingOrigin = true
                 $0.locationMessage = "현재 위치를 지정할 수 없어요. 선택한 층의 도면에서 출발점을 눌러주세요."
-                $0.cameraRequest = .init(id: 1, target: .floor(IndoorMapTestData.groundID))
             }
             #expect(store.state.manualPosition == nil)
         }

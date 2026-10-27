@@ -1,6 +1,8 @@
 import ComposableArchitecture
 import SwiftUI
 
+/// 홈 지도에서 선택한 서가의 경로 진입 카드 또는 길찾기 자료의 실패·준비 전 상태를 표시한다.
+/// 이 View는 경로를 계산하지 않고 사용자 조작을 TCA Action으로 전달한다.
 struct IndoorRouteControls: View {
     let store: StoreOf<IndoorMapFeature>
 
@@ -35,6 +37,19 @@ struct IndoorRouteControls: View {
             .padding(16)
             .background(Color(uiColor: .systemBackground), in: RoundedRectangle(cornerRadius: 20))
             .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
+        } else if let message = store.navigationLoadError {
+            HStack(alignment: .top, spacing: 10) {
+                Image(systemName: "info.circle")
+                    .accessibilityHidden(true)
+                Text(message)
+                    .font(.caption)
+                Spacer(minLength: 0)
+                Button("다시 시도") { store.send(.retryNavigationTapped) }
+                    .font(.caption.weight(.semibold))
+            }
+            .padding(12)
+            .background(Color(uiColor: .systemBackground), in: RoundedRectangle(cornerRadius: 12))
+            .accessibilityIdentifier("map-navigation-status")
         }
     }
 }

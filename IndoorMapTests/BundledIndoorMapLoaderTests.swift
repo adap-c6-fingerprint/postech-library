@@ -104,6 +104,59 @@ struct BundledIndoorMapLoaderTests {
         #expect(polygons[0][1][0] == IndoorMapCoordinate(latitude: 36.1, longitude: 129.1))
     }
 
+    @Test("선택 파일인 amenity가 없어도 지도를 읽되, 존재하는 손상 파일은 거부한다")
+    func acceptsAbsentAmenityButRejectsCorruption() async throws {
+        let directory = try IMDFTestFixture.makeDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let file = directory.appendingPathComponent("amenity.geojson")
+        try FileManager.default.removeItem(at: file)
+        let map = try await BundledIndoorMapLoader().load(directory: directory)
+        #expect(map.features.allSatisfy { $0.kind != .amenity })
+        try Data("{".utf8).write(to: file)
+        do {
+            _ = try await BundledIndoorMapLoader().load(directory: directory)
+            Issue.record("존재하는 손상 amenity 파일을 누락으로 처리했습니다.")
+        } catch let error as IndoorMapLoadError {
+            guard case .invalidData(let file, _) = error else {
+                Issue.record("손상 파일의 위치가 보고되어야 합니다.")
+                return
+            }
+            #expect(file == "amenity.geojson")
+        }
+    }
+
+    @Test("선택 section도 층 참조와 geometry를 검사한다")
+    func validatesSectionFloor() async throws {
+        let directory = try IMDFTestFixture.makeDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        var section = try readJSON("fixture.geojson", in: directory)
+        var features = section["features"] as! [[String: Any]]
+        features[0]["feature_type"] = "section"
+        features[0]["id"] = "00000000-0000-4000-8000-000000000100"
+        section["features"] = features
+        let file = directory.appendingPathComponent("section.geojson")
+        try JSONSerialization.data(withJSONObject: section).write(to: file)
+        let map = try await BundledIndoorMapLoader().load(directory: directory)
+        #expect(map.features.first { $0.kind == .section }?.floorID == UUID(uuidString: IMDFTestFixture.floorID))
+        try edit("section.geojson", in: directory) { json in
+            var features = json["features"] as! [[String: Any]]
+            var properties = features[0]["properties"] as! [String: Any]
+            properties["level_id"] = UUID().uuidString
+            features[0]["properties"] = properties
+            json["features"] = features
+        }
+        do {
+            _ = try await BundledIndoorMapLoader().load(directory: directory)
+            Issue.record("알 수 없는 층의 section을 정상 자료로 처리했습니다.")
+        } catch let error as IndoorMapLoadError {
+            guard case .invalidData(let file, _) = error else {
+                Issue.record("잘못된 section 파일을 보고해야 합니다.")
+                return
+            }
+            #expect(file == "section.geojson")
+        }
+    }
+
     enum Corruption: CaseIterable, Sendable, Equatable {
         case unsupportedVersion, missingFile, invalidJSON, wrongCollection
         case emptyFloors, missingOrdinal, unknownFloor, duplicateID

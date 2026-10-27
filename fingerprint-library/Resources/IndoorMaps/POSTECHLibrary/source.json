@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "dataset_id": "postech-library",
+  "source_name": "POSTECH Taejoon Park Digital Library IMDF  261026_1631",
+  "source_created": "2026-10-26T06:39:35Z",
+  "generated_by": "IM-DFrnt",
+  "files_sha256": {
+    "address.geojson": "f17db4bad2ff04c407c70b0d360f8819a9e5217700d2d4daaeefdebd0a7f1ebd",
+    "building.geojson": "16d13c8f50a58d5ac6bde494ffab6896c8b23fdf81048ce1b2d4ca801feeb00d",
+    "fixture.geojson": "c0f815052578575991d60fd4c154272098659ac711fd6070ab0146ae99dcbf0b",
+    "footprint.geojson": "79daf31a737a864f554c801e8c82c4780fe3ae25b9ee1b7873a91135d81d5f0e",
+    "level.geojson": "d67160747287349b7d9d5372bc13dd7f0d7cd34a2866dce7f2a640bbf9fe27f8",
+    "manifest.json": "6620b8f562651ba41065778a5098c3a1e19482e33714bfbfc99da3aa63730a63",
+    "opening.geojson": "497da6a52141be2cc9d158edc5a2ddd89314953b38d419d45b330f0ad09d5873",
+    "section.geojson": "a4dbd3399aaabd3bfb6a1af096286d519073c2852bb30afc9c42f1b70e0227ca",
+    "unit.geojson": "09ce591c48b216790b7ff887ff2e63d73b0947e9e1555e8459f1f5ee8d82bfa8",
+    "venue.geojson": "099d0e7fdcf4341223195e4175a26541fd20bf5f4701ebda0c8ea270c377eb29"
+  },
+  "navigation_data_included": false
+}
