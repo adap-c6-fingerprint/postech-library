@@ -42,7 +42,7 @@ struct IndoorMapInitialLayoutTests {
         return window
     }
 
-    @Test("실제 도서관은 최초 표시와 1~5층 전환 때 각 층의 도형·카메라가 반영된다")
+    @Test("명시적인 층 전체 맞춤은 실제 도서관 1~5층의 도형을 모두 보여준다")
     func rendersLibraryFloors() async throws {
         let map = try await BundledIndoorMapLoader().loadLibrary()
         let first = try #require(map.floors.first)
@@ -73,6 +73,60 @@ struct IndoorMapInitialLayoutTests {
                 #expect(view.visibleMapRect.contains(MKMapPoint(point.clCoordinate)))
             }
             // 서가·시설이 많은 상층에서도 도면의 실제 도형들이 overlay로 전달돼야 한다.
+            if floor.ordinal >= 2 { #expect(view.overlays.count > 400) }
+        }
+    }
+
+    @Test("최초 도면은 전체 맞춤보다 25% 크게 표시한다")
+    func enlargesInitialMap() throws {
+        let parent = parent()
+        let coordinator = IndoorMapKitView.Coordinator(parent: parent)
+        let view = coordinator.makeMapView()
+        coordinator.update(parent: parent, in: view)
+        let window = try host(view, size: size)
+        defer { window.isHidden = true }
+        let fittedWidth = view.visibleMapRect.width
+        #expect(coordinator.moveCamera(.init(id: 2, target: .initialFloor(parent.floor.id)),
+                                       in: view, animated: false))
+        #expect(abs(fittedWidth / view.visibleMapRect.width - 1.25) < 0.02)
+        #expect(view.camera.pitch == 0)
+    }
+
+    @Test("크기가 다른 실제 도서관 층으로 전환해도 중심·확대·회전을 유지한다")
+    func preservesCameraAcrossLibraryFloors() async throws {
+        let map = try await BundledIndoorMapLoader().loadLibrary()
+        let first = try #require(map.floors.first)
+        let request = IndoorMapCameraRequest(id: 1, target: .initialFloor(first.id))
+        func parent(_ floor: IndoorMapFloor) -> IndoorMapKitView {
+            IndoorMapKitView(
+                map: map, floor: floor, selectedFeatureID: nil, position: nil,
+                showsUserLocation: false, isPlacingOrigin: false, cameraRequest: request,
+                onSelect: { _ in }, onPlaceOrigin: { _ in }
+            )
+        }
+        let coordinator = IndoorMapKitView.Coordinator(parent: parent(first))
+        let view = coordinator.makeMapView()
+        coordinator.update(parent: parent(first), in: view)
+        let window = try host(view, size: size)
+        defer { window.isHidden = true }
+        let camera = view.camera.copy() as! MKMapCamera
+        camera.centerCoordinate.latitude += 0.0001
+        camera.centerCoordinate.longitude += 0.0001
+        camera.centerCoordinateDistance *= 0.8
+        camera.heading = 35
+        view.setCamera(camera, animated: false)
+        let expected = view.camera.copy() as! MKMapCamera
+
+        for floor in map.floors.reversed() {
+            coordinator.update(parent: parent(floor), in: view)
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+            #expect(coordinator.renderedFloorID == floor.id)
+            #expect(coordinator.pendingCameraRequest == nil)
+            #expect(abs(view.centerCoordinate.latitude - expected.centerCoordinate.latitude) < 0.000001)
+            #expect(abs(view.centerCoordinate.longitude - expected.centerCoordinate.longitude) < 0.000001)
+            #expect(abs(view.camera.centerCoordinateDistance - expected.centerCoordinateDistance) < 0.1)
+            #expect(abs(view.camera.heading - expected.heading) < 0.01)
             if floor.ordinal >= 2 { #expect(view.overlays.count > 400) }
         }
     }
@@ -167,6 +221,7 @@ struct IndoorMapInitialLayoutTests {
         let camera = view.camera.copy() as! MKMapCamera
         camera.heading = heading
         view.setCamera(camera, animated: false)
+        let originalDistance = view.camera.centerCoordinateDistance
         let coordinate = parent.floor.geometry.coordinates[0]
         #expect(coordinator.moveCamera(.init(id: 2, target: .position(coordinate)), in: view, animated: false))
         let point = view.convert(coordinate.clCoordinate, toPointTo: view)
@@ -174,5 +229,7 @@ struct IndoorMapInitialLayoutTests {
         #expect(abs(point.x - viewport.midX) < 2)
         #expect(abs(point.y - viewport.midY) < 2)
         #expect(view.camera.pitch == 0)
+        #expect(abs(view.camera.centerCoordinateDistance - originalDistance) < 0.1)
+        #expect(abs(view.camera.heading - heading) < 0.01)
     }
 }

@@ -5,6 +5,10 @@ import SwiftUI
 ///
 /// 선택과 카메라 이동 의도는 값·콜백으로 주고받고, MKMapView와 overlay의 수명은 Coordinator가 관리한다.
 struct IndoorMapKitView: UIViewRepresentable {
+    /// 최초 도면의 확대 배율. 1은 층 전체 맞춤이며, 1.25는 그보다 25% 크게 표시한다.
+    /// 층 전환·현재 위치 포커스에는 다시 적용하지 않는다.
+    static let initialZoomScale = 1.25
+
     let map: IndoorMap
     let floor: IndoorMapFloor
     let selectedFeatureID: IndoorMapElement.ID?
@@ -68,7 +72,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         ///
         /// 카메라 거리의 최소·최대값은 아래 `setCameraZoomRange`에서 미터 단위로 설정한다.
         /// 이 값은 확대·축소의 제한이며,
-        /// 최초·층 변경 때의 실제 줌은 `moveCamera(_:in:animated:)`의 도면 맞춤에서 정한다.
+        /// 최초 줌은 `initialZoomScale`과 `moveCamera(_:in:animated:)`의 도면 맞춤에서 정한다.
+        /// 층 전환은 도형만 갱신하고 카메라는 유지한다.
         /// - Returns: SwiftUI 배치가 끝난 시점을 알려줄 수 있는 ``IndoorMapSurface``.
         func makeMapView() -> IndoorMapSurface {
             let view = IndoorMapSurface()
@@ -238,19 +243,20 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = positionAnnotation { view.addAnnotation(annotation) }
         }
 
-        /// 층 전체를 맞추거나 특정 좌표를 조작 UI에 가리지 않는 영역의 중심으로 이동한다.
+        /// 최초 확대·층 전체 맞춤 또는 특정 좌표 중심 이동을 명시적으로 적용한다.
         ///
-        /// 층 맞춤은 도형 범위와 padding으로 줌을 자동 계산한다. 위치 이동은 기존 줌을 유지한다.
-        /// 두 경우 모두 카메라를 평면으로 돌리며, 줌 허용 범위는 `makeMapView()`에서 설정한다.
+        /// 최초 표시만 도형의 중심을 기준으로 `initialZoomScale`만큼 확대한다.
+        /// 층 전체 맞춤은 원본 범위와 padding으로 줌을 계산하고, 위치 이동은 기존 줌을 유지한다.
+        /// 요청 적용 시 평면으로 돌리며, 일반 층 전환에서는 이 메서드를 호출하지 않는다.
         /// - Parameters:
-        ///   - request: TCA에서 전달한 층 맞춤 또는 좌표 이동 요청.
+        ///   - request: TCA에서 전달한 최초 확대, 층 맞춤 또는 좌표 이동 요청.
         ///   - view: 이동할 MapKit 화면.
         ///   - animated: 좌표 중심 이동의 애니메이션 여부. 층 전체 맞춤은 즉시 적용한다.
         /// - Returns: 요청을 적용했으면 true, 공간·대상·좌표가 유효하지 않아 보류해야 하면 false.
         @discardableResult
         func moveCamera(_ request: IndoorMapCameraRequest, in view: MKMapView, animated: Bool = true) -> Bool {
             switch request.target {
-            case .floor(let id):
+            case .initialFloor(let id), .floor(let id):
                 let padding = UIEdgeInsets(
                     top: 24 + parent.viewportInsets.top, left: 80 + parent.viewportInsets.left,
                     bottom: 24 + parent.viewportInsets.bottom, right: 24 + parent.viewportInsets.right
@@ -258,8 +264,12 @@ struct IndoorMapKitView: UIViewRepresentable {
                 guard view.bounds.width > padding.left + padding.right,
                       view.bounds.height > padding.top + padding.bottom,
                       let floor = parent.map.floors.first(where: { $0.id == id }) else { return false }
-                let rect = MapKitGeometry.mapRect(for: floor.geometry)
+                var rect = MapKitGeometry.mapRect(for: floor.geometry)
                 guard !rect.isNull else { return false }
+                if case .initialFloor = request.target {
+                    let insetRatio = (1 - 1 / IndoorMapKitView.initialZoomScale) / 2
+                    rect = rect.insetBy(dx: rect.width * insetRatio, dy: rect.height * insetRatio)
+                }
                 let camera = view.camera.copy() as! MKMapCamera
                 camera.pitch = 0
                 view.setCamera(camera, animated: false)

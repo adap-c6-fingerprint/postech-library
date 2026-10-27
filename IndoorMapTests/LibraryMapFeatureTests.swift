@@ -20,7 +20,7 @@ extension IndoorMapSerialTests {
                 $0.isLoading = false
                 $0.map = map
                 $0.selectedFloorID = first.id
-                $0.cameraRequest = .init(id: 1, target: .floor(first.id))
+                $0.cameraRequest = .init(id: 1, target: .initialFloor(first.id))
                 $0.isLoadingNavigation = true
                 $0.navigationRequestID = 1
             }
@@ -30,8 +30,8 @@ extension IndoorMapSerialTests {
             }
             await store.send(.floorSelected(third.id)) {
                 $0.selectedFloorID = third.id
-                $0.cameraRequest = .init(id: 2, target: .floor(third.id))
             }
+            #expect(store.state.cameraRequest == .init(id: 1, target: .initialFloor(first.id)))
             #expect(store.state.map == map)
             #expect(store.state.selectedFloor?.name == "3층")
             #expect(store.state.navigation == nil)

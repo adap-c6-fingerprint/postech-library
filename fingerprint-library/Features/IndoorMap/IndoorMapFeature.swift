@@ -80,7 +80,7 @@ struct IndoorMapFeature {
 
         /// 같은 목적지의 재요청도 새 의도로 구분하도록 번호를 증가시켜 카메라 요청을 만든다.
         ///
-        /// - Parameter target: 층 전체 맞춤 또는 특정 위치 중심 이동.
+        /// - Parameter target: 최초 확대 표시, 층 전체 맞춤 또는 특정 위치 중심 이동.
         mutating func requestCamera(_ target: IndoorMapCameraRequest.Target) {
             cameraRequest = IndoorMapCameraRequest(id: (cameraRequest?.id ?? 0) + 1, target: target)
         }
@@ -157,7 +157,7 @@ struct IndoorMapFeature {
                     state.latestPosition = nil
                     state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
                 }
-                if let floor { state.requestCamera(.floor(floor.id)) }
+                if let floor { state.requestCamera(.initialFloor(floor.id)) }
                 state.navigation = nil
                 state.isLoadingNavigation = false
                 return .merge(cancellation, loadNavigation(&state))
@@ -237,7 +237,6 @@ struct IndoorMapFeature {
                        floor.id != state.selectedFloorID {
                         state.selectedFloorID = floor.id
                         state.selectedShelfKey = nil
-                        state.requestCamera(.floor(floor.id))
                     }
                     if state.wantsRecenter { recenter(&state, position: position) }
                 }
@@ -276,7 +275,7 @@ struct IndoorMapFeature {
                 state.selectedFloorID = id
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
-                state.requestCamera(.floor(id))
+                // 층별 외곽 크기가 달라도 사용자가 보고 있던 중심·줌·회전을 유지한다.
                 return .none
 
             case .fitMapTapped:
@@ -324,7 +323,6 @@ struct IndoorMapFeature {
                     state.isPlacingOrigin = true
                     state.locationMessage = "현재 위치를 지정할 수 없어요. 선택한 층의 도면에서 출발점을 눌러주세요."
                 }
-                state.requestCamera(.floor(id))
                 return .none
 
             case .featureSelected(let id):
@@ -525,6 +523,8 @@ struct IndoorMapFeature {
 /// View는 요청 ID를 기억해 일반 상태 갱신이 사용자의 지도 이동을 덮어쓰지 않게 한다.
 nonisolated struct IndoorMapCameraRequest: Equatable, Sendable {
     enum Target: Equatable, Sendable {
+        /// 최초 표시 층의 중심을 기준으로 도면을 확대한다. 일반 층 전환에서는 요청하지 않는다.
+        case initialFloor(UUID)
         /// 지정 층의 도형 전체를 표시 영역에 맞춘다.
         case floor(UUID)
         /// 현재 줌을 유지한 채 해당 좌표를 가려지지 않는 영역의 중심으로 이동한다.
