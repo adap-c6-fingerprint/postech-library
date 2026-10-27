@@ -16,9 +16,7 @@ struct LibraryMapView: View {
     ) {
         BookSearchFeature()
     }
-    @State private var isSearchPresented = false
     @State private var isBasketPresented = false
-    @FocusState private var isSearchFocused: Bool
 
     private var mapStore: StoreOf<IndoorMapFeature> {
         store.scope(state: \.indoorMap, action: \.indoorMap)
@@ -28,55 +26,8 @@ struct LibraryMapView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 homeHeader
-                ZStack(alignment: .top) {
-                    // 검색 중에도 지도를 유지해 카메라와 층 선택 상태를 보존
-                    IndoorMapView(store: mapStore)
-                        .ignoresSafeArea(.keyboard, edges: .bottom)
-                        .opacity(isSearchPresented ? 0 : 1)
-                        .allowsHitTesting(!isSearchPresented)
-                        .accessibilityHidden(isSearchPresented)
-
-                    if isSearchPresented {
-                        BookSearchView(
-                            store: searchStore,
-                            isEditingSearch: isSearchFocused,
-                            onSelectRecentQuery: { keyword in
-                                searchStore.send(.queryChanged(keyword))
-                                submitSearch()
-                            },
-                            onShowBasket: {
-                                isSearchFocused = false
-                                isBasketPresented = true
-                            }
-                        )
-                        .padding(.top, 44)
-                    }
-
-                    HomeSearchBar(
-                        text: Binding(
-                            get: { searchStore.query },
-                            set: { searchStore.send(.queryChanged($0)) }
-                        ),
-                        isFocused: $isSearchFocused,
-                        isPresented: isSearchPresented,
-                        onCancel: {
-                            isSearchFocused = false
-                            isSearchPresented = false
-                        },
-                        onSubmit: submitSearch
-                    )
-                }
-                .background(Color(uiColor: .systemGroupedBackground))
-            }
-            .onChange(of: isSearchFocused) { _, isFocused in
-                if isFocused {
-                    isSearchPresented = true
-                }
-            }
-            .onChange(of: isSearchPresented) { _, isPresented in
-                if !isPresented {
-                    searchStore.send(.searchCancelled)
-                }
+                IndoorMapView(store: mapStore)
+                    .background(Color(uiColor: .systemGroupedBackground))
             }
             .task {
                 searchStore.send(.task)
@@ -114,7 +65,6 @@ struct LibraryMapView: View {
             Spacer()
 
             Button {
-                isSearchFocused = false
                 isBasketPresented = true
             } label: {
                 Image(systemName: "cart")
@@ -138,55 +88,6 @@ struct LibraryMapView: View {
         .padding(.vertical, 8)
     }
 
-    private func submitSearch() {
-        guard !searchStore.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        else { return }
-        isSearchFocused = false
-        searchStore.send(.searchButtonTapped)
-    }
-}
-
-private struct HomeSearchBar: View {
-    @Binding var text: String
-    var isFocused: FocusState<Bool>.Binding
-    let isPresented: Bool
-    let onCancel: () -> Void
-    let onSubmit: () -> Void
-
-    var body: some View {
-        HStack(spacing: 8) {
-            HStack(spacing: 8) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundStyle(.secondary)
-
-                TextField("어떤 책을 찾으시나요?", text: $text)
-                    .focused(isFocused)
-                    .submitLabel(.search)
-                    .onSubmit(onSubmit)
-
-                if !text.isEmpty {
-                    Button {
-                        text = ""
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
-                    }
-                    .accessibilityLabel("검색어 지우기")
-                }
-            }
-            .padding(.horizontal, 12)
-            .frame(minHeight: 36)
-            .background(.quaternary, in: RoundedRectangle(cornerRadius: 10))
-
-            if isPresented {
-                Button("취소", action: onCancel)
-                    .foregroundStyle(.primary)
-            }
-        }
-        .buttonStyle(.plain)
-        .padding(.horizontal, 16)
-        .padding(.bottom, 8)
-    }
 }
 
 #Preview {
