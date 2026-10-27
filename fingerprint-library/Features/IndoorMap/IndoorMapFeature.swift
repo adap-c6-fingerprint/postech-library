@@ -21,6 +21,11 @@ struct IndoorMapFeature {
         var isLoadingNavigation = false
         /// 현재 요청의 결과만 수용하기 위한 번호. 취소·재요청 뒤의 늦은 응답을 구분한다.
         var navigationRequestID = 0
+        /// 지도에 표시할 번호·범위. 도착 노드가 없는 경우에도 별도로 읽는다.
+        var shelfLabels: [IndoorShelfLabel] = []
+        var shelfLabelError: String?
+        var isLoadingShelfLabels = false
+        var shelfLabelRequestID = 0
         /// 사용자가 조회하는 층의 원본 ID. 위치의 floorOrdinal을 덮어쓰는 값이 아니다.
         var selectedFloorID: UUID?
         var selectedFeatureID: IndoorMapElement.ID?
@@ -95,6 +100,9 @@ struct IndoorMapFeature {
         case retryNavigationTapped
         case navigationLoaded(requestID: Int, IndoorNavigationData)
         case navigationFailed(requestID: Int, String)
+        case retryShelfLabelsTapped
+        case shelfLabelsLoaded(requestID: Int, [IndoorShelfLabel])
+        case shelfLabelsFailed(requestID: Int, String)
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(IndoorLocationEvent)
@@ -125,11 +133,12 @@ struct IndoorMapFeature {
 
     @Dependency(\.indoorMapClient) var mapClient
     @Dependency(\.indoorNavigationClient) var navigationClient
+    @Dependency(\.indoorShelfLabelClient) var shelfLabelClient
     @Dependency(\.indoorLocationClient) var locationClient
     @Dependency(\.date.now) var now
     @Dependency(\.indoorRouteClient) var routeClient
 
-    nonisolated private enum CancelID: Hashable, Sendable { case map, navigation, location, route }
+    nonisolated private enum CancelID: Hashable, Sendable { case map, navigation, shelfLabels, location, route }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -137,7 +146,9 @@ struct IndoorMapFeature {
             case .task:
                 state.isActive = true
                 let loading = state.map == nil || state.loadError != nil ? loadMap(&state) : loadNavigation(&state)
-                return .merge(loading, locationEvents())
+                let labels = state.map != nil && state.shelfLabels.isEmpty && !state.isLoadingShelfLabels
+                    ? loadShelfLabels(&state) : .none
+                return .merge(loading, labels, locationEvents())
 
             case .retryTapped:
                 return loadMap(&state)
@@ -160,7 +171,7 @@ struct IndoorMapFeature {
                 if let floor { state.requestCamera(.initialFloor(floor.id)) }
                 state.navigation = nil
                 state.isLoadingNavigation = false
-                return .merge(cancellation, loadNavigation(&state))
+                return .merge(cancellation, loadNavigation(&state), loadShelfLabels(&state))
 
             case .mapFailed(let message):
                 state.isLoading = false
@@ -185,6 +196,22 @@ struct IndoorMapFeature {
                 state.navigationLoadError = message
                 return .none
 
+            case .retryShelfLabelsTapped:
+                return loadShelfLabels(&state)
+
+            case .shelfLabelsLoaded(let requestID, let labels):
+                guard state.isLoadingShelfLabels, requestID == state.shelfLabelRequestID else { return .none }
+                state.isLoadingShelfLabels = false
+                state.shelfLabelError = nil
+                state.shelfLabels = labels
+                return .none
+
+            case .shelfLabelsFailed(let requestID, let message):
+                guard state.isLoadingShelfLabels, requestID == state.shelfLabelRequestID else { return .none }
+                state.isLoadingShelfLabels = false
+                state.shelfLabelError = message
+                return .none
+
             case .sceneActiveChanged(let active):
                 guard state.isActive != active else { return .none }
                 state.isActive = active
@@ -192,12 +219,16 @@ struct IndoorMapFeature {
 
             case .disappeared:
                 state.isActive = false
+                if state.isLoadingShelfLabels {
+                    state.isLoadingShelfLabels = false
+                    state.shelfLabelRequestID += 1
+                }
                 if state.isLoadingNavigation {
                     state.isLoadingNavigation = false
                     state.navigationRequestID += 1
                 }
                 return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.map),
-                              .cancel(id: CancelID.navigation), invalidateRoute(&state))
+                              .cancel(id: CancelID.navigation), .cancel(id: CancelID.shelfLabels), invalidateRoute(&state))
 
             case .locationEvent(.authorization(let authorization)):
                 state.authorization = authorization
@@ -471,6 +502,30 @@ struct IndoorMapFeature {
             catch is CancellationError { }
             catch { await send(.mapFailed(error.localizedDescription)) }
         }.cancellable(id: CancelID.map, cancelInFlight: true)
+    }
+
+    /// 서가 표시 자료만 갱신한다. 실패해도 지도·층 선택·길찾기 로딩을 유지한다.
+    private func loadShelfLabels(_ state: inout State) -> Effect<Action> {
+        state.shelfLabels = []
+        state.shelfLabelError = nil
+        guard let map = state.map, shelfLabelClient.supports(map) else {
+            state.isLoadingShelfLabels = false
+            return .cancel(id: CancelID.shelfLabels)
+        }
+        state.isLoadingShelfLabels = true
+        state.shelfLabelRequestID += 1
+        let requestID = state.shelfLabelRequestID
+        return .run { send in
+            do {
+                let labels = try await shelfLabelClient.load(map)
+                try Task.checkCancellation()
+                await send(.shelfLabelsLoaded(requestID: requestID, labels))
+            } catch is CancellationError { }
+            catch {
+                guard !Task.isCancelled else { return }
+                await send(.shelfLabelsFailed(requestID: requestID, error.localizedDescription))
+            }
+        }.cancellable(id: CancelID.shelfLabels, cancelInFlight: true)
     }
 
     /// 화면 수명에 맞춰 위치 스트림을 구독하고 재구독 시 이전 구독을 취소한다.

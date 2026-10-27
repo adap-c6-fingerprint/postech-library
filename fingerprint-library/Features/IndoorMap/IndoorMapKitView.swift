@@ -24,6 +24,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var route: IndoorRoute?
     /// 경로 시트와 상단 위치 버튼을 제외한 영역에 도면·현재 위치를 맞춘다.
     var viewportInsets: UIEdgeInsets = .zero
+    var shelfLabels: [IndoorShelfLabel] = []
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -60,6 +61,9 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var positionAnnotation: PositionAnnotation?
         private var renderedPosition: IndoorPosition?
         private var renderedShelves: [ShelfDestination] = []
+        private var renderedShelfLabels: [IndoorShelfLabel] = []
+        private var shelfLabelAnnotations: [IndoorShelfLabelAnnotation] = []
+        private var displayedShelfLabelIDs = Set<String>()
         private var renderedRoute: IndoorRoute?
         private var routeFloorID: UUID?
         private var routeOverlays: [any MKOverlay] = []
@@ -96,7 +100,10 @@ struct IndoorMapKitView: UIViewRepresentable {
             longPress.cancelsTouchesInView = false
             longPress.delegate = self
             view.addGestureRecognizer(longPress)
-            view.onLayout = { [weak self] view in self?.applyPendingCamera(in: view) }
+            view.onLayout = { [weak self] view in
+                self?.applyPendingCamera(in: view)
+                self?.layoutShelfLabels(in: view)
+            }
             mapView = view
             return view
         }
@@ -111,6 +118,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.showsUserLocation = parent.showsUserLocation
             updatePosition(in: view)
             updateShelves(in: view)
+            updateShelfLabels(in: view)
             updateRoute(in: view)
             if selectedID != parent.selectedFeatureID {
                 selectedID = parent.selectedFeatureID
@@ -172,6 +180,48 @@ struct IndoorMapKitView: UIViewRepresentable {
                 where annotation.destination.key != parent.selectedShelfKey {
                 view.deselectAnnotation(annotation, animated: false)
             }
+        }
+
+        /// 현재 층의 서가 면에 번호·범위를 표시한다. 일반 위치 갱신에서는 annotation을 재사용한다.
+        private func updateShelfLabels(in view: MKMapView) {
+            let labels = parent.shelfLabels.filter { $0.floorID == parent.floor.id }
+            if labels != renderedShelfLabels {
+                view.removeAnnotations(view.annotations.filter { $0 is IndoorShelfLabelAnnotation })
+                renderedShelfLabels = labels
+                shelfLabelAnnotations = labels.map(IndoorShelfLabelAnnotation.init)
+                displayedShelfLabelIDs = []
+            }
+            layoutShelfLabels(in: view)
+        }
+
+        /// 화면 중심에 가까운 레이블부터 겹치지 않게 배치한다. 촬영 순서는 사용하지 않는다.
+        private func layoutShelfLabels(in view: MKMapView) {
+            guard view.bounds.width > 0, view.bounds.height > 0 else { return }
+            let center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
+            let candidates = shelfLabelAnnotations.compactMap { annotation -> (IndoorShelfLabelAnnotation, CGRect, CGFloat)? in
+                let point = view.convert(annotation.coordinate, toPointTo: view)
+                let size = annotation.labelSize
+                let frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2,
+                                   width: size.width, height: size.height)
+                guard frame.intersects(view.bounds) else { return nil }
+                return (annotation, frame.insetBy(dx: -3, dy: -3), hypot(point.x - center.x, point.y - center.y))
+            }.sorted { $0.2 == $1.2 ? $0.0.label.id < $1.0.label.id : $0.2 < $1.2 }
+            var occupied: [CGRect] = []
+            var chosen: [IndoorShelfLabelAnnotation] = []
+            for (annotation, frame, _) in candidates where !occupied.contains(where: { $0.intersects(frame) }) {
+                chosen.append(annotation)
+                occupied.append(frame)
+            }
+            let ids = Set(chosen.map { $0.label.id })
+            guard ids != displayedShelfLabelIDs else { return }
+            view.removeAnnotations(view.annotations.compactMap { $0 as? IndoorShelfLabelAnnotation }
+                .filter { !ids.contains($0.label.id) })
+            view.addAnnotations(chosen.filter { !displayedShelfLabelIDs.contains($0.label.id) })
+            displayedShelfLabelIDs = ids
+        }
+
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            layoutShelfLabels(in: mapView)
         }
 
         /// 화면에 붙고 유효한 크기를 가진 뒤 최신 보류 요청을 한 번 적용한다.
@@ -341,6 +391,13 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
+            if let annotation = annotation as? IndoorShelfLabelAnnotation {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: IndoorShelfLabelView.reuseID)
+                    as? IndoorShelfLabelView
+                    ?? IndoorShelfLabelView(annotation: annotation, reuseIdentifier: IndoorShelfLabelView.reuseID)
+                view.configure(annotation)
+                return view
+            }
             if let annotation = annotation as? IndoorRouteTransitionAnnotation {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-transition")
                     ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-transition")

@@ -48,7 +48,8 @@ struct IndoorMapView: View {
                         ? store.selectedShelfKey : store.routeDestinationKey,
                     onSelectShelf: { if showsDestinationCard { store.send(.shelfSelected($0)) } },
                     route: showsDestinationCard ? nil : store.route,
-                    viewportInsets: .init(top: 60, left: 0, bottom: bottomContentInset, right: 0)
+                    viewportInsets: .init(top: 60, left: 0, bottom: bottomContentInset, right: 0),
+                    shelfLabels: store.shelfLabels
                 )
                 .ignoresSafeArea(.container, edges: .bottom)
 
@@ -89,6 +90,17 @@ struct IndoorMapView: View {
                                 in: RoundedRectangle(cornerRadius: 12)
                             )
                             .accessibilityIdentifier("map-location-status")
+                    }
+
+                    if let message = store.shelfLabelError {
+                        HStack {
+                            Text(message)
+                            Button("다시 시도") { store.send(.retryShelfLabelsTapped) }
+                        }
+                        .font(.caption)
+                        .padding(10)
+                        .background(Color(uiColor: .systemBackground), in: RoundedRectangle(cornerRadius: 12))
+                        .accessibilityIdentifier("map-shelf-label-status")
                     }
 
                     Spacer(minLength: 0)
