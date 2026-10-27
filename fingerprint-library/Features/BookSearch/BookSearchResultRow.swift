@@ -9,7 +9,9 @@ import SwiftUI
 
 struct BookSearchResultRow: View {
     let book: Book
+    let isFavorite: Bool
     let onShowDetail: () -> Void
+    let onToggleFavorite: () -> Void
     let onAddToBasket: () -> Void
 
     var body: some View {
@@ -79,12 +81,15 @@ struct BookSearchResultRow: View {
     }
 
     private var favoriteButton: some View {
-        Button(action: {}) {
-            Image(systemName: "heart")
+        Button(action: onToggleFavorite) {
+            Image(systemName: isFavorite ? "heart.fill" : "heart")
                 .frame(minWidth: 28, minHeight: 32)
         }
         .buttonStyle(.bordered)
-        .accessibilityLabel("찜")
+        .tint(isFavorite ? .red : .primary)
+        .accessibilityLabel(isFavorite ? "찜 해제" : "찜하기")
+        .accessibilityValue(isFavorite ? "찜됨" : "찜 안 됨")
+        .accessibilityIdentifier("book-favorite-\(book.id)")
     }
 
     private var basketButton: some View {

@@ -10,12 +10,17 @@ import ComposableArchitecture
 
 struct BookSearchView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-    @State private var isBasketPresented = false
+    let isEditingSearch: Bool
+    let onSelectRecentQuery: (String) -> Void
+    let onShowBasket: () -> Void
     
     var body: some View {
         Group {
             if store.isLoading {
                 ProgressView("책을 찾고 있어요")
+            } else if isEditingSearch || !store.hasSearched
+                        || store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                searchHistory
             } else if store.errorMessage != nil {
                 ContentUnavailableView {
                     Label(
@@ -29,12 +34,6 @@ struct BookSearchView: View {
                         store.send(.searchButtonTapped)
                     }
                 }
-            } else if !store.hasSearched {
-                ContentUnavailableView(
-                    "어떤 책을 찾으시나요?",
-                    systemImage: "books.vertical",
-                    description: Text("제목이나 저자 이름을 입력해 주세요.")
-                )
             } else if store.books.isEmpty {
                 ContentUnavailableView(
                     "검색 결과가 없어요",
@@ -47,8 +46,12 @@ struct BookSearchView: View {
                         ForEach(store.books) { book in
                             BookSearchResultRow(
                                 book: book,
+                                isFavorite: store.favoriteBookKeys.contains(book.recordKey),
                                 onShowDetail: {
                                     store.send(.bookSelected(book))
+                                },
+                                onToggleFavorite: {
+                                    store.send(.favoriteButtonTapped(book))
                                 },
                                 onAddToBasket: {
                                     store.send(.addToBasket(book))
@@ -66,7 +69,7 @@ struct BookSearchView: View {
             
             if !store.basketBooks.isEmpty {
                 Button {
-                    isBasketPresented = true
+                    onShowBasket()
                 } label: {
                     Label(
                         "책바구니 바로가기 (\(store.basketBooks.count)권)",
@@ -81,54 +84,40 @@ struct BookSearchView: View {
                 .background(.bar)
             }
         }
-        .navigationDestination(isPresented: $isBasketPresented) {
-            BookBasketDestination(store: store)
-        }
-        .navigationTitle(
-            store.hasSearched ? "검색 결과" : "책 검색"
-        )
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationDestination(item: $store.scope(state: \.detail, action: \.detail)) { detailStore in
-            BookDetailView(store: detailStore)
-        }
-        .searchable(
-            text: Binding(
-                get: {
-                    return store.query
-                },
-                set: { newQuery in
-                    store.send(.queryChanged(newQuery))
-                }
-            ),
-            placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "제목이나 저자 이름"
-        )
-        .searchSuggestions {
-            Section("최근 검색어") {
-                ForEach(store.recentQueries, id: \.self) { keyword in
-                    Text(keyword)
-                        .searchCompletion(keyword)
+    }
+
+    @ViewBuilder
+    private var searchHistory: some View {
+        if matchingRecentQueries.isEmpty {
+            ContentUnavailableView(
+                "어떤 책을 찾으시나요?",
+                systemImage: "books.vertical",
+                description: Text("제목이나 저자 이름을 입력하고 검색해 주세요.")
+            )
+        } else {
+            List {
+                Section("최근 검색어") {
+                    ForEach(matchingRecentQueries, id: \.self) { keyword in
+                        Button {
+                            onSelectRecentQuery(keyword)
+                        } label: {
+                            Label(keyword, systemImage: "clock")
+                                .foregroundStyle(.primary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .contentShape(Rectangle())
+                        }
+                        .accessibilityHint("이 검색어로 도서 검색")
+                    }
                 }
             }
-        }
-        .onSubmit(of: .search) {
-            store.send(.searchButtonTapped)
-        }
-        .task {
-            store.send(.task)
+            .listStyle(.plain)
+            .scrollDismissesKeyboard(.interactively)
         }
     }
-}
 
-private struct BookBasketDestination: View {
-    let store: StoreOf<BookSearchFeature>
-
-    var body: some View {
-        BookBasketView(
-            books: store.basketBooks,
-            onDeletedSelected: { bookIDs in
-                store.send(.removeFromBasket(bookIDs))
-            }
-        )
+    private var matchingRecentQueries: [String] {
+        let keyword = store.query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !keyword.isEmpty else { return store.recentQueries }
+        return store.recentQueries.filter { $0.localizedStandardContains(keyword) }
     }
 }
