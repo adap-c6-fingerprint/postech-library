@@ -10,7 +10,8 @@ import ComposableArchitecture
 
 struct BookSearchView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-
+    @State private var isBasketPresented = false
+    
     var body: some View {
         Group {
             if store.isLoading {
@@ -51,7 +52,7 @@ struct BookSearchView: View {
                                 },
                                 onAddToBasket: {
                                     store.send(.addToBasket(book))
-                            })
+                                })
                         }
                     }
                     .padding(16)
@@ -62,20 +63,26 @@ struct BookSearchView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
         .safeAreaInset(edge: .bottom) {
-            if store.hasSearched && !store.isLoading
-                && store.errorMessage == nil && !store.books.isEmpty {
-                Button(action: {}) {
+            
+            if !store.basketBooks.isEmpty {
+                Button {
+                    isBasketPresented = true
+                } label: {
                     Label(
                         "책바구니 바로가기 (\(store.basketBooks.count)권)",
                         systemImage: "basket"
                     )
-                        .frame(maxWidth: .infinity, minHeight: 44)
+                    .frame(maxWidth: .infinity, minHeight: 44)
                 }
-                .buttonStyle(.borderedProminent)
+                .glassEffect()
+                .buttonStyle(.glassProminent)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(.bar)
             }
+        }
+        .navigationDestination(isPresented: $isBasketPresented) {
+            BookBasketDestination(store: store)
         }
         .navigationTitle(
             store.hasSearched ? "검색 결과" : "책 검색"
@@ -99,5 +106,18 @@ struct BookSearchView: View {
         .onSubmit(of: .search) {
             store.send(.searchButtonTapped)
         }
+    }
+}
+
+private struct BookBasketDestination: View {
+    let store: StoreOf<BookSearchFeature>
+
+    var body: some View {
+        BookBasketView(
+            books: store.basketBooks,
+            onDeletedSelected: { bookIDs in
+                store.send(.removeFromBasket(bookIDs))
+            }
+        )
     }
 }

@@ -32,6 +32,7 @@ struct BookSearchFeature {
         case searchFailed(String)
         
         case addToBasket(Book)
+        case removeFromBasket(Set<Book.ID>)
         case bookSelected(Book)
         case detail(PresentationAction<BookDetailFeature.Action>)
     }
@@ -118,6 +119,13 @@ struct BookSearchFeature {
             case let .searchFailed(message):
                 state.isLoading = false
                 state.errorMessage = message
+                return .none
+                
+            case let .removeFromBasket(bookIDs):
+                state.basketBooks.removeAll { book in
+                    bookIDs.contains(book.id)
+                }
+                
                 return .none
             }
         }
