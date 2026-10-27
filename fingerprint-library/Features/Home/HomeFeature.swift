@@ -20,6 +20,8 @@ struct HomeFeature {
         var popularBooksErrorMessage: String? = nil
         var recommendationSessionID: UUID?
         var isLoadingRecommendations = false
+        var isPreparingRecommendations = false
+        var nextRecommendationsSavedAt: Date?
     }
 
     // 도서관 소장 정보는 기존 Book 모델과 분리한다.
@@ -32,7 +34,7 @@ struct HomeFeature {
         case task
         case recommendationSessionStarted
         case recommendationsRestored(UUID, CachedRecommendations?)
-        case recommendationsLoaded(UUID, [Book])
+        case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
         case libraryInfoLoaded([Book.ID: LibraryInfo])
         case departmentChanged(String)
@@ -88,6 +90,8 @@ struct HomeFeature {
                 let sessionID = uuid()
                 state.recommendationSessionID = sessionID
                 state.isLoadingRecommendations = true
+                state.isPreparingRecommendations = true
+                state.nextRecommendationsSavedAt = nil
                 state.recommendationErrorMessage = nil
                 return loadRecommendations(sessionID: sessionID)
 
@@ -99,18 +103,22 @@ struct HomeFeature {
                 }
                 return .none
 
-            case let .recommendationsLoaded(sessionID, books):
+            case let .recommendationsLoaded(sessionID, prepared):
                 guard state.recommendationSessionID == sessionID else { return .none }
                 state.isLoadingRecommendations = false
-                state.recommendedBooks = books
-                state.recommendationErrorMessage = books.isEmpty
-                    ? "추천 도서를 찾지 못했어요."
-                    : nil
+                state.isPreparingRecommendations = false
+                state.nextRecommendationsSavedAt = prepared.savedAt
+                // 이번 접속의 목록 A는 유지한다. 완성된 B는 다음 접속에서 복원한다.
+                if state.recommendedBooks.isEmpty {
+                    state.recommendedBooks = prepared.displayBooks
+                }
+                state.recommendationErrorMessage = nil
                 return .none
 
             case let .recommendationsFailed(sessionID, message):
                 guard state.recommendationSessionID == sessionID else { return .none }
                 state.isLoadingRecommendations = false
+                state.isPreparingRecommendations = false
                 state.recommendationErrorMessage = message
                 return .none
 
@@ -162,15 +170,16 @@ struct HomeFeature {
                 let cached = try? await recommendationCacheClient.restore()
                 try Task.checkCancellation()
                 await send(.recommendationsRestored(sessionID, cached))
-                if cached != nil { return }
                 let books = try await bookRecommendationClient.fetch(6)
                 try Task.checkCancellation()
-                await send(.recommendationsLoaded(sessionID, books))
+                let prepared = try await recommendationCacheClient.prepare(books)
+                try Task.checkCancellation()
+                await send(.recommendationsLoaded(sessionID, prepared))
             } catch is CancellationError {
                 return
             } catch {
                 guard !Task.isCancelled else { return }
-                await send(.recommendationsFailed(sessionID, error.localizedDescription))
+                await send(.recommendationsFailed(sessionID, "추천 도서를 준비하지 못했어요. 다시 시도해 주세요."))
             }
         }
         .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)

@@ -55,11 +55,14 @@ struct HomePopularBooksTests {
         await store.receive(\.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
             $0.isLoadingRecommendations = true
+            $0.isPreparingRecommendations = true
         }
         await store.receive(\.recommendationsRestored)
         await store.receive(\.recommendationsLoaded) {
             $0.recommendedBooks = [recommended]
             $0.isLoadingRecommendations = false
+            $0.isPreparingRecommendations = false
+            $0.nextRecommendationsSavedAt = .distantPast
         }
         #expect(store.state.popularBooks == [popular])
         await store.finish()

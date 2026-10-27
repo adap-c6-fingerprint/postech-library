@@ -16,18 +16,21 @@ struct HomeRecommendationCacheTests {
         let store = TestStore(initialState: HomeFeature.State()) { HomeFeature() } withDependencies: {
             $0.uuid = .constant(sessionID)
             $0.recommendationCacheClient.restore = { snapshot }
-            $0.bookRecommendationClient.fetch = { _ in
-                Issue.record("저장본을 표시할 때 네트워크를 기다리지 않는다")
-                return []
-            }
+            $0.bookRecommendationClient.fetch = { _ in [book] }
+            $0.recommendationCacheClient.prepare = { _ in snapshot }
         }
         await store.send(.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
             $0.isLoadingRecommendations = true
+            $0.isPreparingRecommendations = true
         }
         await store.receive(\.recommendationsRestored) {
             $0.recommendedBooks = snapshot.displayBooks
             $0.isLoadingRecommendations = false
+        }
+        await store.receive(\.recommendationsLoaded) {
+            $0.isPreparingRecommendations = false
+            $0.nextRecommendationsSavedAt = .distantPast
         }
         await store.finish()
     }
@@ -47,12 +50,45 @@ struct HomeRecommendationCacheTests {
         await store.send(.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
             $0.isLoadingRecommendations = true
+            $0.isPreparingRecommendations = true
         }
         await store.receive(\.recommendationsRestored)
         await store.receive(\.recommendationsLoaded) {
             $0.recommendedBooks = [book]
             $0.isLoadingRecommendations = false
+            $0.isPreparingRecommendations = false
+            $0.nextRecommendationsSavedAt = .distantPast
         }
+        await store.finish()
+    }
+
+    @Test("새 추천 준비가 끝나도 이번 접속에서 표시 중인 목록은 유지한다")
+    func keepsCurrentListUntilNextSession() async {
+        let sessionID = sessionID
+        let a = RecommendationCacheFixture.book("a", hasCover: false)
+        let b = RecommendationCacheFixture.book("b", hasCover: false)
+        let saved = CachedRecommendations(books: [a], savedAt: .distantPast, coverFiles: [:])
+        let next = CachedRecommendations(books: [b], savedAt: .now, coverFiles: [:])
+        let store = TestStore(initialState: HomeFeature.State()) { HomeFeature() } withDependencies: {
+            $0.uuid = .constant(sessionID)
+            $0.recommendationCacheClient.restore = { saved }
+            $0.bookRecommendationClient.fetch = { _ in [b] }
+            $0.recommendationCacheClient.prepare = { _ in next }
+        }
+        await store.send(.recommendationSessionStarted) {
+            $0.recommendationSessionID = sessionID
+            $0.isLoadingRecommendations = true
+            $0.isPreparingRecommendations = true
+        }
+        await store.receive(\.recommendationsRestored) {
+            $0.recommendedBooks = [a]
+            $0.isLoadingRecommendations = false
+        }
+        await store.receive(\.recommendationsLoaded) {
+            $0.isPreparingRecommendations = false
+            $0.nextRecommendationsSavedAt = next.savedAt
+        }
+        #expect(store.state.recommendedBooks == [a])
         await store.finish()
     }
 }

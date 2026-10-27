@@ -30,11 +30,18 @@ actor RecommendationCacheStore {
 
     private let directory: URL
     private var displayedFiles: Set<String> = []
+    private var preparationID: UUID?
     private var manifestURL: URL { directory.appendingPathComponent("recommendations.json") }
     private var imagesDirectory: URL { directory.appendingPathComponent("covers", isDirectory: true) }
 
     init(directory: URL) {
         self.directory = directory
+    }
+
+    func beginPreparation() -> UUID {
+        let id = UUID()
+        preparationID = id
+        return id
     }
 
     /// 전체 묶음을 확인한 뒤 반환한다. 중간에 유실된 표지가 있으면 정상 저장본으로 취급하지 않는다.
@@ -73,8 +80,12 @@ actor RecommendationCacheStore {
     }
 
     /// 파일 준비 → 마지막에 목록을 atomic 교체한다. 실패하면 이전 목록과 표지는 유지한다.
-    func save(books: [Book], covers: [URL: Data], savedAt: Date) throws -> CachedRecommendations {
+    func save(
+        books: [Book], covers: [URL: Data], savedAt: Date,
+        preparationID expectedID: UUID? = nil
+    ) throws -> CachedRecommendations {
         try Task.checkCancellation()
+        if let expectedID, preparationID != expectedID { throw CancellationError() }
         guard !books.isEmpty, books.count <= 6,
               Set(books.map(\.id)).count == books.count else { throw CacheError.invalidSnapshot }
 
