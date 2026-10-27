@@ -1,3 +1,4 @@
+import Foundation
 import ComposableArchitecture
 
 @Reducer
@@ -14,6 +15,9 @@ struct HomeFeature {
         var recommendationCount: Int {
             recommendedBooks.isEmpty ? 6 : min(recommendedBooks.count, 6)
         }
+
+        var recommendationErrorMessage: String? = nil
+        var popularBooksErrorMessage: String? = nil
     }
 
     // 도서관 소장 정보는 기존 Book 모델과 분리한다.
@@ -36,6 +40,9 @@ struct HomeFeature {
         case detail(PresentationAction<BookDetailFeature.Action>)
         case delegate(Delegate)
 
+        case recommendationsFailed(String)
+        case popularBooksFailed(String)
+
         enum Delegate {
             case showBasket
             case showProfile
@@ -43,19 +50,50 @@ struct HomeFeature {
         }
     }
 
+    @Dependency(\.bookRecommendationClient)
+    var bookRecommendationClient
+
+    @Dependency(\.departmentPopularBooksClient)
+    var departmentPopularBooksClient
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
-                // TODO: 홈 도서 API Client를 연결하고 조회 결과 액션을 보낸다.
-                return .none
+                var effects: [Effect<Action>] = []
+
+                if state.recommendedBooks.isEmpty {
+                    state.recommendationErrorMessage = nil
+                    effects.append(loadRecommendations())
+                }
+
+                if state.popularBooks.isEmpty {
+                    state.popularBooksErrorMessage = nil
+                    effects.append(loadPopularBooks(departmentName: state.departmentName))
+                }
+
+                return .merge(effects)
 
             case let .recommendationsLoaded(books):
                 state.recommendedBooks = books
+                state.recommendationErrorMessage = books.isEmpty
+                    ? "추천 도서를 찾지 못했어요."
+                    : nil
+                return .none
+
+            case let .recommendationsFailed(message):
+                state.recommendationErrorMessage = message
                 return .none
 
             case let .popularBooksLoaded(books):
                 state.popularBooks = books
+                state.popularBooksErrorMessage = books.isEmpty
+                    ? "인기 도서를 찾지 못했어요."
+                    : nil
+                return .none
+
+            case let .popularBooksFailed(message):
+                state.popularBooksErrorMessage = message
                 return .none
 
             case let .libraryInfoLoaded(info):
@@ -85,6 +123,36 @@ struct HomeFeature {
         }
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
+        }
+    }
+
+    private func loadRecommendations() -> Effect<Action> {
+        .run { [bookRecommendationClient] send in
+            do {
+                let books = try await bookRecommendationClient.fetch(6)
+                try Task.checkCancellation()
+                await send(.recommendationsLoaded(books))
+            } catch is CancellationError {
+                return
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.recommendationsFailed(error.localizedDescription))
+            }
+        }
+    }
+
+    private func loadPopularBooks(departmentName: String) -> Effect<Action> {
+        .run { [departmentPopularBooksClient] send in
+            do {
+                let books = try await departmentPopularBooksClient.fetch(departmentName, 6)
+                try Task.checkCancellation()
+                await send(.popularBooksLoaded(books))
+            } catch is CancellationError {
+                return
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.popularBooksFailed(error.localizedDescription))
+            }
         }
     }
 }
