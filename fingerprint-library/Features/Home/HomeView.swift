@@ -21,7 +21,7 @@ struct HomeView: View {
         }
         .background(Color(uiColor: .systemBackground))
         .toolbar(.hidden, for: .navigationBar)
-        .task { await store.send(.task).finish() }
+        .task { store.send(.task) }
         .navigationDestination(
             item: $store.scope(state: \.detail, action: \.detail)
         ) { detailStore in
@@ -188,21 +188,7 @@ private struct HomeBookCover: View {
     let height: CGFloat
     
     var body: some View {
-        AsyncImage(url: book?.imageURL) { phase in
-            if let image = phase.image {
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                ZStack {
-                    Color.primary.opacity(0.07)
-                    Image(systemName: "book.closed")
-                        .font(.system(size: 24, weight: .light))
-                        .foregroundStyle(.secondary.opacity(0.45))
-                }
-            }
-        }
+        BookCoverView(url: book?.imageURL)
         .frame(width: width, height: height)
         .background(Color.primary.opacity(0.04))
         .clipShape(RoundedRectangle(cornerRadius: 4))

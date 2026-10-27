@@ -18,6 +18,8 @@ struct HomeFeature {
 
         var recommendationErrorMessage: String? = nil
         var popularBooksErrorMessage: String? = nil
+        var recommendationSessionID: UUID?
+        var isLoadingRecommendations = false
     }
 
     // 도서관 소장 정보는 기존 Book 모델과 분리한다.
@@ -28,7 +30,9 @@ struct HomeFeature {
 
     enum Action {
         case task
-        case recommendationsLoaded([Book])
+        case recommendationSessionStarted
+        case recommendationsRestored(UUID, CachedRecommendations?)
+        case recommendationsLoaded(UUID, [Book])
         case popularBooksLoaded([Book])
         case libraryInfoLoaded([Book.ID: LibraryInfo])
         case departmentChanged(String)
@@ -40,7 +44,7 @@ struct HomeFeature {
         case detail(PresentationAction<BookDetailFeature.Action>)
         case delegate(Delegate)
 
-        case recommendationsFailed(String)
+        case recommendationsFailed(UUID, String)
         case popularBooksFailed(String)
 
         enum Delegate {
@@ -56,15 +60,21 @@ struct HomeFeature {
     @Dependency(\.departmentPopularBooksClient)
     var departmentPopularBooksClient
 
+    @Dependency(\.recommendationCacheClient) var recommendationCacheClient
+    @Dependency(\.uuid) var uuid
+
+    private nonisolated enum CancelID: Hashable, Sendable {
+        case recommendationSession
+    }
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
                 var effects: [Effect<Action>] = []
 
-                if state.recommendedBooks.isEmpty {
-                    state.recommendationErrorMessage = nil
-                    effects.append(loadRecommendations())
+                if state.recommendedBooks.isEmpty && state.recommendationSessionID == nil {
+                    effects.append(.send(.recommendationSessionStarted))
                 }
 
                 if state.popularBooks.isEmpty {
@@ -74,14 +84,33 @@ struct HomeFeature {
 
                 return .merge(effects)
 
-            case let .recommendationsLoaded(books):
+            case .recommendationSessionStarted:
+                let sessionID = uuid()
+                state.recommendationSessionID = sessionID
+                state.isLoadingRecommendations = true
+                state.recommendationErrorMessage = nil
+                return loadRecommendations(sessionID: sessionID)
+
+            case let .recommendationsRestored(sessionID, cached):
+                guard state.recommendationSessionID == sessionID else { return .none }
+                if let cached {
+                    state.recommendedBooks = cached.displayBooks
+                    state.isLoadingRecommendations = false
+                }
+                return .none
+
+            case let .recommendationsLoaded(sessionID, books):
+                guard state.recommendationSessionID == sessionID else { return .none }
+                state.isLoadingRecommendations = false
                 state.recommendedBooks = books
                 state.recommendationErrorMessage = books.isEmpty
                     ? "추천 도서를 찾지 못했어요."
                     : nil
                 return .none
 
-            case let .recommendationsFailed(message):
+            case let .recommendationsFailed(sessionID, message):
+                guard state.recommendationSessionID == sessionID else { return .none }
+                state.isLoadingRecommendations = false
                 state.recommendationErrorMessage = message
                 return .none
 
@@ -126,19 +155,25 @@ struct HomeFeature {
         }
     }
 
-    private func loadRecommendations() -> Effect<Action> {
-        .run { [bookRecommendationClient] send in
+    private func loadRecommendations(sessionID: UUID) -> Effect<Action> {
+        .run { [bookRecommendationClient, recommendationCacheClient] send in
             do {
+                // 저장본이 손상되어도 캐시가 없는 경우와 같은 최초 조회 경로로 복구한다.
+                let cached = try? await recommendationCacheClient.restore()
+                try Task.checkCancellation()
+                await send(.recommendationsRestored(sessionID, cached))
+                if cached != nil { return }
                 let books = try await bookRecommendationClient.fetch(6)
                 try Task.checkCancellation()
-                await send(.recommendationsLoaded(books))
+                await send(.recommendationsLoaded(sessionID, books))
             } catch is CancellationError {
                 return
             } catch {
                 guard !Task.isCancelled else { return }
-                await send(.recommendationsFailed(error.localizedDescription))
+                await send(.recommendationsFailed(sessionID, error.localizedDescription))
             }
         }
+        .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
     }
 
     private func loadPopularBooks(departmentName: String) -> Effect<Action> {

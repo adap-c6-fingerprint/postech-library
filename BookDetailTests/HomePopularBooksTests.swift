@@ -33,12 +33,14 @@ struct HomePopularBooksTests {
 
     @Test("하단 목록이 이미 있으면 위쪽 추천만 조회한다")
     func loadsRecommendationsWithPopularBooksCached() async {
+        let sessionID = UUID(uuidString: "00000000-0000-0000-0000-000000000071")!
         let recommended = Self.book("recommended")
         let popular = Self.book("popular")
         var initialState = HomeFeature.State()
         initialState.popularBooks = [popular]
         let store = TestStore(initialState: initialState) { HomeFeature() }
             withDependencies: {
+                $0.uuid = .constant(sessionID)
                 $0.bookRecommendationClient.fetch = { count in
                     #expect(count == 6)
                     return [recommended]
@@ -50,7 +52,15 @@ struct HomePopularBooksTests {
             }
 
         await store.send(.task)
-        await store.receive(\.recommendationsLoaded) { $0.recommendedBooks = [recommended] }
+        await store.receive(\.recommendationSessionStarted) {
+            $0.recommendationSessionID = sessionID
+            $0.isLoadingRecommendations = true
+        }
+        await store.receive(\.recommendationsRestored)
+        await store.receive(\.recommendationsLoaded) {
+            $0.recommendedBooks = [recommended]
+            $0.isLoadingRecommendations = false
+        }
         #expect(store.state.popularBooks == [popular])
         await store.finish()
     }
