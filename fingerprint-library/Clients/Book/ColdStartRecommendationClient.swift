@@ -156,7 +156,7 @@ nonisolated enum ColdStartRecommendationService {
         return Array(result.prefix(limit))
     }
 
-    private static func isRealImage(_ url: URL) async -> Bool {
+    static func isRealImage(_ url: URL) async -> Bool {
     // 주소를 실제로 받아 보고 이미지인지 확인한다.
         var request = URLRequest(url: url)
         request.timeoutInterval = 10
@@ -220,7 +220,7 @@ nonisolated enum ColdStartRecommendationService {
         return PrimoCandidatePage(total: response.info.total, candidates: candidates)
     }
 
-    private static func primoThumbnailURL(from links: [PrimoLink]?) -> URL? {
+    static func primoThumbnailURL(from links: [PrimoLink]?) -> URL? {
     // 포스텍 응답의 링크 목록에서 표지 이미지 주소를 찾는다. BookClient와 같은 기준이다.
         links?
             .filter { $0.linkType == "thumbnail" || $0.linkType?.hasSuffix("/thumbnail") == true }
@@ -245,7 +245,7 @@ nonisolated enum ColdStartRecommendationService {
 
     // MARK: - 정보나루 표지
 
-    private static func data4LibraryCoverURL(isbn13: String, apiKey: String) async throws -> URL? {
+    static func data4LibraryCoverURL(isbn13: String, apiKey: String) async throws -> URL? {
     // ISBN 하나로 정보나루 도서 상세를 조회해 표지 주소를 꺼낸다.
         var components = URLComponents(string: "https://data4library.kr/api/srchDtlList")
         components?.queryItems = [
@@ -314,7 +314,7 @@ nonisolated enum ColdStartRecommendationService {
         let callNumber: String?
     }
 
-    private nonisolated struct PrimoLink: Decodable {
+    nonisolated struct PrimoLink: Decodable {
         let linkType: String?
         let linkURL: String?
     }

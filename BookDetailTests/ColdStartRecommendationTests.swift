@@ -187,5 +187,7 @@ struct ColdStartRecommendationTests {
             }
         }
         await store.send(.task)
+        await store.receive(\.personalizedLoaded)
+        // 기록이 있으면 첫 추천 대신 맞춤 추천을 부른다.
     }
 }
