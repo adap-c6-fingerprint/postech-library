@@ -182,7 +182,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
             let features = parent.map.features.filter { $0.floorID == parent.floor.id }
             // 넓은 구역부터 그리고 그 위에 fixture와 opening을 올린다.
-            for kind in [IndoorMapElement.Kind.unit, .fixture, .opening] {
+            for kind in [IndoorMapElement.Kind.unit, .section, .fixture, .opening] {
                 for feature in features where feature.kind == kind {
                     for overlay in MapKitGeometry.overlays(for: feature.geometry) {
                         overlayFeatures[ObjectIdentifier(overlay)] = feature
@@ -273,6 +273,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             renderer.strokeColor = .systemGray2
             switch feature?.kind {
             case .fixture: renderer.fillColor = UIColor(red: 0.83, green: 0.73, blue: 0.57, alpha: 1)
+            case .section:
+                renderer.fillColor = UIColor.systemGray5.withAlphaComponent(0.35)
             case .unit:
                 renderer.fillColor = feature?.category == "walkway" ? .systemGray6 : .white
                 if feature?.category == "stairs" { renderer.fillColor = UIColor.systemPurple.withAlphaComponent(0.12) }

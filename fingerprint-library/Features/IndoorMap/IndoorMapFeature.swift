@@ -133,7 +133,7 @@ struct IndoorMapFeature {
                 if let position = state.latestPosition, position.source == .simulation,
                    !acceptsSimulation(position, on: map) {
                     state.latestPosition = nil
-                    state.locationMessage = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+                    state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
                 }
                 if let floor { state.requestCamera(.floor(floor.id)) }
                 state.navigation = nil
@@ -203,7 +203,7 @@ struct IndoorMapFeature {
                 if let latest = state.latestPosition, position.timestamp < latest.timestamp { return .none }
                 if position.source == .simulation, let map = state.map, !acceptsSimulation(position, on: map) {
                     state.latestPosition = nil
-                    state.locationMessage = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+                    state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
                     return invalidateRoute(&state)
                 }
                 let previousFloor = state.latestPosition?.floorOrdinal

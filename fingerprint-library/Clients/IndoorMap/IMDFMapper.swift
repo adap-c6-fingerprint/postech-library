@@ -6,7 +6,7 @@ nonisolated enum IMDFImportPolicy: Sendable {
     case c5Compatibility
 }
 
-/// 현재 렌더링 대상: venue, level, footprint, unit, fixture, opening, amenity.
+/// 현재 렌더링 대상: venue, level, footprint, unit, section, fixture, opening, amenity.
 /// 나머지 IMDF 파일은 원본 그대로 보관하며 필요한 기능에서 별도로 해석한다.
 nonisolated struct IMDFMapper {
     func map(
@@ -65,8 +65,14 @@ nonisolated struct IMDFMapper {
         }
 
         var features: [IndoorMapElement] = []
-        for kind in [IndoorMapElement.Kind.footprint, .unit, .fixture, .opening, .amenity] {
-            for feature in try required(kind.rawValue, in: collections) {
+        for kind in [IndoorMapElement.Kind.footprint, .unit, .section, .fixture, .opening, .amenity] {
+            let elements: [IMDFFeatureDTO]
+            if kind == .amenity || kind == .section {
+                elements = collections[kind.rawValue]?.features ?? []
+            } else {
+                elements = try required(kind.rawValue, in: collections)
+            }
+            for feature in elements {
                 let floorID: UUID?
                 if kind == .amenity {
                     floorID = try amenityFloor(feature, unitFloors: unitFloors, floorIDs: floorIDs)
@@ -142,11 +148,11 @@ nonisolated struct IMDFMapper {
             return .lineString(try values.map { try coordinate($0, in: file) })
         case ("venue", .polygon(let rings)), ("level", .polygon(let rings)),
              ("footprint", .polygon(let rings)), ("unit", .polygon(let rings)),
-             ("fixture", .polygon(let rings)):
+             ("section", .polygon(let rings)), ("fixture", .polygon(let rings)):
             return .polygon(try polygon(rings, in: file))
         case ("venue", .multiPolygon(let polygons)), ("level", .multiPolygon(let polygons)),
              ("footprint", .multiPolygon(let polygons)), ("unit", .multiPolygon(let polygons)),
-             ("fixture", .multiPolygon(let polygons)):
+             ("section", .multiPolygon(let polygons)), ("fixture", .multiPolygon(let polygons)):
             guard !polygons.isEmpty else { throw invalid(file, "MultiPolygon이 비어 있습니다.") }
             return .multiPolygon(try polygons.map { try polygon($0, in: file) })
         default:

@@ -18,7 +18,7 @@ nonisolated struct IndoorMapFloor: Identifiable, Equatable, Sendable {
 
 nonisolated struct IndoorMapElement: Identifiable, Equatable, Sendable {
     enum Kind: String, Hashable, Sendable {
-        case venue, footprint, unit, fixture, opening, amenity
+        case venue, footprint, unit, section, fixture, opening, amenity
     }
 
     struct ID: Hashable, Sendable {

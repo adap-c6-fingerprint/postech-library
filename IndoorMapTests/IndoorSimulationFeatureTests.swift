@@ -53,7 +53,7 @@ extension IndoorMapSerialTests {
             let store = TestStore(initialState: initial) { IndoorMapFeature() } withDependencies: {
                 $0.date.now = IndoorMapTestData.now
             }
-            let mismatch = "시뮬레이터에서 앱과 같은 C5 도면과 층을 선택해주세요."
+            let mismatch = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
             let olderMismatch = IndoorPosition(coordinate: .init(latitude: 37, longitude: 129),
                 floorOrdinal: 99, horizontalAccuracy: 0,
                 timestamp: IndoorMapTestData.now.addingTimeInterval(-1), source: .simulation)

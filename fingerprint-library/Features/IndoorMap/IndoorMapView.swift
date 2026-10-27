@@ -17,7 +17,7 @@ struct IndoorMapView: View {
                 ContentUnavailableView {
                     Label("지도를 불러오지 못했어요", systemImage: "map")
                 } description: {
-                    Text("C5 테스트 도면을 준비한 뒤 다시 시도해주세요.")
+                    Text(store.loadError ?? "도서관 지도를 불러올 수 없어요. 다시 시도해주세요.")
                 } actions: {
                     Button("다시 시도") { store.send(.retryTapped) }
                         .buttonStyle(.borderedProminent)

@@ -5,6 +5,19 @@ nonisolated struct BundledIndoorNavigationLoader {
     static let mapFiles = ["manifest.json", "venue.geojson", "level.geojson", "footprint.geojson",
                            "unit.geojson", "fixture.geojson", "opening.geojson", "amenity.geojson"]
 
+    @concurrent
+    func loadLibrary(on map: IndoorMap, in bundle: Bundle = .main) async throws -> IndoorNavigationData {
+        try Task.checkCancellation()
+        guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
+            throw IndoorMapLoadError.missingResource("IndoorMaps/POSTECHLibrary")
+        }
+        let directory = root.appendingPathComponent("POSTECHLibrary", isDirectory: true)
+        guard FileManager.default.fileExists(atPath: directory.appendingPathComponent("dataset.json").path) else {
+            throw IndoorNavigationLoadError.notPrepared
+        }
+        return try await load(directory: directory, on: map)
+    }
+
     func loadC5(on map: IndoorMap, in bundle: Bundle = .main) async throws -> IndoorNavigationData {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
             throw IndoorMapLoadError.missingResource("IndoorMaps/C5/dataset.json")

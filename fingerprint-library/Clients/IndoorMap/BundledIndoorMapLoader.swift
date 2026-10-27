@@ -1,6 +1,15 @@
 import Foundation
 
 nonisolated struct BundledIndoorMapLoader {
+    func loadLibrary(in bundle: Bundle = .main) async throws -> IndoorMap {
+        guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
+            throw IndoorMapLoadError.missingResource("IndoorMaps/POSTECHLibrary/IMDFData")
+        }
+        return try await load(
+            directory: root.appending(path: "POSTECHLibrary/IMDFData", directoryHint: .isDirectory)
+        )
+    }
+
     func loadC5(in bundle: Bundle = .main) async throws -> IndoorMap {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
             throw IndoorMapLoadError.missingResource("IndoorMaps/C5/IMDFData")
@@ -22,9 +31,16 @@ nonisolated struct BundledIndoorMapLoader {
             )
         }
         var collections: [String: IMDFFeatureCollectionDTO] = [:]
-        for file in ["venue", "level", "footprint", "unit", "fixture", "opening", "amenity"] {
+        for file in ["venue", "level", "footprint", "unit", "fixture", "opening"] {
             try Task.checkCancellation()
             collections[file] = try decode("\(file).geojson", in: directory)
+        }
+        for file in ["amenity", "section"] {
+            try Task.checkCancellation()
+            let url = directory.appendingPathComponent("\(file).geojson")
+            if FileManager.default.fileExists(atPath: url.path) {
+                collections[file] = try decode("\(file).geojson", in: directory)
+            }
         }
         return try IMDFMapper().map(version: manifest.version, collections: collections, policy: policy)
     }

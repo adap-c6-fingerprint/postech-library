@@ -5,7 +5,7 @@ nonisolated struct IndoorMapClient: Sendable {
 }
 
 extension IndoorMapClient: DependencyKey {
-    static let liveValue = Self(load: { try await BundledIndoorMapLoader().loadC5() })
+    static let liveValue = Self(load: { try await BundledIndoorMapLoader().loadLibrary() })
     static let testValue = Self(load: { throw IndoorMapLoadError.missingResource("test map") })
 }
 

@@ -42,6 +42,41 @@ struct IndoorMapInitialLayoutTests {
         return window
     }
 
+    @Test("실제 도서관은 최초 표시와 1~5층 전환 때 각 층의 도형·카메라가 반영된다")
+    func rendersLibraryFloors() async throws {
+        let map = try await BundledIndoorMapLoader().loadLibrary()
+        let first = try #require(map.floors.first)
+        var parent = IndoorMapKitView(
+            map: map, floor: first, selectedFeatureID: nil, position: nil,
+            showsUserLocation: false, isPlacingOrigin: false,
+            cameraRequest: .init(id: 1, target: .floor(first.id)),
+            onSelect: { _ in }, onPlaceOrigin: { _ in }
+        )
+        let coordinator = IndoorMapKitView.Coordinator(parent: parent)
+        let view = coordinator.makeMapView()
+        coordinator.update(parent: parent, in: view)
+        let window = try host(view, size: size)
+        defer { window.isHidden = true }
+        for (index, floor) in map.floors.enumerated() {
+            parent = IndoorMapKitView(
+                map: map, floor: floor, selectedFeatureID: nil, position: nil,
+                showsUserLocation: false, isPlacingOrigin: false,
+                cameraRequest: .init(id: index + 2, target: .floor(floor.id)),
+                onSelect: { _ in }, onPlaceOrigin: { _ in }
+            )
+            coordinator.update(parent: parent, in: view)
+            view.layoutIfNeeded()
+            #expect(coordinator.renderedFloorID == floor.id)
+            #expect(coordinator.lastCameraRequest == parent.cameraRequest)
+            #expect(view.camera.pitch == 0)
+            for point in floor.geometry.coordinates {
+                #expect(view.visibleMapRect.contains(MKMapPoint(point.clCoordinate)))
+            }
+            // 서가·시설이 많은 상층에서도 도면의 실제 도형들이 overlay로 전달돼야 한다.
+            if floor.ordinal >= 2 { #expect(view.overlays.count > 400) }
+        }
+    }
+
     @Test("처음 받은 층 카메라는 화면 부착·배치 뒤 층 선택 없이 적용된다")
     func initialCameraWaitsForLayout() throws {
         let parent = parent()
