@@ -26,8 +26,8 @@ def map_hashes(directory):
 
 def build_manifest(directory):
     """schema 1 자료의 식별자를 확인하고 지도·경로·서가·선택적 층간 거리 해시를 묶는다."""
-    graph = json.loads((directory / "routing-graph.geojson").read_text())
-    shelves = json.loads((directory / "shelves.json").read_text())
+    graph = json.loads((directory / "routing-graph.geojson").read_text(encoding="utf-8"))
+    shelves = json.loads((directory / "shelves.json").read_text(encoding="utf-8"))
     layout = graph.get("layout_version")
     dataset = shelves.get("dataset_id")
     if (graph.get("schema_version") != 1 or shelves.get("schema_version") != 1
@@ -43,7 +43,7 @@ def build_manifest(directory):
     }
     distances = directory / "cross-floor-distances.json"
     if distances.exists():
-        metadata = json.loads(distances.read_text())
+        metadata = json.loads(distances.read_text(encoding="utf-8"))
         if (metadata.get("schema_version") != 1 or metadata.get("dataset_id") != dataset
                 or metadata.get("layout_version") != layout):
             raise ValueError("층간 거리 자료의 schema·데이터셋·개정이 일치하지 않습니다.")
@@ -61,7 +61,7 @@ def main():
     try:
         manifest = build_manifest(directory)
         if output.exists():
-            previous = json.loads(output.read_text())
+            previous = json.loads(output.read_text(encoding="utf-8"))
             # 갱신 대상이 아닌 출처 등 추가 메타데이터는 보존한다.
             generated_keys = set(manifest) | {"cross_floor_distances_sha256"}
             manifest.update({key: value for key, value in previous.items() if key not in generated_keys})
@@ -70,7 +70,7 @@ def main():
                 return
             if not args.replace:
                 parser.error("기존 데이터셋과 자료가 다릅니다. 묶음을 검토한 뒤 --replace로 다시 생성하세요.")
-        output.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+        output.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     except (OSError, ValueError) as error:
         parser.error(str(error))
     print(f"지도 {len(manifest['map_files_sha256'])}개 파일과 길찾기 자료의 해시를 기록했습니다: {output}")

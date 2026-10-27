@@ -3,6 +3,7 @@
 from contextlib import contextmanager
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -112,6 +113,36 @@ class NavigationDatasetTests(unittest.TestCase):
             file.unlink()
             self.assertEqual(self.run_cli(root, "--replace").returncode, 0)
             self.assertNotIn("cross_floor_distances_sha256", json.loads((root / "dataset.json").read_text()))
+
+    def test_utf8_json_round_trips_under_ascii_locale(self):
+        with self.fixture(False, True) as root:
+            for name, value in {
+                "routing-graph.geojson": {"schema_version": 1, "layout_version": "도서관-개정"},
+                "shelves.json": {"schema_version": 1, "dataset_id": "도서관", "layout_version": "도서관-개정"},
+                "cross-floor-distances.json": {"schema_version": 1, "dataset_id": "도서관", "layout_version": "도서관-개정"},
+                "dataset.json": {"source_name": "한글 출처"},
+            }.items():
+                (root / name).write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
+            env = {**os.environ, "LC_ALL": "C", "PYTHONUTF8": "0", "PYTHONCOERCECLOCALE": "0"}
+            # 터미널 출력 인코딩은 제외하고 JSON 읽기 4곳과 쓰기를 실제 ASCII 로캘에서 검증한다.
+            code = """
+import io, locale, runpy, sys
+assert locale.getpreferredencoding(False).lower() in ('ascii', 'us-ascii', 'ansi_x3.4-1968')
+script, directory = sys.argv[1:]
+module = runpy.run_path(script)
+sys.stdout = io.StringIO()
+sys.argv = [script, '--directory', directory, '--replace']
+module['main']()
+"""
+            result = subprocess.run([sys.executable, "-c", code, str(SCRIPT), str(root)],
+                                    env=env, capture_output=True, encoding="utf-8", timeout=15)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            text = (root / "dataset.json").read_bytes().decode("utf-8")
+            manifest = json.loads(text)
+            self.assertEqual(manifest["dataset_id"], "도서관")
+            self.assertEqual(manifest["source_name"], "한글 출처")
+            self.assertIn("한글 출처", text)
+            self.assertIn("cross_floor_distances_sha256", manifest)
 
 
 if __name__ == "__main__":
