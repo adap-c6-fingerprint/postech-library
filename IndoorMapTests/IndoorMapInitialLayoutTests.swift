@@ -77,7 +77,7 @@ struct IndoorMapInitialLayoutTests {
         }
     }
 
-    @Test("최초 도면은 전체 맞춤보다 25% 크게 표시한다")
+    @Test("최초 도면은 전체 맞춤보다 3배 크게 표시한다")
     func enlargesInitialMap() throws {
         let parent = parent()
         let coordinator = IndoorMapKitView.Coordinator(parent: parent)
@@ -88,7 +88,7 @@ struct IndoorMapInitialLayoutTests {
         let fittedWidth = view.visibleMapRect.width
         #expect(coordinator.moveCamera(.init(id: 2, target: .initialFloor(parent.floor.id)),
                                        in: view, animated: false))
-        #expect(abs(fittedWidth / view.visibleMapRect.width - 1.25) < 0.02)
+        #expect(abs(fittedWidth / view.visibleMapRect.width - 3.0) < 0.02)
         #expect(view.camera.pitch == 0)
     }
 

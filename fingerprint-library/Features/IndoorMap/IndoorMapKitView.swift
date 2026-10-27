@@ -5,9 +5,9 @@ import SwiftUI
 ///
 /// 선택과 카메라 이동 의도는 값·콜백으로 주고받고, MKMapView와 overlay의 수명은 Coordinator가 관리한다.
 struct IndoorMapKitView: UIViewRepresentable {
-    /// 최초 도면의 확대 배율. 1은 층 전체 맞춤이며, 1.25는 그보다 25% 크게 표시한다.
+    /// 최초 도면의 확대 배율. 1은 층 전체 맞춤이며, 3은 그보다 3배 크게 표시한다.
     /// 층 전환·현재 위치 포커스에는 다시 적용하지 않는다.
-    static let initialZoomScale = 1.25
+    static let initialZoomScale = 3.0
 
     let map: IndoorMap
     let floor: IndoorMapFloor
