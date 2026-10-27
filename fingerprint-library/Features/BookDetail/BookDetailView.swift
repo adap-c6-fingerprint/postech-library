@@ -8,15 +8,7 @@ struct BookDetailView: View {
         List {
             Section {
                 HStack(alignment: .top, spacing: 16) {
-                    AsyncImage(url: store.book.imageURL) { phase in
-                        if let image = phase.image {
-                            image.resizable().scaledToFit()
-                        } else {
-                            Image(systemName: "book.closed")
-                                .font(.largeTitle)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
+                    BookCoverView(url: store.book.imageURL)
                     .frame(width: 80, height: 116)
                     .background(Color.gray.opacity(0.08))
                     .clipShape(RoundedRectangle(cornerRadius: 6))

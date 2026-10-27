@@ -33,6 +33,7 @@ struct HomeFeature {
     enum Action {
         case task
         case recommendationSessionStarted
+        case retryRecommendationsButtonTapped
         case recommendationsRestored(UUID, CachedRecommendations?)
         case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
@@ -93,7 +94,13 @@ struct HomeFeature {
                 state.isPreparingRecommendations = true
                 state.nextRecommendationsSavedAt = nil
                 state.recommendationErrorMessage = nil
-                return loadRecommendations(sessionID: sessionID)
+                let displayedCovers = state.recommendedBooks.compactMap(\.imageURL)
+                    + [state.detail?.book.imageURL].compactMap { $0 }
+                return loadRecommendations(sessionID: sessionID, retaining: displayedCovers)
+
+            case .retryRecommendationsButtonTapped:
+                guard !state.isPreparingRecommendations else { return .none }
+                return .send(.recommendationSessionStarted)
 
             case let .recommendationsRestored(sessionID, cached):
                 guard state.recommendationSessionID == sessionID else { return .none }
@@ -163,15 +170,20 @@ struct HomeFeature {
         }
     }
 
-    private func loadRecommendations(sessionID: UUID) -> Effect<Action> {
+    private func loadRecommendations(sessionID: UUID, retaining covers: [URL]) -> Effect<Action> {
         .run { [bookRecommendationClient, recommendationCacheClient] send in
             do {
+                await recommendationCacheClient.retainDisplayedCovers(covers)
                 // 저장본이 손상되어도 캐시가 없는 경우와 같은 최초 조회 경로로 복구한다.
                 let cached = try? await recommendationCacheClient.restore()
                 try Task.checkCancellation()
                 await send(.recommendationsRestored(sessionID, cached))
                 let books = try await bookRecommendationClient.fetch(6)
                 try Task.checkCancellation()
+                guard !books.isEmpty else {
+                    await send(.recommendationsFailed(sessionID, "추천 도서를 찾지 못했어요. 다시 시도해 주세요."))
+                    return
+                }
                 let prepared = try await recommendationCacheClient.prepare(books)
                 try Task.checkCancellation()
                 await send(.recommendationsLoaded(sessionID, prepared))

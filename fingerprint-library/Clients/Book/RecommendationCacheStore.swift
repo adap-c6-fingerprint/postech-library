@@ -30,6 +30,7 @@ actor RecommendationCacheStore {
 
     private let directory: URL
     private var displayedFiles: Set<String> = []
+    private var retainedDisplayFiles: Set<String> = []
     private var preparationID: UUID?
     private var manifestURL: URL { directory.appendingPathComponent("recommendations.json") }
     private var imagesDirectory: URL { directory.appendingPathComponent("covers", isDirectory: true) }
@@ -42,6 +43,13 @@ actor RecommendationCacheStore {
         let id = UUID()
         preparationID = id
         return id
+    }
+
+    /// 접속이 바뀌어도 열린 상세 화면이 참조하는 로컬 표지는 정리하지 않는다.
+    func retainDisplayedCovers(_ files: [URL]) {
+        retainedDisplayFiles = Set(files.filter {
+            $0.isFileURL && $0.deletingLastPathComponent().standardizedFileURL == imagesDirectory.standardizedFileURL
+        }.map(\.lastPathComponent))
     }
 
     /// 전체 묶음을 확인한 뒤 반환한다. 중간에 유실된 표지가 있으면 정상 저장본으로 취급하지 않는다.
@@ -65,7 +73,7 @@ actor RecommendationCacheStore {
             try Self.validateImage(Data(contentsOf: file))
             files[remoteURL] = file
         }
-        displayedFiles = Set(files.values.map(\.lastPathComponent))
+        displayedFiles = Set(files.values.map(\.lastPathComponent)).union(retainedDisplayFiles)
         return CachedRecommendations(
             books: manifest.books.map(\.book), savedAt: manifest.savedAt, coverFiles: files
         )
@@ -121,7 +129,7 @@ actor RecommendationCacheStore {
         try data.write(to: manifestURL, options: .atomic)
 
         // 지금 표시 중인 A와 다음 접속용 B가 참조하는 표지는 모두 보존한다.
-        let retained = displayedFiles.union(files.values.map(\.lastPathComponent))
+        let retained = displayedFiles.union(retainedDisplayFiles).union(files.values.map(\.lastPathComponent))
         if let contents = try? FileManager.default.contentsOfDirectory(
             at: imagesDirectory, includingPropertiesForKeys: nil
         ) {

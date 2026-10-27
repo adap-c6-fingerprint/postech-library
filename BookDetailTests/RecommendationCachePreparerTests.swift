@@ -73,6 +73,31 @@ struct RecommendationCachePreparerTests {
         #expect(await transport.calls == 6)
         #expect(await transport.maximum == 2)
     }
+
+    @Test("갱신 작업을 취소하면 이전 정상 저장본은 남는다")
+    func cancelledPreparationPreservesSnapshot() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let a = RecommendationCacheFixture.book("a"), b = RecommendationCacheFixture.book("b")
+        let store = RecommendationCacheStore(directory: directory)
+        _ = try await store.save(books: [a], covers: [a.imageURL!: RecommendationCacheFixture.image], savedAt: .now)
+        let started = AsyncStream<Void>.makeStream()
+        let pending = AsyncStream<Data>.makeStream()
+        let preparer = RecommendationCachePreparer(store: store, loadCover: { _ in
+            started.continuation.yield()
+            for await data in pending.stream { return data }
+            throw CancellationError()
+        })
+        let task = Task { try await preparer.prepare([b]) }
+        for await _ in started.stream { break }
+        task.cancel()
+        switch await task.result {
+        case .success: Issue.record("취소한 작업이 성공으로 처리됨")
+        case let .failure(error): #expect(error is CancellationError)
+        }
+        pending.continuation.finish()
+        #expect(try await store.restore()?.books == [a])
+    }
 }
 
 private actor CoverCalls {

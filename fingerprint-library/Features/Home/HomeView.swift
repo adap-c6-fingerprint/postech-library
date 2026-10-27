@@ -62,7 +62,39 @@ struct HomeView: View {
             }
             .padding(.horizontal, 16)
             
-            ZStack(alignment: .bottom) {
+            if store.recommendedBooks.isEmpty {
+                if store.isLoadingRecommendations || store.recommendationSessionID == nil {
+                    VStack(spacing: 8) {
+                        ProgressView("추천 도서를 준비하고 있어요")
+                        Text("처음에는 잠시 걸릴 수 있어요.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 206)
+                }
+            } else {
+                recommendationCarousel
+            }
+
+            if let message = store.recommendationErrorMessage {
+                VStack(alignment: .leading, spacing: 10) {
+                    Label(message, systemImage: "exclamationmark.circle")
+                    if !store.recommendedBooks.isEmpty {
+                        Text("이전 추천은 계속 볼 수 있어요.")
+                            .font(.footnote)
+                    }
+                    Button("다시 시도") { store.send(.retryRecommendationsButtonTapped) }
+                        .buttonStyle(.bordered)
+                        .disabled(store.isPreparingRecommendations)
+                }
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+
+    private var recommendationCarousel: some View {
+        ZStack(alignment: .bottom) {
                 ScrollView(.horizontal) {
                     LazyHStack(alignment: .bottom, spacing: 12) {
                         ForEach(0..<store.recommendationCount, id: \.self) { index in
@@ -92,7 +124,6 @@ struct HomeView: View {
             .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
                 recommendationPosition = 0
             }
-        }
     }
     
     private var popularBooksSection: some View {

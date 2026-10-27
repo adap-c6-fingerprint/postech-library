@@ -78,6 +78,34 @@ struct RecommendationCacheStoreTests {
         _ = try await store.save(books: [c], covers: [c.imageURL!: RecommendationCacheFixture.image], savedAt: .now)
         #expect(!FileManager.default.fileExists(atPath: first.coverFiles[a.imageURL!]!.path))
     }
+
+    @Test("다음 접속으로 넘어가도 열린 상세 화면의 표지 파일을 보존한다")
+    func retainsOpenDetailCover() async throws {
+        let directory = directory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = RecommendationCacheStore(directory: directory)
+        let a = RecommendationCacheFixture.book("a"), b = RecommendationCacheFixture.book("b"), c = RecommendationCacheFixture.book("c")
+        let first = try await store.save(books: [a], covers: [a.imageURL!: RecommendationCacheFixture.image], savedAt: .now)
+        let detailCover = first.coverFiles[a.imageURL!]!
+        _ = try await store.restore()
+        _ = try await store.save(books: [b], covers: [b.imageURL!: RecommendationCacheFixture.image], savedAt: .now)
+        await store.retainDisplayedCovers([detailCover])
+        _ = try await store.restore()
+        _ = try await store.save(books: [c], covers: [c.imageURL!: RecommendationCacheFixture.image], savedAt: .now)
+        #expect(FileManager.default.fileExists(atPath: detailCover.path))
+    }
+
+    @Test("빈 목록과 중복 도서 결과는 정상 저장본을 교체하지 않는다")
+    func rejectsEmptyAndDuplicateResults() async throws {
+        let directory = directory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let store = RecommendationCacheStore(directory: directory)
+        let a = RecommendationCacheFixture.book("a")
+        _ = try await store.save(books: [a], covers: [a.imageURL!: RecommendationCacheFixture.image], savedAt: .now)
+        await #expect(throws: (any Error).self) { try await store.save(books: [], covers: [:], savedAt: .now) }
+        await #expect(throws: (any Error).self) { try await store.save(books: [a, a], covers: [a.imageURL!: RecommendationCacheFixture.image], savedAt: .now) }
+        #expect(try await store.restore()?.books == [a])
+    }
 }
 
 @MainActor

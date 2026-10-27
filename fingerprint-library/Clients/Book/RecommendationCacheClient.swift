@@ -5,12 +5,14 @@ import UIKit
 nonisolated struct RecommendationCacheClient: Sendable {
     var restore: @Sendable () async throws -> CachedRecommendations?
     var prepare: @Sendable ([Book]) async throws -> CachedRecommendations
+    var retainDisplayedCovers: @Sendable ([URL]) async -> Void = { _ in }
 }
 
 extension RecommendationCacheClient: DependencyKey {
     static let liveValue = Self(
         restore: { try await store.restore() },
-        prepare: { try await preparer.prepare($0) }
+        prepare: { try await preparer.prepare($0) },
+        retainDisplayedCovers: { await store.retainDisplayedCovers($0) }
     )
     static let testValue = Self(
         restore: { nil },
