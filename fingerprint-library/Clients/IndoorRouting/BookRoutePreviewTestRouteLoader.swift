@@ -7,10 +7,42 @@ nonisolated struct BookRoutePreviewTestRoute: Equatable, Sendable {
     let start: IndoorPosition
     let route: IndoorRoute
     let guidance: RoutePreviewGuidance
+    let graph: RoutingGraph
 }
 
-/// navigation-only 묶음을 테스트 화면에만 연결한다. 원본 파일·기존 데이터셋 로더는 바꾸지 않는다.
+/// 311-B 고정 출발을 미리보기에서 공유한다. 원본 파일·기존 데이터셋 로더는 바꾸지 않는다.
 nonisolated struct BookRoutePreviewTestRouteLoader {
+    func load(on map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookNavigationStop],
+              in bundle: Bundle = .main) async throws -> BookNavigationSession {
+        guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
+            throw IndoorMapLoadError.missingResource("IndoorMaps/POSTECHLibrary")
+        }
+        return try await load(directory: root.appendingPathComponent("POSTECHLibrary"),
+                              on: map, labels: labels, stops: stops)
+    }
+
+    @concurrent
+    func load(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
+              stops: [BookNavigationStop]) async throws -> BookNavigationSession {
+        guard BookRouteSelection.allows(bookCount: stops.count),
+              Set(stops.map { $0.book.id }).count == stops.count else { throw IndoorRoutingError.invalidDestination }
+        let pinned = try await BundledIndoorMapLoader().load(directory: directory.appendingPathComponent("IMDFData"))
+        guard pinned == map else { throw invalid("navigation.json", "현재 지도와 번들 도면이 다릅니다.") }
+        let metadata = try read("navigation.json", at: directory)
+        let graphData = try read("routing-graph.geojson", at: directory)
+        let links = try read("navigation-feature-links.json", at: directory)
+        var results: [BookRoutePreviewTestRoute] = []
+        for stop in stops {
+            try Task.checkCancellation()
+            let result = try build(on: map, labels: labels, destination: stop.shelf,
+                metadata: metadata, graph: graphData, links: links, origin: results.last?.destination)
+            results.append(result)
+        }
+        guard let first = results.first else { throw IndoorRoutingError.invalidDestination }
+        return try await .init(map: map, shelfLabels: labels, stops: stops, legs: results.map(\.route),
+                         graph: first.graph, origin: first.origin, start: first.start)
+    }
+
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,
               in bundle: Bundle = .main) async throws -> BookRoutePreviewTestRoute {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
@@ -32,7 +64,8 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
     }
 
     func build(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,
-               metadata: Data, graph graphData: Data, links linkData: Data) throws -> BookRoutePreviewTestRoute {
+               metadata: Data, graph graphData: Data, links linkData: Data,
+               origin previousShelf: IndoorShelfLabel? = nil) throws -> BookRoutePreviewTestRoute {
         try Task.checkCancellation()
         let descriptor: Descriptor = try decode(metadata, file: "navigation.json")
         guard descriptor.schemaVersion == 1, descriptor.kind == "navigation-only",
@@ -46,11 +79,12 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         let (graph, diagnostics) = try RoutingGraphMapper().map(normalized, on: map, layoutVersion: descriptor.layoutVersion)
         let links: FeatureLinks = try decode(linkData, file: "navigation-feature-links.json")
         let mapping = try featureNodes(links, graph: graph, map: map)
-        let origins = labels.filter {
-            $0.realNumber == "311" && $0.side == .b && $0.floorID == destination.floorID
+        let origins = labels.filter { shelf in
+            shelf.realNumber == "311" && shelf.side == .b
+                && map.floors.first(where: { $0.id == shelf.floorID })?.ordinal == 2
         }
-        guard origins.count == 1, let origin = origins.first,
-              labels.contains(destination), map.floors.first(where: { $0.id == origin.floorID })?.ordinal == 2,
+        guard origins.count == 1, let origin = previousShelf ?? origins.first,
+              labels.contains(origin), labels.contains(destination),
               let startNode = mapping[origin.mapElementID], let endNode = mapping[destination.mapElementID] else {
             throw invalid("navigation-feature-links.json", "3층 311-B와 목적지의 명시적 노드 연결이 필요합니다.")
         }
@@ -72,7 +106,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         ))
         guard case .route(let route) = outcome else { throw IndoorRoutingError.noRoute }
         return .init(origin: origin, destination: destination, start: start, route: route,
-                     guidance: try RoutePreviewGuidance(route: route, graph: graph))
+                     guidance: try RoutePreviewGuidance(route: route, graph: graph), graph: graph)
     }
 
     /// 이 묶음의 ordinal은 실제 층 번호다. UUID·descriptor와 대조한 노드만 현재 IMDF ordinal로 변환한다.
