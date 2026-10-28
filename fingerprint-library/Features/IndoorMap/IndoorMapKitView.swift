@@ -60,6 +60,11 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var isApplyingCamera = false
         /// MapKit overlay 객체와 원본 요소를 연결해 색상·선택 스타일을 결정한다.
         private var overlayFeatures: [ObjectIdentifier: IndoorMapElement] = [:]
+        /// 도형마다 첫 renderer 활성화 후 한 번만 다시 그린다. 카메라 이동으로 복구하지 않는다.
+        private var pendingOverlayRedrawIDs = Set<ObjectIdentifier>()
+        private var readyOverlayRenderers: [ObjectIdentifier: MKOverlayRenderer] = [:]
+        private var overlayRedrawTask: Task<Void, Never>?
+        private var overlayGeneration = 0
         private var positionAnnotation: PositionAnnotation?
         private var renderedPosition: IndoorPosition?
         private var renderedShelves: [ShelfDestination] = []
@@ -105,6 +110,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.onLayout = { [weak self] view in
                 self?.applyPendingCamera(in: view)
                 self?.layoutShelfLabels(in: view)
+                self?.scheduleOverlayRedraw(in: view)
             }
             mapView = view
             return view
@@ -237,6 +243,38 @@ struct IndoorMapKitView: UIViewRepresentable {
             layoutShelfLabels(in: mapView)
         }
 
+        /// 등록 직후의 rendererFor보다 늦은 시점이다. 이 콜백에서는 renderer가 지도에 부착돼 있다.
+        func mapView(_ mapView: MKMapView, didAdd renderers: [MKOverlayRenderer]) {
+            guard mapView === self.mapView else { return }
+            for renderer in renderers {
+                let id = ObjectIdentifier(renderer.overlay)
+                if pendingOverlayRedrawIDs.contains(id) { readyOverlayRenderers[id] = renderer }
+            }
+            scheduleOverlayRedraw(in: mapView)
+        }
+
+        /// 초기 배치 중 들어온 활성화 콜백을 모아 다음 main actor 작업에서 한 번 갱신한다.
+        /// 지도 타일 다운로드 완료를 기다리지 않으므로 번들 도면은 오프라인에서도 표시할 수 있다.
+        private func scheduleOverlayRedraw(in view: MKMapView) {
+            guard overlayRedrawTask == nil, !readyOverlayRenderers.isEmpty,
+                  view.window != nil, view.bounds.width > 0, view.bounds.height > 0,
+                  pendingCameraRequest == nil, !isApplyingCamera else { return }
+            let generation = overlayGeneration
+            overlayRedrawTask = Task { @MainActor [weak self, weak view] in
+                await Task.yield()
+                guard let self, !Task.isCancelled, generation == self.overlayGeneration else { return }
+                self.overlayRedrawTask = nil
+                guard let view, view === self.mapView, view.window != nil,
+                      view.bounds.width > 0, view.bounds.height > 0,
+                      self.pendingCameraRequest == nil, !self.isApplyingCamera else { return }
+                let renderers = self.readyOverlayRenderers
+                self.readyOverlayRenderers.removeAll()
+                for (id, renderer) in renderers where self.pendingOverlayRedrawIDs.remove(id) != nil {
+                    renderer.setNeedsDisplay()
+                }
+            }
+        }
+
         /// 화면에 붙고 유효한 크기를 가진 뒤 최신 보류 요청을 한 번 적용한다.
         /// 적용할 수 없으면 요청을 소비하지 않아 다음 layout에서 다시 처리할 수 있다.
         private func applyPendingCamera(in view: MKMapView) {
@@ -251,13 +289,23 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         /// View 제거 시 참조와 보류 요청을 해제해 종료된 화면에 카메라 작업이 남지 않게 한다.
         func detachMapView() {
+            cancelOverlayRedraw()
             mapView = nil
             pendingCameraRequest = nil
+        }
+
+        private func cancelOverlayRedraw() {
+            overlayGeneration += 1
+            overlayRedrawTask?.cancel()
+            overlayRedrawTask = nil
+            pendingOverlayRedrawIDs.removeAll()
+            readyOverlayRenderers.removeAll()
         }
 
         /// 조회 층이 바뀌면 층 외곽·unit·section·fixture·opening과 시설 핀을 다시 구성한다.
         /// 서가·현재 위치·경로 표시는 별도의 갱신 메서드에서 이어서 반영한다.
         func render(in view: MKMapView) {
+            cancelOverlayRedraw()
             view.removeOverlays(view.overlays)
             view.removeAnnotations(routeTransitionAnnotations)
             routeTransitionAnnotations.removeAll()
@@ -269,19 +317,20 @@ struct IndoorMapKitView: UIViewRepresentable {
             renderedMap = parent.map
             renderedFloorID = parent.floor.id
             selectedID = parent.selectedFeatureID
-            for overlay in MapKitGeometry.overlays(for: parent.floor.geometry) {
-                view.addOverlay(overlay, level: .aboveRoads)
-            }
+            var overlays = MapKitGeometry.overlays(for: parent.floor.geometry)
             let features = parent.map.features.filter { $0.floorID == parent.floor.id }
             // unit과 section을 먼저 그리고 그 위에 fixture와 opening을 올린다.
             for kind in [IndoorMapElement.Kind.unit, .section, .fixture, .opening] {
                 for feature in features where feature.kind == kind {
                     for overlay in MapKitGeometry.overlays(for: feature.geometry) {
                         overlayFeatures[ObjectIdentifier(overlay)] = feature
-                        view.addOverlay(overlay, level: .aboveRoads)
+                        overlays.append(overlay)
                     }
                 }
             }
+            // 모든 스타일 참조를 준비하고 한 번에 등록해 중간 도면 상태의 갱신을 줄인다.
+            pendingOverlayRedrawIDs = Set(overlays.map { ObjectIdentifier($0) })
+            view.addOverlays(overlays, level: .aboveRoads)
             view.addAnnotations(features.compactMap { feature in
                 guard feature.kind == .amenity, case .point(let coordinate) = feature.geometry else { return nil }
                 return FeatureAnnotation(feature: feature, coordinate: coordinate.clCoordinate)
