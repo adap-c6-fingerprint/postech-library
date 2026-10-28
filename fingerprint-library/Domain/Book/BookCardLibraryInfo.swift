@@ -17,7 +17,11 @@ nonisolated struct BookCardLibraryInfo: Equatable, Sendable {
 
     var location: String? {
         guard let holding = primaryHolding else { return nil }
-        let parts = [holding.locationName, holding.callNumber].compactMap { value -> String? in
+        let name = holding.locationName?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let displayName = name.map {
+            $0.hasPrefix("단행본") ? String($0.dropFirst("단행본".count)) : $0
+        }
+        let parts = [displayName, holding.callNumber].compactMap { value -> String? in
             guard let text = value?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty else { return nil }
             return text
         }

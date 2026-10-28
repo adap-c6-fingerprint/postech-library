@@ -6,8 +6,8 @@ struct BookCardLibraryInfoTests {
     @Test("위치와 이용 가능 상태를 같은 소장처에서 선택한다")
     func selectsAvailableHolding() {
         let info = BookCardLibraryInfo(holdings: [
-            holding("3층", call: "QA1", status: "unavailable"),
-            holding("4층", call: "QA2", status: "available")
+            holding("단행본3층", call: "QA1", status: "unavailable"),
+            holding("단행본4층", call: "QA2", status: "available")
         ])
         #expect(info.location == "4층 QA2")
         #expect(info.availability == .available)

@@ -12,7 +12,7 @@ struct VerifyPrimoHoldings {
         try check(holdings.first?.callNumber == "CB113.H4 .H3713 2015", "complete call number")
         try check(holdings.last?.availability == "unavailable", "unavailable copy retained")
         let card = BookCardLibraryInfo(holdings: holdings)
-        try check(card.location == "단행본3층 CB113.H4 .H3713 2015", "card location and call number")
+        try check(card.location == "3층 CB113.H4 .H3713 2015", "card location and call number")
         try check(card.availability == .available, "card availability matches the displayed holding")
         try check(card.additionalLocationCount == 2, "card retains additional locations")
         for suffix in ["1", "2", "3"] {
