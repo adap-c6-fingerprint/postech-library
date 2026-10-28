@@ -52,6 +52,14 @@ struct BookDetailFeature {
 
         // 장바구니
         case addToBasketButtonTapped
+
+        // 길안내
+        case startGuidanceButtonTapped
+        case delegate(Delegate)
+
+        enum Delegate: Equatable {
+            case startGuidance(Book)
+        }
     }
 
     @Dependency(\.bookDetailClient)
@@ -117,6 +125,13 @@ struct BookDetailFeature {
             case .addToBasketButtonTapped:
                 bookBasketClient.add(state.book, at: now)
 
+                return .none
+
+            case .startGuidanceButtonTapped:
+                // 장바구니를 거치지 않고 이 책 1권으로 길안내를 시작한다.
+                return .send(.delegate(.startGuidance(state.book)))
+
+            case .delegate:
                 return .none
             }
         }

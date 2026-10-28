@@ -36,6 +36,17 @@ struct BookDetailFeatureTests {
         await store.finish()
     }
 
+    @Test("바로 안내 시작은 이 책 1권을 길안내 위임 액션으로 전달한다")
+    func startGuidanceWithThisBook() async {
+        let selected = book()
+        let store = TestStore(initialState: BookDetailFeature.State(book: selected)) {
+            BookDetailFeature()
+        }
+
+        await store.send(.startGuidanceButtonTapped)
+        await store.receive(\.delegate.startGuidance, selected)
+    }
+
     @Test("소개 없음은 오류 없이 완료한다")
     func emptyDescription() async {
         let store = TestStore(initialState: BookDetailFeature.State(book: book())) {
