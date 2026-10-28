@@ -19,6 +19,10 @@ struct BookBasketView: View {
             selectedBookIDs.contains($0.id)
         }
     }
+
+    private var selectedBooks: [Book] {
+        books.filter { selectedBookIDs.contains($0.id) }
+    }
     
     var body: some View {
         List(books) { book in
@@ -71,6 +75,15 @@ struct BookBasketView: View {
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(spacing: 8) {
+                NavigationLink {
+                    BookRoutePreviewView(books: selectedBooks)
+                } label: {
+                    Text("선택한 \(selectedBooks.count)권 경로 미리보기")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.bordered)
+                .disabled(selectedBooks.isEmpty)
+                .accessibilityIdentifier("basket-route-preview")
                 Text("길안내는 한 번에 최대 \(BookRouteSelection.maximumBookCount)권까지 가능해요.")
                     .font(.caption)
                     .foregroundStyle(.secondary)

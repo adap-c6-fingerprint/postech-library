@@ -28,6 +28,12 @@ struct BookDetailView: View {
             }
 
             Section {
+                NavigationLink {
+                    BookRoutePreviewView(books: [store.book])
+                } label: {
+                    Label("길찾기 경로 미리보기", systemImage: "map")
+                }
+                .accessibilityIdentifier("detail-route-preview")
                 Button("길안내 받기", systemImage: "map") { store.send(.directionsButtonTapped) }
                     .accessibilityIdentifier("book-detail-directions")
             }
