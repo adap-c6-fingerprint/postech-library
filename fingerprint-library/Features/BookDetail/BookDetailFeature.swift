@@ -22,6 +22,7 @@ struct BookDetailFeature {
     @ObservableState
     struct State: Equatable {
         let book: Book
+        @Presents var shelfMap: BookShelfMapFeature.State?
 
         // 책 소개
         var description: BookDescription? = nil
@@ -38,6 +39,8 @@ struct BookDetailFeature {
     }
 
     enum Action {
+        case directionsButtonTapped
+        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         // 책 소개
         case loadDescription
         case retryButtonTapped
@@ -60,6 +63,13 @@ struct BookDetailFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .directionsButtonTapped:
+                state.shelfMap = .init(book: state.book)
+                return .none
+
+            case .shelfMap:
+                return .none
+
             case .loadDescription:
                 guard !state.hasLoaded else {
                     return .none
@@ -106,6 +116,7 @@ struct BookDetailFeature {
                 return .none
             }
         }
+        .ifLet(\.$shelfMap, action: \.shelfMap) { BookShelfMapFeature() }
     }
 
     private nonisolated enum CancelID: Hashable, Sendable {

@@ -17,6 +17,10 @@ enum AppConfiguration {
         value(for: "PRIMO_API_KEY")
     }
 
+    static var primoProxyURL: String? {
+        value(for: "PRIMO_PROXY_URL")
+    }
+
     private static func value(for key: String) -> String? {
         guard
             let value = Bundle.main.object(forInfoDictionaryKey: key) as? String,

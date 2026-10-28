@@ -6,7 +6,7 @@ import Testing
 extension IndoorMapSerialTests {
     @MainActor
     struct BookShelfMapFeatureTests {
-        @Test("1~3권을 책마다 서가 하나에 연결하고 각 책 또는 전체를 포커스한다", arguments: [1, 2, 3])
+        @Test("1~3권의 실제 청구기호를 서가에 연결하고 포커스한다", arguments: [1, 2, 3])
         func mapsOneShelfPerBook(count: Int) async throws {
             let map = try await BundledIndoorMapLoader().loadLibrary()
             let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
@@ -14,6 +14,11 @@ extension IndoorMapSerialTests {
             var initial = try #require(BookShelfMapFeature.State(books: books))
             initial.map.map = map
             initial.map.shelfLabels = labels
+            for (index, book) in books.enumerated() {
+                initial.holdings[book.id] = .loaded([BookHoldingTestData.holding(index)])
+                initial.resolutions[book.id] = BookHoldingShelfResolver().resolve(
+                    [BookHoldingTestData.holding(index)], on: map, labels: labels)
+            }
             let third = try #require(map.floors.first { $0.ordinal == 2 })
             let fourth = try #require(map.floors.first { $0.ordinal == 3 })
             let fixtures = Array(["S-3F-616-B", "S-3F-612-B", "S-3F-608-B"].prefix(count))
@@ -28,10 +33,13 @@ extension IndoorMapSerialTests {
             #expect(store.state.shelves.map(\.fixtureNumber) == fixtures)
             #expect(store.state.highlightedFeatureIDs.count == count)
             for (index, book) in books.enumerated() {
-                #expect(store.state.shelf(for: book.id)?.fixtureNumber == fixtures[index])
+                #expect(store.state.shelves(for: book.id).first?.fixtureNumber == fixtures[index])
                 var single = BookShelfMapFeature.State(book: book)
+                single.map.map = map
                 single.map.shelfLabels = labels
-                #expect(single.shelf(for: book.id) == store.state.shelf(for: book.id))
+                single.holdings[book.id] = initial.holdings[book.id]
+                single.resolutions[book.id] = initial.resolutions[book.id]
+                #expect(single.shelves(for: book.id) == store.state.shelves(for: book.id))
             }
             let lastBook = try #require(books.last)
             let lastShelf = try #require(shelves.last)
@@ -56,6 +64,7 @@ extension IndoorMapSerialTests {
             let shelf = try #require(labels.first { $0.fixtureNumber == "S-3F-616-B" })
             var initial = BookShelfMapFeature.State(book: book)
             initial.map.map = map
+            initial.holdings[book.id] = .loaded([BookHoldingTestData.holding()])
             initial.map.isLoadingShelfLabels = true
             initial.map.shelfLabelRequestID = 2
             let store = TestStore(initialState: initial) { BookShelfMapFeature() }
@@ -64,7 +73,9 @@ extension IndoorMapSerialTests {
                 $0.map.isLoadingShelfLabels = false
                 $0.map.shelfLabels = labels
             }
-            await store.receive(.focusShelfTapped) {
+            await store.receive(.resolveLocations) {
+                $0.resolutions[book.id] = BookHoldingShelfResolver().resolve(
+                    [BookHoldingTestData.holding()], on: map, labels: labels)
                 $0.map.selectedFloorID = shelf.floorID
                 $0.map.requestCamera(.features([shelf.mapElementID]))
             }
@@ -90,8 +101,8 @@ extension IndoorMapSerialTests {
             await store.finish()
         }
 
-        @Test("서가 자료 재시도 후 목업으로 연결한 서가 하나를 강조한다")
-        func retriesLabelsForSingleMockShelf() async throws {
+        @Test("서가 자료 재시도 후 소장 청구기호에 해당하는 서가를 강조한다")
+        func retriesLabelsForHolding() async throws {
             let map = try await BundledIndoorMapLoader().loadLibrary()
             let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
             let third = try #require(map.floors.first { $0.ordinal == 2 })
@@ -100,6 +111,7 @@ extension IndoorMapSerialTests {
             var initial = BookShelfMapFeature.State(book: book)
             initial.map.map = map
             initial.map.selectedFloorID = third.id
+            initial.holdings[book.id] = .loaded([BookHoldingTestData.holding()])
             let store = TestStore(initialState: initial) { BookShelfMapFeature() } withDependencies: {
                 $0.indoorShelfLabelClient = .init(
                     supports: { _ in true },
@@ -138,7 +150,9 @@ extension IndoorMapSerialTests {
                 $0.map.isLoadingShelfLabels = false
                 $0.map.shelfLabels = labels
             }
-            await store.receive(.focusShelfTapped) {
+            await store.receive(.resolveLocations) {
+                $0.resolutions[book.id] = BookHoldingShelfResolver().resolve(
+                    [BookHoldingTestData.holding()], on: map, labels: labels)
                 $0.map.selectedFloorID = third.id
                 $0.map.requestCamera(.features([shelf.mapElementID]))
             }
@@ -214,7 +228,9 @@ extension IndoorMapSerialTests {
                 }
             }
             await store.send(.directionsButtonTapped(book)) { $0.shelfMap = .init(book: book) }
-            await store.send(.shelfMap(.presented(.task)))
+            await store.send(.shelfMap(.presented(.task))) {
+                $0.shelfMap?.holdings[book.id] = .failed(BookHoldingsError.invalidRecordID.localizedDescription)
+            }
             await store.receive(\.shelfMap.presented.map.retryTapped) {
                 $0.shelfMap?.map.isLoading = true
             }
@@ -233,9 +249,7 @@ extension IndoorMapSerialTests {
         }
 
         private func makeBook(_ index: Int) -> Book {
-            .init(id: "route-book-\(index)", isbn: nil, controlNumber: "record-\(index)",
-                  title: "길안내 테스트 \(index + 1)", author: "테스트", publisher: nil,
-                  publicationYear: nil, description: nil, imageURL: nil)
+            BookHoldingTestData.book(index)
         }
     }
 }

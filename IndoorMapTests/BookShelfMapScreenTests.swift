@@ -9,18 +9,12 @@ extension IndoorMapSerialTests {
     @MainActor
     struct BookShelfMapScreenTests {
         @Test("단일 도서와 바구니 3권의 서가 강조·뒤로가기와 재진입을 확인한다")
-        func navigatesAndHighlightsMockShelf() async throws {
+        func navigatesAndHighlightsHoldingShelf() async throws {
             let map = try await BundledIndoorMapLoader().loadLibrary()
             let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
             let third = try #require(map.floors.first { $0.ordinal == 2 })
-            let book = Book(id: "route-book-0", isbn: nil, controlNumber: nil,
-                            title: "서가 위치 테스트 도서", author: "테스트", publisher: nil,
-                            publicationYear: nil, description: nil, imageURL: nil)
-            let basket = [book] + (2...3).map { index in
-                Book(id: "route-book-\(index - 1)", isbn: nil, controlNumber: "record-\(index)",
-                     title: "서가 위치 테스트 도서 \(index)", author: "테스트", publisher: nil,
-                     publicationYear: nil, description: nil, imageURL: nil)
-            }
+            let book = BookHoldingTestData.book()
+            let basket = (0..<3).map(BookHoldingTestData.book)
             var appInitial = AppFeature.State()
             appInitial.indoorMap.map = map
             appInitial.indoorMap.shelfLabels = labels
@@ -33,6 +27,9 @@ extension IndoorMapSerialTests {
             searchInitial.basketBooks = basket
             searchInitial.hasSearched = true
             let searchStore = Store(initialState: searchInitial) { BookSearchFeature() } withDependencies: {
+                $0.bookHoldingsClient.fetch = { recordID in
+                    [BookHoldingTestData.holding(Int(String(recordID.suffix(1))) ?? 0)]
+                }
                 $0.indoorMapClient.load = { map }
                 $0.indoorShelfLabelClient = .liveValue
                 $0.indoorNavigationClient.load = { _ in throw IndoorNavigationLoadError.notPrepared }
@@ -132,7 +129,7 @@ extension IndoorMapSerialTests {
             #expect(abs(frame.midY - point.y) < 1)
             #expect(map.bounds.contains(frame))
             let mapFrame = container.convert(map.bounds, from: map)
-            // 안내 카드에는 제목·목업 안내·서가 버튼이 있어 최소 100pt의 표시 공간이 필요하다.
+            // 안내 카드에는 제목·청구기호 기반 안내·서가 버튼이 있어 최소 100pt의 표시 공간이 필요하다.
             #expect(mapFrame.maxY <= container.bounds.maxY - 100,
                     "카메라를 맞추는 지도 영역이 하단 서가 안내 카드와 겹치지 않아야 합니다.")
         }
@@ -151,7 +148,7 @@ extension IndoorMapSerialTests {
                 if predicate() { return }
                 try await Task.sleep(for: .milliseconds(50))
             }
-            #expect(predicate(), "목업 서가 지도 표시 또는 화면 전환 시간이 초과됐습니다.")
+            #expect(predicate(), "청구기호 기반 서가 지도 표시 또는 화면 전환 시간이 초과됐습니다.")
         }
 
         private func saveSnapshot(_ window: UIWindow, name: String) {
@@ -160,7 +157,7 @@ extension IndoorMapSerialTests {
             }
             let path = FileManager.default.temporaryDirectory.appendingPathComponent("book-shelf-map-\(name).png")
             try? image.pngData()?.write(to: path)
-            print("목업 서가 지도 검증 이미지: \(path.path)")
+            print("청구기호 기반 서가 지도 검증 이미지: \(path.path)")
         }
     }
 }
