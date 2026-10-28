@@ -16,7 +16,6 @@ struct LibraryMapView: View {
     ) {
         BookSearchFeature()
     }
-    @State private var isBasketPresented = false
 
     private var mapStore: StoreOf<IndoorMapFeature> {
         store.scope(state: \.indoorMap, action: \.indoorMap)
@@ -32,13 +31,10 @@ struct LibraryMapView: View {
             .task {
                 searchStore.send(.task)
             }
-            .navigationDestination(isPresented: $isBasketPresented) {
-                BookBasketView(
-                    books: searchStore.basketBooks,
-                    onDeletedSelected: { bookIDs in
-                        searchStore.send(.removeFromBasket(bookIDs))
-                    }
-                )
+            .navigationDestination(
+                item: $searchStore.scope(state: \.basket, action: \.basket)
+            ) { basketStore in
+                BookBasketView(store: basketStore)
             }
             .navigationDestination(
                 item: $searchStore.scope(state: \.detail, action: \.detail)
@@ -65,7 +61,7 @@ struct LibraryMapView: View {
             Spacer()
 
             Button {
-                isBasketPresented = true
+                searchStore.send(.basketButtonTapped)
             } label: {
                 Image(systemName: "cart")
                     .font(.system(size: 22))

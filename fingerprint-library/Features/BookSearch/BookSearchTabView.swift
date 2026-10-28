@@ -14,7 +14,6 @@ struct BookSearchTabView: View {
     ) {
         BookSearchFeature()
     }
-    @State private var isBasketPresented = false
     @Environment(\.isSearching) private var isSearching
 
     var body: some View {
@@ -27,17 +26,14 @@ struct BookSearchTabView: View {
                     submitSearch()
                 },
                 onShowBasket: {
-                    isBasketPresented = true
+                    store.send(.basketButtonTapped)
                 }
             )
             .navigationTitle("도서 검색")
-            .navigationDestination(isPresented: $isBasketPresented) {
-                BookBasketView(
-                    books: store.basketBooks,
-                    onDeletedSelected: { bookIDs in
-                        store.send(.removeFromBasket(bookIDs))
-                    }
-                )
+            .navigationDestination(
+                item: $store.scope(state: \.basket, action: \.basket)
+            ) { basketStore in
+                BookBasketView(store: basketStore)
             }
             .navigationDestination(
                 item: $store.scope(state: \.detail, action: \.detail)

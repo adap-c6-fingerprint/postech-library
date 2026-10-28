@@ -24,6 +24,7 @@ struct BookSearchFeature {
         
         var basketBooks: [Book] = []
         @Presents var detail: BookDetailFeature.State?
+        @Presents var basket: BookBasketFeature.State?
     }
     
     // 이 기능에서 발생할 수 있는 이벤트
@@ -41,6 +42,8 @@ struct BookSearchFeature {
         case removeFromBasket(Set<Book.ID>)
         case bookSelected(Book)
         case detail(PresentationAction<BookDetailFeature.Action>)
+        case basketButtonTapped
+        case basket(PresentationAction<BookBasketFeature.Action>)
     }
     
     // 검색에 사용할 BookClient 값
@@ -56,6 +59,12 @@ struct BookSearchFeature {
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient: BookFavoritesClient
 
+    @Dependency(\.bookBasketClient)
+    var bookBasketClient: BookBasketClient
+
+    @Dependency(\.date.now)
+    var now: Date
+
     private nonisolated enum CancelID: Hashable, Sendable {
         case search
     }
@@ -67,6 +76,12 @@ struct BookSearchFeature {
             case .task:
                 state.recentQueries = searchHistoryClient.load()
                 state.favoriteBookKeys = bookFavoritesClient.load()
+                // 저장된 장바구니를 복원하되 이미 담긴 책은 다시 넣지 않는다.
+                for item in bookBasketClient.load() where !state.basketBooks.contains(where: {
+                    $0.recordKey == item.book.recordKey
+                }) {
+                    state.basketBooks.append(item.book)
+                }
                 return .none
 
             case let .favoriteButtonTapped(book):
@@ -85,6 +100,18 @@ struct BookSearchFeature {
 
             case .detail:
                 return .none
+
+            case .basketButtonTapped:
+                state.basket = BookBasketFeature.State()
+                return .none
+
+            case .basket(.dismiss):
+                // 장바구니 화면에서 바뀐 목록을 검색 화면의 바로가기 권수에 반영한다.
+                state.basketBooks = bookBasketClient.load().map(\.book)
+                return .none
+
+            case .basket:
+                return .none
                 
             case let .addToBasket(book):
                 guard !state.basketBooks.contains(where: {
@@ -94,6 +121,11 @@ struct BookSearchFeature {
                 }
                 
                 state.basketBooks.append(book)
+                var items = bookBasketClient.load()
+                if !items.contains(where: { $0.book.recordKey == book.recordKey }) {
+                    items.append(BookBasketItem(book: book, addedAt: now))
+                    bookBasketClient.save(items)
+                }
                 return .none
                 
             case let .queryChanged(query):
@@ -184,15 +216,24 @@ struct BookSearchFeature {
                 return .none
                 
             case let .removeFromBasket(bookIDs):
+                let removedKeys = Set(
+                    state.basketBooks.filter { bookIDs.contains($0.id) }.map(\.recordKey)
+                )
                 state.basketBooks.removeAll { book in
                     bookIDs.contains(book.id)
                 }
-                
+                bookBasketClient.save(
+                    bookBasketClient.load().filter { !removedKeys.contains($0.book.recordKey) }
+                )
+
                 return .none
             }
         }
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
+        }
+        .ifLet(\.$basket, action: \.basket) {
+            BookBasketFeature()
         }
     }
 }
