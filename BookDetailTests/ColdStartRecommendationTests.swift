@@ -157,37 +157,4 @@ struct ColdStartRecommendationTests {
         ])
     }
 
-    @Test("기록이 없으면 홈 화면이 첫 추천을 불러온다")
-    func homeLoadsColdStart() async {
-        let book = RecommendedBook(recordID: "alma1", coverImageURL: URL(string: "https://c.example.com/1.jpg")!)
-        let store = TestStore(initialState: HomeFeature.State()) {
-            HomeFeature()
-        } withDependencies: {
-            $0.bookFavoritesClient.load = { [] }
-            $0.searchHistoryClient.load = { [] }
-            $0.coldStartRecommendationClient.fetch = { interests in
-                #expect(interests == ColdStartRecommendation.placeholderInterests)
-                return [book]
-            }
-        }
-        await store.send(.task)
-        await store.receive(\.coldStartLoaded) { $0.coldStartBooks = [book] }
-    }
-
-    @Test("검색 기록이 있으면 첫 추천을 부르지 않는다")
-    func homeSkipsColdStartWithHistory() async {
-        let store = TestStore(initialState: HomeFeature.State()) {
-            HomeFeature()
-        } withDependencies: {
-            $0.bookFavoritesClient.load = { [] }
-            $0.searchHistoryClient.load = { ["스위프트"] }
-            $0.coldStartRecommendationClient.fetch = { _ in
-                Issue.record("호출되면 안 된다")
-                return []
-            }
-        }
-        await store.send(.task)
-        await store.receive(\.personalizedLoaded)
-        // 기록이 있으면 첫 추천 대신 맞춤 추천을 부른다.
-    }
 }

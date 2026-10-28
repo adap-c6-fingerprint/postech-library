@@ -8,7 +8,7 @@
 import Foundation
 import ComposableArchitecture
 
-struct BookClient: Sendable {
+nonisolated struct BookClient: Sendable {
     var search: @Sendable (_ query: String) async throws -> [Book]
     
     nonisolated static func publicationYear(from value: String?) -> String? {
@@ -327,7 +327,7 @@ extension BookClient: DependencyKey {
 }
 
 extension DependencyValues {
-    var bookClient: BookClient {
+    nonisolated var bookClient: BookClient {
         get { self[BookClient.self] }
         set { self[BookClient.self] = newValue }
     }

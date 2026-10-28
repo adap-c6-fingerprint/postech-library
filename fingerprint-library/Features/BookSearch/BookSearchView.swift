@@ -68,6 +68,17 @@ struct BookSearchView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.systemGroupedBackground))
+        .toolbar {
+            if store.hasSearched && !isEditingSearch {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("검색 결과 새로고침", systemImage: "arrow.clockwise") {
+                        store.send(.refreshButtonTapped)
+                    }
+                    .labelStyle(.iconOnly)
+                    .disabled(store.isLoading)
+                }
+            }
+        }
         .safeAreaInset(edge: .bottom) {
             
             if !store.basketBooks.isEmpty {

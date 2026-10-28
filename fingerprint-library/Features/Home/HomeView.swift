@@ -21,7 +21,10 @@ struct HomeView: View {
         }
         .background(Color(uiColor: .systemBackground))
         .toolbar(.hidden, for: .navigationBar)
-        .task { await store.send(.task).finish() }
+        .task { store.send(.task) }
+        .task(id: upcomingCoverURLs) {
+            await BookCoverPipeline.shared.prefetch(upcomingCoverURLs)
+        }
         .navigationDestination(
             item: $store.scope(state: \.detail, action: \.detail)
         ) { detailStore in
@@ -44,6 +47,11 @@ struct HomeView: View {
         .padding(.trailing, 8)
         .padding(.vertical, 8)
     }
+
+    private var upcomingCoverURLs: [URL] {
+        let nextIndex = max(0, (recommendationPosition ?? 0) + 1)
+        return store.recommendedBooks.dropFirst(nextIndex).prefix(2).compactMap(\.imageURL)
+    }
     
     private var recommendationSection: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -62,7 +70,39 @@ struct HomeView: View {
             }
             .padding(.horizontal, 16)
             
-            ZStack(alignment: .bottom) {
+            if store.recommendedBooks.isEmpty {
+                if store.isLoadingRecommendations || store.recommendationSessionID == nil {
+                    VStack(spacing: 8) {
+                        ProgressView("추천 도서를 준비하고 있어요")
+                        Text("처음에는 잠시 걸릴 수 있어요.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 206)
+                }
+            } else {
+                recommendationCarousel
+            }
+
+            if let message = store.recommendationErrorMessage {
+                VStack(alignment: .leading, spacing: 10) {
+                    Label(message, systemImage: "exclamationmark.circle")
+                    if !store.recommendedBooks.isEmpty {
+                        Text("이전 추천은 계속 볼 수 있어요.")
+                            .font(.footnote)
+                    }
+                    Button("다시 시도") { store.send(.retryRecommendationsButtonTapped) }
+                        .buttonStyle(.bordered)
+                        .disabled(store.isPreparingRecommendations)
+                }
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+
+    private var recommendationCarousel: some View {
+        ZStack(alignment: .bottom) {
                 ScrollView(.horizontal) {
                     LazyHStack(alignment: .bottom, spacing: 12) {
                         ForEach(0..<store.recommendationCount, id: \.self) { index in
@@ -92,7 +132,6 @@ struct HomeView: View {
             .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
                 recommendationPosition = 0
             }
-        }
     }
     
     private var popularBooksSection: some View {
@@ -188,21 +227,8 @@ private struct HomeBookCover: View {
     let height: CGFloat
     
     var body: some View {
-        AsyncImage(url: book?.imageURL) { phase in
-            if let image = phase.image {
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                ZStack {
-                    Color.primary.opacity(0.07)
-                    Image(systemName: "book.closed")
-                        .font(.system(size: 24, weight: .light))
-                        .foregroundStyle(.secondary.opacity(0.45))
-                }
-            }
-        }
+        // 홈 카드는 전체가 상세 이동 버튼이다. 재시도는 열린 상세 화면에서 제공한다.
+        BookCoverView(url: book?.imageURL, allowsRetry: false)
         .frame(width: width, height: height)
         .background(Color.primary.opacity(0.04))
         .clipShape(RoundedRectangle(cornerRadius: 4))

@@ -1,5 +1,5 @@
-import ComposableArchitecture
 import Foundation
+import ComposableArchitecture
 
 @Reducer
 struct HomeFeature {
@@ -9,16 +9,19 @@ struct HomeFeature {
         var popularBooks: [Book] = []
         var departmentName = ""
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
-        var coldStartBooks: [RecommendedBook] = []
-        // 찜·검색 기록이 없을 때 보여 줄 첫 추천 결과 (최대 6권).
-        var personalizedBooks: [RecommendedBook] = []
-        // 찜·검색 기록이 있을 때 보여 줄 맞춤 추천 결과 (최대 6권).
 
         @Presents var detail: BookDetailFeature.State?
 
         var recommendationCount: Int {
             recommendedBooks.isEmpty ? 6 : min(recommendedBooks.count, 6)
         }
+
+        var recommendationErrorMessage: String? = nil
+        var popularBooksErrorMessage: String? = nil
+        var recommendationSessionID: UUID?
+        var isLoadingRecommendations = false
+        var isPreparingRecommendations = false
+        var nextRecommendationsSavedAt: Date?
     }
 
     // 도서관 소장 정보는 기존 Book 모델과 분리한다.
@@ -29,14 +32,13 @@ struct HomeFeature {
 
     enum Action {
         case task
-        case recommendationsLoaded([Book])
+        case recommendationSessionStarted
+        case retryRecommendationsButtonTapped
+        case recommendationsRestored(UUID, CachedRecommendations?)
+        case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
         case libraryInfoLoaded([Book.ID: LibraryInfo])
         case departmentChanged(String)
-        case coldStartLoaded([RecommendedBook])
-        case coldStartFailed(String)
-        case personalizedLoaded([RecommendedBook])
-        case personalizedFailed(String)
 
         case bookSelected(Book)
         case basketButtonTapped
@@ -45,6 +47,9 @@ struct HomeFeature {
         case detail(PresentationAction<BookDetailFeature.Action>)
         case delegate(Delegate)
 
+        case recommendationsFailed(UUID, String)
+        case popularBooksFailed(String)
+
         enum Delegate {
             case showBasket
             case showProfile
@@ -52,60 +57,87 @@ struct HomeFeature {
         }
     }
 
-    @Dependency(\.bookFavoritesClient) var bookFavoritesClient
-    @Dependency(\.searchHistoryClient) var searchHistoryClient
-    // 검색 화면과 같은 저장소(UserDefaults)를 읽어 기록이 있는지 확인한다.
-    @Dependency(\.coldStartRecommendationClient) var coldStartClient
-    @Dependency(\.personalizedRecommendationClient) var personalizedClient
+    @Dependency(\.bookRecommendationClient)
+    var bookRecommendationClient
+
+    @Dependency(\.departmentPopularBooksClient)
+    var departmentPopularBooksClient
+
+    @Dependency(\.recommendationCacheClient) var recommendationCacheClient
+    @Dependency(\.uuid) var uuid
+
+    private nonisolated enum CancelID: Hashable, Sendable {
+        case recommendationSession
+    }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
-                // TODO: 홈 도서 API Client를 연결하고 조회 결과 액션을 보낸다.
-                let favoriteKeys = bookFavoritesClient.load()
-                let recentQueries = searchHistoryClient.load()
-                let interests = ColdStartRecommendation.placeholderInterests
-                // TODO: 온보딩 완성 후 저장된 UserProfile.interests로 교체한다.
-                guard PersonalizedRecommendation.shouldApply(
-                    favoriteKeys: favoriteKeys,
-                    recentQueries: recentQueries
-                ) else { return coldStartEffect(interests: interests) }
-                // 찜·검색 기록이 둘 다 없으면 첫 추천을 쓴다.
-                let input = PersonalizedRecommendationInput(
-                    favoriteKeys: favoriteKeys,
-                    recentQueries: recentQueries,
-                    interests: interests
-                )
-                return .run { [personalizedClient] send in
-                    await send(.personalizedLoaded(try await personalizedClient.fetch(input)))
-                } catch: { error, send in
-                    await send(.personalizedFailed(error.localizedDescription))
+                var effects: [Effect<Action>] = []
+
+                if state.recommendedBooks.isEmpty && state.recommendationSessionID == nil {
+                    effects.append(.send(.recommendationSessionStarted))
                 }
 
-            case let .personalizedLoaded(books):
-                state.personalizedBooks = books
+                if state.popularBooks.isEmpty {
+                    state.popularBooksErrorMessage = nil
+                    effects.append(loadPopularBooks(departmentName: state.departmentName))
+                }
+
+                return .merge(effects)
+
+            case .recommendationSessionStarted:
+                let sessionID = uuid()
+                state.recommendationSessionID = sessionID
+                state.isLoadingRecommendations = true
+                state.isPreparingRecommendations = true
+                state.nextRecommendationsSavedAt = nil
+                state.recommendationErrorMessage = nil
+                let displayedCovers = state.recommendedBooks.compactMap(\.imageURL)
+                    + [state.detail?.book.imageURL].compactMap { $0 }
+                return loadRecommendations(sessionID: sessionID, retaining: displayedCovers)
+
+            case .retryRecommendationsButtonTapped:
+                guard !state.isPreparingRecommendations else { return .none }
+                return .send(.recommendationSessionStarted)
+
+            case let .recommendationsRestored(sessionID, cached):
+                guard state.recommendationSessionID == sessionID else { return .none }
+                if let cached {
+                    state.recommendedBooks = cached.displayBooks
+                    state.isLoadingRecommendations = false
+                }
                 return .none
 
-            case .personalizedFailed:
-                state.personalizedBooks = []
-                return coldStartEffect(interests: ColdStartRecommendation.placeholderInterests)
-                // 맞춤 추천이 실패하면(네트워크·키워드 없음 등) 홈이 비지 않게 첫 추천으로 대신한다.
-
-            case let .coldStartLoaded(books):
-                state.coldStartBooks = books
+            case let .recommendationsLoaded(sessionID, prepared):
+                guard state.recommendationSessionID == sessionID else { return .none }
+                state.isLoadingRecommendations = false
+                state.isPreparingRecommendations = false
+                state.nextRecommendationsSavedAt = prepared.savedAt
+                // 이번 접속의 목록 A는 유지한다. 완성된 B는 다음 접속에서 복원한다.
+                if state.recommendedBooks.isEmpty {
+                    state.recommendedBooks = prepared.displayBooks
+                }
+                state.recommendationErrorMessage = nil
                 return .none
 
-            case .coldStartFailed:
-                state.coldStartBooks = []
-                return .none
-
-            case let .recommendationsLoaded(books):
-                state.recommendedBooks = books
+            case let .recommendationsFailed(sessionID, message):
+                guard state.recommendationSessionID == sessionID else { return .none }
+                state.isLoadingRecommendations = false
+                state.isPreparingRecommendations = false
+                state.recommendationErrorMessage = message
                 return .none
 
             case let .popularBooksLoaded(books):
                 state.popularBooks = books
+                state.popularBooksErrorMessage = books.isEmpty
+                    ? "인기 도서를 찾지 못했어요."
+                    : nil
+                return .none
+
+            case let .popularBooksFailed(message):
+                state.popularBooksErrorMessage = message
                 return .none
 
             case let .libraryInfoLoaded(info):
@@ -138,12 +170,45 @@ struct HomeFeature {
         }
     }
 
-    private func coldStartEffect(interests: [String]) -> Effect<Action> {
-    // 첫 추천을 불러오는 작업. 기록이 없을 때와 맞춤 추천이 실패했을 때 함께 쓴다.
-        .run { [coldStartClient] send in
-            await send(.coldStartLoaded(try await coldStartClient.fetch(interests)))
-        } catch: { error, send in
-            await send(.coldStartFailed(error.localizedDescription))
+    private func loadRecommendations(sessionID: UUID, retaining covers: [URL]) -> Effect<Action> {
+        .run { [bookRecommendationClient, recommendationCacheClient] send in
+            do {
+                await recommendationCacheClient.retainDisplayedCovers(covers)
+                // 저장본이 손상되어도 캐시가 없는 경우와 같은 최초 조회 경로로 복구한다.
+                let cached = try? await recommendationCacheClient.restore()
+                try Task.checkCancellation()
+                await send(.recommendationsRestored(sessionID, cached))
+                let books = try await bookRecommendationClient.fetch(6)
+                try Task.checkCancellation()
+                guard !books.isEmpty else {
+                    await send(.recommendationsFailed(sessionID, "추천 도서를 찾지 못했어요. 다시 시도해 주세요."))
+                    return
+                }
+                let prepared = try await recommendationCacheClient.prepare(books)
+                try Task.checkCancellation()
+                await send(.recommendationsLoaded(sessionID, prepared))
+            } catch is CancellationError {
+                return
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.recommendationsFailed(sessionID, "추천 도서를 준비하지 못했어요. 다시 시도해 주세요."))
+            }
+        }
+        .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
+    }
+
+    private func loadPopularBooks(departmentName: String) -> Effect<Action> {
+        .run { [departmentPopularBooksClient] send in
+            do {
+                let books = try await departmentPopularBooksClient.fetch(departmentName, 6)
+                try Task.checkCancellation()
+                await send(.popularBooksLoaded(books))
+            } catch is CancellationError {
+                return
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.popularBooksFailed(error.localizedDescription))
+            }
         }
     }
 }

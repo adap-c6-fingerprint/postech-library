@@ -191,48 +191,6 @@ struct PersonalizedRecommendationTests {
         #expect(books.map(\.recordID) == ["a", "b", "c"])
     }
 
-    @Test("기록이 있으면 홈 화면이 맞춤 추천을 불러온다")
-    func homeLoadsPersonalized() async {
-        let book = RecommendedBook(recordID: "alma1", coverImageURL: URL(string: "https://c.example.com/1.jpg")!)
-        let store = TestStore(initialState: HomeFeature.State()) {
-            HomeFeature()
-        } withDependencies: {
-            $0.bookFavoritesClient.load = { [] }
-            $0.searchHistoryClient.load = { ["반도체"] }
-            $0.personalizedRecommendationClient.fetch = { input in
-                #expect(input.recentQueries == ["반도체"])
-                #expect(input.interests == ColdStartRecommendation.placeholderInterests)
-                return [book]
-            }
-            $0.coldStartRecommendationClient.fetch = { _ in
-                Issue.record("호출되면 안 된다")
-                return []
-            }
-        }
-        await store.send(.task)
-        await store.receive(\.personalizedLoaded) { $0.personalizedBooks = [book] }
-    }
-
-    @Test("맞춤 추천이 실패하면 첫 추천으로 대신한다")
-    func homeFallsBackToColdStart() async {
-        let book = RecommendedBook(recordID: "alma9", coverImageURL: URL(string: "https://c.example.com/9.jpg")!)
-        let store = TestStore(initialState: HomeFeature.State()) {
-            HomeFeature()
-        } withDependencies: {
-            $0.bookFavoritesClient.load = { [["control", "primo:alma1"]] }
-            $0.searchHistoryClient.load = { [] }
-            $0.personalizedRecommendationClient.fetch = { _ in
-                throw PersonalizedRecommendationError.noKeywords
-            }
-            $0.coldStartRecommendationClient.fetch = { _ in [book] }
-        }
-        store.exhaustivity = .off(showSkippedAssertions: false)
-        // 실패 메시지 문자열은 확인하지 않는다.
-        await store.send(.task)
-        await store.receive(\.personalizedFailed)
-        await store.receive(\.coldStartLoaded) { $0.coldStartBooks = [book] }
-    }
-
     // MARK: - 테스트 데이터
 
     private func candidate(

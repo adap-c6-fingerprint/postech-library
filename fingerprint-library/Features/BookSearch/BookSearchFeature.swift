@@ -33,6 +33,7 @@ struct BookSearchFeature {
         case queryChanged(String)
         case searchCancelled
         case searchButtonTapped
+        case refreshButtonTapped
         case searchSucceeded([Book])
         case searchFailed(String)
         case favoriteButtonTapped(Book)
@@ -49,6 +50,9 @@ struct BookSearchFeature {
     // 검색에 사용할 BookClient 값
     @Dependency(\.bookClient)
     var bookClient: BookClient
+
+    @Dependency(\.bookSearchCache)
+    var bookSearchCache: BookSearchCacheClient
 
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
@@ -122,7 +126,7 @@ struct BookSearchFeature {
                 state.hasSearched = false
                 return .cancel(id: CancelID.search)
                 
-            case .searchButtonTapped:
+            case .searchButtonTapped, .refreshButtonTapped:
                 // 이미 검색 중이면 추가 요청을 보내지 않음
                 guard !state.isLoading else {
                     return .none
@@ -140,9 +144,7 @@ struct BookSearchFeature {
                     return .none
                 }
                 
-                state.isLoading = true
                 state.errorMessage = nil
-                state.books = []
                 state.hasSearched = true
                 
                 state.recentQueries.removeAll { $0 == keyword }
@@ -150,12 +152,24 @@ struct BookSearchFeature {
                 state.recentQueries = Array(state.recentQueries.prefix(20))
                 searchHistoryClient.save(state.recentQueries)
 
+                if case .refreshButtonTapped = action {
+                    // 사용자가 새로고침하면 유효기간 안의 결과도 다시 조회한다.
+                    bookSearchCache.remove(keyword)
+                } else if let books = bookSearchCache.load(keyword) {
+                    state.books = books
+                    return .none
+                }
+
+                state.isLoading = true
+                state.books = []
+
                 // 검색할 작업을 담은 Effect 값을 만들어 반환
-                return .run { [bookClient] send in
+                return .run { [bookClient, bookSearchCache] send in
                     do {
                         // Store가 Effect를 실행하면 이 코드가 동작
                         let books = try await bookClient.search(keyword)
                         try Task.checkCancellation()
+                        bookSearchCache.save(keyword, books)
                         
                         // 검색 결과를 새로운 Action으로 보냄
                         await send(.searchSucceeded(books))
