@@ -9,21 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct BookBasketView: View {
-    let books: [Book]
-    let onDeletedSelected: (Set<Book.ID>) -> Void
-    let onShowDirections: (Set<Book.ID>) -> Void
-    
-    @State private var selectedBookIDs: Set<Book.ID> = []
-    
-    private var isAllSelected: Bool {
-        !books.isEmpty && books.allSatisfy {
-            selectedBookIDs.contains($0.id)
-        }
-    }
-
-    private var selectedBooks: [Book] {
-        books.filter { selectedBookIDs.contains($0.id) }
-    }
+    @Bindable var store: StoreOf<BookBasketFeature>
     
     var body: some View {
         ScrollView {
@@ -57,39 +43,28 @@ struct BookBasketView: View {
         .navigationTitle("장바구니")
         .navigationBarTitleDisplayMode(.inline)
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            VStack(spacing: 8) {
+            if store.isSelectingForGuidance {
                 NavigationLink {
-                    BookRoutePreviewView(books: selectedBooks)
+                    BookRoutePreviewView(books: store.selectedBooks)
                 } label: {
-                    Text("선택한 \(selectedBooks.count)권 경로 미리보기")
+                    Text("선택한 \(store.selectedBooks.count)권 경로 미리보기")
                         .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.bordered)
-                .disabled(selectedBooks.isEmpty)
+                .disabled(store.selectedBooks.isEmpty)
                 .accessibilityIdentifier("basket-route-preview")
-                Text("길안내는 한 번에 최대 \(BookRouteSelection.maximumBookCount)권까지 가능해요.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Button {
-                    onShowDirections(selectedBookIDs)
-                } label: {
-                    Text("길안내 받기 (\(selectedBookIDs.count)/\(BookRouteSelection.maximumBookCount)권)")
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(!BookRouteSelection.allows(bookCount: selectedBookIDs.count))
-                .accessibilityIdentifier("basket-directions")
+                .padding(16)
+                .background(Color(.systemGroupedBackground))
             }
-            .padding(16)
-            .background(Color(.systemGroupedBackground))
         }
-        .safeAreaInset(edge: .top, spacing: 0) {
-            HStack(spacing: 12) {
-                Button {
-                    if isAllSelected {
-                        selectedBookIDs.removeAll()
-                    } else {
-                        selectedBookIDs = Set(books.map(\.id))
+        .toolbar {
+            if store.isSelectingForGuidance {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("완료") { store.send(.doneButtonTapped) }
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button("선택 삭제", systemImage: "trash", role: .destructive) {
+                        store.send(.removeButtonTapped)
                     }
                     .labelStyle(.iconOnly)
                     .disabled(store.selectedCount == 0)

@@ -25,6 +25,7 @@ struct BookSearchFeature {
         var basketBooks: [Book] = []
         var isBasketLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
+        @Presents var basket: BookBasketFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
     }
     
@@ -43,6 +44,8 @@ struct BookSearchFeature {
         case basketLimitAlertDismissed
         case removeFromBasket(Set<Book.ID>)
         case bookSelected(Book)
+        case basketButtonTapped
+        case basket(PresentationAction<BookBasketFeature.Action>)
         case detail(PresentationAction<BookDetailFeature.Action>)
         case directionsButtonTapped(Book)
         case basketDirectionsButtonTapped(Set<Book.ID>)
@@ -107,6 +110,23 @@ struct BookSearchFeature {
                 return .none
 
             case .detail:
+                return .none
+
+            case .basketButtonTapped:
+                state.basket = BookBasketFeature.State()
+                return .none
+
+            case .basket(.dismiss):
+                state.basketBooks = bookBasketClient.load().map(\.book)
+                return .none
+
+            case .basket(.presented(.delegate(.startGuidance(let books)))):
+                guard let shelfMap = BookShelfMapFeature.State(books: books) else { return .none }
+                state.basket = nil
+                state.shelfMap = shelfMap
+                return .none
+
+            case .basket:
                 return .none
 
             case .directionsButtonTapped(let book):
@@ -248,6 +268,9 @@ struct BookSearchFeature {
         }
         .ifLet(\.$shelfMap, action: \.shelfMap) {
             BookShelfMapFeature()
+        }
+        .ifLet(\.$basket, action: \.basket) {
+            BookBasketFeature()
         }
     }
 }
