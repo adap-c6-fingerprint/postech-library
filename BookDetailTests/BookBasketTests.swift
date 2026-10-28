@@ -76,20 +76,6 @@ struct BookBasketTests {
         }
     }
 
-    @Test("검색·지도 장바구니가 선택한 책 순서를 유지해 기존 서가 화면으로 전달한다")
-    func forwardsBasketGuidance() async {
-        let selected = [book(id: "c"), book(id: "a")]
-        var state = BookSearchFeature.State()
-        state.basket = BookBasketFeature.State(items: selected.map { BookBasketItem(book: $0, addedAt: .distantPast) })
-        let store = TestStore(initialState: state) { BookSearchFeature() }
-
-        await store.send(.basket(.presented(.delegate(.startGuidance(selected))))) {
-            $0.basket = nil
-            $0.shelfMap = BookShelfMapFeature.State(books: selected)
-        }
-        #expect(store.state.shelfMap?.books == selected)
-    }
-
     @Test("도서 상세에서 담은 책을 담은 시각과 함께 한 번만 저장한다")
     func addFromDetailPersistsOnce() async {
         let suiteName = "BookBasketTests.\(UUID().uuidString)"

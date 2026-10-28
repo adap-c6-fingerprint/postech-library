@@ -46,6 +46,7 @@ struct BookFavoritesTests {
             BookSearchFeature()
         } withDependencies: {
             $0.bookFavoritesClient = client
+            $0.bookBasketClient.load = { [BookBasketItem(book: currentBook, addedAt: .distantPast)] }
         }
 
         await store.send(.task) { $0.favoriteBookKeys = keys }
@@ -61,10 +62,15 @@ struct BookFavoritesTests {
 
     @Test("ISBN이 같아도 도서관 자료 번호가 다르면 찜 상태를 따로 관리한다")
     func separateLibraryRecords() async {
+        let suiteName = "BookFavoritesTests.\(UUID().uuidString)"
+        defer { UserDefaults.standard.removePersistentDomain(forName: suiteName) }
+        let client = BookFavoritesClient.userDefaults(suiteName: suiteName)
         let first = book(id: "first", controlNumber: "record-1")
         let second = book(id: "second", controlNumber: "record-2")
         let store = TestStore(initialState: BookSearchFeature.State(books: [first, second])) {
             BookSearchFeature()
+        } withDependencies: {
+            $0.bookFavoritesClient = client
         }
 
         await store.send(.favoriteButtonTapped(first)) {

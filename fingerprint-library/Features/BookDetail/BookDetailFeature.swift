@@ -18,10 +18,18 @@ struct BookDetailFeature {
         case failed(String)
     }
 
+    enum HoldingsState: Equatable {
+        case idle
+        case loading
+        case loaded([BookHolding])
+        case failed
+    }
+
     // 화면 전체의 현재 상태
     @ObservableState
     struct State: Equatable {
         let book: Book
+        var isFavorite = false
         @Presents var shelfMap: BookShelfMapFeature.State?
 
         // 책 소개
@@ -32,6 +40,13 @@ struct BookDetailFeature {
 
         // 연관 도서
         var relatedBooksState: RelatedBooksState = .idle
+        var holdingsState: HoldingsState = .idle
+        var routeSummary: BookRouteSummary = .mock
+
+        var displayedHolding: BookHolding? {
+            guard case let .loaded(holdings) = holdingsState else { return nil }
+            return BookHoldingPresentation.preferred(in: holdings)
+        }
 
         // 장바구니
         var isBasketLimitAlertPresented = false
@@ -42,8 +57,6 @@ struct BookDetailFeature {
     }
 
     enum Action {
-        case directionsButtonTapped
-        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         // 책 소개
         case loadDescription
         case retryButtonTapped
@@ -56,17 +69,24 @@ struct BookDetailFeature {
         case relatedBooksLoaded([Book])
         case relatedBooksFailed(String)
 
-        // 장바구니
+        case directionsButtonTapped
+        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
+        case loadHoldings
+        case retryHoldingsButtonTapped
+        case holdingsLoaded([BookHolding])
+        case holdingsFailed
+        case routeSummaryUpdated(BookRouteSummary)
+        case loadFavorites
+        case favoriteButtonTapped
         case addToBasketButtonTapped
         case basketLimitAlertDismissed
-
-        // 길안내
         case startGuidanceButtonTapped
         case delegate(Delegate)
 
         @CasePathable
         enum Delegate: Equatable {
             case startGuidance(Book)
+            case favoritesChanged(Set<[String?]>)
         }
     }
 
@@ -76,20 +96,64 @@ struct BookDetailFeature {
     @Dependency(\.relatedBooksClient)
     var relatedBooksClient
 
-    @Dependency(\.bookBasketClient)
-    var bookBasketClient
+    @Dependency(\.bookHoldingsClient)
+    var bookHoldingsClient
 
-    @Dependency(\.date.now)
-    var now
+    @Dependency(\.bookFavoritesClient)
+    var bookFavoritesClient
+
+    @Dependency(\.bookBasketClient) var bookBasketClient
+    @Dependency(\.date.now) var now
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .loadFavorites:
+                state.isFavorite = bookFavoritesClient.load().contains(state.book.recordKey)
+                return .none
+
+            case .favoriteButtonTapped:
+                // 다른 화면에서 추가한 찜도 보존하도록 최신 저장 목록에서 변경한다.
+                var keys = bookFavoritesClient.load()
+                let key = state.book.recordKey
+                if keys.contains(key) {
+                    keys.remove(key)
+                } else {
+                    keys.insert(key)
+                }
+                state.isFavorite = keys.contains(key)
+                bookFavoritesClient.save(keys)
+                return .send(.delegate(.favoritesChanged(keys)))
+
             case .directionsButtonTapped:
-                state.shelfMap = .init(book: state.book)
+                var destination = BookShelfMapFeature.State(book: state.book)
+                // 상세에서 받은 전체 소장처를 지도에 전달해 위치 후보를 보존한다.
+                if case let .loaded(holdings) = state.holdingsState {
+                    destination.holdings[state.book.id] = .loaded(holdings)
+                }
+                state.shelfMap = destination
                 return .none
 
             case .shelfMap:
+                return .none
+
+            case .loadHoldings:
+                guard case .idle = state.holdingsState else { return .none }
+                return loadHoldings(state: &state)
+
+            case .retryHoldingsButtonTapped:
+                return loadHoldings(state: &state)
+
+            case let .holdingsLoaded(holding):
+                state.holdingsState = .loaded(holding)
+                return .none
+
+            case .holdingsFailed:
+                state.holdingsState = .failed
+                return .none
+
+            case let .routeSummaryUpdated(summary):
+                state.routeSummary = summary
                 return .none
 
             case .loadDescription:
@@ -164,6 +228,27 @@ struct BookDetailFeature {
     private nonisolated enum CancelID: Hashable, Sendable {
         case description
         case relatedBooks
+        case holdings
+    }
+
+    private func loadHoldings(state: inout State) -> Effect<Action> {
+        guard state.holdingsState != .loading else { return .none }
+        guard let recordID = BookHoldingsClient.recordID(for: state.book) else {
+            state.holdingsState = .failed
+            return .none
+        }
+        state.holdingsState = .loading
+        return .run { [bookHoldingsClient] send in
+            do {
+                let holding = try await bookHoldingsClient.fetch(recordID)
+                try Task.checkCancellation()
+                await send(.holdingsLoaded(holding))
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.holdingsFailed)
+            }
+        }
+        .cancellable(id: CancelID.holdings, cancelInFlight: true)
     }
 
     // 책 소개 조회

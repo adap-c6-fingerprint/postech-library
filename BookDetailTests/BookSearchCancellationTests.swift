@@ -22,6 +22,7 @@ struct BookSearchCancellationTests {
         }
 
         await store.send(.searchCancelled) {
+            $0.searchGeneration += 1
             $0.query = ""
             $0.books = []
             $0.errorMessage = nil
@@ -38,7 +39,8 @@ struct BookSearchCancellationTests {
             BookSearchFeature()
         } withDependencies: {
             $0.searchHistoryClient.save = { _ in }
-            $0.bookClient.search = { query in
+            $0.bookClient.search = { request in
+                let query = request.query
                 if query == "이전 검색" {
                     try await Task.sleep(for: .seconds(60))
                 }
@@ -47,11 +49,13 @@ struct BookSearchCancellationTests {
         }
 
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = ["이전 검색"]
         }
         await store.send(.searchCancelled) {
+            $0.searchGeneration += 1
             $0.query = ""
             $0.isLoading = false
             $0.hasSearched = false
@@ -60,6 +64,7 @@ struct BookSearchCancellationTests {
 
         await store.send(.queryChanged("새 검색")) { $0.query = "새 검색" }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = ["새 검색", "이전 검색"]

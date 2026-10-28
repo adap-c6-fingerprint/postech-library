@@ -10,7 +10,7 @@ import SwiftUI
 
 struct BookBasketView: View {
     @Bindable var store: StoreOf<BookBasketFeature>
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .trailing, spacing: 0) {
@@ -42,65 +42,62 @@ struct BookBasketView: View {
         .background(Color.basketBackground)
         .navigationTitle("장바구니")
         .navigationBarTitleDisplayMode(.inline)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            if store.isSelectingForGuidance {
-                NavigationLink {
-                    BookRoutePreviewView(books: store.selectedBooks)
-                } label: {
-                    Text("선택한 \(store.selectedBooks.count)권 경로 미리보기")
-                        .frame(maxWidth: .infinity, minHeight: 44)
-                }
-                .buttonStyle(.bordered)
-                .disabled(store.selectedBooks.isEmpty)
-                .accessibilityIdentifier("basket-route-preview")
-                .padding(16)
-                .background(Color(.systemGroupedBackground))
-            }
-        }
         .toolbar {
             if store.isSelectingForGuidance {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("완료") { store.send(.doneButtonTapped) }
                 }
-                ToolbarItem(placement: .bottomBar) {
-                    Button("선택 삭제", systemImage: "trash", role: .destructive) {
-                        store.send(.removeButtonTapped)
-                    }
-                    .labelStyle(.iconOnly)
-                    .disabled(store.selectedCount == 0)
-                }
-                ToolbarSpacer(.flexible, placement: .bottomBar)
-                ToolbarItem(placement: .bottomBar) {
-                    Button {
-                        store.send(.startGuidanceButtonTapped)
+            }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 12) {
+                if store.isSelectingForGuidance {
+                    NavigationLink {
+                        BookRoutePreviewView(books: store.selectedBooks)
                     } label: {
-                        Text(
-                            store.selectedCount == 0
-                            ? "안내 시작하기"
-                            : "안내 시작하기 (\(store.selectedCount)권)"
-                        )
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.black)
+                        Text("선택한 \(store.selectedCount)권 경로 미리보기")
+                            .frame(maxWidth: .infinity, minHeight: 44)
                     }
-                    .buttonStyle(.glassProminent)
-                    .tint(Color.basketPrimary)
-                    // 선택한 책이 0권이면 길안내를 시작하지 않는다.
+                    .buttonStyle(.bordered)
                     .disabled(store.selectedCount == 0)
-                    .accessibilityValue("\(store.selectedCount)권 선택됨")
-                }
-            } else {
-                ToolbarItem(placement: .bottomBar) {
-                    Button(
-                        "길안내할 책 선택",
-                        systemImage: "circle.grid.2x2.topleft.checkmark.filled"
-                    ) {
+                    .accessibilityIdentifier("basket-route-preview")
+
+                    HStack(spacing: 16) {
+                        Button("선택한 책 삭제", systemImage: "trash") {
+                            store.send(.removeButtonTapped)
+                        }
+                        .labelStyle(.iconOnly)
+                        .frame(minWidth: 44, minHeight: 44)
+                        .disabled(store.selectedCount == 0)
+
+                        Button {
+                            store.send(.startGuidanceButtonTapped)
+                        } label: {
+                            Text("서가 위치 보기 (\(store.selectedCount)권)")
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                        }
+                        .buttonStyle(.glassProminent)
+                        .tint(Color.basketPrimary)
+                        .foregroundStyle(.black)
+                        .disabled(store.selectedCount == 0)
+                        .accessibilityIdentifier("basket-directions")
+                    }
+                    Text("길안내는 한 번에 최대 \(BookBasketItem.maxGuidanceCount)권까지 가능해요.")
+                        .font(.caption)
+                        .foregroundStyle(Color.basketTextTertiary)
+                } else {
+                    Button("길안내할 책 선택", systemImage: "checkmark.circle") {
                         store.send(.selectButtonTapped)
                     }
-                    .labelStyle(.iconOnly)
+                    .frame(maxWidth: .infinity, minHeight: 44)
+                    .buttonStyle(.glassProminent)
+                    .tint(Color.basketPrimary)
+                    .foregroundStyle(.black)
                     .disabled(store.items.isEmpty)
                 }
-                ToolbarSpacer(.flexible, placement: .bottomBar)
             }
+            .padding(16)
+            .background(Color.basketBackground)
         }
         .alert(
             "길안내는 최대 \(BookBasketItem.maxGuidanceCount)권까지 가능해요",

@@ -1,8 +1,8 @@
 import Foundation
 import Synchronization
 
-/// 현재 BookClient의 검색 조건은 검색어 외에 모두 고정되어 있다.
-/// 범위·필터·정렬·페이지가 가변 값이 되면 캐시 키에도 반드시 포함한다.
+/// 검색어와 자료 유형별 결과를 보관한다.
+/// 범위·정렬·페이지가 가변 값이 되면 BookSearchRequest에도 반드시 포함한다.
 nonisolated final class BookSearchResultCache: Sendable {
     private struct Entry: Sendable {
         let books: [Book]
@@ -10,10 +10,10 @@ nonisolated final class BookSearchResultCache: Sendable {
     }
 
     private struct Storage: Sendable {
-        var entries: [String: Entry] = [:]
-        var recentKeys: [String] = []
+        var entries: [BookSearchRequest: Entry] = [:]
+        var recentKeys: [BookSearchRequest] = []
 
-        mutating func remove(_ key: String) {
+        mutating func remove(_ key: BookSearchRequest) {
             entries[key] = nil
             recentKeys.removeAll { $0 == key }
         }
@@ -41,8 +41,7 @@ nonisolated final class BookSearchResultCache: Sendable {
         self.now = now
     }
 
-    func load(_ query: String) -> [Book]? {
-        let key = query.trimmingCharacters(in: .whitespacesAndNewlines)
+    func load(_ key: BookSearchRequest) -> [Book]? {
         let date = now()
         return storage.withLock { storage in
             storage.removeExpired(at: date)
@@ -53,9 +52,8 @@ nonisolated final class BookSearchResultCache: Sendable {
         }
     }
 
-    func save(_ books: [Book], for query: String) {
-        let key = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !key.isEmpty else { return }
+    func save(_ books: [Book], for key: BookSearchRequest) {
+        guard !key.query.isEmpty else { return }
         let date = now()
         storage.withLock { storage in
             storage.removeExpired(at: date)
@@ -68,8 +66,7 @@ nonisolated final class BookSearchResultCache: Sendable {
         }
     }
 
-    func remove(_ query: String) {
-        let key = query.trimmingCharacters(in: .whitespacesAndNewlines)
+    func remove(_ key: BookSearchRequest) {
         storage.withLock { $0.remove(key) }
     }
 }

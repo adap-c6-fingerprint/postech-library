@@ -7,6 +7,8 @@ struct IndoorMapView: View {
     let store: StoreOf<IndoorMapFeature>
     /// 홈에서는 선택한 서가 카드를, 경로 화면에서는 계산한 경로와 목적지를 표시하도록 구분한다.
     var showsDestinationCard = true
+    /// 책 상세에서는 다른 화면에서 계산한 서가·경로를 책 위치로 오인하지 않게 숨긴다.
+    var showsRoute = true
     /// 경로 시트가 차지하는 하단 영역. 카메라 맞춤과 지도 조작 UI의 배치에 함께 적용한다.
     var bottomContentInset: CGFloat = 0
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
@@ -47,11 +49,11 @@ struct IndoorMapView: View {
                     onSelect: { _ in },
                     onPlaceOrigin: { _ in },
                     shelves: showsDestinationCard
-                        ? store.mockShelves : store.routeDestination.map { [$0] } ?? [],
+                        ? store.mockShelves : (showsRoute ? store.routeDestination.map { [$0] } ?? [] : []),
                     selectedShelfKey: showsDestinationCard
-                        ? store.selectedShelfKey : store.routeDestinationKey,
+                        ? store.selectedShelfKey : (showsRoute ? store.routeDestinationKey : nil),
                     onSelectShelf: { if showsDestinationCard { store.send(.shelfSelected($0)) } },
-                    route: showsDestinationCard ? nil : store.route,
+                    route: !showsDestinationCard && showsRoute ? store.route : nil,
                     viewportInsets: .init(top: 60, left: 0, bottom: bottomContentInset, right: 0),
                     shelfLabels: store.shelfLabels,
                     highlightedFeatureIDs: highlightedFeatureIDs

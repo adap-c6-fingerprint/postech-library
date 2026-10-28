@@ -245,18 +245,15 @@
 		750000000000000000000001 /* Validate Release Primo Proxy */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
 			inputPaths = (
 				"$(SRCROOT)/Scripts/validate-release-configuration.py",
 			);
 			name = "Validate Release Primo Proxy";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/bin/python3 \"$SRCROOT/Scripts/validate-release-configuration.py\"\n";
+			shellScript = (
+				"/usr/bin/python3 \"$SRCROOT/Scripts/validate-release-configuration.py\"",
+				"",
+			);
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

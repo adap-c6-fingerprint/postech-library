@@ -35,6 +35,7 @@ struct BookSearchHistoryTests {
 
         await store.send(.task) { $0.recentQueries = previous }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = expected
@@ -58,6 +59,7 @@ struct BookSearchHistoryTests {
 
         await store.send(.task) { $0.recentQueries = ["코스모스", "사피엔스"] }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = ["사피엔스", "코스모스"]
@@ -66,7 +68,10 @@ struct BookSearchHistoryTests {
         #expect(history.load() == ["사피엔스", "코스모스"])
 
         await store.send(.queryChanged(" \n")) { $0.query = " \n" }
-        await store.send(.searchButtonTapped) { $0.hasSearched = false }
+        await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
+            $0.hasSearched = false
+        }
         #expect(history.load() == ["사피엔스", "코스모스"])
     }
 
@@ -85,6 +90,7 @@ struct BookSearchHistoryTests {
         }
 
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = ["사피엔스"]

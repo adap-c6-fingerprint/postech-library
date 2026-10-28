@@ -35,6 +35,9 @@ extension IndoorMapSerialTests {
                 $0.indoorNavigationClient.load = { _ in throw IndoorNavigationLoadError.notPrepared }
                 $0.searchHistoryClient.load = { [] }
                 $0.bookFavoritesClient.load = { [] }
+                $0.bookBasketClient.load = {
+                    basket.map { BookBasketItem(book: $0, addedAt: .distantPast) }
+                }
             }
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)

@@ -11,13 +11,11 @@ import SwiftUI
 struct LibraryMapView: View {
     @Bindable var store: StoreOf<AppFeature>
 
-    @State private var searchStore: StoreOf<BookSearchFeature>
+    @Bindable private var searchStore: StoreOf<BookSearchFeature>
 
     init(store: StoreOf<AppFeature>, searchStore: StoreOf<BookSearchFeature>? = nil) {
         self.store = store
-        _searchStore = State(initialValue: searchStore ?? Store(
-            initialState: BookSearchFeature.State()
-        ) { BookSearchFeature() })
+        self.searchStore = searchStore ?? store.scope(state: \.bookSearch, action: \.bookSearch)
     }
 
     private var mapStore: StoreOf<IndoorMapFeature> {
@@ -38,6 +36,7 @@ struct LibraryMapView: View {
                 item: $searchStore.scope(state: \.basket, action: \.basket)
             ) { basketStore in
                 BookBasketView(store: basketStore)
+                    .toolbar(.visible, for: .navigationBar)
             }
             .navigationDestination(
                 item: $searchStore.scope(state: \.detail, action: \.detail)
@@ -48,6 +47,7 @@ struct LibraryMapView: View {
                 item: $searchStore.scope(state: \.shelfMap, action: \.shelfMap)
             ) { shelfMapStore in
                 BookShelfMapView(store: shelfMapStore)
+                    .toolbar(.visible, for: .navigationBar)
             }
             .navigationDestination(
                 isPresented: Binding(

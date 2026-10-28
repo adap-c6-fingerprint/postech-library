@@ -20,7 +20,9 @@ struct BookRecommendationClientTests {
                 Issue.record("기록이 없으면 맞춤 추천을 호출하면 안 된다")
                 return []
             }
-            $0.bookClient.search = { query in
+            $0.bookClient.search = { request in
+                let query = request.query
+                #expect(request.category == .monograph)
                 #expect(query == "1 OR 2")
                 return [Self.book("2"), Self.book("9"), Self.book("1")]
             }
@@ -68,7 +70,9 @@ struct BookRecommendationClientTests {
                 return []
             }
             $0.coldStartRecommendationClient.fetch = { _ in [recommendation] }
-            $0.bookClient.search = { query in
+            $0.bookClient.search = { request in
+                let query = request.query
+                #expect(request.category == .monograph)
                 #expect(query == "9")
                 return [Self.book("9")]
             }
