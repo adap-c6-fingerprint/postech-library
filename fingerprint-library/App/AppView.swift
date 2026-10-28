@@ -25,13 +25,23 @@ struct AppView: View {
                     )
                 }
             }
+
+            Tab(role: .search) {
+                BookSearchTabView()
+            }
         }
+        .tabViewSearchActivation(.searchTabSelection)
         .tint(Color(red: 0.88, green: 0.95, blue: 0.19))
         // 위치 스트림은 탭 전환이 아닌 앱 루트 수명에 맞춘다.
-        .task { await store.send(.indoorMap(.task)).finish() }
+        .task {
+            store.send(.appStarted)
+            await store.send(.indoorMap(.task)).finish()
+        }
         .onDisappear { store.send(.indoorMap(.disappeared)) }
         .onChange(of: scenePhase) { _, phase in
             store.send(.indoorMap(.sceneActiveChanged(phase == .active)))
+            if phase == .background { store.send(.appEnteredBackground) }
+            if phase == .active { store.send(.appBecameActive) }
         }
     }
 }
