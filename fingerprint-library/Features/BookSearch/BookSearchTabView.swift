@@ -26,7 +26,6 @@ struct BookSearchTabView: View {
                     isBasketPresented = true
                 }
             )
-            .navigationTitle("도서 검색")
             .navigationDestination(isPresented: $isBasketPresented) {
                 BookBasketView(
                     books: store.basketBooks,
@@ -34,11 +33,13 @@ struct BookSearchTabView: View {
                         store.send(.removeFromBasket(bookIDs))
                     }
                 )
+                .toolbar(.visible, for: .navigationBar)
             }
             .navigationDestination(
                 item: $store.scope(state: \.detail, action: \.detail)
             ) { detailStore in
                 BookDetailView(store: detailStore)
+                    .toolbar(.visible, for: .navigationBar)
             }
         }
         .searchable(

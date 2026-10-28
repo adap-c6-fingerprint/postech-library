@@ -15,6 +15,8 @@ struct BookSearchFeature {
     @ObservableState
     struct State: Equatable {
         var query: String = ""
+        var category: BookSearchCategory = .all
+        var searchGeneration: Int = 0
         var recentQueries: [String] = []
         var favoriteBookKeys: Set<[String?]> = []
         var books: [Book] = []
@@ -30,11 +32,12 @@ struct BookSearchFeature {
     enum Action {
         case task
         case queryChanged(String)
+        case categoryChanged(BookSearchCategory)
         case searchCancelled
         case searchButtonTapped
         case refreshButtonTapped
-        case searchSucceeded([Book])
-        case searchFailed(String)
+        case searchSucceeded(generation: Int, books: [Book])
+        case searchFailed(generation: Int, message: String)
         case favoriteButtonTapped(Book)
         
         case addToBasket(Book)
@@ -115,7 +118,15 @@ struct BookSearchFeature {
                 state.query = query
                 return .none
 
+            case let .categoryChanged(category):
+                guard state.category != category else { return .none }
+                state.category = category
+                guard state.hasSearched else { return .none }
+                // 검색 중이어도 새 분류로 교체하고 이전 요청을 취소한다.
+                return search(state: &state, recordsHistory: false)
+
             case .searchCancelled:
+                state.searchGeneration += 1
                 state.query = ""
                 state.books = []
                 state.isLoading = false
@@ -123,65 +134,18 @@ struct BookSearchFeature {
                 state.hasSearched = false
                 return .cancel(id: CancelID.search)
                 
-            case .searchButtonTapped, .refreshButtonTapped:
-                // 이미 검색 중이면 추가 요청을 보내지 않음
-                guard !state.isLoading else {
+            case .searchButtonTapped:
+                guard !state.isLoading else { return .none }
+                return search(state: &state)
+
+            case .refreshButtonTapped:
+                guard !state.isLoading else { return .none }
+                return search(state: &state, refreshing: true)
+
+            case let .searchSucceeded(generation, books):
+                guard generation == state.searchGeneration, state.isLoading else {
                     return .none
                 }
-                
-                let keyword = state.query.trimmingCharacters(
-                    in: .whitespacesAndNewlines
-                )
-                
-                // 빈 검색어는 통신 없이 처리
-                guard !keyword.isEmpty else {
-                    state.books = []
-                    state.errorMessage = nil
-                    state.hasSearched = false
-                    return .none
-                }
-                
-                state.errorMessage = nil
-                state.hasSearched = true
-                
-                state.recentQueries.removeAll { $0 == keyword }
-                state.recentQueries.insert(keyword, at: 0)
-                state.recentQueries = Array(state.recentQueries.prefix(20))
-                searchHistoryClient.save(state.recentQueries)
-
-                if case .refreshButtonTapped = action {
-                    // 사용자가 새로고침하면 유효기간 안의 결과도 다시 조회한다.
-                    bookSearchCache.remove(keyword)
-                } else if let books = bookSearchCache.load(keyword) {
-                    state.books = books
-                    return .none
-                }
-
-                state.isLoading = true
-                state.books = []
-
-                // 검색할 작업을 담은 Effect 값을 만들어 반환
-                return .run { [bookClient, bookSearchCache] send in
-                    do {
-                        // Store가 Effect를 실행하면 이 코드가 동작
-                        let books = try await bookClient.search(keyword)
-                        try Task.checkCancellation()
-                        bookSearchCache.save(keyword, books)
-                        
-                        // 검색 결과를 새로운 Action으로 보냄
-                        await send(.searchSucceeded(books))
-                    } catch is CancellationError {
-                        return
-                    } catch {
-                        guard !Task.isCancelled else { return }
-                        await send(
-                            .searchFailed(error.localizedDescription)
-                        )
-                    }
-                }
-                .cancellable(id: CancelID.search, cancelInFlight: true)
-                
-            case let .searchSucceeded(books):
                 // 화면 ID가 모두 다른지 확인
                 assert(Set(books.map(\.id)).count == books.count)
                 
@@ -193,7 +157,10 @@ struct BookSearchFeature {
                 state.books = books
                 return .none
                 
-            case let .searchFailed(message):
+            case let .searchFailed(generation, message):
+                guard generation == state.searchGeneration, state.isLoading else {
+                    return .none
+                }
                 state.isLoading = false
                 state.errorMessage = message
                 return .none
@@ -210,4 +177,61 @@ struct BookSearchFeature {
             BookDetailFeature()
         }
     }
+
+    private func search(
+        state: inout State,
+        refreshing: Bool = false,
+        recordsHistory: Bool = true
+    ) -> Effect<Action> {
+        let request = BookSearchRequest(query: state.query, category: state.category)
+        state.searchGeneration += 1
+        let generation = state.searchGeneration
+        state.errorMessage = nil
+
+        guard !request.query.isEmpty else {
+            state.books = []
+            state.isLoading = false
+            state.hasSearched = false
+            return .cancel(id: CancelID.search)
+        }
+
+        state.hasSearched = true
+        if recordsHistory {
+            state.recentQueries.removeAll { $0 == request.query }
+            state.recentQueries.insert(request.query, at: 0)
+            state.recentQueries = Array(state.recentQueries.prefix(20))
+            searchHistoryClient.save(state.recentQueries)
+        }
+
+        if refreshing {
+            bookSearchCache.remove(request)
+        } else if let books = bookSearchCache.load(request) {
+            state.books = books
+            state.isLoading = false
+            return .cancel(id: CancelID.search)
+        }
+
+        state.isLoading = true
+        // 당겨서 새로고침하는 동안 ScrollView와 기존 목록을 유지한다.
+        if !refreshing {
+            state.books = []
+        }
+        return .run { [bookClient, bookSearchCache] send in
+            do {
+                let books = try await bookClient.search(request)
+                try Task.checkCancellation()
+                bookSearchCache.save(request, books)
+                await send(.searchSucceeded(generation: generation, books: books))
+            } catch is CancellationError {
+                return
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.searchFailed(
+                    generation: generation, message: error.localizedDescription
+                ))
+            }
+        }
+        .cancellable(id: CancelID.search, cancelInFlight: true)
+    }
+
 }

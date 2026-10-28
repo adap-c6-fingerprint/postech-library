@@ -27,12 +27,14 @@ struct BookSearchCacheFeatureTests {
         } withDependencies: {
             $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in }
-            $0.bookClient.search = { query in
+            $0.bookClient.search = { request in
+                let query = request.query
                 calls.withLock { $0 += 1 }
                 return query == "스위프트" ? [swift] : [science]
             }
         }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = ["스위프트"]
@@ -42,11 +44,14 @@ struct BookSearchCacheFeatureTests {
             $0.books = [swift]
         }
         await store.send(.queryChanged(" 스위프트\n")) { $0.query = " 스위프트\n" }
-        await store.send(.searchButtonTapped)
+        await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
+        }
         #expect(calls.withLock { $0 } == 1)
 
         await store.send(.queryChanged("과학")) { $0.query = "과학" }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.books = []
             $0.isLoading = true
             $0.recentQueries = ["과학", "스위프트"]
@@ -57,6 +62,7 @@ struct BookSearchCacheFeatureTests {
         }
         await store.send(.queryChanged("스위프트")) { $0.query = "스위프트" }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.books = [swift]
             $0.recentQueries = ["스위프트", "과학"]
         }
@@ -67,7 +73,7 @@ struct BookSearchCacheFeatureTests {
     func reloadsExpiredResult() async {
         let now = Mutex(Date(timeIntervalSince1970: 100))
         let cache = BookSearchResultCache(now: { now.withLock { $0 } })
-        cache.save([], for: "스위프트")
+        cache.save([], for: .init(query: "스위프트", category: .all))
         now.withLock { $0 = $0.addingTimeInterval(60) }
         let calls = Mutex(0)
         let store = TestStore(initialState: BookSearchFeature.State(query: "스위프트")) {
@@ -81,6 +87,7 @@ struct BookSearchCacheFeatureTests {
             }
         }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = ["스위프트"]
@@ -92,7 +99,7 @@ struct BookSearchCacheFeatureTests {
     @Test("실패한 새로고침의 이전 캐시를 재사용하지 않고 다음 제출에서 재시도한다")
     func refreshInvalidatesAndFailureIsNotCached() async {
         let cache = BookSearchResultCache()
-        cache.save([swift], for: "스위프트")
+        cache.save([swift], for: .init(query: "스위프트", category: .all))
         let calls = Mutex(0)
         let error = URLError(.notConnectedToInternet)
         let message = error.localizedDescription
@@ -110,7 +117,7 @@ struct BookSearchCacheFeatureTests {
             }
         }
         await store.send(.refreshButtonTapped) {
-            $0.books = []
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.recentQueries = ["스위프트"]
         }
@@ -118,14 +125,16 @@ struct BookSearchCacheFeatureTests {
             $0.isLoading = false
             $0.errorMessage = message
         }
-        #expect(cache.load("스위프트") == nil)
+        #expect(cache.load(.init(query: "스위프트", category: .all)) == nil)
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.errorMessage = nil
+            $0.books = []
         }
         await store.receive(\.searchSucceeded) { $0.isLoading = false }
         #expect(calls.withLock { $0 } == 2)
-        #expect(cache.load("스위프트") == [])
+        #expect(cache.load(.init(query: "스위프트", category: .all)) == [])
     }
 
     @Test("검색 중 입력이 바뀌어도 제출했던 검색어에 결과를 저장한다")
@@ -144,6 +153,7 @@ struct BookSearchCacheFeatureTests {
             }
         }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = ["스위프트"]
@@ -155,8 +165,8 @@ struct BookSearchCacheFeatureTests {
             $0.isLoading = false
             $0.books = [swift]
         }
-        #expect(cache.load("스위프트") == [swift])
-        #expect(cache.load("과학") == nil)
+        #expect(cache.load(.init(query: "스위프트", category: .all)) == [swift])
+        #expect(cache.load(.init(query: "과학", category: .all)) == nil)
     }
 
     @Test("취소한 검색의 늦은 성공 결과는 캐시하지 않는다")
@@ -175,17 +185,19 @@ struct BookSearchCacheFeatureTests {
             }
         }
         await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
             $0.hasSearched = true
             $0.recentQueries = ["스위프트"]
         }
         await store.send(.searchCancelled) {
+            $0.searchGeneration += 1
             $0.query = ""
             $0.isLoading = false
             $0.hasSearched = false
         }
         await store.finish()
         gate.continuation.finish()
-        #expect(cache.load("스위프트") == nil)
+        #expect(cache.load(.init(query: "스위프트", category: .all)) == nil)
     }
 }
