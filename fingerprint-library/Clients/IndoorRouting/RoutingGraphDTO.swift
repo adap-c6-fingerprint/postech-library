@@ -37,11 +37,13 @@ nonisolated struct RoutingGraphDTO: Decodable {
         let direction: RouteEdgeDirection?
         let accessible: Bool?
         let traversalSeconds: Double?
+        var groupID: UUID? = nil
 
         enum CodingKeys: String, CodingKey {
             case role, level, name, category, from, to, direction, accessible
             case levelID = "level_id"
             case traversalSeconds = "traversal_seconds"
+            case groupID = "group_id"
         }
     }
 }

@@ -22,18 +22,37 @@ struct BookRoutePreviewTestRouteTests {
         #expect((58...60).contains(result.route.distanceMeters))
         #expect(result.route.start.distanceToGraphMeters == 0)
         #expect(result.route.floorChanges.isEmpty)
+        #expect(abs(result.guidance.walkingSeconds - 42.22028465) < 0.000_001)
+        #expect(result.guidance.stepCount == 3)
+        #expect(result.guidance.groupTransitionNodes.map(\.id) == [
+            "e43c6135-24a2-43a9-ba62-a9d6cf03cb76", "6ec3f119-b41f-40e8-afe0-3c3aaccc55bd"
+        ])
 
         let floor = try #require(fixture.map.floors.first { $0.id == result.origin.floorID })
-        let parent = IndoorMapKitView(
+        var parent = IndoorMapKitView(
             map: fixture.map, floor: floor, selectedFeatureID: nil, position: result.start,
             showsUserLocation: false, isPlacingOrigin: false, cameraRequest: nil,
             onSelect: { _ in }, onPlaceOrigin: { _ in }, route: result.route,
+            groupTransitionNodes: result.guidance.groupTransitionNodes,
             shelfLabels: fixture.labels, highlightedFeatureIDs: [result.destination.mapElementID])
         let coordinator = parent.makeCoordinator()
         let view = coordinator.makeMapView()
         defer { view.delegate = nil }
         view.frame = CGRect(x: 0, y: 0, width: 390, height: 340)
         coordinator.update(parent: parent, in: view)
+        let markers = view.annotations.compactMap { $0 as? MKPointAnnotation }
+        #expect(markers.count == 2)
+        for node in result.guidance.groupTransitionNodes {
+            let marker = try #require(markers.first {
+                abs($0.coordinate.latitude - node.coordinate.latitude) < 0.000_001
+                    && abs($0.coordinate.longitude - node.coordinate.longitude) < 0.000_001
+            })
+            let badge = try #require(coordinator.mapView(view, viewFor: marker))
+            #expect(badge.image?.size == CGSize(width: 24, height: 24))
+            #expect(badge.zPriority == .max)
+            #expect(badge.displayPriority == .required)
+            #expect(badge.accessibilityIdentifier == "route-group-transition-\(node.id)")
+        }
         let segment = try #require(result.route.segments.first)
         let path = try #require(view.overlays.compactMap { $0 as? MKPolyline }.first {
             $0.pointCount == segment.coordinates.count
@@ -53,6 +72,17 @@ struct BookRoutePreviewTestRouteTests {
                                      toPointTo: view)
             #expect(view.bounds.insetBy(dx: 16, dy: 16).contains(point))
         }
+        // 동일 경로에서 그룹 표시만 바뀌어도 이전 원을 정리한다.
+        parent.groupTransitionNodes = []
+        coordinator.update(parent: parent, in: view)
+        #expect(view.annotations.compactMap { $0 as? MKPointAnnotation }.isEmpty)
+        parent.groupTransitionNodes = result.guidance.groupTransitionNodes
+        coordinator.update(parent: parent, in: view)
+        #expect(view.annotations.compactMap { $0 as? MKPointAnnotation }.count == 2)
+        parent.route = nil
+        coordinator.update(parent: parent, in: view)
+        #expect(view.overlays.compactMap { $0 as? MKCircle }.isEmpty)
+        #expect(view.annotations.compactMap { $0 as? MKPointAnnotation }.isEmpty)
     }
 
     enum Corruption: CaseIterable { case hash, level, missingOrigin, reverseLinks, disconnected }

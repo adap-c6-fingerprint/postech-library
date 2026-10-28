@@ -29,6 +29,8 @@ nonisolated struct RouteEdge: Identifiable, Equatable, Sendable {
     let coordinates: [IndoorMapCoordinate]
     /// 원본에 있을 때만 보존한다. 실제 거리나 ETA로 사용하지 않는다.
     let traversalSeconds: Double?
+    /// 안내 단계 구분용 원본 그룹 UUID. 경로 비용·방향에는 영향을 주지 않는다.
+    var groupID: UUID? = nil
 }
 
 nonisolated struct RoutingGraph: Equatable, Sendable {
