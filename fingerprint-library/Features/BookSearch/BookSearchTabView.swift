@@ -31,6 +31,9 @@ struct BookSearchTabView: View {
                     books: store.basketBooks,
                     onDeletedSelected: { bookIDs in
                         store.send(.removeFromBasket(bookIDs))
+                    },
+                    onShowDirections: { bookIDs in
+                        store.send(.basketDirectionsButtonTapped(bookIDs))
                     }
                 )
                 .toolbar(.visible, for: .navigationBar)
@@ -39,6 +42,12 @@ struct BookSearchTabView: View {
                 item: $store.scope(state: \.detail, action: \.detail)
             ) { detailStore in
                 BookDetailView(store: detailStore)
+                    .toolbar(.visible, for: .navigationBar)
+            }
+            .navigationDestination(
+                item: $store.scope(state: \.shelfMap, action: \.shelfMap)
+            ) { shelfMapStore in
+                BookShelfMapView(store: shelfMapStore)
                     .toolbar(.visible, for: .navigationBar)
             }
         }

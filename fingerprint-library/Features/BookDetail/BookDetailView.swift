@@ -57,7 +57,7 @@ struct BookDetailSheet: View {
 }
 
 struct BookDetailView: View {
-    let store: StoreOf<BookDetailFeature>
+    @Bindable var store: StoreOf<BookDetailFeature>
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var isNoticePresented = false
     @State private var noticeMessage = ""
@@ -77,6 +77,12 @@ struct BookDetailView: View {
             Button("확인", role: .cancel) { }
         } message: {
             Text(noticeMessage)
+        }
+        .navigationDestination(
+            item: $store.scope(state: \.shelfMap, action: \.shelfMap)
+        ) { shelfMapStore in
+            BookShelfMapView(store: shelfMapStore)
+                .toolbar(.visible, for: .navigationBar)
         }
         .task { store.send(.loadFavorites) }
         .task { await store.send(.loadHoldings).finish() }
@@ -115,10 +121,9 @@ struct BookDetailView: View {
         ToolbarItem(placement: .bottomBar) {
             HStack(spacing: 12) {
                 Button {
-                    noticeMessage = "도서의 서가 위치가 연결되면 안내를 시작할 수 있어요."
-                    isNoticePresented = true
+                    store.send(.directionsButtonTapped)
                 } label: {
-                    Text("바로 안내 시작")
+                    Text("서가 위치 보기")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                 }
@@ -185,8 +190,8 @@ struct BookDetailView: View {
 
     @ViewBuilder
     private var holdingContent: some View {
-        if case let .loaded(holding) = store.holdingsState {
-            Text(holding?.callNumber ?? "정보 없음")
+        if case .loaded = store.holdingsState {
+            Text(store.displayedHolding?.callNumber ?? "정보 없음")
                 .font(.subheadline)
                 .textSelection(.enabled)
         }
@@ -204,8 +209,14 @@ struct BookDetailView: View {
         case .idle, .loading:
             ProgressView("소장정보 확인 중")
                 .font(.caption)
-        case let .loaded(holding):
-            availabilityLabel(holding?.availability ?? .unknown)
+        case .loaded:
+            if let holding = store.displayedHolding {
+                availabilityLabel(holding)
+            } else {
+                Text("소장정보 없음")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
         case .failed:
             VStack(alignment: .leading, spacing: 4) {
                 Text("소장정보를 불러오지 못했어요.")
@@ -233,28 +244,24 @@ struct BookDetailView: View {
         .accessibilityIdentifier("bookDetail.favorite")
     }
 
-    private func availabilityLabel(_ availability: BookHolding.Availability) -> some View {
-        let title: String
-        let color: Color
-        switch availability {
-        case .available:
-            title = "대출 가능"
-            color = .green
-        case .unavailable:
-            title = "대출 불가능"
-            color = .secondary
-        case .unknown:
-            title = "대출 상태 확인 불가"
-            color = .secondary
-        }
-        return Text(title)
+    private func availabilityLabel(_ holding: BookHolding) -> some View {
+        Text(holding.availabilityText)
             .font(.subheadline.bold())
-            .foregroundStyle(color)
+            .foregroundStyle(holding.availability == "available" ? Color.green : Color.secondary)
     }
 
     private var routeSummaryContent: some View {
-        BookRouteSummaryView(summary: store.routeSummary)
-            .accessibilityIdentifier("bookDetail.routeSummary")
+        VStack(alignment: .leading, spacing: 12) {
+            BookRouteSummaryView(summary: store.routeSummary)
+                .accessibilityIdentifier("bookDetail.routeSummary")
+            NavigationLink {
+                BookRoutePreviewView(books: [store.book])
+            } label: {
+                Label("경로 미리보기", systemImage: "map")
+            }
+            .buttonStyle(.bordered)
+            .accessibilityIdentifier("detail-route-preview")
+        }
     }
 
     @ViewBuilder
@@ -359,7 +366,7 @@ private struct BookRouteSummaryView: View {
                 .foregroundStyle(.secondary)
 
             HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text("\(value)")
+                Text(summary.isMock ? "—" : "\(value)")
                     .font(.system(size: valueFontSize, weight: .semibold))
                     .monospacedDigit()
 
@@ -371,6 +378,6 @@ private struct BookRouteSummaryView: View {
         .frame(minWidth: 70, alignment: .leading)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
-        .accessibilityValue("\(value)\(spokenUnit)")
+        .accessibilityValue(summary.isMock ? "계산 전" : "\(value)\(spokenUnit)")
     }
 }

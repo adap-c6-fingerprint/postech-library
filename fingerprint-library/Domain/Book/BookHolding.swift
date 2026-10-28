@@ -1,26 +1,25 @@
 import Foundation
 
-/// Primo의 한 소장 위치. 청구기호와 대출 상태는 같은 소장 항목에서 가져온다.
-nonisolated struct BookHolding: Equatable, Sendable {
-    enum Availability: Equatable, Sendable {
-        case available
-        case unavailable
-        case unknown
+/// 도서의 소장처. 서지 ID·소장 ID·지도 fixture ID는 각각 다른 식별자다.
+nonisolated struct BookHolding: Equatable, Identifiable, Sendable {
+    let holdingID: String?
+    let institutionCode: String?
+    let libraryCode: String?
+    let locationCode: String?
+    let locationName: String?
+    let callNumber: String?
+    let availability: String?
+
+    var id: String {
+        [institutionCode, libraryCode, locationCode, locationName, callNumber, holdingID]
+            .map { $0 ?? "" }.joined(separator: "\u{1F}")
     }
 
-    let recordID: String
-    let callNumber: String?
-    let location: String?
-    let locationCode: String?
-    let availability: Availability
-}
-
-/// 실제 경로 계산 결과를 연결할 때 교체할 상세 화면의 표시 데이터.
-nonisolated struct BookRouteSummary: Equatable, Sendable {
-    var walkingMinutes: Int
-    var stepCount: Int
-    var distanceMeters: Int
-    var isMock: Bool
-
-    static let mock = Self(walkingMinutes: 3, stepCount: 5, distanceMeters: 120, isMock: true)
+    var availabilityText: String {
+        switch availability {
+        case "available": "대출 가능"
+        case "unavailable": "대출 중 또는 이용 불가"
+        default: "대출 상태 확인 필요"
+        }
+    }
 }

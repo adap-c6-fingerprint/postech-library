@@ -3,6 +3,8 @@ NATIONAL_LIBRARY_API_KEY =
 YES24_API_KEY =
 DATA4LIBRARY_API_KEY =
 PRIMO_API_KEY =
+// Required for Release; validated by the app target before compilation.
+PRIMO_PROXY_URL =
 
 // Load local keys when the file exists.
 #include? "Secrets.xcconfig"

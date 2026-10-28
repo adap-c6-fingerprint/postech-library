@@ -6,18 +6,21 @@ import Testing
 @MainActor
 struct BookDetailHoldingsFeatureTests {
     private var book: Book {
-        Book(id: "primo:alma123", isbn: nil, controlNumber: "primo:alma123", title: "선택한 책",
+        Book(id: "primo:alma991000958759703286", isbn: nil, controlNumber: "primo:alma991000958759703286", title: "선택한 책",
              author: "저자", publisher: nil, publicationYear: nil, description: nil, imageURL: nil)
     }
 
     @Test("소장정보를 조회하고 같은 화면의 중복 조회를 막는다")
     func loadOnce() async {
-        let holding = BookHolding(recordID: "alma123", callNumber: "QA76", location: "3층", locationCode: "c3b", availability: .available)
+        let holding = BookHolding(holdingID: "holding-1", institutionCode: "82POSTECH_INST", libraryCode: "MAIN", locationCode: "c3b", locationName: "3층", callNumber: "QA76", availability: "available")
         let store = TestStore(initialState: BookDetailFeature.State(book: book)) { BookDetailFeature() } withDependencies: {
-            $0.bookHoldingsClient.fetch = { _ in holding }
+            $0.bookHoldingsClient.fetch = { recordID in
+                #expect(recordID == "alma991000958759703286")
+                return [holding]
+            }
         }
         await store.send(.loadHoldings) { $0.holdingsState = .loading }
-        await store.receive(\.holdingsLoaded) { $0.holdingsState = .loaded(holding) }
+        await store.receive(\.holdingsLoaded) { $0.holdingsState = .loaded([holding]) }
         await store.send(.loadHoldings)
         await store.finish()
     }
@@ -29,9 +32,9 @@ struct BookDetailHoldingsFeatureTests {
         }
         await store.send(.loadHoldings) { $0.holdingsState = .loading }
         await store.receive(\.holdingsFailed) { $0.holdingsState = .failed }
-        store.dependencies.bookHoldingsClient.fetch = { _ in nil }
+        store.dependencies.bookHoldingsClient.fetch = { _ in [] }
         await store.send(.retryHoldingsButtonTapped) { $0.holdingsState = .loading }
-        await store.receive(\.holdingsLoaded) { $0.holdingsState = .loaded(nil) }
+        await store.receive(\.holdingsLoaded) { $0.holdingsState = .loaded([]) }
         await store.finish()
     }
 
@@ -45,8 +48,10 @@ struct BookDetailHoldingsFeatureTests {
             await store.send(.home(.detail(.presented(.addToBasketButtonTapped))))
             await store.receive(\.home.detail.presented.delegate)
             await store.receive(\.home.delegate)
-            await store.receive(\.bookSearch.addToBasket) {
-                if attempt == 0 { $0.bookSearch.basketBooks = [book] }
+            if attempt == 0 {
+                await store.receive(\.bookSearch.addToBasket) { $0.bookSearch.basketBooks = [book] }
+            } else {
+                await store.receive(\.bookSearch.addToBasket)
             }
         }
         await store.finish()

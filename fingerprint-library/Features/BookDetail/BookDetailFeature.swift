@@ -21,7 +21,7 @@ struct BookDetailFeature {
     enum HoldingsState: Equatable {
         case idle
         case loading
-        case loaded(BookHolding?)
+        case loaded([BookHolding])
         case failed
     }
 
@@ -30,6 +30,7 @@ struct BookDetailFeature {
     struct State: Equatable {
         let book: Book
         var isFavorite = false
+        @Presents var shelfMap: BookShelfMapFeature.State?
 
         // 책 소개
         var description: BookDescription? = nil
@@ -41,6 +42,11 @@ struct BookDetailFeature {
         var relatedBooksState: RelatedBooksState = .idle
         var holdingsState: HoldingsState = .idle
         var routeSummary: BookRouteSummary = .mock
+
+        var displayedHolding: BookHolding? {
+            guard case let .loaded(holdings) = holdingsState else { return nil }
+            return BookHoldingPresentation.preferred(in: holdings)
+        }
 
         var isbn13: String? {
             BookISBN.isbn13(from: book.isbn)
@@ -60,9 +66,11 @@ struct BookDetailFeature {
         case relatedBooksLoaded([Book])
         case relatedBooksFailed(String)
 
+        case directionsButtonTapped
+        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         case loadHoldings
         case retryHoldingsButtonTapped
-        case holdingsLoaded(BookHolding?)
+        case holdingsLoaded([BookHolding])
         case holdingsFailed
         case routeSummaryUpdated(BookRouteSummary)
         case loadFavorites
@@ -107,6 +115,18 @@ struct BookDetailFeature {
                 state.isFavorite = keys.contains(key)
                 bookFavoritesClient.save(keys)
                 return .send(.delegate(.favoritesChanged(keys)))
+
+            case .directionsButtonTapped:
+                var destination = BookShelfMapFeature.State(book: state.book)
+                // 상세에서 받은 전체 소장처를 지도에 전달해 위치 후보를 보존한다.
+                if case let .loaded(holdings) = state.holdingsState {
+                    destination.holdings[state.book.id] = .loaded(holdings)
+                }
+                state.shelfMap = destination
+                return .none
+
+            case .shelfMap:
+                return .none
 
             case .loadHoldings:
                 guard case .idle = state.holdingsState else { return .none }
@@ -179,6 +199,7 @@ struct BookDetailFeature {
                 return .none
             }
         }
+        .ifLet(\.$shelfMap, action: \.shelfMap) { BookShelfMapFeature() }
     }
 
     private nonisolated enum CancelID: Hashable, Sendable {
@@ -189,10 +210,14 @@ struct BookDetailFeature {
 
     private func loadHoldings(state: inout State) -> Effect<Action> {
         guard state.holdingsState != .loading else { return .none }
+        guard let recordID = BookHoldingsClient.recordID(for: state.book) else {
+            state.holdingsState = .failed
+            return .none
+        }
         state.holdingsState = .loading
-        return .run { [book = state.book, bookHoldingsClient] send in
+        return .run { [bookHoldingsClient] send in
             do {
-                let holding = try await bookHoldingsClient.fetch(book)
+                let holding = try await bookHoldingsClient.fetch(recordID)
                 try Task.checkCancellation()
                 await send(.holdingsLoaded(holding))
             } catch {

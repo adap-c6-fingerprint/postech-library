@@ -1,99 +1,119 @@
 import Foundation
+import Synchronization
 import Testing
 @testable import fingerprint_library
 
+@Suite(.serialized)
 struct BookHoldingsClientTests {
-    private func book(id: String = "primo:alma123", isbn: String? = "9791139723281") -> Book {
-        Book(id: id, isbn: isbn, controlNumber: id, title: "책", author: "저자",
-             publisher: nil, publicationYear: nil, description: nil, imageURL: nil)
+    private let recordID = "alma991000958759703286"
+
+    @Test("Book의 원본 자료번호를 추출하고 유효하지 않은 식별자는 조회하지 않는다")
+    @MainActor
+    func extractsRecordID() {
+        func book(_ id: String, control: String? = nil) -> Book {
+            Book(id: id, isbn: "9791139723281", controlNumber: control, title: "책", author: "저자",
+                 publisher: nil, publicationYear: nil, description: nil, imageURL: nil)
+        }
+        #expect(BookHoldingsClient.recordID(for: book("primo:\(recordID)")) == recordID)
+        #expect(BookHoldingsClient.recordID(for: book("local", control: recordID)) == recordID)
+        #expect(BookHoldingsClient.recordID(for: book("local", control: "alma123")) == nil)
+        #expect(BookHoldingsClient.recordID(for: book("9791139723281")) == nil)
     }
 
-    private func response(_ request: URLRequest, _ json: String, status: Int = 200) -> (Data, URLResponse) {
-        (Data(json.utf8), HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: nil)!)
-    }
-
-    @Test("공개 Primo를 인증 없이 조회하고 같은 소장의 청구기호·대출 상태를 표시한다")
-    func selectsAvailableHolding() async throws {
-        let service = PrimoBookHoldingsService(load: { request in
-            #expect(request.url?.host == "postech.primo.exlibrisgroup.com")
+    @Test("자료번호로 요청하고 청구기호·상태가 다른 소장처 전체를 반환한다")
+    func preservesAllHoldings() async throws {
+        let recordID = recordID
+        let session = makeSession { request in
+            #expect(request.url?.host == "api-ap.hosted.exlibrisgroup.com")
             #expect(request.value(forHTTPHeaderField: "Authorization") == nil)
             let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!.queryItems!
-            #expect(query.first { $0.name == "q" }?.value == "any,contains,123")
+            #expect(query.first { $0.name == "q" }?.value == "any,contains,991000958759703286")
             #expect(query.first { $0.name == "skipDelivery" }?.value == "false")
             return response(request, """
-            {"docs":[{"pnx":{"control":{"recordid":["alma123"]}},"delivery":{
-            "deliveryCategory":["Alma-P"],"holding":[
-              {"callNumber":"UNAVAILABLE","availabilityStatus":"unavailable"},
-              {"callNumber":" QA76.9 .A43 ","subLocation":"단행본3층","subLocationCode":"c3b","availabilityStatus":"available"}
+            {"docs":[{"pnx":{"control":{"recordid":["\(recordID)"]}},"delivery":{"holding":[
+              {"holdId":"a","callNumber":"UNAVAILABLE","availabilityStatus":"unavailable"},
+              {"holdId":"b","callNumber":" QA76.9 .A43 ","subLocation":"단행본3층","subLocationCode":"c3b","availabilityStatus":"available"}
             ]}}]}
             """)
-        })
-        let result = try await service.fetch(for: book())
-        #expect(result?.callNumber == "QA76.9 .A43")
-        #expect(result?.locationCode == "c3b")
-        #expect(result?.availability == .available)
+        }
+        defer { session.invalidateAndCancel() }
+        let result = try await PrimoBookHoldingsService(session: session).fetch(recordID: recordID)
+        #expect(result.map(\.callNumber) == ["UNAVAILABLE", "QA76.9 .A43"])
+        #expect(result.map(\.availability) == ["unavailable", "available"])
+        #expect(result[1].locationCode == "c3b")
     }
 
-    @Test("소장 없음 레코드는 같은 ISBN의 실물 소장 레코드를 다시 조회한다")
-    func fallsBackToMatchingISBN() async throws {
-        let service = PrimoBookHoldingsService(load: { request in
-            let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!.queryItems!
-                .first { $0.name == "q" }!.value!
-            if query.hasPrefix("any,") {
-                return response(request, """
-                {"docs":[{"pnx":{"control":{"recordid":["alma123"]}},"delivery":{"availability":["no_inventory"]}}]}
-                """)
-            }
-            #expect(query == "isbn,exact,9791139723281")
-            return response(request, """
-            {"docs":[
-              {"pnx":{"control":{"recordid":["alma999"]},"addata":{"isbn":["9788966260959"]}},"delivery":{"holding":[{"callNumber":"WRONG","availabilityStatus":"available"}]}},
-              {"pnx":{"control":{"recordid":["alma456"]},"addata":{"isbn":["9791139723281"]}},"delivery":{"bestlocation":{"callNumber":"BF637.S8 .N47 2025","availabilityStatus":"unavailable"}}}
-            ]}
-            """)
-        })
-        let result = try await service.fetch(for: book())
-        #expect(result?.recordID == "alma456")
-        #expect(result?.callNumber == "BF637.S8 .N47 2025")
-        #expect(result?.availability == .unavailable)
-    }
-
-    @Test("알 수 없는 상태를 대출 불가능으로 바꾸지 않는다", arguments: ["check_holdings", "", "unexpected"])
-    func unknownAvailability(_ status: String) async throws {
-        let service = PrimoBookHoldingsService(load: { request in
+    @Test("알 수 없는 대출 상태의 원본 값을 보존한다", arguments: ["check_holdings", "unexpected"])
+    func preservesUnknownAvailability(_ status: String) async throws {
+        let recordID = recordID
+        let session = makeSession { request in
             response(request, """
-            {"docs":[{"pnx":{"control":{"recordid":["alma123"]}},"delivery":{"holding":[{"callNumber":"Q1","availabilityStatus":"\(status)"}]}}]}
+            {"docs":[{"pnx":{"control":{"recordid":["\(recordID)"]}},"delivery":{"holding":[{"callNumber":"Q1","availabilityStatus":"\(status)"}]}}]}
             """)
-        })
-        let result = try await service.fetch(for: book())
-        #expect(result?.availability == .unknown)
+        }
+        defer { session.invalidateAndCancel() }
+        let result = try await PrimoBookHoldingsService(session: session).fetch(recordID: recordID)
+        #expect(result.first?.availability == status)
+        #expect(result.first?.availabilityText == "대출 상태 확인 필요")
     }
 
-    @Test("엉뚱한 레코드와 전자자료의 소장을 선택하지 않는다")
-    func ignoresUnrelatedAndElectronicRecords() async throws {
-        let service = PrimoBookHoldingsService(load: { request in
-            response(request, """
-            {"docs":[
-              {"pnx":{"control":{"recordid":["alma999"]}},"delivery":{"holding":[{"callNumber":"WRONG","availabilityStatus":"available"}]}},
-              {"pnx":{"control":{"recordid":["alma123"]}},"delivery":{"deliveryCategory":["Alma-E"],"holding":[{"callNumber":"ONLINE","availabilityStatus":"available"}]}}
-            ]}
-            """)
-        })
-        let result = try await service.fetch(for: book(isbn: nil))
-        #expect(result == nil)
+    @Test("대상 자료번호와 다른 레코드의 소장처로 대체하지 않는다")
+    func rejectsUnrelatedRecord() async throws {
+        let session = makeSession { request in
+            response(request, #"{"docs":[{"pnx":{"control":{"recordid":["alma991000958759703280"]}},"delivery":{"holding":[{"callNumber":"WRONG"}]}}]}"#)
+        }
+        defer { session.invalidateAndCancel() }
+        #expect(try await PrimoBookHoldingsService(session: session).fetch(recordID: recordID) == [])
     }
 
-    @Test("소장·ISBN이 없으면 대출 불가능으로 추정하지 않는다")
-    func missingInventory() async throws {
-        let service = PrimoBookHoldingsService(load: { request in response(request, "{\"docs\":[]}") })
-        #expect(try await service.fetch(for: book(isbn: nil)) == nil)
-    }
-
-    @Test("서버 오류와 잘못된 응답은 빈 소장으로 처리하지 않는다", arguments: [500, 200])
-    func invalidResponse(_ status: Int) async {
-        let service = PrimoBookHoldingsService(load: { request in response(request, "{\"error\":\"failed\"}", status: status) })
-        await #expect(throws: (any Error).self) {
-            try await service.fetch(for: book())
+    @Test("유효하지 않은 자료번호는 네트워크 호출 전에 거절한다")
+    func rejectsInvalidIDBeforeLoading() async {
+        let session = makeSession { request in
+            Issue.record("유효하지 않은 식별자로 요청하면 안 된다")
+            return response(request, #"{"docs":[]}"#)
+        }
+        defer { session.invalidateAndCancel() }
+        await #expect(throws: BookHoldingsError.self) {
+            try await PrimoBookHoldingsService(session: session).fetch(recordID: "alma123")
         }
     }
+
+    @Test("HTTP 오류와 잘못된 응답을 소장 없음으로 숨기지 않는다", arguments: [400, 200])
+    func invalidResponse(_ status: Int) async {
+        let session = makeSession { request in response(request, #"{"error":"failed"}"#, status: status) }
+        defer { session.invalidateAndCancel() }
+        await #expect(throws: (any Error).self) {
+            try await PrimoBookHoldingsService(session: session).fetch(recordID: recordID)
+        }
+    }
+
+    private func makeSession(
+        _ handler: @escaping @Sendable (URLRequest) -> (Data, URLResponse)
+    ) -> URLSession {
+        HoldingsURLProtocol.handler.withLock { $0 = handler }
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [HoldingsURLProtocol.self]
+        return URLSession(configuration: configuration)
+    }
+}
+
+private nonisolated func response(_ request: URLRequest, _ json: String, status: Int = 200) -> (Data, URLResponse) {
+    (Data(json.utf8), HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: nil)!)
+}
+
+private final class HoldingsURLProtocol: URLProtocol, @unchecked Sendable {
+    static let handler = Mutex<(@Sendable (URLRequest) -> (Data, URLResponse))?>(nil)
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func startLoading() {
+        guard let handler = Self.handler.withLock({ $0 }) else {
+            client?.urlProtocol(self, didFailWithError: URLError(.badServerResponse))
+            return
+        }
+        let (data, response) = handler(request)
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: data)
+        client?.urlProtocolDidFinishLoading(self)
+    }
+    override func stopLoading() {}
 }

@@ -11,6 +11,10 @@ struct IndoorMapView: View {
     var showsRoute = true
     /// 경로 시트가 차지하는 하단 영역. 카메라 맞춤과 지도 조작 UI의 배치에 함께 적용한다.
     var bottomContentInset: CGFloat = 0
+    var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
+    var showsCurrentLocationButton = true
+    /// 하단 안내 카드가 있는 화면에서는 지도·카메라 영역을 카드 위로 제한한다.
+    var extendsUnderBottomSafeArea = true
 
     var body: some View {
         Group {
@@ -50,36 +54,40 @@ struct IndoorMapView: View {
                         ? store.selectedShelfKey : (showsRoute ? store.routeDestinationKey : nil),
                     onSelectShelf: { if showsDestinationCard { store.send(.shelfSelected($0)) } },
                     route: !showsDestinationCard && showsRoute ? store.route : nil,
-                    viewportInsets: .init(top: 60, left: 0, bottom: bottomContentInset, right: 0)
+                    viewportInsets: .init(top: 60, left: 0, bottom: bottomContentInset, right: 0),
+                    shelfLabels: store.shelfLabels,
+                    highlightedFeatureIDs: highlightedFeatureIDs
                 )
-                .ignoresSafeArea(.container, edges: .bottom)
+                .ignoresSafeArea(.container, edges: extendsUnderBottomSafeArea ? .bottom : [])
 
                 VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Spacer()
-                        Button {
-                            store.send(.currentLocationTapped)
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "scope")
-                                    .font(.title3.weight(.medium))
-                                if !showsDestinationCard {
-                                    Text(currentFloorLabel)
-                                        .font(.subheadline.weight(.medium))
-                                        .lineLimit(1)
+                    if showsCurrentLocationButton {
+                        HStack {
+                            Spacer()
+                            Button {
+                                store.send(.currentLocationTapped)
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "scope")
+                                        .font(.title3.weight(.medium))
+                                    if !showsDestinationCard {
+                                        Text(currentFloorLabel)
+                                            .font(.subheadline.weight(.medium))
+                                            .lineLimit(1)
+                                    }
                                 }
+                                .padding(.horizontal, showsDestinationCard ? 0 : 14)
+                                .frame(minWidth: 48, minHeight: 48)
+                                .background(Color(uiColor: .systemBackground), in: Capsule())
+                                .overlay(
+                                    Capsule().strokeBorder(Color(uiColor: .separator).opacity(0.4))
+                                )
+                                .shadow(color: .black.opacity(0.12), radius: 6, y: 3)
                             }
-                            .padding(.horizontal, showsDestinationCard ? 0 : 14)
-                            .frame(minWidth: 48, minHeight: 48)
-                            .background(Color(uiColor: .systemBackground), in: Capsule())
-                            .overlay(
-                                Capsule().strokeBorder(Color(uiColor: .separator).opacity(0.4))
-                            )
-                            .shadow(color: .black.opacity(0.12), radius: 6, y: 3)
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("현재 위치로 지도 이동")
+                            .accessibilityIdentifier("recenter-location")
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("현재 위치로 지도 이동")
-                        .accessibilityIdentifier("recenter-location")
                     }
 
                     if let message = store.locationMessage {
@@ -93,6 +101,17 @@ struct IndoorMapView: View {
                             .accessibilityIdentifier("map-location-status")
                     }
 
+                    if let message = store.shelfLabelError {
+                        HStack {
+                            Text(message)
+                            Button("다시 시도") { store.send(.retryShelfLabelsTapped) }
+                        }
+                        .font(.caption)
+                        .padding(10)
+                        .background(Color(uiColor: .systemBackground), in: RoundedRectangle(cornerRadius: 12))
+                        .accessibilityIdentifier("map-shelf-label-status")
+                    }
+
                     Spacer(minLength: 0)
                     floorPicker(
                         map: map, floor: floor,
@@ -102,6 +121,7 @@ struct IndoorMapView: View {
                         IndoorRouteControls(store: store)
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .padding(16)
                 .padding(.bottom, bottomContentInset)
             }
