@@ -75,4 +75,20 @@ struct BookBasketTests {
             $0.basketBooks = saved.map(\.book)
         }
     }
+
+    @Test("보관 목록을 보관한 날짜별로 최근 날짜부터 묶고 권수를 유지한다")
+    func groupByAddedDay() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Seoul")!
+        let day1 = calendar.date(from: DateComponents(year: 2026, month: 10, day: 3, hour: 9))!
+        let day1Later = calendar.date(from: DateComponents(year: 2026, month: 10, day: 3, hour: 21))!
+        let day2 = calendar.date(from: DateComponents(year: 2026, month: 10, day: 12, hour: 12))!
+        let items = [item("a", addedAt: day1), item("b", addedAt: day2), item("c", addedAt: day1Later)]
+
+        let sections = BookBasketSection.grouped(items, calendar: calendar)
+
+        #expect(sections.map(\.day) == [calendar.startOfDay(for: day2), calendar.startOfDay(for: day1)])
+        #expect(sections.map { $0.items.map(\.id) } == [["b"], ["c", "a"]])
+        #expect(sections.flatMap(\.items).count == items.count)
+    }
 }

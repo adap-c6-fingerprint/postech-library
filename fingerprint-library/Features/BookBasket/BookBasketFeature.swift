@@ -11,6 +11,10 @@ struct BookBasketFeature {
     @ObservableState
     struct State: Equatable {
         var items: [BookBasketItem] = []
+
+        var sections: [BookBasketSection] {
+            BookBasketSection.grouped(items, calendar: .current)
+        }
     }
 
     enum Action {
