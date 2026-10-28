@@ -1,8 +1,8 @@
 import SwiftUI
 import ComposableArchitecture
 
-/// 추천 탭에서 진입하는 지도 중심 책 상세 화면.
-/// 지도 로딩과 위치 스트림은 AppFeature가 소유한 기존 Store를 재사용한다.
+/// 추천 탭에서 진입하는 지도 중심 책 상세 화면
+/// 지도 로딩과 위치 스트림은 AppFeature가 소유한 기존 Store를 재사용
 struct BookDetailMapView: View {
     let store: StoreOf<BookDetailFeature>
     let mapStore: StoreOf<IndoorMapFeature>
@@ -42,7 +42,6 @@ struct BookDetailMapView: View {
     }
 }
 
-/// 표지를 포함한 서지정보를 모두 시트 안쪽에 배치한다.
 struct BookDetailSheet: View {
     let store: StoreOf<BookDetailFeature>
     @State private var selectedDetent: PresentationDetent = .medium
@@ -92,20 +91,8 @@ struct BookDetailView: View {
 
                 routeSummaryContent
 
-                Divider()
-
                 VStack(alignment: .leading, spacing: 12) {
-                    Text("책 정보")
-                        .font(.headline)
                     descriptionContent
-                }
-
-                Divider()
-
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("연관 도서")
-                        .font(.headline)
-                    relatedBooksContent
                 }
             }
             .padding(.horizontal, 20)
@@ -192,24 +179,6 @@ struct BookDetailView: View {
                 .fixedSize(horizontal: false, vertical: true)
 
             holdingContent
-
-            Text(BookText.plainText(store.book.author))
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            if let publisher = store.book.publisher.map(BookText.plainText),
-               !publisher.isEmpty {
-                Text(publisher)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            if let year = store.book.publicationYear.map(BookText.plainText),
-               !year.isEmpty {
-                Text(year)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -217,7 +186,7 @@ struct BookDetailView: View {
     @ViewBuilder
     private var holdingContent: some View {
         if case let .loaded(holding) = store.holdingsState {
-            Text("청구기호 \(holding?.callNumber ?? "정보 없음")")
+            Text(holding?.callNumber ?? "정보 없음")
                 .font(.subheadline)
                 .textSelection(.enabled)
         }
@@ -226,13 +195,6 @@ struct BookDetailView: View {
             holdingStatusContent
             Spacer(minLength: 8)
             favoriteButton
-        }
-
-        if case let .loaded(holding) = store.holdingsState,
-           let location = holding?.location {
-            Text(location)
-                .font(.caption)
-                .foregroundStyle(.secondary)
         }
     }
 
@@ -291,28 +253,8 @@ struct BookDetailView: View {
     }
 
     private var routeSummaryContent: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(store.routeSummary.isMock ? "내 위치에서 · 예시 경로" : "내 위치에서")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            ViewThatFits(in: .horizontal) {
-                HStack(spacing: 20) { routeMetrics }
-                VStack(alignment: .leading, spacing: 12) { routeMetrics }
-            }
-            .font(.subheadline.bold())
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(16)
-        .background(.quaternary, in: RoundedRectangle(cornerRadius: 16))
-        .accessibilityIdentifier("bookDetail.routeSummary")
-    }
-
-    @ViewBuilder
-    private var routeMetrics: some View {
-        Label("도보 \(store.routeSummary.walkingMinutes)분", systemImage: "figure.walk")
-        Label("\(store.routeSummary.stepCount)단계", systemImage: "arrow.triangle.turn.up.right.diamond")
-        Label("\(store.routeSummary.distanceMeters)m", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
+        BookRouteSummaryView(summary: store.routeSummary)
+            .accessibilityIdentifier("bookDetail.routeSummary")
     }
 
     @ViewBuilder
@@ -380,5 +322,55 @@ struct BookDetailView: View {
                 .buttonStyle(.bordered)
             }
         }
+    }
+}
+
+
+/// 도보·단계·거리의 값과 단위를 같은 기준선에 표시한다.
+private struct BookRouteSummaryView: View {
+    let summary: BookRouteSummary
+    @ScaledMetric(relativeTo: .largeTitle) private var valueFontSize: CGFloat = 32
+
+    var body: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: 24) {
+                metrics
+            }
+            .fixedSize(horizontal: true, vertical: false)
+
+            VStack(alignment: .leading, spacing: 16) {
+                metrics
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private var metrics: some View {
+        metric("도보", value: summary.walkingMinutes, unit: "min", spokenUnit: "분")
+        metric("단계", value: summary.stepCount, unit: "steps", spokenUnit: "단계")
+        metric("거리", value: summary.distanceMeters, unit: "m", spokenUnit: "미터")
+    }
+
+    private func metric(_ title: String, value: Int, unit: String, spokenUnit: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text("\(value)")
+                    .font(.system(size: valueFontSize, weight: .semibold))
+                    .monospacedDigit()
+
+                Text(unit)
+                    .font(.body.weight(.medium))
+            }
+            .foregroundStyle(.primary)
+        }
+        .frame(minWidth: 70, alignment: .leading)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(title)
+        .accessibilityValue("\(value)\(spokenUnit)")
     }
 }
