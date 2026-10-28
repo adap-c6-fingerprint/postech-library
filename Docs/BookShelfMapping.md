@@ -110,3 +110,19 @@ HTTP 검증 명령·mock 출처·한계는
 기존 `BookShelfResolver`와 C5 fixture 테스트는 명시적으로 전달한 `ShelfKey`를
 길찾기 디렉터리에 연결하는 별도 규칙이며 그대로 보존한다. 이번 실제 위치 표시에는
 길찾기 노드가 없는 IMDF fixture를 사용한다.
+
+### 최신 dev 통합 후 게시 검증
+
+`7079c5e`의 검색 탭 분리·추천/표지 캐시 변경을 병합하고, 검색 탭의 결과·바구니에서도
+서가 지도를 표시하도록 연결했다. 지도 탭과 검색 탭 양쪽의 화면 진입·뒤로가기·3권 표시는 통과했다.
+전체 260개 테스트 함수·429회 실행 중 258개 함수·427회가 통과하고 2개가 실패했다.
+실패·skip·경고를 통과로 합산하지 않는다. skip과 xcresult 런타임 경고는 0이다.
+결과는 `/private/tmp/postech-issue75-publish-tests.xcresult`다.
+
+실패한 항목은 `HomeRecommendationCacheTests.connectsAlgorithmToHomeAndCache(hasCached:)`와
+`preservesDisplayOnFailure(hasCached:)`의 캐시 없음 분기다. 변경 없는 dev `7079c5e`에서도
+동일한 두 실패를 재현했다. 상태가 바뀌지 않는 `recommendationsRestored`에 상태 변경 검증
+클로저를 전달해 TCA가 `Expected state to change, but no change occurred`를 보고한다.
+두 테스트와 `HomeFeature`는 본 PR에서 변경하지 않았다. 기준 브랜치 검사 결과는
+`/private/tmp/postech-issue75-dev-baseline.xcresult`다. 전체 검증 완료 판정은 이 기존 실패의
+해결 또는 팀의 검증 기준 확인 후에 내린다. Python 자료 검사 16개는 통과했다.
