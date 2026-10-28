@@ -18,9 +18,11 @@ struct BookRoutePreviewView: View {
     private var readySession: BookNavigationSession? {
         guard let previewSession, case let .ready(map, labels, stops) = routeRequest,
               previewSession.map == map, previewSession.shelfLabels == labels,
-              previewSession.stops == stops else { return nil }
+              previewSession.stops.count == stops.count,
+              previewSession.stops.allSatisfy({ stops.contains($0) }) else { return nil }
         return previewSession
     }
+    private var orderedBooks: [Book] { readySession?.stops.map(\.book) ?? destination.books }
 
     init(books: [Book] = []) {
         let destination = BookRoutePreviewDestination(books: books)
@@ -30,8 +32,10 @@ struct BookRoutePreviewView: View {
 
     static func makeShelfMapState(for destination: BookRoutePreviewDestination) -> BookShelfMapFeature.State? {
         guard var state = BookShelfMapFeature.State(books: destination.books) else { return nil }
-        if destination.isAnimalFarmTest {
-            state.holdings[BookRoutePreviewSample.book.id] = .loaded([BookRoutePreviewSample.holding])
+        if destination.isTestMode {
+            for item in BookRoutePreviewSample.testItems {
+                state.holdings[item.book.id] = .loaded([item.holding])
+            }
         }
         return state
     }
@@ -93,15 +97,15 @@ struct BookRoutePreviewView: View {
 
                 VStack(spacing: 0) {
                     header
-                    Button("동물농장으로 테스트") {
+                    Button("테스트모드") {
                         destinationStore?.send(.map(.disappeared))
                         previewSession = nil
                         routeError = nil
-                        destination.useAnimalFarmTest()
+                        destination.useTestMode()
                         destinationStore = Self.makeStore(for: destination)
                     }
                     .buttonStyle(.bordered)
-                    .accessibilityIdentifier("animal-farm-test")
+                    .accessibilityIdentifier("preview-test-mode")
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
                     ScrollView {
@@ -190,11 +194,11 @@ struct BookRoutePreviewView: View {
             : AnyLayout(HStackLayout(spacing: 12))
 
         return VStack(alignment: .leading, spacing: 8) {
-            if destination.isAnimalFarmTest {
-                Text("고정 목데이터 · 동물농장 목적지 테스트")
+            if destination.isTestMode {
+                Text("고정 목데이터 · 도서 3권 최단 방문 순서 테스트")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                    .accessibilityIdentifier("animal-farm-test-status")
+                    .accessibilityIdentifier("preview-test-mode-status")
             }
             if destinationStore != nil, previewSession == nil, routeError == nil {
                 ProgressView(isLoadingRoute ? "311-B에서 목적지까지 경로 계산 중" : "도서·서가 위치 확인 중")
@@ -231,7 +235,7 @@ struct BookRoutePreviewView: View {
             .background(Color(uiColor: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
 
             Text(previewSession == nil ? "경로 계산 후 시간·단계·거리가 표시돼요."
-                 : "시속 5km 기준 예상 시간이에요(10m ≈ 7.2초). 단계는 그룹 전환 횟수 + 1이며, 주황색 원은 전환 노드예요. 여러 책은 전달된 순서대로 방문해요. 출발점은 테스트용 고정 위치예요.")
+                 : "시속 5km 기준 예상 시간이에요(10m ≈ 7.2초). 단계는 그룹 전환 횟수 + 1이며, 주황색 원은 전환 노드예요. 모든 방문 순서 중 실제 이동거리가 가장 짧은 경로예요. 출발점은 테스트용 고정 위치예요.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -262,8 +266,8 @@ struct BookRoutePreviewView: View {
                 if destination.books.isEmpty {
                     Text("전달받은 목적지 도서가 없어요").foregroundStyle(.secondary)
                 } else if destinationStore != nil {
-                    ForEach(destination.books) { book in
-                        Label(BookText.plainText(book.title), systemImage: "book.circle.fill")
+                    ForEach(Array(orderedBooks.enumerated()), id: \.element.id) { index, book in
+                        Label("\(index + 1). \(BookText.plainText(book.title))", systemImage: "book.circle.fill")
                             .symbolRenderingMode(.palette)
                             .foregroundStyle(.white, .orange)
                     }
@@ -282,7 +286,7 @@ struct BookRoutePreviewView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("도서 및 청구기호").font(.headline)
             if destinationStore != nil {
-                ForEach(destination.books) { book in
+                ForEach(orderedBooks) { book in
                     HStack(alignment: .top, spacing: 16) {
                         BookCoverView(url: book.imageURL)
                             .frame(width: 72, height: 104)
