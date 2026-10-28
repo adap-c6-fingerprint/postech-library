@@ -61,6 +61,7 @@ struct BookDetailView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var isNoticePresented = false
     @State private var noticeMessage = ""
+    @State private var isRoutePreviewPresented = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -83,6 +84,9 @@ struct BookDetailView: View {
         ) { shelfMapStore in
             BookShelfMapView(store: shelfMapStore)
                 .toolbar(.visible, for: .navigationBar)
+        }
+        .fullScreenCover(isPresented: $isRoutePreviewPresented) {
+            BookRoutePreviewView(books: [store.book])
         }
         .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
             store.send(.basketLimitAlertDismissed)
@@ -124,9 +128,9 @@ struct BookDetailView: View {
         ToolbarItem(placement: .bottomBar) {
             HStack(spacing: 12) {
                 Button {
-                    store.send(.directionsButtonTapped)
+                    isRoutePreviewPresented = true
                 } label: {
-                    Text("서가 위치 보기")
+                    Text("바로 안내 시작")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                 }
@@ -256,17 +260,8 @@ struct BookDetailView: View {
     }
 
     private var routeSummaryContent: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            BookRouteSummaryView(summary: store.routeSummary)
-                .accessibilityIdentifier("bookDetail.routeSummary")
-            NavigationLink {
-                BookRoutePreviewView(books: [store.book])
-            } label: {
-                Label("경로 미리보기", systemImage: "map")
-            }
-            .buttonStyle(.bordered)
-            .accessibilityIdentifier("detail-route-preview")
-        }
+        BookRouteSummaryView(summary: store.routeSummary)
+            .accessibilityIdentifier("bookDetail.routeSummary")
     }
 
     @ViewBuilder

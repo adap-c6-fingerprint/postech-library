@@ -43,7 +43,7 @@ extension FoundationModelsClient: DependencyKey {
 }
 
 extension DependencyValues {
-    var foundationModelsClient: FoundationModelsClient {
+    nonisolated var foundationModelsClient: FoundationModelsClient {
         get { self[FoundationModelsClient.self] }
         set { self[FoundationModelsClient.self] = newValue }
     }

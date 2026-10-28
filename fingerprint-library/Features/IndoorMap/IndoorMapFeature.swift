@@ -586,6 +586,8 @@ nonisolated struct IndoorMapCameraRequest: Equatable, Sendable {
         case position(IndoorMapCoordinate)
         /// 같은 층의 서가 후보들을 함께 볼 수 있도록 도형 전체에 맞춘다.
         case features([IndoorMapElement.ID])
+        /// 표시 층의 경로 전체와 출발·도착 서가 도형을 함께 맞춘다.
+        case route(IndoorRoute, featureIDs: [IndoorMapElement.ID])
     }
     let id: Int
     let target: Target
