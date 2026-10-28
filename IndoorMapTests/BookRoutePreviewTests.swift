@@ -7,6 +7,56 @@ import Testing
 extension IndoorMapSerialTests {
     @MainActor
     struct BookRoutePreviewTests {
+        @Test("한 권·여러 권 입력을 순서와 원본 식별자 그대로 기본 목적지로 받는다", arguments: [1, 3])
+        func preservesReceivedBooks(count: Int) throws {
+            let books = (0..<count).map { BookHoldingTestData.book($0) }
+            let destination = BookRoutePreviewDestination(books: books)
+            let state = try #require(BookRoutePreviewView.makeShelfMapState(for: destination))
+            #expect(destination.books == books)
+            #expect(!destination.isAnimalFarmTest)
+            #expect(state.books == books)
+            #expect(state.holdings.isEmpty)
+            #expect(state.resolutions.isEmpty)
+        }
+
+        @Test("동일한 동물농장 책을 전달해도 버튼을 누르기 전에는 목데이터를 주입하지 않는다")
+        func doesNotInferTestModeFromBookID() throws {
+            let destination = BookRoutePreviewDestination(books: [BookRoutePreviewSample.book])
+            let state = try #require(BookRoutePreviewView.makeShelfMapState(for: destination))
+            #expect(!destination.isAnimalFarmTest)
+            #expect(state.holdings.isEmpty)
+        }
+
+        @Test("테스트 선택은 전달받은 여러 책을 동물농장 한 권으로 교체하고 원본 배열을 보존한다")
+        func replacesDestinationsOnlyOnTestSelection() throws {
+            let books = (0..<3).map { BookHoldingTestData.book($0) }
+            var destination = BookRoutePreviewDestination(books: books)
+            destination.useAnimalFarmTest()
+            let state = try #require(BookRoutePreviewView.makeShelfMapState(for: destination))
+            #expect(destination.isAnimalFarmTest)
+            #expect(destination.books == [BookRoutePreviewSample.book])
+            #expect(state.books == destination.books)
+            #expect(state.holdings == [BookRoutePreviewSample.book.id: .loaded([BookRoutePreviewSample.holding])])
+            #expect(books.count == 3)
+            #expect(books.allSatisfy { $0.id != BookRoutePreviewSample.book.id })
+            destination.useAnimalFarmTest()
+            #expect(destination.books.count == 1)
+        }
+
+        @Test("빈 입력·중복 ID·조회 상한 초과를 동물농장으로 대체하거나 일부만 선택하지 않는다")
+        func keepsInvalidInputWithoutFallback() {
+            let book = BookHoldingTestData.book()
+            let inputs = [[], [book, book], (0..<4).map { BookHoldingTestData.book($0) }]
+            for books in inputs {
+                var destination = BookRoutePreviewDestination(books: books)
+                #expect(destination.books == books)
+                #expect(!destination.isAnimalFarmTest)
+                #expect(BookRoutePreviewView.makeShelfMapState(for: destination) == nil)
+                destination.useAnimalFarmTest()
+                #expect(BookRoutePreviewView.makeShelfMapState(for: destination) != nil)
+            }
+        }
+
         @Test("동물농장 목데이터는 API 조회 없이 실제 3층 337-A fixture 하나에 연결된다")
         func highlightsOnlyAnimalFarmShelf() async throws {
             let book = BookRoutePreviewSample.book
@@ -15,8 +65,9 @@ extension IndoorMapSerialTests {
             #expect(BookHoldingsClient.recordID(for: book) == BookRoutePreviewSample.recordID)
             let map = try await BundledIndoorMapLoader().loadLibrary()
             let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
-            var initial = BookShelfMapFeature.State(book: book)
-            initial.holdings[book.id] = .loaded([BookRoutePreviewSample.holding])
+            var destination = BookRoutePreviewDestination(books: [])
+            destination.useAnimalFarmTest()
+            var initial = try #require(BookRoutePreviewView.makeShelfMapState(for: destination))
             initial.map.map = map
             initial.map.shelfLabels = labels
             let shelf = try #require(labels.first { $0.fixtureNumber == "S-3F-564-A" })
