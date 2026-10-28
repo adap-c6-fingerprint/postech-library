@@ -16,7 +16,7 @@ struct BookBasketItem: Equatable, Identifiable, Sendable {
     static let maxGuidanceCount = 3
 
     // 장바구니에 보관할 수 있는 최대 권수
-    static let maxStoredCount = 30
+    nonisolated static let maxStoredCount = 30
 }
 
 // 같은 날 보관한 책 묶음
