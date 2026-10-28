@@ -27,6 +27,49 @@ extension IndoorMapSerialTests {
             #expect(state.holdings.isEmpty)
         }
 
+        @Test("일반 입력도 소장 조회·해석이 끝나면 모든 도서를 순서대로 경로 요청에 넣는다")
+        func preparesReceivedBooksForRouting() async throws {
+            let books = (0..<3).map { BookHoldingTestData.book($0) }
+            var state = try #require(BookShelfMapFeature.State(books: books))
+            #expect(BookRoutePreviewRequest(state: state) == .waiting)
+            let map = try await BundledIndoorMapLoader().loadLibrary()
+            let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
+            state.map.map = map
+            state.map.shelfLabels = labels
+            for book in books {
+                state.holdings[book.id] = .loaded([BookRoutePreviewSample.holding])
+                state.resolutions[book.id] = BookHoldingShelfResolver().resolve(
+                    [BookRoutePreviewSample.holding], on: map, labels: labels)
+            }
+            guard case let .ready(receivedMap, receivedLabels, stops) = BookRoutePreviewRequest(state: state) else {
+                Issue.record("조회 완료 후 경로 계산 준비가 되지 않았습니다."); return
+            }
+            #expect(receivedMap == map && receivedLabels == labels)
+            #expect(stops.map(\.book) == books)
+            #expect(stops.allSatisfy { $0.shelf.fixtureNumber == "S-3F-564-A" })
+            state.holdings[books[1].id] = .loading
+            #expect(BookRoutePreviewRequest(state: state) == .waiting)
+            state.holdings[books[1].id] = .failed("조회 실패")
+            #expect(BookRoutePreviewRequest(state: state) == .failed("조회 실패"))
+        }
+
+        @Test("매칭 실패·복수 서가에서는 임의 목적지를 선택하지 않는다")
+        func doesNotChooseArbitraryShelf() async throws {
+            let book = BookHoldingTestData.book()
+            var state = BookShelfMapFeature.State(book: book)
+            let map = try await BundledIndoorMapLoader().loadLibrary()
+            let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
+            state.map.map = map
+            state.map.shelfLabels = labels
+            state.holdings[book.id] = .loaded([BookRoutePreviewSample.holding])
+            for shelves in [[], Array(labels.prefix(2))] {
+                state.resolutions[book.id] = [.init(holding: BookRoutePreviewSample.holding, outcome: .candidates(shelves))]
+                guard case .failed = BookRoutePreviewRequest(state: state) else {
+                    Issue.record("서가가 확정되지 않았는데 경로를 준비했습니다."); return
+                }
+            }
+        }
+
         @Test("테스트 선택은 전달받은 여러 책을 동물농장 한 권으로 교체하고 원본 배열을 보존한다")
         func replacesDestinationsOnlyOnTestSelection() throws {
             let books = (0..<3).map { BookHoldingTestData.book($0) }
