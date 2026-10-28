@@ -428,7 +428,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Base.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = FPIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = PobookIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
@@ -471,7 +471,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Base.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = FPIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = PobookIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
