@@ -1,6 +1,8 @@
+import Foundation
 import Testing
 @testable import fingerprint_library
 
+@MainActor
 struct BookClientTests {
     @Test("Primo 날짜에서 네 자리 출판 연도만 추출한다", arguments: [
         ("2011", "2011"),
@@ -37,5 +39,41 @@ struct BookClientTests {
     ] as [([String]?, [String]?, String?)])
     func publisher(sample: ([String]?, [String]?, String?)) {
         #expect(BookClient.publisher(from: sample.0, fallback: sample.1) == sample.2)
+    }
+
+    @Test("검색 응답의 subLocation과 저자를 같은 책에 보존한다")
+    func searchLocationAndAuthor() throws {
+        let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma991000958759703286"]},"display":{"title":["책 제목"],"creator":["<b>저자 이름</b>$$Qcreator-id"]},"addata":{"pub":["출판사"],"date":["c2026"]}},"delivery":{"holding":[{"subLocation":" 단행본3층 "},{"subLocation":"단행본3층"},{"subLocation":"스마트도서관"},{"subLocation":" "},{}]}}]}"#.utf8)
+        let book = try #require(BookClient.books(from: data).first)
+        #expect(book.subLocation == "단행본3층 · 스마트도서관")
+        #expect(book.author == "저자 이름")
+        #expect(book.publisher == "출판사")
+        #expect(book.publicationYear == "2026")
+
+        let cache = BookSearchResultCache()
+        let request = BookSearchRequest(query: "책 제목", category: .all)
+        cache.save([book], for: request)
+        #expect(cache.load(request)?.first?.subLocation == book.subLocation)
+    }
+
+    @Test("holding이 없으면 bestlocation의 subLocation을 사용한다")
+    func searchBestLocation() throws {
+        let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma991000958759703286"]},"display":{"title":["책 제목"]}},"delivery":{"bestlocation":{"subLocation":"단행본4층"}}}]}"#.utf8)
+        let book = try #require(BookClient.books(from: data).first)
+        #expect(book.subLocation == "단행본4층")
+        #expect(book.author == "저자 정보 없음")
+    }
+
+    @Test("명시적인 빈 holding은 bestlocation의 과거 위치로 대체하지 않는다")
+    func searchEmptyHoldings() throws {
+        let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma991000958759703286"]},"display":{"title":["책 제목"]}},"delivery":{"holding":[],"bestlocation":{"subLocation":"단행본3층"}}}]}"#.utf8)
+        #expect(try BookClient.books(from: data).first?.subLocation == nil)
+    }
+
+    @Test("위치 필드가 없거나 비어 있어도 다른 책의 위치를 섞지 않는다")
+    func searchMissingLocations() throws {
+        let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma1"]},"display":{"title":["위치 있음"]}},"delivery":{"holding":[{"subLocation":"단행본3층"}]}},{"pnx":{"control":{"recordid":["alma2"]},"display":{"title":["위치 없음"]}}},{"pnx":{"control":{"recordid":["alma3"]},"display":{"title":["빈 위치"]}},"delivery":{"holding":[{"subLocation":" "},{}]}}]}"#.utf8)
+        let books = try BookClient.books(from: data)
+        #expect(books.map(\.subLocation) == ["단행본3층", nil, nil])
     }
 }

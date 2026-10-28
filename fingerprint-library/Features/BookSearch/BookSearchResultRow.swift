@@ -27,17 +27,15 @@ struct BookSearchResultRow: View {
                                 .foregroundStyle(.primary)
                                 .lineLimit(3)
 
-                            Text(cleaned(book.author))
+                            Text(book.subLocation.map(cleaned) ?? "위치 정보 없음")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .lineLimit(2)
 
-                            if !publicationInfo.isEmpty {
-                                Text(publicationInfo)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(2)
-                            }
+                            Text(cleaned(book.author))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(2)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         Image(systemName: "chevron.right")
@@ -117,20 +115,6 @@ struct BookSearchResultRow: View {
         .frame(width: 72, height: 104)
         .background(Color.gray.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: 6))
-    }
-
-    private var publicationInfo: String {
-        let values = [book.publisher, book.publicationYear]
-
-        return values.compactMap { value -> String? in
-            guard let value else {
-                return nil
-            }
-
-            let text = cleaned(value)
-            return text.isEmpty ? nil : text
-        }
-        .joined(separator: " · ")
     }
 
     private func cleaned(_ text: String) -> String {
