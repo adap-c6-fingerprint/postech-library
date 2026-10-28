@@ -61,6 +61,7 @@ struct BookDetailFeature {
         case startGuidanceButtonTapped
         case delegate(Delegate)
 
+        @CasePathable
         enum Delegate: Equatable {
             case startGuidance(Book)
         }
