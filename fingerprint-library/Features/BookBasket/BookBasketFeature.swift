@@ -21,6 +21,11 @@ struct BookBasketFeature {
         }
 
         var selectedCount: Int { selectedIDs.count }
+
+        // 아직 장바구니에 남아 있는 선택 책만 고른 순서대로 돌려준다.
+        var selectedBooks: [Book] {
+            selectedIDs.compactMap { id in items.first { $0.id == id }?.book }
+        }
     }
 
     enum Action {
@@ -30,6 +35,13 @@ struct BookBasketFeature {
         case selectionToggled(Book.ID)
         case selectionLimitAlertDismissed
         case startGuidanceButtonTapped
+        case delegate(Delegate)
+
+        @CasePathable
+        enum Delegate: Equatable {
+            // 목적 서가 확인 및 경로 미리보기 화면으로 넘길 책
+            case startGuidance([Book])
+        }
     }
 
     @Dependency(\.bookBasketClient)
@@ -70,6 +82,13 @@ struct BookBasketFeature {
                 return .none
 
             case .startGuidanceButtonTapped:
+                let books = state.selectedBooks
+                guard (1...BookBasketItem.maxGuidanceCount).contains(books.count) else {
+                    return .none
+                }
+                return .send(.delegate(.startGuidance(books)))
+
+            case .delegate:
                 return .none
             }
         }

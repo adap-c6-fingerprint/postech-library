@@ -128,4 +128,19 @@ struct BookBasketTests {
         await store.send(.selectionToggled("b")) { $0.selectedIDs = ["a", "c"] }
         await store.send(.selectionToggled("d")) { $0.selectedIDs = ["a", "c", "d"] }
     }
+
+    @Test("길안내 시작 시 장바구니에 남은 선택 책만 고른 순서대로 전달한다")
+    func startGuidanceWithSelectedBooks() async {
+        let items = ["a", "b", "c"].map { item($0) }
+        let store = TestStore(initialState: BookBasketFeature.State(
+            items: items,
+            isSelectingForGuidance: true,
+            selectedIDs: ["c", "missing", "a"]
+        )) {
+            BookBasketFeature()
+        }
+
+        await store.send(.startGuidanceButtonTapped)
+        await store.receive(\.delegate.startGuidance, [items[2].book, items[0].book])
+    }
 }

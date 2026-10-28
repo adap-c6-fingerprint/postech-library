@@ -110,6 +110,10 @@ struct BookSearchFeature {
                 state.basketBooks = bookBasketClient.load().map(\.book)
                 return .none
 
+            case .basket(.presented(.delegate(.startGuidance))):
+                // TODO: 경로 요약 페이지(07)를 구현하면 선택한 책을 넘겨 화면을 연다.
+                return .none
+
             case .basket:
                 return .none
                 
