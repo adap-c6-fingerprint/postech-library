@@ -18,6 +18,10 @@ struct BookBasketView: View {
             selectedBookIDs.contains($0.id)
         }
     }
+
+    private var selectedBooks: [Book] {
+        books.filter { selectedBookIDs.contains($0.id) }
+    }
     
     var body: some View {
         List(books) { book in
@@ -68,6 +72,19 @@ struct BookBasketView: View {
         }
         .navigationTitle("책바구니")
         .navigationBarTitleDisplayMode(.inline)
+        .safeAreaInset(edge: .bottom) {
+            NavigationLink {
+                BookRoutePreviewView(books: selectedBooks)
+            } label: {
+                Text("선택한 \(selectedBooks.count)권 경로 미리보기")
+                    .frame(maxWidth: .infinity, minHeight: 44)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(selectedBooks.isEmpty)
+            .accessibilityIdentifier("basket-route-preview")
+            .padding()
+            .background(Color(.systemGroupedBackground))
+        }
         .safeAreaInset(edge: .top, spacing: 0) {
             HStack(spacing: 12) {
                 Button {

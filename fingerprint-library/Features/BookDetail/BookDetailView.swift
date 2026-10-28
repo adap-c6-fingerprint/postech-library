@@ -27,6 +27,15 @@ struct BookDetailView: View {
                 }
             }
 
+            Section {
+                NavigationLink {
+                    BookRoutePreviewView(books: [store.book])
+                } label: {
+                    Label("길찾기 경로 미리보기", systemImage: "map")
+                }
+                .accessibilityIdentifier("detail-route-preview")
+            }
+
             Section("책 정보") {
                 if store.isLoading || !store.hasLoaded {
                     ProgressView("책 정보를 불러오고 있어요")
