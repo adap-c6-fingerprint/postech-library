@@ -14,6 +14,7 @@ struct BookBasketFeature {
         var isSelectingForGuidance = false
         // 길안내할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
+        var isSelectionLimitAlertPresented = false
 
         var sections: [BookBasketSection] {
             BookBasketSection.grouped(items, calendar: .current)
@@ -27,6 +28,7 @@ struct BookBasketFeature {
         case selectButtonTapped
         case doneButtonTapped
         case selectionToggled(Book.ID)
+        case selectionLimitAlertDismissed
         case startGuidanceButtonTapped
     }
 
@@ -55,9 +57,16 @@ struct BookBasketFeature {
                 else { return .none }
                 if let index = state.selectedIDs.firstIndex(of: id) {
                     state.selectedIDs.remove(at: index)
+                } else if state.selectedIDs.count >= BookBasketItem.maxGuidanceCount {
+                    // 네 번째 책은 선택하지 않고 기존 선택을 그대로 둔다.
+                    state.isSelectionLimitAlertPresented = true
                 } else {
                     state.selectedIDs.append(id)
                 }
+                return .none
+
+            case .selectionLimitAlertDismissed:
+                state.isSelectionLimitAlertPresented = false
                 return .none
 
             case .startGuidanceButtonTapped:

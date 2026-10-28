@@ -111,4 +111,21 @@ struct BookBasketTests {
             $0.selectedIDs = []
         }
     }
+
+    @Test("네 번째 책 선택은 막고 기존 세 권을 유지하며 한도 팝업을 띄운다")
+    func blockFourthSelection() async {
+        let store = TestStore(initialState: BookBasketFeature.State(
+            items: ["a", "b", "c", "d"].map { item($0) },
+            isSelectingForGuidance: true,
+            selectedIDs: ["a", "b", "c"]
+        )) {
+            BookBasketFeature()
+        }
+
+        await store.send(.selectionToggled("d")) { $0.isSelectionLimitAlertPresented = true }
+        #expect(store.state.selectedIDs == ["a", "b", "c"])
+        await store.send(.selectionLimitAlertDismissed) { $0.isSelectionLimitAlertPresented = false }
+        await store.send(.selectionToggled("b")) { $0.selectedIDs = ["a", "c"] }
+        await store.send(.selectionToggled("d")) { $0.selectedIDs = ["a", "c", "d"] }
+    }
 }

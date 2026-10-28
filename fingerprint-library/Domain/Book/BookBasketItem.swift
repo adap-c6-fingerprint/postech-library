@@ -11,6 +11,9 @@ struct BookBasketItem: Equatable, Identifiable, Sendable {
     let addedAt: Date
 
     var id: Book.ID { book.id }
+
+    // 한 번에 길안내할 수 있는 최대 권수
+    static let maxGuidanceCount = 3
 }
 
 // 같은 날 보관한 책 묶음

@@ -80,6 +80,17 @@ struct BookBasketView: View {
                 ToolbarSpacer(.flexible, placement: .bottomBar)
             }
         }
+        .alert(
+            "길안내는 최대 \(BookBasketItem.maxGuidanceCount)권까지 가능해요",
+            isPresented: Binding(
+                get: { store.isSelectionLimitAlertPresented },
+                set: { if !$0 { store.send(.selectionLimitAlertDismissed) } }
+            )
+        ) {
+            Button("확인했어요") {}
+        } message: {
+            Text("다른 책을 선택하려면 추가한 책을 해제하고 다시 시도해보세요.")
+        }
         .task {
             store.send(.task)
         }
