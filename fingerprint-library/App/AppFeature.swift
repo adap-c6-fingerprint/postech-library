@@ -17,6 +17,9 @@ struct AppFeature {
         var isRouteSettingsPresented = false
         var hasStartedRecommendationSession = false
         var hasEnteredBackground = false
+        // 저장된 프로필을 확인하기 전에는 탭 화면도 온보딩도 띄우지 않는다.
+        var hasCheckedProfile = false
+        var onboarding: OnboardingFeature.State?
     }
 
     enum Action {
@@ -27,9 +30,13 @@ struct AppFeature {
         case appStarted
         case appEnteredBackground
         case appBecameActive
+        case profileCheckRequested
+        case profileChecked(hasProfile: Bool)
+        case onboarding(OnboardingFeature.Action)
     }
 
     @Dependency(\.bookBasketClient) var bookBasketClient
+    @Dependency(\.userProfileClient) var userProfileClient
 
     var body: some Reducer<State, Action> {
         Scope(state: \.home, action: \.home) { HomeFeature() }
@@ -93,8 +100,26 @@ struct AppFeature {
                 return .none
             case .indoorMap:
                 return .none
+
+            case .profileCheckRequested:
+                guard !state.hasCheckedProfile else { return .none }
+                return .run { [userProfileClient] send in
+                    // 확인에 실패하면 온보딩을 보여준다. 저장할 때 기존 프로필이 있으면 덮어쓴다.
+                    let hasProfile = (try? await userProfileClient.hasProfile()) ?? false
+                    await send(.profileChecked(hasProfile: hasProfile))
+                }
+            case let .profileChecked(hasProfile):
+                state.hasCheckedProfile = true
+                state.onboarding = hasProfile ? nil : OnboardingFeature.State()
+                return .none
+            case .onboarding(.delegate(.completed)):
+                state.onboarding = nil
+                return .none
+            case .onboarding:
+                return .none
             }
         }
+        .ifLet(\.onboarding, action: \.onboarding) { OnboardingFeature() }
     }
 
     private func synchronizeBasket(state: inout State) {

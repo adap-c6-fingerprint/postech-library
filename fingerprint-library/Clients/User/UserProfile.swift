@@ -87,6 +87,29 @@ final class UserProfile {
         return profile
     }
 
+    // MARK: - 온보딩 저장
+
+    static func exists(in context: ModelContext) throws -> Bool {
+    // 저장된 프로필이 하나라도 있는지 확인한다. 없으면 온보딩을 보여준다.
+        var descriptor = FetchDescriptor<UserProfile>()
+        descriptor.fetchLimit = 1
+        return try !context.fetch(descriptor).isEmpty
+    }
+
+    static func save(departmentName: String, interests: [String], in context: ModelContext) throws {
+    // 온보딩에서 입력한 값을 저장한다.
+    // 이미 프로필이 있으면 그 값을 바꾸고, 없으면 새로 만든다. 프로필은 항상 하나만 남는다.
+        var descriptor = FetchDescriptor<UserProfile>()
+        descriptor.fetchLimit = 1
+        if let existing = try context.fetch(descriptor).first {
+            try existing.updateDepartmentName(departmentName)
+            try existing.updateInterests(interests)
+        } else {
+            context.insert(try UserProfile(departmentName: departmentName, interests: interests))
+        }
+        try context.save()
+    }
+
     // MARK: - 검사
 
     private static func validatedDepartmentName(_ name: String) throws -> String {

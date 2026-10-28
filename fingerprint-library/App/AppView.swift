@@ -13,6 +13,20 @@ struct AppView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
+        Group {
+            if let onboardingStore = store.scope(state: \.onboarding, action: \.onboarding) {
+                OnboardingView(store: onboardingStore)
+            } else if store.hasCheckedProfile {
+                tabs
+            } else {
+                Color.basketBackground.ignoresSafeArea()
+            }
+        }
+        // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
+        .task { store.send(.profileCheckRequested) }
+    }
+
+    private var tabs: some View {
         TabView {
             Tab("홈", systemImage: "house") {
                 LibraryMapView(store: store)
