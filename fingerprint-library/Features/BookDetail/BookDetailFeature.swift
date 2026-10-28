@@ -32,6 +32,9 @@ struct BookDetailFeature {
         // 연관 도서
         var relatedBooksState: RelatedBooksState = .idle
 
+        // 장바구니
+        var isBasketLimitAlertPresented = false
+
         var isbn13: String? {
             BookISBN.isbn13(from: book.isbn)
         }
@@ -52,6 +55,7 @@ struct BookDetailFeature {
 
         // 장바구니
         case addToBasketButtonTapped
+        case basketLimitAlertDismissed
 
         // 길안내
         case startGuidanceButtonTapped
@@ -123,7 +127,15 @@ struct BookDetailFeature {
                 return .none
 
             case .addToBasketButtonTapped:
-                bookBasketClient.add(state.book, at: now)
+                // 이미 한도까지 담겨 있으면 저장하지 않고 한도 팝업을 띄운다.
+                if bookBasketClient.add(state.book, at: now) == .limitExceeded {
+                    state.isBasketLimitAlertPresented = true
+                }
+
+                return .none
+
+            case .basketLimitAlertDismissed:
+                state.isBasketLimitAlertPresented = false
 
                 return .none
 

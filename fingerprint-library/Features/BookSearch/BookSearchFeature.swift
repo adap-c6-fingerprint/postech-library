@@ -23,6 +23,7 @@ struct BookSearchFeature {
         var hasSearched: Bool = false
         
         var basketBooks: [Book] = []
+        var isBasketLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
         @Presents var basket: BookBasketFeature.State?
     }
@@ -39,6 +40,7 @@ struct BookSearchFeature {
         case favoriteButtonTapped(Book)
         
         case addToBasket(Book)
+        case basketLimitAlertDismissed
         case removeFromBasket(Set<Book.ID>)
         case bookSelected(Book)
         case detail(PresentationAction<BookDetailFeature.Action>)
@@ -129,10 +131,18 @@ struct BookSearchFeature {
                     return .none
                 }
                 
+                // 이미 한도까지 담겨 있으면 권수를 늘리지 않고 한도 팝업을 띄운다.
+                guard bookBasketClient.add(book, at: now) != .limitExceeded else {
+                    state.isBasketLimitAlertPresented = true
+                    return .none
+                }
                 state.basketBooks.append(book)
-                bookBasketClient.add(book, at: now)
                 return .none
-                
+
+            case .basketLimitAlertDismissed:
+                state.isBasketLimitAlertPresented = false
+                return .none
+
             case let .queryChanged(query):
                 state.query = query
                 return .none

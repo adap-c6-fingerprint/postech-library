@@ -57,12 +57,21 @@ nonisolated struct BookBasketClient: Sendable {
         }
     }
 
-    // 같은 책이 없을 때만 담은 시각과 함께 저장한다.
-    func add(_ book: Book, at date: Date) {
+    enum AddResult: Equatable, Sendable {
+        case added
+        case alreadyAdded
+        case limitExceeded
+    }
+
+    // 같은 책이 없고 보관 한도가 남아 있을 때만 담은 시각과 함께 저장한다.
+    @discardableResult
+    func add(_ book: Book, at date: Date) -> AddResult {
         var items = load()
-        guard !items.contains(where: { $0.book.recordKey == book.recordKey }) else { return }
+        guard !items.contains(where: { $0.book.recordKey == book.recordKey }) else { return .alreadyAdded }
+        guard items.count < BookBasketItem.maxStoredCount else { return .limitExceeded }
         items.append(BookBasketItem(book: book, addedAt: date))
         save(items)
+        return .added
     }
 }
 

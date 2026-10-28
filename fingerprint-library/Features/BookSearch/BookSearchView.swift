@@ -95,6 +95,9 @@ struct BookSearchView: View {
                 .background(.bar)
             }
         }
+        .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
+            store.send(.basketLimitAlertDismissed)
+        }
     }
 
     @ViewBuilder

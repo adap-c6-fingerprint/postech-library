@@ -94,6 +94,9 @@ struct BookDetailView: View {
         // 탭바와 검색 탭 버튼을 숨기고 하단에는 피그마 하단 액션바만 둔다.
         .toolbar(.hidden, for: .tabBar)
         .safeAreaInset(edge: .bottom) { actionBar }
+        .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
+            store.send(.basketLimitAlertDismissed)
+        }
         .task { await store.send(.loadDescription).finish() }
         .task { await store.send(.loadRelatedBooks).finish() }
     }

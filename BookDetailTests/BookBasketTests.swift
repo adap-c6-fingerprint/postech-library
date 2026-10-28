@@ -95,6 +95,36 @@ struct BookBasketTests {
         #expect(client.load() == [BookBasketItem(book: selected, addedAt: now)])
     }
 
+    @Test("도서 상세에서 30권이 찬 장바구니에 새 책을 담으면 저장하지 않고 한도 팝업을 띄운다")
+    func addFromDetailOverLimit() async {
+        let full = (0..<BookBasketItem.maxStoredCount).map { item("\($0)") }
+        let store = TestStore(initialState: BookDetailFeature.State(book: book(id: "new"))) {
+            BookDetailFeature()
+        } withDependencies: {
+            $0.bookBasketClient.load = { full }
+            $0.bookBasketClient.save = { _ in Issue.record("한도를 넘기면 저장하면 안 됩니다.") }
+        }
+
+        await store.send(.addToBasketButtonTapped) { $0.isBasketLimitAlertPresented = true }
+        await store.send(.basketLimitAlertDismissed) { $0.isBasketLimitAlertPresented = false }
+    }
+
+    @Test("검색 결과에서 30권이 찬 장바구니에 새 책을 담으면 권수를 늘리지 않고 한도 팝업을 띄운다")
+    func addFromSearchOverLimit() async {
+        let full = (0..<BookBasketItem.maxStoredCount).map { item("\($0)") }
+        var initialState = BookSearchFeature.State()
+        initialState.basketBooks = full.map(\.book)
+        let store = TestStore(initialState: initialState) {
+            BookSearchFeature()
+        } withDependencies: {
+            $0.bookBasketClient.load = { full }
+            $0.bookBasketClient.save = { _ in Issue.record("한도를 넘기면 저장하면 안 됩니다.") }
+        }
+
+        await store.send(.addToBasket(book(id: "new"))) { $0.isBasketLimitAlertPresented = true }
+        await store.send(.basketLimitAlertDismissed) { $0.isBasketLimitAlertPresented = false }
+    }
+
     @Test("도서 상세를 닫으면 검색 화면의 장바구니 권수를 저장소 기준으로 갱신한다")
     func refreshBasketAfterDetail() async {
         let selected = book(id: "a")

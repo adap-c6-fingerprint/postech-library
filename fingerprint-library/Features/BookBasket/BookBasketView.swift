@@ -203,6 +203,23 @@ struct BookBasketView: View {
         .locale(Locale(identifier: "en_US"))
 }
 
+extension View {
+    // 장바구니 보관 한도를 넘겨 새 책을 담지 못했을 때 띄우는 팝업
+    func basketLimitAlert(isPresented: Bool, onDismiss: @escaping () -> Void) -> some View {
+        alert(
+            "장바구니 최대 권수를 초과했어요",
+            isPresented: Binding(
+                get: { isPresented },
+                set: { if !$0 { onDismiss() } }
+            )
+        ) {
+            Button("확인했어요") {}
+        } message: {
+            Text("박태준학술정보관 장바구니에는 최대 \(BookBasketItem.maxStoredCount)권까지 담을 수 있어요. 새 책을 담으시려면 기존에 담은 책 중 일부를 삭제해 주세요.")
+        }
+    }
+}
+
 // 피그마 장바구니 시안의 색상 토큰
 extension Color {
     static let basketBackground = Color(red: 0x12 / 255, green: 0x12 / 255, blue: 0x12 / 255)
