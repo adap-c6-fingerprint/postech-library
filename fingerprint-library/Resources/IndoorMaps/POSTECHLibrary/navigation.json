@@ -1,0 +1,91 @@
+{
+  "edge_groups" : [
+    {
+      "id" : "5b41df9a-ad42-4fed-b2f4-e6a64befb192",
+      "name" : "3층 원형 A"
+    },
+    {
+      "id" : "d41e7b0e-45f7-4a7f-a4f5-86428a7edd11",
+      "name" : "3층 원형 B"
+    },
+    {
+      "id" : "c6555568-4688-477e-a2f7-2086688b508d",
+      "name" : "3층 원형 C"
+    },
+    {
+      "id" : "45a88fba-d53b-42f8-a413-29f512e9bf00",
+      "name" : "3층 원형 D"
+    },
+    {
+      "id" : "f245a91e-ab48-4a7f-be95-8bfdb2b5a7b9",
+      "name" : "3층 책장 사이"
+    },
+    {
+      "id" : "2c18ef89-b2d4-4af5-95c8-f9406c8ec9b5",
+      "name" : "엘베 및 계단 연결"
+    },
+    {
+      "id" : "ca5afc0e-8019-4e71-b1b5-fc829ed69a3b",
+      "name" : "기타 단일 엣지"
+    },
+    {
+      "id" : "51a6556c-27f5-4671-bbe4-acbc54bfa3ad",
+      "name" : "4층 원형 A"
+    },
+    {
+      "id" : "ba724f4c-6cbf-42ec-b938-79deb1dc934d",
+      "name" : "4층 원형 B"
+    },
+    {
+      "id" : "d42221f1-9dae-4906-9d45-122c7d9e55b3",
+      "name" : "4층 원형 C"
+    },
+    {
+      "id" : "6c7f2d63-feaa-4c19-94b1-b11cb5bd92c8",
+      "name" : "4층 원형 D"
+    },
+    {
+      "id" : "86ed9f13-d9a4-4e98-9a48-a87859843809",
+      "name" : "4층 책장 사이"
+    }
+  ],
+  "feature_links_file" : "navigation-feature-links.json",
+  "feature_links_sha256" : "4aef9a279aaf3727d3dab29d17e84d5b9f2d8265e60ac809fc76119d29053052",
+  "kind" : "navigation-only",
+  "layout_version" : "layout-1",
+  "levels" : [
+    {
+      "id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+      "name" : "2층",
+      "ordinal" : 2,
+      "short_name" : null
+    },
+    {
+      "id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+      "name" : "3층",
+      "ordinal" : 3,
+      "short_name" : null
+    },
+    {
+      "id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "name" : "4층",
+      "ordinal" : 4,
+      "short_name" : "4층"
+    },
+    {
+      "id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+      "name" : "5층",
+      "ordinal" : 5,
+      "short_name" : null
+    },
+    {
+      "id" : "097591dd-64ce-494f-a776-da6a3723075e",
+      "name" : "1층",
+      "ordinal" : 1,
+      "short_name" : ""
+    }
+  ],
+  "routing_file" : "routing-graph.geojson",
+  "routing_sha256" : "2fe17357e151c5824261fdf9c98b54415a366d64188c5bffc26d659cb7d1bfcb",
+  "schema_version" : 1
+}

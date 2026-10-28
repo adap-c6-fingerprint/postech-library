@@ -1,41 +1,52 @@
+import ComposableArchitecture
 import SwiftUI
 
-/// PLI-96 / #116 디자인 단계. 지도 그림은 예시이며 실제 경로 값은 아직 없다.
+/// PLI-96 / #116. 실제 IMDF에 고정 목데이터의 목적지 서가만 강조한다.
 struct BookRoutePreviewView: View {
-    let books: [Book]
+    @State private var destinationStore: StoreOf<BookShelfMapFeature>
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let accent = Color(red: 0.88, green: 0.95, blue: 0.19)
 
+    // shortcut: 이번 알파에서는 입력 책 대신 고정 목데이터를 사용한다. 실제 도서 연결 단계에서 해제한다.
+    init(books _: [Book]) {
+        var state = BookShelfMapFeature.State(book: BookRoutePreviewSample.book)
+        // 미리 주어진 소장 정보만 사용하므로 실제 Primo 조회를 하지 않는다.
+        state.holdings[BookRoutePreviewSample.book.id] = .loaded([BookRoutePreviewSample.holding])
+        _destinationStore = State(initialValue: Store(initialState: state) { BookShelfMapFeature() })
+    }
+
+    private var books: [Book] { destinationStore.books }
+
     var body: some View {
         GeometryReader { geometry in
+            let panelHeight = geometry.size.height * 0.57
             ZStack(alignment: .bottom) {
-                BookRouteMapPlaceholder(accent: accent, topInset: geometry.safeAreaInsets.top)
-                    .ignoresSafeArea()
+                IndoorMapView(
+                    store: destinationStore.scope(state: \.map, action: \.map),
+                    showsDestinationCard: false,
+                    highlightedFeatureIDs: destinationStore.highlightedFeatureIDs,
+                    showsCurrentLocationButton: false,
+                    extendsUnderBottomSafeArea: false
+                )
+                .frame(height: geometry.size.height - panelHeight)
+                .frame(maxHeight: .infinity, alignment: .top)
 
                 VStack(spacing: 0) {
                     header
                     ScrollView {
-                        if books.isEmpty {
-                            ContentUnavailableView(
-                                "찾을 책이 없어요",
-                                systemImage: "books.vertical",
-                                description: Text("책 상세 또는 책바구니에서 책을 선택해 주세요.")
-                            )
-                        } else {
-                            VStack(alignment: .leading, spacing: 24) {
-                                routeMetrics
-                                routeSummary
-                                bookInformation
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.bottom, 20)
+                        VStack(alignment: .leading, spacing: 24) {
+                            routeMetrics
+                            routeSummary
+                            bookInformation
                         }
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 20)
                     }
                     .scrollIndicators(.hidden)
                 }
-                .frame(height: geometry.size.height * 0.57)
+                .frame(height: panelHeight)
                 .frame(maxWidth: .infinity)
                 .background {
                     UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28)
@@ -48,6 +59,8 @@ struct BookRoutePreviewView: View {
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .accessibilityIdentifier("book-route-preview")
+        .task { await destinationStore.send(.task).finish() }
+        .onDisappear { destinationStore.send(.map(.disappeared)) }
     }
 
     private var header: some View {
@@ -76,6 +89,9 @@ struct BookRoutePreviewView: View {
             : AnyLayout(HStackLayout(spacing: 12))
 
         return VStack(alignment: .leading, spacing: 8) {
+            Text("고정 목데이터 · 동물농장 목적지 테스트")
+                .font(.caption)
+                .foregroundStyle(.secondary)
             layout {
                 HStack(spacing: 12) {
                     metric("도보", unit: "min")
@@ -123,7 +139,7 @@ struct BookRoutePreviewView: View {
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.white, .blue)
                 Divider().padding(.leading, 28)
-                Label(books.count == 1 ? "첫 번째 책" : "선택한 책 \(books.count)권", systemImage: "book.circle.fill")
+                Label(BookRoutePreviewSample.book.title, systemImage: "book.circle.fill")
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.white, .orange)
             }
@@ -144,13 +160,19 @@ struct BookRoutePreviewView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("소장 위치 · 청구기호 확인 전")
+                        Text(BookRoutePreviewSample.holding.locationName ?? "")
                             .font(.caption).foregroundStyle(.secondary)
+                        Text(BookRoutePreviewSample.holding.callNumber ?? "")
+                            .font(.caption).textSelection(.enabled)
                         Text(BookText.plainText(book.title))
                             .font(.subheadline.bold())
                             .fixedSize(horizontal: false, vertical: true)
                         Text(BookText.plainText(book.author))
                             .font(.caption).foregroundStyle(.secondary)
+                        if let shelf = destinationStore.state.shelves.first {
+                            Text("서가 \(shelf.realNumber)-\(shelf.side.rawValue)")
+                                .font(.caption.bold()).foregroundStyle(.orange)
+                        }
                         Text("대출 정보 확인 전")
                             .font(.caption).foregroundStyle(.secondary)
                     }
@@ -164,72 +186,8 @@ struct BookRoutePreviewView: View {
     }
 }
 
-/// 실제 IMDF·현재 위치·목적지로 오해하지 않도록 표시하는 디자인용 도면.
-private struct BookRouteMapPlaceholder: View {
-    let accent: Color
-    let topInset: CGFloat
-
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .topTrailing) {
-                Canvas { context, size in
-                    context.fill(Path(CGRect(origin: .zero, size: size)), with: .color(Color(red: 0.15, green: 0.11, blue: 0.12)))
-                    for column in 0..<4 {
-                        for row in 0..<13 {
-                            let shelf = CGRect(x: CGFloat(column) * size.width * 0.27 - 22,
-                                               y: CGFloat(row) * 34 + CGFloat(column % 2) * 12,
-                                               width: size.width * 0.18, height: 11)
-                            context.fill(Path(roundedRect: shelf, cornerRadius: 2), with: .color(.white.opacity(0.10)))
-                        }
-                    }
-                    var corridor = Path()
-                    corridor.move(to: CGPoint(x: size.width * 0.60, y: 0))
-                    corridor.addCurve(to: CGPoint(x: size.width * 0.64, y: size.height * 0.59),
-                                      control1: CGPoint(x: size.width * 0.14, y: size.height * 0.18),
-                                      control2: CGPoint(x: size.width * 0.24, y: size.height * 0.40))
-                    context.stroke(corridor, with: .color(.gray.opacity(0.25)), lineWidth: 52)
-
-                    var route = Path()
-                    route.move(to: CGPoint(x: size.width * 0.48, y: size.height * 0.40))
-                    route.addCurve(to: CGPoint(x: size.width * 0.55, y: size.height * 0.10),
-                                   control1: CGPoint(x: size.width * 0.23, y: size.height * 0.31),
-                                   control2: CGPoint(x: size.width * 0.34, y: size.height * 0.20))
-                    context.stroke(route, with: .color(accent), style: StrokeStyle(lineWidth: 3, lineCap: .round, dash: [3, 9]))
-                }
-                .accessibilityHidden(true)
-
-                Image(systemName: "book.fill")
-                    .foregroundStyle(.black)
-                    .padding(12)
-                    .background(accent, in: Circle())
-                    .position(x: geometry.size.width * 0.55, y: geometry.size.height * 0.10)
-                    .accessibilityHidden(true)
-                Image(systemName: "location.north.fill")
-                    .font(.title2)
-                    .foregroundStyle(accent)
-                    .padding(12)
-                    .background(.black, in: Circle())
-                    .overlay(Circle().stroke(accent, lineWidth: 3))
-                    .position(x: geometry.size.width * 0.48, y: geometry.size.height * 0.40)
-                    .accessibilityHidden(true)
-
-                Text("지도 예시")
-                    .font(.caption)
-                    .padding(.horizontal, 10).padding(.vertical, 6)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .padding(16)
-                    .padding(.top, topInset)
-            }
-        }
-    }
-}
-
 #Preview("한 권 · 다크 모드") {
     NavigationStack {
-        BookRoutePreviewView(books: [Book(
-            id: "primo:preview", isbn: nil, controlNumber: "primo:preview",
-            title: "양자역학의 기초", author: "박하린", publisher: nil,
-            publicationYear: nil, description: nil, imageURL: nil
-        )])
+        BookRoutePreviewView(books: [BookRoutePreviewSample.book])
     }
 }
