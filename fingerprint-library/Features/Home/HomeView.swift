@@ -31,6 +31,12 @@ struct HomeView: View {
             BookDetailView(store: detailStore)
                 .toolbar(.visible, for: .navigationBar)
         }
+        .navigationDestination(
+            item: $store.scope(state: \.basket, action: \.basket)
+        ) { basketStore in
+            BookBasketView(store: basketStore)
+                .toolbar(.visible, for: .navigationBar)
+        }
     }
     
     private var header: some View {
@@ -40,7 +46,7 @@ struct HomeView: View {
             
             Spacer()
             
-            headerButton("cart", label: "책바구니", action: .basketButtonTapped)
+            headerButton("cart", label: "책바구니", action: .basketButtonTapped, isEnabled: true)
             headerButton("person", label: "마이페이지", action: .profileButtonTapped)
         }
         .padding(.leading, 16)
@@ -188,7 +194,8 @@ struct HomeView: View {
     private func headerButton(
         _ symbol: String,
         label: String,
-        action: HomeFeature.Action
+        action: HomeFeature.Action,
+        isEnabled: Bool = false
     ) -> some View {
         Button { store.send(action) } label: {
             Image(systemName: symbol)
@@ -197,7 +204,7 @@ struct HomeView: View {
                 .frame(width: 44, height: 44)
         }
         .buttonStyle(.plain)
-        .disabled(true) // TODO: AppFeature의 목적 화면 연결 후 활성화
+        .disabled(!isEnabled) // TODO: AppFeature의 목적 화면 연결 후 활성화
         .accessibilityLabel(label)
     }
     

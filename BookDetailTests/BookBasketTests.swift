@@ -76,6 +76,20 @@ struct BookBasketTests {
         }
     }
 
+    @Test("추천 탭에서도 저장된 장바구니 화면을 열고 닫는다")
+    func openBasketFromHome() async {
+        let saved = [item("a")]
+        let store = TestStore(initialState: HomeFeature.State()) {
+            HomeFeature()
+        } withDependencies: {
+            $0.bookBasketClient.load = { saved }
+        }
+
+        await store.send(.basketButtonTapped) { $0.basket = BookBasketFeature.State() }
+        await store.send(.basket(.presented(.task))) { $0.basket?.items = saved }
+        await store.send(.basket(.dismiss)) { $0.basket = nil }
+    }
+
     @Test("보관 목록을 보관한 날짜별로 최근 날짜부터 묶고 권수를 유지한다")
     func groupByAddedDay() {
         var calendar = Calendar(identifier: .gregorian)
