@@ -9,6 +9,6 @@ import ComposableArchitecture
         WindowGroup {
             AppView(store: store)
         }
-        .modelContainer(for: UserProfile.self)
+        .modelContainer(UserProfile.sharedContainer)
     }
 }

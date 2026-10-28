@@ -29,7 +29,7 @@ struct BookSearchTabView: View {
                     submitSearch()
                 },
                 onShowBasket: {
-                    isBasketPresented = true
+                    store.send(.basketButtonTapped)
                 }
             )
             .navigationTitle("도서 검색")

@@ -76,7 +76,7 @@ struct LibraryMapView: View {
             Spacer()
 
             Button {
-                isBasketPresented = true
+                searchStore.send(.basketButtonTapped)
             } label: {
                 Image(systemName: "cart")
                     .font(.system(size: 22))

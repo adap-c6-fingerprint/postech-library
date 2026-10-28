@@ -108,4 +108,41 @@ struct BookDetailView: View {
         .task { await store.send(.loadDescription).finish() }
         .task { await store.send(.loadRelatedBooks).finish() }
     }
+
+    // 피그마 하단 액션바: 어두운 글래스 텍스트 버튼과 장바구니 심볼 버튼
+    private var actionBar: some View {
+        HStack(spacing: 12) {
+            Button {
+                store.send(.startGuidanceButtonTapped)
+            } label: {
+                Text("바로 안내 시작")
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundStyle(Color.detailActionText)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 52)
+            }
+            .buttonStyle(.plain)
+            .glassEffect(.regular.tint(Color.detailActionTint).interactive(), in: .capsule)
+
+            Button {
+                store.send(.addToBasketButtonTapped)
+            } label: {
+                Image(systemName: "cart.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(Color.detailActionText)
+                    .frame(width: 50, height: 50)
+            }
+            .buttonStyle(.plain)
+            .glassEffect(.regular.tint(Color.detailActionTint).interactive(), in: .circle)
+            .accessibilityLabel("장바구니에 담기")
+        }
+        // 홈 인디케이터 안전 영역(34pt) 위에 붙어 피그마의 하단 여백과 맞는다.
+        .padding(.horizontal, 16)
+    }
+}
+
+// 피그마 하단 액션바 색상 토큰 (Text Primary, Gray 700)
+private extension Color {
+    static let detailActionText = Color(red: 0xF9 / 255, green: 0xF9 / 255, blue: 0xF9 / 255)
+    static let detailActionTint = Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)
 }

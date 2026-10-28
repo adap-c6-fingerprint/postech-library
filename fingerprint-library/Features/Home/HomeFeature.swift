@@ -12,6 +12,7 @@ struct HomeFeature {
         var libraryInfoGeneration = 0
 
         @Presents var detail: BookDetailFeature.State?
+        @Presents var basket: BookBasketFeature.State?
 
         var recommendationCount: Int {
             recommendedBooks.isEmpty ? 6 : min(recommendedBooks.count, 6)
@@ -50,13 +51,13 @@ struct HomeFeature {
         case profileButtonTapped
         case popularBooksButtonTapped
         case detail(PresentationAction<BookDetailFeature.Action>)
+        case basket(PresentationAction<BookBasketFeature.Action>)
         case delegate(Delegate)
 
         case recommendationsFailed(UUID, String)
         case popularBooksFailed(String)
 
         enum Delegate {
-            case showBasket
             case showProfile
             case showPopularBooks
         }
@@ -89,7 +90,7 @@ struct HomeFeature {
 
                 if state.popularBooks.isEmpty {
                     state.popularBooksErrorMessage = nil
-                    effects.append(loadPopularBooks(departmentName: state.departmentName))
+                    effects.append(loadPopularBooks())
                 }
 
                 return .merge(effects)
@@ -176,7 +177,12 @@ struct HomeFeature {
                 return .none
 
             case .basketButtonTapped:
-                return .send(.delegate(.showBasket))
+                state.basket = BookBasketFeature.State()
+                return .none
+
+            case .basket(.presented(.delegate(.startGuidance))):
+                // TODO: 경로 요약 페이지(07)를 구현하면 선택한 책을 넘겨 화면을 연다.
+                return .none
 
             case .profileButtonTapped:
                 return .send(.delegate(.showProfile))
@@ -184,12 +190,15 @@ struct HomeFeature {
             case .popularBooksButtonTapped:
                 return .send(.delegate(.showPopularBooks))
 
-            case .detail, .delegate:
+            case .detail, .basket, .delegate:
                 return .none
             }
         }
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
+        }
+        .ifLet(\.$basket, action: \.basket) {
+            BookBasketFeature()
         }
     }
 
@@ -257,9 +266,12 @@ struct HomeFeature {
         .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
     }
 
-    private func loadPopularBooks(departmentName: String) -> Effect<Action> {
-        .run { [departmentPopularBooksClient] send in
+    private func loadPopularBooks() -> Effect<Action> {
+        .run { [userProfileClient, departmentPopularBooksClient] send in
             do {
+                // 저장된 프로필의 학과로 제목을 채우고 같은 학과의 인기 도서를 조회한다.
+                let departmentName = try await userProfileClient.load().departmentName
+                await send(.departmentChanged(departmentName))
                 let books = try await departmentPopularBooksClient.fetch(departmentName, 6)
                 try Task.checkCancellation()
                 await send(.popularBooksLoaded(books))

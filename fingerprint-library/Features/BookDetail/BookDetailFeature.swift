@@ -33,6 +33,9 @@ struct BookDetailFeature {
         // 연관 도서
         var relatedBooksState: RelatedBooksState = .idle
 
+        // 장바구니
+        var isBasketLimitAlertPresented = false
+
         var isbn13: String? {
             BookISBN.isbn13(from: book.isbn)
         }
@@ -52,6 +55,19 @@ struct BookDetailFeature {
         case retryRelatedBooksButtonTapped
         case relatedBooksLoaded([Book])
         case relatedBooksFailed(String)
+
+        // 장바구니
+        case addToBasketButtonTapped
+        case basketLimitAlertDismissed
+
+        // 길안내
+        case startGuidanceButtonTapped
+        case delegate(Delegate)
+
+        @CasePathable
+        enum Delegate: Equatable {
+            case startGuidance(Book)
+        }
     }
 
     @Dependency(\.bookDetailClient)
@@ -59,6 +75,12 @@ struct BookDetailFeature {
 
     @Dependency(\.relatedBooksClient)
     var relatedBooksClient
+
+    @Dependency(\.bookBasketClient)
+    var bookBasketClient
+
+    @Dependency(\.date.now)
+    var now
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -113,6 +135,26 @@ struct BookDetailFeature {
             case let .relatedBooksFailed(message):
                 state.relatedBooksState = .failed(message)
 
+                return .none
+
+            case .addToBasketButtonTapped:
+                // 이미 한도까지 담겨 있으면 저장하지 않고 한도 팝업을 띄운다.
+                if bookBasketClient.add(state.book, at: now) == .limitExceeded {
+                    state.isBasketLimitAlertPresented = true
+                }
+
+                return .none
+
+            case .basketLimitAlertDismissed:
+                state.isBasketLimitAlertPresented = false
+
+                return .none
+
+            case .startGuidanceButtonTapped:
+                // 장바구니를 거치지 않고 이 책 1권으로 길안내를 시작한다.
+                return .send(.delegate(.startGuidance(state.book)))
+
+            case .delegate:
                 return .none
             }
         }

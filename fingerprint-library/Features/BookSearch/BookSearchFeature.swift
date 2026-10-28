@@ -23,6 +23,7 @@ struct BookSearchFeature {
         var hasSearched: Bool = false
         
         var basketBooks: [Book] = []
+        var isBasketLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
     }
@@ -39,6 +40,7 @@ struct BookSearchFeature {
         case favoriteButtonTapped(Book)
         
         case addToBasket(Book)
+        case basketLimitAlertDismissed
         case removeFromBasket(Set<Book.ID>)
         case bookSelected(Book)
         case detail(PresentationAction<BookDetailFeature.Action>)
@@ -60,6 +62,12 @@ struct BookSearchFeature {
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient: BookFavoritesClient
 
+    @Dependency(\.bookBasketClient)
+    var bookBasketClient: BookBasketClient
+
+    @Dependency(\.date.now)
+    var now: Date
+
     private nonisolated enum CancelID: Hashable, Sendable {
         case search
     }
@@ -71,6 +79,12 @@ struct BookSearchFeature {
             case .task:
                 state.recentQueries = searchHistoryClient.load()
                 state.favoriteBookKeys = bookFavoritesClient.load()
+                // 저장된 장바구니를 복원하되 이미 담긴 책은 다시 넣지 않는다.
+                for item in bookBasketClient.load() where !state.basketBooks.contains(where: {
+                    $0.recordKey == item.book.recordKey
+                }) {
+                    state.basketBooks.append(item.book)
+                }
                 return .none
 
             case let .favoriteButtonTapped(book):
@@ -85,6 +99,11 @@ struct BookSearchFeature {
 
             case let .bookSelected(book):
                 state.detail = BookDetailFeature.State(book: book)
+                return .none
+
+            case .detail(.dismiss):
+                // 상세 화면에서 담은 책을 검색 화면의 바로가기 권수에 반영한다.
+                state.basketBooks = bookBasketClient.load().map(\.book)
                 return .none
 
             case .detail:
@@ -111,9 +130,18 @@ struct BookSearchFeature {
                     return .none
                 }
                 
+                // 이미 한도까지 담겨 있으면 권수를 늘리지 않고 한도 팝업을 띄운다.
+                guard bookBasketClient.add(book, at: now) != .limitExceeded else {
+                    state.isBasketLimitAlertPresented = true
+                    return .none
+                }
                 state.basketBooks.append(book)
                 return .none
-                
+
+            case .basketLimitAlertDismissed:
+                state.isBasketLimitAlertPresented = false
+                return .none
+
             case let .queryChanged(query):
                 state.query = query
                 return .none
@@ -202,10 +230,16 @@ struct BookSearchFeature {
                 return .none
                 
             case let .removeFromBasket(bookIDs):
+                let removedKeys = Set(
+                    state.basketBooks.filter { bookIDs.contains($0.id) }.map(\.recordKey)
+                )
                 state.basketBooks.removeAll { book in
                     bookIDs.contains(book.id)
                 }
-                
+                bookBasketClient.save(
+                    bookBasketClient.load().filter { !removedKeys.contains($0.book.recordKey) }
+                )
+
                 return .none
             }
         }
