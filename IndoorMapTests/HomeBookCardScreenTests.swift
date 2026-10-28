@@ -3,14 +3,15 @@ import Foundation
 import SwiftUI
 import Testing
 import UIKit
+import Vision
 @testable import fingerprint_library
 
 extension IndoorMapSerialTests {
     @MainActor
     struct HomeBookCardScreenTests {
-        @Test("추천 카드가 위치·이용 상태·누락·실패를 표시한다")
-        func rendersLibraryInformation() async throws {
-            let cases = ["사피엔스", "대출할 수 없는 책", "소장 정보 없는 책", "조회 실패 도서"]
+        @Test("추천 카드가 위치·이용 상태·누락·실패 문구를 표시한다", arguments: 0..<4)
+        func rendersLibraryInformation(scenario: Int) async throws {
+            let cases = ["사피엔스", "자료 A", "자료 B", "자료 C"]
             let books = cases.enumerated().map { index, title in
                 Book(id: "book-\(index)", isbn: nil, controlNumber: "alma99100095875970328\(index)",
                      title: title, author: "저자 \(index + 1)", publisher: nil, publicationYear: nil,
@@ -19,7 +20,9 @@ extension IndoorMapSerialTests {
             var initial = HomeFeature.State()
             initial.departmentName = "반도체공학과"
             initial.recommendedBooks = books
-            initial.popularBooks = books
+            let selectedBook = books[scenario]
+            // 각 상태를 화면 안의 실제 카드 경로에서 확인한다.
+            initial.popularBooks = [selectedBook]
             let store = Store(initialState: initial) { HomeFeature() } withDependencies: {
                 $0.bookHoldingsClient.fetch = { recordID in
                     switch recordID.last {
@@ -37,26 +40,58 @@ extension IndoorMapSerialTests {
             window.makeKeyAndVisible()
             defer { window.isHidden = true; window.rootViewController = nil }
             for _ in 0..<100 {
-                if store.libraryInfo.count == 4, !store.libraryInfo.values.contains(.loading) { break }
+                if store.libraryInfo.count == 1, !store.libraryInfo.values.contains(.loading) { break }
                 try await Task.sleep(for: .milliseconds(50))
             }
-            #expect(store.libraryInfo[books[0].id] == .loaded(.init(holdings: [Self.holding(status: "available")])))
-            #expect(store.libraryInfo[books[1].id] == .loaded(.init(holdings: [Self.holding(status: "unavailable")])))
-            #expect(store.libraryInfo[books[2].id] == .loaded(.init(holdings: [])))
-            #expect(store.libraryInfo[books[3].id] == .failed)
+            let expected: HomeFeature.LibraryInfoState = switch scenario {
+            case 0: .loaded(.init(holdings: [Self.holding(status: "available")]))
+            case 1: .loaded(.init(holdings: [Self.holding(status: "unavailable")]))
+            case 2: .loaded(.init(holdings: []))
+            default: .failed
+            }
+            #expect(store.libraryInfo[selectedBook.id] == expected)
+            let expectedText: [String] = switch scenario {
+            case 0: ["3층 QA1", "대출 가능"]
+            case 1: ["3층 QA1", "이용 불가"]
+            case 2: ["소장 정보 없음", "대출 정보 없음"]
+            default: ["소장 정보 확인 불가", "대출 상태 확인 필요"]
+            }
             try await Task.sleep(for: .milliseconds(300))
+            host.view.layoutIfNeeded()
             let image = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
                 window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
             }
-            try image.pngData()?.write(to: FileManager.default.temporaryDirectory.appendingPathComponent("home-book-card-issue88.png"))
-            #expect(store.popularBooks == books)
-            store.send(.bookSelected(books[0]))
-            #expect(store.detail?.book == books[0])
+            try image.pngData()?.write(to: FileManager.default.temporaryDirectory.appendingPathComponent("home-book-card-issue88-\(scenario).png"))
+            let renderedText = try recognizedText(in: image)
+            #expect(renderedText.contains(withoutWhitespace(selectedBook.title)))
+            #expect(renderedText.contains(withoutWhitespace(selectedBook.author)))
+            for text in expectedText {
+                #expect(renderedText.contains(withoutWhitespace(text)), "렌더링된 카드에 '\(text)'가 없습니다: \(renderedText)")
+            }
+            #expect(!renderedText.contains("단행본"))
+            #expect(!renderedText.contains(withoutWhitespace(scenario == 0 ? "이용 불가" : "대출 가능")))
+            #expect(store.popularBooks == [selectedBook])
+            store.send(.bookSelected(selectedBook))
+            #expect(store.detail?.book == selectedBook)
+        }
+
+        private func recognizedText(in image: UIImage) throws -> String {
+            let request = VNRecognizeTextRequest()
+            request.recognitionLevel = .accurate
+            request.recognitionLanguages = ["ko-KR", "en-US"]
+            request.usesLanguageCorrection = false
+            try VNImageRequestHandler(cgImage: #require(image.cgImage), options: [:]).perform([request])
+            let text = (request.results ?? []).compactMap { $0.topCandidates(1).first?.string }.joined()
+            return withoutWhitespace(text)
+        }
+
+        private func withoutWhitespace(_ text: String) -> String {
+            String(text.filter { !$0.isWhitespace })
         }
 
         private nonisolated static func holding(status: String) -> BookHolding {
             .init(holdingID: "h1", institutionCode: "82POSTECH_INST", libraryCode: "MAIN",
-                  locationCode: "c3b", locationName: "단행본3층", callNumber: "CB113.H4 .H3713 2015", availability: status)
+                  locationCode: "c3b", locationName: "단행본3층", callNumber: "QA1", availability: status)
         }
     }
 }
