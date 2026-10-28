@@ -58,12 +58,18 @@ struct BookBasketView: View {
                     Button {
                         store.send(.startGuidanceButtonTapped)
                     } label: {
-                        Text("안내 시작하기 (\(store.selectedCount)권)")
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(.black)
+                        Text(
+                            store.selectedCount == 0
+                            ? "안내 시작하기"
+                            : "안내 시작하기 (\(store.selectedCount)권)"
+                        )
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.black)
                     }
                     .buttonStyle(.glassProminent)
                     .tint(Color.basketPrimary)
+                    // 선택한 책이 0권이면 길안내를 시작하지 않는다.
+                    .disabled(store.selectedCount == 0)
                     .accessibilityValue("\(store.selectedCount)권 선택됨")
                 }
             } else {

@@ -143,4 +143,30 @@ struct BookBasketTests {
         await store.send(.startGuidanceButtonTapped)
         await store.receive(\.delegate.startGuidance, [items[2].book, items[0].book])
     }
+
+    @Test("선택한 책이 0권이면 길안내를 시작하지 않는다")
+    func noGuidanceWithoutSelection() async {
+        let store = TestStore(initialState: BookBasketFeature.State(
+            items: [item("a")],
+            isSelectingForGuidance: true
+        )) {
+            BookBasketFeature()
+        }
+
+        await store.send(.startGuidanceButtonTapped)
+    }
+
+    @Test("선택했던 책이 모두 장바구니에서 빠졌으면 0권으로 보고 길안내를 시작하지 않는다")
+    func noGuidanceWithStaleSelection() async {
+        let store = TestStore(initialState: BookBasketFeature.State(
+            items: [item("a")],
+            isSelectingForGuidance: true,
+            selectedIDs: ["missing"]
+        )) {
+            BookBasketFeature()
+        }
+
+        #expect(store.state.selectedBooks.isEmpty)
+        await store.send(.startGuidanceButtonTapped)
+    }
 }
