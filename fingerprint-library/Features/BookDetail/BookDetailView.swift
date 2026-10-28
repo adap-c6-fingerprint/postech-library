@@ -61,6 +61,7 @@ struct BookDetailView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var isNoticePresented = false
     @State private var noticeMessage = ""
+    @State private var isRoutePreviewPresented = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -83,6 +84,9 @@ struct BookDetailView: View {
         ) { shelfMapStore in
             BookShelfMapView(store: shelfMapStore)
                 .toolbar(.visible, for: .navigationBar)
+        }
+        .fullScreenCover(isPresented: $isRoutePreviewPresented) {
+            BookRoutePreviewView(books: [store.book])
         }
         .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
             store.send(.basketLimitAlertDismissed)
@@ -123,8 +127,8 @@ struct BookDetailView: View {
     private func bottomToolbarItem(width: CGFloat) -> some ToolbarContent {
         ToolbarItem(placement: .bottomBar) {
             HStack(spacing: 12) {
-                NavigationLink {
-                    BookRoutePreviewView(books: [store.book])
+                Button {
+                    isRoutePreviewPresented = true
                 } label: {
                     Text("바로 안내 시작")
                         .font(.headline)
