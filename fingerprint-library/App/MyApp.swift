@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 import ComposableArchitecture
 
 @main struct MyApp: App {
@@ -8,5 +9,6 @@ import ComposableArchitecture
         WindowGroup {
             AppView(store: store)
         }
+        .modelContainer(UserProfile.sharedContainer)
     }
 }

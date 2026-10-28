@@ -23,6 +23,7 @@ struct BookSearchFeature {
         var hasSearched: Bool = false
         
         var basketBooks: [Book] = []
+        var isBasketLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
     }
@@ -33,11 +34,13 @@ struct BookSearchFeature {
         case queryChanged(String)
         case searchCancelled
         case searchButtonTapped
+        case refreshButtonTapped
         case searchSucceeded([Book])
         case searchFailed(String)
         case favoriteButtonTapped(Book)
         
         case addToBasket(Book)
+        case basketLimitAlertDismissed
         case removeFromBasket(Set<Book.ID>)
         case bookSelected(Book)
         case detail(PresentationAction<BookDetailFeature.Action>)
@@ -50,11 +53,20 @@ struct BookSearchFeature {
     @Dependency(\.bookClient)
     var bookClient: BookClient
 
+    @Dependency(\.bookSearchCache)
+    var bookSearchCache: BookSearchCacheClient
+
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
 
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient: BookFavoritesClient
+
+    @Dependency(\.bookBasketClient)
+    var bookBasketClient: BookBasketClient
+
+    @Dependency(\.date.now)
+    var now: Date
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case search
@@ -67,6 +79,12 @@ struct BookSearchFeature {
             case .task:
                 state.recentQueries = searchHistoryClient.load()
                 state.favoriteBookKeys = bookFavoritesClient.load()
+                // 저장된 장바구니를 복원하되 이미 담긴 책은 다시 넣지 않는다.
+                for item in bookBasketClient.load() where !state.basketBooks.contains(where: {
+                    $0.recordKey == item.book.recordKey
+                }) {
+                    state.basketBooks.append(item.book)
+                }
                 return .none
 
             case let .favoriteButtonTapped(book):
@@ -81,6 +99,11 @@ struct BookSearchFeature {
 
             case let .bookSelected(book):
                 state.detail = BookDetailFeature.State(book: book)
+                return .none
+
+            case .detail(.dismiss):
+                // 상세 화면에서 담은 책을 검색 화면의 바로가기 권수에 반영한다.
+                state.basketBooks = bookBasketClient.load().map(\.book)
                 return .none
 
             case .detail:
@@ -107,9 +130,18 @@ struct BookSearchFeature {
                     return .none
                 }
                 
+                // 이미 한도까지 담겨 있으면 권수를 늘리지 않고 한도 팝업을 띄운다.
+                guard bookBasketClient.add(book, at: now) != .limitExceeded else {
+                    state.isBasketLimitAlertPresented = true
+                    return .none
+                }
                 state.basketBooks.append(book)
                 return .none
-                
+
+            case .basketLimitAlertDismissed:
+                state.isBasketLimitAlertPresented = false
+                return .none
+
             case let .queryChanged(query):
                 state.query = query
                 return .none
@@ -122,7 +154,7 @@ struct BookSearchFeature {
                 state.hasSearched = false
                 return .cancel(id: CancelID.search)
                 
-            case .searchButtonTapped:
+            case .searchButtonTapped, .refreshButtonTapped:
                 // 이미 검색 중이면 추가 요청을 보내지 않음
                 guard !state.isLoading else {
                     return .none
@@ -140,9 +172,7 @@ struct BookSearchFeature {
                     return .none
                 }
                 
-                state.isLoading = true
                 state.errorMessage = nil
-                state.books = []
                 state.hasSearched = true
                 
                 state.recentQueries.removeAll { $0 == keyword }
@@ -150,12 +180,24 @@ struct BookSearchFeature {
                 state.recentQueries = Array(state.recentQueries.prefix(20))
                 searchHistoryClient.save(state.recentQueries)
 
+                if case .refreshButtonTapped = action {
+                    // 사용자가 새로고침하면 유효기간 안의 결과도 다시 조회한다.
+                    bookSearchCache.remove(keyword)
+                } else if let books = bookSearchCache.load(keyword) {
+                    state.books = books
+                    return .none
+                }
+
+                state.isLoading = true
+                state.books = []
+
                 // 검색할 작업을 담은 Effect 값을 만들어 반환
-                return .run { [bookClient] send in
+                return .run { [bookClient, bookSearchCache] send in
                     do {
                         // Store가 Effect를 실행하면 이 코드가 동작
                         let books = try await bookClient.search(keyword)
                         try Task.checkCancellation()
+                        bookSearchCache.save(keyword, books)
                         
                         // 검색 결과를 새로운 Action으로 보냄
                         await send(.searchSucceeded(books))
@@ -188,10 +230,16 @@ struct BookSearchFeature {
                 return .none
                 
             case let .removeFromBasket(bookIDs):
+                let removedKeys = Set(
+                    state.basketBooks.filter { bookIDs.contains($0.id) }.map(\.recordKey)
+                )
                 state.basketBooks.removeAll { book in
                     bookIDs.contains(book.id)
                 }
-                
+                bookBasketClient.save(
+                    bookBasketClient.load().filter { !removedKeys.contains($0.book.recordKey) }
+                )
+
                 return .none
             }
         }

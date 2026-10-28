@@ -14,12 +14,17 @@ struct AppFeature {
         var home = HomeFeature.State()
         var indoorMap = IndoorMapFeature.State()
         var isRouteSettingsPresented = false
+        var hasStartedRecommendationSession = false
+        var hasEnteredBackground = false
     }
 
     enum Action {
         case home(HomeFeature.Action)
         case indoorMap(IndoorMapFeature.Action)
         case routeSettingsPresentationChanged(Bool)
+        case appStarted
+        case appEnteredBackground
+        case appBecameActive
     }
 
     var body: some Reducer<State, Action> {
@@ -27,6 +32,18 @@ struct AppFeature {
         Scope(state: \.indoorMap, action: \.indoorMap) { IndoorMapFeature() }
         Reduce { state, action in
             switch action {
+            case .appStarted:
+                guard !state.hasStartedRecommendationSession else { return .none }
+                state.hasStartedRecommendationSession = true
+                guard state.home.recommendationSessionID == nil else { return .none }
+                return .send(.home(.recommendationSessionStarted))
+            case .appEnteredBackground:
+                state.hasEnteredBackground = true
+                return .none
+            case .appBecameActive:
+                guard state.hasStartedRecommendationSession, state.hasEnteredBackground else { return .none }
+                state.hasEnteredBackground = false
+                return .send(.home(.recommendationSessionStarted))
             case .indoorMap(.delegate(.showRouteSettings)):
                 guard !state.isRouteSettingsPresented, state.indoorMap.routeDestination != nil
                 else {

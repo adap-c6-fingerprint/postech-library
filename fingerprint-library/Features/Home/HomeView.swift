@@ -21,13 +21,31 @@ struct HomeView: View {
         }
         .background(Color(uiColor: .systemBackground))
         .toolbar(.hidden, for: .navigationBar)
-        .task { await store.send(.task).finish() }
+        .task { store.send(.task) }
+        .task(id: LibraryInfoTaskID(bookIDs: store.popularBooks.map(\.id), sessionID: store.recommendationSessionID)) {
+            await store.send(.loadLibraryInfo).finish()
+        }
+        .onDisappear { store.send(.libraryInfoCancelled) }
+        .task(id: upcomingCoverURLs) {
+            await BookCoverPipeline.shared.prefetch(upcomingCoverURLs)
+        }
         .navigationDestination(
             item: $store.scope(state: \.detail, action: \.detail)
         ) { detailStore in
             BookDetailView(store: detailStore)
                 .toolbar(.visible, for: .navigationBar)
         }
+        .navigationDestination(
+            item: $store.scope(state: \.basket, action: \.basket)
+        ) { basketStore in
+            BookBasketView(store: basketStore)
+                .toolbar(.visible, for: .navigationBar)
+        }
+    }
+
+    private struct LibraryInfoTaskID: Equatable {
+        let bookIDs: [Book.ID]
+        let sessionID: UUID?
     }
     
     private var header: some View {
@@ -37,12 +55,17 @@ struct HomeView: View {
             
             Spacer()
             
-            headerButton("cart", label: "책바구니", action: .basketButtonTapped)
+            headerButton("cart", label: "책바구니", action: .basketButtonTapped, isEnabled: true)
             headerButton("person", label: "마이페이지", action: .profileButtonTapped)
         }
         .padding(.leading, 16)
         .padding(.trailing, 8)
         .padding(.vertical, 8)
+    }
+
+    private var upcomingCoverURLs: [URL] {
+        let nextIndex = max(0, (recommendationPosition ?? 0) + 1)
+        return store.recommendedBooks.dropFirst(nextIndex).prefix(2).compactMap(\.imageURL)
     }
     
     private var recommendationSection: some View {
@@ -62,7 +85,39 @@ struct HomeView: View {
             }
             .padding(.horizontal, 16)
             
-            ZStack(alignment: .bottom) {
+            if store.recommendedBooks.isEmpty {
+                if store.isLoadingRecommendations || store.recommendationSessionID == nil {
+                    VStack(spacing: 8) {
+                        ProgressView("추천 도서를 준비하고 있어요")
+                        Text("처음에는 잠시 걸릴 수 있어요.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, minHeight: 206)
+                }
+            } else {
+                recommendationCarousel
+            }
+
+            if let message = store.recommendationErrorMessage {
+                VStack(alignment: .leading, spacing: 10) {
+                    Label(message, systemImage: "exclamationmark.circle")
+                    if !store.recommendedBooks.isEmpty {
+                        Text("이전 추천은 계속 볼 수 있어요.")
+                            .font(.footnote)
+                    }
+                    Button("다시 시도") { store.send(.retryRecommendationsButtonTapped) }
+                        .buttonStyle(.bordered)
+                        .disabled(store.isPreparingRecommendations)
+                }
+                .foregroundStyle(.secondary)
+                .padding(.horizontal, 16)
+            }
+        }
+    }
+
+    private var recommendationCarousel: some View {
+        ZStack(alignment: .bottom) {
                 ScrollView(.horizontal) {
                     LazyHStack(alignment: .bottom, spacing: 12) {
                         ForEach(0..<store.recommendationCount, id: \.self) { index in
@@ -92,7 +147,6 @@ struct HomeView: View {
             .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
                 recommendationPosition = 0
             }
-        }
     }
     
     private var popularBooksSection: some View {
@@ -143,13 +197,21 @@ struct HomeView: View {
             }
             .contentMargins(.horizontal, 16, for: .scrollContent)
             .scrollIndicators(.hidden)
+
+            if store.libraryInfo.values.contains(.failed) {
+                Button("소장 정보 다시 불러오기") { store.send(.loadLibraryInfo) }
+                    .font(.footnote)
+                    .buttonStyle(.bordered)
+                    .padding(.horizontal, 16)
+            }
         }
     }
     
     private func headerButton(
         _ symbol: String,
         label: String,
-        action: HomeFeature.Action
+        action: HomeFeature.Action,
+        isEnabled: Bool = false
     ) -> some View {
         Button { store.send(action) } label: {
             Image(systemName: symbol)
@@ -158,7 +220,7 @@ struct HomeView: View {
                 .frame(width: 44, height: 44)
         }
         .buttonStyle(.plain)
-        .disabled(true) // TODO: AppFeature의 목적 화면 연결 후 활성화
+        .disabled(!isEnabled) // TODO: AppFeature의 목적 화면 연결 후 활성화
         .accessibilityLabel(label)
     }
     
@@ -188,21 +250,8 @@ private struct HomeBookCover: View {
     let height: CGFloat
     
     var body: some View {
-        AsyncImage(url: book?.imageURL) { phase in
-            if let image = phase.image {
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                ZStack {
-                    Color.primary.opacity(0.07)
-                    Image(systemName: "book.closed")
-                        .font(.system(size: 24, weight: .light))
-                        .foregroundStyle(.secondary.opacity(0.45))
-                }
-            }
-        }
+        // 홈 카드는 전체가 상세 이동 버튼이다. 재시도는 열린 상세 화면에서 제공한다.
+        BookCoverView(url: book?.imageURL, allowsRetry: false)
         .frame(width: width, height: height)
         .background(Color.primary.opacity(0.04))
         .clipShape(RoundedRectangle(cornerRadius: 4))
@@ -212,7 +261,7 @@ private struct HomeBookCover: View {
 
 private struct HomePopularBookCard: View {
     let book: Book?
-    let libraryInfo: HomeFeature.LibraryInfo?
+    let libraryInfo: HomeFeature.LibraryInfoState?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -220,12 +269,12 @@ private struct HomePopularBookCard: View {
                 .padding(.bottom, 8)
             
             if let book {
-                Text(book.title)
+                Text(BookText.plainText(book.title))
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 
-                Text(book.author)
+                Text(BookText.plainText(book.author))
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
@@ -234,25 +283,45 @@ private struct HomePopularBookCard: View {
                 placeholder(width: 76, height: 10)
             }
             
-            if let location = libraryInfo?.location {
-                Text(location)
-                    .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-            } else {
-                placeholder(width: 86, height: 10)
-            }
-            
-            if let isAvailable = libraryInfo?.isAvailable {
-                Text(isAvailable ? "대출 가능" : "대출 불가")
-                    .font(.system(size: 12))
-                    .foregroundStyle(isAvailable ? Color.green : Color.red)
-            } else {
-                placeholder(width: 48, height: 10)
-            }
+            libraryInformation
         }
         .frame(width: 96, alignment: .leading)
         .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private var libraryInformation: some View {
+        switch libraryInfo {
+        case .none, .loading:
+            placeholder(width: 86, height: 10)
+            placeholder(width: 48, height: 10)
+        case .loaded(let info):
+            VStack(alignment: .leading, spacing: 8) {
+                Text(info.location ?? (info.holdings.isEmpty ? "소장 정보 없음" : "위치 정보 없음"))
+                    .lineLimit(1)
+                    .foregroundStyle(.secondary)
+                if info.additionalLocationCount > 0 {
+                    Text("외 \(info.additionalLocationCount)곳 소장")
+                        .foregroundStyle(.secondary)
+                }
+                switch info.availability {
+                case .available:
+                    Text("대출 가능").foregroundStyle(.green)
+                case .unavailable:
+                    Text("이용 불가").foregroundStyle(.red)
+                case .unknown:
+                    Text("대출 정보 없음").foregroundStyle(.secondary)
+                }
+            }
+            .font(.system(size: 12))
+        case .failed, .unavailable:
+            VStack(alignment: .leading, spacing: 8) {
+                Text("소장 정보 확인 불가")
+                Text("대출 상태 확인 필요")
+            }
+            .font(.system(size: 12))
+            .foregroundStyle(.secondary)
+        }
     }
     
     private func placeholder(width: CGFloat, height: CGFloat) -> some View {
