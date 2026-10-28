@@ -10,6 +10,7 @@ import SwiftUI
 struct BookBasketView: View {
     let books: [Book]
     let onDeletedSelected: (Set<Book.ID>) -> Void
+    let onShowDirections: (Set<Book.ID>) -> Void
     
     @State private var selectedBookIDs: Set<Book.ID> = []
     
@@ -68,6 +69,24 @@ struct BookBasketView: View {
         }
         .navigationTitle("책바구니")
         .navigationBarTitleDisplayMode(.inline)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 8) {
+                Text("길안내는 한 번에 최대 \(BookRouteSelection.maximumBookCount)권까지 가능해요.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button {
+                    onShowDirections(selectedBookIDs)
+                } label: {
+                    Text("길안내 받기 (\(selectedBookIDs.count)/\(BookRouteSelection.maximumBookCount)권)")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!BookRouteSelection.allows(bookCount: selectedBookIDs.count))
+                .accessibilityIdentifier("basket-directions")
+            }
+            .padding(16)
+            .background(Color(.systemGroupedBackground))
+        }
         .safeAreaInset(edge: .top, spacing: 0) {
             HStack(spacing: 12) {
                 Button {
