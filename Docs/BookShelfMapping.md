@@ -85,6 +85,23 @@ Debug에서 프록시를 설정하지 않으면 기존 로컬 `PRIMO_API_KEY`로
 Release의 새 소장 조회는 프록시 없이 실패한다. 기존 검색·추천 클라이언트의 직접 호출 구조는
 이번 이슈에서 바꾸지 않았으므로 앱 전체의 배포용 키 관리는 별도로 점검해야 한다.
 
+앱 타깃의 `Validate Release Primo Proxy` 빌드 단계가
+`Scripts/validate-release-configuration.py`로 Release의 실제 빌드 설정을 검사한다.
+누락·미치환 변수·HTTP·사용자 정보·쿼리·fragment가 있는 주소는 빌드 오류로 처리해
+설정 없이 배포한 뒤 위치 조회가 실패하는 경로를 막는다. Debug에는 프록시를 강제하지 않는다.
+주입 경로는 로컬의 Git 제외 `Secrets.xcconfig` 또는 배포 명령의 명시적인
+`PRIMO_PROXY_URL="$POSTECH_PRIMO_PROXY_URL"` 빌드 설정이다. 명령 예시는 README에 있다.
+프록시 운영 주소는 아직 확인되지 않았으며 주소 형식·빌드 주입 검사와 실제 서비스 배포 완료는 구분한다.
+
+PR 리뷰 보완 검증에서 프록시 없는 Release 빌드가 설정 오류로 중단되는 것을 확인했다.
+검증용 `.invalid` HTTPS 주소를 명시적인 빌드 설정으로 주입하면 Release Simulator 빌드와
+생성된 `Info.plist`의 값 전달이 통과했다. 이는 운영 서버 접속 검사가 아니다.
+프록시 없는 Debug의 파싱 테스트는 7개 함수·13회 실행, Python 자료·설정 검사는 20개가 통과했다.
+파싱 결과 번들은 `/private/tmp/postech-issue75-review-final.xcresult`다.
+
+식별 정보가 없는 비대상 문서는 정상 대상의 위치 조회를 막지 않도록 `pnx`·`control`·`recordid`의
+누락·null을 불일치로 처리한다. API 오류 객체처럼 `docs` 자체가 잘못된 응답은 계속 오류로 처리한다.
+
 ## 검증
 
 `PrimoHoldingsMapperTests`, `BookHoldingShelfResolverTests`, `BookHoldingMapFeatureTests`와

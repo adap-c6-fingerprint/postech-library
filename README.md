@@ -30,6 +30,21 @@ Debug 개발용 조회에는 로컬 `PRIMO_API_KEY`를 사용합니다. Release�
 기관 키를 보관하는 HTTPS 프록시의 `PRIMO_PROXY_URL` 설정이 필요합니다.
 키·프록시 설정, 확인된 위치 코드와 검증 범위는 [책과 서가 연결](Docs/BookShelfMapping.md)을 참고하세요.
 
+Release 빌드는 앱 타깃의 `Validate Release Primo Proxy` 단계에서 프록시 주소를 검사합니다.
+주소가 없거나 HTTPS 기본 주소 형식이 아니면 빌드를 중단합니다.
+로컬에서는 무시되는 `Secrets.xcconfig`에 실제 `PRIMO_PROXY_URL`을 설정하고,
+배포 자동화에서는 비공개 환경 변수 `POSTECH_PRIMO_PROXY_URL`을 명시적인 빌드 설정으로 전달합니다.
+
+```sh
+xcodebuild archive -project fingerprint-library.xcodeproj \
+  -scheme fingerprint-library -configuration Release \
+  -destination 'generic/platform=iOS' \
+  PRIMO_PROXY_URL="$POSTECH_PRIMO_PROXY_URL"
+```
+
+환경 변수만 정의하고 위 빌드 설정 전달을 생략하지 않습니다.
+설정 형식 검증은 프록시 운영·인증·응답의 정상 동작을 보증하지 않으므로, 실제 주소로 배포 전 조회도 확인해야 합니다.
+
 ## 도서 상세와 책 소개
 
 홈 → 도서 검색 → 검색 결과의 표지나 책 정보를 누르면 기본 상세 화면이 열립니다.
