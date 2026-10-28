@@ -22,6 +22,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var selectedShelfKey: ShelfKey?
     var onSelectShelf: (ShelfKey?) -> Void = { _ in }
     var route: IndoorRoute?
+    var groupTransitionNodes: [RouteNode] = []
     /// 경로 시트와 상단 위치 버튼을 제외한 영역에 도면·현재 위치를 맞춘다.
     var viewportInsets: UIEdgeInsets = .zero
     var shelfLabels: [IndoorShelfLabel] = []
@@ -72,9 +73,11 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var shelfLabelAnnotations: [IndoorShelfLabelAnnotation] = []
         private var displayedShelfLabelIDs = Set<String>()
         private var renderedRoute: IndoorRoute?
+        private var renderedGroupTransitionNodes: [RouteNode] = []
         private var routeFloorID: UUID?
         private var routeOverlays: [any MKOverlay] = []
         private var routeOverlayIDs = Set<ObjectIdentifier>()
+        private var groupTransitionAnnotations: [MKPointAnnotation] = []
         private var routeTransitionAnnotations: [IndoorRouteTransitionAnnotation] = []
 
         init(parent: IndoorMapKitView) { self.parent = parent }
@@ -149,13 +152,17 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 계산된 경로 중 조회 층의 선·통로 연결점·층 이동 진입 및 출구만 표시한다.
         /// 이 메서드는 경로를 계산하거나 도착을 판정하지 않는다.
         private func updateRoute(in view: MKMapView) {
-            guard renderedRoute != parent.route || routeFloorID != parent.floor.id else { return }
+            guard renderedRoute != parent.route || routeFloorID != parent.floor.id
+                || renderedGroupTransitionNodes != parent.groupTransitionNodes else { return }
             view.removeOverlays(routeOverlays)
             view.removeAnnotations(routeTransitionAnnotations)
+            view.removeAnnotations(groupTransitionAnnotations)
             routeOverlays.removeAll()
             routeOverlayIDs.removeAll()
+            groupTransitionAnnotations.removeAll()
             routeTransitionAnnotations.removeAll()
             renderedRoute = parent.route
+            renderedGroupTransitionNodes = parent.groupTransitionNodes
             routeFloorID = parent.floor.id
             guard let route = parent.route else { return }
             for segment in route.segments where segment.floorID == parent.floor.id && segment.coordinates.count >= 2 {
@@ -164,6 +171,13 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
             if route.start.floorID == parent.floor.id {
                 routeOverlays.append(MKCircle(center: route.start.routeCoordinate.clCoordinate, radius: 1))
+            }
+            for (index, node) in parent.groupTransitionNodes.enumerated() where node.floorID == parent.floor.id {
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = node.coordinate.clCoordinate
+                annotation.title = "\(index + 2)단계 시작 · 그룹 전환"
+                annotation.subtitle = node.id
+                groupTransitionAnnotations.append(annotation)
             }
             for change in route.floorChanges {
                 if change.fromFloorID == parent.floor.id {
@@ -176,6 +190,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             routeOverlayIDs = Set(routeOverlays.map { ObjectIdentifier($0) })
             view.addOverlays(routeOverlays, level: .aboveLabels)
             view.addAnnotations(routeTransitionAnnotations)
+            view.addAnnotations(groupTransitionAnnotations)
         }
 
         /// 조회 층의 서가 핀을 갱신하고 선택 색상과 MapKit의 선택 상태를 맞춘다.
@@ -490,6 +505,31 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
+            if let annotation = annotation as? MKPointAnnotation,
+               groupTransitionAnnotations.contains(where: { $0 === annotation }) {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-group-transition")
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-group-transition")
+                view.annotation = annotation
+                let size = CGSize(width: 24, height: 24)
+                view.image = UIGraphicsImageRenderer(size: size).image { _ in
+                    let circle = UIBezierPath(ovalIn: CGRect(origin: .zero, size: size).insetBy(dx: 2, dy: 2))
+                    UIColor.white.setFill()
+                    circle.fill()
+                    UIColor.systemOrange.setStroke()
+                    circle.lineWidth = 3
+                    circle.stroke()
+                }
+                view.centerOffset = .zero
+                view.zPriority = .max
+                view.displayPriority = .required
+                view.collisionMode = .circle
+                view.clusteringIdentifier = nil
+                view.isEnabled = false
+                view.isAccessibilityElement = true
+                view.accessibilityLabel = annotation.title
+                view.accessibilityIdentifier = "route-group-transition-\(annotation.subtitle ?? "")"
+                return view
+            }
             if let annotation = annotation as? IndoorShelfLabelAnnotation {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: IndoorShelfLabelView.reuseID)
                     as? IndoorShelfLabelView

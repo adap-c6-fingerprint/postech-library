@@ -6,6 +6,7 @@ nonisolated struct BookRoutePreviewTestRoute: Equatable, Sendable {
     let destination: IndoorShelfLabel
     let start: IndoorPosition
     let route: IndoorRoute
+    let guidance: RoutePreviewGuidance
 }
 
 /// navigation-only 묶음을 테스트 화면에만 연결한다. 원본 파일·기존 데이터셋 로더는 바꾸지 않는다.
@@ -70,7 +71,8 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
             navigation: navigation, start: start, destination: key, preference: .shortestDistance
         ))
         guard case .route(let route) = outcome else { throw IndoorRoutingError.noRoute }
-        return .init(origin: origin, destination: destination, start: start, route: route)
+        return .init(origin: origin, destination: destination, start: start, route: route,
+                     guidance: try RoutePreviewGuidance(route: route, graph: graph))
     }
 
     /// 이 묶음의 ordinal은 실제 층 번호다. UUID·descriptor와 대조한 노드만 현재 IMDF ordinal로 변환한다.
@@ -96,7 +98,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
             return .init(type: feature.type, id: feature.id, properties: .init(
                 role: p.role, level: floor.ordinal, levelID: p.levelID, name: p.name, category: p.category,
                 from: p.from, to: p.to, direction: p.direction, accessible: p.accessible,
-                traversalSeconds: p.traversalSeconds
+                traversalSeconds: p.traversalSeconds, groupID: p.groupID
             ), geometry: feature.geometry)
         }
         return .init(type: graph.type, schemaVersion: graph.schemaVersion, layoutVersion: graph.layoutVersion,

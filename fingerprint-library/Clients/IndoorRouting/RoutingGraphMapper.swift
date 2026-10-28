@@ -61,7 +61,7 @@ nonisolated struct RoutingGraphMapper {
             }
             return RouteEdge(id: feature.id, fromNodeID: fromID, toNodeID: toID, direction: direction,
                              category: category, accessible: accessible, coordinates: points,
-                             traversalSeconds: p.traversalSeconds)
+                             traversalSeconds: p.traversalSeconds, groupID: p.groupID)
         }
         let graph = RoutingGraph(schemaVersion: dto.schemaVersion, layoutVersion: dto.layoutVersion,
                                  hardSearchRadiusMeters: dto.routingConfig.hardSearchRadiusMeters,

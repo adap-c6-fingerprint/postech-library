@@ -47,6 +47,7 @@ struct BookRoutePreviewView: View {
                                 featureIDs: [testRoute.origin.mapElementID, testRoute.destination.mapElementID])),
                             onSelect: { _ in }, onPlaceOrigin: { _ in },
                             route: testRoute.route,
+                            groupTransitionNodes: testRoute.guidance.groupTransitionNodes,
                             shelfLabels: destinationStore.map.shelfLabels,
                             highlightedFeatureIDs: [testRoute.destination.mapElementID]
                         )
@@ -187,8 +188,10 @@ struct BookRoutePreviewView: View {
             }
             layout {
                 HStack(spacing: 12) {
-                    metric("도보", unit: "min")
-                    metric("단계", unit: "steps")
+                    metric("도보", unit: "min", value: testRoute.map {
+                        $0.guidance.walkingMinutes.formatted(.number.precision(.fractionLength(2)))
+                    })
+                    metric("단계", unit: "steps", value: testRoute.map { String($0.guidance.stepCount) })
                     metric("거리", unit: "m", value: testRoute.map { $0.route.distanceMeters.formatted(.number.precision(.fractionLength(0))) })
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -204,8 +207,8 @@ struct BookRoutePreviewView: View {
             .padding(16)
             .background(Color(uiColor: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
 
-            Text(testRoute == nil ? "경로 계산 후 거리가 표시돼요. 시간·안내 단계는 아직 미연결이에요."
-                 : "노드 경로의 거리예요. 시간·안내 단계·실제 안내 시작은 아직 미연결이에요.")
+            Text(testRoute == nil ? "경로 계산 후 시간·단계·거리가 표시돼요."
+                 : "시속 5km 기준 예상 시간이에요(10m ≈ 7.2초). 단계는 그룹 전환 횟수 + 1이며, 주황색 원은 전환 노드예요. 실제 안내 시작은 아직 미연결이에요.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
