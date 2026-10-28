@@ -5,6 +5,9 @@ import SwiftUI
 struct BookRoutePreviewView: View {
     @State private var destination: BookRoutePreviewDestination
     @State private var destinationStore: StoreOf<BookShelfMapFeature>?
+    @State private var testRoute: BookRoutePreviewTestRoute?
+    @State private var isLoadingTestRoute = false
+    @State private var testRouteError: String?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -35,7 +38,20 @@ struct BookRoutePreviewView: View {
             let panelHeight = geometry.size.height * 0.57
             ZStack(alignment: .bottom) {
                 Group {
-                    if let destinationStore {
+                    if let destinationStore, let testRoute, let map = destinationStore.map.map,
+                       let floor = map.floors.first(where: { $0.id == testRoute.origin.floorID }) {
+                        IndoorMapKitView(
+                            map: map, floor: floor, selectedFeatureID: nil,
+                            position: testRoute.start, showsUserLocation: false, isPlacingOrigin: false,
+                            cameraRequest: .init(id: 1, target: .route(testRoute.route,
+                                featureIDs: [testRoute.origin.mapElementID, testRoute.destination.mapElementID])),
+                            onSelect: { _ in }, onPlaceOrigin: { _ in },
+                            route: testRoute.route,
+                            shelfLabels: destinationStore.map.shelfLabels,
+                            highlightedFeatureIDs: [testRoute.destination.mapElementID]
+                        )
+                        .accessibilityIdentifier("preview-test-route-map")
+                    } else if let destinationStore {
                         IndoorMapView(
                             store: destinationStore.scope(state: \.map, action: \.map),
                             showsDestinationCard: false,
@@ -60,6 +76,9 @@ struct BookRoutePreviewView: View {
                     header
                     Button("동물농장으로 테스트") {
                         destinationStore?.send(.map(.disappeared))
+                        testRoute = nil
+                        testRouteError = nil
+                        isLoadingTestRoute = true
                         destination.useAnimalFarmTest()
                         destinationStore = Self.makeStore(for: destination)
                     }
@@ -91,10 +110,31 @@ struct BookRoutePreviewView: View {
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .accessibilityIdentifier("book-route-preview")
-        .task(id: destinationStore.map { ObjectIdentifier($0) }) { [destinationStore] in
+        .task(id: destinationStore.map { ObjectIdentifier($0) }) { [destinationStore, isTest = destination.isAnimalFarmTest] in
             // Store 교체 시 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
             guard let destinationStore else { return }
             await destinationStore.send(.task).finish()
+            guard isTest else { return }
+            do {
+                try Task.checkCancellation()
+                let shelves = destinationStore.state.shelves(for: BookRoutePreviewSample.book.id)
+                guard let map = destinationStore.map.map, shelves.count == 1, let shelf = shelves.first else {
+                    throw IndoorMapLoadError.invalidData(file: "shelfdata.json", reason:
+                        destinationStore.map.loadError ?? destinationStore.map.shelfLabelError ?? "동물농장 서가 한 곳을 확인할 수 없습니다.")
+                }
+                let result = try await BookRoutePreviewTestRouteLoader().load(
+                    on: map, labels: destinationStore.map.shelfLabels, destination: shelf
+                )
+                try Task.checkCancellation()
+                guard self.destinationStore === destinationStore else { return }
+                testRoute = result
+            } catch is CancellationError {
+                return
+            } catch {
+                guard self.destinationStore === destinationStore else { return }
+                testRouteError = error.localizedDescription
+            }
+            if self.destinationStore === destinationStore { isLoadingTestRoute = false }
         }
         .onDisappear { destinationStore?.send(.map(.disappeared)) }
     }
@@ -130,12 +170,26 @@ struct BookRoutePreviewView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .accessibilityIdentifier("animal-farm-test-status")
+                if isLoadingTestRoute {
+                    ProgressView("311-B에서 동물농장까지 경로 계산 중")
+                        .font(.caption)
+                }
+                if let testRouteError {
+                    Text(testRouteError).font(.caption).foregroundStyle(.red)
+                        .accessibilityIdentifier("preview-test-route-error")
+                }
+                if let testRoute {
+                    Text("311-B → \(testRoute.destination.realNumber)-\(testRoute.destination.side.rawValue) · \(testRoute.route.edgeIDs.count)개 연결")
+                        .font(.caption).foregroundStyle(.secondary)
+                    Text("출발점은 311-B에 배정된 통로 노드로 고정돼요.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
             }
             layout {
                 HStack(spacing: 12) {
                     metric("도보", unit: "min")
                     metric("단계", unit: "steps")
-                    metric("거리", unit: "m")
+                    metric("거리", unit: "m", value: testRoute.map { $0.route.distanceMeters.formatted(.number.precision(.fractionLength(0))) })
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Button("출발") { }
@@ -145,36 +199,37 @@ struct BookRoutePreviewView: View {
                     .controlSize(.large)
                     .fixedSize()
                     .disabled(true)
-                    .accessibilityHint("경로 계산 후 사용할 수 있어요")
+                    .accessibilityHint("실제 안내 시작은 아직 연결되지 않았어요")
             }
             .padding(16)
             .background(Color(uiColor: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
 
-            Text("경로 계산 후 시간·단계·거리가 표시돼요.")
+            Text(testRoute == nil ? "경로 계산 후 거리가 표시돼요. 시간·안내 단계는 아직 미연결이에요."
+                 : "노드 경로의 거리예요. 시간·안내 단계·실제 안내 시작은 아직 미연결이에요.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
     }
 
-    private func metric(_ title: String, unit: String) -> some View {
+    private func metric(_ title: String, unit: String, value: String? = nil) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title).font(.caption).foregroundStyle(.secondary)
             HStack(alignment: .firstTextBaseline, spacing: 3) {
-                Text("—").font(.title2.bold())
+                Text(value ?? "—").font(.title2.bold())
                 Text(unit).font(.caption)
             }
             .lineLimit(1)
             .minimumScaleFactor(0.7)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(title), 계산 전")
+        .accessibilityLabel(value.map { "\(title), \($0) \(unit)" } ?? "\(title), 계산 전")
     }
 
     private var routeSummary: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("경로 요약").font(.headline)
             VStack(alignment: .leading, spacing: 12) {
-                Label("내 위치", systemImage: "location.circle.fill")
+                Label(destination.isAnimalFarmTest ? "출발 · 3층 311-B (테스트 고정)" : "내 위치", systemImage: "location.circle.fill")
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.white, .blue)
                 Divider().padding(.leading, 28)

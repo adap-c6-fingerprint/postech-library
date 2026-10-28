@@ -402,6 +402,25 @@ struct IndoorMapKitView: UIViewRepresentable {
                     y: point.y + cameraCenter.y - viewport.midY
                 )
                 view.setCenter(view.convert(center, toCoordinateFrom: view), animated: animated)
+            case .route(let route, let ids):
+                var rect = parent.map.features.filter { ids.contains($0.id) && $0.floorID == parent.floor.id }
+                    .reduce(MKMapRect.null) { $0.union(MapKitGeometry.mapRect(for: $1.geometry)) }
+                for segment in route.segments where segment.floorID == parent.floor.id {
+                    rect = rect.union(MapKitGeometry.mapRect(for: .lineString(segment.coordinates)))
+                }
+                if route.start.floorID == parent.floor.id {
+                    rect = rect.union(MapKitGeometry.mapRect(for: .point(route.start.actualCoordinate)))
+                }
+                guard !rect.isNull else { return false }
+                let padding = UIEdgeInsets(top: 32 + parent.viewportInsets.top, left: 32 + parent.viewportInsets.left,
+                                           bottom: 32 + parent.viewportInsets.bottom, right: 32 + parent.viewportInsets.right)
+                guard view.bounds.width > padding.left + padding.right,
+                      view.bounds.height > padding.top + padding.bottom else { return false }
+                let margin = MKMapPointsPerMeterAtLatitude(MKMapPoint(x: rect.midX, y: rect.midY).coordinate.latitude) * 4
+                let camera = view.camera.copy() as! MKMapCamera
+                camera.pitch = 0
+                view.setCamera(camera, animated: false)
+                view.setVisibleMapRect(rect.insetBy(dx: -margin, dy: -margin), edgePadding: padding, animated: false)
             case .features(let ids):
                 let features = parent.map.features.filter { ids.contains($0.id) && $0.floorID == parent.floor.id }
                 guard !features.isEmpty else { return false }
