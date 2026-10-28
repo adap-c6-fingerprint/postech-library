@@ -12,6 +12,7 @@ struct LibraryMapView: View {
     @Bindable var store: StoreOf<AppFeature>
 
     @Bindable private var searchStore: StoreOf<BookSearchFeature>
+    @ScaledMetric(relativeTo: .title) private var headerHeight: CGFloat = 160
 
     init(store: StoreOf<AppFeature>, searchStore: StoreOf<BookSearchFeature>? = nil) {
         self.store = store
@@ -24,11 +25,15 @@ struct LibraryMapView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                homeHeader
-                IndoorMapView(store: mapStore)
-                    .background(Color(uiColor: .systemGroupedBackground))
-            }
+            IndoorMapView(store: mapStore, topContentInset: headerHeight, appearance: .home)
+                .ignoresSafeArea(.container, edges: .top)
+                .overlay(alignment: .topLeading) { homeHeader }
+                .background(.black)
+                .toolbar {
+                    LibraryTopBar(title: "홈", onBasket: { searchStore.send(.basketButtonTapped) })
+                }
+                .toolbarBackground(.hidden, for: .navigationBar)
+                .toolbarColorScheme(.dark, for: .navigationBar)
             .task {
                 searchStore.send(.task)
             }
@@ -62,34 +67,16 @@ struct LibraryMapView: View {
     }
     
     private var homeHeader: some View {
-        HStack(spacing: 8) {
-            Text("오늘은 어떤 책을\n읽어볼까요?")
-                .font(.system(size: 28, weight: .bold))
-
-            Spacer()
-
-            Button {
-                searchStore.send(.basketButtonTapped)
-            } label: {
-                Image(systemName: "cart")
-                    .font(.system(size: 22))
-                    .frame(width: 44, height: 44)
-            }
-            .accessibilityLabel("책바구니")
-
-            Button {
-                // 마이페이지 이동 연결
-            } label: {
-                Image(systemName: "person")
-                    .font(.system(size: 22))
-                    .frame(width: 44, height: 44)
-            }
-            .accessibilityLabel("마이페이지")
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(.primary)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        Text("오늘은 어떤 책을\n읽어볼까요?")
+            .font(.title.weight(.bold))
+            .lineSpacing(6)
+            .foregroundStyle(.white)
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+            .frame(maxWidth: .infinity, minHeight: headerHeight, alignment: .topLeading)
+            .background { LibraryTopBarBackground().ignoresSafeArea(.container, edges: .top) }
+            .allowsHitTesting(false)
+            .accessibilityIdentifier("library-home-greeting")
     }
 
 }
