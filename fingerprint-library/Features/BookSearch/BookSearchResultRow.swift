@@ -13,6 +13,7 @@ struct BookSearchResultRow: View {
     let onShowDetail: () -> Void
     let onToggleFavorite: () -> Void
     let onAddToBasket: () -> Void
+    let onShowDirections: () -> Void
 
     var body: some View {
         VStack(spacing: 12) {
@@ -101,11 +102,12 @@ struct BookSearchResultRow: View {
     }
 
     private var directionsButton: some View {
-        Button(action: {}) {
+        Button(action: onShowDirections) {
             Text("길안내 받기")
                 .frame(minHeight: 32)
         }
         .buttonStyle(.bordered)
+        .accessibilityIdentifier("book-directions-\(book.id)")
     }
 
     private var coverImage: some View {
