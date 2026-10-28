@@ -44,6 +44,10 @@ No credentials, workspace binding or public deployment are needed.
 ## Observations
 
 <!-- begin:observations -->
+2026-10-28: `library` served the production client's new mixed-document fault
+case as well as the existing cases. Missing/null pnx, control and recordid
+before a valid target no longer hide its holdings. This defensive payload was
+synthetic; it was not observed from the provider. Swift 6 HTTP execution passed.
 2026-10-28: `library` served every tested request; there were no other members.
 The production service passed the live-sample shape, exact ID rejection, empty
 result, 401 without retry, invalid JSON without retry, 503 bounded retries and

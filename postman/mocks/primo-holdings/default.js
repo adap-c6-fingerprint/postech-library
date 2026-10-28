@@ -270,6 +270,13 @@ const server = http.createServer((req, res) => {
     const doc = JSON.parse(JSON.stringify(documents[0]));
     doc.pnx.control.recordid = [id]; return send(200, {docs: [doc]});
   }
+  // Defensive fault scenario; these missing fields were not observed in the live sample.
+  if (id === 'alma999999999999990007') {
+    const doc = JSON.parse(JSON.stringify(documents[0]));
+    doc.pnx.control.recordid = [id];
+    return send(200, {docs: [{}, {pnx: null}, {pnx: {control: null}},
+      {pnx: {control: {recordid: null}}}, doc]});
+  }
   return send(200, {docs: documents.filter(d => d.pnx.control.recordid.includes(id))});
 });
 server.listen(process.env.PORT || 47576);

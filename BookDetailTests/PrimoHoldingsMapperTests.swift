@@ -5,6 +5,23 @@ import Testing
 struct PrimoHoldingsMapperTests {
     private let recordID = "alma991000958759703286"
 
+    @Test("식별 정보가 누락되거나 null인 문서가 섞여도 정상 대상 문서의 위치를 읽는다", arguments: [
+        #"{}"#, #"{"pnx":null}"#, #"{"pnx":{}}"#, #"{"pnx":{"control":null}}"#,
+        #"{"pnx":{"control":{}}}"#, #"{"pnx":{"control":{"recordid":null}}}"#,
+        #"{"pnx":{"control":{"recordid":[]}}}"#
+    ])
+    func skipsDocumentsWithoutIdentity(incomplete: String) throws {
+        let target = #"{"pnx":{"control":{"recordid":["alma991000958759703286"]}},"delivery":{"holding":[{"holdId":"target","callNumber":"RC263 .R632 1990"}]}}"#
+        let mixed = Data("{\"docs\":[\(incomplete),\(target)]}".utf8)
+        let holdings = try PrimoHoldingsMapper.decode(mixed, recordID: recordID)
+        #expect(holdings.count == 1)
+        #expect(holdings.first?.holdingID == "target")
+        #expect(holdings.first?.callNumber == "RC263 .R632 1990")
+
+        let unidentified = Data("{\"docs\":[\(incomplete)]}".utf8)
+        #expect(try PrimoHoldingsMapper.decode(unidentified, recordID: recordID).isEmpty)
+    }
+
     @Test("실제 top-level holding·holdId·위치 코드와 복수 소장처를 보존한다")
     func topLevelHoldings() throws {
         let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma991000958759703286"]}},"delivery":{"holding":[{"organization":"82POSTECH_INST","libraryCode":"MAIN","subLocation":"단행본3층","subLocationCode":"c3b","callNumber":"CB113.H4 .H3713 2015","holdId":"holding-a","availabilityStatus":"available"},{"organization":"82POSTECH_INST","libraryCode":"MAIN","subLocation":"스마트도서관","subLocationCode":"smart","callNumber":"CB113.H4 .H3713 2015","holdId":"holding-b","availabilityStatus":"unavailable"}]}}]}"#.utf8)

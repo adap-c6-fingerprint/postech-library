@@ -23,13 +23,15 @@ struct VerifyPrimoHoldings {
         }
         let recovered = try await service.fetch(recordID: "alma999999999999990006")
         try check(recovered.count == 3, "429 retry recovery")
+        let mixed = try await service.fetch(recordID: "alma999999999999990007")
+        try check(mixed == holdings, "incomplete non-target documents do not hide a valid target")
         let (data, _) = try await URLSession.shared.data(from: base.appending(path: "__counts"))
         let counts = try JSONDecoder().decode([String: Int].self, from: data)
         try check(counts["alma999999999999990001"] == 3, "503 bounded to three attempts")
         try check(counts["alma999999999999990002"] == 1, "401 not retried")
         try check(counts["alma999999999999990003"] == 1, "invalid JSON not retried")
         try check(counts["alma999999999999990006"] == 2, "429 recovered on second attempt")
-        print("PASS: production Swift 6 HTTP service — holdings, exact ID, empty result, 401, invalid JSON, 503 and 429 recovery")
+        print("PASS: production Swift 6 HTTP service — holdings, incomplete documents, exact ID, empty result, 401, invalid JSON, 503 and 429 recovery")
     }
 
     static func check(_ condition: Bool, _ message: String) throws {
