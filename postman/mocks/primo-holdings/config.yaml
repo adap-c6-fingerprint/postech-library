@@ -1,0 +1,11 @@
+version: 1
+id: 21d3b856-5db9-4080-9521-9a8d312f3436
+name: POSTECH Primo Holdings Read
+slug: postech-primo-holdings-read
+protocol: http
+interceptRequests: true
+port: 47576
+scenarios:
+  - name: default
+    path: ./default.js
+    default: true

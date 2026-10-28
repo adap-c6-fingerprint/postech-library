@@ -9,8 +9,22 @@ import ComposableArchitecture
 import SwiftUI
 
 struct BookBasketView: View {
-    @Bindable var store: StoreOf<BookBasketFeature>
+    let books: [Book]
+    let onDeletedSelected: (Set<Book.ID>) -> Void
+    let onShowDirections: (Set<Book.ID>) -> Void
+    
+    @State private var selectedBookIDs: Set<Book.ID> = []
+    
+    private var isAllSelected: Bool {
+        !books.isEmpty && books.allSatisfy {
+            selectedBookIDs.contains($0.id)
+        }
+    }
 
+    private var selectedBooks: [Book] {
+        books.filter { selectedBookIDs.contains($0.id) }
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .trailing, spacing: 0) {
@@ -42,22 +56,40 @@ struct BookBasketView: View {
         .background(Color.basketBackground)
         .navigationTitle("장바구니")
         .navigationBarTitleDisplayMode(.inline)
-        // 하단 툴바의 선택·제거·안내 버튼이 탭바에 가려지지 않게 한다.
-        .toolbar(.hidden, for: .tabBar)
-        .toolbar {
-            if store.isSelectingForGuidance {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("선택 완료", systemImage: "checkmark") {
-                        store.send(.doneButtonTapped)
-                    }
-                    .labelStyle(.iconOnly)
-                    .buttonStyle(.glassProminent)
-                    .tint(Color.basketPrimary)
-                    .foregroundStyle(.black)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 8) {
+                NavigationLink {
+                    BookRoutePreviewView(books: selectedBooks)
+                } label: {
+                    Text("선택한 \(selectedBooks.count)권 경로 미리보기")
+                        .frame(maxWidth: .infinity, minHeight: 44)
                 }
-                ToolbarItem(placement: .bottomBar) {
-                    Button("선택한 책 제거", systemImage: "trash") {
-                        store.send(.removeButtonTapped)
+                .buttonStyle(.bordered)
+                .disabled(selectedBooks.isEmpty)
+                .accessibilityIdentifier("basket-route-preview")
+                Text("길안내는 한 번에 최대 \(BookRouteSelection.maximumBookCount)권까지 가능해요.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Button {
+                    onShowDirections(selectedBookIDs)
+                } label: {
+                    Text("길안내 받기 (\(selectedBookIDs.count)/\(BookRouteSelection.maximumBookCount)권)")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!BookRouteSelection.allows(bookCount: selectedBookIDs.count))
+                .accessibilityIdentifier("basket-directions")
+            }
+            .padding(16)
+            .background(Color(.systemGroupedBackground))
+        }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            HStack(spacing: 12) {
+                Button {
+                    if isAllSelected {
+                        selectedBookIDs.removeAll()
+                    } else {
+                        selectedBookIDs = Set(books.map(\.id))
                     }
                     .labelStyle(.iconOnly)
                     .disabled(store.selectedCount == 0)

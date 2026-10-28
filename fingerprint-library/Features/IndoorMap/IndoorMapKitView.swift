@@ -24,6 +24,8 @@ struct IndoorMapKitView: UIViewRepresentable {
     var route: IndoorRoute?
     /// 경로 시트와 상단 위치 버튼을 제외한 영역에 도면·현재 위치를 맞춘다.
     var viewportInsets: UIEdgeInsets = .zero
+    var shelfLabels: [IndoorShelfLabel] = []
+    var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -50,6 +52,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         var renderedMap: IndoorMap?
         var renderedFloorID: UUID?
         var selectedID: IndoorMapElement.ID?
+        private var highlightedIDs: Set<IndoorMapElement.ID> = []
         /// 적용을 마친 요청. 같은 요청의 반복 갱신이 사용자의 수동 이동을 덮어쓰지 않게 한다.
         var lastCameraRequest: IndoorMapCameraRequest?
         /// 화면 부착·크기 결정까지 보류한 최신 카메라 요청.
@@ -57,9 +60,17 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var isApplyingCamera = false
         /// MapKit overlay 객체와 원본 요소를 연결해 색상·선택 스타일을 결정한다.
         private var overlayFeatures: [ObjectIdentifier: IndoorMapElement] = [:]
+        /// 도형마다 첫 renderer 활성화 후 한 번만 다시 그린다. 카메라 이동으로 복구하지 않는다.
+        private var pendingOverlayRedrawIDs = Set<ObjectIdentifier>()
+        private var readyOverlayRenderers: [ObjectIdentifier: MKOverlayRenderer] = [:]
+        private var overlayRedrawTask: Task<Void, Never>?
+        private var overlayGeneration = 0
         private var positionAnnotation: PositionAnnotation?
         private var renderedPosition: IndoorPosition?
         private var renderedShelves: [ShelfDestination] = []
+        private var renderedShelfLabels: [IndoorShelfLabel] = []
+        private var shelfLabelAnnotations: [IndoorShelfLabelAnnotation] = []
+        private var displayedShelfLabelIDs = Set<String>()
         private var renderedRoute: IndoorRoute?
         private var routeFloorID: UUID?
         private var routeOverlays: [any MKOverlay] = []
@@ -96,7 +107,11 @@ struct IndoorMapKitView: UIViewRepresentable {
             longPress.cancelsTouchesInView = false
             longPress.delegate = self
             view.addGestureRecognizer(longPress)
-            view.onLayout = { [weak self] view in self?.applyPendingCamera(in: view) }
+            view.onLayout = { [weak self] view in
+                self?.applyPendingCamera(in: view)
+                self?.layoutShelfLabels(in: view)
+                self?.scheduleOverlayRedraw(in: view)
+            }
             mapView = view
             return view
         }
@@ -111,13 +126,20 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.showsUserLocation = parent.showsUserLocation
             updatePosition(in: view)
             updateShelves(in: view)
+            updateShelfLabels(in: view)
             updateRoute(in: view)
-            if selectedID != parent.selectedFeatureID {
+            if selectedID != parent.selectedFeatureID || highlightedIDs != parent.highlightedFeatureIDs {
                 selectedID = parent.selectedFeatureID
+                highlightedIDs = parent.highlightedFeatureIDs
                 for overlay in view.overlays {
                     if let renderer = view.renderer(for: overlay) as? MKOverlayPathRenderer {
                         style(renderer, overlay: overlay)
                     }
+                }
+                for case let annotation as IndoorShelfLabelAnnotation in view.annotations {
+                    (view.view(for: annotation) as? IndoorShelfLabelView)?.configure(
+                        annotation, highlighted: highlightedIDs.contains(annotation.label.mapElementID)
+                    )
                 }
             }
             pendingCameraRequest = parent.cameraRequest == lastCameraRequest ? nil : parent.cameraRequest
@@ -174,6 +196,85 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
         }
 
+        /// 현재 층의 서가 면에 번호·범위를 표시한다. 일반 위치 갱신에서는 annotation을 재사용한다.
+        private func updateShelfLabels(in view: MKMapView) {
+            let labels = parent.shelfLabels.filter { $0.floorID == parent.floor.id }
+            if labels != renderedShelfLabels {
+                view.removeAnnotations(view.annotations.filter { $0 is IndoorShelfLabelAnnotation })
+                renderedShelfLabels = labels
+                shelfLabelAnnotations = labels.map { IndoorShelfLabelAnnotation($0) }
+                displayedShelfLabelIDs = []
+            }
+            layoutShelfLabels(in: view)
+        }
+
+        /// 화면 중심에 가까운 레이블부터 겹치지 않게 배치한다. 촬영 순서는 사용하지 않는다.
+        private func layoutShelfLabels(in view: MKMapView) {
+            guard view.bounds.width > 0, view.bounds.height > 0 else { return }
+            let center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
+            let candidates = shelfLabelAnnotations.compactMap { annotation -> (IndoorShelfLabelAnnotation, CGRect, CGFloat)? in
+                let point = view.convert(annotation.coordinate, toPointTo: view)
+                let size = annotation.labelSize
+                let frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2,
+                                   width: size.width, height: size.height)
+                guard frame.intersects(view.bounds) else { return nil }
+                return (annotation, frame.insetBy(dx: -3, dy: -3), hypot(point.x - center.x, point.y - center.y))
+            }.sorted {
+                let left = parent.highlightedFeatureIDs.contains($0.0.label.mapElementID)
+                let right = parent.highlightedFeatureIDs.contains($1.0.label.mapElementID)
+                if left != right { return left }
+                return $0.2 == $1.2 ? $0.0.label.id < $1.0.label.id : $0.2 < $1.2
+            }
+            var occupied: [CGRect] = []
+            var chosen: [IndoorShelfLabelAnnotation] = []
+            for (annotation, frame, _) in candidates where !occupied.contains(where: { $0.intersects(frame) }) {
+                chosen.append(annotation)
+                occupied.append(frame)
+            }
+            let ids = Set(chosen.map { $0.label.id })
+            guard ids != displayedShelfLabelIDs else { return }
+            view.removeAnnotations(view.annotations.compactMap { $0 as? IndoorShelfLabelAnnotation }
+                .filter { !ids.contains($0.label.id) })
+            view.addAnnotations(chosen.filter { !displayedShelfLabelIDs.contains($0.label.id) })
+            displayedShelfLabelIDs = ids
+        }
+
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            layoutShelfLabels(in: mapView)
+        }
+
+        /// 등록 직후의 rendererFor보다 늦은 시점이다. 이 콜백에서는 renderer가 지도에 부착돼 있다.
+        func mapView(_ mapView: MKMapView, didAdd renderers: [MKOverlayRenderer]) {
+            guard mapView === self.mapView else { return }
+            for renderer in renderers {
+                let id = ObjectIdentifier(renderer.overlay)
+                if pendingOverlayRedrawIDs.contains(id) { readyOverlayRenderers[id] = renderer }
+            }
+            scheduleOverlayRedraw(in: mapView)
+        }
+
+        /// 초기 배치 중 들어온 활성화 콜백을 모아 다음 main actor 작업에서 한 번 갱신한다.
+        /// 지도 타일 다운로드 완료를 기다리지 않으므로 번들 도면은 오프라인에서도 표시할 수 있다.
+        private func scheduleOverlayRedraw(in view: MKMapView) {
+            guard overlayRedrawTask == nil, !readyOverlayRenderers.isEmpty,
+                  view.window != nil, view.bounds.width > 0, view.bounds.height > 0,
+                  pendingCameraRequest == nil, !isApplyingCamera else { return }
+            let generation = overlayGeneration
+            overlayRedrawTask = Task { @MainActor [weak self, weak view] in
+                await Task.yield()
+                guard let self, !Task.isCancelled, generation == self.overlayGeneration else { return }
+                self.overlayRedrawTask = nil
+                guard let view, view === self.mapView, view.window != nil,
+                      view.bounds.width > 0, view.bounds.height > 0,
+                      self.pendingCameraRequest == nil, !self.isApplyingCamera else { return }
+                let renderers = self.readyOverlayRenderers
+                self.readyOverlayRenderers.removeAll()
+                for (id, renderer) in renderers where self.pendingOverlayRedrawIDs.remove(id) != nil {
+                    renderer.setNeedsDisplay()
+                }
+            }
+        }
+
         /// 화면에 붙고 유효한 크기를 가진 뒤 최신 보류 요청을 한 번 적용한다.
         /// 적용할 수 없으면 요청을 소비하지 않아 다음 layout에서 다시 처리할 수 있다.
         private func applyPendingCamera(in view: MKMapView) {
@@ -188,13 +289,23 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         /// View 제거 시 참조와 보류 요청을 해제해 종료된 화면에 카메라 작업이 남지 않게 한다.
         func detachMapView() {
+            cancelOverlayRedraw()
             mapView = nil
             pendingCameraRequest = nil
+        }
+
+        private func cancelOverlayRedraw() {
+            overlayGeneration += 1
+            overlayRedrawTask?.cancel()
+            overlayRedrawTask = nil
+            pendingOverlayRedrawIDs.removeAll()
+            readyOverlayRenderers.removeAll()
         }
 
         /// 조회 층이 바뀌면 층 외곽·unit·section·fixture·opening과 시설 핀을 다시 구성한다.
         /// 서가·현재 위치·경로 표시는 별도의 갱신 메서드에서 이어서 반영한다.
         func render(in view: MKMapView) {
+            cancelOverlayRedraw()
             view.removeOverlays(view.overlays)
             view.removeAnnotations(routeTransitionAnnotations)
             routeTransitionAnnotations.removeAll()
@@ -206,19 +317,20 @@ struct IndoorMapKitView: UIViewRepresentable {
             renderedMap = parent.map
             renderedFloorID = parent.floor.id
             selectedID = parent.selectedFeatureID
-            for overlay in MapKitGeometry.overlays(for: parent.floor.geometry) {
-                view.addOverlay(overlay, level: .aboveRoads)
-            }
+            var overlays = MapKitGeometry.overlays(for: parent.floor.geometry)
             let features = parent.map.features.filter { $0.floorID == parent.floor.id }
             // unit과 section을 먼저 그리고 그 위에 fixture와 opening을 올린다.
             for kind in [IndoorMapElement.Kind.unit, .section, .fixture, .opening] {
                 for feature in features where feature.kind == kind {
                     for overlay in MapKitGeometry.overlays(for: feature.geometry) {
                         overlayFeatures[ObjectIdentifier(overlay)] = feature
-                        view.addOverlay(overlay, level: .aboveRoads)
+                        overlays.append(overlay)
                     }
                 }
             }
+            // 모든 스타일 참조를 준비하고 한 번에 등록해 중간 도면 상태의 갱신을 줄인다.
+            pendingOverlayRedrawIDs = Set(overlays.map { ObjectIdentifier($0) })
+            view.addOverlays(overlays, level: .aboveRoads)
             view.addAnnotations(features.compactMap { feature in
                 guard feature.kind == .amenity, case .point(let coordinate) = feature.geometry else { return nil }
                 return FeatureAnnotation(feature: feature, coordinate: coordinate.clCoordinate)
@@ -290,6 +402,20 @@ struct IndoorMapKitView: UIViewRepresentable {
                     y: point.y + cameraCenter.y - viewport.midY
                 )
                 view.setCenter(view.convert(center, toCoordinateFrom: view), animated: animated)
+            case .features(let ids):
+                let features = parent.map.features.filter { ids.contains($0.id) && $0.floorID == parent.floor.id }
+                guard !features.isEmpty else { return false }
+                let rect = features.reduce(MKMapRect.null) { $0.union(MapKitGeometry.mapRect(for: $1.geometry)) }
+                guard !rect.isNull else { return false }
+                let padding = UIEdgeInsets(top: 32 + parent.viewportInsets.top, left: 32 + parent.viewportInsets.left,
+                                           bottom: 32 + parent.viewportInsets.bottom, right: 32 + parent.viewportInsets.right)
+                guard view.bounds.width > padding.left + padding.right,
+                      view.bounds.height > padding.top + padding.bottom else { return false }
+                let margin = MKMapPointsPerMeterAtLatitude(MKMapPoint(x: rect.midX, y: rect.midY).coordinate.latitude) * 8
+                let camera = view.camera.copy() as! MKMapCamera
+                camera.pitch = 0
+                view.setCamera(camera, animated: false)
+                view.setVisibleMapRect(rect.insetBy(dx: -margin, dy: -margin), edgePadding: padding, animated: false)
             }
             return true
         }
@@ -330,7 +456,11 @@ struct IndoorMapKitView: UIViewRepresentable {
                 renderer.strokeColor = .white
             default: renderer.fillColor = UIColor.systemGray6.withAlphaComponent(0.95)
             }
-            if let feature, feature.id == selectedID {
+            if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
+                renderer.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
+                renderer.strokeColor = .systemOrange
+                renderer.lineWidth = 3
+            } else if let feature, feature.id == selectedID {
                 renderer.fillColor = UIColor.systemTeal.withAlphaComponent(0.35)
                 renderer.strokeColor = .systemTeal
                 renderer.lineWidth = 2
@@ -341,6 +471,13 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
+            if let annotation = annotation as? IndoorShelfLabelAnnotation {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: IndoorShelfLabelView.reuseID)
+                    as? IndoorShelfLabelView
+                    ?? IndoorShelfLabelView(annotation: annotation, reuseIdentifier: IndoorShelfLabelView.reuseID)
+                view.configure(annotation, highlighted: parent.highlightedFeatureIDs.contains(annotation.label.mapElementID))
+                return view
+            }
             if let annotation = annotation as? IndoorRouteTransitionAnnotation {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-transition")
                     ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-transition")

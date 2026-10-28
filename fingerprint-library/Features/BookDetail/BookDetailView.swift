@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct BookDetailView: View {
-    let store: StoreOf<BookDetailFeature>
+    @Bindable var store: StoreOf<BookDetailFeature>
 
     var body: some View {
         List {
@@ -25,6 +25,17 @@ struct BookDetailView: View {
                         }
                     }
                 }
+            }
+
+            Section {
+                NavigationLink {
+                    BookRoutePreviewView(books: [store.book])
+                } label: {
+                    Label("길찾기 경로 미리보기", systemImage: "map")
+                }
+                .accessibilityIdentifier("detail-route-preview")
+                Button("길안내 받기", systemImage: "map") { store.send(.directionsButtonTapped) }
+                    .accessibilityIdentifier("book-detail-directions")
             }
 
             Section("책 정보") {
@@ -91,11 +102,8 @@ struct BookDetailView: View {
         }
         .navigationTitle("도서 상세")
         .navigationBarTitleDisplayMode(.inline)
-        // 탭바와 검색 탭 버튼을 숨기고 하단에는 피그마 하단 액션바만 둔다.
-        .toolbar(.hidden, for: .tabBar)
-        .safeAreaInset(edge: .bottom) { actionBar }
-        .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
-            store.send(.basketLimitAlertDismissed)
+        .navigationDestination(item: $store.scope(state: \.$shelfMap, action: \.shelfMap)) {
+            BookShelfMapView(store: $0)
         }
         .task { await store.send(.loadDescription).finish() }
         .task { await store.send(.loadRelatedBooks).finish() }

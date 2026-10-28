@@ -13,12 +13,37 @@
 cp Secrets.example.xcconfig Secrets.xcconfig
 ```
 
-생성한 `Secrets.xcconfig`의 `NATIONAL_LIBRARY_API_KEY`에 국립중앙도서관 API 키를 입력합니다.
+생성한 `Secrets.xcconfig`의 `PRIMO_API_KEY`에 POSTECH 도서관 Primo API 키를 입력합니다.
 도서 상세 화면의 책 소개를 사용하려면 `YES24_API_KEY`도 입력합니다.
 키가 없으면 검색 시 API 키 누락 오류로 처리합니다.
 
 `Secrets.xcconfig`는 `.gitignore`에 등록된 개인 설정 파일입니다.
 실제 키는 `Base.xcconfig`나 `Secrets.example.xcconfig`에 작성하지 않습니다.
+
+## 책의 서가 위치
+
+검색 결과·책바구니·도서 상세의 `길안내 받기`에서 도서관 소장 정보의 청구기호로
+3층 단행본·4층 제본학술지의 실제 서가를 찾아 지도에 표시합니다.
+복수 소장처와 범위가 겹치는 후보는 보존하고, 지도에 없는 별치 구역은 미연결로 안내합니다.
+
+Debug 개발용 조회에는 로컬 `PRIMO_API_KEY`를 사용합니다. Release의 소장 조회에는
+기관 키를 보관하는 HTTPS 프록시의 `PRIMO_PROXY_URL` 설정이 필요합니다.
+키·프록시 설정, 확인된 위치 코드와 검증 범위는 [책과 서가 연결](Docs/BookShelfMapping.md)을 참고하세요.
+
+Release 빌드는 앱 타깃의 `Validate Release Primo Proxy` 단계에서 프록시 주소를 검사합니다.
+주소가 없거나 HTTPS 기본 주소 형식이 아니면 빌드를 중단합니다.
+로컬에서는 무시되는 `Secrets.xcconfig`에 실제 `PRIMO_PROXY_URL`을 설정하고,
+배포 자동화에서는 비공개 환경 변수 `POSTECH_PRIMO_PROXY_URL`을 명시적인 빌드 설정으로 전달합니다.
+
+```sh
+xcodebuild archive -project fingerprint-library.xcodeproj \
+  -scheme fingerprint-library -configuration Release \
+  -destination 'generic/platform=iOS' \
+  PRIMO_PROXY_URL="$POSTECH_PRIMO_PROXY_URL"
+```
+
+환경 변수만 정의하고 위 빌드 설정 전달을 생략하지 않습니다.
+설정 형식 검증은 프록시 운영·인증·응답의 정상 동작을 보증하지 않으므로, 실제 주소로 배포 전 조회도 확인해야 합니다.
 
 ## 도서 상세와 책 소개
 

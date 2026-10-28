@@ -9,12 +9,15 @@ import ComposableArchitecture
 import SwiftUI
 
 struct BookSearchTabView: View {
-    @State private var store = Store(
-        initialState: BookSearchFeature.State()
-    ) {
-        BookSearchFeature()
-    }
+    @State private var store: StoreOf<BookSearchFeature>
+    @State private var isBasketPresented = false
     @Environment(\.isSearching) private var isSearching
+
+    init(store: StoreOf<BookSearchFeature>? = nil) {
+        _store = State(initialValue: store ?? Store(
+            initialState: BookSearchFeature.State()
+        ) { BookSearchFeature() })
+    }
 
     var body: some View {
         NavigationStack {
@@ -30,15 +33,26 @@ struct BookSearchTabView: View {
                 }
             )
             .navigationTitle("도서 검색")
-            .navigationDestination(
-                item: $store.scope(state: \.basket, action: \.basket)
-            ) { basketStore in
-                BookBasketView(store: basketStore)
+            .navigationDestination(isPresented: $isBasketPresented) {
+                BookBasketView(
+                    books: store.basketBooks,
+                    onDeletedSelected: { bookIDs in
+                        store.send(.removeFromBasket(bookIDs))
+                    },
+                    onShowDirections: { bookIDs in
+                        store.send(.basketDirectionsButtonTapped(bookIDs))
+                    }
+                )
             }
             .navigationDestination(
                 item: $store.scope(state: \.detail, action: \.detail)
             ) { detailStore in
                 BookDetailView(store: detailStore)
+            }
+            .navigationDestination(
+                item: $store.scope(state: \.shelfMap, action: \.shelfMap)
+            ) { shelfMapStore in
+                BookShelfMapView(store: shelfMapStore)
             }
         }
         .searchable(
