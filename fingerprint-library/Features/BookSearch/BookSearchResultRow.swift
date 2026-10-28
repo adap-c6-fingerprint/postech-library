@@ -16,37 +16,38 @@ struct BookSearchResultRow: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            Button(action: onShowDetail) {
-                HStack(alignment: .top, spacing: 16) {
-                    coverImage
+            HStack(alignment: .top, spacing: 16) {
+                coverImage
+                Button(action: onShowDetail) {
+                    HStack(alignment: .top, spacing: 16) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(cleaned(book.title))
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                                .lineLimit(3)
 
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(cleaned(book.title))
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                            .lineLimit(3)
-
-                        Text(cleaned(book.author))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(2)
-
-                        if !publicationInfo.isEmpty {
-                            Text(publicationInfo)
-                                .font(.caption)
+                            Text(cleaned(book.author))
+                                .font(.subheadline)
                                 .foregroundStyle(.secondary)
                                 .lineLimit(2)
+
+                            if !publicationInfo.isEmpty {
+                                Text(publicationInfo)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(2)
+                            }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    .contentShape(Rectangle())
                 }
-                .contentShape(Rectangle())
+                .buttonStyle(.plain)
+                .accessibilityHint("책 소개 보기")
             }
-            .buttonStyle(.plain)
-            .accessibilityHint("책 소개 보기")
 
             actionButtons
         }
@@ -109,11 +110,11 @@ struct BookSearchResultRow: View {
     }
 
     private var coverImage: some View {
-        BookCoverView(url: book.imageURL)
+        // 상세 이동 버튼 안에 재시도 버튼을 중첩하지 않는다.
+        BookCoverView(url: book.imageURL, onOpen: onShowDetail)
         .frame(width: 72, height: 104)
         .background(Color.gray.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: 6))
-        .accessibilityHidden(true)
     }
 
     private var publicationInfo: String {

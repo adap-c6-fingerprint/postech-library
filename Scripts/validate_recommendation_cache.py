@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""실제 API/설정 없이 추천 캐시의 순수 로직을 macOS SwiftPM에서 검증한다."""
+"""실제 API/설정 없이 표지·추천·검색 캐시의 순수 로직을 macOS SwiftPM에서 검증한다."""
 from pathlib import Path
 import argparse
 import shutil
@@ -30,10 +30,17 @@ let package = Package(name: "RecommendationCacheValidation", platforms: [.macOS(
         "fingerprint-library/Clients/Book/RecommendationCacheStore.swift",
         "fingerprint-library/Clients/Book/RecommendationCachePreparer.swift",
         "fingerprint-library/Shared/BookCover/SharedImageLoader.swift",
+        "fingerprint-library/Shared/BookCover/BookCoverFailure.swift",
+        "fingerprint-library/Shared/BookCover/BookCoverModel.swift",
+        "fingerprint-library/Clients/Book/BookSearchResultCache.swift",
     ]:
         path = repo / relative
         shutil.copy2(path, sources / path.name)
-    for name in ["RecommendationCacheStoreTests.swift", "RecommendationCachePreparerTests.swift", "SharedImageLoaderTests.swift"]:
+    for name in [
+        "RecommendationCacheStoreTests.swift", "RecommendationCachePreparerTests.swift",
+        "SharedImageLoaderTests.swift", "BookSearchResultCacheTests.swift",
+        "BookCoverFailureTests.swift", "BookCoverModelTests.swift",
+    ]:
         shutil.copy2(repo / "BookDetailTests" / name, tests / name)
     # SwiftPM 자체의 중첩 sandbox만 끈다. 공개 소스 사본과 가짜 응답만 빌드한다.
     command = [

@@ -3,89 +3,63 @@ import UIKit
 
 struct BookCoverView: View {
     let url: URL?
-    @State private var model: BookCoverModel
+    let onOpen: (() -> Void)?
+    let allowsRetry: Bool
+    @State private var retryID = 0
+    @State private var model: BookCoverModel<UIImage>
 
-    init(url: URL?) {
+    init(url: URL?, onOpen: (() -> Void)? = nil, allowsRetry: Bool = true) {
         self.url = url
-        _model = State(initialValue: BookCoverModel(url: url))
+        self.onOpen = onOpen
+        self.allowsRetry = allowsRetry
+        _model = State(initialValue: BookCoverModel(url: url, pipeline: BookCoverPipeline.shared))
     }
 
     var body: some View {
-        ZStack {
-            switch model.phase(for: url) {
-            case let .loaded(image):
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-            case .loading:
-                ProgressView()
-            case .failed:
-                VStack(spacing: 4) {
-                    Image(systemName: "exclamationmark.triangle")
-                    Text("표지 오류").font(.caption2)
+        Group {
+            if case .failed = model.phase(for: url), allowsRetry {
+                Button { retryID += 1 } label: {
+                    placeholder("arrow.clockwise", text: "다시 시도")
                 }
-                .foregroundStyle(.secondary)
-            case .unavailable:
-                Image(systemName: "book.closed")
-                    .font(.title2)
-                    .foregroundStyle(.secondary)
+                .accessibilityLabel("표지 다시 불러오기")
+            } else if let onOpen {
+                Button(action: onOpen) { coverContent }
+                    .accessibilityLabel("책 표지, 책 소개 보기")
+            } else {
+                coverContent
             }
         }
+        .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .task(id: url) { await model.load(url) }
-    }
-}
-
-@MainActor
-@Observable
-final class BookCoverModel {
-    enum Phase {
-        case loading
-        case loaded(UIImage)
-        case failed
-        case unavailable
+        .task(id: LoadID(url: url, retry: retryID)) { await model.load(url) }
     }
 
-    private var url: URL?
-    private var currentPhase: Phase
-    private let pipeline: SharedImageLoader<UIImage>
-
-    init(url: URL?, pipeline: SharedImageLoader<UIImage>? = nil) {
-        self.url = url
-        let pipeline = pipeline ?? BookCoverPipeline.shared
-        self.pipeline = pipeline
-        currentPhase = url.map { url in
-            pipeline.cachedImage(for: url).map(Phase.loaded) ?? .loading
-        } ?? .unavailable
+    @ViewBuilder
+    private var coverContent: some View {
+        switch model.phase(for: url) {
+        case let .loaded(image):
+            Image(uiImage: image).resizable().scaledToFit()
+        case .loading:
+            ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .failed:
+            placeholder("exclamationmark.triangle", text: "로딩 실패")
+        case .unavailable:
+            placeholder("book.closed", text: "표지 없음")
+        }
     }
 
-    func phase(for url: URL?) -> Phase {
-        guard self.url == url else {
-            return url.flatMap(pipeline.cachedImage).map(Phase.loaded)
-                ?? (url == nil ? .unavailable : .loading)
+    private func placeholder(_ symbol: String, text: String) -> some View {
+        VStack(spacing: 4) {
+            Image(systemName: symbol).font(.title2)
+            Text(text).font(.caption2)
         }
-        return currentPhase
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .contentShape(Rectangle())
     }
 
-    func load(_ url: URL?) async {
-        self.url = url
-        guard let url else {
-            currentPhase = .unavailable
-            return
-        }
-        if let image = pipeline.cachedImage(for: url) {
-            currentPhase = .loaded(image)
-            return
-        }
-        currentPhase = .loading
-        do {
-            let image = try await pipeline.image(for: url)
-            try Task.checkCancellation()
-            guard self.url == url else { return }
-            currentPhase = .loaded(image)
-        } catch {
-            guard !Task.isCancelled, self.url == url else { return }
-            currentPhase = .failed
-        }
+    private struct LoadID: Equatable {
+        let url: URL?
+        let retry: Int
     }
 }

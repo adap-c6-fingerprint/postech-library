@@ -4,6 +4,34 @@ import Testing
 
 @MainActor
 struct RecommendationCacheStoreTests {
+    @Test("이전 버전의 미제공 표식 없는 저장본도 읽는다")
+    func restoresLegacyManifest() async throws {
+        let directory = directory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let book = RecommendationCacheFixture.book("legacy")
+        let store = RecommendationCacheStore(directory: directory)
+        _ = try await store.save(books: [book], covers: [book.imageURL!: RecommendationCacheFixture.image], savedAt: .now)
+        let manifest = directory.appendingPathComponent("recommendations.json")
+        var json = try #require(JSONSerialization.jsonObject(with: Data(contentsOf: manifest)) as? [String: Any])
+        json["version"] = 1
+        try JSONSerialization.data(withJSONObject: json).write(to: manifest)
+        #expect(try await RecommendationCacheStore(directory: directory).restore()?.books == [book])
+    }
+
+    @Test("표지 파일과 미제공 표식을 동시에 저장하는 모순을 거부한다")
+    func rejectsContradictoryUnavailableMarker() async throws {
+        let directory = directory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let book = RecommendationCacheFixture.book("a")
+        let store = RecommendationCacheStore(directory: directory)
+        await #expect(throws: RecommendationCacheStore.CacheError.invalidSnapshot) {
+            try await store.save(
+                books: [book], covers: [book.imageURL!: RecommendationCacheFixture.image],
+                savedAt: .now, unavailableCovers: [book.imageURL!]
+            )
+        }
+    }
+
     private func directory() -> URL {
         FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
     }

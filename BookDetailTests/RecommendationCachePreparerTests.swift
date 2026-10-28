@@ -4,6 +4,44 @@ import Testing
 
 @MainActor
 struct RecommendationCachePreparerTests {
+    @Test("미제공 표지 하나가 추천 전체를 막지 않고 원격 주소를 보존해 다음 준비에서 회복한다")
+    func savesKnownUnavailableAndRecovers() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let missing = RecommendationCacheFixture.book("missing")
+        let good = RecommendationCacheFixture.book("good")
+        let missingURL = missing.imageURL!
+        let store = RecommendationCacheStore(directory: directory)
+        let preparer = RecommendationCachePreparer(store: store, loadCover: { url in
+            if url == missingURL { throw BookCoverFailure.unavailable(statusCode: 200) }
+            return RecommendationCacheFixture.image
+        })
+        _ = try await preparer.prepare([missing, good])
+        let restored = try #require(try await RecommendationCacheStore(directory: directory).restore())
+        #expect(restored.books == [missing, good])
+        #expect(restored.displayBooks[0].imageURL == nil)
+        #expect(restored.displayBooks[1].imageURL?.isFileURL == true)
+        let calls = CoverCalls()
+        let recovered = try await RecommendationCachePreparer(
+            store: store, loadCover: { await calls.load($0) }
+        ).prepare(restored.books)
+        #expect(await calls.urls == [missingURL])
+        #expect(recovered.displayBooks.allSatisfy { $0.imageURL?.isFileURL == true })
+    }
+
+    @Test("서버 오류·손상된 이미지는 미제공으로 처리하지 않고 이전 추천을 보존한다",
+          arguments: [BookCoverFailure.httpStatus(503), .invalidImage])
+    func preservesSnapshotOnRealFailure(failure: BookCoverFailure) async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let a = RecommendationCacheFixture.book("a"), b = RecommendationCacheFixture.book("b")
+        let store = RecommendationCacheStore(directory: directory)
+        _ = try await store.save(books: [a], covers: [a.imageURL!: RecommendationCacheFixture.image], savedAt: .now)
+        let preparer = RecommendationCachePreparer(store: store, loadCover: { _ in throw failure })
+        await #expect(throws: failure) { try await preparer.prepare([b]) }
+        #expect(try await store.restore()?.books == [a])
+    }
+
     @Test("저장된 표지는 재사용하고 새 표지만 받아 다음 인스턴스에서 복원한다")
     func downloadsOnlyMissingCovers() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)

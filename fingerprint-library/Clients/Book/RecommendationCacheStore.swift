@@ -56,7 +56,7 @@ actor RecommendationCacheStore {
     func restore() throws -> CachedRecommendations? {
         guard FileManager.default.fileExists(atPath: manifestURL.path) else { return nil }
         let manifest = try JSONDecoder().decode(Manifest.self, from: Data(contentsOf: manifestURL))
-        guard manifest.version == 1, !manifest.books.isEmpty,
+        guard [1, 2].contains(manifest.version), !manifest.books.isEmpty,
               manifest.books.count <= 6,
               Set(manifest.books.map(\.id)).count == manifest.books.count else {
             throw CacheError.invalidSnapshot
@@ -64,10 +64,14 @@ actor RecommendationCacheStore {
         var files: [URL: URL] = [:]
         for book in manifest.books {
             guard let remoteURL = book.imageURL else {
-                guard book.coverFile == nil else { throw CacheError.invalidSnapshot }
+                guard book.coverFile == nil, book.coverUnavailable != true else { throw CacheError.invalidSnapshot }
                 continue
             }
             let name = try coverName(for: remoteURL)
+            if book.coverUnavailable == true {
+                guard manifest.version == 2, book.coverFile == nil else { throw CacheError.invalidSnapshot }
+                continue
+            }
             guard book.coverFile == name else { throw CacheError.invalidSnapshot }
             let file = imagesDirectory.appendingPathComponent(name)
             try Self.validateImage(Data(contentsOf: file))
@@ -90,12 +94,15 @@ actor RecommendationCacheStore {
     /// 파일 준비 → 마지막에 목록을 atomic 교체한다. 실패하면 이전 목록과 표지는 유지한다.
     func save(
         books: [Book], covers: [URL: Data], savedAt: Date,
+        unavailableCovers: Set<URL> = [],
         preparationID expectedID: UUID? = nil
     ) throws -> CachedRecommendations {
         try Task.checkCancellation()
         if let expectedID, preparationID != expectedID { throw CancellationError() }
         guard !books.isEmpty, books.count <= 6,
               Set(books.map(\.id)).count == books.count else { throw CacheError.invalidSnapshot }
+        guard unavailableCovers.isSubset(of: Set(books.compactMap(\.imageURL))),
+              unavailableCovers.isDisjoint(with: Set(covers.keys)) else { throw CacheError.invalidSnapshot }
 
         var records: [StoredBook] = []
         var files: [URL: URL] = [:]
@@ -103,12 +110,18 @@ actor RecommendationCacheStore {
         for book in books {
             var name: String?
             if let url = book.imageURL {
-                name = try coverName(for: url)
-                guard let data = covers[url] else { throw CacheError.missingCover }
-                try Self.validateImage(data)
-                files[url] = imagesDirectory.appendingPathComponent(name!)
+                let expectedName = try coverName(for: url)
+                if !unavailableCovers.contains(url) {
+                    guard let data = covers[url] else { throw CacheError.missingCover }
+                    try Self.validateImage(data)
+                    name = expectedName
+                    files[url] = imagesDirectory.appendingPathComponent(expectedName)
+                }
             }
-            records.append(StoredBook(book, coverFile: name))
+            records.append(StoredBook(
+                book, coverFile: name,
+                coverUnavailable: book.imageURL.map(unavailableCovers.contains) == true ? true : nil
+            ))
         }
 
         try FileManager.default.createDirectory(at: imagesDirectory, withIntermediateDirectories: true)
@@ -124,7 +137,7 @@ actor RecommendationCacheStore {
             }
         }
         try Task.checkCancellation()
-        let manifest = Manifest(version: 1, savedAt: savedAt, books: records)
+        let manifest = Manifest(version: 2, savedAt: savedAt, books: records)
         let data = try JSONEncoder().encode(manifest)
         try data.write(to: manifestURL, options: .atomic)
 
@@ -171,12 +184,14 @@ actor RecommendationCacheStore {
         let description: String?
         let imageURL: URL?
         let coverFile: String?
+        let coverUnavailable: Bool?
 
-        init(_ book: Book, coverFile: String?) {
+        init(_ book: Book, coverFile: String?, coverUnavailable: Bool? = nil) {
             id = book.id; isbn = book.isbn; controlNumber = book.controlNumber
             title = book.title; author = book.author; publisher = book.publisher
             publicationYear = book.publicationYear; description = book.description
             imageURL = book.imageURL; self.coverFile = coverFile
+            self.coverUnavailable = coverUnavailable
         }
 
         var book: Book {

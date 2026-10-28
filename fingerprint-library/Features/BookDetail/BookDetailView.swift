@@ -12,7 +12,6 @@ struct BookDetailView: View {
                     .frame(width: 80, height: 116)
                     .background(Color.gray.opacity(0.08))
                     .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .accessibilityHidden(true)
 
                     VStack(alignment: .leading, spacing: 8) {
                         Text(BookText.plainText(store.book.title)).font(.headline)

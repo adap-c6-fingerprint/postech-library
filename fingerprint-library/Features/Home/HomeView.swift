@@ -227,7 +227,8 @@ private struct HomeBookCover: View {
     let height: CGFloat
     
     var body: some View {
-        BookCoverView(url: book?.imageURL)
+        // 홈 카드는 전체가 상세 이동 버튼이다. 재시도는 열린 상세 화면에서 제공한다.
+        BookCoverView(url: book?.imageURL, allowsRetry: false)
         .frame(width: width, height: height)
         .background(Color.primary.opacity(0.04))
         .clipShape(RoundedRectangle(cornerRadius: 4))
