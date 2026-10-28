@@ -21,7 +21,7 @@ postman simulation run postman/simulations/primo-holdings/primo-holdings.sim.yam
 Once the `listening` event reports port 47575, compile and run in another:
 
 ```sh
-swiftc -swift-version 6 -parse-as-library fingerprint-library/Domain/Book/BookHolding.swift fingerprint-library/Clients/Book/PrimoHoldingsMapper.swift fingerprint-library/Clients/Book/PrimoBookHoldingsService.swift Scripts/verify-primo-holdings.swift -o /tmp/primo-holdings-proof
+swiftc -swift-version 6 -parse-as-library fingerprint-library/Domain/Book/BookHolding.swift fingerprint-library/Domain/Book/BookCardLibraryInfo.swift fingerprint-library/Clients/Book/PrimoHoldingsMapper.swift fingerprint-library/Clients/Book/PrimoBookHoldingsService.swift Scripts/verify-primo-holdings.swift -o /tmp/primo-holdings-proof
 /tmp/primo-holdings-proof http://127.0.0.1:47575/library
 ```
 
@@ -44,6 +44,11 @@ No credentials, workspace binding or public deployment are needed.
 ## Observations
 
 <!-- begin:observations -->
+2026-10-28 (#88): `library` served the production Swift 6 HTTP service and
+recommendation-card conversion. Location, call number, availability from the
+same holding and additional locations passed alongside the existing fault
+cases. No other members exist. This does not exercise the app's key/proxy
+configuration or live provider availability.
 2026-10-28: `library` served the production client's new mixed-document fault
 case as well as the existing cases. Missing/null pnx, control and recordid
 before a valid target no longer hide its holdings. This defensive payload was

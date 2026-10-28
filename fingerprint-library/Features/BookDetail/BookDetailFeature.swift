@@ -48,6 +48,9 @@ struct BookDetailFeature {
             return BookHoldingPresentation.preferred(in: holdings)
         }
 
+        // 장바구니
+        var isBasketLimitAlertPresented = false
+
         var isbn13: String? {
             BookISBN.isbn13(from: book.isbn)
         }
@@ -76,10 +79,13 @@ struct BookDetailFeature {
         case loadFavorites
         case favoriteButtonTapped
         case addToBasketButtonTapped
+        case basketLimitAlertDismissed
+        case startGuidanceButtonTapped
         case delegate(Delegate)
 
-        enum Delegate {
-            case addToBasket(Book)
+        @CasePathable
+        enum Delegate: Equatable {
+            case startGuidance(Book)
             case favoritesChanged(Set<[String?]>)
         }
     }
@@ -95,6 +101,9 @@ struct BookDetailFeature {
 
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient
+
+    @Dependency(\.bookBasketClient) var bookBasketClient
+    @Dependency(\.date.now) var now
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -147,12 +156,6 @@ struct BookDetailFeature {
                 state.routeSummary = summary
                 return .none
 
-            case .addToBasketButtonTapped:
-                return .send(.delegate(.addToBasket(state.book)))
-
-            case .delegate:
-                return .none
-
             case .loadDescription:
                 guard !state.hasLoaded else {
                     return .none
@@ -196,6 +199,26 @@ struct BookDetailFeature {
             case let .relatedBooksFailed(message):
                 state.relatedBooksState = .failed(message)
 
+                return .none
+
+            case .addToBasketButtonTapped:
+                // 이미 한도까지 담겨 있으면 저장하지 않고 한도 팝업을 띄운다.
+                if bookBasketClient.add(state.book, at: now) == .limitExceeded {
+                    state.isBasketLimitAlertPresented = true
+                }
+
+                return .none
+
+            case .basketLimitAlertDismissed:
+                state.isBasketLimitAlertPresented = false
+
+                return .none
+
+            case .startGuidanceButtonTapped:
+                // 장바구니를 거치지 않고 이 책 1권으로 길안내를 시작한다.
+                return .send(.delegate(.startGuidance(state.book)))
+
+            case .delegate:
                 return .none
             }
         }

@@ -67,6 +67,7 @@ private actor BookHoldingsCache {
         if entries.count >= 200, let oldest = entries.min(by: { $0.value.expires < $1.value.expires })?.key {
             entries[oldest] = nil
         }
-        entries[key] = (Date().addingTimeInterval(24 * 60 * 60), holdings)
+        // 카드의 이용 가능 상태를 하루 전 응답으로 표시하지 않도록 짧게 재사용한다.
+        entries[key] = (Date().addingTimeInterval(60), holdings)
     }
 }

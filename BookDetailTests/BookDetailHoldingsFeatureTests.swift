@@ -41,19 +41,25 @@ struct BookDetailHoldingsFeatureTests {
     @Test("추천 상세에서 담은 책은 검색 탭의 같은 장바구니에 한 번만 저장한다")
     func sharedBasket() async {
         let book = book
+        let suite = "BookDetailHoldingsFeatureTests.\(UUID().uuidString)"
+        defer { UserDefaults.standard.removePersistentDomain(forName: suite) }
+        let client = BookBasketClient.userDefaults(suiteName: suite)
         var initial = AppFeature.State()
         initial.home.detail = BookDetailFeature.State(book: book)
-        let store = TestStore(initialState: initial) { AppFeature() }
+        let store = TestStore(initialState: initial) { AppFeature() } withDependencies: {
+            $0.bookBasketClient = client
+            $0.date.now = Date(timeIntervalSince1970: 1_000)
+        }
         for attempt in 0..<2 {
-            await store.send(.home(.detail(.presented(.addToBasketButtonTapped))))
-            await store.receive(\.home.detail.presented.delegate)
-            await store.receive(\.home.delegate)
             if attempt == 0 {
-                await store.receive(\.bookSearch.addToBasket) { $0.bookSearch.basketBooks = [book] }
+                await store.send(.home(.detail(.presented(.addToBasketButtonTapped)))) {
+                    $0.bookSearch.basketBooks = [book]
+                }
             } else {
-                await store.receive(\.bookSearch.addToBasket)
+                await store.send(.home(.detail(.presented(.addToBasketButtonTapped))))
             }
         }
+        #expect(client.load().map(\.book) == [book])
         await store.finish()
     }
 

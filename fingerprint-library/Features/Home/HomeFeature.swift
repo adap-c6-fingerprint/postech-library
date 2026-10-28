@@ -8,9 +8,12 @@ struct HomeFeature {
         var recommendedBooks: [Book] = []
         var popularBooks: [Book] = []
         var departmentName = ""
-        var libraryInfo: [Book.ID: LibraryInfo] = [:]
+        var libraryInfo: [Book.ID: LibraryInfoState] = [:]
+        var libraryInfoGeneration = 0
 
         @Presents var detail: BookDetailFeature.State?
+        @Presents var basket: BookBasketFeature.State?
+        @Presents var shelfMap: BookShelfMapFeature.State?
 
         var recommendationCount: Int {
             recommendedBooks.isEmpty ? 6 : min(recommendedBooks.count, 6)
@@ -24,10 +27,11 @@ struct HomeFeature {
         var nextRecommendationsSavedAt: Date?
     }
 
-    // 도서관 소장 정보는 기존 Book 모델과 분리한다.
-    struct LibraryInfo: Equatable, Sendable {
-        var location: String?
-        var isAvailable: Bool?
+    enum LibraryInfoState: Equatable {
+        case loading
+        case loaded(BookCardLibraryInfo)
+        case unavailable
+        case failed
     }
 
     enum Action {
@@ -37,7 +41,10 @@ struct HomeFeature {
         case recommendationsRestored(UUID, CachedRecommendations?)
         case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
-        case libraryInfoLoaded([Book.ID: LibraryInfo])
+        case loadLibraryInfo
+        case libraryInfoLoaded(generation: Int, Book.ID, [BookHolding])
+        case libraryInfoFailed(generation: Int, Book.ID)
+        case libraryInfoCancelled
         case departmentChanged(String)
 
         case bookSelected(Book)
@@ -45,15 +52,15 @@ struct HomeFeature {
         case profileButtonTapped
         case popularBooksButtonTapped
         case detail(PresentationAction<BookDetailFeature.Action>)
+        case basket(PresentationAction<BookBasketFeature.Action>)
+        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         case delegate(Delegate)
 
         case recommendationsFailed(UUID, String)
         case popularBooksFailed(String)
 
         enum Delegate {
-            case addToBasket(Book)
             case favoritesChanged(Set<[String?]>)
-            case showBasket
             case showProfile
             case showPopularBooks
         }
@@ -67,10 +74,13 @@ struct HomeFeature {
 
     @Dependency(\.recommendationCacheClient) var recommendationCacheClient
     @Dependency(\.bookFavoritesClient) var bookFavoritesClient
+    @Dependency(\.bookHoldingsClient) var bookHoldingsClient
+    @Dependency(\.userProfileClient) var userProfileClient
     @Dependency(\.uuid) var uuid
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case recommendationSession
+        case libraryInfo
     }
 
     var body: some Reducer<State, Action> {
@@ -85,7 +95,7 @@ struct HomeFeature {
 
                 if state.popularBooks.isEmpty {
                     state.popularBooksErrorMessage = nil
-                    effects.append(loadPopularBooks(departmentName: state.departmentName))
+                    effects.append(loadPopularBooks())
                 }
 
                 return .merge(effects)
@@ -143,9 +153,25 @@ struct HomeFeature {
                 state.popularBooksErrorMessage = message
                 return .none
 
-            case let .libraryInfoLoaded(info):
-                state.libraryInfo = info
+            case .loadLibraryInfo:
+                return loadLibraryInfo(state: &state)
+
+            case let .libraryInfoLoaded(generation, bookID, holdings):
+                guard state.libraryInfoGeneration == generation,
+                      state.popularBooks.contains(where: { $0.id == bookID }) else { return .none }
+                state.libraryInfo[bookID] = .loaded(BookCardLibraryInfo(holdings: holdings))
                 return .none
+
+            case let .libraryInfoFailed(generation, bookID):
+                guard state.libraryInfoGeneration == generation,
+                      state.popularBooks.contains(where: { $0.id == bookID }) else { return .none }
+                // 조회 실패 후 예전 대출 상태를 현재 상태처럼 남겨 두지 않는다.
+                state.libraryInfo[bookID] = .failed
+                return .none
+
+            case .libraryInfoCancelled:
+                state.libraryInfoGeneration += 1
+                return .cancel(id: CancelID.libraryInfo)
 
             case let .departmentChanged(name):
                 state.departmentName = name
@@ -158,7 +184,16 @@ struct HomeFeature {
                 return .none
 
             case .basketButtonTapped:
-                return .send(.delegate(.showBasket))
+                state.basket = BookBasketFeature.State()
+                return .none
+
+            case let .basket(.presented(.delegate(.startGuidance(books)))):
+                state.shelfMap = BookShelfMapFeature.State(books: books)
+                return .none
+
+            case let .detail(.presented(.delegate(.startGuidance(book)))):
+                state.shelfMap = BookShelfMapFeature.State(book: book)
+                return .none
 
             case .profileButtonTapped:
                 return .send(.delegate(.showProfile))
@@ -166,19 +201,59 @@ struct HomeFeature {
             case .popularBooksButtonTapped:
                 return .send(.delegate(.showPopularBooks))
 
-            case let .detail(.presented(.delegate(.addToBasket(book)))):
-                return .send(.delegate(.addToBasket(book)))
-
             case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
                 return .send(.delegate(.favoritesChanged(keys)))
 
-            case .detail, .delegate:
+            case .detail, .basket, .shelfMap, .delegate:
                 return .none
             }
         }
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
         }
+        .ifLet(\.$basket, action: \.basket) {
+            BookBasketFeature()
+        }
+        .ifLet(\.$shelfMap, action: \.shelfMap) {
+            BookShelfMapFeature()
+        }
+    }
+
+    private func loadLibraryInfo(state: inout State) -> Effect<Action> {
+        state.libraryInfoGeneration += 1
+        let generation = state.libraryInfoGeneration
+        let visibleIDs = Set(state.popularBooks.map(\.id))
+        state.libraryInfo = state.libraryInfo.filter { visibleIDs.contains($0.key) }
+        var requests: [(bookID: Book.ID, recordID: String)] = []
+        for book in state.popularBooks {
+            guard let recordID = BookHoldingsClient.recordID(for: book) else {
+                state.libraryInfo[book.id] = .unavailable
+                continue
+            }
+            state.libraryInfo[book.id] = .loading
+            requests.append((book.id, recordID))
+        }
+        return .run { [bookHoldingsClient, requests] send in
+            // 표지와 서지정보 표시는 막지 않고 최대 3건씩 조회한다.
+            for start in stride(from: 0, to: requests.count, by: 3) {
+                guard !Task.isCancelled else { return }
+                await withTaskGroup(of: Void.self) { group in
+                    for request in requests[start..<min(start + 3, requests.count)] {
+                        group.addTask {
+                            do {
+                                let holdings = try await bookHoldingsClient.fetch(request.recordID)
+                                try Task.checkCancellation()
+                                await send(.libraryInfoLoaded(generation: generation, request.bookID, holdings))
+                            } catch {
+                                guard !Task.isCancelled else { return }
+                                await send(.libraryInfoFailed(generation: generation, request.bookID))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .cancellable(id: CancelID.libraryInfo, cancelInFlight: true)
     }
 
     private func loadRecommendations(sessionID: UUID, retaining covers: [URL]) -> Effect<Action> {
@@ -208,9 +283,12 @@ struct HomeFeature {
         .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
     }
 
-    private func loadPopularBooks(departmentName: String) -> Effect<Action> {
-        .run { [departmentPopularBooksClient] send in
+    private func loadPopularBooks() -> Effect<Action> {
+        .run { [userProfileClient, departmentPopularBooksClient] send in
             do {
+                // 저장된 프로필의 학과로 제목을 채우고 같은 학과의 인기 도서를 조회한다.
+                let departmentName = try await userProfileClient.load().departmentName
+                await send(.departmentChanged(departmentName))
                 let books = try await departmentPopularBooksClient.fetch(departmentName, 6)
                 try Task.checkCancellation()
                 await send(.popularBooksLoaded(books))

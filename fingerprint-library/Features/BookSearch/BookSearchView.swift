@@ -22,6 +22,9 @@ struct BookSearchView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color(.systemGroupedBackground))
+        .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
+            store.send(.basketLimitAlertDismissed)
+        }
         .toolbar(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
             if !store.basketBooks.isEmpty {

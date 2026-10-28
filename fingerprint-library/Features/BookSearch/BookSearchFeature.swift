@@ -25,7 +25,9 @@ struct BookSearchFeature {
         var hasSearched: Bool = false
         
         var basketBooks: [Book] = []
+        var isBasketLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
+        @Presents var basket: BookBasketFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
     }
     
@@ -42,6 +44,9 @@ struct BookSearchFeature {
         case favoriteButtonTapped(Book)
         
         case addToBasket(Book)
+        case basketButtonTapped
+        case basket(PresentationAction<BookBasketFeature.Action>)
+        case basketLimitAlertDismissed
         case removeFromBasket(Set<Book.ID>)
         case bookSelected(Book)
         case detail(PresentationAction<BookDetailFeature.Action>)
@@ -63,6 +68,12 @@ struct BookSearchFeature {
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient: BookFavoritesClient
 
+    @Dependency(\.bookBasketClient)
+    var bookBasketClient: BookBasketClient
+
+    @Dependency(\.date.now)
+    var now: Date
+
     private nonisolated enum CancelID: Hashable, Sendable {
         case search
     }
@@ -74,6 +85,7 @@ struct BookSearchFeature {
             case .task:
                 state.recentQueries = searchHistoryClient.load()
                 state.favoriteBookKeys = bookFavoritesClient.load()
+                state.basketBooks = bookBasketClient.load().map(\.book)
                 return .none
 
             case let .favoriteButtonTapped(book):
@@ -98,14 +110,36 @@ struct BookSearchFeature {
                 )
                 return .none
 
-            case let .detail(.presented(.delegate(.addToBasket(book)))):
-                return .send(.addToBasket(book))
+            case .detail(.presented(.addToBasketButtonTapped)):
+                state.basketBooks = bookBasketClient.load().map(\.book)
+                return .none
+
+            case let .detail(.presented(.delegate(.startGuidance(book)))):
+                state.shelfMap = BookShelfMapFeature.State(book: book)
+                return .none
 
             case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
                 state.favoriteBookKeys = keys
                 return .none
 
-            case .detail:
+            case .detail(.dismiss):
+                // 상세 화면에서 담은 책을 검색 화면의 바로가기 권수에 반영한다.
+                state.basketBooks = bookBasketClient.load().map(\.book)
+                return .none
+
+            case .basketButtonTapped:
+                state.basket = BookBasketFeature.State()
+                return .none
+
+            case .basket(.dismiss), .basket(.presented(.removeConfirmed)):
+                state.basketBooks = bookBasketClient.load().map(\.book)
+                return .none
+
+            case let .basket(.presented(.delegate(.startGuidance(books)))):
+                state.shelfMap = BookShelfMapFeature.State(books: books)
+                return .none
+
+            case .detail, .basket:
                 return .none
 
             case .directionsButtonTapped(let book):
@@ -123,15 +157,17 @@ struct BookSearchFeature {
                 return .none
                 
             case let .addToBasket(book):
-                guard !state.basketBooks.contains(where: {
-                    $0.recordKey == book.recordKey
-                }) else {
-                    return .none
+                let result = bookBasketClient.add(book, at: now)
+                state.basketBooks = bookBasketClient.load().map(\.book)
+                if result == .limitExceeded {
+                    state.isBasketLimitAlertPresented = true
                 }
-                
-                state.basketBooks.append(book)
                 return .none
-                
+
+            case .basketLimitAlertDismissed:
+                state.isBasketLimitAlertPresented = false
+                return .none
+
             case let .queryChanged(query):
                 state.query = query
                 return .none
@@ -184,15 +220,24 @@ struct BookSearchFeature {
                 return .none
                 
             case let .removeFromBasket(bookIDs):
+                let removedKeys = Set(
+                    state.basketBooks.filter { bookIDs.contains($0.id) }.map(\.recordKey)
+                )
                 state.basketBooks.removeAll { book in
                     bookIDs.contains(book.id)
                 }
-                
+                bookBasketClient.save(
+                    bookBasketClient.load().filter { !removedKeys.contains($0.book.recordKey) }
+                )
+
                 return .none
             }
         }
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
+        }
+        .ifLet(\.$basket, action: \.basket) {
+            BookBasketFeature()
         }
         .ifLet(\.$shelfMap, action: \.shelfMap) {
             BookShelfMapFeature()

@@ -46,6 +46,7 @@ struct BookFavoritesTests {
             BookSearchFeature()
         } withDependencies: {
             $0.bookFavoritesClient = client
+            $0.bookBasketClient.load = { [BookBasketItem(book: currentBook, addedAt: .distantPast)] }
         }
 
         await store.send(.task) { $0.favoriteBookKeys = keys }

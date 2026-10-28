@@ -10,7 +10,6 @@ import SwiftUI
 
 struct BookSearchTabView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-    @State private var isBasketPresented = false
     @Environment(\.isSearching) private var isSearching
 
     var body: some View {
@@ -23,20 +22,14 @@ struct BookSearchTabView: View {
                     submitSearch()
                 },
                 onShowBasket: {
-                    isBasketPresented = true
+                    store.send(.basketButtonTapped)
                 }
             )
-            .navigationDestination(isPresented: $isBasketPresented) {
-                BookBasketView(
-                    books: store.basketBooks,
-                    onDeletedSelected: { bookIDs in
-                        store.send(.removeFromBasket(bookIDs))
-                    },
-                    onShowDirections: { bookIDs in
-                        store.send(.basketDirectionsButtonTapped(bookIDs))
-                    }
-                )
-                .toolbar(.visible, for: .navigationBar)
+            .navigationDestination(
+                item: $store.scope(state: \.basket, action: \.basket)
+            ) { basketStore in
+                BookBasketView(store: basketStore)
+                    .toolbar(.visible, for: .navigationBar)
             }
             .navigationDestination(
                 item: $store.scope(state: \.detail, action: \.detail)

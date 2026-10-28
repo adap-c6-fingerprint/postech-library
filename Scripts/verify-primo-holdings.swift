@@ -11,6 +11,10 @@ struct VerifyPrimoHoldings {
         try check(holdings.first?.locationCode == "c3b", "physical location code")
         try check(holdings.first?.callNumber == "CB113.H4 .H3713 2015", "complete call number")
         try check(holdings.last?.availability == "unavailable", "unavailable copy retained")
+        let card = BookCardLibraryInfo(holdings: holdings)
+        try check(card.location == "3층 CB113.H4 .H3713 2015", "card location and call number")
+        try check(card.availability == .available, "card availability matches the displayed holding")
+        try check(card.additionalLocationCount == 2, "card retains additional locations")
         for suffix in ["1", "2", "3"] {
             do {
                 _ = try await service.fetch(recordID: "alma99999999999999000" + suffix)
@@ -31,7 +35,7 @@ struct VerifyPrimoHoldings {
         try check(counts["alma999999999999990002"] == 1, "401 not retried")
         try check(counts["alma999999999999990003"] == 1, "invalid JSON not retried")
         try check(counts["alma999999999999990006"] == 2, "429 recovered on second attempt")
-        print("PASS: production Swift 6 HTTP service — holdings, incomplete documents, exact ID, empty result, 401, invalid JSON, 503 and 429 recovery")
+        print("PASS: production Swift 6 HTTP service and recommendation card mapping — holdings, incomplete documents, exact ID, empty result, 401, invalid JSON, 503 and 429 recovery")
     }
 
     static func check(_ condition: Bool, _ message: String) throws {

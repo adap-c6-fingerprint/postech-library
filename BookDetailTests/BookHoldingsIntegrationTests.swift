@@ -67,15 +67,21 @@ struct BookHoldingsIntegrationTests {
     @Test("추천 상세의 책바구니 추가·검색의 삭제·길안내가 루트의 같은 목록을 사용한다")
     func rootBasketDirectionsUsesSharedSelection() async {
         let selected = book(), other = book("alma991000958759703280")
+        let suite = "BookHoldingsIntegrationTests.\(UUID().uuidString)"
+        defer { UserDefaults.standard.removePersistentDomain(forName: suite) }
+        let client = BookBasketClient.userDefaults(suiteName: suite)
+        client.save([BookBasketItem(book: other, addedAt: .distantPast)])
         var initial = AppFeature.State()
         initial.home.detail = BookDetailFeature.State(book: selected)
         initial.bookSearch.category = .journal
         initial.bookSearch.basketBooks = [other]
-        let store = TestStore(initialState: initial) { AppFeature() }
-        await store.send(.home(.detail(.presented(.addToBasketButtonTapped))))
-        await store.receive(\.home.detail.presented.delegate)
-        await store.receive(\.home.delegate)
-        await store.receive(\.bookSearch.addToBasket) { $0.bookSearch.basketBooks = [other, selected] }
+        let store = TestStore(initialState: initial) { AppFeature() } withDependencies: {
+            $0.bookBasketClient = client
+            $0.date.now = Date(timeIntervalSince1970: 1_000)
+        }
+        await store.send(.home(.detail(.presented(.addToBasketButtonTapped)))) {
+            $0.bookSearch.basketBooks = [other, selected]
+        }
         await store.send(.bookSearch(.removeFromBasket([other.id]))) { $0.bookSearch.basketBooks = [selected] }
         await store.send(.bookSearch(.basketDirectionsButtonTapped([selected.id]))) {
             $0.bookSearch.shelfMap = BookShelfMapFeature.State(book: selected)

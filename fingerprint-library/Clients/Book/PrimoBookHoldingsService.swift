@@ -36,7 +36,7 @@ nonisolated struct PrimoBookHoldingsService: Sendable {
             guard let http = response as? HTTPURLResponse else { throw BookHoldingsError.invalidResponse }
             if http.statusCode == 429 || (500..<600).contains(http.statusCode) {
                 guard attempt < 2 else { throw BookHoldingsError.serviceUnavailable }
-                // 동시 조회는 화면의 1~3권으로 제한하며 재시도는 0.5초·1초 간격이다.
+                // 호출 화면에서 동시 요청을 제한한다. 재시도는 0.5초·1초 간격이다.
                 let retryAfter = http.value(forHTTPHeaderField: "Retry-After").flatMap(Double.init) ?? 0
                 guard retryAfter <= 5 else { throw BookHoldingsError.serviceUnavailable }
                 try await Task.sleep(for: .seconds(max(retryAfter, 0.5 * pow(2, Double(attempt)))))

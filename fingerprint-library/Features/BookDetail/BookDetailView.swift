@@ -84,6 +84,9 @@ struct BookDetailView: View {
             BookShelfMapView(store: shelfMapStore)
                 .toolbar(.visible, for: .navigationBar)
         }
+        .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
+            store.send(.basketLimitAlertDismissed)
+        }
         .task { store.send(.loadFavorites) }
         .task { await store.send(.loadHoldings).finish() }
         .task { await store.send(.loadDescription).finish() }
@@ -136,8 +139,10 @@ struct BookDetailView: View {
 
                 Button {
                     store.send(.addToBasketButtonTapped)
-                    noticeMessage = "검색 탭의 장바구니에서 이 책을 확인할 수 있어요."
-                    isNoticePresented = true
+                    if !store.isBasketLimitAlertPresented {
+                        noticeMessage = "책바구니에서 이 책을 확인할 수 있어요."
+                        isNoticePresented = true
+                    }
                 } label: {
                     Image(systemName: "cart.fill")
                         .font(.system(size: 23, weight: .semibold))
@@ -380,4 +385,5 @@ private struct BookRouteSummaryView: View {
         .accessibilityLabel(title)
         .accessibilityValue(summary.isMock ? "계산 전" : "\(value)\(spokenUnit)")
     }
+
 }

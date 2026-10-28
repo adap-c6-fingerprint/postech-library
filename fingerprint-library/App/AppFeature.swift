@@ -29,20 +29,32 @@ struct AppFeature {
         case appBecameActive
     }
 
+    @Dependency(\.bookBasketClient) var bookBasketClient
+
     var body: some Reducer<State, Action> {
         Scope(state: \.home, action: \.home) { HomeFeature() }
         Scope(state: \.bookSearch, action: \.bookSearch) { BookSearchFeature() }
         Scope(state: \.indoorMap, action: \.indoorMap) { IndoorMapFeature() }
         Reduce { state, action in
             switch action {
-            case let .home(.delegate(.addToBasket(book))):
-                return .send(.bookSearch(.addToBasket(book)))
+            case .home(.detail(.presented(.addToBasketButtonTapped))),
+                 .home(.basket(.presented(.removeConfirmed))),
+                 .bookSearch(.detail(.presented(.addToBasketButtonTapped))),
+                 .bookSearch(.basket(.presented(.removeConfirmed))),
+                 .bookSearch(.addToBasket(_)), .bookSearch(.removeFromBasket(_)):
+                synchronizeBasket(state: &state)
+                return .none
+
+            case .bookSearch(.task):
+                synchronizeBasket(state: &state)
+                synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
+                return .none
 
             case let .home(.delegate(.favoritesChanged(keys))):
                 synchronizeFavorites(keys, state: &state)
                 return .none
 
-            case .bookSearch(.task), .bookSearch(.bookSelected(_)),
+            case .bookSearch(.bookSelected(_)),
                  .bookSearch(.favoriteButtonTapped(_)),
                  .bookSearch(.detail(.presented(.delegate(.favoritesChanged(_))))):
                 synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
@@ -82,6 +94,20 @@ struct AppFeature {
             case .indoorMap:
                 return .none
             }
+        }
+    }
+
+    private func synchronizeBasket(state: inout State) {
+        let items = bookBasketClient.load()
+        let ids = Set(items.map(\.id))
+        state.bookSearch.basketBooks = items.map(\.book)
+        if state.bookSearch.basket != nil {
+            state.bookSearch.basket?.items = items
+            state.bookSearch.basket?.selectedIDs.removeAll { !ids.contains($0) }
+        }
+        if state.home.basket != nil {
+            state.home.basket?.items = items
+            state.home.basket?.selectedIDs.removeAll { !ids.contains($0) }
         }
     }
 
