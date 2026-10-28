@@ -105,6 +105,8 @@ struct BookDetailFeatureTests {
         )) {
             BookSearchFeature()
         } withDependencies: {
+            // 상세를 닫으면 저장소 기준으로 책바구니를 다시 읽는다.
+            $0.bookBasketClient.load = { [BookBasketItem(book: selected, addedAt: .distantPast)] }
             $0.bookDetailClient.fetchDescription = { _ in
                 signal.yield(())
                 for await description in pending { return description }

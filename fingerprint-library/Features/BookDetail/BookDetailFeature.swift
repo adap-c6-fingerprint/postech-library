@@ -49,6 +49,9 @@ struct BookDetailFeature {
         case retryRelatedBooksButtonTapped
         case relatedBooksLoaded([Book])
         case relatedBooksFailed(String)
+
+        // 장바구니
+        case addToBasketButtonTapped
     }
 
     @Dependency(\.bookDetailClient)
@@ -56,6 +59,12 @@ struct BookDetailFeature {
 
     @Dependency(\.relatedBooksClient)
     var relatedBooksClient
+
+    @Dependency(\.bookBasketClient)
+    var bookBasketClient
+
+    @Dependency(\.date.now)
+    var now
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -102,6 +111,11 @@ struct BookDetailFeature {
 
             case let .relatedBooksFailed(message):
                 state.relatedBooksState = .failed(message)
+
+                return .none
+
+            case .addToBasketButtonTapped:
+                bookBasketClient.add(state.book, at: now)
 
                 return .none
             }

@@ -91,6 +91,28 @@ struct BookDetailView: View {
         }
         .navigationTitle("도서 상세")
         .navigationBarTitleDisplayMode(.inline)
+        // TODO: 상세 페이지 디자인을 적용하면 하단 액션바의 장바구니 버튼으로 옮긴다.
+        .safeAreaInset(edge: .bottom) {
+            HStack {
+                Spacer()
+                Button {
+                    store.send(.addToBasketButtonTapped)
+                } label: {
+                    Image(systemName: "cart.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(Color(red: 0xF9 / 255, green: 0xF9 / 255, blue: 0xF9 / 255))
+                        .frame(width: 50, height: 50)
+                }
+                .buttonStyle(.plain)
+                .glassEffect(
+                    .regular.tint(Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)).interactive(),
+                    in: .circle
+                )
+                .accessibilityLabel("장바구니에 담기")
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 8)
+        }
         .task { await store.send(.loadDescription).finish() }
         .task { await store.send(.loadRelatedBooks).finish() }
     }

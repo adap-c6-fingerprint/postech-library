@@ -56,6 +56,14 @@ nonisolated struct BookBasketClient: Sendable {
             )
         }
     }
+
+    // 같은 책이 없을 때만 담은 시각과 함께 저장한다.
+    func add(_ book: Book, at date: Date) {
+        var items = load()
+        guard !items.contains(where: { $0.book.recordKey == book.recordKey }) else { return }
+        items.append(BookBasketItem(book: book, addedAt: date))
+        save(items)
+    }
 }
 
 extension BookBasketClient: DependencyKey {

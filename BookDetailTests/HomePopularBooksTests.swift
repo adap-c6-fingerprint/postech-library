@@ -5,15 +5,17 @@ import Testing
 
 @MainActor
 struct HomePopularBooksTests {
-    @Test("추천 목록이 이미 있어도 하단 도서를 조회하고 학과명을 전달한다")
+    @Test("추천 목록이 이미 있어도 하단 도서를 조회하고 프로필의 학과명을 전달한다")
     func loadsPopularBooksWithRecommendationsCached() async {
         let recommended = Self.book("recommended")
         let popular = Self.book("popular")
         var initialState = HomeFeature.State()
         initialState.recommendedBooks = [recommended]
-        initialState.departmentName = "컴퓨터공학과"
         let store = TestStore(initialState: initialState) { HomeFeature() }
             withDependencies: {
+                $0.userProfileClient.load = {
+                    UserProfileSnapshot(departmentName: "컴퓨터공학과", interests: [])
+                }
                 $0.bookRecommendationClient.fetch = { _ in
                     Issue.record("이미 있는 추천 목록을 다시 조회하면 안 됩니다.")
                     return []
@@ -26,6 +28,7 @@ struct HomePopularBooksTests {
             }
 
         await store.send(.task)
+        await store.receive(\.departmentChanged) { $0.departmentName = "컴퓨터공학과" }
         await store.receive(\.popularBooksLoaded) { $0.popularBooks = [popular] }
         #expect(store.state.recommendedBooks == [recommended])
         await store.finish()
@@ -85,6 +88,7 @@ struct HomePopularBooksTests {
             }
 
         await store.send(.task)
+        await store.receive(\.departmentChanged)
         await store.receive(\.popularBooksFailed) {
             $0.popularBooksErrorMessage = URLError(.notConnectedToInternet).localizedDescription
         }
@@ -92,6 +96,7 @@ struct HomePopularBooksTests {
         #expect(store.state.recommendationErrorMessage == nil)
 
         await store.send(.task) { $0.popularBooksErrorMessage = nil }
+        await store.receive(\.departmentChanged)
         await store.receive(\.popularBooksLoaded) { $0.popularBooks = [popular] }
         await store.finish()
 

@@ -65,6 +65,7 @@ struct HomeFeature {
     var departmentPopularBooksClient
 
     @Dependency(\.recommendationCacheClient) var recommendationCacheClient
+    @Dependency(\.userProfileClient) var userProfileClient
     @Dependency(\.uuid) var uuid
 
     private nonisolated enum CancelID: Hashable, Sendable {
@@ -83,7 +84,7 @@ struct HomeFeature {
 
                 if state.popularBooks.isEmpty {
                     state.popularBooksErrorMessage = nil
-                    effects.append(loadPopularBooks(departmentName: state.departmentName))
+                    effects.append(loadPopularBooks())
                 }
 
                 return .merge(effects)
@@ -206,9 +207,12 @@ struct HomeFeature {
         .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
     }
 
-    private func loadPopularBooks(departmentName: String) -> Effect<Action> {
-        .run { [departmentPopularBooksClient] send in
+    private func loadPopularBooks() -> Effect<Action> {
+        .run { [userProfileClient, departmentPopularBooksClient] send in
             do {
+                // 저장된 프로필의 학과로 제목을 채우고 같은 학과의 인기 도서를 조회한다.
+                let departmentName = try await userProfileClient.load().departmentName
+                await send(.departmentChanged(departmentName))
                 let books = try await departmentPopularBooksClient.fetch(departmentName, 6)
                 try Task.checkCancellation()
                 await send(.popularBooksLoaded(books))

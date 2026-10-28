@@ -76,6 +76,43 @@ struct BookBasketTests {
         }
     }
 
+    @Test("도서 상세에서 담은 책을 담은 시각과 함께 한 번만 저장한다")
+    func addFromDetailPersistsOnce() async {
+        let suiteName = "BookBasketTests.\(UUID().uuidString)"
+        defer { UserDefaults.standard.removePersistentDomain(forName: suiteName) }
+        let client = BookBasketClient.userDefaults(suiteName: suiteName)
+        let now = Date(timeIntervalSince1970: 2_000)
+        let selected = book(id: "a")
+        let store = TestStore(initialState: BookDetailFeature.State(book: selected)) {
+            BookDetailFeature()
+        } withDependencies: {
+            $0.bookBasketClient = client
+            $0.date.now = now
+        }
+
+        await store.send(.addToBasketButtonTapped)
+        await store.send(.addToBasketButtonTapped)
+        #expect(client.load() == [BookBasketItem(book: selected, addedAt: now)])
+    }
+
+    @Test("도서 상세를 닫으면 검색 화면의 장바구니 권수를 저장소 기준으로 갱신한다")
+    func refreshBasketAfterDetail() async {
+        let selected = book(id: "a")
+        let saved = [item("a")]
+        var initialState = BookSearchFeature.State()
+        initialState.detail = BookDetailFeature.State(book: selected)
+        let store = TestStore(initialState: initialState) {
+            BookSearchFeature()
+        } withDependencies: {
+            $0.bookBasketClient.load = { saved }
+        }
+
+        await store.send(.detail(.dismiss)) {
+            $0.detail = nil
+            $0.basketBooks = saved.map(\.book)
+        }
+    }
+
     @Test("추천 탭에서도 저장된 장바구니 화면을 열고 닫는다")
     func openBasketFromHome() async {
         let saved = [item("a")]

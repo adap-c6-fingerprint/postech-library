@@ -98,6 +98,11 @@ struct BookSearchFeature {
                 state.detail = BookDetailFeature.State(book: book)
                 return .none
 
+            case .detail(.dismiss):
+                // 상세 화면에서 담은 책을 검색 화면의 바로가기 권수에 반영한다.
+                state.basketBooks = bookBasketClient.load().map(\.book)
+                return .none
+
             case .detail:
                 return .none
 
@@ -125,11 +130,7 @@ struct BookSearchFeature {
                 }
                 
                 state.basketBooks.append(book)
-                var items = bookBasketClient.load()
-                if !items.contains(where: { $0.book.recordKey == book.recordKey }) {
-                    items.append(BookBasketItem(book: book, addedAt: now))
-                    bookBasketClient.save(items)
-                }
+                bookBasketClient.add(book, at: now)
                 return .none
                 
             case let .queryChanged(query):
