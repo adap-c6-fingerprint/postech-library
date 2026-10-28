@@ -53,6 +53,19 @@ struct BookBasketView: View {
                     .tint(Color.basketPrimary)
                     .foregroundStyle(.black)
                 }
+                ToolbarSpacer(.flexible, placement: .bottomBar)
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        store.send(.startGuidanceButtonTapped)
+                    } label: {
+                        Text("안내 시작하기 (\(store.selectedCount)권)")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(.black)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .tint(Color.basketPrimary)
+                    .accessibilityValue("\(store.selectedCount)권 선택됨")
+                }
             } else {
                 ToolbarItem(placement: .bottomBar) {
                     Button(

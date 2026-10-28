@@ -102,7 +102,9 @@ struct BookBasketTests {
         await store.send(.selectButtonTapped) { $0.isSelectingForGuidance = true }
         await store.send(.selectionToggled("a")) { $0.selectedIDs = ["a"] }
         await store.send(.selectionToggled("b")) { $0.selectedIDs = ["a", "b"] }
+        #expect(store.state.selectedCount == 2)
         await store.send(.selectionToggled("a")) { $0.selectedIDs = ["b"] }
+        #expect(store.state.selectedCount == 1)
         await store.send(.selectionToggled("missing"))
         await store.send(.doneButtonTapped) {
             $0.isSelectingForGuidance = false

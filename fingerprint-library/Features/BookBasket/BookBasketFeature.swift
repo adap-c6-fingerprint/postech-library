@@ -18,6 +18,8 @@ struct BookBasketFeature {
         var sections: [BookBasketSection] {
             BookBasketSection.grouped(items, calendar: .current)
         }
+
+        var selectedCount: Int { selectedIDs.count }
     }
 
     enum Action {
@@ -25,6 +27,7 @@ struct BookBasketFeature {
         case selectButtonTapped
         case doneButtonTapped
         case selectionToggled(Book.ID)
+        case startGuidanceButtonTapped
     }
 
     @Dependency(\.bookBasketClient)
@@ -55,6 +58,9 @@ struct BookBasketFeature {
                 } else {
                     state.selectedIDs.append(id)
                 }
+                return .none
+
+            case .startGuidanceButtonTapped:
                 return .none
             }
         }
