@@ -17,6 +17,7 @@ struct Book: Equatable, Identifiable, Sendable {
     let publicationYear: String? // 출판 연도
     let description: String? // 설명
     let imageURL: URL? // 책 표지 URL
+    var subLocation: String? = nil // 검색 응답의 소장 위치명
     
     var recordKey: [String?] {
         if let controlNumber {
