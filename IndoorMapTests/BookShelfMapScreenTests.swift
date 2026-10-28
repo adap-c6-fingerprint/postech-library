@@ -8,8 +8,8 @@ import UIKit
 extension IndoorMapSerialTests {
     @MainActor
     struct BookShelfMapScreenTests {
-        @Test("단일 도서와 바구니 3권의 서가 강조·뒤로가기와 재진입을 확인한다")
-        func navigatesAndHighlightsHoldingShelf() async throws {
+        @Test("지도 탭·검색 탭에서 서가 강조·뒤로가기와 재진입을 확인한다", arguments: [false, true])
+        func navigatesAndHighlightsHoldingShelf(fromSearchTab: Bool) async throws {
             let map = try await BundledIndoorMapLoader().loadLibrary()
             let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
             let third = try #require(map.floors.first { $0.ordinal == 2 })
@@ -38,7 +38,10 @@ extension IndoorMapSerialTests {
             }
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
-            let host = UIHostingController(rootView: LibraryMapView(store: appStore, searchStore: searchStore))
+            let root = fromSearchTab
+                ? AnyView(BookSearchTabView(store: searchStore))
+                : AnyView(LibraryMapView(store: appStore, searchStore: searchStore))
+            let host = UIHostingController(rootView: root)
             window.rootViewController = host
             window.makeKeyAndVisible()
             defer {
@@ -48,9 +51,9 @@ extension IndoorMapSerialTests {
             }
             try await waitUntil { self.navigation(in: host) != nil }
             let navigation = try #require(navigation(in: host))
-            let homeMap = try #require(descendants(of: host.view).compactMap { $0 as? MKMapView }.first)
-            try await waitUntil { homeMap.camera.centerCoordinateDistance < 5_000 }
-            let homeCamera = homeMap.camera.copy() as! MKMapCamera
+            let homeMap = descendants(of: host.view).compactMap { $0 as? MKMapView }.first
+            if let homeMap { try await waitUntil { homeMap.camera.centerCoordinateDistance < 5_000 } }
+            let homeCamera = homeMap?.camera.copy() as? MKMapCamera
 
             searchStore.send(.directionsButtonTapped(book))
             try await waitUntil {
@@ -82,7 +85,9 @@ extension IndoorMapSerialTests {
             #expect(searchStore.books == [book])
             #expect(searchStore.basketBooks == basket)
             #expect(appStore.indoorMap == appInitial.indoorMap)
-            #expect(abs(homeMap.camera.centerCoordinateDistance - homeCamera.centerCoordinateDistance) < 0.1)
+            if let homeMap, let homeCamera {
+                #expect(abs(homeMap.camera.centerCoordinateDistance - homeCamera.centerCoordinateDistance) < 0.1)
+            }
 
             searchStore.send(.directionsButtonTapped(book))
             try await waitUntil {

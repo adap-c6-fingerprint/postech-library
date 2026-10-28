@@ -70,4 +70,3 @@ private actor BookHoldingsCache {
         entries[key] = (Date().addingTimeInterval(24 * 60 * 60), holdings)
     }
 }
-
