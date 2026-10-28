@@ -9,11 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct BookSearchTabView: View {
-    @State private var store = Store(
-        initialState: BookSearchFeature.State()
-    ) {
-        BookSearchFeature()
-    }
+    @Bindable var store: StoreOf<BookSearchFeature>
     @State private var isBasketPresented = false
     @Environment(\.isSearching) private var isSearching
 

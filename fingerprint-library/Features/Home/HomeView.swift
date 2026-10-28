@@ -3,6 +3,7 @@ import ComposableArchitecture
 
 struct HomeView: View {
     @Bindable var store: StoreOf<HomeFeature>
+    let mapStore: StoreOf<IndoorMapFeature>
     @State private var recommendationPosition: Int? = 0
 
     var body: some View {
@@ -28,8 +29,10 @@ struct HomeView: View {
         .navigationDestination(
             item: $store.scope(state: \.detail, action: \.detail)
         ) { detailStore in
-            BookDetailView(store: detailStore)
-                .toolbar(.visible, for: .navigationBar)
+            BookDetailMapView(
+                store: detailStore,
+                mapStore: mapStore
+            )
         }
     }
     
@@ -105,18 +108,18 @@ struct HomeView: View {
         ZStack(alignment: .bottom) {
                 ScrollView(.horizontal) {
                     LazyHStack(alignment: .bottom, spacing: 12) {
-                        ForEach(0..<store.recommendationCount, id: \.self) { index in
-                            let book = store.recommendedBooks.isEmpty
-                            ? nil : store.recommendedBooks[index]
+                        ForEach(
+                            Array(store.recommendedBooks.prefix(6).enumerated()),
+                            id: \.element.id
+                        ) { index, book in
                             
                             Button {
-                                if let book { store.send(.bookSelected(book)) }
+                                store.send(.bookSelected(book))
                             } label: {
                                 HomeBookCover(book: book, width: 122, height: 180)
                             }
                             .buttonStyle(.plain)
-                            .disabled(book == nil)
-                            .accessibilityLabel(book?.title ?? "추천 도서 자리")
+                            .accessibilityLabel(book.title)
                             .id(index)
                         }
                     }
@@ -291,7 +294,10 @@ private struct HomePopularBookCard: View {
 
 #Preview("추천 홈 · 다크") {
     NavigationStack {
-        HomeView(store: Store(initialState: HomeFeature.State()) { HomeFeature() })
+        HomeView(
+            store: Store(initialState: HomeFeature.State()) { HomeFeature() },
+            mapStore: Store(initialState: IndoorMapFeature.State()) { IndoorMapFeature() }
+        )
     }
     .preferredColorScheme(.dark)
 }

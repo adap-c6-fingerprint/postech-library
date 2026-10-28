@@ -1,97 +1,353 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct BookDetailView: View {
+/// 추천 탭에서 진입하는 지도 중심 책 상세 화면.
+/// 지도 로딩과 위치 스트림은 AppFeature가 소유한 기존 Store를 재사용한다.
+struct BookDetailMapView: View {
     let store: StoreOf<BookDetailFeature>
+    let mapStore: StoreOf<IndoorMapFeature>
+
+    @Environment(\.dismiss) private var dismiss
+    @State private var isSheetPresented = false
+    @State private var isVisible = false
+    @State private var sheetHeight: CGFloat = 0
 
     var body: some View {
-        List {
-            Section {
-                HStack(alignment: .top, spacing: 16) {
-                    BookCoverView(url: store.book.imageURL)
-                    .frame(width: 80, height: 116)
-                    .background(Color.gray.opacity(0.08))
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(BookText.plainText(store.book.title)).font(.headline)
-                        Text(BookText.plainText(store.book.author))
-                            .font(.subheadline).foregroundStyle(.secondary)
-                        if let publisher = store.book.publisher, !publisher.isEmpty {
-                            Text(BookText.plainText(publisher)).font(.caption)
-                        }
-                        if let year = store.book.publicationYear, !year.isEmpty {
-                            Text(year).font(.caption).foregroundStyle(.secondary)
-                        }
-                    }
-                }
-            }
-
-            Section("책 정보") {
-                if store.isLoading || !store.hasLoaded {
-                    ProgressView("책 정보를 불러오고 있어요")
-                        .frame(maxWidth: .infinity, minHeight: 80)
-                } else if let message = store.errorMessage {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label(message, systemImage: "exclamationmark.circle")
-                            .foregroundStyle(.secondary)
-                        if store.isbn13 != nil {
-                            Button("다시 시도") { store.send(.retryButtonTapped) }
-                                .buttonStyle(.bordered)
-                        }
-                    }
-                } else if let description = store.description {
-                    Text(description.text).textSelection(.enabled)
-                    Link(destination: description.sourceURL) {
-                        Label("책 소개 제공: Yes24 · 원문 보기", systemImage: "arrow.up.right.square")
-                            .font(.footnote)
-                    }
-                } else {
-                    Text("이 책의 정보가 아직 제공되지 않아요.")
-                        .foregroundStyle(.secondary)
-                }
-            }
-            
-            Section("연관 도서") {
-                switch store.relatedBooksState {
-                case .idle:
-                    Text("연관 도서 조회를 기다리고 있어요.")
-                        .foregroundStyle(.secondary)
-                    
-                case .loading:
-                    ProgressView("연관 도서를 불러오고 있어요.")
-                    
-                case let .loaded(books):
-                    if books.isEmpty {
-                        Text("연관 도서가 아직 없어요.")
-                    } else {
-                        ForEach(books) { book in
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(BookText.plainText(book.title))
-                                    .font(.headline)
-                                
-                                Text(BookText.plainText(book.author))
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                case let .failed(message):
-                    VStack {
-                        Text(message)
-                            .foregroundStyle(.secondary)
-                        
-                        Button("다시 시도") {
-                            store.send(.retryRelatedBooksButtonTapped)
-                        }
-                        .buttonStyle(.bordered)
-                    }
-                }
-            }
+        GeometryReader { geometry in
+            IndoorMapView(
+                store: mapStore,
+                showsDestinationCard: false,
+                showsRoute: false,
+                bottomContentInset: min(sheetHeight, geometry.size.height)
+            )
         }
-        .navigationTitle("도서 상세")
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
+        .toolbar(.hidden, for: .tabBar)
+        .onAppear {
+            isVisible = true
+            isSheetPresented = true
+        }
+        .onDisappear { isVisible = false }
+        .sheet(isPresented: $isSheetPresented, onDismiss: {
+            if isVisible { dismiss() }
+        }) {
+            BookDetailSheet(store: store)
+                .presentationBackgroundInteraction(.enabled(upThrough: .medium))
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
+                    sheetHeight = height
+                }
+        }
+    }
+}
+
+/// 표지를 포함한 서지정보를 모두 시트 안쪽에 배치한다.
+struct BookDetailSheet: View {
+    let store: StoreOf<BookDetailFeature>
+    @State private var selectedDetent: PresentationDetent = .medium
+
+    var body: some View {
+        NavigationStack {
+            BookDetailView(store: store)
+                .toolbar(.hidden, for: .navigationBar)
+        }
+        .presentationDetents([.medium, .large], selection: $selectedDetent)
+        .presentationDragIndicator(.visible)
+    }
+}
+
+struct BookDetailView: View {
+    let store: StoreOf<BookDetailFeature>
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @State private var isNoticePresented = false
+    @State private var noticeMessage = ""
+
+    var body: some View {
+        GeometryReader { geometry in
+            detailContent
+                .toolbar(.visible, for: .bottomBar)
+                .toolbarBackgroundVisibility(.hidden, for: .bottomBar)
+                .toolbar {
+                    bottomToolbar(width: max(0, geometry.size.width - 32))
+                }
+        }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .alert("도서 안내", isPresented: $isNoticePresented) {
+            Button("확인", role: .cancel) { }
+        } message: {
+            Text(noticeMessage)
+        }
+        .task { await store.send(.loadHoldings).finish() }
         .task { await store.send(.loadDescription).finish() }
         .task { await store.send(.loadRelatedBooks).finish() }
+    }
+
+    private var detailContent: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                header
+
+                routeSummaryContent
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("책 정보")
+                        .font(.headline)
+                    descriptionContent
+                }
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("연관 도서")
+                        .font(.headline)
+                    relatedBooksContent
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 24)
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    @ToolbarContentBuilder
+    private func bottomToolbar(width: CGFloat) -> some ToolbarContent {
+        if #available(iOS 27.0, *) {
+            bottomToolbarItem(width: width)
+                .contentMarginsRemoved()
+        } else {
+            bottomToolbarItem(width: width)
+        }
+    }
+
+    private func bottomToolbarItem(width: CGFloat) -> some ToolbarContent {
+        ToolbarItem(placement: .bottomBar) {
+            HStack(spacing: 12) {
+                Button {
+                    noticeMessage = "도서의 서가 위치가 연결되면 안내를 시작할 수 있어요."
+                    isNoticePresented = true
+                } label: {
+                    Text("바로 안내 시작")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.glass)
+                .buttonBorderShape(.capsule)
+                .buttonSizing(.flexible)
+                .controlSize(.large)
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .accessibilityIdentifier("bookDetail.startGuidance")
+
+                Button {
+                    store.send(.addToBasketButtonTapped)
+                    noticeMessage = "검색 탭의 장바구니에서 이 책을 확인할 수 있어요."
+                    isNoticePresented = true
+                } label: {
+                    Image(systemName: "cart.fill")
+                        .font(.system(size: 23, weight: .semibold))
+                }
+                .buttonStyle(.glass)
+                .buttonBorderShape(.circle)
+                .controlSize(.large)
+                .frame(width: 50, height: 50)
+                .accessibilityLabel("장바구니에 담기")
+                .accessibilityIdentifier("bookDetail.addToBasket")
+            }
+            .foregroundStyle(.white)
+            .frame(width: width)
+        }
+        .sharedBackgroundVisibility(.hidden)
+    }
+
+    @ViewBuilder
+    private var header: some View {
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: 16) {
+                cover
+                bibliography
+            }
+        } else {
+            HStack(alignment: .top, spacing: 16) {
+                cover
+                bibliography
+            }
+        }
+    }
+
+    private var cover: some View {
+        BookCoverView(url: store.book.imageURL)
+            .frame(width: 100, height: 148)
+            .background(.quaternary)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+    }
+
+    private var bibliography: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(BookText.plainText(store.book.title))
+                .font(.title3.bold())
+                .fixedSize(horizontal: false, vertical: true)
+
+            holdingContent
+
+            Text(BookText.plainText(store.book.author))
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            if let publisher = store.book.publisher.map(BookText.plainText),
+               !publisher.isEmpty {
+                Text(publisher)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if let year = store.book.publicationYear.map(BookText.plainText),
+               !year.isEmpty {
+                Text(year)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private var holdingContent: some View {
+        switch store.holdingsState {
+        case .idle, .loading:
+            ProgressView("소장정보 확인 중")
+                .font(.caption)
+        case let .loaded(holding):
+            Text("청구기호 \(holding?.callNumber ?? "정보 없음")")
+                .font(.subheadline)
+                .textSelection(.enabled)
+
+            availabilityLabel(holding?.availability ?? .unknown)
+
+            if let location = holding?.location {
+                Text(location)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        case .failed:
+            Text("소장정보를 불러오지 못했어요.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Button("다시 시도") { store.send(.retryHoldingsButtonTapped) }
+                .font(.caption)
+        }
+    }
+
+    private func availabilityLabel(_ availability: BookHolding.Availability) -> some View {
+        let title: String
+        let color: Color
+        switch availability {
+        case .available:
+            title = "대출 가능"
+            color = .green
+        case .unavailable:
+            title = "대출 불가능"
+            color = .secondary
+        case .unknown:
+            title = "대출 상태 확인 불가"
+            color = .secondary
+        }
+        return Text(title)
+            .font(.subheadline.bold())
+            .foregroundStyle(color)
+    }
+
+    private var routeSummaryContent: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(store.routeSummary.isMock ? "내 위치에서 · 예시 경로" : "내 위치에서")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 20) { routeMetrics }
+                VStack(alignment: .leading, spacing: 12) { routeMetrics }
+            }
+            .font(.subheadline.bold())
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(.quaternary, in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityIdentifier("bookDetail.routeSummary")
+    }
+
+    @ViewBuilder
+    private var routeMetrics: some View {
+        Label("도보 \(store.routeSummary.walkingMinutes)분", systemImage: "figure.walk")
+        Label("\(store.routeSummary.stepCount)단계", systemImage: "arrow.triangle.turn.up.right.diamond")
+        Label("\(store.routeSummary.distanceMeters)m", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
+    }
+
+    @ViewBuilder
+    private var descriptionContent: some View {
+        if store.isLoading || !store.hasLoaded {
+            ProgressView("책 정보를 불러오고 있어요")
+                .frame(maxWidth: .infinity, minHeight: 80)
+        } else if let message = store.errorMessage {
+            VStack(alignment: .leading, spacing: 12) {
+                Label(message, systemImage: "exclamationmark.circle")
+                    .foregroundStyle(.secondary)
+                if store.isbn13 != nil {
+                    Button("다시 시도") { store.send(.retryButtonTapped) }
+                        .buttonStyle(.bordered)
+                }
+            }
+        } else if let description = store.description {
+            Text(description.text)
+                .textSelection(.enabled)
+            Link(destination: description.sourceURL) {
+                Label("책 소개 제공: Yes24 · 원문 보기", systemImage: "arrow.up.right.square")
+                    .font(.footnote)
+            }
+        } else {
+            Text("이 책의 정보가 아직 제공되지 않아요.")
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var relatedBooksContent: some View {
+        switch store.relatedBooksState {
+        case .idle:
+            Text("연관 도서 조회를 기다리고 있어요.")
+                .foregroundStyle(.secondary)
+
+        case .loading:
+            ProgressView("연관 도서를 불러오고 있어요.")
+
+        case let .loaded(books):
+            if books.isEmpty {
+                Text("연관 도서가 아직 없어요.")
+                    .foregroundStyle(.secondary)
+            } else {
+                LazyVStack(alignment: .leading, spacing: 16) {
+                    ForEach(books) { book in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(BookText.plainText(book.title))
+                                .font(.headline)
+                            Text(BookText.plainText(book.author))
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+
+        case let .failed(message):
+            VStack(alignment: .leading, spacing: 12) {
+                Text(message)
+                    .foregroundStyle(.secondary)
+                Button("다시 시도") {
+                    store.send(.retryRelatedBooksButtonTapped)
+                }
+                .buttonStyle(.bordered)
+            }
+        }
     }
 }

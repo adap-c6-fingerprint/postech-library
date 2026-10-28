@@ -51,6 +51,7 @@ struct HomeFeature {
         case popularBooksFailed(String)
 
         enum Delegate {
+            case addToBasket(Book)
             case showBasket
             case showProfile
             case showPopularBooks
@@ -160,6 +161,9 @@ struct HomeFeature {
 
             case .popularBooksButtonTapped:
                 return .send(.delegate(.showPopularBooks))
+
+            case let .detail(.presented(.delegate(.addToBasket(book)))):
+                return .send(.delegate(.addToBasket(book)))
 
             case .detail, .delegate:
                 return .none

@@ -21,13 +21,16 @@ struct AppView: View {
             Tab("추천", systemImage: "books.vertical") {
                 NavigationStack {
                     HomeView(
-                        store: store.scope(state: \.home, action: \.home)
+                        store: store.scope(state: \.home, action: \.home),
+                        mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
                     )
                 }
             }
 
             Tab(role: .search) {
-                BookSearchTabView()
+                BookSearchTabView(
+                    store: store.scope(state: \.bookSearch, action: \.bookSearch)
+                )
             }
         }
         .tabViewSearchActivation(.searchTabSelection)

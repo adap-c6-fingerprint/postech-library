@@ -12,6 +12,7 @@ struct AppFeature {
     @ObservableState
     struct State: Equatable {
         var home = HomeFeature.State()
+        var bookSearch = BookSearchFeature.State()
         var indoorMap = IndoorMapFeature.State()
         var isRouteSettingsPresented = false
         var hasStartedRecommendationSession = false
@@ -20,6 +21,7 @@ struct AppFeature {
 
     enum Action {
         case home(HomeFeature.Action)
+        case bookSearch(BookSearchFeature.Action)
         case indoorMap(IndoorMapFeature.Action)
         case routeSettingsPresentationChanged(Bool)
         case appStarted
@@ -29,9 +31,16 @@ struct AppFeature {
 
     var body: some Reducer<State, Action> {
         Scope(state: \.home, action: \.home) { HomeFeature() }
+        Scope(state: \.bookSearch, action: \.bookSearch) { BookSearchFeature() }
         Scope(state: \.indoorMap, action: \.indoorMap) { IndoorMapFeature() }
         Reduce { state, action in
             switch action {
+            case let .home(.delegate(.addToBasket(book))):
+                return .send(.bookSearch(.addToBasket(book)))
+
+            case .bookSearch:
+                return .none
+
             case .appStarted:
                 guard !state.hasStartedRecommendationSession else { return .none }
                 state.hasStartedRecommendationSession = true

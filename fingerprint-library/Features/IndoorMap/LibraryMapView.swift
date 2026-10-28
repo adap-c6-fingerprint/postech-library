@@ -34,9 +34,9 @@ struct LibraryMapView: View {
             }
             .navigationDestination(isPresented: $isBasketPresented) {
                 BookBasketView(
-                    books: searchStore.basketBooks,
+                    books: store.bookSearch.basketBooks,
                     onDeletedSelected: { bookIDs in
-                        searchStore.send(.removeFromBasket(bookIDs))
+                        store.send(.bookSearch(.removeFromBasket(bookIDs)))
                     }
                 )
             }

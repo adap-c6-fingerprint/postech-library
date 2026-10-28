@@ -83,6 +83,9 @@ struct BookSearchFeature {
                 state.detail = BookDetailFeature.State(book: book)
                 return .none
 
+            case let .detail(.presented(.delegate(.addToBasket(book)))):
+                return .send(.addToBasket(book))
+
             case .detail:
                 return .none
                 

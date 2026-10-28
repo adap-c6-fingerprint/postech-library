@@ -18,6 +18,13 @@ struct BookDetailFeature {
         case failed(String)
     }
 
+    enum HoldingsState: Equatable {
+        case idle
+        case loading
+        case loaded(BookHolding?)
+        case failed
+    }
+
     // 화면 전체의 현재 상태
     @ObservableState
     struct State: Equatable {
@@ -31,6 +38,8 @@ struct BookDetailFeature {
 
         // 연관 도서
         var relatedBooksState: RelatedBooksState = .idle
+        var holdingsState: HoldingsState = .idle
+        var routeSummary: BookRouteSummary = .mock
 
         var isbn13: String? {
             BookISBN.isbn13(from: book.isbn)
@@ -49,6 +58,18 @@ struct BookDetailFeature {
         case retryRelatedBooksButtonTapped
         case relatedBooksLoaded([Book])
         case relatedBooksFailed(String)
+
+        case loadHoldings
+        case retryHoldingsButtonTapped
+        case holdingsLoaded(BookHolding?)
+        case holdingsFailed
+        case routeSummaryUpdated(BookRouteSummary)
+        case addToBasketButtonTapped
+        case delegate(Delegate)
+
+        enum Delegate {
+            case addToBasket(Book)
+        }
     }
 
     @Dependency(\.bookDetailClient)
@@ -57,9 +78,37 @@ struct BookDetailFeature {
     @Dependency(\.relatedBooksClient)
     var relatedBooksClient
 
+    @Dependency(\.bookHoldingsClient)
+    var bookHoldingsClient
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .loadHoldings:
+                guard case .idle = state.holdingsState else { return .none }
+                return loadHoldings(state: &state)
+
+            case .retryHoldingsButtonTapped:
+                return loadHoldings(state: &state)
+
+            case let .holdingsLoaded(holding):
+                state.holdingsState = .loaded(holding)
+                return .none
+
+            case .holdingsFailed:
+                state.holdingsState = .failed
+                return .none
+
+            case let .routeSummaryUpdated(summary):
+                state.routeSummary = summary
+                return .none
+
+            case .addToBasketButtonTapped:
+                return .send(.delegate(.addToBasket(state.book)))
+
+            case .delegate:
+                return .none
+
             case .loadDescription:
                 guard !state.hasLoaded else {
                     return .none
@@ -111,6 +160,23 @@ struct BookDetailFeature {
     private nonisolated enum CancelID: Hashable, Sendable {
         case description
         case relatedBooks
+        case holdings
+    }
+
+    private func loadHoldings(state: inout State) -> Effect<Action> {
+        guard state.holdingsState != .loading else { return .none }
+        state.holdingsState = .loading
+        return .run { [book = state.book, bookHoldingsClient] send in
+            do {
+                let holding = try await bookHoldingsClient.fetch(book)
+                try Task.checkCancellation()
+                await send(.holdingsLoaded(holding))
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.holdingsFailed)
+            }
+        }
+        .cancellable(id: CancelID.holdings, cancelInFlight: true)
     }
 
     // 책 소개 조회
