@@ -9,8 +9,45 @@ import Foundation
 import ComposableArchitecture
 
 nonisolated struct BookClient: Sendable {
-    var search: @Sendable (_ query: String) async throws -> [Book]
+    var search: @Sendable (_ request: BookSearchRequest) async throws -> [Book]
     
+    /// URL 생성은 인증과 분리해 자료 유형 필터를 오프라인에서도 검증한다.
+    nonisolated static func searchURL(for request: BookSearchRequest) throws -> URL {
+        let resourceTypes: [String]
+        switch request.category {
+        case .all:
+            resourceTypes = ["books", "printed_book", "journals"]
+        case .monograph:
+            resourceTypes = ["books", "printed_book"]
+        case .journal:
+            resourceTypes = ["journals"]
+        }
+
+        var components = URLComponents(
+            string: "https://api-ap.hosted.exlibrisgroup.com/primo/v1/search"
+        )
+        components?.queryItems = [
+            URLQueryItem(name: "vid", value: "82POSTECH_INST:82POSTECH"),
+            URLQueryItem(name: "tab", value: "LibraryCatalog"),
+            URLQueryItem(name: "scope", value: "MyInstitution"),
+            URLQueryItem(name: "q", value: "any,contains,\(request.query)"),
+            // multiFacets는 같은 범주의 자료 유형을 OR로 묶는다.
+            URLQueryItem(
+                name: "multiFacets",
+                value: resourceTypes.map { "facet_rtype,include,\($0)" }
+                    .joined(separator: "|,|")
+            ),
+            URLQueryItem(name: "lang", value: "ko"),
+            URLQueryItem(name: "offset", value: "0"),
+            URLQueryItem(name: "limit", value: "20"),
+            URLQueryItem(name: "skipDelivery", value: "false")
+        ]
+        guard let url = components?.url else {
+            throw BookClientError.invalidURL
+        }
+        return url
+    }
+
     nonisolated static func publicationYear(from value: String?) -> String? {
         guard let value,
               let range = value.range(
@@ -47,63 +84,13 @@ nonisolated struct BookClient: Sendable {
 
 extension BookClient: DependencyKey {
     static let liveValue = BookClient(
-        search: { query in
+        search: { searchRequest in
             guard let apiKey = await AppConfiguration.primoAPIKey else {
                 throw BookClientError.missingAPIKey
             }
             
-            let primoGateway = "https://api-ap.hosted.exlibrisgroup.com"
+            let url = try BookClient.searchURL(for: searchRequest)
 
-            var components = URLComponents(
-                string: "\(primoGateway)/primo/v1/search"
-            )
-            
-            // name은 Primo 서버가 정한 항목 이름이고, value는 그 항목에 보낼 값
-            // 예: name이 limit이고 value가 20이면 URL에 limit=20이 붙음
-            components?.queryItems = [
-                // vid = view ID. 어떤 Primo 검색 화면의 설정을 사용할지 지정
-                // 이 값은 POSTECH 검색 화면의 식별자
-                URLQueryItem(name: "vid", value: "82POSTECH_INST:82POSTECH"),
-
-                // tab: 검색 화면 안에서 사용할 탭의 설정 이름
-                // LibraryCatalog는 소장자료 검색 탭
-                URLQueryItem(name: "tab", value: "LibraryCatalog"),
-
-                // scope: 실제로 어느 자료 범위에서 검색할지 지정
-                // MyInstitution은 해당 기관(여기서는 POSTECH)의 자료 범위
-                URLQueryItem(name: "scope", value: "MyInstitution"),
-
-                // q = query. 검색 조건을 "검색 필드,검색 방식,검색어" 순서로 보냄
-                // any는 통합검색 필드, contains는 포함 검색, query는 사용자가 입력한 검색어
-                // 예: query가 사피엔스이면 "any,contains,사피엔스"를 보냄
-                URLQueryItem(name: "q", value: "any,contains,\(query)"),
-
-                // 같은 자료 유형의 값은 OR로 묶어 기존 도서와 종이책을 함께 검색한다.
-                URLQueryItem(
-                    name: "multiFacets",
-                    value: "facet_rtype,include,books|,|facet_rtype,include,printed_book"
-                ),
-
-                // lang = language. ko는 표시 언어를 한국어로 지정하는 값
-                URLQueryItem(name: "lang", value: "ko"),
-
-                // offset: 검색 결과의 앞에서 몇 건을 건너뛸지 지정
-                URLQueryItem(name: "offset", value: "0"),
-
-                // limit: 이번 요청에서 받을 검색 결과의 최대 개수
-                URLQueryItem(name: "limit", value: "20"),
-
-                // skipDelivery: 소장·이용가능정보 조회를 건너뛸지 지정(Primo VE)
-                // true는 생략, false는 생략하지 않고 함께 조회하도록 요청한
-                // 여기서 delivery는 배송이 아니라 자료의 소장·이용 정보 조회
-                URLQueryItem(name: "skipDelivery", value: "false")
-            ]
-
-            
-            guard let url = components?.url else {
-                throw BookClientError.invalidURL
-            }
-            
             var request = URLRequest(url: url)
             request.setValue(
                 "apikey \(apiKey)",

@@ -26,7 +26,9 @@ struct HomeRecommendationCacheTests {
             $0.personalizedRecommendationClient.fetch = { _ in
                 [RecommendedBook(recordID: "alma1", coverImageURL: cover)]
             }
-            $0.bookClient.search = { query in
+            $0.bookClient.search = { request in
+                let query = request.query
+                #expect(request.category == .monograph)
                 #expect(query == "1")
                 return [next]
             }
@@ -41,11 +43,13 @@ struct HomeRecommendationCacheTests {
             $0.isLoadingRecommendations = true
             $0.isPreparingRecommendations = true
         }
-        await store.receive(\.recommendationsRestored) {
-            if hasCached {
+        if hasCached {
+            await store.receive(\.recommendationsRestored) {
                 $0.recommendedBooks = [previous]
                 $0.isLoadingRecommendations = false
             }
+        } else {
+            await store.receive(\.recommendationsRestored)
         }
         await store.receive(\.recommendationsLoaded) {
             if !hasCached { $0.recommendedBooks = prepared.displayBooks }
@@ -157,11 +161,13 @@ struct HomeRecommendationCacheTests {
             $0.isLoadingRecommendations = true
             $0.isPreparingRecommendations = true
         }
-        await store.receive(\.recommendationsRestored) {
-            if hasCached {
+        if hasCached {
+            await store.receive(\.recommendationsRestored) {
                 $0.recommendedBooks = [a]
                 $0.isLoadingRecommendations = false
             }
+        } else {
+            await store.receive(\.recommendationsRestored)
         }
         await store.receive(\.recommendationsFailed) {
             $0.isLoadingRecommendations = false

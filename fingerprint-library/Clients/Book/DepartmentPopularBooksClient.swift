@@ -20,7 +20,9 @@ extension DepartmentPopularBooksClient: DependencyKey {
 
             let keywords = ["소설", "과학", "역사", "예술"]
             let keyword = keywords.randomElement() ?? "소설"
-            let books = try await bookClient.search(keyword)
+            let books = try await bookClient.search(BookSearchRequest(
+                query: keyword, category: .monograph
+            ))
 
             return Array(books.shuffled().prefix(count))
         }

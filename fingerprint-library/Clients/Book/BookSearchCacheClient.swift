@@ -1,9 +1,9 @@
 import ComposableArchitecture
 
 nonisolated struct BookSearchCacheClient: Sendable {
-    var load: @Sendable (String) -> [Book]?
-    var save: @Sendable (String, [Book]) -> Void
-    var remove: @Sendable (String) -> Void
+    var load: @Sendable (BookSearchRequest) -> [Book]?
+    var save: @Sendable (BookSearchRequest, [Book]) -> Void
+    var remove: @Sendable (BookSearchRequest) -> Void
 
     static func inMemory(_ cache: BookSearchResultCache = BookSearchResultCache()) -> Self {
         Self(

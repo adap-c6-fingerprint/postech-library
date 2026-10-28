@@ -61,7 +61,9 @@ extension BookRecommendationClient: DependencyKey {
         guard recordNumbers.allSatisfy({ !$0.isEmpty && $0.allSatisfy(\.isNumber) }) else {
             throw URLError(.cannotParseResponse)
         }
-        let metadata = try await bookClient.search(recordNumbers.joined(separator: " OR "))
+        let metadata = try await bookClient.search(BookSearchRequest(
+            query: recordNumbers.joined(separator: " OR "), category: .monograph
+        ))
         try Task.checkCancellation()
 
         // 검색 응답의 순서·표지 대신 알고리즘의 추천 순서·확인된 표지를 유지한다.

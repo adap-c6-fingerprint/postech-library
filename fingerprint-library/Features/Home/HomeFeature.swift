@@ -13,6 +13,7 @@ struct HomeFeature {
 
         @Presents var detail: BookDetailFeature.State?
         @Presents var basket: BookBasketFeature.State?
+        @Presents var shelfMap: BookShelfMapFeature.State?
 
         var recommendationCount: Int {
             recommendedBooks.isEmpty ? 6 : min(recommendedBooks.count, 6)
@@ -52,12 +53,14 @@ struct HomeFeature {
         case popularBooksButtonTapped
         case detail(PresentationAction<BookDetailFeature.Action>)
         case basket(PresentationAction<BookBasketFeature.Action>)
+        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         case delegate(Delegate)
 
         case recommendationsFailed(UUID, String)
         case popularBooksFailed(String)
 
         enum Delegate {
+            case favoritesChanged(Set<[String?]>)
             case showProfile
             case showPopularBooks
         }
@@ -70,7 +73,9 @@ struct HomeFeature {
     var departmentPopularBooksClient
 
     @Dependency(\.recommendationCacheClient) var recommendationCacheClient
+    @Dependency(\.bookFavoritesClient) var bookFavoritesClient
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
+    @Dependency(\.userProfileClient) var userProfileClient
     @Dependency(\.uuid) var uuid
 
     private nonisolated enum CancelID: Hashable, Sendable {
@@ -173,15 +178,21 @@ struct HomeFeature {
                 return .none
 
             case let .bookSelected(book):
-                state.detail = BookDetailFeature.State(book: book)
+                state.detail = BookDetailFeature.State(
+                    book: book, isFavorite: bookFavoritesClient.load().contains(book.recordKey)
+                )
                 return .none
 
             case .basketButtonTapped:
                 state.basket = BookBasketFeature.State()
                 return .none
 
-            case .basket(.presented(.delegate(.startGuidance))):
-                // TODO: 경로 요약 페이지(07)를 구현하면 선택한 책을 넘겨 화면을 연다.
+            case let .basket(.presented(.delegate(.startGuidance(books)))):
+                state.shelfMap = BookShelfMapFeature.State(books: books)
+                return .none
+
+            case let .detail(.presented(.delegate(.startGuidance(book)))):
+                state.shelfMap = BookShelfMapFeature.State(book: book)
                 return .none
 
             case .profileButtonTapped:
@@ -190,7 +201,10 @@ struct HomeFeature {
             case .popularBooksButtonTapped:
                 return .send(.delegate(.showPopularBooks))
 
-            case .detail, .basket, .delegate:
+            case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
+                return .send(.delegate(.favoritesChanged(keys)))
+
+            case .detail, .basket, .shelfMap, .delegate:
                 return .none
             }
         }
@@ -199,6 +213,9 @@ struct HomeFeature {
         }
         .ifLet(\.$basket, action: \.basket) {
             BookBasketFeature()
+        }
+        .ifLet(\.$shelfMap, action: \.shelfMap) {
+            BookShelfMapFeature()
         }
     }
 
