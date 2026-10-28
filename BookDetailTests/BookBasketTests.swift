@@ -169,4 +169,34 @@ struct BookBasketTests {
         #expect(store.state.selectedBooks.isEmpty)
         await store.send(.startGuidanceButtonTapped)
     }
+
+    @Test("선택한 책을 확인 후 장바구니에서 제거하고 목록·권수·저장소를 갱신한다")
+    func removeSelectedBooks() async {
+        let suiteName = "BookBasketTests.\(UUID().uuidString)"
+        defer { UserDefaults.standard.removePersistentDomain(forName: suiteName) }
+        let client = BookBasketClient.userDefaults(suiteName: suiteName)
+        let items = ["a", "b", "c"].map { item($0) }
+        client.save(items)
+        let store = TestStore(initialState: BookBasketFeature.State(
+            items: items,
+            isSelectingForGuidance: true,
+            selectedIDs: ["a", "c"]
+        )) {
+            BookBasketFeature()
+        } withDependencies: {
+            $0.bookBasketClient = client
+        }
+
+        await store.send(.removeButtonTapped) { $0.isRemoveAlertPresented = true }
+        await store.send(.removeAlertDismissed) { $0.isRemoveAlertPresented = false }
+        #expect(client.load() == items)
+        await store.send(.removeButtonTapped) { $0.isRemoveAlertPresented = true }
+        await store.send(.removeConfirmed) {
+            $0.isRemoveAlertPresented = false
+            $0.items = [items[1]]
+            $0.selectedIDs = []
+        }
+        #expect(client.load() == [items[1]])
+        await store.send(.removeButtonTapped)
+    }
 }

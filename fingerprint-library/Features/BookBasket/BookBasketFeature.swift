@@ -15,6 +15,7 @@ struct BookBasketFeature {
         // 길안내할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
         var isSelectionLimitAlertPresented = false
+        var isRemoveAlertPresented = false
 
         var sections: [BookBasketSection] {
             BookBasketSection.grouped(items, calendar: .current)
@@ -35,6 +36,9 @@ struct BookBasketFeature {
         case selectionToggled(Book.ID)
         case selectionLimitAlertDismissed
         case startGuidanceButtonTapped
+        case removeButtonTapped
+        case removeConfirmed
+        case removeAlertDismissed
         case delegate(Delegate)
 
         @CasePathable
@@ -87,6 +91,23 @@ struct BookBasketFeature {
                     return .none
                 }
                 return .send(.delegate(.startGuidance(books)))
+
+            case .removeButtonTapped:
+                guard !state.selectedBooks.isEmpty else { return .none }
+                state.isRemoveAlertPresented = true
+                return .none
+
+            case .removeConfirmed:
+                state.isRemoveAlertPresented = false
+                let removedIDs = Set(state.selectedIDs)
+                state.items.removeAll { removedIDs.contains($0.id) }
+                state.selectedIDs = []
+                bookBasketClient.save(state.items)
+                return .none
+
+            case .removeAlertDismissed:
+                state.isRemoveAlertPresented = false
+                return .none
 
             case .delegate:
                 return .none

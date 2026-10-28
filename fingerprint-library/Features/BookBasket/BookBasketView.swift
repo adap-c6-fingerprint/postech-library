@@ -53,6 +53,13 @@ struct BookBasketView: View {
                     .tint(Color.basketPrimary)
                     .foregroundStyle(.black)
                 }
+                ToolbarItem(placement: .bottomBar) {
+                    Button("선택한 책 제거", systemImage: "trash") {
+                        store.send(.removeButtonTapped)
+                    }
+                    .labelStyle(.iconOnly)
+                    .disabled(store.selectedCount == 0)
+                }
                 ToolbarSpacer(.flexible, placement: .bottomBar)
                 ToolbarItem(placement: .bottomBar) {
                     Button {
@@ -96,6 +103,20 @@ struct BookBasketView: View {
             Button("확인했어요") {}
         } message: {
             Text("다른 책을 선택하려면 추가한 책을 해제하고 다시 시도해보세요.")
+        }
+        .alert(
+            "선택한 책 \(store.selectedCount)권을 삭제할까요?",
+            isPresented: Binding(
+                get: { store.isRemoveAlertPresented },
+                set: { if !$0 { store.send(.removeAlertDismissed) } }
+            )
+        ) {
+            Button("삭제하기", role: .destructive) {
+                store.send(.removeConfirmed)
+            }
+            Button("취소하기", role: .cancel) {}
+        } message: {
+            Text("장바구니에서만 삭제돼요. 도서관 소장 정보에는 영향이 없어요.")
         }
         .task {
             store.send(.task)
