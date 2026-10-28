@@ -42,6 +42,31 @@ struct BookBasketView: View {
         .background(Color.basketBackground)
         .navigationTitle("장바구니")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if store.isSelectingForGuidance {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("선택 완료", systemImage: "checkmark") {
+                        store.send(.doneButtonTapped)
+                    }
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.glassProminent)
+                    .tint(Color.basketPrimary)
+                    .foregroundStyle(.black)
+                }
+            } else {
+                ToolbarItem(placement: .bottomBar) {
+                    Button(
+                        "길안내할 책 선택",
+                        systemImage: "circle.grid.2x2.topleft.checkmark.filled"
+                    ) {
+                        store.send(.selectButtonTapped)
+                    }
+                    .labelStyle(.iconOnly)
+                    .disabled(store.items.isEmpty)
+                }
+                ToolbarSpacer(.flexible, placement: .bottomBar)
+            }
+        }
         .task {
             store.send(.task)
         }
@@ -67,7 +92,37 @@ struct BookBasketView: View {
         }
     }
 
+    @ViewBuilder
     private func row(_ item: BookBasketItem) -> some View {
+        if store.isSelectingForGuidance {
+            Button {
+                store.send(.selectionToggled(item.id))
+            } label: {
+                HStack(spacing: 21) {
+                    selectionMark(isSelected: store.selectedIDs.contains(item.id))
+                    bookInfo(item)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityAddTraits(
+                store.selectedIDs.contains(item.id) ? .isSelected : []
+            )
+        } else {
+            bookInfo(item)
+        }
+    }
+
+    private func selectionMark(isSelected: Bool) -> some View {
+        Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+            .font(.system(size: 24))
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(isSelected ? Color.white : Color.basketTextTertiary, Color.blue)
+            .frame(width: 24, height: 24)
+            .accessibilityHidden(true)
+    }
+
+    private func bookInfo(_ item: BookBasketItem) -> some View {
         HStack(spacing: 21) {
             BookCoverView(url: item.book.imageURL, allowsRetry: false)
                 .frame(width: 80, height: 113)
@@ -101,4 +156,5 @@ extension Color {
     static let basketCard = Color(red: 0x2B / 255, green: 0x2B / 255, blue: 0x2B / 255)
     static let basketTextSecondary = Color(red: 0xF3 / 255, green: 0xF3 / 255, blue: 0xF3 / 255)
     static let basketTextTertiary = Color(red: 0xD9 / 255, green: 0xD9 / 255, blue: 0xD9 / 255)
+    static let basketPrimary = Color(red: 0xDD / 255, green: 0xF5 / 255, blue: 0x3C / 255)
 }

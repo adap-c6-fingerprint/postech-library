@@ -91,4 +91,22 @@ struct BookBasketTests {
         #expect(sections.map { $0.items.map(\.id) } == [["b"], ["c", "a"]])
         #expect(sections.flatMap(\.items).count == items.count)
     }
+
+    @Test("선택 모드에서 길안내할 책을 선택·해제하고 완료하면 선택을 비운다")
+    func toggleGuidanceSelection() async {
+        let store = TestStore(initialState: BookBasketFeature.State(items: [item("a"), item("b")])) {
+            BookBasketFeature()
+        }
+
+        await store.send(.selectionToggled("a"))
+        await store.send(.selectButtonTapped) { $0.isSelectingForGuidance = true }
+        await store.send(.selectionToggled("a")) { $0.selectedIDs = ["a"] }
+        await store.send(.selectionToggled("b")) { $0.selectedIDs = ["a", "b"] }
+        await store.send(.selectionToggled("a")) { $0.selectedIDs = ["b"] }
+        await store.send(.selectionToggled("missing"))
+        await store.send(.doneButtonTapped) {
+            $0.isSelectingForGuidance = false
+            $0.selectedIDs = []
+        }
+    }
 }
