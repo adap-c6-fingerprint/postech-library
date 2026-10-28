@@ -18,7 +18,7 @@ struct Book: Equatable, Identifiable, Sendable {
     let description: String? // 설명
     let imageURL: URL? // 책 표지 URL
     
-    var recordKey: [String?] {
+    nonisolated var recordKey: [String?] {
         if let controlNumber {
             return ["control", controlNumber]
         }
