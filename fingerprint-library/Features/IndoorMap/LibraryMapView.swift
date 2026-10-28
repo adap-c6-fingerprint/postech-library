@@ -11,12 +11,15 @@ import SwiftUI
 struct LibraryMapView: View {
     @Bindable var store: StoreOf<AppFeature>
 
-    @State private var searchStore = Store(
-        initialState: BookSearchFeature.State()
-    ) {
-        BookSearchFeature()
-    }
+    @State private var searchStore: StoreOf<BookSearchFeature>
     @State private var isBasketPresented = false
+
+    init(store: StoreOf<AppFeature>, searchStore: StoreOf<BookSearchFeature>? = nil) {
+        self.store = store
+        _searchStore = State(initialValue: searchStore ?? Store(
+            initialState: BookSearchFeature.State()
+        ) { BookSearchFeature() })
+    }
 
     private var mapStore: StoreOf<IndoorMapFeature> {
         store.scope(state: \.indoorMap, action: \.indoorMap)
@@ -37,6 +40,9 @@ struct LibraryMapView: View {
                     books: searchStore.basketBooks,
                     onDeletedSelected: { bookIDs in
                         searchStore.send(.removeFromBasket(bookIDs))
+                    },
+                    onShowDirections: { bookIDs in
+                        searchStore.send(.basketDirectionsButtonTapped(bookIDs))
                     }
                 )
             }
@@ -44,6 +50,11 @@ struct LibraryMapView: View {
                 item: $searchStore.scope(state: \.detail, action: \.detail)
             ) { detailStore in
                 BookDetailView(store: detailStore)
+            }
+            .navigationDestination(
+                item: $searchStore.scope(state: \.shelfMap, action: \.shelfMap)
+            ) { shelfMapStore in
+                BookShelfMapView(store: shelfMapStore)
             }
             .navigationDestination(
                 isPresented: Binding(

@@ -2,7 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct BookDetailView: View {
-    let store: StoreOf<BookDetailFeature>
+    @Bindable var store: StoreOf<BookDetailFeature>
 
     var body: some View {
         List {
@@ -25,6 +25,11 @@ struct BookDetailView: View {
                         }
                     }
                 }
+            }
+
+            Section {
+                Button("길안내 받기", systemImage: "map") { store.send(.directionsButtonTapped) }
+                    .accessibilityIdentifier("book-detail-directions")
             }
 
             Section("책 정보") {
@@ -91,6 +96,9 @@ struct BookDetailView: View {
         }
         .navigationTitle("도서 상세")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(item: $store.scope(state: \.$shelfMap, action: \.shelfMap)) {
+            BookShelfMapView(store: $0)
+        }
         .task { await store.send(.loadDescription).finish() }
         .task { await store.send(.loadRelatedBooks).finish() }
     }

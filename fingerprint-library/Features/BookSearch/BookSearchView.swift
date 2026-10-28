@@ -55,6 +55,9 @@ struct BookSearchView: View {
                                 },
                                 onAddToBasket: {
                                     store.send(.addToBasket(book))
+                                },
+                                onShowDirections: {
+                                    store.send(.directionsButtonTapped(book))
                                 })
                         }
                     }
