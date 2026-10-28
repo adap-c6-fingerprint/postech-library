@@ -29,6 +29,7 @@ struct BookDetailFeature {
     @ObservableState
     struct State: Equatable {
         let book: Book
+        var isFavorite = false
 
         // 책 소개
         var description: BookDescription? = nil
@@ -64,11 +65,14 @@ struct BookDetailFeature {
         case holdingsLoaded(BookHolding?)
         case holdingsFailed
         case routeSummaryUpdated(BookRouteSummary)
+        case loadFavorites
+        case favoriteButtonTapped
         case addToBasketButtonTapped
         case delegate(Delegate)
 
         enum Delegate {
             case addToBasket(Book)
+            case favoritesChanged(Set<[String?]>)
         }
     }
 
@@ -81,9 +85,29 @@ struct BookDetailFeature {
     @Dependency(\.bookHoldingsClient)
     var bookHoldingsClient
 
+    @Dependency(\.bookFavoritesClient)
+    var bookFavoritesClient
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .loadFavorites:
+                state.isFavorite = bookFavoritesClient.load().contains(state.book.recordKey)
+                return .none
+
+            case .favoriteButtonTapped:
+                // 다른 화면에서 추가한 찜도 보존하도록 최신 저장 목록에서 변경한다.
+                var keys = bookFavoritesClient.load()
+                let key = state.book.recordKey
+                if keys.contains(key) {
+                    keys.remove(key)
+                } else {
+                    keys.insert(key)
+                }
+                state.isFavorite = keys.contains(key)
+                bookFavoritesClient.save(keys)
+                return .send(.delegate(.favoritesChanged(keys)))
+
             case .loadHoldings:
                 guard case .idle = state.holdingsState else { return .none }
                 return loadHoldings(state: &state)

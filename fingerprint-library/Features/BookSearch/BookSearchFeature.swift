@@ -70,6 +70,7 @@ struct BookSearchFeature {
                 return .none
 
             case let .favoriteButtonTapped(book):
+                state.favoriteBookKeys = bookFavoritesClient.load()
                 let key = book.recordKey
                 if state.favoriteBookKeys.contains(key) {
                     state.favoriteBookKeys.remove(key)
@@ -77,14 +78,25 @@ struct BookSearchFeature {
                     state.favoriteBookKeys.insert(key)
                 }
                 bookFavoritesClient.save(state.favoriteBookKeys)
+                if let detailBook = state.detail?.book {
+                    let isFavorite = state.favoriteBookKeys.contains(detailBook.recordKey)
+                    state.detail?.isFavorite = isFavorite
+                }
                 return .none
 
             case let .bookSelected(book):
-                state.detail = BookDetailFeature.State(book: book)
+                state.favoriteBookKeys = bookFavoritesClient.load()
+                state.detail = BookDetailFeature.State(
+                    book: book, isFavorite: state.favoriteBookKeys.contains(book.recordKey)
+                )
                 return .none
 
             case let .detail(.presented(.delegate(.addToBasket(book)))):
                 return .send(.addToBasket(book))
+
+            case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
+                state.favoriteBookKeys = keys
+                return .none
 
             case .detail:
                 return .none

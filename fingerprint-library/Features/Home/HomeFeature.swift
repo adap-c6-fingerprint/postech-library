@@ -52,6 +52,7 @@ struct HomeFeature {
 
         enum Delegate {
             case addToBasket(Book)
+            case favoritesChanged(Set<[String?]>)
             case showBasket
             case showProfile
             case showPopularBooks
@@ -65,6 +66,7 @@ struct HomeFeature {
     var departmentPopularBooksClient
 
     @Dependency(\.recommendationCacheClient) var recommendationCacheClient
+    @Dependency(\.bookFavoritesClient) var bookFavoritesClient
     @Dependency(\.uuid) var uuid
 
     private nonisolated enum CancelID: Hashable, Sendable {
@@ -150,7 +152,9 @@ struct HomeFeature {
                 return .none
 
             case let .bookSelected(book):
-                state.detail = BookDetailFeature.State(book: book)
+                state.detail = BookDetailFeature.State(
+                    book: book, isFavorite: bookFavoritesClient.load().contains(book.recordKey)
+                )
                 return .none
 
             case .basketButtonTapped:
@@ -164,6 +168,9 @@ struct HomeFeature {
 
             case let .detail(.presented(.delegate(.addToBasket(book)))):
                 return .send(.delegate(.addToBasket(book)))
+
+            case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
+                return .send(.delegate(.favoritesChanged(keys)))
 
             case .detail, .delegate:
                 return .none

@@ -38,6 +38,16 @@ struct AppFeature {
             case let .home(.delegate(.addToBasket(book))):
                 return .send(.bookSearch(.addToBasket(book)))
 
+            case let .home(.delegate(.favoritesChanged(keys))):
+                synchronizeFavorites(keys, state: &state)
+                return .none
+
+            case .bookSearch(.task), .bookSearch(.bookSelected(_)),
+                 .bookSearch(.favoriteButtonTapped(_)),
+                 .bookSearch(.detail(.presented(.delegate(.favoritesChanged(_))))):
+                synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
+                return .none
+
             case .bookSearch:
                 return .none
 
@@ -72,6 +82,16 @@ struct AppFeature {
             case .indoorMap:
                 return .none
             }
+        }
+    }
+
+    private func synchronizeFavorites(_ keys: Set<[String?]>, state: inout State) {
+        state.bookSearch.favoriteBookKeys = keys
+        if let book = state.bookSearch.detail?.book {
+            state.bookSearch.detail?.isFavorite = keys.contains(book.recordKey)
+        }
+        if let book = state.home.detail?.book {
+            state.home.detail?.isFavorite = keys.contains(book.recordKey)
         }
     }
 }

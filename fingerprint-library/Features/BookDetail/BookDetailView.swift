@@ -79,6 +79,7 @@ struct BookDetailView: View {
         } message: {
             Text(noticeMessage)
         }
+        .task { store.send(.loadFavorites) }
         .task { await store.send(.loadHoldings).finish() }
         .task { await store.send(.loadDescription).finish() }
         .task { await store.send(.loadRelatedBooks).finish() }
@@ -215,29 +216,59 @@ struct BookDetailView: View {
 
     @ViewBuilder
     private var holdingContent: some View {
+        if case let .loaded(holding) = store.holdingsState {
+            Text("청구기호 \(holding?.callNumber ?? "정보 없음")")
+                .font(.subheadline)
+                .textSelection(.enabled)
+        }
+
+        HStack(spacing: 8) {
+            holdingStatusContent
+            Spacer(minLength: 8)
+            favoriteButton
+        }
+
+        if case let .loaded(holding) = store.holdingsState,
+           let location = holding?.location {
+            Text(location)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var holdingStatusContent: some View {
         switch store.holdingsState {
         case .idle, .loading:
             ProgressView("소장정보 확인 중")
                 .font(.caption)
         case let .loaded(holding):
-            Text("청구기호 \(holding?.callNumber ?? "정보 없음")")
-                .font(.subheadline)
-                .textSelection(.enabled)
-
             availabilityLabel(holding?.availability ?? .unknown)
-
-            if let location = holding?.location {
-                Text(location)
+        case .failed:
+            VStack(alignment: .leading, spacing: 4) {
+                Text("소장정보를 불러오지 못했어요.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                Button("다시 시도") { store.send(.retryHoldingsButtonTapped) }
+                    .font(.caption)
             }
-        case .failed:
-            Text("소장정보를 불러오지 못했어요.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-            Button("다시 시도") { store.send(.retryHoldingsButtonTapped) }
-                .font(.caption)
         }
+    }
+
+    private var favoriteButton: some View {
+        Button {
+            store.send(.favoriteButtonTapped)
+        } label: {
+            Image(systemName: store.isFavorite ? "heart.fill" : "heart")
+                .font(.system(size: 20))
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(store.isFavorite ? Color.red : Color.secondary)
+        .accessibilityLabel(store.isFavorite ? "찜 해제" : "찜하기")
+        .accessibilityValue(store.isFavorite ? "찜됨" : "찜 안 됨")
+        .accessibilityIdentifier("bookDetail.favorite")
     }
 
     private func availabilityLabel(_ availability: BookHolding.Availability) -> some View {
