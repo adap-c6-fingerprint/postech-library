@@ -7,6 +7,56 @@ import Testing
 struct HomeRecommendationCacheTests {
     private let sessionID = UUID(uuidString: "00000000-0000-0000-0000-000000000071")!
 
+    @Test("새 추천 알고리즘의 도서를 캐시에 저장하고 이번 접속의 저장본은 유지한다", arguments: [false, true])
+    func connectsAlgorithmToHomeAndCache(hasCached: Bool) async {
+        let sessionID = sessionID
+        let previous = RecommendationCacheFixture.book("previous", hasCover: false)
+        let cover = URL(string: "https://covers.example.com/1.png")!
+        let localCover = URL(fileURLWithPath: "/cached/1.png")
+        let next = Book(
+            id: "primo:alma1", isbn: nil, controlNumber: "primo:alma1", title: "맞춤 추천",
+            author: "저자", publisher: nil, publicationYear: nil, description: nil, imageURL: cover
+        )
+        let cached = CachedRecommendations(books: [previous], savedAt: .distantPast, coverFiles: [:])
+        let prepared = CachedRecommendations(books: [next], savedAt: .distantFuture, coverFiles: [cover: localCover])
+        let store = TestStore(initialState: HomeFeature.State()) { HomeFeature() } withDependencies: {
+            $0.uuid = .constant(sessionID)
+            $0.bookRecommendationClient = .liveValue
+            $0.searchHistoryClient.load = { ["스위프트"] }
+            $0.personalizedRecommendationClient.fetch = { _ in
+                [RecommendedBook(recordID: "alma1", coverImageURL: cover)]
+            }
+            $0.bookClient.search = { query in
+                #expect(query == "1")
+                return [next]
+            }
+            $0.recommendationCacheClient.restore = { hasCached ? cached : nil }
+            $0.recommendationCacheClient.prepare = { books in
+                await MainActor.run { #expect(books == [next]) }
+                return prepared
+            }
+        }
+        await store.send(.recommendationSessionStarted) {
+            $0.recommendationSessionID = sessionID
+            $0.isLoadingRecommendations = true
+            $0.isPreparingRecommendations = true
+        }
+        await store.receive(\.recommendationsRestored) {
+            if hasCached {
+                $0.recommendedBooks = [previous]
+                $0.isLoadingRecommendations = false
+            }
+        }
+        await store.receive(\.recommendationsLoaded) {
+            if !hasCached { $0.recommendedBooks = prepared.displayBooks }
+            $0.isLoadingRecommendations = false
+            $0.isPreparingRecommendations = false
+            $0.nextRecommendationsSavedAt = .distantFuture
+        }
+        #expect(store.state.recommendedBooks == (hasCached ? [previous] : prepared.displayBooks))
+        await store.finish()
+    }
+
     @Test("저장된 추천은 네트워크 응답을 기다리지 않고 로컬 표지로 표시한다")
     func restoresBeforeNetwork() async {
         let book = RecommendationCacheFixture.book("cached")

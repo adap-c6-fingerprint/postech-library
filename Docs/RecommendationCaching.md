@@ -66,7 +66,7 @@ await send(.recommendationsLoaded(sessionID, prepared))
 
 `Clients/Book/RecommendationCachePreparer.swift`
 
-- 기존 `BookRecommendationClient.fetch(6)` 결과를 그대로 받아 최대 6권을 준비한다. 추천 알고리즘 자체는 작성하지 않는다.
+- `BookRecommendationClient.fetch(6)`가 첫 추천·맞춤 추천 결과를 기존 `Book`으로 변환해 전달하고, 준비기는 그 결과의 목록·표지만 저장한다.
 - 같은 표지 URL은 중복 제거한다. 정상 로컬 파일이 있으면 다시 다운로드하지 않는다.
 - 없는 표지는 throwing task group으로 최대 두 개씩 준비한다. 미제공으로 분류한 표지만 별도로 표시하고, 나머지 수신 실패나 취소가 있으면 목록 저장으로 넘어가지 않는다.
 - live 다운로드는 기존 BookCoverPipeline을 사용하므로 화면에서 완료했거나 받고 있는 이미지 요청도 공유한다. 검증 가능한 이미지 데이터로 변환해 저장한다.
@@ -132,11 +132,15 @@ python3 Scripts/validate_recommendation_cache.py
 
 표지 오류 보완 후에는 `Scripts/validate_recommendation_cache.py`가 표지 모델·실패 분류·검색 캐시 테스트도 포함한다. 오프라인 **39개 테스트 / 6개 suite**, 앱 전체 iOS 모듈 생성과 BookDetailTests 전체 Swift 6 타입 검사를 통과했다. 실제 표지 공급처·실기기 화면에서의 검증 결과와 구분한다.
 
+2026-10-28 추천 연결에서는 첫 추천·맞춤 추천·홈 모델 변환 **26개 테스트 / 3개 suite**를 별도 macOS 검증 사본에서 실행했다. 실제 DependencyValues 구현을 사용하고 ComposableArchitecture 모듈 이름은 Dependencies·ConcurrencyExtras를 다시 내보내는 얇은 모듈로 대체했다. 실제 인증 설정은 복사하지 않고 API 키가 nil인 가짜 설정을 사용했다. 앱 전체 iOS 모듈 생성과 BookDetailTests 전체 Swift 6 타입 검사도 통과했다. 새 Home 캐시 통합 테스트는 캐시 유무 두 경우를 포함하며 타입 검사까지만 수행했다. iOS TCA runner·실서비스 호출·실기기 화면 검증은 별도로 남아 있다.
+
 ## 남은 통합 확인
 
-- 현재 저장소의 `BookRecommendationClient.liveValue`는 `.random`이다. 사노의 실제 추천 구현은 같은 `fetch` 경계에 연결해야 한다. PLI-49 데이터 구조 합의나 해당 알고리즘 구현을 대신 확정하지 않았다.
+- 2026-10-28 통합: `BookRecommendationClient.liveValue`에서 찜·최근 검색이 없으면 `ColdStartRecommendationClient`, 있으면 `PersonalizedRecommendationClient`를 호출한다. 맞춤 추천의 오류·빈 결과는 첫 추천으로 대체하고, 취소는 그대로 전달한다. 관심사는 기존 알고리즘의 `placeholderInterests`를 사용하며 온보딩 저장값 연결은 남아 있다.
+- 추천의 `recordID`에서 숫자 레코드 번호를 추출해 기존 `BookClient.search`로 최대 6권의 메타데이터를 한 번에 보완한다. 검색 응답 순서와 관계없이 추천 순서·검증된 표지 URL을 유지한다. 조회되지 않은 레코드는 제외하며 결과가 전부 비면 HomeFeature의 기존 오류·캐시 보존 경로를 따른다.
+- `HomeFeature`의 복원 → `fetch(6)` → 표지 준비·저장 경로와 `HomeView.recommendedBooks`를 그대로 재사용한다. 별도의 첫 추천·맞춤 추천 배열에만 결과가 쌓이던 경로를 제거했으므로 앱 시작·백그라운드 복귀·재시도가 같은 알고리즘을 거친다.
 - 표지 변경 판별은 현재 원격 URL 기준이다. 같은 URL의 이미지 내용이 바뀌는 공급처라면 URL에 버전을 반영하거나 별도 재검증 정책을 추천 계약에 추가해야 한다.
 - 현재 앱에 계정/추천 입력별 캐시 키가 없다. 해당 입력이 추가되면 캐시 namespace와 무효화 조건을 함께 추가해야 한다.
 - 첫 접속의 네트워크 응답 시간은 이 캐시로 제거되지 않는다. 이번 구현은 최초 로딩 안내와 정상 데이터의 다음 접속 복원을 제공한다.
 - 실기기에서는 A 복원 → B 준비 중 탭 왕복 → 앱 background/복귀 → B 표시, 오프라인·파일 유실·중간 종료를 확인한다.
-- 실제 추천 연결과 실기기 검증이 남아 있어 커밋은 `Refs #71`로 연결하고 이슈를 자동 종료하지 않는다.
+- 실제 추천의 홈·캐시 연결은 2026-10-28에 추가했다. 실서비스 응답·실기기 성능 검증은 별도로 확인한다. 이 문서 갱신만으로 이슈를 자동 종료하지 않는다.
