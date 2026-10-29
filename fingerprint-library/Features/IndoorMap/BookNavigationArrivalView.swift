@@ -40,7 +40,7 @@ struct BookNavigationArrivalView: View {
                                     .padding(.top, 44 * spacingScale)
                                 searchInstruction(info)
                                     .padding(.top, 36 * spacingScale)
-                                BookCoverView(url: info.book.imageURL)
+                                BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
                                     .id(info.book.imageURL)
                                     .frame(width: min(230, geometry.size.width * 0.58),
                                            height: min(330, geometry.size.height * 0.42))

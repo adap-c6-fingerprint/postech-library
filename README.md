@@ -55,3 +55,9 @@ ISBN13을 우선하며 ISBN10은 ISBN13으로 변환합니다. ISBN이 없거나
 
 API 형식과 출처 표시는 [Yes24 상품 상세 API](https://developers.yes24.com/api-doc/goods-item-detail)와
 [이용약관](https://developers.yes24.com/support/terms)을 기준으로 합니다.
+
+## 표지 누락 보완
+
+도서관 표지 URL이 없거나 이미지 로딩이 실패하면 같은 ISBN13의 Yes24 표지를 다시 조회합니다.
+다른 판본의 표지는 사용하지 않으며, ISBN·상품·표지가 없으면 기존 ‘표지 없음’을 표시합니다.
+기존 `YES24_API_KEY` 설정이 필요합니다. [동작과 검증 방법](Docs/BookCoverFallback.md)을 참고하세요.

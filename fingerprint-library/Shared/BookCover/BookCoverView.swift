@@ -3,21 +3,24 @@ import UIKit
 
 struct BookCoverView: View {
     let url: URL?
+    let isbn: String?
     let onOpen: (() -> Void)?
     let allowsRetry: Bool
     @State private var retryID = 0
     @State private var model: BookCoverModel<UIImage>
 
-    init(url: URL?, onOpen: (() -> Void)? = nil, allowsRetry: Bool = true) {
+    init(url: URL?, isbn: String? = nil, onOpen: (() -> Void)? = nil, allowsRetry: Bool = true) {
         self.url = url
+        self.isbn = isbn
         self.onOpen = onOpen
         self.allowsRetry = allowsRetry
-        _model = State(initialValue: BookCoverModel(url: url, pipeline: BookCoverPipeline.shared))
+        _model = State(initialValue: BookCoverModel(url: url, isbn: isbn, pipeline: BookCoverPipeline.shared,
+            fallback: { try await BookCoverPipeline.fallback.coverURL(for: $0) }))
     }
 
     var body: some View {
         Group {
-            if case .failed = model.phase(for: url), allowsRetry {
+            if case .failed = model.phase(for: url, isbn: isbn), allowsRetry {
                 Button { retryID += 1 } label: {
                     placeholder("arrow.clockwise", text: "다시 시도")
                 }
@@ -31,12 +34,12 @@ struct BookCoverView: View {
         }
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .task(id: LoadID(url: url, retry: retryID)) { await model.load(url) }
+        .task(id: LoadID(url: url, isbn13: BookISBN.isbn13(from: isbn), retry: retryID)) { await model.load(url, isbn: isbn) }
     }
 
     @ViewBuilder
     private var coverContent: some View {
-        switch model.phase(for: url) {
+        switch model.phase(for: url, isbn: isbn) {
         case let .loaded(image):
             Image(uiImage: image).resizable().scaledToFit()
         case .loading:
@@ -60,6 +63,7 @@ struct BookCoverView: View {
 
     private struct LoadID: Equatable {
         let url: URL?
+        let isbn13: String?
         let retry: Int
     }
 }

@@ -111,7 +111,7 @@ struct BookSearchResultRow: View {
 
     private var coverImage: some View {
         // 상세 이동 버튼 안에 재시도 버튼을 중첩하지 않는다.
-        BookCoverView(url: book.imageURL, onOpen: onShowDetail)
+        BookCoverView(url: book.imageURL, isbn: book.isbn, onOpen: onShowDetail)
         .frame(width: 72, height: 104)
         .background(Color.gray.opacity(0.08))
         .clipShape(RoundedRectangle(cornerRadius: 6))
