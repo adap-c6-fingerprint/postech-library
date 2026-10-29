@@ -28,6 +28,10 @@ struct IndoorMapKitView: UIViewRepresentable {
     var viewportInsets: UIEdgeInsets = .zero
     var shelfLabels: [IndoorShelfLabel] = []
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
+    var routeTurnArrows: [RouteTurnArrow] = []
+    var navigationAppearance = false
+    var navigationBearingRadians: Double?
+    var navigationDestination: BookNavigationMapDestination?
     var appearance: Appearance = .standard
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
@@ -77,6 +81,11 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var displayedShelfLabelIDs = Set<String>()
         private var renderedRoute: IndoorRoute?
         private var renderedGroupTransitionNodes: [RouteNode] = []
+        private var renderedTurnArrows: [RouteTurnArrow] = []
+        private var renderedNavigationAppearance = false
+        private var renderedNavigationDestination: BookNavigationMapDestination?
+        private var turnArrowOverlays: [MKPolyline] = []
+        private var turnArrowOverlayIDs = Set<ObjectIdentifier>()
         private var routeFloorID: UUID?
         private var routeOverlays: [any MKOverlay] = []
         private var routeOverlayIDs = Set<ObjectIdentifier>()
@@ -126,12 +135,15 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 카메라는 새 요청일 때만 배치 이후 적용하도록 보류한다.
         func update(parent: IndoorMapKitView, in view: MKMapView) {
             self.parent = parent
-            if renderedMap != parent.map || renderedFloorID != parent.floor.id || renderedAppearance != parent.appearance {
-                renderedAppearance = parent.appearance
+            if renderedMap != parent.map || renderedFloorID != parent.floor.id
+                || renderedNavigationAppearance != parent.navigationAppearance
+                || renderedAppearance != parent.appearance {
                 render(in: view)
             }
+            view.overrideUserInterfaceStyle = parent.navigationAppearance ? .dark : .unspecified
             view.showsUserLocation = parent.showsUserLocation
             updatePosition(in: view)
+            updateNavigationMarkerBearing(in: view)
             updateShelves(in: view)
             updateShelfLabels(in: view)
             updateRoute(in: view)
@@ -145,7 +157,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 }
                 for case let annotation as IndoorShelfLabelAnnotation in view.annotations {
                     (view.view(for: annotation) as? IndoorShelfLabelView)?.configure(
-                        annotation, highlighted: highlightedIDs.contains(annotation.label.mapElementID)
+                        annotation, highlighted: highlightedIDs.contains(annotation.label.mapElementID),
+                        navigationAppearance: parent.navigationAppearance
                     )
                 }
             }
@@ -157,16 +170,24 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 이 메서드는 경로를 계산하거나 도착을 판정하지 않는다.
         private func updateRoute(in view: MKMapView) {
             guard renderedRoute != parent.route || routeFloorID != parent.floor.id
-                || renderedGroupTransitionNodes != parent.groupTransitionNodes else { return }
+                || renderedGroupTransitionNodes != parent.groupTransitionNodes
+                || renderedTurnArrows != parent.routeTurnArrows
+                || renderedNavigationDestination != parent.navigationDestination else { return }
             view.removeOverlays(routeOverlays)
+            view.removeOverlays(turnArrowOverlays)
             view.removeAnnotations(routeTransitionAnnotations)
             view.removeAnnotations(groupTransitionAnnotations)
+            view.removeAnnotations(view.annotations.filter { $0 is BookNavigationDestinationAnnotation })
             routeOverlays.removeAll()
+            turnArrowOverlays.removeAll()
+            turnArrowOverlayIDs.removeAll()
             routeOverlayIDs.removeAll()
             groupTransitionAnnotations.removeAll()
             routeTransitionAnnotations.removeAll()
             renderedRoute = parent.route
             renderedGroupTransitionNodes = parent.groupTransitionNodes
+            renderedTurnArrows = parent.routeTurnArrows
+            renderedNavigationDestination = parent.navigationDestination
             routeFloorID = parent.floor.id
             guard let route = parent.route else { return }
             for segment in route.segments where segment.floorID == parent.floor.id && segment.coordinates.count >= 2 {
@@ -191,10 +212,20 @@ struct IndoorMapKitView: UIViewRepresentable {
                     routeTransitionAnnotations.append(.init(change: change, isEntry: false))
                 }
             }
+            for arrow in parent.routeTurnArrows where arrow.floorID == parent.floor.id
+                && arrow.coordinates.count >= 2 && arrow.coordinates.allSatisfy(\.isValid) {
+                let points = arrow.coordinates.map(\.clCoordinate)
+                turnArrowOverlays.append(MKPolyline(coordinates: points, count: points.count))
+            }
             routeOverlayIDs = Set(routeOverlays.map { ObjectIdentifier($0) })
+            turnArrowOverlayIDs = Set(turnArrowOverlays.map { ObjectIdentifier($0) })
             view.addOverlays(routeOverlays, level: .aboveLabels)
+            view.addOverlays(turnArrowOverlays, level: .aboveLabels)
             view.addAnnotations(routeTransitionAnnotations)
             view.addAnnotations(groupTransitionAnnotations)
+            if let destination = parent.navigationDestination, destination.floorID == parent.floor.id {
+                view.addAnnotation(BookNavigationDestinationAnnotation(destination))
+            }
         }
 
         /// 조회 층의 서가 핀을 갱신하고 선택 색상과 MapKit의 선택 상태를 맞춘다.
@@ -260,6 +291,7 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
             layoutShelfLabels(in: mapView)
+            updateNavigationMarkerBearing(in: mapView)
         }
 
         /// 등록 직후의 rendererFor보다 늦은 시점이다. 이 콜백에서는 renderer가 지도에 부착돼 있다.
@@ -335,6 +367,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             overlayFeatures.removeAll()
             renderedMap = parent.map
             renderedFloorID = parent.floor.id
+            renderedNavigationAppearance = parent.navigationAppearance
+            renderedAppearance = parent.appearance
             selectedID = parent.selectedFeatureID
             var overlays = MapKitGeometry.overlays(for: parent.floor.geometry)
             let features = parent.map.features.filter { $0.floorID == parent.floor.id }
@@ -360,7 +394,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 센서 위치는 MapKit 기본 사용자 위치에 맡기며 같은 출처의 이동은 기존 annotation을 갱신한다.
         func updatePosition(in view: MKMapView) {
             let visible = parent.position.flatMap { position -> IndoorPosition? in
-                guard position.source != .sensor, position.floorOrdinal == parent.floor.ordinal else { return nil }
+                guard (position.source != .sensor || parent.navigationAppearance), position.floorOrdinal == parent.floor.ordinal else { return nil }
                 return position
             }
             guard visible != renderedPosition else { return }
@@ -372,6 +406,20 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = positionAnnotation { view.removeAnnotation(annotation) }
             positionAnnotation = visible.map { PositionAnnotation(position: $0) }
             if let annotation = positionAnnotation { view.addAnnotation(annotation) }
+        }
+
+        private func updateNavigationMarkerBearing(in map: MKMapView) {
+            guard parent.navigationAppearance else { return }
+            for case let annotation as PositionAnnotation in map.annotations {
+                if let view = map.view(for: annotation) { configureNavigationBearing(view, in: map) }
+            }
+        }
+
+        private func configureNavigationBearing(_ view: MKAnnotationView, in map: MKMapView) {
+            guard let arrow = view.viewWithTag(8_124) as? UIImageView else { return }
+            arrow.image = UIImage(systemName: parent.navigationBearingRadians == nil ? "circle.fill" : "location.north.fill")
+            let angle = parent.navigationBearingRadians.map { $0 - map.camera.heading * .pi / 180 } ?? 0
+            arrow.transform = CGAffineTransform(rotationAngle: CGFloat(angle))
         }
 
         /// 최초 확대·층 전체 맞춤 또는 특정 좌표 중심 이동을 명시적으로 적용한다.
@@ -471,15 +519,34 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         /// 경로는 파란색으로 구분하고 도면 요소에는 종류별 색상과 선택 강조를 적용한다.
         func style(_ renderer: MKOverlayPathRenderer, overlay: any MKOverlay) {
+            if turnArrowOverlayIDs.contains(ObjectIdentifier(overlay)) {
+                renderer.strokeColor = parent.navigationAppearance ? .white : .systemYellow
+                renderer.fillColor = .clear
+                renderer.lineWidth = 5
+                renderer.lineCap = .round
+                renderer.lineJoin = .round
+                return
+            }
             if routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
-                renderer.strokeColor = .systemBlue
-                renderer.fillColor = UIColor.systemBlue.withAlphaComponent(0.25)
-                renderer.lineWidth = overlay is MKPolyline ? 5 : 2
+                renderer.strokeColor = parent.navigationAppearance ? BookNavigationPalette.uiAccent : .systemBlue
+                renderer.fillColor = renderer.strokeColor?.withAlphaComponent(0.25)
+                renderer.lineWidth = overlay is MKPolyline ? (parent.navigationAppearance ? 7 : 5) : 2
                 renderer.lineCap = .round
                 renderer.lineJoin = .round
                 return
             }
             let feature = overlayFeatures[ObjectIdentifier(overlay)]
+            if parent.navigationAppearance {
+                renderer.strokeColor = UIColor(white: 0.12, alpha: 1)
+                renderer.lineWidth = 0.5
+                let shade: CGFloat = feature?.kind == .fixture ? 0.09 : (feature?.category == "walkway" ? 0.22 : 0.17)
+                renderer.fillColor = UIColor(white: shade, alpha: 1)
+                if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
+                    renderer.fillColor = BookNavigationPalette.uiAccent
+                    renderer.strokeColor = BookNavigationPalette.uiAccent
+                }
+                return
+            }
             if parent.appearance == .home {
                 renderer.strokeColor = UIColor(white: 0.12, alpha: 1)
                 renderer.lineWidth = 0.8
@@ -527,6 +594,56 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
+            if let annotation = annotation as? BookNavigationDestinationAnnotation {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "navigation-book")
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "navigation-book")
+                view.annotation = annotation
+                view.subviews.forEach { $0.removeFromSuperview() }
+                view.frame.size = CGSize(width: 40, height: 40)
+                let content = UIHostingConfiguration {
+                    BookCoverView(url: annotation.destination.book.imageURL)
+                        .frame(width: 32, height: 32).clipShape(Circle())
+                        .padding(3).background(BookNavigationPalette.accent, in: Circle())
+                }.margins(.all, 0).makeContentView()
+                content.frame = view.bounds
+                content.backgroundColor = .clear
+                content.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                view.addSubview(content)
+                view.displayPriority = .required
+                view.collisionMode = .circle
+                view.isEnabled = false
+                view.isAccessibilityElement = true
+                view.accessibilityLabel = "목적지: \(annotation.title ?? "도서")"
+                view.accessibilityIdentifier = "book-navigation-destination"
+                return view
+            }
+            if let annotation = annotation as? PositionAnnotation, parent.navigationAppearance {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "navigation-position")
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "navigation-position")
+                view.annotation = annotation
+                let size = CGSize(width: 72, height: 58)
+                view.image = UIGraphicsImageRenderer(size: size).image { _ in
+                    let oval = UIBezierPath(ovalIn: CGRect(x: 4, y: 12, width: 64, height: 34))
+                    UIColor.black.setFill(); oval.fill()
+                    BookNavigationPalette.uiAccent.setStroke(); oval.lineWidth = 4; oval.stroke()
+                }
+                if view.viewWithTag(8_124) == nil {
+                    let arrow = UIImageView(frame: CGRect(x: 24, y: 17, width: 24, height: 24))
+                    arrow.tag = 8_124; arrow.contentMode = .scaleAspectFit
+                    arrow.tintColor = BookNavigationPalette.uiAccent
+                    view.addSubview(arrow)
+                }
+                view.layer.shadowColor = BookNavigationPalette.uiAccent.cgColor
+                view.layer.shadowOpacity = 0.75; view.layer.shadowRadius = 12
+                view.layer.shadowOffset = .zero
+                view.displayPriority = .required; view.isEnabled = false
+                view.isAccessibilityElement = true
+                view.accessibilityLabel = annotation.title
+                view.accessibilityValue = "경로 진행 방향"
+                view.accessibilityIdentifier = "book-navigation-position"
+                configureNavigationBearing(view, in: mapView)
+                return view
+            }
             if let annotation = annotation as? MKPointAnnotation,
                groupTransitionAnnotations.contains(where: { $0 === annotation }) {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-group-transition")
@@ -556,7 +673,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: IndoorShelfLabelView.reuseID)
                     as? IndoorShelfLabelView
                     ?? IndoorShelfLabelView(annotation: annotation, reuseIdentifier: IndoorShelfLabelView.reuseID)
-                view.configure(annotation, highlighted: parent.highlightedFeatureIDs.contains(annotation.label.mapElementID))
+                view.configure(annotation, highlighted: parent.highlightedFeatureIDs.contains(annotation.label.mapElementID),
+                               navigationAppearance: parent.navigationAppearance)
                 return view
             }
             if let annotation = annotation as? IndoorRouteTransitionAnnotation {
@@ -753,6 +871,7 @@ private final class PositionAnnotation: NSObject, MKAnnotation {
     @objc dynamic var coordinate: CLLocationCoordinate2D
     var title: String? {
         switch position.source {
+        case .sensor: "현재 위치"
         case .simulation: "시뮬레이션 위치"
         case .replay: "테스트 재생 위치"
         default: "수동 출발점"

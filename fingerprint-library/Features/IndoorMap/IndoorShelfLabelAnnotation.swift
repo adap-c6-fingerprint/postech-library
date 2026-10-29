@@ -28,6 +28,7 @@ final class IndoorShelfLabelView: MKAnnotationView {
     private let numberLabel = UILabel()
     private let rangeLabel = UILabel()
     private var highlightsShelf = false
+    private var navigationAppearance = false
 
     override init(annotation: (any MKAnnotation)?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -46,7 +47,7 @@ final class IndoorShelfLabelView: MKAnnotationView {
         isAccessibilityElement = true
         registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: IndoorShelfLabelView, _: UITraitCollection) in
             if let annotation = view.annotation as? IndoorShelfLabelAnnotation {
-                view.configure(annotation, highlighted: view.highlightsShelf)
+                view.configure(annotation, highlighted: view.highlightsShelf, navigationAppearance: view.navigationAppearance)
             }
         }
     }
@@ -63,14 +64,15 @@ final class IndoorShelfLabelView: MKAnnotationView {
         return CGSize(width: width + 12, height: 22 + range.sizeThatFits(CGSize(width: width, height: 100)).height)
     }
 
-    func configure(_ annotation: IndoorShelfLabelAnnotation, highlighted: Bool = false) {
+    func configure(_ annotation: IndoorShelfLabelAnnotation, highlighted: Bool = false, navigationAppearance: Bool = false) {
         self.annotation = annotation
         highlightsShelf = highlighted
+        self.navigationAppearance = navigationAppearance
         displayPriority = highlighted ? .required : .defaultHigh
         numberLabel.text = annotation.title
         rangeLabel.text = annotation.subtitle
-        numberLabel.textColor = UIColor.label.resolvedColor(with: traitCollection)
-        rangeLabel.textColor = UIColor.secondaryLabel.resolvedColor(with: traitCollection)
+        numberLabel.textColor = navigationAppearance ? .black : UIColor.label.resolvedColor(with: traitCollection)
+        rangeLabel.textColor = navigationAppearance ? .black : UIColor.secondaryLabel.resolvedColor(with: traitCollection)
         let size = annotation.labelSize
         let contentWidth = size.width - 12
         let rangeHeight = size.height - 22
@@ -80,13 +82,13 @@ final class IndoorShelfLabelView: MKAnnotationView {
         image = UIGraphicsImageRenderer(size: size).image { context in
             let rect = CGRect(origin: .zero, size: size).insetBy(dx: 0.5, dy: 0.5)
             let card = UIBezierPath(roundedRect: rect, cornerRadius: 5)
-            UIColor.systemBackground.resolvedColor(with: traitCollection).setFill()
+            (navigationAppearance ? BookNavigationPalette.uiAccent : UIColor.systemBackground.resolvedColor(with: traitCollection)).setFill()
             card.fill()
-            if highlighted {
+            if highlighted && !navigationAppearance {
                 UIColor.systemOrange.withAlphaComponent(0.2).resolvedColor(with: traitCollection).setFill()
                 card.fill()
             }
-            (highlighted ? UIColor.systemOrange : UIColor.separator).resolvedColor(with: traitCollection).setStroke()
+            (navigationAppearance ? BookNavigationPalette.uiAccent : (highlighted ? UIColor.systemOrange : UIColor.separator)).resolvedColor(with: traitCollection).setStroke()
             card.lineWidth = highlighted ? 2 : 0.5
             card.stroke()
             context.cgContext.saveGState()

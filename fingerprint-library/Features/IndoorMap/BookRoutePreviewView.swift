@@ -6,7 +6,7 @@ struct BookRoutePreviewView: View {
     @State private var destination: BookRoutePreviewDestination
     @State private var destinationStore: StoreOf<BookShelfMapFeature>?
     @State private var previewSession: BookNavigationSession?
-    @State private var navigationSession: BookNavigationSession?
+    @State private var navigationFlow = BookRoutePreviewNavigationState()
     @State private var isLoadingRoute = false
     @State private var routeError: String?
     @State private var routeFloorID: UUID?
@@ -114,8 +114,12 @@ struct BookRoutePreviewView: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            .fullScreenCover(item: $navigationSession) { session in
-                BookNavigationView(session: session)
+            .fullScreenCover(item: $navigationFlow.session, onDismiss: {
+                if navigationFlow.presentationDismissed() { dismiss() }
+            }) { session in
+                BookNavigationView(session: session) { _ in
+                    navigationFlow.navigationEnded()
+                }
             }
         }
         .background(Color(uiColor: .systemBackground))
@@ -199,7 +203,7 @@ struct BookRoutePreviewView: View {
                     metric("거리", unit: "m", value: previewSession.map { $0.route.distanceMeters.formatted(.number.precision(.fractionLength(0))) })
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                Button("출발") { navigationSession = readySession }
+                Button("출발") { navigationFlow.start(readySession) }
                     .font(.headline)
                     .buttonStyle(.borderedProminent)
                     .tint(accent)
