@@ -6,7 +6,7 @@ struct BookRoutePreviewView: View {
     @State private var destination: BookRoutePreviewDestination
     @State private var destinationStore: StoreOf<BookShelfMapFeature>?
     @State private var previewSession: BookNavigationSession?
-    @State private var navigationSession: BookNavigationSession?
+    @State private var navigationFlow = BookRoutePreviewNavigationState()
     @State private var isLoadingRoute = false
     @State private var routeError: String?
     @State private var routeFloorID: UUID?
@@ -128,8 +128,12 @@ struct BookRoutePreviewView: View {
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .accessibilityIdentifier("book-route-preview")
-        .fullScreenCover(item: $navigationSession) { session in
-            BookNavigationView(session: session)
+        .fullScreenCover(item: $navigationFlow.session, onDismiss: {
+            if navigationFlow.presentationDismissed() { dismiss() }
+        }) { session in
+            BookNavigationView(session: session) { _ in
+                navigationFlow.navigationEnded()
+            }
         }
         .task(id: destinationStore.map { ObjectIdentifier($0) }) { [destinationStore] in
             // Store 교체 시 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
@@ -217,7 +221,7 @@ struct BookRoutePreviewView: View {
                     metric("거리", unit: "m", value: previewSession.map { $0.route.distanceMeters.formatted(.number.precision(.fractionLength(0))) })
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                Button("출발") { navigationSession = readySession }
+                Button("출발") { navigationFlow.start(readySession) }
                     .font(.headline)
                     .buttonStyle(.borderedProminent)
                     .tint(accent)
