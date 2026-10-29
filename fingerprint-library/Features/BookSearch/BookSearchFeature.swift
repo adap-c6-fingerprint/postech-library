@@ -11,19 +11,23 @@ import ComposableArchitecture
 @Reducer
 struct BookSearchFeature {
     
-    // 화면과 검색 로직에 필요한 데이터
     @ObservableState
     struct State: Equatable {
+        // MARK: - 검색 요청
         var query: String = ""
         var category: BookSearchCategory = .all
         var searchGeneration: Int = 0
+        // MARK: - 저장된 사용자 활동
         var recentQueries: [String] = []
         var favoriteBookKeys: Set<[String?]> = []
+
+        // MARK: - 검색 결과
         var books: [Book] = []
         var isLoading: Bool = false
         var errorMessage: String? = nil
         var hasSearched: Bool = false
         
+        // MARK: - 장바구니와 하위 화면
         var basketBooks: [Book] = []
         var isBasketLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
@@ -31,7 +35,6 @@ struct BookSearchFeature {
         @Presents var shelfMap: BookShelfMapFeature.State?
     }
     
-    // 이 기능에서 발생할 수 있는 이벤트
     enum Action {
         case task
         case queryChanged(String)
@@ -55,7 +58,7 @@ struct BookSearchFeature {
         case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
     }
     
-    // 검색에 사용할 BookClient 값
+    // API와 캐시는 새로고침·만료 정책이 달라 별도 의존성으로 유지한다.
     @Dependency(\.bookClient)
     var bookClient: BookClient
 
@@ -78,7 +81,6 @@ struct BookSearchFeature {
         case search
     }
     
-    // Action을 받아 State를 바꾸고, 필요한 Effect를 반환
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -89,14 +91,7 @@ struct BookSearchFeature {
                 return .none
 
             case let .favoriteButtonTapped(book):
-                state.favoriteBookKeys = bookFavoritesClient.load()
-                let key = book.recordKey
-                if state.favoriteBookKeys.contains(key) {
-                    state.favoriteBookKeys.remove(key)
-                } else {
-                    state.favoriteBookKeys.insert(key)
-                }
-                bookFavoritesClient.save(state.favoriteBookKeys)
+                state.favoriteBookKeys = bookFavoritesClient.toggle(book)
                 if let detailBook = state.detail?.book {
                     let isFavorite = state.favoriteBookKeys.contains(detailBook.recordKey)
                     state.detail?.isFavorite = isFavorite

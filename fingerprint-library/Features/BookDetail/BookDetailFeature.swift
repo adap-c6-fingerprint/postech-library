@@ -25,21 +25,22 @@ struct BookDetailFeature {
         case failed
     }
 
-    // 화면 전체의 현재 상태
     @ObservableState
     struct State: Equatable {
         let book: Book
         var isFavorite = false
         @Presents var shelfMap: BookShelfMapFeature.State?
 
-        // 책 소개
+        // MARK: - 책 소개
         var description: BookDescription? = nil
         var isLoading = false
         var errorMessage: String? = nil
         var hasLoaded = false
 
-        // 연관 도서
+        // MARK: - 연관 도서
         var relatedBooksState: RelatedBooksState = .idle
+
+        // MARK: - 소장 정보와 경로 요약
         var holdingsState: HoldingsState = .idle
         var routeSummary: BookRouteSummary = .mock
 
@@ -48,7 +49,7 @@ struct BookDetailFeature {
             return BookHoldingPresentation.preferred(in: holdings)
         }
 
-        // 장바구니
+        // MARK: - 장바구니
         var isBasketLimitAlertPresented = false
 
         var isbn13: String? {
@@ -113,16 +114,9 @@ struct BookDetailFeature {
                 return .none
 
             case .favoriteButtonTapped:
-                // 다른 화면에서 추가한 찜도 보존하도록 최신 저장 목록에서 변경한다.
-                var keys = bookFavoritesClient.load()
+                let keys = bookFavoritesClient.toggle(state.book)
                 let key = state.book.recordKey
-                if keys.contains(key) {
-                    keys.remove(key)
-                } else {
-                    keys.insert(key)
-                }
                 state.isFavorite = keys.contains(key)
-                bookFavoritesClient.save(keys)
                 return .send(.delegate(.favoritesChanged(keys)))
 
             case .directionsButtonTapped:

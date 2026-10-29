@@ -5,21 +5,19 @@ nonisolated struct BookBasketClient: Sendable {
     var load: @Sendable () -> [BookBasketItem]
     var save: @Sendable ([BookBasketItem]) -> Void
 
-    private static let storageKey = "bookBasketItems"
-
     // 테스트에서는 별도 suite를 사용해 앱의 실제 장바구니와 분리한다.
     static func userDefaults(suiteName: String? = nil) -> Self {
         Self(
             load: {
                 let defaults = suiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
-                guard let data = defaults.data(forKey: storageKey) else { return [] }
+                guard let data = defaults.data(forKey: BookStorageKey.basketItems) else { return [] }
                 let records = (try? JSONDecoder().decode([StoredItem].self, from: data)) ?? []
                 return records.map(\.item)
             },
             save: { items in
                 guard let data = try? JSONEncoder().encode(items.map(StoredItem.init)) else { return }
                 let defaults = suiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
-                defaults.set(data, forKey: storageKey)
+                defaults.set(data, forKey: BookStorageKey.basketItems)
             }
         )
     }
