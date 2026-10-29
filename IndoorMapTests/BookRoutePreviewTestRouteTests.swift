@@ -87,6 +87,34 @@ struct BookRoutePreviewTestRouteTests {
 
     enum Corruption: CaseIterable { case hash, level, missingOrigin, reverseLinks, disconnected }
 
+    @Test("시트 가림 높이가 달라도 지도 크기는 유지하고 남은 영역에 전체 경로를 맞춘다")
+    func fitsRouteAboveNativeSheet() async throws {
+        let fixture = try await Fixture.load()
+        let result = try await BookRoutePreviewTestRouteLoader().load(
+            directory: fixture.root, on: fixture.map, labels: fixture.labels, destination: fixture.destination)
+        let floor = try #require(fixture.map.floors.first { $0.id == result.origin.floorID })
+        var parent = IndoorMapKitView(map: fixture.map, floor: floor, selectedFeatureID: nil,
+            position: result.start, showsUserLocation: false, isPlacingOrigin: false, cameraRequest: nil,
+            onSelect: { _ in }, onPlaceOrigin: { _ in }, route: result.route)
+        let coordinator = parent.makeCoordinator()
+        let view = coordinator.makeMapView()
+        defer { view.delegate = nil }
+        view.frame = CGRect(x: 0, y: 0, width: 390, height: 874)
+        for bottom in [250.0, 435, 560, 250] {
+            parent.viewportInsets = .init(top: 60, left: 0, bottom: bottom, right: 0)
+            coordinator.update(parent: parent, in: view)
+            #expect(coordinator.moveCamera(.init(id: Int(bottom), target: .route(result.route,
+                featureIDs: [result.origin.mapElementID, result.destination.mapElementID])), in: view, animated: false))
+            let visible = view.bounds.inset(by: .init(top: 76, left: 16, bottom: bottom + 16, right: 16))
+            let coordinates = result.route.segments.flatMap(\.coordinates)
+                + result.origin.geometry.coordinates + result.destination.geometry.coordinates
+            let points = coordinates.map { view.convert($0.clCoordinate, toPointTo: view) }
+            #expect(points.allSatisfy { visible.contains($0) })
+            #expect((try #require(points.map(\.y).max())) - (try #require(points.map(\.y).min())) > 40)
+            #expect(view.bounds.size == CGSize(width: 390, height: 874))
+        }
+    }
+
     @Test("손상·잘못된 층·미연결 자료에서는 임의 노드나 직선으로 대체하지 않는다", arguments: Corruption.allCases)
     func rejectsInvalidData(_ corruption: Corruption) async throws {
         let fixture = try await Fixture.load()
@@ -136,6 +164,7 @@ struct BookRoutePreviewTestRouteTests {
 
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
 
+    @MainActor
     private struct Fixture {
         let root: URL
         let map: IndoorMap

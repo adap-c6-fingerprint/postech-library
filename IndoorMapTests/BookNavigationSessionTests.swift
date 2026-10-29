@@ -21,17 +21,17 @@ struct BookNavigationSessionTests {
         #expect(session.legs.count == 1)
     }
 
-    @Test("세 책은 입력 순서대로 이어지고 출발점·도서·구간별 경로를 함께 전달한다")
+    @Test("입력 순서를 최적화해도 기존 출발점·도서·구간별 전달 계약을 유지한다")
     func orderedBooks() async throws {
         let fixture = try await Fixture.load()
         let stops = [fixture.stop(0, shelf: fixture.goal), fixture.stop(1, shelf: fixture.origin),
                      fixture.stop(2, shelf: fixture.goal)]
         let session = try await fixture.load(stops)
-        #expect(session.stops == stops)
+        #expect(session.stops == [stops[1], stops[0], stops[2]])
         #expect(session.legs.count == 3)
         #expect(session.legs[0].nodeIDs.last == session.legs[1].nodeIDs.first)
         #expect(session.legs[1].nodeIDs.last == session.legs[2].nodeIDs.first)
-        #expect(session.legs.map(\.destination.value) == stops.map(\.shelf.fixtureNumber))
+        #expect(session.legs.map(\.destination.value) == session.stops.map(\.shelf.fixtureNumber))
         #expect(session.route.distanceMeters == session.legs.reduce(0) { $0 + $1.distanceMeters })
         #expect(session.route.edgeIDs == session.legs.flatMap(\.edgeIDs))
         #expect(session.route.segments == session.legs.flatMap(\.segments))

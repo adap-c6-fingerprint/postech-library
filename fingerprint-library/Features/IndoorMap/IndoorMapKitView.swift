@@ -5,6 +5,7 @@ import SwiftUI
 ///
 /// 선택과 카메라 이동 의도는 값·콜백으로 주고받고, MKMapView와 overlay의 수명은 Coordinator가 관리한다.
 struct IndoorMapKitView: UIViewRepresentable {
+    enum Appearance: Equatable { case standard, home }
     /// 최초 도면의 확대 배율. 1은 층 전체 맞춤이며, 3은 그보다 3배 크게 표시한다.
     /// 층 전환·현재 위치 포커스에는 다시 적용하지 않는다.
     static let initialZoomScale = 3.0
@@ -31,6 +32,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var navigationAppearance = false
     var navigationBearingRadians: Double?
     var navigationDestination: BookNavigationMapDestination?
+    var appearance: Appearance = .standard
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -58,6 +60,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         var renderedFloorID: UUID?
         var selectedID: IndoorMapElement.ID?
         private var highlightedIDs: Set<IndoorMapElement.ID> = []
+        private var renderedAppearance: Appearance = .standard
         /// 적용을 마친 요청. 같은 요청의 반복 갱신이 사용자의 수동 이동을 덮어쓰지 않게 한다.
         var lastCameraRequest: IndoorMapCameraRequest?
         /// 화면 부착·크기 결정까지 보류한 최신 카메라 요청.
@@ -133,7 +136,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         func update(parent: IndoorMapKitView, in view: MKMapView) {
             self.parent = parent
             if renderedMap != parent.map || renderedFloorID != parent.floor.id
-                || renderedNavigationAppearance != parent.navigationAppearance {
+                || renderedNavigationAppearance != parent.navigationAppearance
+                || renderedAppearance != parent.appearance {
                 render(in: view)
             }
             view.overrideUserInterfaceStyle = parent.navigationAppearance ? .dark : .unspecified
@@ -364,6 +368,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             renderedMap = parent.map
             renderedFloorID = parent.floor.id
             renderedNavigationAppearance = parent.navigationAppearance
+            renderedAppearance = parent.appearance
             selectedID = parent.selectedFeatureID
             var overlays = MapKitGeometry.overlays(for: parent.floor.geometry)
             let features = parent.map.features.filter { $0.floorID == parent.floor.id }
@@ -539,6 +544,24 @@ struct IndoorMapKitView: UIViewRepresentable {
                 if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
                     renderer.fillColor = BookNavigationPalette.uiAccent
                     renderer.strokeColor = BookNavigationPalette.uiAccent
+                }
+                return
+            }
+            if parent.appearance == .home {
+                renderer.strokeColor = UIColor(white: 0.12, alpha: 1)
+                renderer.lineWidth = 0.8
+                switch feature?.kind {
+                case .fixture: renderer.fillColor = UIColor(white: 0.09, alpha: 1)
+                case .unit: renderer.fillColor = UIColor(white: feature?.category == "walkway" ? 0.23 : 0.29, alpha: 1)
+                case .opening:
+                    renderer.fillColor = .clear
+                    renderer.strokeColor = UIColor(white: 0.35, alpha: 1)
+                default: renderer.fillColor = UIColor(white: 0.23, alpha: 1)
+                }
+                if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
+                    renderer.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
+                    renderer.strokeColor = .systemOrange
+                    renderer.lineWidth = 3
                 }
                 return
             }

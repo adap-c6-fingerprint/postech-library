@@ -8,8 +8,6 @@ struct HomeView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            header
-            
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
                     recommendationSection
@@ -21,7 +19,11 @@ struct HomeView: View {
             .scrollIndicators(.hidden)
         }
         .background(Color(uiColor: .systemBackground))
-        .toolbar(.hidden, for: .navigationBar)
+        .toolbar {
+            LibraryTopBar(title: "추천", onBasket: { store.send(.basketButtonTapped) })
+        }
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
         .task { store.send(.task) }
         .task(id: LibraryInfoTaskID(bookIDs: store.popularBooks.map(\.id), sessionID: store.recommendationSessionID)) {
             await store.send(.loadLibraryInfo).finish()
@@ -57,21 +59,6 @@ struct HomeView: View {
         let sessionID: UUID?
     }
     
-    private var header: some View {
-        HStack(spacing: 4) {
-            Text("추천")
-                .font(.system(size: 28, weight: .bold))
-            
-            Spacer()
-            
-            headerButton("cart", label: "책바구니", action: .basketButtonTapped, isEnabled: true)
-            headerButton("person", label: "마이페이지", action: .profileButtonTapped)
-        }
-        .padding(.leading, 16)
-        .padding(.trailing, 8)
-        .padding(.vertical, 8)
-    }
-
     private var upcomingCoverURLs: [URL] {
         let nextIndex = max(0, (recommendationPosition ?? 0) + 1)
         return store.recommendedBooks.dropFirst(nextIndex).prefix(2).compactMap(\.imageURL)
@@ -214,23 +201,6 @@ struct HomeView: View {
                     .padding(.horizontal, 16)
             }
         }
-    }
-    
-    private func headerButton(
-        _ symbol: String,
-        label: String,
-        action: HomeFeature.Action,
-        isEnabled: Bool = false
-    ) -> some View {
-        Button { store.send(action) } label: {
-            Image(systemName: symbol)
-                .font(.system(size: 22))
-                .foregroundStyle(.primary)
-                .frame(width: 44, height: 44)
-        }
-        .buttonStyle(.plain)
-        .disabled(!isEnabled) // TODO: AppFeature의 목적 화면 연결 후 활성화
-        .accessibilityLabel(label)
     }
     
     private func recommendationButton(direction: Int) -> some View {

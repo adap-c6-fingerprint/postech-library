@@ -11,6 +11,8 @@ struct IndoorMapView: View {
     var showsRoute = true
     /// 경로 시트가 차지하는 하단 영역. 카메라 맞춤과 지도 조작 UI의 배치에 함께 적용한다.
     var bottomContentInset: CGFloat = 0
+    var topContentInset: CGFloat = 0
+    var appearance: IndoorMapKitView.Appearance = .standard
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
     var showsCurrentLocationButton = true
     /// 하단 안내 카드가 있는 화면에서는 지도·카메라 영역을 카드 위로 제한한다.
@@ -54,39 +56,19 @@ struct IndoorMapView: View {
                         ? store.selectedShelfKey : (showsRoute ? store.routeDestinationKey : nil),
                     onSelectShelf: { if showsDestinationCard { store.send(.shelfSelected($0)) } },
                     route: !showsDestinationCard && showsRoute ? store.route : nil,
-                    viewportInsets: .init(top: 60, left: 0, bottom: bottomContentInset, right: 0),
+                    viewportInsets: .init(top: 60 + topContentInset, left: 0, bottom: bottomContentInset,
+                                          right: appearance == .home ? 72 : 0),
                     shelfLabels: store.shelfLabels,
-                    highlightedFeatureIDs: highlightedFeatureIDs
+                    highlightedFeatureIDs: highlightedFeatureIDs,
+                    appearance: appearance
                 )
                 .ignoresSafeArea(.container, edges: extendsUnderBottomSafeArea ? .bottom : [])
 
                 VStack(alignment: .leading, spacing: 12) {
-                    if showsCurrentLocationButton {
+                    if showsCurrentLocationButton, appearance == .standard {
                         HStack {
                             Spacer()
-                            Button {
-                                store.send(.currentLocationTapped)
-                            } label: {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "scope")
-                                        .font(.title3.weight(.medium))
-                                    if !showsDestinationCard {
-                                        Text(currentFloorLabel)
-                                            .font(.subheadline.weight(.medium))
-                                            .lineLimit(1)
-                                    }
-                                }
-                                .padding(.horizontal, showsDestinationCard ? 0 : 14)
-                                .frame(minWidth: 48, minHeight: 48)
-                                .background(Color(uiColor: .systemBackground), in: Capsule())
-                                .overlay(
-                                    Capsule().strokeBorder(Color(uiColor: .separator).opacity(0.4))
-                                )
-                                .shadow(color: .black.opacity(0.12), radius: 6, y: 3)
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel("현재 위치로 지도 이동")
-                            .accessibilityIdentifier("recenter-location")
+                            currentLocationButton
                         }
                     }
 
@@ -113,19 +95,50 @@ struct IndoorMapView: View {
                     }
 
                     Spacer(minLength: 0)
-                    floorPicker(
-                        map: map, floor: floor,
-                        maxHeight: max(44, geometry.size.height - bottomContentInset - 200)
-                    )
-                    if showsDestinationCard {
+                    HStack(alignment: .bottom) {
+                        if appearance == .home {
+                            if showsDestinationCard { IndoorRouteControls(store: store) }
+                            Spacer(minLength: 12)
+                        }
+                        VStack(spacing: 12) {
+                            if appearance == .home, showsCurrentLocationButton { currentLocationButton }
+                            floorPicker(
+                                map: map, floor: floor,
+                                maxHeight: max(44, geometry.size.height - bottomContentInset - topContentInset - 200)
+                            )
+                        }
+                        if appearance == .standard { Spacer(minLength: 0) }
+                    }
+                    if showsDestinationCard, appearance == .standard {
                         IndoorRouteControls(store: store)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 .padding(16)
+                .padding(.top, topContentInset)
                 .padding(.bottom, bottomContentInset)
             }
         }
+    }
+
+    private var currentLocationButton: some View {
+        Button { store.send(.currentLocationTapped) } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "scope").font(.title3.weight(.medium))
+                if !showsDestinationCard {
+                    Text(currentFloorLabel).font(.subheadline.weight(.medium)).lineLimit(1)
+                }
+            }
+            .padding(.horizontal, showsDestinationCard ? 0 : 14)
+            .frame(minWidth: 48, minHeight: 48)
+            .background(appearance == .home ? .clear : Color(uiColor: .systemBackground), in: Capsule())
+            .glassEffect(appearance == .home ? .regular : .identity, in: .capsule)
+            .overlay(Capsule().strokeBorder(Color(uiColor: .separator).opacity(appearance == .home ? 0 : 0.4)))
+            .shadow(color: .black.opacity(appearance == .home ? 0 : 0.12), radius: 6, y: 3)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("현재 위치로 지도 이동")
+        .accessibilityIdentifier("recenter-location")
     }
 
     /// 실제 위치의 ordinal에 대응하는 표시 이름을 사용한다. 조회 중인 층을 현재 위치로 표시하지 않는다.
@@ -148,15 +161,18 @@ struct IndoorMapView: View {
                         Button {
                             store.send(.floorSelected(item.id))
                         } label: {
-                            Text(item.name)
+                            Text(appearance == .home ? "\(item.ordinal + 1)F" : item.name)
                                 .font(.subheadline.weight(item.id == floor.id ? .bold : .regular))
                                 .frame(width: 56, height: 44)
                                 .background(
-                                    item.id == floor.id ? Color(uiColor: .label) : Color.clear
+                                    item.id == floor.id
+                                        ? (appearance == .home ? Color(red: 0.88, green: 0.95, blue: 0.19) : Color(uiColor: .label))
+                                        : Color.clear
                                 )
                                 .foregroundStyle(
                                     item.id == floor.id
-                                        ? Color(uiColor: .systemBackground) : .primary
+                                        ? (appearance == .home ? .black : Color(uiColor: .systemBackground))
+                                        : (appearance == .home ? .white : .primary)
                                 )
                                 .overlay(alignment: .bottom) {
                                     Rectangle().fill(Color(uiColor: .separator).opacity(0.3)).frame(
@@ -173,8 +189,9 @@ struct IndoorMapView: View {
             }
             .scrollIndicators(.hidden)
             .frame(width: 56, height: min(CGFloat(map.floors.count) * 44, maxHeight))
-            .background(Color(uiColor: .systemBackground))
+            .background(appearance == .home ? .clear : Color(uiColor: .systemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .glassEffect(appearance == .home ? .regular : .identity, in: .rect(cornerRadius: 12))
             .overlay(
                 RoundedRectangle(cornerRadius: 12).strokeBorder(
                     Color(uiColor: .separator).opacity(0.6))
