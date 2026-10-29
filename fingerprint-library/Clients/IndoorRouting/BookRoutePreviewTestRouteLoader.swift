@@ -31,17 +31,56 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         let metadata = try read("navigation.json", at: directory)
         let graphData = try read("routing-graph.geojson", at: directory)
         let links = try read("navigation-feature-links.json", at: directory)
-        var results: [BookRoutePreviewTestRoute] = []
-        for stop in stops {
-            try Task.checkCancellation()
-            let result = try build(on: map, labels: labels, destination: stop.shelf,
-                metadata: metadata, graph: graphData, links: links, origin: results.last?.destination)
-            results.append(result)
+        // 미리보기 입력 상한은 3권이다. 모든 순서를 비교하며 같은 방향의 구간은 한 번만 계산한다.
+        let orders: [[Int]] = switch stops.count {
+        case 1: [[0]]
+        case 2: [[0, 1], [1, 0]]
+        case 3: [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]
+        default: throw IndoorRoutingError.invalidDestination
         }
-        guard let first = results.first else { throw IndoorRoutingError.invalidDestination }
-        return try await .init(map: map, shelfLabels: labels, stops: stops, legs: results.map(\.route),
+        var cache: [LegKey: BookRoutePreviewTestRoute] = [:]
+        var unreachable = Set<LegKey>()
+        var bestOrder: [Int] = []
+        var bestResults: [BookRoutePreviewTestRoute] = []
+        var bestDistance = Double.infinity
+        for order in orders {
+            try Task.checkCancellation()
+            var results: [BookRoutePreviewTestRoute] = []
+            do {
+                for (index, next) in order.enumerated() {
+                    try Task.checkCancellation()
+                    let previous = index == 0 ? -1 : order[index - 1]
+                    let key = LegKey(from: previous, to: next)
+                    if unreachable.contains(key) { throw IndoorRoutingError.noRoute }
+                    if let cached = cache[key] {
+                        results.append(cached)
+                    } else {
+                        do {
+                            let result = try build(on: map, labels: labels, destination: stops[next].shelf,
+                                metadata: metadata, graph: graphData, links: links,
+                                origin: previous == -1 ? nil : stops[previous].shelf)
+                            cache[key] = result
+                            results.append(result)
+                        } catch IndoorRoutingError.noRoute {
+                            unreachable.insert(key)
+                            throw IndoorRoutingError.noRoute
+                        }
+                    }
+                }
+            } catch IndoorRoutingError.noRoute { continue }
+            let distance = results.reduce(0) { $0 + $1.route.distanceMeters }
+            if distance < bestDistance {
+                bestDistance = distance
+                bestOrder = order
+                bestResults = results
+            }
+        }
+        guard let first = bestResults.first else { throw IndoorRoutingError.noRoute }
+        return try await .init(map: map, shelfLabels: labels, stops: bestOrder.map { stops[$0] }, legs: bestResults.map(\.route),
                          graph: first.graph, origin: first.origin, start: first.start)
     }
+
+    private struct LegKey: Hashable { let from: Int; let to: Int }
 
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,
               in bundle: Bundle = .main) async throws -> BookRoutePreviewTestRoute {

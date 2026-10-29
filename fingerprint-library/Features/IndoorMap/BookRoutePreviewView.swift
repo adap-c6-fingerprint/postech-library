@@ -18,9 +18,11 @@ struct BookRoutePreviewView: View {
     private var readySession: BookNavigationSession? {
         guard let previewSession, case let .ready(map, labels, stops) = routeRequest,
               previewSession.map == map, previewSession.shelfLabels == labels,
-              previewSession.stops == stops else { return nil }
+              previewSession.stops.count == stops.count,
+              previewSession.stops.allSatisfy({ stops.contains($0) }) else { return nil }
         return previewSession
     }
+    private var orderedBooks: [Book] { readySession?.stops.map(\.book) ?? destination.books }
 
     init(books: [Book] = []) {
         let destination = BookRoutePreviewDestination(books: books)
@@ -30,8 +32,10 @@ struct BookRoutePreviewView: View {
 
     static func makeShelfMapState(for destination: BookRoutePreviewDestination) -> BookShelfMapFeature.State? {
         guard var state = BookShelfMapFeature.State(books: destination.books) else { return nil }
-        if destination.isAnimalFarmTest {
-            state.holdings[BookRoutePreviewSample.book.id] = .loaded([BookRoutePreviewSample.holding])
+        if destination.isTestMode {
+            for item in BookRoutePreviewSample.testItems {
+                state.holdings[item.book.id] = .loaded([item.holding])
+            }
         }
         return state
     }
@@ -43,94 +47,92 @@ struct BookRoutePreviewView: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            let panelHeight = geometry.size.height * 0.57
-            ZStack(alignment: .bottom) {
-                Group {
-                    if let previewSession,
-                       let floor = previewSession.map.floors.first(where: { $0.id == (routeFloorID ?? previewSession.origin.floorID) }) {
-                        IndoorMapKitView(
-                            map: previewSession.map, floor: floor, selectedFeatureID: nil,
-                            position: previewSession.start, showsUserLocation: false, isPlacingOrigin: false,
-                            cameraRequest: .init(id: floor.ordinal, target: .route(previewSession.route,
-                                featureIDs: [previewSession.origin.mapElementID] + previewSession.stops.map { $0.shelf.mapElementID })),
-                            onSelect: { _ in }, onPlaceOrigin: { _ in },
-                            route: previewSession.route,
-                            groupTransitionNodes: previewSession.guidance.groupTransitionNodes,
-                            shelfLabels: previewSession.shelfLabels,
-                            highlightedFeatureIDs: Set(previewSession.stops.map { $0.shelf.mapElementID })
-                        )
-                        .accessibilityIdentifier("preview-test-route-map")
-                        .overlay(alignment: .topTrailing) {
-                            Menu("층 보기", systemImage: "square.3.layers.3d") {
-                                ForEach(previewSession.map.floors) { floor in
-                                    Button("\(floor.ordinal + 1)층") { routeFloorID = floor.id }
-                                }
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .padding(12)
-                        }
-                    } else if let destinationStore {
-                        IndoorMapView(
-                            store: destinationStore.scope(state: \.map, action: \.map),
-                            showsDestinationCard: false,
-                            highlightedFeatureIDs: destinationStore.highlightedFeatureIDs,
-                            showsCurrentLocationButton: false,
-                            extendsUnderBottomSafeArea: false
-                        )
-                    } else {
-                        ContentUnavailableView(
-                            destination.books.isEmpty ? "목적지 도서를 기다리고 있어요" : "목적지 정보를 확인해 주세요",
-                            systemImage: "books.vertical",
-                            description: Text(destination.books.isEmpty
-                                ? "도서 목록을 전달하거나 아래 테스트 버튼을 눌러 주세요."
-                                : "서가 조회는 ID가 서로 다른 1~\(BookRouteSelection.maximumBookCount)권을 지원해요.")
-                        )
-                    }
+        BookRoutePreviewMapSheet(onBack: { dismiss() }, onViewportChange: {
+            if previewSession == nil { destinationStore?.send(.focusShelfTapped) }
+        }) { insets, cameraRevision in
+            Group {
+                if let previewSession,
+                   let floor = previewSession.map.floors.first(where: { $0.id == (routeFloorID ?? previewSession.origin.floorID) }) {
+                    IndoorMapKitView(
+                        map: previewSession.map, floor: floor, selectedFeatureID: nil,
+                        position: previewSession.start, showsUserLocation: false, isPlacingOrigin: false,
+                        cameraRequest: .init(id: cameraRevision * 100 + floor.ordinal, target: .route(previewSession.route,
+                            featureIDs: [previewSession.origin.mapElementID] + previewSession.stops.map { $0.shelf.mapElementID })),
+                        onSelect: { _ in }, onPlaceOrigin: { _ in },
+                        route: previewSession.route,
+                        groupTransitionNodes: previewSession.guidance.groupTransitionNodes,
+                        viewportInsets: insets,
+                        shelfLabels: previewSession.shelfLabels,
+                        highlightedFeatureIDs: Set(previewSession.stops.map { $0.shelf.mapElementID })
+                    )
+                    .accessibilityIdentifier("preview-test-route-map")
+                } else if let destinationStore {
+                    IndoorMapView(
+                        store: destinationStore.scope(state: \.map, action: \.map),
+                        showsDestinationCard: false,
+                        bottomContentInset: insets.bottom,
+                        highlightedFeatureIDs: destinationStore.highlightedFeatureIDs,
+                        showsCurrentLocationButton: false,
+                        extendsUnderBottomSafeArea: true
+                    )
+                } else {
+                    ContentUnavailableView(
+                        destination.books.isEmpty ? "목적지 도서를 기다리고 있어요" : "목적지 정보를 확인해 주세요",
+                        systemImage: "books.vertical",
+                        description: Text(destination.books.isEmpty
+                            ? "도서 목록을 전달하거나 아래 테스트 버튼을 눌러 주세요."
+                            : "서가 조회는 ID가 서로 다른 1~\(BookRouteSelection.maximumBookCount)권을 지원해요.")
+                    )
+                    .padding(.bottom, insets.bottom)
                 }
-                .frame(height: geometry.size.height - panelHeight)
-                .frame(maxHeight: .infinity, alignment: .top)
-
-                VStack(spacing: 0) {
-                    header
-                    Button("동물농장으로 테스트") {
-                        destinationStore?.send(.map(.disappeared))
-                        previewSession = nil
-                        routeError = nil
-                        destination.useAnimalFarmTest()
-                        destinationStore = Self.makeStore(for: destination)
+            }
+        } details: {
+            VStack(spacing: 0) {
+                Text("경로 미리보기")
+                    .font(.headline)
+                    .padding(.top, 24)
+                    .padding(.bottom, 16)
+                Button("테스트모드") {
+                    destinationStore?.send(.map(.disappeared))
+                    previewSession = nil
+                    routeError = nil
+                    destination.useTestMode()
+                    destinationStore = Self.makeStore(for: destination)
+                }
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("preview-test-mode")
+                .padding(.horizontal, 16)
+                .padding(.bottom, 12)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        routeMetrics
+                        routeSummary
+                        bookInformation
                     }
-                    .buttonStyle(.bordered)
-                    .accessibilityIdentifier("animal-farm-test")
                     .padding(.horizontal, 16)
-                    .padding(.bottom, 12)
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 24) {
-                            routeMetrics
-                            routeSummary
-                            bookInformation
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.bottom, 20)
-                    }
-                    .scrollIndicators(.hidden)
+                    .padding(.bottom, 20)
                 }
-                .frame(height: panelHeight)
-                .frame(maxWidth: .infinity)
-                .background {
-                    UnevenRoundedRectangle(topLeadingRadius: 28, topTrailingRadius: 28)
-                        .fill(Color(uiColor: .secondarySystemBackground))
-                        .ignoresSafeArea(.container, edges: .bottom)
-                }
+                .scrollIndicators(.hidden)
+            }
+            .fullScreenCover(item: $navigationSession) { session in
+                BookNavigationView(session: session)
             }
         }
         .background(Color(uiColor: .systemBackground))
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
-        .accessibilityIdentifier("book-route-preview")
-        .fullScreenCover(item: $navigationSession) { session in
-            BookNavigationView(session: session)
+        .overlay(alignment: .topTrailing) {
+            if let previewSession {
+                Menu("층 보기", systemImage: "square.3.layers.3d") {
+                    ForEach(previewSession.map.floors) { floor in
+                        Button("\(floor.ordinal + 1)층") { routeFloorID = floor.id }
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .padding(16)
+            }
         }
+        .accessibilityIdentifier("book-route-preview")
         .task(id: destinationStore.map { ObjectIdentifier($0) }) { [destinationStore] in
             // Store 교체 시 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
             guard let destinationStore else { return }
@@ -164,37 +166,17 @@ struct BookRoutePreviewView: View {
         .onDisappear { destinationStore?.send(.map(.disappeared)) }
     }
 
-    private var header: some View {
-        HStack {
-            Button { dismiss() } label: {
-                Image(systemName: "chevron.left")
-                    .frame(width: 28, height: 28)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
-            .tint(.white)
-            .accessibilityLabel("뒤로가기")
-
-            Spacer()
-            Text("경로 미리보기").font(.headline)
-            Spacer()
-            Color.clear.frame(width: 44, height: 44)
-                .accessibilityHidden(true)
-        }
-        .padding(16)
-    }
-
     private var routeMetrics: some View {
         let layout = dynamicTypeSize.isAccessibilitySize
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
             : AnyLayout(HStackLayout(spacing: 12))
 
         return VStack(alignment: .leading, spacing: 8) {
-            if destination.isAnimalFarmTest {
-                Text("고정 목데이터 · 동물농장 목적지 테스트")
+            if destination.isTestMode {
+                Text("고정 목데이터 · 도서 3권 최단 방문 순서 테스트")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                    .accessibilityIdentifier("animal-farm-test-status")
+                    .accessibilityIdentifier("preview-test-mode-status")
             }
             if destinationStore != nil, previewSession == nil, routeError == nil {
                 ProgressView(isLoadingRoute ? "311-B에서 목적지까지 경로 계산 중" : "도서·서가 위치 확인 중")
@@ -231,7 +213,7 @@ struct BookRoutePreviewView: View {
             .background(Color(uiColor: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
 
             Text(previewSession == nil ? "경로 계산 후 시간·단계·거리가 표시돼요."
-                 : "시속 5km 기준 예상 시간이에요(10m ≈ 7.2초). 단계는 그룹 전환 횟수 + 1이며, 주황색 원은 전환 노드예요. 여러 책은 전달된 순서대로 방문해요. 출발점은 테스트용 고정 위치예요.")
+                 : "시속 5km 기준 예상 시간이에요(10m ≈ 7.2초). 단계는 그룹 전환 횟수 + 1이며, 주황색 원은 전환 노드예요. 모든 방문 순서 중 실제 이동거리가 가장 짧은 경로예요. 출발점은 테스트용 고정 위치예요.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -262,8 +244,8 @@ struct BookRoutePreviewView: View {
                 if destination.books.isEmpty {
                     Text("전달받은 목적지 도서가 없어요").foregroundStyle(.secondary)
                 } else if destinationStore != nil {
-                    ForEach(destination.books) { book in
-                        Label(BookText.plainText(book.title), systemImage: "book.circle.fill")
+                    ForEach(Array(orderedBooks.enumerated()), id: \.element.id) { index, book in
+                        Label("\(index + 1). \(BookText.plainText(book.title))", systemImage: "book.circle.fill")
                             .symbolRenderingMode(.palette)
                             .foregroundStyle(.white, .orange)
                     }
@@ -282,31 +264,36 @@ struct BookRoutePreviewView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("도서 및 청구기호").font(.headline)
             if destinationStore != nil {
-                ForEach(destination.books) { book in
-                    HStack(alignment: .top, spacing: 16) {
-                        BookCoverView(url: book.imageURL)
-                            .frame(width: 72, height: 104)
-                            .background(.quaternary, in: RoundedRectangle(cornerRadius: 10))
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(BookText.plainText(book.title))
-                                .font(.subheadline.bold())
-                                .fixedSize(horizontal: false, vertical: true)
-                            Text(BookText.plainText(book.author))
-                                .font(.caption).foregroundStyle(.secondary)
-                            holdingInformation(for: book)
-                            ForEach(destinationStore?.state.shelves(for: book.id) ?? []) { shelf in
-                                Text("서가 \(shelf.realNumber)-\(shelf.side.rawValue)")
-                                    .font(.caption.bold()).foregroundStyle(.orange)
-                            }
+                VStack(spacing: 0) {
+                    ForEach(orderedBooks) { book in
+                        if book.id != orderedBooks.first?.id {
+                            Divider().padding(.leading, 104).padding(.trailing, 16)
                         }
-                        Spacer(minLength: 0)
+                        HStack(alignment: .top, spacing: 16) {
+                            BookCoverView(url: book.imageURL)
+                                .frame(width: 72, height: 104)
+                                .background(.quaternary, in: RoundedRectangle(cornerRadius: 10))
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(BookText.plainText(book.title))
+                                    .font(.subheadline.bold())
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text(BookText.plainText(book.author))
+                                    .font(.caption).foregroundStyle(.secondary)
+                                holdingInformation(for: book)
+                                ForEach(destinationStore?.state.shelves(for: book.id) ?? []) { shelf in
+                                    Text("서가 \(shelf.realNumber)-\(shelf.side.rawValue)")
+                                        .font(.caption.bold()).foregroundStyle(.orange)
+                                }
+                            }
+                            Spacer(minLength: 0)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(16)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
-                    .background(Color(uiColor: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
                 }
+                .background(Color(uiColor: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
             }
         }
     }
