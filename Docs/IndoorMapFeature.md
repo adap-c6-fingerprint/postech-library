@@ -49,7 +49,7 @@ MapKit 카메라 요청은 `IndoorMapSurface`가 window에 붙고 유효한 크�
 이는 원래의 간헐 현상이 모든 기기에서 제거됐다는 보장은 아니며, 실제 기기의 첫 진입도 확인해야 한다.
 
 최초 지도 로딩은 `initialFloor` 요청으로 층 전체 맞춤보다 3배 확대한다. 배율은
-`Features/IndoorMap/IndoorMapKitView.swift`의 `initialZoomScale`에서 조절한다. `1`은 전체 맞춤,
+`Features/IndoorMap/Rendering/IndoorMapKitView.swift`의 `initialZoomScale`에서 조절한다. `1`은 전체 맞춤,
 `3.0`은 3배 확대이며, 전체 외곽 일부가 화면 밖으로 나갈 수 있다. 층 선택이나 시뮬레이터의 층 이동은
 카메라 요청을 새로 만들지 않으므로 현재 중심·확대·회전을 유지한다. 현재 위치 버튼은 기존 줌을
 유지하며 위치 중심만 이동한다. 내부 `fitMapTapped` action은 기존처럼 해당 층 전체를 맞춘다.
