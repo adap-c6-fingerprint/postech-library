@@ -1,0 +1,89 @@
+PLI-150 / GitHub #191 — 1차 코드 정리
+
+기준
+- origin/dev eea814f에서 분기한 refactor/#191-pli-150-code-cleanup.
+- 동작·UI·도서/길안내 데이터 계약을 유지하는 범위의 정리다.
+- Ponytail: 실제 책임·사용처를 기준으로 나누고, 새 추상화보다 기존 코드 재사용을 우선했다.
+
+현재 구조
+- App: 탭, 온보딩, 앱 수명과 기능 간 장바구니·찜 동기화.
+- Features/IndoorMap: 지도 화면과 층·위치·단일 서가 길찾기 상태.
+  Rendering: MapKit 어댑터·좌표 변환.
+  Rendering/Annotations: 지도 전용 시설·서가·안내 목적지 표시.
+- Features/BookShelfMap: 소장 정보와 청구기호를 실제 fixture에 연결.
+- Features/BookRoutePreview: 도서 입력·테스트 전환·미리보기 경로 계산과 시트 배치.
+- Features/BookNavigation: 확정된 세션의 실시간 안내·도착 화면.
+- Clients: API·캐시·번들 파일·위치·저장소와의 경계.
+- Domain/User/UserProfileSnapshot.swift: SwiftData 객체와 분리된 프로필 전달 값·검증 오류.
+
+책을 받아 안내로 넘기는 흐름
+1. 기존 BookRoutePreviewView(books:) 입력은 그대로 유지한다.
+2. BookRoutePreviewFeature가 BookShelfMapFeature를 자식 상태로 소유한다.
+3. 자식이 도서별 소장·서가 연결을 끝내면 BookRoutePreviewRequest가 확정된 입력을 만든다.
+4. 부모의 onChange가 요청 변화를 감지해 BookRoutePreviewClient로 계산한다.
+5. Client는 기존 BookRoutePreviewTestRouteLoader를 호출한다. 최단 순서·거리·단계 계산은 바꾸지 않았다.
+6. 계산 결과는 기존 BookNavigationSession 그대로 보관하고 기존 전체 화면 안내로 전달한다.
+
+상태와 수명
+- 미리보기 계산 결과·로딩·오류·층 선택은 Reducer에 둔다.
+- 시트 높이·detent·카메라 배치 보정과 cover 닫힘 순서는 기존 View/UI 상태에 둔다.
+- 새 입력은 이전 계산을 취소한다. 요청 번호·입력 일치·화면 활성 여부로 늦은 결과를 차단한다.
+- 테스트모드 전환은 자식을 nil로 만들고 다음 액션에서 재생성한다.
+  TCA ifLet은 비식별 자식을 같은 non-nil 타입으로 덮어쓰는 것만으로는 이전 효과를 취소하지 않는다.
+- 화면 종료는 경로 계산, 자식 소장 조회와 지도 작업을 취소한다.
+
+의존성을 합치지 않은 이유
+- BookClient는 서지 검색, BookSearchCacheClient는 메모리 TTL·새로고침 정책을 담당한다.
+  네트워크와 캐시는 독립적으로 대체·검증해야 하므로 분리를 유지했다.
+- 찜·장바구니·검색 기록은 서로 다른 저장 책임이므로 하나의 거대한 Client로 합치지 않았다.
+- 중복된 찜 토글만 BookFavoritesClient.toggle로 모았다. 최신 저장값을 읽는 기존 순서를 유지한다.
+- BookStorageKey에 기존 저장 키 3개를 모았다. 문자열 값·JSON 저장 형식은 바꾸지 않았다.
+- MapKit 재사용 식별자와 방향 화살표 태그는 Coordinator 내부에 모았다. 기존 값을 유지한다.
+
+그 밖의 정리
+- 주요 State·Coordinator 캐시를 목적별 MARK로 나눴다. 기존 프로퍼티 이름·초기화 인자 순서는 유지한다.
+- UserProfile의 문법 설명 주석을 줄이고 순수 전달 값을 Domain으로 옮겼다.
+  주석·공백을 제외한 기존 모델과 전달 값 코드의 동일성도 확인했다.
+- 선언이 없는 AppError.swift만 제거했다. 사용 여부가 불분명한 코드를 추측해서 지우지 않았다.
+
+유지한 경계
+- Book, recordID/recordKey, BookNavigationSession 및 소장 DTO.
+- IMDF·서가·노드/엣지 원본 리소스와 최단 경로 알고리즘.
+- 온보딩 저장 필드, UserDefaults 키·JSON, SwiftData 모델·검증·저장 순서.
+- 지도/시트 배치, 표지·문구·색상·거리/시간 표현, 실시간 안내 전달 방식.
+- 패키지 버전·프로젝트 빌드 설정.
+- 별도 PLI-140 브랜치의 미머지 추천 데이터 기능은 이번 브랜치에 섞지 않았다.
+
+검증 (Xcode 26.6 / iOS Simulator 26.5)
+- 정리 전: 404개 테스트, 실패 4개.
+- 정리 후: 414개 테스트, 동일한 실패 4개. 추가 실패 없음.
+- 기존 실패 4개를 정확한 식별자로 제외한 재실행: 410개 테스트 모두 통과.
+- 신규 미리보기 7개: 경로 전달, 성공·실패, 오래된 응답 무시, 실제 계산·소장 조회 취소,
+  종료 후 재계산 차단을 확인한다. 입력·최단 순서·안내 cover 전환의 기존 테스트도 유지한다.
+- 신규 저장 호환 3개: 기존 배포 키/JSON 복원, 최신 목록 기준 찜 토글, 메모리 SwiftData 검증·단일 저장.
+- Scripts/tests의 Python 테스트 20개 통과.
+- git diff --check 통과. Book·Routing·리소스·패키지 고정 파일 변경 없음.
+
+기존 실패 4개 (이번 정리에서 고치지 않음)
+- BookBasketTests/addFromSearchOverLimit(): date 의존성 테스트값 누락.
+- BookBasketTests/addFromDetailOverLimit(): date 의존성 테스트값 누락.
+- BookDetailFeatureTests/dismissDetail(): date 의존성 테스트값 누락.
+- IndoorMapSerialTests/IndoorLocationAuthorizationMonitorTests/queriesServicesOutsideMainThread():
+  전체 테스트 실행 시 offMainThread 기대 불일치.
+
+검증 제약
+- 원본 전체 빌드·전체 테스트 성공이라고 해석하면 안 된다.
+- 기존 BookDetailView의 iOS 27 contentMarginsRemoved API를 현재 SDK가 제공하지 않는다.
+  해당 줄만 제외한 임시 VFS 사본으로 검사했다. 저장소 원본은 유지했다.
+- BookBasketIsolationTests.swift의 기존 actor 격리 오류와 *ScreenTests.swift의 기존
+  #require 매크로/지역 UINavigationController 이름 충돌은 EXCLUDED_SOURCE_FILE_NAMES로 제외했다.
+- 위 4개 실패를 별도로 제외할 때는 Swift Testing의 실제 함수 식별자(끝의 괄호 포함)를 사용한다.
+- UI 스냅샷·실기기 센서·실제 네트워크·배포 CI는 별도 확인이 필요하다.
+- 로컬 검증 로그: /private/tmp/pli150-validation.nxEU6X/
+
+후속 개발 시
+- 기능 버그나 UX 변경은 이번 구조 정리와 섞지 않고 별도 이슈로 진행한다.
+- 새 MapKit 표시 코드는 Rendering에, 경로 계산의 외부 의존성은 Client에 둔다.
+- 여러 곳에서 실제로 쓰이지 않는 UI를 Shared로 옮기지 않는다.
+- 이 변경은 여러 기능 경계를 다루므로 영향도 M으로 보고 사람의 최종 리뷰·승인이 필요하다.
+- PR·push·merge 및 이슈 완료 상태 변경은 이번 작업에 포함하지 않았다.
