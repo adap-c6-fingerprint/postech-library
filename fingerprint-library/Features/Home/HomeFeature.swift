@@ -5,12 +5,14 @@ import ComposableArchitecture
 struct HomeFeature {
     @ObservableState
     struct State: Equatable {
+        // MARK: - 추천 카드와 학과 목록
         var recommendedBooks: [Book] = []
         var popularBooks: [Book] = []
         var departmentName = ""
         var libraryInfo: [Book.ID: LibraryInfoState] = [:]
         var libraryInfoGeneration = 0
 
+        // MARK: - 하위 화면
         @Presents var detail: BookDetailFeature.State?
         @Presents var basket: BookBasketFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
@@ -19,12 +21,14 @@ struct HomeFeature {
             recommendedBooks.isEmpty ? 6 : min(recommendedBooks.count, 6)
         }
 
+        // MARK: - 조회 상태와 다음 접속용 캐시
         var recommendationErrorMessage: String? = nil
         var popularBooksErrorMessage: String? = nil
         var recommendationSessionID: UUID?
         var isLoadingRecommendations = false
         var isPreparingRecommendations = false
         var nextRecommendationsSavedAt: Date?
+
     }
 
     enum LibraryInfoState: Equatable {

@@ -11,12 +11,15 @@ import ComposableArchitecture
 struct AppFeature {
     @ObservableState
     struct State: Equatable {
+        // MARK: - 탭과 지도 화면
         var home = HomeFeature.State()
         var bookSearch = BookSearchFeature.State()
         var indoorMap = IndoorMapFeature.State()
         var isRouteSettingsPresented = false
+        // MARK: - 앱 접속 수명
         var hasStartedRecommendationSession = false
         var hasEnteredBackground = false
+        // MARK: - 온보딩
         // 저장된 프로필을 확인하기 전에는 탭 화면도 온보딩도 띄우지 않는다.
         var hasCheckedProfile = false
         var onboarding: OnboardingFeature.State?

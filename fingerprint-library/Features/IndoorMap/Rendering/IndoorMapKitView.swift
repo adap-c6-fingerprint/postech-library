@@ -53,6 +53,18 @@ struct IndoorMapKitView: UIViewRepresentable {
 
     /// MapKit delegate·제스처를 처리하고 마지막 렌더링 값을 기억해 필요한 부분만 갱신한다.
     final class Coordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
+        private enum AnnotationID {
+            static let destination = "navigation-book"
+            static let navigationPosition = "navigation-position"
+            static let groupTransition = "route-group-transition"
+            static let floorTransition = "route-transition"
+            static let simulation = "simulation-dot"
+            static let shelf = "virtual-shelf"
+            static let feature = "indoor-marker"
+        }
+        private static let navigationArrowTag = 8_124
+
+        // MARK: - 표시 입력과 카메라 수명
         var parent: IndoorMapKitView
         weak var mapView: MKMapView?
         /// 마지막으로 도형을 그린 지도·층. 위치 갱신마다 전체 도형을 다시 만드는 것을 피한다.
@@ -66,6 +78,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 화면 부착·크기 결정까지 보류한 최신 카메라 요청.
         private(set) var pendingCameraRequest: IndoorMapCameraRequest?
         private var isApplyingCamera = false
+        // MARK: - 도형과 초기 렌더링 캐시
         /// MapKit overlay 객체와 원본 요소를 연결해 색상·선택 스타일을 결정한다.
         private var overlayFeatures: [ObjectIdentifier: IndoorMapElement] = [:]
         /// 도형마다 첫 renderer 활성화 후 한 번만 다시 그린다. 카메라 이동으로 복구하지 않는다.
@@ -73,12 +86,14 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var readyOverlayRenderers: [ObjectIdentifier: MKOverlayRenderer] = [:]
         private var overlayRedrawTask: Task<Void, Never>?
         private var overlayGeneration = 0
+        // MARK: - 위치와 서가 annotation
         private var positionAnnotation: PositionAnnotation?
         private var renderedPosition: IndoorPosition?
         private var renderedShelves: [ShelfDestination] = []
         private var renderedShelfLabels: [IndoorShelfLabel] = []
         private var shelfLabelAnnotations: [IndoorShelfLabelAnnotation] = []
         private var displayedShelfLabelIDs = Set<String>()
+        // MARK: - 경로와 단계 전환 표시
         private var renderedRoute: IndoorRoute?
         private var renderedGroupTransitionNodes: [RouteNode] = []
         private var renderedTurnArrows: [RouteTurnArrow] = []
@@ -416,7 +431,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         private func configureNavigationBearing(_ view: MKAnnotationView, in map: MKMapView) {
-            guard let arrow = view.viewWithTag(8_124) as? UIImageView else { return }
+            guard let arrow = view.viewWithTag(Self.navigationArrowTag) as? UIImageView else { return }
             arrow.image = UIImage(systemName: parent.navigationBearingRadians == nil ? "circle.fill" : "location.north.fill")
             let angle = parent.navigationBearingRadians.map { $0 - map.camera.heading * .pi / 180 } ?? 0
             arrow.transform = CGAffineTransform(rotationAngle: CGFloat(angle))
@@ -595,8 +610,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
             if let annotation = annotation as? BookNavigationDestinationAnnotation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "navigation-book")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "navigation-book")
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: AnnotationID.destination)
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationID.destination)
                 view.annotation = annotation
                 view.subviews.forEach { $0.removeFromSuperview() }
                 view.frame.size = CGSize(width: 40, height: 40)
@@ -618,8 +633,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 return view
             }
             if let annotation = annotation as? PositionAnnotation, parent.navigationAppearance {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "navigation-position")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "navigation-position")
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: AnnotationID.navigationPosition)
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationID.navigationPosition)
                 view.annotation = annotation
                 let size = CGSize(width: 72, height: 58)
                 view.image = UIGraphicsImageRenderer(size: size).image { _ in
@@ -627,9 +642,9 @@ struct IndoorMapKitView: UIViewRepresentable {
                     UIColor.black.setFill(); oval.fill()
                     BookNavigationPalette.uiAccent.setStroke(); oval.lineWidth = 4; oval.stroke()
                 }
-                if view.viewWithTag(8_124) == nil {
+                if view.viewWithTag(Self.navigationArrowTag) == nil {
                     let arrow = UIImageView(frame: CGRect(x: 24, y: 17, width: 24, height: 24))
-                    arrow.tag = 8_124; arrow.contentMode = .scaleAspectFit
+                    arrow.tag = Self.navigationArrowTag; arrow.contentMode = .scaleAspectFit
                     arrow.tintColor = BookNavigationPalette.uiAccent
                     view.addSubview(arrow)
                 }
@@ -646,8 +661,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
             if let annotation = annotation as? MKPointAnnotation,
                groupTransitionAnnotations.contains(where: { $0 === annotation }) {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-group-transition")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-group-transition")
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: AnnotationID.groupTransition)
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationID.groupTransition)
                 view.annotation = annotation
                 let size = CGSize(width: 24, height: 24)
                 view.image = UIGraphicsImageRenderer(size: size).image { _ in
@@ -678,8 +693,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 return view
             }
             if let annotation = annotation as? IndoorRouteTransitionAnnotation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-transition")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-transition")
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: AnnotationID.floorTransition)
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationID.floorTransition)
                 view.annotation = annotation
                 view.image = annotation.markerImage
                 view.centerOffset = .zero
@@ -694,8 +709,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 return view
             }
             if let annotation = annotation as? PositionAnnotation, annotation.position.source == .simulation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "simulation-dot")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "simulation-dot")
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: AnnotationID.simulation)
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: AnnotationID.simulation)
                 view.annotation = annotation
                 view.frame.size = CGSize(width: 30, height: 30)
                 view.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.18)
@@ -716,8 +731,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 return view
             }
             if let annotation = annotation as? IndoorShelfAnnotation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "virtual-shelf") as? MKMarkerAnnotationView
-                    ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "virtual-shelf")
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: AnnotationID.shelf) as? MKMarkerAnnotationView
+                    ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: AnnotationID.shelf)
                 view.annotation = annotation
                 view.glyphImage = UIImage(systemName: "books.vertical.fill")
                 view.markerTintColor = annotation.destination.key == parent.selectedShelfKey ? .systemOrange : .systemIndigo
@@ -730,8 +745,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityIdentifier = "shelf-\(annotation.destination.key.value)"
                 return view
             }
-            let view = mapView.dequeueReusableAnnotationView(withIdentifier: "indoor-marker") as? MKMarkerAnnotationView
-                ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "indoor-marker")
+            let view = mapView.dequeueReusableAnnotationView(withIdentifier: AnnotationID.feature) as? MKMarkerAnnotationView
+                ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: AnnotationID.feature)
             view.annotation = annotation
             view.canShowCallout = false
             view.titleVisibility = .hidden

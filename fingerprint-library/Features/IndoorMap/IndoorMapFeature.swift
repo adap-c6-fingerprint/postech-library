@@ -10,10 +10,12 @@ struct IndoorMapFeature {
     /// 지도 화면에 필요한 값 상태. 표시 중인 층과 실제 위치의 층은 서로 다를 수 있다.
     @ObservableState
     struct State: Equatable {
+        // MARK: - 도면 로딩
         /// 검증을 마친 도면. navigation의 성공 여부와 독립적으로 유지한다.
         var map: IndoorMap?
         var isLoading = false
         var loadError: String?
+        // MARK: - 경로 자료와 서가 레이블 로딩
         /// 도면에 맞춰 읽은 노드·서가·거리 자료. 자료 준비 전이나 로딩 실패 시 nil이다.
         var navigation: IndoorNavigationData?
         /// 길찾기 자료 준비 전·실패 상태의 안내. 지도 자체의 loadError와 구분한다.
@@ -26,6 +28,7 @@ struct IndoorMapFeature {
         var shelfLabelError: String?
         var isLoadingShelfLabels = false
         var shelfLabelRequestID = 0
+        // MARK: - 화면 선택과 현재 위치
         /// 사용자가 조회하는 층의 원본 ID. 위치의 floorOrdinal을 덮어쓰는 값이 아니다.
         var selectedFloorID: UUID?
         var selectedFeatureID: IndoorMapElement.ID?
@@ -39,6 +42,7 @@ struct IndoorMapFeature {
         var locationMessage: String?
         /// 가장 최근의 지도 이동 의도. 실제 적용 여부는 View의 Coordinator가 별도로 기억한다.
         var cameraRequest: IndoorMapCameraRequest?
+        // MARK: - 단일 서가 길찾기
         var route: IndoorRoute?
         var routeDestinationKey: ShelfKey?
         var routePreference: RoutePreference = .shortestDistance

@@ -7,10 +7,12 @@ struct BookNavigationFeature {
     enum ExitReason: Equatable, Sendable { case cancelled, completed }
     @ObservableState
     struct State: Equatable {
+        // MARK: - 확정 경로와 구간별 표시 자료
         let session: BookNavigationSession
         let plans: [RouteGuidancePlan?]
         let bookInfos: [BookNavigationBookInfo?]
         let turnArrowsByStop: [[RouteTurnArrow]]
+        // MARK: - 현재 진행과 위치 수신
         var currentStopIndex = 0
         var progress: RouteGuidanceProgress?
         var rawPosition: IndoorPosition?
@@ -21,6 +23,7 @@ struct BookNavigationFeature {
         var statusMessage: String? = "현재 위치를 확인하고 있어요."
         var isActive = false
         var subscriptionID = 0
+        // MARK: - 화면 전환과 카메라
         var isArrivalPresented = false
         var isCancelConfirmationPresented = false
         var exitReason: ExitReason?
