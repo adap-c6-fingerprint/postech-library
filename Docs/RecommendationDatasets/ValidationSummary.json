@@ -1,0 +1,11 @@
+{
+  "categories": 17,
+  "categoryRows": 204,
+  "affiliations": 36,
+  "affiliationRows": 720,
+  "uniqueBooks": 343,
+  "uniqueISBNs": 343,
+  "apiExactChecks": 343,
+  "datasetSHA256": "690e3a1258564136c0cda1eb8761aaf8b0cd680d19c0b5b5d8d445f949ec55ee",
+  "jsonBytes": 424398
+}
