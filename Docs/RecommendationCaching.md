@@ -15,7 +15,7 @@
 
 ## 1. 디스크 저장
 
-`Clients/Book/RecommendationCacheStore.swift`
+`Clients/Book/Cache/RecommendationCacheStore.swift`
 
 - Foundation actor가 목록·표지 파일의 읽기와 쓰기를 직렬화한다.
 - `Application Support/RecommendationCache/recommendations.json`에 마지막 정상 목록을 기록한다.
@@ -38,7 +38,7 @@ try data.write(to: manifestURL, options: .atomic)
 
 ## 2. 접속 시 복원
 
-`Clients/Book/RecommendationCacheClient.swift`, `Features/Home/HomeFeature.swift`
+`Clients/Book/Cache/RecommendationCacheClient.swift`, `Features/Home/HomeFeature.swift`
 
 - 기존 TCA DependencyKey 방식으로 `restore`, `prepare`, `retainDisplayedCovers`를 주입한다.
 - 복원한 로컬 목록을 먼저 액션으로 반영하고, 그 뒤 추천 알고리즘과 표지 준비를 수행한다.
@@ -64,7 +64,7 @@ await send(.recommendationsLoaded(sessionID, prepared))
 
 ## 3. 다음 추천 준비
 
-`Clients/Book/RecommendationCachePreparer.swift`
+`Clients/Book/Cache/RecommendationCachePreparer.swift`
 
 - `BookRecommendationClient.fetch(6)`가 첫 추천·맞춤 추천 결과를 기존 `Book`으로 변환해 전달하고, 준비기는 그 결과의 목록·표지만 저장한다.
 - 같은 표지 URL은 중복 제거한다. 정상 로컬 파일이 있으면 다시 다운로드하지 않는다.
