@@ -40,29 +40,40 @@ extension IndoorMapSerialTests {
             }
             try image.pngData()?.write(to: FileManager.default.temporaryDirectory
                 .appendingPathComponent("issue133-\(scenario).png"))
-            let text = try await recognizedText(image)
+            let regions = try await recognizedText(image)
+            let text = regions.map(\.text).joined()
             #expect(text.contains("찾았어요"))
             if scenario == "missing" {
                 #expect(text.contains("청구기호확인필요"))
                 #expect(text.contains("367-A"))
-            } else if scenario != "large-text", scenario != "last" {
-                #expect(text.contains("76.73"))
-                #expect(text.contains("P98"))
-                #expect(text.contains("2021"))
+            } else if scenario != "last" {
+                let markers = ["76.73", "P98", "2021"]
+                let centers = try markers.map { marker in
+                    try #require(regions.first { $0.text.contains(marker) }, "청구기호의 \(marker)가 표시되어야 합니다").bounds.midY
+                }
+                #expect(try #require(centers.max()) - #require(centers.min()) < 0.025,
+                        "청구기호의 모든 요소가 같은 가로줄에 있어야 합니다")
             }
             if isMultiple { #expect(text.contains(scenario == "last" ? "2/2" : "1/2")) }
             else { #expect(!text.contains("1/1")) }
         }
 
         @concurrent
-        private func recognizedText(_ image: UIImage) async throws -> String {
+        private func recognizedText(_ image: UIImage) async throws -> [RecognizedRegion] {
             let request = VNRecognizeTextRequest()
             request.recognitionLevel = .accurate
             request.recognitionLanguages = ["ko-KR", "en-US"]
             request.usesLanguageCorrection = false
             try VNImageRequestHandler(cgImage: #require(image.cgImage), options: [:]).perform([request])
-            return String((request.results ?? []).compactMap { $0.topCandidates(1).first?.string }.joined()
-                .filter { !$0.isWhitespace })
+            return (request.results ?? []).compactMap { observation in
+                guard let value = observation.topCandidates(1).first?.string else { return nil }
+                return RecognizedRegion(text: String(value.filter { !$0.isWhitespace }), bounds: observation.boundingBox)
+            }
+        }
+
+        private struct RecognizedRegion: Sendable {
+            let text: String
+            let bounds: CGRect
         }
 
         /// 네트워크 없이 표지의 로딩·비율·회전을 확인하는 테스트 전용 이미지다.

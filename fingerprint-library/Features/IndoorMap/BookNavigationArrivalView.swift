@@ -128,6 +128,8 @@ struct BookNavigationArrivalView: View {
                         Text(rawValue)
                             .font(.title2.bold())
                             .foregroundStyle(BookNavigationPalette.accent)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.4)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -138,21 +140,13 @@ struct BookNavigationArrivalView: View {
     }
 
     private func callNumber(_ number: BookNavigationArrivalCallNumber) -> some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 10) {
-                chip(number.classification)
-                highlightedNumber(number.number)
-                suffixChips(number)
-            }
-            .fixedSize(horizontal: true, vertical: false)
-            VStack(spacing: 12) {
-                chip(number.classification)
-                highlightedNumber(number.number)
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(1)
-                suffixChips(number)
-            }
+        HStack(spacing: 8) {
+            chip(number.classification)
+            highlightedNumber(number.number)
+            suffixChips(number)
         }
+        .lineLimit(1)
+        .minimumScaleFactor(0.4)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("청구기호 \(number.rawValue)")
     }
