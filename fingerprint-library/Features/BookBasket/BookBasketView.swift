@@ -42,6 +42,8 @@ struct BookBasketView: View {
         .background(Color.basketBackground)
         .navigationTitle("장바구니")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
+        // 장바구니는 하단 버튼 영역을 쓰므로 탭바를 숨긴다.
         .toolbar {
             if store.isSelectingForGuidance {
                 ToolbarItem(placement: .topBarTrailing) {
