@@ -180,7 +180,7 @@ struct BookDetailView: View {
     }
 
     private var cover: some View {
-        BookCoverView(url: store.book.imageURL)
+        BookCoverView(url: store.book.imageURL, isbn: store.book.isbn)
             .frame(width: 100, height: 148)
             .background(.quaternary)
             .clipShape(RoundedRectangle(cornerRadius: 6))

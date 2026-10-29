@@ -4,6 +4,12 @@ import OSLog
 @MainActor
 enum BookCoverPipeline {
     private static let logger = Logger(subsystem: "Fingerprint", category: "BookCover")
+    static let fallback = Yes24BookCoverResolver { isbn13 in
+        guard let key = await AppConfiguration.yes24APIKey else {
+            throw BookDetailClientError.missingAPIKey
+        }
+        return try await Yes24BookDetailService().fetchCoverURL(isbn13: isbn13, apiKey: key)
+    }
     /// 추천·검색·상세가 같은 메모리 캐시와 진행 중 요청을 사용한다.
     static let shared = SharedImageLoader<UIImage>(
         readLocalImage: { url in

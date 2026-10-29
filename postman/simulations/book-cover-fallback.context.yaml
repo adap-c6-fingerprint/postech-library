@@ -1,0 +1,41 @@
+purpose:
+  stands_in_for: Primo 표지 서버, Yes24 상품 상세 API, Yes24 이미지 서버
+  unblocks: 앱의 공통 표지 로더를 실제 HTTP 누락·오류·판본 불일치 응답에 연결해 검증한다.
+assumptions:
+  - id: exact-edition-lookup
+    status: supported
+    claim: Yes24 상품 상세는 ISBN13 조회와 cover 필드를 제공하며, 확인한 1984 다섯 판본은 요청 ISBN과 같은 ISBN을 반환했다.
+    reason: 공식 계약 및 2026-10-29 실서버 응답에서 확인했다. 전체 카탈로그에 대한 보장은 아니다.
+    verification: 실제 앱의 서비스·표지 모델 소스를 Swift 6으로 컴파일해 --live로 실행했다. 다섯 판본 모두 Yes24 이미지 다운로드와 디코딩이 성공했다.
+    source: https://developers.yes24.com/api-doc/goods-item-detail; Scripts/verify-book-cover-fallback.swift; Docs/BookCoverFallback.md
+    updated_at: '2026-10-29'
+  - id: library-url-does-not-guarantee-image
+    status: supported
+    claim: 도서관 표지 URL이 있어도 이미지 로딩이 실패할 수 있다.
+    reason: 조회한 1984 레코드들의 4libs 표지 URL이 HTTP 403을 반환했다. 이미지 URL nil 검사만으로 이 사례를 해결하지 못한다.
+    verification: 로컬 키를 이용한 Primo 검색 응답의 ISBN과 표지 주소를 대조했다. 실제 403 뒤 동일 ISBN의 Yes24 표지로 loaded 상태에 도달했다.
+    source: Docs/BookCoverFallback.md; Scripts/verify-book-cover-fallback.swift --live
+    updated_at: '2026-10-29'
+  - id: fallback-failure-handling
+    status: supported
+    claim: 구성한 HTTP 사례에서 앱 로더는 다른 ISBN·미등록·표지 null을 거부하고, 503은 실패로 표시한 뒤 재시도할 수 있다.
+    reason: 모의 서버에 실제 서비스·모델을 연결한 실행과 요청 기록을 함께 확인했다. 실서버 장애 응답의 발생 빈도를 증명하는 검사는 아니다.
+    verification: URL 누락, 도서관 403/404, 다른 ISBN, GOODS_002, cover null, 503 및 재시도, ISBN 누락 9개 경로가 통과했다. 서버 호출 횟수도 ISBN별 캐시 재사용과 실패 후 재시도를 확인했다.
+    source: postman/mocks/book-cover-providers/default.js; Scripts/verify-book-cover-fallback.swift
+    updated_at: '2026-10-29'
+  - id: provider-placeholder-detection
+    status: unknown
+    claim: 모든 Yes24 cover URL에서 실제 표지와 제공자 대체 이미지를 자동 구분할 수 있다.
+    reason: 공식 문서는 이미지 미등록 상품에 대체 이미지를 반환한다고 설명하며 별도 등록 여부 필드를 제공하지 않는다. 임의의 크기·파일명 규칙으로 판본 표지를 판정하지 않는다.
+    verification: 실제 1984 다섯 판본의 디코딩 성공까지 확인했다. 카탈로그 전체의 대체 이미지 식별은 검증하지 않았다.
+    source: https://developers.yes24.com/api-doc/goods-item-detail
+    updated_at: '2026-10-29'
+fingerprints:
+  - id: issue174-local-validation
+    date: '2026-10-29'
+    commit: d64aaeccd0f2b16f983183047d7bb77494310bee 기반의 커밋 전 #174 작업 트리
+    cli: Postman CLI 1.73.0; Swift 6
+  - id: issue174-latest-dev-validation
+    date: '2026-10-29'
+    commit: 3137119 최신 dev로 재배치한 #174 작업 트리; 도착 화면 ISBN 전달 포함
+    cli: Postman CLI 1.73.0; iPhone 18 Pro iOS 27.0; Swift 6

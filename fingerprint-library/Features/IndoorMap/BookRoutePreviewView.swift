@@ -274,7 +274,7 @@ struct BookRoutePreviewView: View {
                             Divider().padding(.leading, 104).padding(.trailing, 16)
                         }
                         HStack(alignment: .top, spacing: 16) {
-                            BookCoverView(url: book.imageURL)
+                            BookCoverView(url: book.imageURL, isbn: book.isbn)
                                 .frame(width: 72, height: 104)
                                 .background(.quaternary, in: RoundedRectangle(cornerRadius: 10))
                                 .clipShape(RoundedRectangle(cornerRadius: 10))

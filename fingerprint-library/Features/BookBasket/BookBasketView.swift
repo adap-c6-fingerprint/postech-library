@@ -183,7 +183,7 @@ struct BookBasketView: View {
 
     private func bookInfo(_ item: BookBasketItem) -> some View {
         HStack(spacing: 21) {
-            BookCoverView(url: item.book.imageURL, allowsRetry: false)
+            BookCoverView(url: item.book.imageURL, isbn: item.book.isbn, allowsRetry: false)
                 .frame(width: 80, height: 113)
                 .background(Color.basketTextTertiary)
                 .clipShape(.rect(cornerRadius: 12))

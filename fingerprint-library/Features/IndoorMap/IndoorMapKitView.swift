@@ -601,7 +601,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.subviews.forEach { $0.removeFromSuperview() }
                 view.frame.size = CGSize(width: 40, height: 40)
                 let content = UIHostingConfiguration {
-                    BookCoverView(url: annotation.destination.book.imageURL)
+                    BookCoverView(url: annotation.destination.book.imageURL, isbn: annotation.destination.book.isbn)
                         .frame(width: 32, height: 32).clipShape(Circle())
                         .padding(3).background(BookNavigationPalette.accent, in: Circle())
                 }.margins(.all, 0).makeContentView()

@@ -1,0 +1,14 @@
+version: 1
+name: book-cover-providers
+slug: book-cover-providers
+protocol: http
+port: 4174
+interceptRequests: true
+origin:
+  - apis.yes24.com
+  - image.yes24.com
+  - local.4libs.org
+scenarios:
+  - name: default
+    path: ./default.js
+    default: true
