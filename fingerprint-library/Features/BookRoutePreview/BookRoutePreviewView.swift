@@ -3,47 +3,25 @@ import SwiftUI
 
 /// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
 struct BookRoutePreviewView: View {
-    @State private var destination: BookRoutePreviewDestination
-    @State private var destinationStore: StoreOf<BookShelfMapFeature>?
-    @State private var previewSession: BookNavigationSession?
+    @State private var store: StoreOf<BookRoutePreviewFeature>
     @State private var navigationFlow = BookRoutePreviewNavigationState()
-    @State private var isLoadingRoute = false
-    @State private var routeError: String?
-    @State private var routeFloorID: UUID?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private let accent = Color(red: 0.88, green: 0.95, blue: 0.19)
-    private var routeRequest: BookRoutePreviewRequest { .init(state: destinationStore?.state) }
-    private var readySession: BookNavigationSession? {
-        guard let previewSession, case let .ready(map, labels, stops) = routeRequest,
-              previewSession.map == map, previewSession.shelfLabels == labels,
-              previewSession.stops.count == stops.count,
-              previewSession.stops.allSatisfy({ stops.contains($0) }) else { return nil }
-        return previewSession
-    }
-    private var orderedBooks: [Book] { readySession?.stops.map(\.book) ?? destination.books }
+    private var destinationStore: StoreOf<BookShelfMapFeature>? { store.scope(state: \.shelfMap, action: \.shelfMap) }
+    private var destination: BookRoutePreviewDestination { store.destination }
+    private var previewSession: BookNavigationSession? { store.previewSession }
+    private var isLoadingRoute: Bool { store.isLoadingRoute }
+    private var routeError: String? { store.routeError }
+    private var routeFloorID: UUID? { store.routeFloorID }
+    private var readySession: BookNavigationSession? { store.readySession }
+    private var orderedBooks: [Book] { store.orderedBooks }
 
     init(books: [Book] = []) {
-        let destination = BookRoutePreviewDestination(books: books)
-        _destination = State(initialValue: destination)
-        _destinationStore = State(initialValue: Self.makeStore(for: destination))
-    }
-
-    static func makeShelfMapState(for destination: BookRoutePreviewDestination) -> BookShelfMapFeature.State? {
-        guard var state = BookShelfMapFeature.State(books: destination.books) else { return nil }
-        if destination.isTestMode {
-            for item in BookRoutePreviewSample.testItems {
-                state.holdings[item.book.id] = .loaded([item.holding])
-            }
-        }
-        return state
-    }
-
-    private static func makeStore(for destination: BookRoutePreviewDestination) -> StoreOf<BookShelfMapFeature>? {
-        makeShelfMapState(for: destination).map { state in
-            Store(initialState: state) { BookShelfMapFeature() }
-        }
+        _store = State(initialValue: Store(initialState: BookRoutePreviewFeature.State(books: books)) {
+            BookRoutePreviewFeature()
+        })
     }
 
     var body: some View {
@@ -93,11 +71,7 @@ struct BookRoutePreviewView: View {
                     .padding(.top, 24)
                     .padding(.bottom, 16)
                 Button("테스트모드") {
-                    destinationStore?.send(.map(.disappeared))
-                    previewSession = nil
-                    routeError = nil
-                    destination.useTestMode()
-                    destinationStore = Self.makeStore(for: destination)
+                    store.send(.testModeButtonTapped)
                 }
                 .buttonStyle(.bordered)
                 .accessibilityIdentifier("preview-test-mode")
@@ -129,7 +103,7 @@ struct BookRoutePreviewView: View {
             if let previewSession {
                 Menu("층 보기", systemImage: "square.3.layers.3d") {
                     ForEach(previewSession.map.floors) { floor in
-                        Button("\(floor.ordinal + 1)층") { routeFloorID = floor.id }
+                        Button("\(floor.ordinal + 1)층") { store.send(.floorSelected(floor.id)) }
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -137,37 +111,8 @@ struct BookRoutePreviewView: View {
             }
         }
         .accessibilityIdentifier("book-route-preview")
-        .task(id: destinationStore.map { ObjectIdentifier($0) }) { [destinationStore] in
-            // Store 교체 시 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
-            guard let destinationStore else { return }
-            await destinationStore.send(.task).finish()
-        }
-        .task(id: routeRequest) {
-            let request = routeRequest
-            previewSession = nil
-            routeError = nil
-            isLoadingRoute = false
-            routeFloorID = nil
-            if case .failed(let message) = request { routeError = message }
-            guard case let .ready(map, labels, stops) = request else { return }
-            isLoadingRoute = true
-            do {
-                try Task.checkCancellation()
-                let result = try await BookRoutePreviewTestRouteLoader().load(
-                    on: map, labels: labels, stops: stops
-                )
-                try Task.checkCancellation()
-                guard routeRequest == request else { return }
-                previewSession = result
-            } catch is CancellationError {
-                return
-            } catch {
-                guard !Task.isCancelled, routeRequest == request else { return }
-                routeError = error.localizedDescription
-            }
-            if routeRequest == request { isLoadingRoute = false }
-        }
-        .onDisappear { destinationStore?.send(.map(.disappeared)) }
+        .task { await store.send(.task).finish() }
+        .onDisappear { store.send(.disappeared) }
     }
 
     private var routeMetrics: some View {

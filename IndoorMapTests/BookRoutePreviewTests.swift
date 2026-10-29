@@ -11,7 +11,7 @@ extension IndoorMapSerialTests {
         func preservesReceivedBooks(count: Int) throws {
             let books = (0..<count).map { BookHoldingTestData.book($0) }
             let destination = BookRoutePreviewDestination(books: books)
-            let state = try #require(BookRoutePreviewView.makeShelfMapState(for: destination))
+            let state = try #require(BookRoutePreviewFeature.makeShelfMapState(for: destination))
             #expect(destination.books == books)
             #expect(!destination.isTestMode)
             #expect(state.books == books)
@@ -22,7 +22,7 @@ extension IndoorMapSerialTests {
         @Test("동일한 테스트 책을 전달해도 버튼을 누르기 전에는 목데이터를 주입하지 않는다")
         func doesNotInferTestModeFromBookID() throws {
             let destination = BookRoutePreviewDestination(books: [BookRoutePreviewSample.testItems[0].book])
-            let state = try #require(BookRoutePreviewView.makeShelfMapState(for: destination))
+            let state = try #require(BookRoutePreviewFeature.makeShelfMapState(for: destination))
             #expect(!destination.isTestMode)
             #expect(state.holdings.isEmpty)
         }
@@ -75,7 +75,7 @@ extension IndoorMapSerialTests {
             let books = (0..<3).map { BookHoldingTestData.book($0) }
             var destination = BookRoutePreviewDestination(books: books)
             destination.useTestMode()
-            let state = try #require(BookRoutePreviewView.makeShelfMapState(for: destination))
+            let state = try #require(BookRoutePreviewFeature.makeShelfMapState(for: destination))
             #expect(destination.isTestMode)
             #expect(destination.books == BookRoutePreviewSample.testItems.map(\.book))
             #expect(state.books == destination.books)
@@ -95,9 +95,9 @@ extension IndoorMapSerialTests {
                 var destination = BookRoutePreviewDestination(books: books)
                 #expect(destination.books == books)
                 #expect(!destination.isTestMode)
-                #expect(BookRoutePreviewView.makeShelfMapState(for: destination) == nil)
+                #expect(BookRoutePreviewFeature.makeShelfMapState(for: destination) == nil)
                 destination.useTestMode()
-                #expect(BookRoutePreviewView.makeShelfMapState(for: destination) != nil)
+                #expect(BookRoutePreviewFeature.makeShelfMapState(for: destination) != nil)
             }
         }
 
@@ -108,7 +108,7 @@ extension IndoorMapSerialTests {
             let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
             var destination = BookRoutePreviewDestination(books: [])
             destination.useTestMode()
-            var initial = try #require(BookRoutePreviewView.makeShelfMapState(for: destination))
+            var initial = try #require(BookRoutePreviewFeature.makeShelfMapState(for: destination))
             initial.map.map = map
             initial.map.shelfLabels = labels
             let shelves = items.flatMap { BookHoldingShelfResolver().resolve([$0.holding], on: map, labels: labels).flatMap(\.shelves) }
