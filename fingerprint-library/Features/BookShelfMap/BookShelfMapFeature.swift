@@ -41,6 +41,7 @@ struct BookShelfMapFeature {
 
     enum Action: Equatable {
         case task
+        case disappeared
         case retryHoldingsTapped(Book.ID)
         case holdingsLoaded(Book.ID, requestID: Int, [BookHolding])
         case holdingsFailed(Book.ID, requestID: Int, String)
@@ -63,6 +64,12 @@ struct BookShelfMapFeature {
                     effects.append(loadHoldings(book.id, state: &state))
                 }
                 return .merge(effects)
+
+            case .disappeared:
+                // 테스트모드에서 다시 시작한 조회도 화면 수명에 맞춰 종료한다.
+                return .merge([.send(.map(.disappeared))] + state.books.map {
+                    .cancel(id: CancelID.holdings($0.id))
+                })
 
             case .retryHoldingsTapped(let bookID):
                 return loadHoldings(bookID, state: &state)

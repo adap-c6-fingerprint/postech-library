@@ -37,7 +37,9 @@ extension IndoorMapSerialTests {
             let session = try NavigationGuidanceTestFixture.session()
             let state = readyState(session)
             let request = state.routeRequest
-            let store = TestStore(initialState: BookRoutePreviewFeature.State()) { BookRoutePreviewFeature() }
+            var empty = BookRoutePreviewFeature.State()
+            empty.isActive = true
+            let store = TestStore(initialState: empty) { BookRoutePreviewFeature() }
             await store.send(.routeRequestChanged(.waiting)) { $0.routeRequestID = 1 }
             await store.send(.routeRequestChanged(request))
             await store.send(.routeLoaded(requestID: 0, request: request, session))
@@ -83,7 +85,7 @@ extension IndoorMapSerialTests {
             await store.finish()
         }
 
-        @Test("테스트모드 전환·화면 종료는 진행 중 경로 계산을 실제로 취소한다", arguments: [false, true])
+        @Test("테스트모드 전환·화면 종료는 진행 중 경로 계산을 실제로 취소한다", .timeLimit(.minutes(1)), arguments: [false, true])
         func cancelsPendingRoute(switchesToTestMode: Bool) async throws {
             let session = try NavigationGuidanceTestFixture.session()
             let state = readyState(session)
@@ -109,6 +111,7 @@ extension IndoorMapSerialTests {
             var startedIterator = started.stream.makeAsyncIterator()
             #expect(await startedIterator.next() != nil)
             await store.send(switchesToTestMode ? .testModeButtonTapped : .disappeared)
+            if switchesToTestMode { await store.receive(\.testModePrepared) }
             await store.finish()
             var cancelledIterator = cancelled.stream.makeAsyncIterator()
             #expect(await cancelledIterator.next() != nil)
@@ -120,8 +123,60 @@ extension IndoorMapSerialTests {
             }
         }
 
+        @Test("화면이 닫힌 뒤 자식 입력이 확정되어도 새 경로 계산을 시작하지 않는다")
+        func doesNotRestartOffscreen() async throws {
+            let session = try NavigationGuidanceTestFixture.session()
+            var state = readyState(session)
+            state.isActive = false
+            let request = state.routeRequest
+            let store = TestStore(initialState: state) { BookRoutePreviewFeature() } withDependencies: {
+                $0.bookRoutePreviewClient.load = { _, _, _ in
+                    Issue.record("종료된 미리보기에서 계산을 재시작하면 안 된다")
+                    return session
+                }
+            }
+            await store.send(.routeRequestChanged(request))
+            #expect(!store.state.isLoadingRoute)
+            await store.finish()
+        }
+
+        @Test("미리보기 종료·테스트모드 교체는 자식의 진행 중 소장 조회도 취소한다", .timeLimit(.minutes(1)), arguments: [false, true])
+        func cancelsChildLookup(switchesToTestMode: Bool) async {
+            let book = BookRoutePreviewSample.testItems[0].book
+            let started = AsyncStream<Void>.makeStream()
+            let cancelled = AsyncStream<Void>.makeStream()
+            defer { started.continuation.finish(); cancelled.continuation.finish() }
+            let store = TestStore(initialState: BookRoutePreviewFeature.State(books: [book])) {
+                BookRoutePreviewFeature()
+            } withDependencies: {
+                $0.indoorMapClient.load = { throw CancellationError() }
+                $0.bookHoldingsClient.fetch = { _ in
+                    started.continuation.yield(())
+                    do { try await Task.sleep(for: .seconds(60)) }
+                    catch {
+                        if Task.isCancelled { cancelled.continuation.yield(()) }
+                        throw error
+                    }
+                    return []
+                }
+            }
+            store.exhaustivity = .off(showSkippedAssertions: false)
+            await store.send(.task)
+            // 자식 액션을 받아 네트워크 없이 대기 중인 조회를 시작한다.
+            await store.receive(\.shelfMap.task)
+            var startedIterator = started.stream.makeAsyncIterator()
+            #expect(await startedIterator.next() != nil)
+            await store.send(switchesToTestMode ? .testModeButtonTapped : .disappeared)
+            if switchesToTestMode { await store.receive(\.testModePrepared) }
+            else { await store.receive(\.shelfMap.disappeared) }
+            await store.finish()
+            var cancelledIterator = cancelled.stream.makeAsyncIterator()
+            #expect(await cancelledIterator.next() != nil)
+        }
+
         private func readyState(_ session: BookNavigationSession) -> BookRoutePreviewFeature.State {
             var state = BookRoutePreviewFeature.State(books: session.stops.map(\.book))
+            state.isActive = true
             state.shelfMap?.map.map = session.map
             state.shelfMap?.map.shelfLabels = session.shelfLabels
             for stop in session.stops {

@@ -14,6 +14,7 @@ struct BookRoutePreviewFeature {
         var routeError: String?
         var routeFloorID: UUID?
         var routeRequestID = 0
+        var isActive = false
 
         init(books: [Book] = []) {
             destination = BookRoutePreviewDestination(books: books)
@@ -36,6 +37,7 @@ struct BookRoutePreviewFeature {
     enum Action: Equatable {
         case task
         case testModeButtonTapped
+        case testModePrepared
         case shelfMap(BookShelfMapFeature.Action)
         case routeRequestChanged(BookRoutePreviewRequest)
         case routeLoaded(requestID: Int, request: BookRoutePreviewRequest, BookNavigationSession)
@@ -51,6 +53,8 @@ struct BookRoutePreviewFeature {
         Reduce { state, action in
             switch action {
             case .task:
+                state.isActive = true
+                if state.shelfMap == nil { state.shelfMap = Self.makeShelfMapState(for: state.destination) }
                 let route: Effect<Action> = .send(.routeRequestChanged(state.routeRequest))
                 return state.shelfMap == nil ? route : .merge(route, .send(.shelfMap(.task)))
 
@@ -61,12 +65,17 @@ struct BookRoutePreviewFeature {
                 state.isLoadingRoute = false
                 state.routeFloorID = nil
                 state.destination.useTestMode()
-                // 새 자식 State의 identity로 이전 소장·지도 조회 효과도 함께 취소한다.
+                // ifLet은 nil 전환 때 자식 효과를 취소한다. 같은 책의 테스트 전환도 분리한다.
+                state.shelfMap = nil
+                return .merge(.cancel(id: CancelID.route), .send(.testModePrepared))
+
+            case .testModePrepared:
+                guard state.isActive else { return .none }
                 state.shelfMap = Self.makeShelfMapState(for: state.destination)
-                return .merge(.cancel(id: CancelID.route), .send(.task))
+                return .send(.shelfMap(.task))
 
             case let .routeRequestChanged(request):
-                guard request == state.routeRequest else { return .none }
+                guard state.isActive, request == state.routeRequest else { return .none }
                 state.routeRequestID += 1
                 let requestID = state.routeRequestID
                 state.previewSession = nil
@@ -94,13 +103,13 @@ struct BookRoutePreviewFeature {
                 .cancellable(id: CancelID.route, cancelInFlight: true)
 
             case let .routeLoaded(requestID, request, session):
-                guard requestID == state.routeRequestID, request == state.routeRequest else { return .none }
+                guard state.isActive, requestID == state.routeRequestID, request == state.routeRequest else { return .none }
                 state.previewSession = session
                 state.isLoadingRoute = false
                 return .none
 
             case let .routeFailed(requestID, request, message):
-                guard requestID == state.routeRequestID, request == state.routeRequest else { return .none }
+                guard state.isActive, requestID == state.routeRequestID, request == state.routeRequest else { return .none }
                 state.routeError = message
                 state.isLoadingRoute = false
                 return .none
@@ -110,10 +119,11 @@ struct BookRoutePreviewFeature {
                 return .none
 
             case .disappeared:
+                state.isActive = false
                 state.routeRequestID += 1
                 state.isLoadingRoute = false
                 let cancel: Effect<Action> = .cancel(id: CancelID.route)
-                return state.shelfMap == nil ? cancel : .merge(cancel, .send(.shelfMap(.map(.disappeared))))
+                return state.shelfMap == nil ? cancel : .merge(cancel, .send(.shelfMap(.disappeared)))
 
             case .shelfMap:
                 return .none
