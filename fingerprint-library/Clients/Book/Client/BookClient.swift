@@ -231,61 +231,6 @@ extension BookClient: DependencyKey {
         let creator: [String]?
     }
     
-    private struct LibraryResponse: Decodable {
-        let result: [LibraryBook]
-        
-        enum CodingKeys: String, CodingKey {
-            case result
-            case errorCode
-            case errorMsg
-        }
-        
-        init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            
-            let errorCode = BookClient.nonEmpty(
-                try container.decodeIfPresent(String.self, forKey: .errorCode)
-            )
-            let errorMessage = BookClient.nonEmpty(
-                try container.decodeIfPresent(String.self, forKey: .errorMsg)
-            )
-            
-            // API 오류가 있으면 검색 결과를 처리하기 전에 중단
-            if errorCode != nil || errorMessage != nil {
-                throw BookClientError.apiError(
-                    code: errorCode,
-                    message: errorMessage ?? "알 수 없는 API 오류"
-                )
-            }
-            
-            // api 오류가 없는 응답의 검색 결과 처리
-            result = try container.decodeIfPresent(
-                [LibraryBook].self,
-                forKey: .result
-            ) ?? []
-        }
-    }
-    
-    private struct LibraryBook: Decodable {
-        let title: String
-        let author: String?
-        let publisher: String?
-        let publicationYear: String?
-        let isbn: String?
-        let controlNumber: String?
-        let imageURLString: String?
-        
-        enum CodingKeys: String, CodingKey {
-            case title = "titleInfo"
-            case author = "authorInfo"
-            case publisher = "pubInfo"
-            case publicationYear = "pubYearInfo"
-            case isbn
-            case controlNumber = "controlNo"
-            case imageURLString = "imageUrl"
-        }
-    }
-    
     private enum BookClientError: LocalizedError {
         case missingAPIKey
         case invalidURL
