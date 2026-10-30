@@ -38,7 +38,7 @@ struct HomeFeature {
         case task
         case recommendationSessionStarted // 당신을 위한 추천 불러오기 시작
         case retryRecommendationsButtonTapped // 추천 불러오기 실패시 재시도
-        case recommendationsRestored(UUID, CachedRecommendations?) 
+        case recommendationsRestored(UUID, CachedRecommendations?)
         case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
         case loadLibraryInfo
@@ -46,6 +46,7 @@ struct HomeFeature {
         case libraryInfoFailed(generation: Int, Book.ID)
         case libraryInfoCancelled
         case departmentChanged(String)
+        case upcomingCoversChanged( [URL] ) // 다음에 볼 표지 주소 목록이 바뀜
 
         case bookSelected(Book)
         case basketButtonTapped
@@ -68,7 +69,7 @@ struct HomeFeature {
 
     @Dependency(\.homeRecommendationForYouClient) var homeRecommendationForYouClient
     // 홈화면 상단 - 당신을 위한 추천 리스트
-    
+    @Dependency(\.bookCoverClient) var bookCoverClient // 표지 URL 호출
     @Dependency(\.departmentPopularBooksClient)
     var departmentPopularBooksClient // 학과별 인기 도서
 
@@ -175,6 +176,13 @@ struct HomeFeature {
             case let .departmentChanged(name):
                 state.departmentName = name
                 return .none
+                
+            case let .upcomingCcoversChanged(urls):
+                return .run { [bookCoverClient] _ in
+                    await bookCoverClient.prefetch(urls)
+                    // 표지 미리 받기를 Effect로 시킴
+                }
+                
 
             case let .bookSelected(book):
                 state.detail = BookDetailFeature.State(

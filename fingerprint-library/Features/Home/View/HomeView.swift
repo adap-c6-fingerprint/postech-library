@@ -30,7 +30,7 @@ struct HomeView: View {
         }
         .onDisappear { store.send(.libraryInfoCancelled) }
         .task(id: upcomingCoverURLs) {
-            await BookCoverPipeline.shared.prefetch(upcomingCoverURLs)
+            await store.send(.upcomingCoversChanged(upcomingCoverURLs)).finish()
         }
         .navigationDestination(
             item: $store.scope(state: \.detail, action: \.detail)

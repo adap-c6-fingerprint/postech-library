@@ -29,14 +29,8 @@ extension RecommendationCacheClient: DependencyKey {
             .appendingPathComponent("RecommendationCache", isDirectory: true)
     )
 
-    private static let preparer = RecommendationCachePreparer(store: store, loadCover: { url in
-        // 화면에서 이미 받았거나 받고 있는 표지는 기존 공통 로더의 결과를 공유한다.
-        let image = try await BookCoverPipeline.shared.image(for: url)
-        guard let data = await MainActor.run(body: { image.pngData() }) else {
-            throw RecommendationCacheStore.CacheError.invalidImage
-        }
-        return data
-    })
+    private static let preparer = RecommendationCachePreparer(store: store, loadCover: BookCoverClient.liveValue.pngData)
+    // .shared를 직접 호출하지 않고 BookCoverClient만 넘겨줌
 }
 
 extension DependencyValues {
