@@ -42,7 +42,7 @@
 
 ## 2. 검색 조건별 결과 캐시
 
-`Clients/Book/BookSearchResultCache.swift`는 `[Book]` 메타데이터를 60초 동안 최근 20개 검색어까지 메모리에 보관한다. 날짜 공급을 주입할 수 있어 실제로 60초를 기다리지 않고 만료를 검증한다. Mutex로 reducer의 읽기와 비동기 Effect의 쓰기를 보호한다.
+`Clients/Book/Cache/BookSearchResultCache.swift`는 `[Book]` 메타데이터를 60초 동안 최근 20개 검색어까지 메모리에 보관한다. 날짜 공급을 주입할 수 있어 실제로 60초를 기다리지 않고 만료를 검증한다. Mutex로 reducer의 읽기와 비동기 Effect의 쓰기를 보호한다.
 
 - 앞뒤 공백을 제거한 검색어가 현재 캐시 키다. 현재 BookClient의 범위·정렬·페이지 등 다른 조건은 고정되어 있다. 이 값이 가변이 되면 키에도 포함해야 한다.
 - 만료는 마지막 성공 저장 시점 기준이다. 읽는 것만으로 60초가 연장되지 않는다.
