@@ -40,6 +40,7 @@ flowchart TD
 | 기능 Client와 소장 서비스 | 도서 변환·추천 흐름·기능별 오류 및 재시도 정책 |
 
 `HTTPClient`는 HTTP 오류 상태의 본문과 헤더도 반환한다. Yes24의 404 상품 없음과 소장 조회의 429·5xx 재시도를 API 계층에서 해석하기 위해서다.
+HTTP 전송이 실패했을 때도 현재 Task의 취소 여부를 확인한다. 취소된 Task의 오류는 `CancellationError`로 전달하고, 취소되지 않은 Task의 원래 전송 오류는 보존한다.
 공통 계층은 재시도를 추가하지 않는다. 소장 조회는 기존의 최대 3회, `Retry-After`와 대기 시간을 유지한다.
 `BookHoldingsClient`의 Debug 직접 인증과 Release HTTPS 프록시 선택도 유지한다.
 
@@ -50,7 +51,7 @@ flowchart TD
 앱의 기능 Client와 표지 파이프라인은 `@Dependency(\.httpClient)`로 공통 전송기를 읽는다.
 독립 서비스는 `HTTPClient`를 인자로 받을 수 있고, 기존 `Yes24BookDetailService(load:)`와 소장 서비스의 `session:` 테스트 주입도 유지한다.
 
-`BookDetailTests/HTTPClientTests.swift`는 취소 전 요청 차단·취소 후 결과 차단·HTTP 응답과 전송 오류 보존을 확인한다.
+`BookDetailTests/HTTPClientTests.swift`는 취소 전 요청 차단·취소 후 결과 차단·전송 실패 중 취소 변환·HTTP 응답과 전송 오류 보존을 확인한다. 외부 서버 없이 실제 URLSession을 사용하는 취소 경로도 검증한다.
 `BookDetailTests/BookAPITransportTests.swift`는 세 제공자가 같은 주입 전송기를 사용하는지, 인증 정보와 Primo 페이지·자료 유형이 보존되는지 확인한다.
 
 실제 HTTP 검증은 기존 Postman 시뮬레이션을 사용한다.
@@ -62,8 +63,9 @@ flowchart TD
 
 ## 최신 dev 병합 후 최종 검증
 
-- 기준 dev: `97728250cb76349571f634b59c180e634fc1faa9`.
-- iOS 27.2에서 책 관련 **218개 / 40개 suite**가 제외 없이 통과했다.
+- 기준 dev: `97728250cb76349571f634b59c180e634fc1faa9`. 최종 검증 갱신: 2026-10-31.
+- 전송 중 취소 오류를 통일한 코드로 책 관련 전체 검사를 다시 실행했다. 별도 Foundation 검사도 **27개 / 5개 suite**가 통과했다. 일부 검사는 iOS 실행과 중복된다.
+- iOS 27.2에서 책 관련 **220개 / 40개 suite**가 제외 없이 통과했다.
 - dev에서 바뀐 검색·홈의 호출 방식에 맞춰 테스트 설정을 갱신했다. 이전에 제외했던 날짜 의존성 및 테스트 비교의 MainActor 문제도 테스트 코드에서 보완했다.
 - 네트워크 분리와 추천 책임 분리를 포함한 최종 코드로 검증했다. 상세 범위는 [BookDependencyReview.md](BookDependencyReview.md)를 참조한다.
 - 검증 중 사용한 Xcode 사전 빌드 우회 설정은 종료 후 원래 값으로 복원했다.

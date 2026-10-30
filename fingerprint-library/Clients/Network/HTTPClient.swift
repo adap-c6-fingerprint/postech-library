@@ -16,13 +16,19 @@ nonisolated struct HTTPClient: Sendable {
 
     func send(_ request: URLRequest) async throws -> HTTPResponse {
         try Task.checkCancellation()
-        let (data, response) = try await load(request)
-        try Task.checkCancellation()
-        guard let response = response as? HTTPURLResponse else {
-            throw HTTPClientError.invalidResponse
+        do {
+            let (data, response) = try await load(request)
+            try Task.checkCancellation()
+            guard let response = response as? HTTPURLResponse else {
+                throw HTTPClientError.invalidResponse
+            }
+            // 404의 상품 없음, 429의 재시도 등은 각 API에서 본문·헤더와 함께 해석한다.
+            return HTTPResponse(data: data, response: response)
+        } catch {
+            // URLSession은 Task 취소를 URLError.cancelled로 전달할 수도 있다.
+            try Task.checkCancellation()
+            throw error
         }
-        // 404의 상품 없음, 429의 재시도 등은 각 API에서 본문·헤더와 함께 해석한다.
-        return HTTPResponse(data: data, response: response)
     }
 }
 
