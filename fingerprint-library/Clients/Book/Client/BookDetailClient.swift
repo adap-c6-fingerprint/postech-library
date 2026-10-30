@@ -18,7 +18,9 @@ extension BookDetailClient: DependencyKey {
             guard let apiKey = await AppConfiguration.yes24APIKey else {
                 throw BookDetailClientError.missingAPIKey
             }
-            return try await Yes24BookDetailService().fetchDescription(isbn13: isbn13, apiKey: apiKey)
+            @Dependency(\.httpClient) var httpClient
+            return try await Yes24BookDetailService(httpClient: httpClient)
+                .fetchDescription(isbn13: isbn13, apiKey: apiKey)
         }
     )
 

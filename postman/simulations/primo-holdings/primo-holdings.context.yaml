@@ -1,0 +1,23 @@
+purpose:
+  stands_in_for: POSTECH Primo 소장 조회 API
+  unblocks: 공통 HTTP 전송과 도서관 API 계층을 사용하는 소장 서비스의 응답 변환과 재시도를 키 없이 검증한다.
+assumptions:
+  - id: shared-http-holdings-regression
+    status: supported
+    claim: 구성한 로컬 HTTP 사례에서 공통 전송으로 전환한 소장 서비스가 기존 응답 변환과 오류·재시도 정책을 유지한다.
+    reason: 실제 Swift 서비스·공통 전송·mapper를 실행하고 시뮬레이션의 요청 횟수와 반환 결과를 대조했다.
+    verification: 2026-10-30 Swift 6 검증 프로그램이 소장처 3개·불완전 문서·대상 자료번호 일치·빈 결과·401 1회·잘못된 JSON 1회·503 3회·429 2회 회복을 통과했다. library 멤버 요청 이벤트 12건을 확인했다.
+    source: Scripts/verify-primo-holdings.swift; fingerprint-library/Clients/Network/HTTPClient.swift; fingerprint-library/Clients/Book/Client/PrimoAPIClient.swift; postman/mocks/primo-holdings/default.js
+    updated_at: '2026-10-30'
+  - id: live-proxy-and-catalog-coverage
+    status: unknown
+    claim: 현재 배포된 기관 프록시와 전체 도서관 카탈로그가 구성한 시뮬레이션 응답과 같은 동작을 한다.
+    reason: 이번 검증은 기존 모의 서버와 과거 축소 서지 샘플만 사용했다.
+    verification: 실제 프록시의 인증·배포 상태와 현재 실서버 응답은 호출하지 않았다. 과거 출처와 검증 범위는 기존 context.md에 보존했다.
+    source: postman/simulations/primo-holdings/primo-holdings.context.md; postman/contracts/primo-holdings.openapi.json
+    updated_at: '2026-10-30'
+fingerprints:
+  - id: shared-http-20261030
+    date: '2026-10-30'
+    commit: aae6f8d831a943877c1f7cbd0cfee530a57b0778 기반 refactor/books-dependency-centralization의 커밋 전 작업 트리
+    cli: Postman CLI 1.73.0; Swift 6

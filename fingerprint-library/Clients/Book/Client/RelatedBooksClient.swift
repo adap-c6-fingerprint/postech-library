@@ -23,36 +23,20 @@ extension RelatedBooksClient: DependencyKey {
                 throw RelatedBooksClientError.missingAPIKey
             }
 
-            // 요청 주소 구성
-            var components = URLComponents(
-                string: "https://data4library.kr/api/recommandList"
-            )
-
-            components?.queryItems = [
-                URLQueryItem(name: "authKey", value: apiKey),
-                URLQueryItem(name: "isbn13", value: isbn13),
-                URLQueryItem(name: "type", value: "mania"),
-                URLQueryItem(name: "format", value: "json")
-            ]
-
-            guard let url = components?.url else {
-                throw RelatedBooksClientError.invalidURL
-            }
-
-            // API 호출
-            let (data, response) = try await URLSession.shared.data(from: url)
-
-            guard
-                let httpResponse = response as? HTTPURLResponse,
-                (200..<300).contains(httpResponse.statusCode)
-            else {
+            @Dependency(\.httpClient) var httpClient
+            let result: HTTPResponse
+            do {
+                result = try await Data4LibraryAPIClient(httpClient: httpClient)
+                    .fetch(.relatedBooks, isbn13: isbn13, apiKey: apiKey)
+            } catch is HTTPClientError {
                 throw RelatedBooksClientError.invalidResponse
             }
+            guard result.isSuccessful else { throw RelatedBooksClientError.invalidResponse }
 
             // JSON을 Swift 응답 타입으로 변환
             let decoded = try JSONDecoder().decode(
                 RelatedBooksResponse.self,
-                from: data
+                from: result.data
             )
 
             // 응답의 도서 정보를 앱의 Book으로 변환

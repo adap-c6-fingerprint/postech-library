@@ -21,17 +21,22 @@ extension PersonalizedRecommendationClient: DependencyKey {
             throw ColdStartRecommendationError.missingData4LibraryAPIKey
         }
         @Dependency(\.foundationModelsClient) var model
+        @Dependency(\.httpClient) var httpClient
         return try await PersonalizedRecommendationService.recommend(
             input,
             dependencies: .init(
                 model: model,
                 searchPrimo: { query, limit in
-                    try await PersonalizedRecommendationService.searchPrimo(query: query, limit: limit, apiKey: primoKey)
+                    try await PersonalizedRecommendationService.searchPrimo(
+                        query: query, limit: limit, apiKey: primoKey, httpClient: httpClient
+                    )
                 },
                 data4LibraryLookup: { isbn13 in
-                    try? await ColdStartRecommendationService.data4LibraryCoverURL(isbn13: isbn13, apiKey: data4LibraryKey)
+                    try? await ColdStartRecommendationService.data4LibraryCoverURL(
+                        isbn13: isbn13, apiKey: data4LibraryKey, httpClient: httpClient
+                    )
                 },
-                isRealImage: ColdStartRecommendationService.isRealImage
+                isRealImage: { await ColdStartRecommendationService.isRealImage($0, httpClient: httpClient) }
             )
         )
     })
@@ -198,31 +203,18 @@ nonisolated enum PersonalizedRecommendationService {
 
     // MARK: - 포스텍 Primo
 
-    static func searchPrimo(query: String, limit: Int, apiKey: String) async throws -> Data {
-    // 포스텍 도서관 Primo 검색 API를 한 번 호출하고 응답 원본을 돌려준다.
-        var components = URLComponents(string: "https://api-ap.hosted.exlibrisgroup.com/primo/v1/search")
-        components?.queryItems = [
-            URLQueryItem(name: "vid", value: "82POSTECH_INST:82POSTECH"),
-            URLQueryItem(name: "tab", value: "LibraryCatalog"),
-            URLQueryItem(name: "scope", value: "MyInstitution"),
-            URLQueryItem(name: "q", value: query),
-            URLQueryItem(name: "multiFacets", value: "facet_rtype,include,printed_book"),
-            // 조건: 전자자료가 아닌 인쇄도서만.
-            URLQueryItem(name: "lang", value: "ko"),
-            URLQueryItem(name: "offset", value: "0"),
-            URLQueryItem(name: "limit", value: String(limit)),
-            URLQueryItem(name: "skipDelivery", value: "false")
-            // 청구기호와 표지 링크(delivery)까지 받으려면 false여야 한다.
-        ]
-        guard let url = components?.url else { throw ColdStartRecommendationError.invalidURL }
-
-        var request = URLRequest(url: url)
-        request.setValue("apikey \(apiKey)", forHTTPHeaderField: "Authorization")
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode else {
+    static func searchPrimo(
+        query: String, limit: Int, apiKey: String, httpClient: HTTPClient = .urlSession()
+    ) async throws -> Data {
+        let result: HTTPResponse
+        do {
+            result = try await PrimoAPIClient(httpClient: httpClient, apiKey: apiKey)
+                .search(query: query, resourceTypes: ["printed_book"], limit: limit)
+        } catch is HTTPClientError {
             throw ColdStartRecommendationError.invalidResponse
         }
-        return data
+        guard result.isSuccessful else { throw ColdStartRecommendationError.invalidResponse }
+        return result.data
     }
 
     static func parseTitles(_ data: Data) throws -> [String] {

@@ -14,7 +14,10 @@ nonisolated struct ColdStartRecommendationClient: Sendable {
 
 extension ColdStartRecommendationClient: DependencyKey {
     static let liveValue = Self(fetch: { interests in
-        try await ColdStartRecommendationService.recommend(interests: interests)
+        @Dependency(\.httpClient) var httpClient
+        return try await ColdStartRecommendationService.recommend(
+            interests: interests, httpClient: httpClient
+        )
     })
     // 실제 앱: 포스텍 API와 정보나루 API를 호출한다.
     static let testValue = Self(fetch: { _ in [] })
@@ -51,7 +54,9 @@ nonisolated struct PrimoCandidatePage: Equatable, Sendable {
 
 nonisolated enum ColdStartRecommendationService {
 
-    static func recommend(interests: [String]) async throws -> [RecommendedBook] {
+    static func recommend(
+        interests: [String], httpClient: HTTPClient = .urlSession()
+    ) async throws -> [RecommendedBook] {
     // 전체 흐름을 실행한다.
         let codes = ColdStartRecommendation.normalizedCodes(interests)
         guard !codes.isEmpty else { throw ColdStartRecommendationError.noInterests }
@@ -64,7 +69,9 @@ nonisolated enum ColdStartRecommendationService {
 
         let query = ColdStartRecommendation.primoQuery(for: codes)
         let first = try parsePrimo(
-            try await searchPrimo(query: query, offset: 0, apiKey: primoKey),
+            try await searchPrimo(
+                query: query, offset: 0, apiKey: primoKey, httpClient: httpClient
+            ),
             codes: codes
         )
         // ① 1차 요청. 50권과 전체 건수를 받는다.
@@ -76,9 +83,15 @@ nonisolated enum ColdStartRecommendationService {
         for _ in 0...ColdStartRecommendation.extraPageLimit {
         // 처음 한 번 + 표지가 모자랄 때 최대 extraPageLimit번 더.
             let offset = ColdStartRecommendation.randomOffset(total: first.total, using: &generator)
-            let page = offset == 0
-                ? first
-                : try parsePrimo(try await searchPrimo(query: query, offset: offset, apiKey: primoKey), codes: codes)
+            let page: PrimoCandidatePage
+            if offset == 0 {
+                page = first
+            } else {
+                let data = try await searchPrimo(
+                    query: query, offset: offset, apiKey: primoKey, httpClient: httpClient
+                )
+                page = try parsePrimo(data, codes: codes)
+            }
             // ② 무작위 위치에서 50권. 위치가 0이면 1차 결과를 그대로 쓴다.
             let fresh = page.candidates.filter { usedRecordIDs.insert($0.recordID).inserted }.shuffled()
             // 처음 보는 책만 섞는다.
@@ -86,9 +99,11 @@ nonisolated enum ColdStartRecommendationService {
                 fresh,
                 limit: ColdStartRecommendation.resultCount - result.count,
                 data4LibraryLookup: { isbn13 in
-                    try? await data4LibraryCoverURL(isbn13: isbn13, apiKey: data4LibraryKey)
+                    try? await data4LibraryCoverURL(
+                        isbn13: isbn13, apiKey: data4LibraryKey, httpClient: httpClient
+                    )
                 },
-                isRealImage: isRealImage
+                isRealImage: { await isRealImage($0, httpClient: httpClient) }
             )
             // ③ 정보나루 → 4libs 순서로 표지를 확인해 모자란 만큼 채운다.
             if result.count >= ColdStartRecommendation.resultCount
@@ -156,46 +171,34 @@ nonisolated enum ColdStartRecommendationService {
         return Array(result.prefix(limit))
     }
 
-    static func isRealImage(_ url: URL) async -> Bool {
+    static func isRealImage(_ url: URL, httpClient: HTTPClient = .urlSession()) async -> Bool {
     // 주소를 실제로 받아 보고 이미지인지 확인한다.
         var request = URLRequest(url: url)
         request.timeoutInterval = 10
         guard
-            let (data, response) = try? await URLSession.shared.data(for: request),
-            let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode,
-            http.mimeType?.hasPrefix("image/") == true
+            let result = try? await httpClient.send(request), result.isSuccessful,
+            result.response.mimeType?.hasPrefix("image/") == true
         else { return false }
-        return data.count >= ColdStartRecommendation.minimumCoverBytes
+        return result.data.count >= ColdStartRecommendation.minimumCoverBytes
         // 표지가 없으면 4libs는 빈 HTML(0바이트)을 준다.
     }
 
     // MARK: - 포스텍 Primo
 
-    private static func searchPrimo(query: String, offset: Int, apiKey: String) async throws -> Data {
-    // 포스텍 도서관 Primo 검색 API를 한 번 호출하고 응답 원본을 돌려준다.
-        var components = URLComponents(string: "https://api-ap.hosted.exlibrisgroup.com/primo/v1/search")
-        components?.queryItems = [
-            URLQueryItem(name: "vid", value: "82POSTECH_INST:82POSTECH"),
-            URLQueryItem(name: "tab", value: "LibraryCatalog"),
-            URLQueryItem(name: "scope", value: "MyInstitution"),
-            URLQueryItem(name: "q", value: query),
-            URLQueryItem(name: "multiFacets", value: "facet_rtype,include,printed_book"),
-            // 조건: 전자자료가 아닌 인쇄도서만.
-            URLQueryItem(name: "lang", value: "ko"),
-            URLQueryItem(name: "offset", value: String(offset)),
-            URLQueryItem(name: "limit", value: String(ColdStartRecommendation.primoFetchCount)),
-            URLQueryItem(name: "skipDelivery", value: "false")
-            // 청구기호와 표지 링크(delivery)까지 받으려면 false여야 한다.
-        ]
-        guard let url = components?.url else { throw ColdStartRecommendationError.invalidURL }
-
-        var request = URLRequest(url: url)
-        request.setValue("apikey \(apiKey)", forHTTPHeaderField: "Authorization")
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode else {
+    private static func searchPrimo(
+        query: String, offset: Int, apiKey: String, httpClient: HTTPClient
+    ) async throws -> Data {
+        let result: HTTPResponse
+        do {
+            result = try await PrimoAPIClient(httpClient: httpClient, apiKey: apiKey).search(
+                query: query, resourceTypes: ["printed_book"], offset: offset,
+                limit: ColdStartRecommendation.primoFetchCount
+            )
+        } catch is HTTPClientError {
             throw ColdStartRecommendationError.invalidResponse
         }
-        return data
+        guard result.isSuccessful else { throw ColdStartRecommendationError.invalidResponse }
+        return result.data
     }
 
     static func parsePrimo(_ data: Data, codes: [String]) throws -> PrimoCandidatePage {
@@ -245,21 +248,18 @@ nonisolated enum ColdStartRecommendationService {
 
     // MARK: - 정보나루 표지
 
-    static func data4LibraryCoverURL(isbn13: String, apiKey: String) async throws -> URL? {
-    // ISBN 하나로 정보나루 도서 상세를 조회해 표지 주소를 꺼낸다.
-        var components = URLComponents(string: "https://data4library.kr/api/srchDtlList")
-        components?.queryItems = [
-            URLQueryItem(name: "authKey", value: apiKey),
-            URLQueryItem(name: "isbn13", value: isbn13),
-            URLQueryItem(name: "format", value: "json")
-        ]
-        guard let url = components?.url else { throw ColdStartRecommendationError.invalidURL }
-
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let http = response as? HTTPURLResponse, 200..<300 ~= http.statusCode else {
+    static func data4LibraryCoverURL(
+        isbn13: String, apiKey: String, httpClient: HTTPClient = .urlSession()
+    ) async throws -> URL? {
+        let result: HTTPResponse
+        do {
+            result = try await Data4LibraryAPIClient(httpClient: httpClient)
+                .fetch(.bookDetail, isbn13: isbn13, apiKey: apiKey)
+        } catch is HTTPClientError {
             throw ColdStartRecommendationError.invalidResponse
         }
-        let decoded = try JSONDecoder().decode(Data4LibraryDetailResponse.self, from: data)
+        guard result.isSuccessful else { throw ColdStartRecommendationError.invalidResponse }
+        let decoded = try JSONDecoder().decode(Data4LibraryDetailResponse.self, from: result.data)
         guard let raw = decoded.response.detail?.first?.book.bookImageURL else { return nil }
         return secureCoverURL(raw)
     }

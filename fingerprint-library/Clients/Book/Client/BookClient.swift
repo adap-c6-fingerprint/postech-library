@@ -13,39 +13,20 @@ nonisolated struct BookClient: Sendable {
     
     /// URL 생성은 인증과 분리해 자료 유형 필터를 오프라인에서도 검증한다.
     nonisolated static func searchURL(for request: BookSearchRequest) throws -> URL {
-        let resourceTypes: [String]
-        switch request.category {
-        case .all:
-            resourceTypes = ["books", "printed_book", "journals"]
-        case .monograph:
-            resourceTypes = ["books", "printed_book"]
-        case .journal:
-            resourceTypes = ["journals"]
-        }
-
-        var components = URLComponents(
-            string: "https://api-ap.hosted.exlibrisgroup.com/primo/v1/search"
+        try PrimoAPIClient.searchURL(
+            query: "any,contains,\(request.query)", resourceTypes: resourceTypes(for: request.category)
         )
-        components?.queryItems = [
-            URLQueryItem(name: "vid", value: "82POSTECH_INST:82POSTECH"),
-            URLQueryItem(name: "tab", value: "LibraryCatalog"),
-            URLQueryItem(name: "scope", value: "MyInstitution"),
-            URLQueryItem(name: "q", value: "any,contains,\(request.query)"),
-            // multiFacets는 같은 범주의 자료 유형을 OR로 묶는다.
-            URLQueryItem(
-                name: "multiFacets",
-                value: resourceTypes.map { "facet_rtype,include,\($0)" }
-                    .joined(separator: "|,|")
-            ),
-            URLQueryItem(name: "lang", value: "ko"),
-            URLQueryItem(name: "offset", value: "0"),
-            URLQueryItem(name: "limit", value: "20"),
-            URLQueryItem(name: "skipDelivery", value: "false")
-        ]
-        guard let url = components?.url else {
-            throw BookClientError.invalidURL
+    }
+
+    private static func resourceTypes(for category: BookSearchCategory) -> [String] {
+        switch category {
+        case .all:
+            ["books", "printed_book", "journals"]
+        case .monograph:
+            ["books", "printed_book"]
+        case .journal:
+            ["journals"]
         }
-        return url
     }
 
     nonisolated static func publicationYear(from value: String?) -> String? {
@@ -89,24 +70,18 @@ extension BookClient: DependencyKey {
                 throw BookClientError.missingAPIKey
             }
             
-            let url = try BookClient.searchURL(for: searchRequest)
-
-            var request = URLRequest(url: url)
-            request.setValue(
-                "apikey \(apiKey)",
-                forHTTPHeaderField: "Authorization"
-            )
-
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            guard
-                let httpResponse = response as? HTTPURLResponse,
-                200..<300 ~= httpResponse.statusCode
-                    else {
+            @Dependency(\.httpClient) var httpClient
+            let result: HTTPResponse
+            do {
+                result = try await PrimoAPIClient(httpClient: httpClient, apiKey: apiKey).search(
+                    query: "any,contains,\(searchRequest.query)",
+                    resourceTypes: resourceTypes(for: searchRequest.category)
+                )
+            } catch is HTTPClientError {
                 throw BookClientError.invalidResponse
             }
-            
-            return try BookClient.books(from: data)
+            guard result.isSuccessful else { throw BookClientError.invalidResponse }
+            return try BookClient.books(from: result.data)
         }
     )
 
