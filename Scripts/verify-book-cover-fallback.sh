@@ -3,6 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 proof_binary="${TMPDIR:-/tmp}/postech-book-cover-proof"
 xcrun swiftc -swift-version 6 -parse-as-library \
+  fingerprint-library/Clients/Network/HTTPClient.swift \
   fingerprint-library/Clients/Book/Client/Yes24BookDetailService.swift \
   fingerprint-library/Clients/Book/Cache/Yes24BookCoverResolver.swift \
   fingerprint-library/Domain/Book/BookISBN.swift \

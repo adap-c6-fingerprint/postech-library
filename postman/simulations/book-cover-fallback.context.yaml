@@ -23,6 +23,13 @@ assumptions:
     verification: URL 누락, 도서관 403/404, 다른 ISBN, GOODS_002, cover null, 503 및 재시도, ISBN 누락 9개 경로가 통과했다. 서버 호출 횟수도 ISBN별 캐시 재사용과 실패 후 재시도를 확인했다.
     source: postman/mocks/book-cover-providers/default.js; Scripts/verify-book-cover-fallback.swift
     updated_at: '2026-10-29'
+  - id: shared-http-fallback-regression
+    status: supported
+    claim: 구성한 로컬 HTTP 사례에서 공통 HTTPClient로 전환한 Yes24 서비스가 기존 표지 대체 조회·오류·재시도 동작을 유지한다.
+    reason: 실제 서비스·공통 전송·표지 모델을 기존 시뮬레이션에 연결해 결과와 요청 기록을 확인했다.
+    verification: 2026-10-30 Scripts/verify-book-cover-fallback.sh의 9개 경로와 ISBN별 중복 방지·실패 후 재시도 횟수 검사가 통과했다. covers 멤버 요청 이벤트 11건을 확인했다. 실제 공급처와 기기 UI를 검증한 결과는 아니다.
+    source: Scripts/verify-book-cover-fallback.sh; Scripts/verify-book-cover-fallback.swift; fingerprint-library/Clients/Network/HTTPClient.swift; postman/mocks/book-cover-providers/default.js
+    updated_at: '2026-10-30'
   - id: provider-placeholder-detection
     status: unknown
     claim: 모든 Yes24 cover URL에서 실제 표지와 제공자 대체 이미지를 자동 구분할 수 있다.
@@ -31,6 +38,10 @@ assumptions:
     source: https://developers.yes24.com/api-doc/goods-item-detail
     updated_at: '2026-10-29'
 fingerprints:
+  - id: shared-http-20261030
+    date: '2026-10-30'
+    commit: aae6f8d831a943877c1f7cbd0cfee530a57b0778 기반 refactor/books-dependency-centralization의 커밋 전 작업 트리
+    cli: Postman CLI 1.73.0; Swift 6
   - id: issue174-local-validation
     date: '2026-10-29'
     commit: d64aaeccd0f2b16f983183047d7bb77494310bee 기반의 커밋 전 #174 작업 트리

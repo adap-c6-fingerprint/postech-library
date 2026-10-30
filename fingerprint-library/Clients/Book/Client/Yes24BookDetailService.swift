@@ -1,8 +1,14 @@
 import Foundation
 
 nonisolated struct Yes24BookDetailService: Sendable {
-    var load: @Sendable (URLRequest) async throws -> (Data, URLResponse) = {
-        try await URLSession.shared.data(for: $0)
+    var httpClient: HTTPClient
+
+    init(httpClient: HTTPClient = .urlSession()) {
+        self.httpClient = httpClient
+    }
+
+    init(load: @escaping HTTPClient.Loader) {
+        self.init(httpClient: HTTPClient(load: load))
     }
 
     func fetchCoverURL(isbn13: String, apiKey: String) async throws -> URL? {
@@ -39,11 +45,14 @@ nonisolated struct Yes24BookDetailService: Sendable {
         var request = URLRequest(url: url)
         request.timeoutInterval = 15
         request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
-        let (data, response) = try await load(request)
-        guard let http = response as? HTTPURLResponse else {
+        let response: HTTPResponse
+        do {
+            response = try await httpClient.send(request)
+        } catch is HTTPClientError {
             throw BookDetailClientError.invalidResponse
         }
-        let result = try? JSONDecoder().decode(Yes24DetailResponse.self, from: data)
+        let http = response.response
+        let result = try? JSONDecoder().decode(Yes24DetailResponse.self, from: response.data)
         // SEARCH_002도 404이므로 상품이 없다는 오류만 빈 결과로 처리한다.
         if http.statusCode == 404,
            let code = result?.errorCode, ["GOODS_001", "GOODS_002"].contains(code) {

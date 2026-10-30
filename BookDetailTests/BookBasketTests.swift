@@ -101,6 +101,7 @@ struct BookBasketTests {
         let store = TestStore(initialState: BookDetailFeature.State(book: book(id: "new"))) {
             BookDetailFeature()
         } withDependencies: {
+            $0.date.now = .distantPast
             $0.bookBasketClient.load = { full }
             $0.bookBasketClient.save = { _ in Issue.record("한도를 넘기면 저장하면 안 됩니다.") }
         }
@@ -117,6 +118,7 @@ struct BookBasketTests {
         let store = TestStore(initialState: initialState) {
             BookSearchFeature()
         } withDependencies: {
+            $0.date.now = .distantPast
             $0.bookBasketClient.load = { full }
             $0.bookBasketClient.save = { _ in Issue.record("한도를 넘기면 저장하면 안 됩니다.") }
         }

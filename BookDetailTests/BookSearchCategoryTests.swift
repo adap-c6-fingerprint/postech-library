@@ -56,6 +56,7 @@ struct BookSearchCategoryTests {
                 calls.withLock { $0.append(request) }
                 return []
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: BookSearchResultCache())
         }
         await store.send(.categoryChanged(.journal)) { $0.category = .journal }
         #expect(calls.withLock { $0.isEmpty })
@@ -78,12 +79,12 @@ struct BookSearchCategoryTests {
         let store = TestStore(initialState: BookSearchFeature.State(query: "Nature")) {
             BookSearchFeature()
         } withDependencies: {
-            $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in historyWrites.withLock { $0 += 1 } }
             $0.bookClient.search = { request in
                 calls.withLock { $0.append(request.category) }
                 return request.category == .all ? [allBook] : [journalBook]
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration = 1
@@ -124,7 +125,6 @@ struct BookSearchCategoryTests {
         let store = TestStore(initialState: BookSearchFeature.State(query: "Nature")) {
             BookSearchFeature()
         } withDependencies: {
-            $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { request in
                 if request.category == .all {
@@ -133,6 +133,7 @@ struct BookSearchCategoryTests {
                 }
                 return [journalBook]
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration = 1
@@ -165,12 +166,12 @@ struct BookSearchCategoryTests {
         let store = TestStore(initialState: BookSearchFeature.State(query: "Nature")) {
             BookSearchFeature()
         } withDependencies: {
-            $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { _ in
                 try await Task.sleep(for: .seconds(60))
                 return []
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration = 1

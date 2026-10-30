@@ -1,6 +1,8 @@
 # postech-library
 포스텍 도서관 메인 어플리케이션
 
+도서관·Yes24·정보나루의 공통 HTTP 계층과 API별 책임은 [도서 API 통신 구조](Docs/BookNetworking.md)를 참고하세요.
+
 ## 로컬 API 키 설정
 
 프로젝트 루트의 `Base.xcconfig`를 Debug와 Release에서 공통으로 사용합니다.

@@ -25,13 +25,13 @@ struct BookSearchCacheFeatureTests {
         let store = TestStore(initialState: BookSearchFeature.State(query: "스위프트")) {
             BookSearchFeature()
         } withDependencies: {
-            $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { request in
                 let query = request.query
                 calls.withLock { $0 += 1 }
                 return query == "스위프트" ? [swift] : [science]
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration += 1
@@ -79,12 +79,12 @@ struct BookSearchCacheFeatureTests {
         let store = TestStore(initialState: BookSearchFeature.State(query: "스위프트")) {
             BookSearchFeature()
         } withDependencies: {
-            $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { _ in
                 calls.withLock { $0 += 1 }
                 return []
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration += 1
@@ -108,13 +108,13 @@ struct BookSearchCacheFeatureTests {
         )) {
             BookSearchFeature()
         } withDependencies: {
-            $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { _ in
                 let count = calls.withLock { $0 += 1; return $0 }
                 if count == 1 { throw error }
                 return []
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.refreshButtonTapped) {
             $0.searchGeneration += 1
@@ -145,12 +145,12 @@ struct BookSearchCacheFeatureTests {
         let store = TestStore(initialState: BookSearchFeature.State(query: "스위프트")) {
             BookSearchFeature()
         } withDependencies: {
-            $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { _ in
                 for await _ in gate.stream { break }
                 return [swift]
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration += 1
@@ -177,12 +177,12 @@ struct BookSearchCacheFeatureTests {
         let store = TestStore(initialState: BookSearchFeature.State(query: "스위프트")) {
             BookSearchFeature()
         } withDependencies: {
-            $0.bookSearchCache = .inMemory(cache)
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { _ in
                 for await _ in gate.stream { break }
                 return [swift]
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration += 1

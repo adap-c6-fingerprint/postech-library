@@ -83,7 +83,7 @@ struct PersonalizedRecommendationTests {
            "delivery":{"holding":[{"callNumber":"Q1"}]}}
         ]}
         """
-        let candidates = try PersonalizedRecommendationService.parseCandidates(Data(json.utf8))
+        let candidates = try PrimoRecommendationMapper.personalizedCandidates(from: Data(json.utf8))
         #expect(candidates == [
             PersonalizedCandidate(recordID: "alma1", title: "머신 러닝", subject: "기계학습",
                                   callNumber: "Q325.5 .M87", primoCoverURL: nil, isbn13: "9788966260959"),
@@ -100,7 +100,7 @@ struct PersonalizedRecommendationTests {
             candidate("r3", isbn13: "isbn-none", primo: "https://4libs.example.com/empty"),
             candidate("r4", isbn13: "isbn-none", primo: "https://4libs.example.com/r4"),
         ]
-        let books = await PersonalizedRecommendationService.topBooksWithCovers(
+        let books = await selectRankedCovers(
             ranked,
             limit: 3,
             data4LibraryLookup: { $0 == "isbn-r2" ? URL(string: "https://d4l.example.com/r2.jpg") : nil },
@@ -115,7 +115,7 @@ struct PersonalizedRecommendationTests {
     func coverBatchesStop() async {
         let checked = LockIsolated(0)
         let ranked = (1...25).map { candidate("n\($0)", isbn13: "isbn-\($0)", primo: nil) }
-        let books = await PersonalizedRecommendationService.topBooksWithCovers(
+        let books = await selectRankedCovers(
             ranked,
             data4LibraryLookup: { isbn in
                 checked.withValue { $0 += 1 }
@@ -150,8 +150,10 @@ struct PersonalizedRecommendationTests {
                     queries.withValue { $0.append((query, limit)) }
                     return query.contains("991") ? Self.titleResponse : Self.searchResponse
                 },
-                data4LibraryLookup: { URL(string: "https://d4l.example.com/\($0).jpg") },
-                isRealImage: { _ in true }
+                covers: .init(
+                    data4LibraryLookup: { URL(string: "https://d4l.example.com/\($0).jpg") },
+                    isRealImage: { _ in true }
+                )
             )
         )
         #expect(queries.value.map(\.0) == ["any,contains,991", "any,contains,반도체 OR 양자역학"])
@@ -183,12 +185,44 @@ struct PersonalizedRecommendationTests {
                     queries.withValue { $0.append(query) }
                     return Self.searchResponse
                 },
-                data4LibraryLookup: { URL(string: "https://d4l.example.com/\($0).jpg") },
-                isRealImage: { _ in true }
+                covers: .init(
+                    data4LibraryLookup: { URL(string: "https://d4l.example.com/\($0).jpg") },
+                    isRealImage: { _ in true }
+                )
             )
         )
         #expect(queries.value == ["any,contains,반도체 OR 양자역학"])
         #expect(books.map(\.recordID) == ["a", "b", "c"])
+    }
+
+    @Test("맞춤 추천 전체 흐름은 표지 출처가 달라도 후보 순위를 보존한다")
+    func keepsRankingAcrossCoverSources() async throws {
+        let response = Data(#"{"docs":[{"pnx":{"control":{"recordid":["primo"]},"display":{"title":["첫 번째 책"]}},"delivery":{"holding":[{"callNumber":"Q1"}],"link":[{"linkType":"thumbnail","linkURL":"https://covers.example.com/primo"}]}},{"pnx":{"control":{"recordid":["data4"]},"display":{"title":["두 번째 책"]},"addata":{"isbn":["9788966260959"]}},"delivery":{"holding":[{"callNumber":"Q1"}]}}]}"#.utf8)
+        let books = try await PersonalizedRecommendationService.recommend(
+            .init(favoriteKeys: [], recentQueries: ["과학"], interests: []),
+            dependencies: .init(
+                model: .init(isAvailable: { false }, extractKeywords: { _ in [] }, rankBooks: { _ in [] }),
+                searchPrimo: { _, _ in response },
+                covers: .init(
+                    data4LibraryLookup: { URL(string: "https://d4l.example.com/\($0).jpg") },
+                    isRealImage: { _ in true }
+                )
+            )
+        )
+        #expect(books.map(\.recordID) == ["primo", "data4"])
+    }
+
+    private func selectRankedCovers(
+        _ candidates: [PersonalizedCandidate],
+        limit: Int = ColdStartRecommendation.resultCount,
+        data4LibraryLookup: @escaping @Sendable (String) async -> URL?,
+        isRealImage: @escaping @Sendable (URL) async -> Bool
+    ) async -> [RecommendedBook] {
+        await RecommendationCoverSelector.select(
+            candidates.map(RecommendationCoverSelector.Candidate.init),
+            policy: .preserveRanking, limit: limit, batchSize: ColdStartRecommendation.coverBatchSize,
+            resolver: .init(data4LibraryLookup: data4LibraryLookup, isRealImage: isRealImage)
+        )
     }
 
     // MARK: - 테스트 데이터
