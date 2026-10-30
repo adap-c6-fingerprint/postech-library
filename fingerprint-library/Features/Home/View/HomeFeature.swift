@@ -177,7 +177,7 @@ struct HomeFeature {
                 state.departmentName = name
                 return .none
                 
-            case let .upcomingCcoversChanged(urls):
+            case let .upcomingCoversChanged(urls):
                 return .run { [bookCoverClient] _ in
                     await bookCoverClient.prefetch(urls)
                     // 표지 미리 받기를 Effect로 시킴
