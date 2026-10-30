@@ -4,6 +4,25 @@ import Testing
 
 @MainActor
 struct BookClientTests {
+    @Test("빈 검색 결과는 빈 배열로 반환한다")
+    func acceptsEmptySearchResults() throws {
+        #expect(try BookClient.books(from: Data(#"{"docs":[]}"#.utf8)).isEmpty)
+    }
+
+    @Test("응답 문서가 있어도 유효한 책이 하나도 없으면 기존 Client 오류로 전달한다")
+    func rejectsUnusableSearchResults() {
+        let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma1"]},"display":{"title":[" "]}}}]}"#.utf8)
+        #expect(throws: (any Error).self) { try BookClient.books(from: data) }
+    }
+
+    @Test("유효하지 않은 후보와 중복을 제외하고 최초의 유효한 책 순서를 보존한다")
+    func keepsValidBooksInOrder() throws {
+        let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma1"]},"display":{"title":[" "]}}},{"pnx":{"control":{"recordid":["alma1"]},"display":{"title":["<b>첫 책</b>"]}}},{"pnx":{"control":{"recordid":["alma1"]},"display":{"title":["중복 책"]}}},{"pnx":{"control":{"recordid":["alma2"]},"display":{"title":["둘째 책"]}}}]}"#.utf8)
+        let books = try BookClient.books(from: data)
+        #expect(books.map(\.id) == ["primo:alma1", "primo:alma2"])
+        #expect(books.map(\.title) == ["첫 책", "둘째 책"])
+    }
+
     @Test("Primo 날짜에서 네 자리 출판 연도만 추출한다", arguments: [
         ("2011", "2011"),
         (" 2011\n", "2011"),
@@ -14,14 +33,14 @@ struct BookClientTests {
         ("2011-2013", "2011")
     ])
     func publicationYear(sample: (String, String)) {
-        #expect(BookClient.publicationYear(from: sample.0) == sample.1)
+        #expect(PrimoBookMapper.publicationYear(from: sample.0) == sample.1)
     }
 
     @Test("유효한 네 자리 연도가 없으면 출판 연도를 저장하지 않는다", arguments: [
         nil, "", " \n", "n.d.", "20??", "201", "0000", "12011", "20110", "20112012"
     ] as [String?])
     func invalidPublicationYear(value: String?) {
-        #expect(BookClient.publicationYear(from: value) == nil)
+        #expect(PrimoBookMapper.publicationYear(from: value) == nil)
     }
 
     @Test("공백 출판사는 건너뛰고 유효한 pub를 우선한다", arguments: [
@@ -38,7 +57,7 @@ struct BookClientTests {
         ([" 첫 출판사 ", "", "두 번째 출판사 "], nil, "첫 출판사, 두 번째 출판사")
     ] as [([String]?, [String]?, String?)])
     func publisher(sample: ([String]?, [String]?, String?)) {
-        #expect(BookClient.publisher(from: sample.0, fallback: sample.1) == sample.2)
+        #expect(PrimoBookMapper.publisher(from: sample.0, fallback: sample.1) == sample.2)
     }
 
     @Test("검색 응답의 subLocation과 저자를 같은 책에 보존한다")

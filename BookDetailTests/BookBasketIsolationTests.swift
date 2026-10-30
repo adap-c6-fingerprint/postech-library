@@ -17,13 +17,18 @@ nonisolated struct BookBasketIsolationTests {
             let first = book("a", control: "primo:animal-farm")
             let added = client.add(first, at: .distantPast)
             let duplicate = client.add(book("b", control: "primo:animal-farm"), at: .distantPast)
-            let retained = client.load() == [BookBasketItem(book: first, addedAt: .distantPast)]
+            let restored = client.load()
+            let retained = await MainActor.run {
+                restored == [BookBasketItem(book: first, addedAt: .distantPast)]
+            }
             client.save((0..<BookBasketItem.maxStoredCount).map {
                 BookBasketItem(book: book("\($0)", control: "primo:\($0)"), addedAt: .distantPast)
             })
             let full = client.load()
             let rejected = client.add(first, at: .distantPast)
-            return (added, duplicate, retained, rejected, client.load() == full)
+            let afterRejection = client.load()
+            let unchanged = await MainActor.run { afterRejection == full }
+            return (added, duplicate, retained, rejected, unchanged)
         }.value
         #expect(results.0 == .added)
         #expect(results.1 == .alreadyAdded)

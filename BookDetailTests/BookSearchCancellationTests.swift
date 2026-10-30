@@ -46,6 +46,7 @@ struct BookSearchCancellationTests {
                 }
                 return []
             }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: BookSearchResultCache())
         }
 
         await store.send(.searchButtonTapped) {

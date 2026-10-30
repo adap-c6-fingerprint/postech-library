@@ -25,6 +25,9 @@ struct HomePopularBooksTests {
                     #expect(count == 6)
                     return [popular]
                 }
+                $0.homeRecommendationForYouClient = .live(
+                    recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+                )
             }
 
         await store.send(.task)
@@ -52,6 +55,9 @@ struct HomePopularBooksTests {
                     Issue.record("이미 있는 하단 목록을 다시 조회하면 안 됩니다.")
                     return []
                 }
+                $0.homeRecommendationForYouClient = .live(
+                    recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+                )
             }
 
         await store.send(.task)
@@ -85,6 +91,9 @@ struct HomePopularBooksTests {
                     return []
                 }
                 $0.departmentPopularBooksClient.fetch = { _, _ in try await stub.fetch() }
+                $0.homeRecommendationForYouClient = .live(
+                    recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+                )
             }
 
         await store.send(.task)

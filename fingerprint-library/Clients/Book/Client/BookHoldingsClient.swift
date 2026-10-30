@@ -17,6 +17,7 @@ extension BookHoldingsClient: DependencyKey {
     private static let cache = BookHoldingsCache()
 
     static let liveValue = Self(fetch: { recordID in
+        @Dependency(\.httpClient) var httpClient
         let service: PrimoBookHoldingsService
         if let address = await AppConfiguration.primoProxyURL {
             guard let url = URL(string: address), url.scheme == "https", url.host != nil,
@@ -24,11 +25,11 @@ extension BookHoldingsClient: DependencyKey {
                 throw BookHoldingsError.invalidProxyURL
             }
             // 프록시가 기관 키를 보관한다. 앱의 키를 프록시로 전달하지 않는다.
-            service = .init(baseURL: url)
+            service = .init(baseURL: url, httpClient: httpClient)
         } else {
             #if DEBUG
             guard let key = await AppConfiguration.primoAPIKey else { throw BookHoldingsError.missingAPIKey }
-            service = .init(apiKey: key)
+            service = .init(apiKey: key, httpClient: httpClient)
             #else
             throw BookHoldingsError.missingProxy
             #endif

@@ -2,9 +2,23 @@ import Foundation
 
 /// 호출 경계를 주입할 수 있어 동일한 요청·응답 처리를 로컬 HTTP 시뮬레이션에서도 실행한다.
 nonisolated struct PrimoBookHoldingsService: Sendable {
-    var baseURL = URL(string: "https://api-ap.hosted.exlibrisgroup.com")!
-    var apiKey: String? = nil
-    var session: URLSession = .shared
+    var baseURL: URL
+    var apiKey: String?
+    var httpClient: HTTPClient
+
+    init(
+        baseURL: URL = PrimoAPIClient.defaultBaseURL,
+        apiKey: String? = nil,
+        httpClient: HTTPClient = .urlSession()
+    ) {
+        self.baseURL = baseURL
+        self.apiKey = apiKey
+        self.httpClient = httpClient
+    }
+
+    init(baseURL: URL = PrimoAPIClient.defaultBaseURL, apiKey: String? = nil, session: URLSession) {
+        self.init(baseURL: baseURL, apiKey: apiKey, httpClient: .urlSession(session))
+    }
 
     static func isValid(recordID: String) -> Bool {
         recordID.range(of: #"^alma[0-9]{10,30}$"#, options: .regularExpression) != nil
@@ -12,28 +26,16 @@ nonisolated struct PrimoBookHoldingsService: Sendable {
 
     func fetch(recordID: String) async throws -> [BookHolding] {
         guard Self.isValid(recordID: recordID) else { throw BookHoldingsError.invalidRecordID }
-        var components = URLComponents(url: baseURL.appending(path: "primo/v1/search"), resolvingAgainstBaseURL: false)
-        components?.queryItems = [
-            .init(name: "vid", value: "82POSTECH_INST:82POSTECH"),
-            .init(name: "tab", value: "LibraryCatalog"),
-            .init(name: "scope", value: "MyInstitution"),
-            // POSTECH에서는 rid,exact가 결과를 반환하지 않는다. MMS 검색 후 recordid를 정확히 검증한다.
-            .init(name: "q", value: "any,contains,\(recordID.dropFirst(4))"),
-            .init(name: "lang", value: "ko"),
-            .init(name: "offset", value: "0"),
-            .init(name: "limit", value: "20"),
-            .init(name: "skipDelivery", value: "false")
-        ]
-        guard let url = components?.url else { throw BookHoldingsError.invalidProxyURL }
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 15
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        if let apiKey { request.setValue("apikey \(apiKey)", forHTTPHeaderField: "Authorization") }
+        let api = PrimoAPIClient(httpClient: httpClient, baseURL: baseURL, apiKey: apiKey)
         for attempt in 0..<3 {
-            try Task.checkCancellation()
-            let (data, response) = try await session.data(for: request)
-            try Task.checkCancellation()
-            guard let http = response as? HTTPURLResponse else { throw BookHoldingsError.invalidResponse }
+            let result: HTTPResponse
+            do {
+                // POSTECH에서는 rid,exact가 결과를 반환하지 않는다. MMS 검색 후 recordid를 검증한다.
+                result = try await api.search(query: "any,contains,\(recordID.dropFirst(4))", timeout: 15)
+            } catch is HTTPClientError {
+                throw BookHoldingsError.invalidResponse
+            }
+            let http = result.response
             if http.statusCode == 429 || (500..<600).contains(http.statusCode) {
                 guard attempt < 2 else { throw BookHoldingsError.serviceUnavailable }
                 // 호출 화면에서 동시 요청을 제한한다. 재시도는 0.5초·1초 간격이다.
@@ -43,7 +45,7 @@ nonisolated struct PrimoBookHoldingsService: Sendable {
                 continue
             }
             guard (200..<300).contains(http.statusCode) else { throw BookHoldingsError.invalidResponse }
-            do { return try PrimoHoldingsMapper.decode(data, recordID: recordID) }
+            do { return try PrimoHoldingsMapper.decode(result.data, recordID: recordID) }
             catch { throw BookHoldingsError.invalidResponse }
         }
         throw BookHoldingsError.serviceUnavailable

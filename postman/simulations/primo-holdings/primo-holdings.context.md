@@ -21,7 +21,7 @@ postman simulation run postman/simulations/primo-holdings/primo-holdings.sim.yam
 Once the `listening` event reports port 47575, compile and run in another:
 
 ```sh
-swiftc -swift-version 6 -parse-as-library fingerprint-library/Domain/Book/BookHolding.swift fingerprint-library/Domain/Book/BookCardLibraryInfo.swift fingerprint-library/Clients/Book/PrimoHoldingsMapper.swift fingerprint-library/Clients/Book/PrimoBookHoldingsService.swift Scripts/verify-primo-holdings.swift -o /tmp/primo-holdings-proof
+swiftc -swift-version 6 -parse-as-library fingerprint-library/Clients/Network/HTTPClient.swift fingerprint-library/Clients/Book/Client/PrimoAPIClient.swift fingerprint-library/Domain/Book/BookHolding.swift fingerprint-library/Domain/Book/BookCardLibraryInfo.swift fingerprint-library/Clients/Book/Client/PrimoHoldingsMapper.swift fingerprint-library/Clients/Book/Client/PrimoBookHoldingsService.swift Scripts/verify-primo-holdings.swift -o /tmp/primo-holdings-proof
 /tmp/primo-holdings-proof http://127.0.0.1:47575/library
 ```
 
@@ -44,6 +44,7 @@ No credentials, workspace binding or public deployment are needed.
 ## Observations
 
 <!-- begin:observations -->
+2026-10-30: 공통 `HTTPClient`와 `PrimoAPIClient`를 사용하는 실제 소장 서비스를 Swift 6으로 컴파일해 기존 시뮬레이션에서 실행했다. 기존 응답 변환·401·잘못된 JSON·503 최대 3회·429 두 번째 요청 회복이 통과했고, 요청 이벤트 12건을 확인했다. 실제 프록시나 실서버를 호출한 결과는 아니다. 구조화된 검증 기록은 `primo-holdings.context.yaml`에 추가했다.
 2026-10-28 (#88): `library` served the production Swift 6 HTTP service and
 recommendation-card conversion. Location, call number, availability from the
 same holding and additional locations passed alongside the existing fault

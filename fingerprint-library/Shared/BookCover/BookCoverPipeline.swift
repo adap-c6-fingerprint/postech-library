@@ -1,5 +1,6 @@
 import UIKit
 import OSLog
+import ComposableArchitecture
 
 @MainActor
 enum BookCoverPipeline {
@@ -8,7 +9,9 @@ enum BookCoverPipeline {
         guard let key = await AppConfiguration.yes24APIKey else {
             throw BookDetailClientError.missingAPIKey
         }
-        return try await Yes24BookDetailService().fetchCoverURL(isbn13: isbn13, apiKey: key)
+        @Dependency(\.httpClient) var httpClient
+        return try await Yes24BookDetailService(httpClient: httpClient)
+            .fetchCoverURL(isbn13: isbn13, apiKey: key)
     }
     /// 추천·검색·상세가 같은 메모리 캐시와 진행 중 요청을 사용한다.
     static let shared = SharedImageLoader<UIImage>(
@@ -28,10 +31,15 @@ enum BookCoverPipeline {
                     }
                     return image
                 }
-                let (data, response) = try await URLSession.shared.data(from: url)
-                try Task.checkCancellation()
-                try BookCoverFailure.validate(data: data, response: response)
-                guard let image = UIImage(data: data) else { throw BookCoverFailure.invalidImage }
+                @Dependency(\.httpClient) var httpClient
+                let result: HTTPResponse
+                do {
+                    result = try await httpClient.send(URLRequest(url: url))
+                } catch is HTTPClientError {
+                    throw BookCoverFailure.invalidResponse
+                }
+                try BookCoverFailure.validate(data: result.data, response: result.response)
+                guard let image = UIImage(data: result.data) else { throw BookCoverFailure.invalidImage }
                 return image
             } catch {
                 guard !Task.isCancelled else { throw CancellationError() }

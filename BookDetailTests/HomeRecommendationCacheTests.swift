@@ -37,6 +37,9 @@ struct HomeRecommendationCacheTests {
                 await MainActor.run { #expect(books == [next]) }
                 return prepared
             }
+            $0.homeRecommendationForYouClient = .live(
+                recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+            )
         }
         await store.send(.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
@@ -72,6 +75,9 @@ struct HomeRecommendationCacheTests {
             $0.recommendationCacheClient.restore = { snapshot }
             $0.bookRecommendationClient.fetch = { _ in [book] }
             $0.recommendationCacheClient.prepare = { _ in snapshot }
+            $0.homeRecommendationForYouClient = .live(
+                recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+            )
         }
         await store.send(.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
@@ -100,6 +106,9 @@ struct HomeRecommendationCacheTests {
                 return nil
             }
             $0.bookRecommendationClient.fetch = { _ in [book] }
+            $0.homeRecommendationForYouClient = .live(
+                recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+            )
         }
         await store.send(.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
@@ -128,6 +137,9 @@ struct HomeRecommendationCacheTests {
             $0.recommendationCacheClient.restore = { saved }
             $0.bookRecommendationClient.fetch = { _ in [b] }
             $0.recommendationCacheClient.prepare = { _ in next }
+            $0.homeRecommendationForYouClient = .live(
+                recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+            )
         }
         await store.send(.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
@@ -155,6 +167,9 @@ struct HomeRecommendationCacheTests {
             $0.uuid = .constant(sessionID)
             $0.recommendationCacheClient.restore = { hasCached ? snapshot : nil }
             $0.bookRecommendationClient.fetch = { _ in throw URLError(.notConnectedToInternet) }
+            $0.homeRecommendationForYouClient = .live(
+                recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+            )
         }
         await store.send(.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
@@ -188,6 +203,9 @@ struct HomeRecommendationCacheTests {
         let store = TestStore(initialState: state) { HomeFeature() } withDependencies: {
             $0.uuid = .constant(sessionID)
             $0.bookRecommendationClient.fetch = { _ in [a] }
+            $0.homeRecommendationForYouClient = .live(
+                recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+            )
         }
         await store.send(.retryRecommendationsButtonTapped)
         await store.receive(\.recommendationSessionStarted) {
@@ -231,6 +249,9 @@ struct HomeRecommendationCacheTests {
                 Issue.record("빈 추천은 저장하면 안 된다")
                 throw URLError(.badServerResponse)
             }
+            $0.homeRecommendationForYouClient = .live(
+                recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+            )
         }
         await store.send(.recommendationSessionStarted) {
             $0.recommendationSessionID = sessionID
