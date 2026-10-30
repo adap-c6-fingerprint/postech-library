@@ -43,6 +43,8 @@ flowchart TD
 공통 계층은 재시도를 추가하지 않는다. 소장 조회는 기존의 최대 3회, `Retry-After`와 대기 시간을 유지한다.
 `BookHoldingsClient`의 Debug 직접 인증과 Release HTTPS 프록시 선택도 유지한다.
 
+검색·추천의 후속 책임 분리와 담당 파일별 점검은 [BookDependencyReview.md](BookDependencyReview.md)에 정리했다.
+
 ## 의존성 주입과 검증
 
 앱의 기능 Client와 표지 파이프라인은 `@Dependency(\.httpClient)`로 공통 전송기를 읽는다.

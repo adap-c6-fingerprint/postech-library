@@ -74,7 +74,7 @@ struct ColdStartRecommendationTests {
                        "link":[{"linkType":"thumbnail","linkURL":"https://local.4libs.org/c.php?isbn=978 (pbk.)&institute=82KC-P"}]}}
         ]}
         """
-        let page = try ColdStartRecommendationService.parsePrimo(Data(json.utf8), codes: ["Q"])
+        let page = try PrimoRecommendationMapper.coldStartPage(from: Data(json.utf8), codes: ["Q"])
         #expect(page.total == 123)
         #expect(page.candidates == [
             ColdStartCandidate(recordID: "alma1", primoCoverURL: URL(string: "https://covers.example.com/1.jpg"),
@@ -89,12 +89,12 @@ struct ColdStartRecommendationTests {
 
     @Test("정보나루의 http 표지 주소는 https로 바꾼다")
     func secureCoverURL() {
-        #expect(ColdStartRecommendationService.secureCoverURL("http://image.aladin.co.kr/product/1/cover/a.jpg")
+        #expect(Data4LibraryAPIClient.secureCoverURL("http://image.aladin.co.kr/product/1/cover/a.jpg")
                 == URL(string: "https://image.aladin.co.kr/product/1/cover/a.jpg"))
-        #expect(ColdStartRecommendationService.secureCoverURL("https://bookthumb-phinf.pstatic.net/a.jpg?type=m1")
+        #expect(Data4LibraryAPIClient.secureCoverURL("https://bookthumb-phinf.pstatic.net/a.jpg?type=m1")
                 == URL(string: "https://bookthumb-phinf.pstatic.net/a.jpg?type=m1"))
-        #expect(ColdStartRecommendationService.secureCoverURL("") == nil)
-        #expect(ColdStartRecommendationService.secureCoverURL("ftp://example.com/a.jpg") == nil)
+        #expect(Data4LibraryAPIClient.secureCoverURL("") == nil)
+        #expect(Data4LibraryAPIClient.secureCoverURL("ftp://example.com/a.jpg") == nil)
     }
 
     @Test("정보나루로 6권을 채우면 4libs 링크는 확인하지 않는다")
@@ -104,7 +104,7 @@ struct ColdStartRecommendationTests {
             ColdStartCandidate(recordID: "b\($0)", primoCoverURL: URL(string: "https://4libs.example.com/\($0)"),
                                isbn13: "isbn-\($0)")
         }
-        let books = await ColdStartRecommendationService.booksWithCovers(
+        let books = await selectColdStartCovers(
             candidates,
             data4LibraryLookup: { URL(string: "https://d4l.example.com/\($0).jpg") },
             isRealImage: { _ in
@@ -123,7 +123,7 @@ struct ColdStartRecommendationTests {
         let candidates = (1...25).map {
             ColdStartCandidate(recordID: "n\($0)", primoCoverURL: nil, isbn13: "isbn-\($0)")
         }
-        let books = await ColdStartRecommendationService.booksWithCovers(
+        let books = await selectColdStartCovers(
             candidates,
             data4LibraryLookup: { isbn in
                 lookedUp.withValue { $0.append(isbn) }
@@ -145,7 +145,7 @@ struct ColdStartRecommendationTests {
             ColdStartCandidate(recordID: "p1", primoCoverURL: URL(string: "https://4libs.example.com/p1"), isbn13: nil),
             ColdStartCandidate(recordID: "p2", primoCoverURL: URL(string: "https://4libs.example.com/p2"), isbn13: "isbn-p2"),
         ]
-        let books = await ColdStartRecommendationService.booksWithCovers(
+        let books = await selectColdStartCovers(
             candidates,
             data4LibraryLookup: { $0 == "isbn-d1" ? URL(string: "https://d4l.example.com/d1.jpg") : nil },
             isRealImage: { $0.lastPathComponent != "empty" }
@@ -155,6 +155,19 @@ struct ColdStartRecommendationTests {
             RecommendedBook(recordID: "p1", coverImageURL: URL(string: "https://4libs.example.com/p1")!),
             RecommendedBook(recordID: "p2", coverImageURL: URL(string: "https://4libs.example.com/p2")!),
         ])
+    }
+
+    private func selectColdStartCovers(
+        _ candidates: [ColdStartCandidate],
+        limit: Int = ColdStartRecommendation.resultCount,
+        data4LibraryLookup: @escaping @Sendable (String) async -> URL?,
+        isRealImage: @escaping @Sendable (URL) async -> Bool
+    ) async -> [RecommendedBook] {
+        await RecommendationCoverSelector.select(
+            candidates.map(RecommendationCoverSelector.Candidate.init),
+            policy: .preferData4Library, limit: limit, batchSize: ColdStartRecommendation.coverBatchSize,
+            resolver: .init(data4LibraryLookup: data4LibraryLookup, isRealImage: isRealImage)
+        )
     }
 
 }

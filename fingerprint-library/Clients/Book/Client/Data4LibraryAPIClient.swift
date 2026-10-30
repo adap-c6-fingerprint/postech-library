@@ -17,6 +17,24 @@ nonisolated struct Data4LibraryAPIClient: Sendable {
     var httpClient: HTTPClient = .urlSession()
     var baseURL = URL(string: "https://data4library.kr/api")!
 
+    func coverURL(isbn13: String, apiKey: String) async throws -> URL? {
+        let result = try await fetch(.bookDetail, isbn13: isbn13, apiKey: apiKey)
+        guard result.isSuccessful else { throw Data4LibraryAPIError.invalidResponse }
+        let decoded = try JSONDecoder().decode(DetailResponse.self, from: result.data)
+        guard let raw = decoded.response.detail?.first?.book.bookImageURL else { return nil }
+        return Self.secureCoverURL(raw)
+    }
+
+    static func secureCoverURL(_ raw: String) -> URL? {
+        guard var parts = URLComponents(string: raw), parts.host?.isEmpty == false else { return nil }
+        switch parts.scheme?.lowercased() {
+        case "https": break
+        case "http": parts.scheme = "https"
+        default: return nil
+        }
+        return parts.url
+    }
+
     func fetch(_ endpoint: Endpoint, isbn13: String, apiKey: String) async throws -> HTTPResponse {
         var components = URLComponents(
             url: baseURL.appending(path: endpoint.path), resolvingAgainstBaseURL: false
@@ -33,4 +51,13 @@ nonisolated struct Data4LibraryAPIClient: Sendable {
         guard let url = components?.url else { throw URLError(.badURL) }
         return try await httpClient.send(URLRequest(url: url))
     }
+
+    private nonisolated struct DetailResponse: Decodable {
+        let response: Body
+        nonisolated struct Body: Decodable { let detail: [Detail]? }
+        nonisolated struct Detail: Decodable { let book: Book }
+        nonisolated struct Book: Decodable { let bookImageURL: String? }
+    }
 }
+
+nonisolated enum Data4LibraryAPIError: Error { case invalidResponse }

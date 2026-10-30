@@ -15,28 +15,25 @@ nonisolated struct PersonalizedRecommendationClient: Sendable {
 extension PersonalizedRecommendationClient: DependencyKey {
     static let liveValue = Self(fetch: { input in
         guard let primoKey = await AppConfiguration.primoAPIKey else {
-            throw ColdStartRecommendationError.missingPrimoAPIKey
+            throw RecommendationClientError.missingPrimoAPIKey
         }
         guard let data4LibraryKey = await AppConfiguration.data4LibraryAPIKey else {
-            throw ColdStartRecommendationError.missingData4LibraryAPIKey
+            throw RecommendationClientError.missingData4LibraryAPIKey
         }
         @Dependency(\.foundationModelsClient) var model
         @Dependency(\.httpClient) var httpClient
+        let primo = PrimoAPIClient(httpClient: httpClient, apiKey: primoKey)
         return try await PersonalizedRecommendationService.recommend(
             input,
             dependencies: .init(
                 model: model,
                 searchPrimo: { query, limit in
-                    try await PersonalizedRecommendationService.searchPrimo(
-                        query: query, limit: limit, apiKey: primoKey, httpClient: httpClient
-                    )
+                    try await primo.searchData(query: query, resourceTypes: ["printed_book"], limit: limit)
                 },
-                data4LibraryLookup: { isbn13 in
-                    try? await ColdStartRecommendationService.data4LibraryCoverURL(
-                        isbn13: isbn13, apiKey: data4LibraryKey, httpClient: httpClient
-                    )
-                },
-                isRealImage: { await ColdStartRecommendationService.isRealImage($0, httpClient: httpClient) }
+                covers: .live(
+                    httpClient: httpClient, data4LibraryAPIKey: data4LibraryKey,
+                    minimumImageBytes: ColdStartRecommendation.minimumCoverBytes
+                )
             )
         )
     })
@@ -63,8 +60,7 @@ nonisolated enum PersonalizedRecommendationService {
     // 바깥 시스템 호출 묶음. 테스트에서 가짜로 바꿔 끼운다.
         var model: FoundationModelsClient
         var searchPrimo: @Sendable (_ query: String, _ limit: Int) async throws -> Data
-        var data4LibraryLookup: @Sendable (_ isbn13: String) async -> URL?
-        var isRealImage: @Sendable (_ url: URL) async -> Bool
+        var covers: RecommendationCoverResolver
     }
 
     static func recommend(
@@ -78,7 +74,7 @@ nonisolated enum PersonalizedRecommendationService {
             let data = try? await dependencies.searchPrimo(
                 PersonalizedRecommendation.primoRecordQuery(mmsIDs), mmsIDs.count
             )
-            favoriteTitles += data.flatMap { try? parseTitles($0) } ?? []
+            favoriteTitles += data.flatMap { try? PrimoRecommendationMapper.titles(from: $0) } ?? []
         }
         // ① 찜 목록은 책 ID만 저장돼 있어서, 포스텍 API로 제목을 한 번에 조회한다.
         // 조회에 실패해도 최근 검색어만으로 계속 진행한다.
@@ -91,7 +87,7 @@ nonisolated enum PersonalizedRecommendationService {
         guard !keywords.isEmpty else { throw PersonalizedRecommendationError.noKeywords }
         // ② 모델이 관심사 키워드 5개를 뽑는다.
 
-        let candidates = try parseCandidates(
+        let candidates = try PrimoRecommendationMapper.personalizedCandidates(from:
             try await dependencies.searchPrimo(
                 PersonalizedRecommendation.primoKeywordQuery(keywords),
                 PersonalizedRecommendation.primoFetchCount
@@ -113,10 +109,12 @@ nonisolated enum PersonalizedRecommendationService {
         )
         // ④ 모델이 관련도 순으로 정렬하고, 관심 분류에 속한 책을 앞으로 모은다.
 
-        return await topBooksWithCovers(
-            ranked,
-            data4LibraryLookup: dependencies.data4LibraryLookup,
-            isRealImage: dependencies.isRealImage
+        return await RecommendationCoverSelector.select(
+            ranked.map(RecommendationCoverSelector.Candidate.init),
+            policy: .preserveRanking,
+            limit: ColdStartRecommendation.resultCount,
+            batchSize: ColdStartRecommendation.coverBatchSize,
+            resolver: dependencies.covers
         )
         // ⑤ 우선순위 순서대로 표지를 확인해 표지 있는 상위 6권을 돌려준다.
     }
@@ -159,139 +157,4 @@ nonisolated enum PersonalizedRecommendationService {
         return (try? await model.rankBooks(prompt)) ?? []
     }
 
-    // MARK: - 표지 고르기
-
-    static func topBooksWithCovers(
-        _ ranked: [PersonalizedCandidate],
-        limit: Int = ColdStartRecommendation.resultCount,
-        data4LibraryLookup: @escaping @Sendable (_ isbn13: String) async -> URL?,
-        isRealImage: @escaping @Sendable (_ url: URL) async -> Bool
-    ) async -> [RecommendedBook] {
-    // 우선순위 순서를 지키며 표지를 확인한다. 책마다 정보나루 → 4libs 순서로 시도한다.
-    // 첫 추천과 다른 점: 정보나루 표지가 있는 책을 먼저 모으지 않는다. 순위가 높은 책이 표지 출처 때문에 밀리지 않게.
-        var result: [RecommendedBook] = []
-        var start = 0
-        while start < ranked.count, result.count < limit {
-            let end = min(start + ColdStartRecommendation.coverBatchSize, ranked.count)
-            let batch = Array(ranked[start..<end])
-            let coverByIndex = await withTaskGroup(of: (Int, URL?).self) { group in
-                for (index, candidate) in batch.enumerated() {
-                    group.addTask {
-                        if let isbn13 = candidate.isbn13, let url = await data4LibraryLookup(isbn13) {
-                            return (index, url)
-                        }
-                        if let url = candidate.primoCoverURL, await isRealImage(url) {
-                            return (index, url)
-                        }
-                        return (index, nil)
-                    }
-                }
-                var found: [Int: URL] = [:]
-                for await (index, url) in group {
-                    if let url { found[index] = url }
-                }
-                return found
-            }
-            result += batch.indices.compactMap { index in
-                coverByIndex[index].map { RecommendedBook(recordID: batch[index].recordID, coverImageURL: $0) }
-            }
-            // 응답이 온 순서가 아니라 우선순위 순서를 유지한다.
-            start = end
-        }
-        return Array(result.prefix(limit))
-    }
-
-    // MARK: - 포스텍 Primo
-
-    static func searchPrimo(
-        query: String, limit: Int, apiKey: String, httpClient: HTTPClient = .urlSession()
-    ) async throws -> Data {
-        let result: HTTPResponse
-        do {
-            result = try await PrimoAPIClient(httpClient: httpClient, apiKey: apiKey)
-                .search(query: query, resourceTypes: ["printed_book"], limit: limit)
-        } catch is HTTPClientError {
-            throw ColdStartRecommendationError.invalidResponse
-        }
-        guard result.isSuccessful else { throw ColdStartRecommendationError.invalidResponse }
-        return result.data
-    }
-
-    static func parseTitles(_ data: Data) throws -> [String] {
-    // 찜 도서 조회 응답에서 제목만 꺼낸다.
-        try JSONDecoder().decode(PrimoResponse.self, from: data).docs.compactMap { doc in
-            doc.pnx.display.title?.first.map(BookText.plainText).flatMap { $0.isEmpty ? nil : $0 }
-        }
-    }
-
-    static func parseCandidates(_ data: Data) throws -> [PersonalizedCandidate] {
-    // 키워드 검색 응답을 해석해 조건을 통과한 후보만 남긴다. 조건은 첫 추천과 같다.
-        let response = try JSONDecoder().decode(PrimoResponse.self, from: data)
-        var seen = Set<String>()
-        return response.docs.compactMap { doc -> PersonalizedCandidate? in
-            guard let recordID = doc.pnx.control.recordid.first, !recordID.isEmpty,
-                  seen.insert(recordID).inserted else { return nil }
-            // recordid가 없거나 이미 담은 책이면 탈락.
-            guard let title = doc.pnx.display.title?.first.map(BookText.plainText), !title.isEmpty else {
-                return nil
-            }
-            // 모델이 판단할 제목이 없으면 탈락.
-            guard let callNumber = doc.delivery?.holding?
-                .compactMap({ $0.callNumber?.trimmingCharacters(in: .whitespaces) })
-                .first(where: { !$0.isEmpty })
-            else { return nil }
-            // 조건: 청구기호가 있어야 한다.
-            let primoCoverURL = ColdStartRecommendationService.primoThumbnailURL(from: doc.delivery?.link)
-            let isbn13 = BookISBN.isbn13(from: doc.pnx.addata?.isbn?.joined(separator: " "))
-            guard primoCoverURL != nil || isbn13 != nil else { return nil }
-            // 포스텍 표지도 ISBN도 없으면 표지를 구할 방법이 없으므로 탈락.
-            return PersonalizedCandidate(
-                recordID: recordID,
-                title: title,
-                subject: doc.pnx.display.subject?.first.map(BookText.plainText),
-                callNumber: callNumber,
-                primoCoverURL: primoCoverURL,
-                isbn13: isbn13
-            )
-        }
-    }
-
-    // MARK: - 응답 모양
-
-    private nonisolated struct PrimoResponse: Decodable {
-        let docs: [PrimoDocument]
-    }
-
-    private nonisolated struct PrimoDocument: Decodable {
-        let pnx: PrimoPNX
-        let delivery: PrimoDelivery?
-    }
-
-    private nonisolated struct PrimoPNX: Decodable {
-        let control: PrimoControl
-        let display: PrimoDisplay
-        let addata: PrimoAddData?
-    }
-
-    private nonisolated struct PrimoControl: Decodable {
-        let recordid: [String]
-    }
-
-    private nonisolated struct PrimoDisplay: Decodable {
-        let title: [String]?
-        let subject: [String]?
-    }
-
-    private nonisolated struct PrimoAddData: Decodable {
-        let isbn: [String]?
-    }
-
-    private nonisolated struct PrimoDelivery: Decodable {
-        let holding: [PrimoHolding]?
-        let link: [ColdStartRecommendationService.PrimoLink]?
-    }
-
-    private nonisolated struct PrimoHolding: Decodable {
-        let callNumber: String?
-    }
 }

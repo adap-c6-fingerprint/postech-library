@@ -8,6 +8,20 @@ nonisolated struct PrimoAPIClient: Sendable {
     var baseURL: URL = defaultBaseURL
     var apiKey: String? = nil
 
+    /// 재시도 정책이 필요 없는 조회에서 HTTP 성공 응답의 본문을 반환한다.
+    func searchData(
+        query: String, resourceTypes: [String] = [], offset: Int = 0, limit: Int = 20
+    ) async throws -> Data {
+        let result: HTTPResponse
+        do {
+            result = try await search(query: query, resourceTypes: resourceTypes, offset: offset, limit: limit)
+        } catch is HTTPClientError {
+            throw PrimoAPIError.invalidResponse
+        }
+        guard result.isSuccessful else { throw PrimoAPIError.invalidResponse }
+        return result.data
+    }
+
     static func searchURL(
         baseURL: URL = defaultBaseURL,
         query: String,
@@ -59,3 +73,5 @@ nonisolated struct PrimoAPIClient: Sendable {
         return try await httpClient.send(request)
     }
 }
+
+nonisolated enum PrimoAPIError: Error { case invalidResponse }
