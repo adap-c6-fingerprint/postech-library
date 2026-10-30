@@ -56,11 +56,8 @@ struct BookSearchFeature {
     }
     
     // 검색에 사용할 BookClient 값
-    @Dependency(\.bookClient)
-    var bookClient: BookClient
-
-    @Dependency(\.bookSearchCache)
-    var bookSearchCache: BookSearchCacheClient
+    @Dependency(\.bookSearchClient)
+    var bookSearchClient: BookSearchClient
 
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
@@ -268,10 +265,8 @@ struct BookSearchFeature {
             state.recentQueries = Array(state.recentQueries.prefix(20))
             searchHistoryClient.save(state.recentQueries)
         }
-
-        if refreshing {
-            bookSearchCache.remove(request)
-        } else if let books = bookSearchCache.load(request) {
+        
+        if !refreshing, let books = bookSearchClient.cached(request) {
             state.books = books
             state.isLoading = false
             return .cancel(id: CancelID.search)
@@ -282,11 +277,11 @@ struct BookSearchFeature {
         if !refreshing {
             state.books = []
         }
-        return .run { [bookClient, bookSearchCache] send in
+        
+        return .run { [bookSearchClient] send in
             do {
-                let books = try await bookClient.search(request)
+                let books = try await bookSearchClient.search(request, refreshing)
                 try Task.checkCancellation()
-                bookSearchCache.save(request, books)
                 await send(.searchSucceeded(generation: generation, books: books))
             } catch is CancellationError {
                 return
