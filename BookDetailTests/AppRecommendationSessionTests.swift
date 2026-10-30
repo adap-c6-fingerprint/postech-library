@@ -12,6 +12,9 @@ struct AppRecommendationSessionTests {
         let store = TestStore(initialState: AppFeature.State()) { AppFeature() } withDependencies: {
             $0.uuid = .constant(id)
             $0.bookRecommendationClient.fetch = { _ in [book] }
+            $0.homeRecommendationForYouClient = .live(
+                recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
+            )
         }
         await store.send(.appStarted) { $0.hasStartedRecommendationSession = true }
         await store.receive(\.home.recommendationSessionStarted) {

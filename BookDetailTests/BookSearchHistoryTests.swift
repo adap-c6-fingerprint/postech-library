@@ -31,6 +31,7 @@ struct BookSearchHistoryTests {
         } withDependencies: {
             $0.searchHistoryClient = history
             $0.bookClient.search = { _ in [] }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: BookSearchResultCache())
         }
 
         await store.send(.task) { $0.recentQueries = previous }
@@ -55,6 +56,7 @@ struct BookSearchHistoryTests {
         } withDependencies: {
             $0.searchHistoryClient = history
             $0.bookClient.search = { _ in [] }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: BookSearchResultCache())
         }
 
         await store.send(.task) { $0.recentQueries = ["코스모스", "사피엔스"] }
@@ -87,6 +89,7 @@ struct BookSearchHistoryTests {
         } withDependencies: {
             $0.searchHistoryClient = history
             $0.bookClient.search = { _ in throw error }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: BookSearchResultCache())
         }
 
         await store.send(.searchButtonTapped) {
