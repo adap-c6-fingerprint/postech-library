@@ -2,7 +2,8 @@ import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 
 // Execute inside the development container. No credentials or provider payloads are printed.
-const { RELAY_TOKEN } = JSON.parse(readFileSync('/run/secrets/relay.json', 'utf8'));
+const credentials = JSON.parse(readFileSync('/run/secrets/relay.json', 'utf8'));
+const { RELAY_TOKEN } = credentials;
 const base = 'https://pobook-api-dev.fpmaps.com';
 async function request(path, status, authenticated = true) {
   const response = await fetch(base + path, {
@@ -11,7 +12,9 @@ async function request(path, status, authenticated = true) {
   });
   assert.equal(response.status, status, `Unexpected HTTP status at ${path.split('?')[0]}`);
   assert.equal(response.headers.get('cache-control'), 'no-store');
-  const body = await response.json();
+  const text = await response.text();
+  for (const value of Object.values(credentials)) assert.ok(!text.includes(value), 'Credential found in response');
+  const body = JSON.parse(text);
   console.log(JSON.stringify({ path: path.split('?')[0], status: response.status, cache: response.headers.get('cf-cache-status') }));
   return body;
 }

@@ -73,3 +73,32 @@ Nginx/인증서
 - 외부 제공사 키를 앱에서 제거하되 기존 Mapper와 UI/앱 캐시를 유지한다.
 - 제공사 키가 실제 운영 키인지, 정보나루 서버 IP가 등록됐는지 사람이 확인한다.
 - 개발 토큰은 채팅이나 PR에 붙이지 않고 승인된 비밀 전달 경로로 공유한다.
+
+단계 1 배포 확인 (2026-10-31)
+- 기준 dev: bd908b168ec94e035f3f0cf6a4282387f561f5d8.
+- 실행 이미지: pobook-api-dev:be40821 (Node v22.23.2 / ARM64).
+- https://pobook-api-dev.fpmaps.com/healthz -> 200 {"status":"ok"}.
+- 개발 도메인을 통한 Primo / Yes24 / 정보나루 상세 / 정보나루 연관 도서: 모두 200, 정상 자료 구조 확인.
+- 인증 누락 401, 미허용 경로 404, 키 덮어쓰기 파라미터 400 확인.
+- 모든 smoke 응답의 Cache-Control no-store, Cloudflare DYNAMIC 확인.
+- 로컬 Node 22.22.1 및 서버 ARM Node 22.23.2의 모의 단위 테스트 17개 각각 통과.
+- 기존 Nginx 설정은 변경 없이 유지하고 개발용 HTTP/HTTPS server 블록 두 개만 추가했다.
+- 원본 백업: /home/ubuntu/nginx-proxy/nginx.conf.before-pobook-api-dev-20261031.
+- 최종 Nginx sha256: 42f6d754f1db3f97789f2b7bb2dd91373c758fb4062b6518c0691049acf7888a.
+- nginx -t 통과, graceful reload. 기존 서비스 컨테이너 재시작 없음.
+- john-baek.com 200 / blog.fpmaps.com 200 / set-link.fpmaps.com 302 확인.
+- 운영 API 도메인은 기존과 동일하게 블로그로 301. 운영 환경은 배포하지 않았다.
+- 별도 joinmyorder.pm-z.com / news.pm-z.com HTTPS 526을 발견했으나 수정하지 않았다.
+  사전 상태와의 응답 비교는 없고, 관련 기존 Nginx 블록은 전후 diff에서 동일함을 확인했다.
+- 개발 인증서 만료일 2027-01-29. 전용 cron 설치와 certbot 모의 갱신 성공 확인.
+- 컨테이너 healthy / 재시작 0. 유휴 관측 CPU 0%, RAM 약 17MiB (최대 부하 측정이 아님).
+- 앱/빌드 설정 변경 없음. 앱 연결·장기 부하·제공사 실제 할당량·Cloudflare 계정 설정 검증은 남는다.
+- 비밀 파일은 서버에만 추가했다. 기존 앱 키 제거는 단계 2 범위다.
+- GitHub push/PR/merge 및 Linear 완료 처리는 하지 않았다.
+
+셀프리뷰
+- 영향도 M: 신규 개발 API 경로·배포·인증 경계에 한정하며 앱/운영 도메인 계약은 변경하지 않는다.
+- 고정 upstream, 파라미터 검사, 키 주입, 원본 상태/본문 보존, 취소/상한/타임아웃,
+  키 없는 build context, 파일 권한, 자원 제한 및 기존 Nginx diff를 검토했다.
+- 개발 1단계 범위에서 필수 수정 문제는 남기지 않았다. 운영 전환 승인이나 사람 리뷰를 대신하지 않는다.
+- 메모리 카운터/고정 개발 토큰의 제약은 위에 명시했다. 복제/운영 인증으로 사용하지 않는다.
