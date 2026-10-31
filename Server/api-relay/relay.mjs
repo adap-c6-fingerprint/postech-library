@@ -123,7 +123,8 @@ export function createRelay({ credentials, fetchImpl = fetch, now = Date.now, da
       counter.active++;
       counter.count++;
       counter.daily++;
-      const headers = { Accept: 'application/json' };
+      // Information Naru returns 406 for Accept: application/json even with format=json.
+      const headers = { Accept: provider === 'primo' ? 'application/json' : '*/*' };
       if (provider === 'primo') headers.Authorization = `apikey ${credentials.PRIMO_API_KEY}`;
       else if (provider === 'yes24') headers['X-Api-Key'] = credentials.YES24_API_KEY;
       else target.searchParams.set('authKey', credentials.DATA4LIBRARY_API_KEY);

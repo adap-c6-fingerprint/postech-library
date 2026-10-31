@@ -20,6 +20,8 @@ PLI-144 / GitHub #182 — 개발용 단순 API 중계 (단계 1)
 - 리다이렉트는 추적하지 않는다. 중계 실패 502, 시간 초과 504, 로컬 제한 429.
 - 최대 응답 4MiB, 외부 요청 총 12초. 응답을 읽는 동안에도 제한한다.
 - 자동 재시도 없음: 기존 앱의 재시도와 중첩하지 않는다.
+- Accept는 Primo만 application/json, Yes24/정보나루는 */*로 기존 호출 의미를 유지한다.
+  정보나루는 format=json이어도 Accept: application/json이면 406을 반환함을 실호출로 확인했다.
 - Cache-Control: no-store. Cloudflare의 해당 호스트 캐시 규칙도 별도 확인해야 한다.
 
 개발용 보호 한도

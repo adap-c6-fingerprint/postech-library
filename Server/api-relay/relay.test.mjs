@@ -51,6 +51,7 @@ test('Primo preserves decoded queries, institution, facets and pagination, injec
     assert.equal(url.searchParams.get('limit'), '50');
     assert.equal(url.searchParams.get('multiFacets'), 'facet_rtype,include,printed_book');
     assert.equal(options.headers.Authorization, 'apikey primo-secret');
+    assert.equal(options.headers.Accept, 'application/json');
     assert.equal(options.headers['X-Api-Key'], undefined);
     assert.equal(options.redirect, 'manual');
     return new Response('{"docs":[]}', { headers: { 'Content-Type': 'application/json', 'X-Exl-Api-Remaining': '42', 'Set-Cookie': 'secret' } });
@@ -71,6 +72,7 @@ for (const [path, provider] of [
     const body = '{"errorCode":"GOODS_001","message":"없음"}';
     const relay = handler({ fetchImpl: async (url, options) => {
       assert.equal(options.headers.Authorization, undefined);
+      assert.equal(options.headers.Accept, '*/*');
       if (provider === 'yes24') {
         assert.equal(url.origin, 'https://apis.yes24.com');
         assert.equal(options.headers['X-Api-Key'], 'yes24-secret');
