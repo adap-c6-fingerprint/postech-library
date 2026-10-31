@@ -117,7 +117,7 @@ struct BookNavigationArrivalView: View {
             if info.callNumbers.isEmpty {
                 Text("청구기호 확인 필요")
                     .font(.title3.bold())
-                Text("\(info.floorName ?? "층 정보 확인 필요") · 서가 \(info.shelf.realNumber)-\(info.shelf.side.rawValue)")
+                Text("\(info.floorName ?? "층 정보 확인 필요") · \(info.shelfText)")
                     .font(.subheadline)
                     .accessibilityIdentifier("book-navigation-shelf")
             } else {
@@ -188,7 +188,13 @@ struct BookNavigationArrivalView: View {
     }
 
     private func searchInstruction(_ info: BookNavigationBookInfo) -> some View {
-        Group {
+        VStack(spacing: 8) {
+            if info.candidateShelves.count > 1 {
+                Text(info.shelfText)
+                    .fontWeight(.semibold)
+                    .accessibilityIdentifier("book-navigation-candidate-shelves")
+                Text("두 서가를 확인해 주세요")
+            }
             if let first = info.callNumbers.first, let number = BookNavigationArrivalCallNumber(first) {
                 (Text("책등에서 ") + Text(number.number).foregroundColor(BookNavigationPalette.accent)
                     + Text("을 먼저 찾은 후\n뒤의 숫자들을 이어서 찾으세요"))

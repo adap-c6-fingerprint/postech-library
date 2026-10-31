@@ -335,7 +335,7 @@ struct BookNavigationFeature {
     private func fitCurrentRoute(_ state: inout State) {
         guard let route = state.currentRoute, let stop = state.currentStop else { return }
         state.cameraRequest = .init(id: state.cameraRequest.id + 1,
-            target: .route(route, featureIDs: [stop.shelf.mapElementID]))
+            target: .route(route, featureIDs: stop.candidateShelves.map(\.mapElementID)))
     }
 
     private func updateGuidance(_ state: inout State, previousTimestamp: Date?) {

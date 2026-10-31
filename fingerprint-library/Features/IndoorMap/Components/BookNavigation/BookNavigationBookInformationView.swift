@@ -17,13 +17,13 @@ struct BookNavigationBookInformationView: View {
                     .font(.title3).foregroundStyle(.white.opacity(0.85))
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityIdentifier("book-navigation-call-number")
-                Text("서가 \(info.shelf.realNumber)-\(info.shelf.side.rawValue)")
+                Text(info.shelfText)
                     .font(.caption).foregroundStyle(.white.opacity(0.7))
                     .accessibilityIdentifier("book-navigation-shelf")
             } else {
             Text(BookText.plainText(info.book.author))
                 .font(.subheadline).foregroundStyle(.secondary)
-            Text("\(info.floorName ?? "층 정보 확인 필요") · 서가 \(info.shelf.realNumber)-\(info.shelf.side.rawValue)")
+            Text("\(info.floorName ?? "층 정보 확인 필요") · \(info.shelfText)")
                 .fixedSize(horizontal: false, vertical: true)
                 .accessibilityIdentifier("book-navigation-shelf")
             ForEach(info.locationNames, id: \.self) { location in

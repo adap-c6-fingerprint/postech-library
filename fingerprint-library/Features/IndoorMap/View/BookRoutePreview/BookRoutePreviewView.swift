@@ -71,13 +71,13 @@ struct BookRoutePreviewView: View {
                         map: previewSession.map, floor: floor, selectedFeatureID: nil,
                         position: previewSession.start, showsUserLocation: false, isPlacingOrigin: false,
                         cameraRequest: .init(id: cameraRevision * 100 + floor.ordinal, target: .route(previewSession.route,
-                            featureIDs: [previewSession.origin.mapElementID] + previewSession.stops.map { $0.shelf.mapElementID })),
+                            featureIDs: [previewSession.origin.mapElementID] + previewSession.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })),
                         onSelect: { _ in }, onPlaceOrigin: { _ in },
                         route: previewSession.route,
                         groupTransitionNodes: previewSession.guidance.groupTransitionNodes,
                         viewportInsets: insets,
                         shelfLabels: previewSession.shelfLabels,
-                        highlightedFeatureIDs: Set(previewSession.stops.map { $0.shelf.mapElementID })
+                        highlightedFeatureIDs: Set(previewSession.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })
                     )
                     .accessibilityIdentifier("preview-test-route-map")
                 } else if let destinationStore {
@@ -280,15 +280,22 @@ struct BookRoutePreviewView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
 
                             VStack(alignment: .leading, spacing: 6) {
+                                let shelves = destinationStore?.state.shelves(for: book.id) ?? []
                                 Text(BookText.plainText(book.title))
                                     .font(.subheadline.bold())
                                     .fixedSize(horizontal: false, vertical: true)
                                 Text(BookText.plainText(book.author))
                                     .font(.caption).foregroundStyle(.secondary)
                                 holdingInformation(for: book)
-                                ForEach(destinationStore?.state.shelves(for: book.id) ?? []) { shelf in
-                                    Text("서가 \(shelf.realNumber)-\(shelf.side.rawValue)")
+                                ForEach(shelves) { shelf in
+                                    Text("\(shelves.count > 1 ? "후보 서가" : "서가") \(shelf.realNumber)-\(shelf.side.rawValue)")
                                         .font(.caption.bold()).foregroundStyle(.orange)
+                                }
+                                if let stop = readySession?.stops.first(where: { $0.book.id == book.id }),
+                                   stop.candidateShelves.count > 1 {
+                                    Text("안내 목적지: \(stop.shelf.realNumber)-\(stop.shelf.side.rawValue) · 도착 후 두 서가를 확인해 주세요")
+                                        .font(.caption).foregroundStyle(.secondary)
+                                        .fixedSize(horizontal: false, vertical: true)
                                 }
                             }
                             Spacer(minLength: 0)

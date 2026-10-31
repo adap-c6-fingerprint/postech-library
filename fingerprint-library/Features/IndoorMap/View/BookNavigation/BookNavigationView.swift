@@ -109,7 +109,7 @@ struct BookNavigationView: View {
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
                 if store.isApproachingShelf, let stop = store.currentStop {
-                    Text("\(stop.shelf.realNumber)번 서가 \(stop.shelf.side.rawValue)면")
+                    Text("안내 목적지: \(stop.shelf.realNumber)번 서가 \(stop.shelf.side.rawValue)면")
                         .font(.callout.weight(.semibold))
                     if case let .callNumberRange(start, end) = stop.shelf.content {
                         Text("\(start) ~ \(end)").font(.callout)
@@ -179,7 +179,7 @@ struct BookNavigationView: View {
             position: store.latestPosition, showsUserLocation: false, isPlacingOrigin: false,
             cameraRequest: store.cameraRequest, onSelect: { _ in }, onPlaceOrigin: { _ in },
             route: route, viewportInsets: .init(top: min(280, height * 0.35), left: 0, bottom: 90, right: 0),
-            shelfLabels: [stop.shelf], highlightedFeatureIDs: [stop.shelf.mapElementID],
+            shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),
             routeTurnArrows: store.currentTurnArrows,
             navigationAppearance: true, navigationBearingRadians: store.navigationBearing,
             navigationDestination: store.currentPlan.map { .init(book: stop.book, coordinate: $0.destination.coordinate, floorID: stop.shelf.floorID) }
