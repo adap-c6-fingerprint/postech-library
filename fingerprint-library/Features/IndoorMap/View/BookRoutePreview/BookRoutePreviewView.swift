@@ -3,16 +3,31 @@ import SwiftUI
 
 /// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
 struct BookRoutePreviewView: View {
+    @State private var routeStore = Store(
+        initialState: BookRoutePreviewFeature.State()
+    ) {
+        BookRoutePreviewFeature()
+    }
+    
     @State private var destination: BookRoutePreviewDestination
     @State private var destinationStore: StoreOf<BookShelfMapFeature>?
-    @State private var previewSession: BookNavigationSession?
     @State private var navigationFlow = BookRoutePreviewNavigationState()
-    @State private var isLoadingRoute = false
-    @State private var routeError: String?
     @State private var routeFloorID: UUID?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    private var previewSession: BookNavigationSession? {
+        routeStore.previewSession
+    }
+    
+    private var isLoadingRoute: Bool {
+        routeStore.isLoadingRoute
+    }
+
+    private var routeError: String? {
+        routeStore.routeError
+    }
+    
     private let accent = Color(red: 0.88, green: 0.95, blue: 0.19)
     private var routeRequest: BookRoutePreviewRequest { .init(state: destinationStore?.state) }
     private var readySession: BookNavigationSession? {
@@ -94,8 +109,10 @@ struct BookRoutePreviewView: View {
                     .padding(.bottom, 16)
                 Button("테스트모드") {
                     destinationStore?.send(.map(.disappeared))
-                    previewSession = nil
-                    routeError = nil
+                    
+                    routeStore.send(.reset)
+                    routeFloorID = nil
+                    
                     destination.useTestMode()
                     destinationStore = Self.makeStore(for: destination)
                 }
@@ -144,30 +161,14 @@ struct BookRoutePreviewView: View {
         }
         .task(id: routeRequest) {
             let request = routeRequest
-            previewSession = nil
-            routeError = nil
-            isLoadingRoute = false
             routeFloorID = nil
-            if case .failed(let message) = request { routeError = message }
-            guard case let .ready(map, labels, stops) = request else { return }
-            isLoadingRoute = true
-            do {
-                try Task.checkCancellation()
-                let result = try await BookRoutePreviewTestRouteLoader().load(
-                    on: map, labels: labels, stops: stops
-                )
-                try Task.checkCancellation()
-                guard routeRequest == request else { return }
-                previewSession = result
-            } catch is CancellationError {
-                return
-            } catch {
-                guard !Task.isCancelled, routeRequest == request else { return }
-                routeError = error.localizedDescription
-            }
-            if routeRequest == request { isLoadingRoute = false }
+
+            await routeStore.send(.requestChanged(request)).finish()
         }
-        .onDisappear { destinationStore?.send(.map(.disappeared)) }
+        .onDisappear {
+            routeStore.send(.disappeared)
+            destinationStore?.send(.map(.disappeared))
+        }
     }
 
     private var routeMetrics: some View {
