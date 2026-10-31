@@ -10,7 +10,7 @@ nonisolated struct BookRoutePreviewTestRoute: Equatable, Sendable {
     let graph: RoutingGraph
 }
 
-/// 311-B 고정 출발을 미리보기에서 공유한다. 원본 파일·기존 데이터셋 로더는 바꾸지 않는다.
+/// 파일 검증·서가 연결·311-B 출발 정책을 담당한다. 방문 순서 계산은 Planner에 위임한다.
 nonisolated struct BookRoutePreviewTestRouteLoader {
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookNavigationStop],
               in bundle: Bundle = .main) async throws -> BookNavigationSession {
@@ -20,68 +20,55 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         return try await load(directory: root.appendingPathComponent("POSTECHLibrary"),
                               on: map, labels: labels, stops: stops)
     }
-
+    
     @concurrent
-    func load(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
-              stops: [BookNavigationStop]) async throws -> BookNavigationSession {
-        guard BookRouteSelection.allows(bookCount: stops.count),
-              Set(stops.map { $0.book.id }).count == stops.count else { throw IndoorRoutingError.invalidDestination }
+    func load(
+        directory: URL,
+        on map: IndoorMap,
+        labels: [IndoorShelfLabel],
+        stops: [BookNavigationStop]
+    ) async throws -> BookNavigationSession {
+        let input = try await prepareInput(
+            directory: directory,
+            on: map,
+            labels: labels,
+            stops: stops
+        )
+
+        return try await BookRoutePlanner().plan(input)
+    }
+    
+    @concurrent
+    private func prepareInput(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
+                              stops: [BookNavigationStop]) async throws -> BookRoutePlanningInput {
+        let selections = await MainActor.run { stops.map { (id: $0.book.id, shelf: $0.shelf) } }
+        guard BookRouteSelection.allows(bookCount: selections.count),
+              Set(selections.map(\.id)).count == selections.count else {
+            throw IndoorRoutingError.invalidDestination
+        }
         let pinned = try await BundledIndoorMapLoader().load(directory: directory.appendingPathComponent("IMDFData"))
         guard pinned == map else { throw invalid("navigation.json", "현재 지도와 번들 도면이 다릅니다.") }
-        let metadata = try read("navigation.json", at: directory)
-        let graphData = try read("routing-graph.geojson", at: directory)
-        let links = try read("navigation-feature-links.json", at: directory)
-        // 미리보기 입력 상한은 3권이다. 모든 순서를 비교하며 같은 방향의 구간은 한 번만 계산한다.
-        let orders: [[Int]] = switch stops.count {
-        case 1: [[0]]
-        case 2: [[0, 1], [1, 0]]
-        case 3: [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]
-        default: throw IndoorRoutingError.invalidDestination
-        }
-        var cache: [LegKey: BookRoutePreviewTestRoute] = [:]
-        var unreachable = Set<LegKey>()
-        var bestOrder: [Int] = []
-        var bestResults: [BookRoutePreviewTestRoute] = []
-        var bestDistance = Double.infinity
-        for order in orders {
+        let prepared = try prepareNavigation(
+            on: map, metadata: read("navigation.json", at: directory),
+            graph: read("routing-graph.geojson", at: directory),
+            links: read("navigation-feature-links.json", at: directory)
+        )
+        let origin = try fixedOrigin(on: map, labels: labels)
+        var seen = Set<ShelfKey>()
+        let destinations = try ([origin] + selections.map(\.shelf)).compactMap { label -> ShelfDestination? in
             try Task.checkCancellation()
-            var results: [BookRoutePreviewTestRoute] = []
-            do {
-                for (index, next) in order.enumerated() {
-                    try Task.checkCancellation()
-                    let previous = index == 0 ? -1 : order[index - 1]
-                    let key = LegKey(from: previous, to: next)
-                    if unreachable.contains(key) { throw IndoorRoutingError.noRoute }
-                    if let cached = cache[key] {
-                        results.append(cached)
-                    } else {
-                        do {
-                            let result = try build(on: map, labels: labels, destination: stops[next].shelf,
-                                metadata: metadata, graph: graphData, links: links,
-                                origin: previous == -1 ? nil : stops[previous].shelf)
-                            cache[key] = result
-                            results.append(result)
-                        } catch IndoorRoutingError.noRoute {
-                            unreachable.insert(key)
-                            throw IndoorRoutingError.noRoute
-                        }
-                    }
-                }
-            } catch IndoorRoutingError.noRoute { continue }
-            let distance = results.reduce(0) { $0 + $1.route.distanceMeters }
-            if distance < bestDistance {
-                bestDistance = distance
-                bestOrder = order
-                bestResults = results
-            }
+            let destination = try destination(for: label, labels: labels, nodes: prepared.nodes)
+            return seen.insert(destination.key).inserted ? destination : nil
         }
-        guard let first = bestResults.first else { throw IndoorRoutingError.noRoute }
-        return try await .init(map: map, shelfLabels: labels, stops: bestOrder.map { stops[$0] }, legs: bestResults.map(\.route),
-                         graph: first.graph, origin: first.origin, start: first.start)
+        let start = try position(at: origin, labels: labels, nodes: prepared.nodes)
+        let navigation = IndoorNavigationData(
+            graph: prepared.graph,
+            shelves: .init(datasetID: "postech-library-preview-test", mode: .library, destinations: destinations),
+            diagnostics: prepared.diagnostics
+        )
+        return .init(map: map, shelfLabels: labels, navigation: navigation, origin: origin, start: start, stops: stops)
     }
-
-    private struct LegKey: Hashable { let from: Int; let to: Int }
-
+    
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,
               in bundle: Bundle = .main) async throws -> BookRoutePreviewTestRoute {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
@@ -90,7 +77,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         return try await load(directory: root.appendingPathComponent("POSTECHLibrary"),
                               on: map, labels: labels, destination: destination)
     }
-
+    
     @concurrent
     func load(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
               destination: IndoorShelfLabel) async throws -> BookRoutePreviewTestRoute {
@@ -101,10 +88,27 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
                          graph: read("routing-graph.geojson", at: directory),
                          links: read("navigation-feature-links.json", at: directory))
     }
-
+    
     func build(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,
                metadata: Data, graph graphData: Data, links linkData: Data,
                origin previousShelf: IndoorShelfLabel? = nil) throws -> BookRoutePreviewTestRoute {
+        let prepared = try prepareNavigation(on: map, metadata: metadata, graph: graphData, links: linkData)
+        let fixed = try fixedOrigin(on: map, labels: labels)
+        let origin = previousShelf ?? fixed
+        let goal = try self.destination(for: destination, labels: labels, nodes: prepared.nodes)
+        let start = try position(at: origin, labels: labels, nodes: prepared.nodes)
+        let navigation = IndoorNavigationData(
+            graph: prepared.graph,
+            shelves: .init(datasetID: goal.key.datasetID, mode: .library, destinations: [goal]),
+            diagnostics: prepared.diagnostics
+        )
+        let route = try BookRoutePlanner().route(from: start, to: goal.key, in: navigation)
+        return .init(origin: origin, destination: destination, start: start, route: route,
+                     guidance: try RoutePreviewGuidance(route: route, graph: prepared.graph), graph: prepared.graph)
+    }
+
+    private func prepareNavigation(on map: IndoorMap, metadata: Data, graph graphData: Data, links linkData: Data)
+        throws -> (graph: RoutingGraph, diagnostics: RoutingGraphDiagnostics, nodes: [IndoorMapElement.ID: RouteNode]) {
         try Task.checkCancellation()
         let descriptor: Descriptor = try decode(metadata, file: "navigation.json")
         guard descriptor.schemaVersion == 1, descriptor.kind == "navigation-only",
@@ -117,35 +121,38 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         let normalized = try normalize(rawGraph, descriptor: descriptor, on: map)
         let (graph, diagnostics) = try RoutingGraphMapper().map(normalized, on: map, layoutVersion: descriptor.layoutVersion)
         let links: FeatureLinks = try decode(linkData, file: "navigation-feature-links.json")
-        let mapping = try featureNodes(links, graph: graph, map: map)
-        let origins = labels.filter { shelf in
+        return (graph, diagnostics, try featureNodes(links, graph: graph, map: map))
+    }
+
+    private func fixedOrigin(on map: IndoorMap, labels: [IndoorShelfLabel]) throws -> IndoorShelfLabel {
+        let matches = labels.filter { shelf in
             shelf.realNumber == "311" && shelf.side == .b
                 && map.floors.first(where: { $0.id == shelf.floorID })?.ordinal == 2
         }
-        guard origins.count == 1, let origin = previousShelf ?? origins.first,
-              labels.contains(origin), labels.contains(destination),
-              let startNode = mapping[origin.mapElementID], let endNode = mapping[destination.mapElementID] else {
+        guard matches.count == 1, let origin = matches.first else {
             throw invalid("navigation-feature-links.json", "3층 311-B와 목적지의 명시적 노드 연결이 필요합니다.")
         }
-        let key = ShelfKey(datasetID: "postech-library-preview-test", value: destination.fixtureNumber)
-        let shelf = ShelfDestination(key: key, name: "\(destination.realNumber)-\(destination.side.rawValue)",
-                                     floorID: destination.floorID, mapElementID: destination.mapElementID,
-                                     geometry: destination.geometry, arrivalNodeID: endNode.id,
-                                     arrivalCoordinate: endNode.coordinate)
-        // 출발은 서가 도형 중심이 아닌 sidecar가 지정한 통로 연결 노드다. 근접 노드 추정은 하지 않는다.
-        let start = IndoorPosition(coordinate: startNode.coordinate, floorOrdinal: startNode.level,
-                                   horizontalAccuracy: nil, timestamp: Date(), source: .manual)
-        let navigation = IndoorNavigationData(
-            graph: graph, shelves: .init(datasetID: key.datasetID, mode: .library, destinations: [shelf]),
-            diagnostics: diagnostics
-        )
-        try Task.checkCancellation()
-        let outcome = try IndoorRouteSearchEngine().search(.init(
-            navigation: navigation, start: start, destination: key, preference: .shortestDistance
-        ))
-        guard case .route(let route) = outcome else { throw IndoorRoutingError.noRoute }
-        return .init(origin: origin, destination: destination, start: start, route: route,
-                     guidance: try RoutePreviewGuidance(route: route, graph: graph), graph: graph)
+        return origin
+    }
+
+    private func destination(for shelf: IndoorShelfLabel, labels: [IndoorShelfLabel],
+                             nodes: [IndoorMapElement.ID: RouteNode]) throws -> ShelfDestination {
+        guard labels.contains(shelf), let node = nodes[shelf.mapElementID] else {
+            throw invalid("navigation-feature-links.json", "3층 311-B와 목적지의 명시적 노드 연결이 필요합니다.")
+        }
+        return .init(key: .init(datasetID: "postech-library-preview-test", value: shelf.fixtureNumber),
+                     name: "\(shelf.realNumber)-\(shelf.side.rawValue)", floorID: shelf.floorID,
+                     mapElementID: shelf.mapElementID, geometry: shelf.geometry,
+                     arrivalNodeID: node.id, arrivalCoordinate: node.coordinate)
+    }
+
+    private func position(at shelf: IndoorShelfLabel, labels: [IndoorShelfLabel],
+                          nodes: [IndoorMapElement.ID: RouteNode]) throws -> IndoorPosition {
+        guard labels.contains(shelf), let node = nodes[shelf.mapElementID] else {
+            throw invalid("navigation-feature-links.json", "3층 311-B와 목적지의 명시적 노드 연결이 필요합니다.")
+        }
+        return .init(coordinate: node.coordinate, floorOrdinal: node.level,
+                     horizontalAccuracy: nil, timestamp: Date(), source: .manual)
     }
 
     /// 이 묶음의 ordinal은 실제 층 번호다. UUID·descriptor와 대조한 노드만 현재 IMDF ordinal로 변환한다.
@@ -177,7 +184,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         return .init(type: graph.type, schemaVersion: graph.schemaVersion, layoutVersion: graph.layoutVersion,
                      routingConfig: graph.routingConfig, features: features)
     }
-
+    
     private func featureNodes(_ links: FeatureLinks, graph: RoutingGraph,
                               map: IndoorMap) throws -> [IndoorMapElement.ID: RouteNode] {
         let file = "navigation-feature-links.json"
@@ -210,20 +217,20 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         }
         return mapping
     }
-
+    
     private func read(_ file: String, at directory: URL) throws -> Data {
         do { return try Data(contentsOf: directory.appendingPathComponent(file)) }
         catch { throw invalid(file, error.localizedDescription) }
     }
-
+    
     private func decode<T: Decodable>(_ data: Data, file: String) throws -> T {
         do { return try JSONDecoder().decode(T.self, from: data) }
         catch { throw invalid(file, error.localizedDescription) }
     }
-
+    
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
     private func invalid(_ file: String, _ reason: String) -> IndoorMapLoadError { .invalidData(file: file, reason: reason) }
-
+    
     private struct Descriptor: Decodable {
         let schemaVersion: Int
         let kind: String

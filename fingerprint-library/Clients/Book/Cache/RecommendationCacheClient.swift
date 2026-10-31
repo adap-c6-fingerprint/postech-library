@@ -26,7 +26,8 @@ extension RecommendationCacheClient: DependencyKey {
 
     private static let store = RecommendationCacheStore(
         directory: URL.applicationSupportDirectory
-            .appendingPathComponent("RecommendationCache", isDirectory: true)
+            // 표지 선택 정책 변경: 이전 저해상도 파일 대신 새 묶음을 준비한다.
+            .appendingPathComponent("RecommendationCache-v2", isDirectory: true)
     )
 
     private static let preparer = RecommendationCachePreparer(store: store, loadCover: BookCoverClient.liveValue.pngData)

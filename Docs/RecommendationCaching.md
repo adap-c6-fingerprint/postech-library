@@ -18,7 +18,7 @@
 `Clients/Book/Cache/RecommendationCacheStore.swift`
 
 - Foundation actor가 목록·표지 파일의 읽기와 쓰기를 직렬화한다.
-- `Application Support/RecommendationCache/recommendations.json`에 마지막 정상 목록을 기록한다.
+- `Application Support/RecommendationCache-v2/recommendations.json`에 마지막 정상 목록을 기록한다.
 - `covers/<SHA256(원본 표지 URL)>.image`에 이미지 파일을 저장한다. URL 문자열을 파일 이름으로 직접 사용하지 않는다.
 - 재생성 가능한 지원 데이터이므로 디렉터리에 `isExcludedFromBackup = true`를 설정한다.
 - `StoredBook`과 `Manifest`는 Client 내부의 Codable 저장 형식이다. 팀이 공유하는 `Book`에 필드나 Codable 요구를 추가하지 않았다.
@@ -31,6 +31,8 @@ try data.write(to: manifestURL, options: .atomic)
 ```
 
 표지 URL이 원래 없는 책과 원격 이미지 미제공이 확인된 책은 기본 표지로 표시할 수 있는 정상 항목이다. 그 외 다운로드·변환 실패가 있으면 새 묶음을 활성화하지 않는다. 누락된 파일을 미제공으로 추정하지 않으며, 복원 시 목록 버전·중복 ID·표지 파일 이름·이미지 내용을 확인한다.
+
+2026-10-31 큰 표지 우선 요청 정책에 맞춰 live 저장 폴더를 `RecommendationCache-v2`로 전환했다. 이전 저해상도 표지 묶음은 복원하지 않고 첫 실행에서 추천과 표지를 다시 준비한다. 이전 폴더는 자동 삭제하지 않으며 manifest 형식은 v2를 유지한다.
 
 2026-10-27 표지 오류 보완에서 manifest v2에 선택적인 `coverUnavailable` 표식을 추가했다. v1 저장본도 읽는다. 미제공은 원격 URL과 표식을 보존하되 이미지 파일을 요구하지 않고 표시용 imageURL만 nil로 만든다. 다음 추천 준비에서는 해당 원격 URL을 다시 확인하므로 나중에 표지가 생기면 정상 파일로 회복할 수 있다. 전송 실패·5xx·손상 이미지는 이 표식으로 저장하지 않는다.
 

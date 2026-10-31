@@ -31,16 +31,7 @@ enum BookCoverPipeline {
                     }
                     return image
                 }
-                @Dependency(\.httpClient) var httpClient
-                let result: HTTPResponse
-                do {
-                    result = try await httpClient.send(URLRequest(url: url))
-                } catch is HTTPClientError {
-                    throw BookCoverFailure.invalidResponse
-                }
-                try BookCoverFailure.validate(data: result.data, response: result.response)
-                guard let image = UIImage(data: result.data) else { throw BookCoverFailure.invalidImage }
-                return image
+                return try await BookCoverRemoteLoader.image(for: url, download: download)
             } catch {
                 guard !Task.isCancelled else { throw CancellationError() }
                 let diagnostic = BookCoverFailure.diagnostic(for: error)
@@ -50,4 +41,17 @@ enum BookCoverPipeline {
             }
         }
     )
+
+    private static func download(_ url: URL) async throws -> UIImage {
+        @Dependency(\.httpClient) var httpClient
+        let result: HTTPResponse
+        do {
+            result = try await httpClient.send(URLRequest(url: url))
+        } catch is HTTPClientError {
+            throw BookCoverFailure.invalidResponse
+        }
+        try BookCoverFailure.validate(data: result.data, response: result.response)
+        guard let image = UIImage(data: result.data) else { throw BookCoverFailure.invalidImage }
+        return image
+    }
 }
