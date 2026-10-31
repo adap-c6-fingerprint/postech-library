@@ -211,6 +211,7 @@ struct BookNavigationArrivalView: View {
                     .padding(.vertical, 2)
                     .background(LinearGradient(colors: [Color(white: 0.04), Color(white: 0.11)],
                                                startPoint: .top, endPoint: .bottom), in: Capsule())
+                    .contentShape(Capsule())
                     .overlay(Capsule().stroke(.white.opacity(0.18), lineWidth: 0.5))
                     .accessibilityIdentifier(isIntermediateStop ? "book-navigation-next-stop" : "book-navigation-finish")
             }
@@ -218,6 +219,7 @@ struct BookNavigationArrivalView: View {
                 Button("안내 취소", action: onCancel)
                     .font(.subheadline)
                     .frame(minHeight: 44)
+                    .contentShape(Rectangle())
                     .accessibilityIdentifier("book-navigation-arrival-cancel")
             }
         }
