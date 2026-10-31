@@ -11,7 +11,7 @@ services:
     cpus: 0.5
     mem_limit: 512m
     pids_limit: 64
-    tmpfs: [/tmp:size=16m,noexec,nosuid]
+    tmpfs: ["/tmp:size=16m,noexec,nosuid"]
     volumes:
       - ./private/credentials.json:/run/secrets/relay.json:ro
     environment:
