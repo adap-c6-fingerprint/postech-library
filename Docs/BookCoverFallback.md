@@ -19,6 +19,32 @@
 `searchType=ISBN13`, `query`, `X-Api-Key`, `data.items[].isbn13`, `cover`를 사용한다.
 제공자가 실제 표지 대신 대체 이미지를 반환하는 경우를 판별하는 별도 필드는 없다. 파일명·크기만으로 표지 여부를 추측하지 않는다.
 
+## 큰 표지 우선 요청 (2026-10-31)
+
+공통 `BookCoverPipeline`에서 원격 이미지를 받을 때 `BookCoverRemoteLoader`를 사용한다.
+알라딘의 `/product/<번호>/<번호>/cover/<파일명>`은 `/cover500/`으로,
+Yes24의 `/goods/<상품 번호>/L`은 `/XL`로 먼저 요청한다.
+동일 상품 번호·파일명·쿼리를 유지하고, 다른 공급자·이미 큰 표지·로컬 파일은 바꾸지 않는다.
+지원하는 HTTP 표지 주소의 큰 버전은 HTTPS로 요청한다.
+
+큰 표지의 HTTP 오류나 이미지 디코딩 실패는 제공받은 원본 주소로 복구한다.
+취소는 즉시 전달하며 원본 재요청이나 성공 캐시로 이어지지 않는다.
+둘 다 실패했을 때의 ISBN별 Yes24 조회와 ‘표지 없음’·‘다시 시도’ 구분은 유지한다.
+큰 주소에서 작은 정상 이미지가 반환되면 그대로 사용한다. `/cover500/`·`/XL`은 모든 책의 고해상도를 보장하지 않는다.
+실제로 알라딘 『오늘의 레시피』의 `/cover500/`은 500×735px, 『말로』의 같은 경로 형식은 102×150px였다.
+
+화면과 추천 PNG 저장이 같은 메모리 캐시·진행 중 요청을 사용한다.
+이전 저해상도 로컬 파일을 재사용하지 않도록 live 추천 저장 폴더를 `RecommendationCache-v2`로 전환한다.
+첫 적용 시 추천 묶음을 다시 준비하므로 네트워크 조회가 필요하다. 이전 폴더는 자동 삭제하지 않는다.
+`Book` 계약과 `scaledToFit()`을 사용하는 화면 크기·배치는 바꾸지 않는다.
+
+### 이번 정책의 검증
+
+`BookCoverRemoteLoaderTests`, 기존 `BookCoverFallbackTests`, `BookCoverModelTests`, `SharedImageLoaderTests`의 28개 테스트를 실제 프로젝트 소스를 연결한 임시 macOS SwiftPM 패키지에서 실행해 통과했다.
+큰 표지 우선 선택·원본 복구·작은 정상 이미지 유지·공유 캐시 재사용·취소·기존 ISBN별 Yes24 대체 연결을 확인했다.
+이 실행은 UIKit 디코딩이나 iOS 화면 검증을 대신하지 않는다.
+iOS `build-for-testing`은 패키지 해석 중 `sandbox-exec: sandbox_apply: Operation not permitted`로 중단됐고 CoreSimulatorService 연결 오류도 발생했다. 전체 iOS 빌드·테스트 통과로 간주하지 않는다.
+
 ## 실서버 확인
 
 2026-10-29 Primo에서 확인한 『1984』 다섯 판본의 4libs 표지 URL은 HTTP 403을 반환했다.
