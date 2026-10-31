@@ -3,8 +3,16 @@ import assert from 'node:assert/strict';
 
 // Execute inside the development container. No credentials or provider payloads are printed.
 const credentials = JSON.parse(readFileSync('/run/secrets/relay.json', 'utf8'));
-const { RELAY_TOKEN } = credentials;
-const base = 'https://pobook-api-dev.fpmaps.com';
+const configurations = {
+  development: ['https://pobook-api-dev.fpmaps.com', 'RELAY_TOKEN'],
+  testflight: ['https://pobook-api-testfligh.fpmaps.com', 'RELAY_TOKEN_TESTFLIGHT'],
+  production: ['https://pobook-api.fpmaps.com', 'RELAY_TOKEN_PRODUCTION'],
+};
+const environment = process.env.RELAY_ENVIRONMENT ?? 'development';
+assert.ok(Object.hasOwn(configurations, environment), 'Unknown relay environment');
+const [base, tokenKey] = configurations[environment];
+const RELAY_TOKEN = credentials[tokenKey];
+assert.ok(typeof RELAY_TOKEN === 'string' && RELAY_TOKEN.length >= 32, 'Missing relay token');
 async function request(path, status, authenticated = true) {
   const response = await fetch(base + path, {
     headers: authenticated ? { Authorization: `Bearer ${RELAY_TOKEN}` } : {},
@@ -30,4 +38,4 @@ const detail = await request('/data4library/api/srchDtlList?isbn13=9788937460777
 assert.ok(Array.isArray(detail.response?.detail) && detail.response.detail.length > 0, 'Information Naru test detail missing');
 const related = await request('/data4library/api/recommandList?isbn13=9788937460777&type=mania&format=json', 200);
 assert.ok(Array.isArray(related.response?.docs), 'Information Naru related response missing');
-console.log('Development relay smoke checks passed');
+console.log(`${environment} relay smoke checks passed`);

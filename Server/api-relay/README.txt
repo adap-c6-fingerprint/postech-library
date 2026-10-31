@@ -142,3 +142,18 @@ Nginx/인증서
     Scripts/verify-api-relay.swift -o /tmp/pobook-relay-proof
   /tmp/pobook-relay-proof
 이 검증은 개발 토큰을 로컬 제외 파일에서 읽고 실제 제공사 할당량을 각각 1회 사용한다.
+
+세 환경 배포 구성
+- 신규 release HTTP/HTTPS 템플릿은 TestFlight와 운영 두 호스트만 추가한다. 기존 가상 호스트는 유지한다.
+- 인증서 pobook-api.fpmaps.com은 pobook-api-testfligh.fpmaps.com을 SAN으로 포함한다. 갱신 cron도 이 인증서만 대상으로 한다.
+- 호스트별 독립 토큰을 검사하며 개발 토큰으로 운영/TestFlight에 접근할 수 없다.
+- 단일 중계 프로세스가 세 환경의 제공사별 한도를 함께 집계한다. 데이터/응답 캐시/DB는 추가하지 않는다.
+- 기존 컨테이너 이름 pobook-api-dev는 배포 호환성을 위해 유지하며 이제 세 호스트를 담당한다.
+- state/quota.json만 쓰기 마운트한다. 제공사별 24시간 window/count만 저장하고 요청 내용·도서·사용자 정보는 저장하지 않는다.
+- 각 호출 전에 파일 기록·동기화·원자적 교체를 완료한다. 재시작으로 초기화하지 않으며 파일 누락/손상은 기동 실패, 쓰기 오류는 503이다.
+- 초기 state 파일은 관리자가 명시적으로 준비한다. 기존 개발 컨테이너를 정지한 뒤 그 실행의 로그에서 제공사별 요청 수를 보수적으로 이관한다.
+- quota 파일을 삭제/빈 파일로 교체하거나 두 프로세스가 동시에 소유하지 않는다. 복제 확장 시 공유 트랜잭션 저장소가 필요하다.
+- provision-release.mjs는 실행 컨테이너 안에서 제공사 키를 보존하고 새 release 토큰 두 개를 생성한다. stdout은 반드시 새 private 파일로 직접 연결한다.
+- state와 private은 Git/build context에서 제외한다. 앱에는 제공사 키가 아닌 세 접근 토큰만 비공개 로컬/CI 설정으로 전달한다.
+- Scripts/verify-api-relay.swift 검증 바이너리는 DEVELOPMENT / TESTFLIGHT / PRODUCTION 인자로 각 호스트를 확인할 수 있다.
+- 제공사 실제 할당량/IP 등록은 확인 전까지 1500/1000/400의 보수적 합산 예산을 유지한다. 이 서버 밖에서 같은 키로 호출한 양은 집계하지 못한다.

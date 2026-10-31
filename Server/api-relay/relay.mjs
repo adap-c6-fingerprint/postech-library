@@ -1,4 +1,11 @@
 import { timingSafeEqual } from 'node:crypto';
+import { createDailyBudget } from './daily-budget.mjs';
+
+const hostCredentials = new Map([
+  ['pobook-api-dev.fpmaps.com', 'RELAY_TOKEN'],
+  ['pobook-api-testfligh.fpmaps.com', 'RELAY_TOKEN_TESTFLIGHT'],
+  ['pobook-api.fpmaps.com', 'RELAY_TOKEN_PRODUCTION'],
+]);
 
 const routes = new Map([
   ['/primo/v1/search', { provider: 'primo', url: 'https://api-ap.hosted.exlibrisgroup.com/primo/v1/search' }],
@@ -18,6 +25,10 @@ export function validateCredentials(credentials) {
     }
   }
   if (credentials.RELAY_TOKEN.length < 32) throw new Error('RELAY_TOKEN must have at least 32 characters');
+  const tokens = [...hostCredentials.values()].map(key => credentials[key]).filter(value => value !== undefined);
+  if (tokens.length !== 1 && tokens.length !== 3) throw new Error('Configure both release relay tokens');
+  if (tokens.some(value => typeof value !== 'string' || !/^[\x21-\x7e]{32,}$/.test(value))
+    || new Set(tokens).size !== tokens.length) throw new Error('Relay tokens must be valid and distinct');
 }
 
 function integer(value, min, max) {
@@ -71,14 +82,14 @@ function upstreamURL(input, route) {
   return output;
 }
 
-// shortcut: dev-only counters reset on restart and are not shared across replicas; use shared accounting before production.
 export function createRelay({ credentials, fetchImpl = fetch, now = Date.now, dailyLimits = defaultDailyLimits,
-  timeoutMs = 12000, maxResponseBytes = 4 * 1024 * 1024, log = console.info }) {
+  budget = createDailyBudget(), timeoutMs = 12000, maxResponseBytes = 4 * 1024 * 1024, log = console.info }) {
   validateCredentials(credentials);
   for (const provider of Object.keys(providerKeys)) {
     if (!Number.isSafeInteger(dailyLimits[provider]) || dailyLimits[provider] < 1) throw new Error('Invalid daily limit');
   }
-  const token = Buffer.from(`Bearer ${credentials.RELAY_TOKEN}`);
+  const tokens = new Map([...hostCredentials].filter(([, key]) => credentials[key])
+    .map(([host, key]) => [host, Buffer.from(`Bearer ${credentials[key]}`)]));
   const counters = new Map();
   function error(res, status, code) {
     res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store',
@@ -100,8 +111,9 @@ export function createRelay({ credentials, fetchImpl = fetch, now = Date.now, da
         res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
         return res.end('{"status":"ok"}');
       }
+      const token = tokens.get(req.headers.host?.toLowerCase());
       const received = Buffer.from(req.headers.authorization ?? '');
-      if (received.length !== token.length || !timingSafeEqual(received, token)) return error(res, 401, 'unauthorized');
+      if (!token || received.length !== token.length || !timingSafeEqual(received, token)) return error(res, 401, 'unauthorized');
       route = routes.get(input.pathname);
       if (!route) return error(res, 404, 'route_not_found');
       let target;
@@ -111,18 +123,25 @@ export function createRelay({ credentials, fetchImpl = fetch, now = Date.now, da
       const second = Math.floor(timestamp / 1000);
       counter = counters.get(provider);
       if (!counter) {
-        counter = { active: 0, second, count: 0, window: timestamp, daily: 0 };
+        counter = { active: 0, second, count: 0 };
         counters.set(provider, counter);
       }
-      if (timestamp - counter.window >= 86400000) { counter.window = timestamp; counter.daily = 0; }
       if (counter.second !== second) { counter.second = second; counter.count = 0; }
-      if (counter.active >= concurrent[provider] || counter.count >= perSecond[provider] || counter.daily >= dailyLimits[provider]) {
+      if (counter.active >= concurrent[provider] || counter.count >= perSecond[provider]) {
         counter = undefined;
         return error(res, 429, 'relay_limit');
       }
+      try {
+        if (!budget.reserve(provider, timestamp, dailyLimits[provider])) {
+          counter = undefined;
+          return error(res, 429, 'relay_limit');
+        }
+      } catch {
+        counter = undefined;
+        return error(res, 503, 'quota_unavailable');
+      }
       counter.active++;
       counter.count++;
-      counter.daily++;
       // Information Naru returns 406 for Accept: application/json even with format=json.
       const headers = { Accept: provider === 'primo' ? 'application/json' : '*/*' };
       if (provider === 'primo') headers.Authorization = `apikey ${credentials.PRIMO_API_KEY}`;

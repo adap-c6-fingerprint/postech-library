@@ -1,13 +1,15 @@
 import { createServer } from 'node:http';
 import { readFileSync } from 'node:fs';
 import { createRelay, defaultDailyLimits } from './relay.mjs';
+import { createDailyBudget } from './daily-budget.mjs';
 
 let credentials;
 try { credentials = JSON.parse(readFileSync('/run/secrets/relay.json', 'utf8')); }
 catch { throw new Error('Cannot read valid relay credentials'); }
 const dailyLimits = Object.fromEntries(Object.keys(defaultDailyLimits).map(provider => [provider,
   Number(process.env[`${provider.toUpperCase()}_DAILY_LIMIT`] ?? defaultDailyLimits[provider]) ]));
-const server = createServer({ maxHeaderSize: 20000 }, createRelay({ credentials, dailyLimits }));
+const budget = createDailyBudget('/var/lib/pobook-api/quota.json');
+const server = createServer({ maxHeaderSize: 20000 }, createRelay({ credentials, dailyLimits, budget }));
 server.headersTimeout = 10000;
 server.requestTimeout = 15000;
 server.keepAliveTimeout = 5000;

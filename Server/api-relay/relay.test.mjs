@@ -8,7 +8,7 @@ const authorization = `Bearer ${credentials.RELAY_TOKEN}`;
 const primoPath = '/primo/v1/search?q=any%2Ccontains%2C과학%20%26%20역사%20OR%20QA1*&offset=50&limit=50&multiFacets=facet_rtype%2Cinclude%2Cprinted_book';
 function handler(options = {}) { return createRelay({ credentials, log: () => {}, ...options }); }
 function exchange(url, headers = { authorization }, method = 'GET') {
-  const req = Object.assign(new EventEmitter(), { url, headers, method });
+  const req = Object.assign(new EventEmitter(), { url, headers: { host: 'pobook-api-dev.fpmaps.com', ...headers }, method });
   const res = Object.assign(new EventEmitter(), { statusCode: 200, destroyed: false, headersSent: false, writableEnded: false,
     writeHead(status, headers) { this.statusCode = status; this.headers = headers; this.headersSent = true; },
     end(body) { this.body = Buffer.from(body ?? ''); this.writableEnded = true; },
@@ -193,4 +193,48 @@ test('logs only timing, status and provider', async () => {
   await call(handler({ log: line => logs.push(JSON.parse(line)), fetchImpl: async () => new Response('{}') }), primoPath);
   assert.deepEqual(Object.keys(logs[0]).sort(), ['durationMs', 'provider', 'status']);
   assert.equal(JSON.stringify(logs).includes('secret'), false);
+});
+
+const releaseCredentials = { ...credentials,
+  RELAY_TOKEN_TESTFLIGHT: 'testflight-token-with-at-least-32-characters',
+  RELAY_TOKEN_PRODUCTION: 'production-token-with-at-least-32-characters' };
+const environments = [
+  ['pobook-api-dev.fpmaps.com', credentials.RELAY_TOKEN],
+  ['pobook-api-testfligh.fpmaps.com', releaseCredentials.RELAY_TOKEN_TESTFLIGHT],
+  ['pobook-api.fpmaps.com', releaseCredentials.RELAY_TOKEN_PRODUCTION],
+];
+
+test('release tokens must be complete, distinct and header safe', () => {
+  validateCredentials(releaseCredentials);
+  assert.throws(() => validateCredentials({ ...credentials, RELAY_TOKEN_TESTFLIGHT: releaseCredentials.RELAY_TOKEN_TESTFLIGHT }));
+  for (const value of ['short', credentials.RELAY_TOKEN, 'unsafe-token-with-at-least-32-characters\n']) {
+    assert.throws(() => validateCredentials({ ...releaseCredentials, RELAY_TOKEN_PRODUCTION: value }));
+  }
+});
+
+test('each environment accepts only its own token and unknown hosts are denied', async () => {
+  const relay = handler({ credentials: releaseCredentials, fetchImpl: async () => new Response('{}') });
+  for (const [host, token] of environments) {
+    for (const [, candidate] of environments) {
+      assert.equal((await call(relay, primoPath, { host, authorization: `Bearer ${candidate}` })).statusCode,
+        token === candidate ? 200 : 401);
+    }
+  }
+  assert.equal((await call(relay, primoPath, { host: 'evil.test', authorization })).statusCode, 401);
+});
+
+test('all environments share the same provider budget, not three independent quotas', async () => {
+  const relay = handler({ credentials: releaseCredentials, dailyLimits: { primo: 1, yes24: 1, data4library: 1 },
+    fetchImpl: async () => new Response('{}') });
+  for (const [index, [host, token]] of environments.entries()) {
+    assert.equal((await call(relay, primoPath, { host, authorization: `Bearer ${token}` })).statusCode, index === 0 ? 200 : 429);
+  }
+});
+
+test('quota storage failure fails closed without a provider call or leaked error', async () => {
+  const relay = handler({ budget: { reserve() { throw new Error('private-file-path'); } },
+    fetchImpl: () => assert.fail('upstream called') });
+  const res = await call(relay, primoPath);
+  assert.equal(res.statusCode, 503);
+  assert.equal(res.body.toString(), '{"error":"quota_unavailable"}');
 });

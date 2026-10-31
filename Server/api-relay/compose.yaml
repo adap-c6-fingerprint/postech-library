@@ -14,6 +14,7 @@ services:
     tmpfs: ["/tmp:size=16m,noexec,nosuid"]
     volumes:
       - ./private/credentials.json:/run/secrets/relay.json:ro
+      - ./state:/var/lib/pobook-api:rw
     environment:
       PRIMO_DAILY_LIMIT: "1500"
       YES24_DAILY_LIMIT: "1000"
