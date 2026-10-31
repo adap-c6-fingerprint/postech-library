@@ -5,7 +5,14 @@ import Foundation
 struct VerifyPrimoHoldings {
     static func main() async throws {
         let base = URL(string: CommandLine.arguments.dropFirst().first ?? "http://127.0.0.1:47575/library")!
-        let service = PrimoBookHoldingsService(baseURL: base)
+        let relay = BookAPIClient(httpClient: HTTPClient(load: { original in
+            var request = original
+            var target = URLComponents(url: base.appending(path: "primo/v1/search"), resolvingAgainstBaseURL: false)!
+            target.percentEncodedQuery = URLComponents(url: original.url!, resolvingAgainstBaseURL: false)?.percentEncodedQuery
+            request.url = target.url
+            return try await URLSession.shared.data(for: request)
+        }), configuration: { .init(environment: .development, token: "local-proof-relay-token-with-at-least-32-characters") })
+        let service = PrimoBookHoldingsService(relay: relay)
         let holdings = try await service.fetch(recordID: "alma991000958759703286")
         try check(holdings.count == 3, "real sample's three holdings")
         try check(holdings.first?.locationCode == "c3b", "physical location code")

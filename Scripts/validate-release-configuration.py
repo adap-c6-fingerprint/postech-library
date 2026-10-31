@@ -1,46 +1,26 @@
 #!/usr/bin/env python3
-"""Reject Release builds that cannot perform Primo holdings lookups."""
+"""Validate relay credentials for Release archives. Never print tokens."""
 
 import os
 import sys
-from urllib.parse import urlsplit
 
 
-def validate(configuration: str, proxy_url: str) -> None:
+def validate(configuration: str, channel: str, development: str = "", testflight: str = "", production: str = "") -> None:
+    if channel not in ("automatic", "internal"):
+        raise ValueError("POBOOK_BUILD_CHANNEL must be automatic or internal.")
     if configuration != "Release":
         return
-    value = proxy_url.strip()
-    if not value or value.startswith("$("):
-        raise ValueError(
-            "Release requires PRIMO_PROXY_URL. Set it in the ignored Secrets.xcconfig "
-            "or supply the PRIMO_PROXY_URL build setting in your private archive pipeline."
-        )
-    try:
-        parts = urlsplit(value)
-        valid = (
-            value == proxy_url
-            and value.startswith("https://")
-            and parts.scheme == "https"
-            and parts.hostname is not None
-            and parts.port != 0
-            and parts.username is None
-            and parts.password is None
-            and "?" not in value
-            and "#" not in value
-            and not any(character.isspace() for character in value)
-        )
-    except ValueError:
-        valid = False
-    if not valid:
-        raise ValueError(
-            "PRIMO_PROXY_URL must be an HTTPS base URL without credentials, "
-            "query parameters or fragments."
-        )
+    required = {"DEVELOPMENT": development} if channel == "internal" else {"TESTFLIGHT": testflight, "PRODUCTION": production}
+    for name, value in required.items():
+        if len(value) < 32 or value.startswith("$(") or any(not 0x21 <= ord(character) <= 0x7e for character in value):
+            raise ValueError(f"Release requires a valid POBOOK_RELAY_TOKEN_{name} in private build settings.")
 
 
 if __name__ == "__main__":
     try:
-        validate(os.environ.get("CONFIGURATION", ""), os.environ.get("PRIMO_PROXY_URL", ""))
+        validate(os.environ.get("CONFIGURATION", ""), os.environ.get("POBOOK_BUILD_CHANNEL", "automatic"),
+                 os.environ.get("POBOOK_RELAY_TOKEN_DEVELOPMENT", ""), os.environ.get("POBOOK_RELAY_TOKEN_TESTFLIGHT", ""),
+                 os.environ.get("POBOOK_RELAY_TOKEN_PRODUCTION", ""))
     except ValueError as error:
         print(f"error: {error}", file=sys.stderr)
         sys.exit(1)

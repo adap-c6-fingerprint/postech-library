@@ -33,14 +33,10 @@ nonisolated struct BookClient: Sendable {
 extension BookClient: DependencyKey {
     static let liveValue = BookClient(
         search: { searchRequest in
-            guard let apiKey = await AppConfiguration.primoAPIKey else {
-                throw BookClientError.missingAPIKey
-            }
-            
             @Dependency(\.httpClient) var httpClient
             let result: HTTPResponse
             do {
-                result = try await PrimoAPIClient(httpClient: httpClient, apiKey: apiKey).search(
+                result = try await PrimoAPIClient(relay: .init(httpClient: httpClient)).search(
                     query: "any,contains,\(searchRequest.query)",
                     resourceTypes: resourceTypes(for: searchRequest.category)
                 )
@@ -68,14 +64,10 @@ extension BookClient: DependencyKey {
     }
 
     private enum BookClientError: LocalizedError {
-        case missingAPIKey
         case invalidResponse
         
         var errorDescription: String? {
             switch self {
-            case .missingAPIKey:
-                return "API 키가 없습니다."
-                
             case .invalidResponse:
                 return "서버에서 올바르지 않은 응답을 받았습니다."
             }

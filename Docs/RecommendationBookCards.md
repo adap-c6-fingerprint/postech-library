@@ -18,18 +18,10 @@
 
 ## 설정
 
-키는 Git에서 제외된 `Secrets.xcconfig`에 둔다. Debug는 기존 `PRIMO_API_KEY`로 개발용 조회가 가능하다.
-Release의 새 소장 조회에는 기관 키를 보관하는 HTTPS 백엔드 프록시가 필요하다.
-`PRIMO_PROXY_URL`을 비공개 설정 파일 또는 배포 빌드 설정에 주입한다.
-
-```xcconfig
-// 설정 형식 예시이며 실제 운영 주소가 아니다.
-PRIMO_PROXY_URL = https:/$()/library.example.org
-```
-
-`dev`에서 통합한 `Validate Release Primo Proxy` 빌드 단계가 Release의 프록시 누락·형식 오류를 차단한다.
-기본 주소는 비워 두며 실제 운영 프록시는 아직 확인하지 않았다.
-기존 검색·추천 API의 인증 구조는 변경하지 않는다.
+PLI-144부터 검색·추천·소장·소개는 공통 중계 Client를 사용한다.
+제공사 키는 서버에서만 보관하고 앱에는 환경별 중계 접근 토큰을 설정한다.
+Debug·내부 빌드 / TestFlight / App Store의 주소와 Release 검사는 [README](../README.md)를 따른다.
+추천 흐름과 1분 소장 캐시는 변경하지 않는다. 아래의 기존 검증 기록은 당시 기준이다.
 
 ## 간단한 확인 방법
 

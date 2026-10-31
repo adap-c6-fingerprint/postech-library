@@ -1,18 +1,10 @@
 import Foundation
 
 nonisolated struct Yes24BookDetailService: Sendable {
-    var httpClient: HTTPClient
+    var relay: BookAPIClient = .init()
 
-    init(httpClient: HTTPClient = .urlSession()) {
-        self.httpClient = httpClient
-    }
-
-    init(load: @escaping HTTPClient.Loader) {
-        self.init(httpClient: HTTPClient(load: load))
-    }
-
-    func fetchCoverURL(isbn13: String, apiKey: String) async throws -> URL? {
-        guard let raw = try await matchingItem(isbn13: isbn13, apiKey: apiKey)?.cover,
+    func fetchCoverURL(isbn13: String) async throws -> URL? {
+        guard let raw = try await matchingItem(isbn13: isbn13)?.cover,
               let url = URL(string: raw.trimmingCharacters(in: .whitespacesAndNewlines)),
               url.scheme?.lowercased() == "https", let host = url.host?.lowercased(),
               host == "yes24.com" || host.hasSuffix(".yes24.com"),
@@ -20,8 +12,8 @@ nonisolated struct Yes24BookDetailService: Sendable {
         return url
     }
 
-    func fetchDescription(isbn13: String, apiKey: String) async throws -> BookDescription? {
-        guard let item = try await matchingItem(isbn13: isbn13, apiKey: apiKey),
+    func fetchDescription(isbn13: String) async throws -> BookDescription? {
+        guard let item = try await matchingItem(isbn13: isbn13),
               let introduction = item.contentDetail?.bookIntroduction else { return nil }
         let text = BookText.plainText(introduction)
         guard !text.isEmpty else { return nil }
@@ -33,21 +25,15 @@ nonisolated struct Yes24BookDetailService: Sendable {
         return BookDescription(text: text, sourceURL: sourceURL)
     }
 
-    private func matchingItem(isbn13: String, apiKey: String) async throws -> Yes24DetailItem? {
+    private func matchingItem(isbn13: String) async throws -> Yes24DetailItem? {
         guard BookISBN.isbn13(from: isbn13) == isbn13 else { return nil }
-        var components = URLComponents(string: "https://apis.yes24.com/v1/goods/itemDetail")
-        components?.queryItems = [
+        let items = [
             URLQueryItem(name: "searchType", value: "ISBN13"),
             URLQueryItem(name: "query", value: isbn13)
         ]
-        guard let url = components?.url else { throw BookDetailClientError.invalidURL }
-
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 15
-        request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
         let response: HTTPResponse
         do {
-            response = try await httpClient.send(request)
+            response = try await relay.send(.yes24Detail, queryItems: items, timeout: 15)
         } catch is HTTPClientError {
             throw BookDetailClientError.invalidResponse
         }
@@ -91,7 +77,6 @@ private nonisolated struct Yes24ContentDetail: Decodable {
 }
 
 nonisolated enum BookDetailClientError: Error {
-    case missingAPIKey
     case invalidURL
     case invalidResponse
     case serviceError

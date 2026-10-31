@@ -15,12 +15,9 @@ struct BookDetailClient: Sendable {
 extension BookDetailClient: DependencyKey {
     static let liveValue = BookDetailClient(
         fetchDescription: { isbn13 in
-            guard let apiKey = await AppConfiguration.yes24APIKey else {
-                throw BookDetailClientError.missingAPIKey
-            }
             @Dependency(\.httpClient) var httpClient
-            return try await Yes24BookDetailService(httpClient: httpClient)
-                .fetchDescription(isbn13: isbn13, apiKey: apiKey)
+            return try await Yes24BookDetailService(relay: .init(httpClient: httpClient))
+                .fetchDescription(isbn13: isbn13)
         }
     )
 

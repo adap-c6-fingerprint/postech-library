@@ -11,27 +11,33 @@ spec.loader.exec_module(configuration)
 
 
 class ReleaseConfigurationTests(unittest.TestCase):
-    def test_debug_can_use_local_primo_key_without_proxy(self):
-        configuration.validate("Debug", "")
+    def test_debug_tests_need_no_live_tokens(self):
+        configuration.validate("Debug", "automatic")
 
     def test_release_rejects_missing_or_unexpanded_setting(self):
-        for value in ["", "  ", "$(PRIMO_PROXY_URL)"]:
+        for value in ["", "  ", "$(POBOOK_RELAY_TOKEN_PRODUCTION)", "short", "x" * 32 + "\n"]:
             with self.subTest(value=value), self.assertRaises(ValueError):
-                configuration.validate("Release", value)
+                configuration.validate("Release", "automatic", testflight="t" * 32, production=value)
 
-    def test_release_accepts_https_base_and_prefix(self):
-        for value in ["https://proxy.example.org", "https://proxy.example.org/library", "https://proxy.example.org:8443/"]:
-            with self.subTest(value=value):
-                configuration.validate("Release", value)
+    def test_store_archive_needs_both_environment_tokens(self):
+        configuration.validate("Release", "automatic", testflight="t" * 32, production="p" * 32)
+        with self.assertRaises(ValueError):
+            configuration.validate("Release", "automatic", testflight="t" * 32)
+        with self.assertRaises(ValueError):
+            configuration.validate("Release", "automatic", production="p" * 32)
 
-    def test_release_rejects_urls_the_live_client_cannot_use(self):
-        for value in ["http://proxy.example.org", "HTTPS://proxy.example.org", "proxy.example.org", "https://",
-                      " https://proxy.example.org", "https://proxy.example.org ", "https://user:secret@proxy.example.org",
-                      "https://proxy.example.org?q=1", "https://proxy.example.org?", "https://proxy.example.org/#x",
-                      "https://proxy.example.org/#", "https://proxy.example.org:bad",
-                      "https://proxy.example.org:70000", "https://proxy.example.org/a b"]:
-            with self.subTest(value=value), self.assertRaises(ValueError):
-                configuration.validate("Release", value)
+    def test_internal_release_uses_only_dev(self):
+        configuration.validate("Release", "internal", development="d" * 32)
+        with self.assertRaises(ValueError):
+            configuration.validate("Release", "internal", production="p" * 32)
+
+    def test_invalid_channel_and_errors_do_not_print_tokens(self):
+        with self.assertRaises(ValueError):
+            configuration.validate("Debug", "production")
+        token = "s" * 32 + "\r\n"
+        with self.assertRaises(ValueError) as result:
+            configuration.validate("Release", "internal", development=token)
+        self.assertNotIn(token, str(result.exception))
 
 
 if __name__ == "__main__":
