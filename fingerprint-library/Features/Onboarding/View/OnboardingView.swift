@@ -178,6 +178,7 @@ struct OnboardingView: View {
                 .foregroundStyle(isSelected ? Color.basketBackground : Color.onboardingTextPrimary)
                 .padding(.horizontal, 25)
                 .frame(height: 52)
+                .contentShape(.capsule)
                 .background(isSelected ? Color.basketPrimary : Color.onboardingField, in: .capsule)
         }
         .buttonStyle(.plain)
@@ -198,7 +199,7 @@ struct OnboardingView: View {
 
     private var actionButton: some View {
         let isPrimary = store.step == .interests && store.canFinish
-        // 관심사를 하나 이상 고르면 시작하기 버튼을 강조색으로 바꾼다.
+        // 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다.
         return Button {
             switch store.step {
             case .welcome: store.send(.startButtonTapped)
@@ -211,6 +212,7 @@ struct OnboardingView: View {
                 .foregroundStyle(isPrimary ? Color.basketBackground : Color.onboardingTextPrimary)
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
+                .contentShape(.capsule)
         }
         .buttonStyle(.plain)
         .glassEffect(
