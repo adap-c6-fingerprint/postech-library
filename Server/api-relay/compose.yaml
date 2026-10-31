@@ -1,0 +1,35 @@
+services:
+  api:
+    build: .
+    image: pobook-api-dev:${RELAY_VERSION:-local}
+    container_name: pobook-api-dev
+    user: "${RELAY_UID:-1000}:${RELAY_GID:-1000}"
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    cpus: 0.5
+    mem_limit: 512m
+    pids_limit: 64
+    tmpfs: [/tmp:size=16m,noexec,nosuid]
+    volumes:
+      - ./private/credentials.json:/run/secrets/relay.json:ro
+    environment:
+      PRIMO_DAILY_LIMIT: "1500"
+      YES24_DAILY_LIMIT: "1000"
+      DATA4LIBRARY_DAILY_LIMIT: "400"
+    networks: [webnet]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: "3"
+networks:
+  webnet:
+    external: true
