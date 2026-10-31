@@ -14,9 +14,9 @@ const routes = new Map([
   ['/data4library/api/recommandList', { provider: 'data4library', url: 'https://data4library.kr/api/recommandList' }],
 ]);
 const providerKeys = { primo: 'PRIMO_API_KEY', yes24: 'YES24_API_KEY', data4library: 'DATA4LIBRARY_API_KEY' };
-const perSecond = { primo: 10, yes24: 5, data4library: 10 };
-const concurrent = { primo: 4, yes24: 2, data4library: 10 };
-export const defaultDailyLimits = { primo: 1500, yes24: 1000, data4library: 400 };
+const perSecond = { primo: 10, data4library: 10 };
+const concurrent = { primo: 4, data4library: 10 };
+export const defaultDailyLimits = { primo: 1500, data4library: 400 };
 
 export function validateCredentials(credentials) {
   for (const key of ['RELAY_TOKEN', ...Object.values(providerKeys)]) {
@@ -85,7 +85,7 @@ function upstreamURL(input, route) {
 export function createRelay({ credentials, fetchImpl = fetch, now = Date.now, dailyLimits = defaultDailyLimits,
   budget = createDailyBudget(), timeoutMs = 12000, maxResponseBytes = 4 * 1024 * 1024, log = console.info }) {
   validateCredentials(credentials);
-  for (const provider of Object.keys(providerKeys)) {
+  for (const provider of Object.keys(defaultDailyLimits)) {
     if (!Number.isSafeInteger(dailyLimits[provider]) || dailyLimits[provider] < 1) throw new Error('Invalid daily limit');
   }
   const tokens = new Map([...hostCredentials].filter(([, key]) => credentials[key])
@@ -119,29 +119,32 @@ export function createRelay({ credentials, fetchImpl = fetch, now = Date.now, da
       let target;
       try { target = upstreamURL(input, route); } catch { return error(res, 400, 'invalid_query'); }
       const provider = route.provider;
-      const timestamp = now();
-      const second = Math.floor(timestamp / 1000);
-      counter = counters.get(provider);
-      if (!counter) {
-        counter = { active: 0, second, count: 0 };
-        counters.set(provider, counter);
-      }
-      if (counter.second !== second) { counter.second = second; counter.count = 0; }
-      if (counter.active >= concurrent[provider] || counter.count >= perSecond[provider]) {
-        counter = undefined;
-        return error(res, 429, 'relay_limit');
-      }
-      try {
-        if (!budget.reserve(provider, timestamp, dailyLimits[provider])) {
+      // Yes24 자체 호출 제한은 사용자 요청으로 제거한다. 제공사 응답/보안 검사는 유지한다.
+      if (provider !== 'yes24') {
+        const timestamp = now();
+        const second = Math.floor(timestamp / 1000);
+        counter = counters.get(provider);
+        if (!counter) {
+          counter = { active: 0, second, count: 0 };
+          counters.set(provider, counter);
+        }
+        if (counter.second !== second) { counter.second = second; counter.count = 0; }
+        if (counter.active >= concurrent[provider] || counter.count >= perSecond[provider]) {
           counter = undefined;
           return error(res, 429, 'relay_limit');
         }
-      } catch {
-        counter = undefined;
-        return error(res, 503, 'quota_unavailable');
+        try {
+          if (!budget.reserve(provider, timestamp, dailyLimits[provider])) {
+            counter = undefined;
+            return error(res, 429, 'relay_limit');
+          }
+        } catch {
+          counter = undefined;
+          return error(res, 503, 'quota_unavailable');
+        }
+        counter.active++;
+        counter.count++;
       }
-      counter.active++;
-      counter.count++;
       // Information Naru returns 406 for Accept: application/json even with format=json.
       const headers = { Accept: provider === 'primo' ? 'application/json' : '*/*' };
       if (provider === 'primo') headers.Authorization = `apikey ${credentials.PRIMO_API_KEY}`;

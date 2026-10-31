@@ -165,27 +165,26 @@ test('client disconnect aborts upstream and releases concurrency', async () => {
 test('daily budget is provider-specific and expires after 24h', async () => {
   let time = 0;
   let count = 0;
-  const relay = handler({ now: () => time, dailyLimits: { primo: 1, yes24: 1, data4library: 1 }, fetchImpl: async () => { count++; return new Response('{}'); } });
+  const relay = handler({ now: () => time, dailyLimits: { primo: 1, data4library: 1 }, fetchImpl: async () => { count++; return new Response('{}'); } });
   assert.equal((await call(relay, primoPath)).statusCode, 200);
   time = 2000;
   assert.equal((await call(relay, primoPath)).statusCode, 429);
   assert.equal(count, 1);
-  assert.equal((await call(relay, '/yes24/v1/goods/itemDetail?query=9788937460777')).statusCode, 200);
+  assert.equal((await call(relay, '/data4library/api/srchDtlList?isbn13=9788937460777')).statusCode, 200);
   time = 86400001;
   assert.equal((await call(relay, primoPath)).statusCode, 200);
 });
 
 test('per-second and in-flight limits bound provider load', async () => {
   const fast = handler({ now: () => 0, fetchImpl: async () => new Response('{}') });
-  for (let i = 0; i < 5; i++) assert.equal((await call(fast, '/yes24/v1/goods/itemDetail?query=9788937460777')).statusCode, 200);
-  assert.equal((await call(fast, '/yes24/v1/goods/itemDetail?query=9788937460777')).statusCode, 429);
+  for (let i = 0; i < 10; i++) assert.equal((await call(fast, primoPath)).statusCode, 200);
+  assert.equal((await call(fast, primoPath)).statusCode, 429);
   const releases = [];
   const busy = handler({ fetchImpl: async () => new Promise(resolve => releases.push(() => resolve(new Response('{}')))) });
-  const first = call(busy, '/yes24/v1/goods/itemDetail?query=9788937460777');
-  const second = call(busy, '/yes24/v1/goods/itemDetail?query=9788937460777');
-  assert.equal((await call(busy, '/yes24/v1/goods/itemDetail?query=9788937460777')).statusCode, 429);
+  const pending = Array.from({ length: 4 }, () => call(busy, primoPath));
+  assert.equal((await call(busy, primoPath)).statusCode, 429);
   releases.forEach(release => release());
-  await Promise.all([first, second]);
+  await Promise.all(pending);
 });
 
 test('logs only timing, status and provider', async () => {
@@ -224,7 +223,7 @@ test('each environment accepts only its own token and unknown hosts are denied',
 });
 
 test('all environments share the same provider budget, not three independent quotas', async () => {
-  const relay = handler({ credentials: releaseCredentials, dailyLimits: { primo: 1, yes24: 1, data4library: 1 },
+  const relay = handler({ credentials: releaseCredentials, dailyLimits: { primo: 1, data4library: 1 },
     fetchImpl: async () => new Response('{}') });
   for (const [index, [host, token]] of environments.entries()) {
     assert.equal((await call(relay, primoPath, { host, authorization: `Bearer ${token}` })).statusCode, index === 0 ? 200 : 429);
@@ -237,4 +236,30 @@ test('quota storage failure fails closed without a provider call or leaked error
   const res = await call(relay, primoPath);
   assert.equal(res.statusCode, 503);
   assert.equal(res.body.toString(), '{"error":"quota_unavailable"}');
+});
+
+test('Yes24 forwards bursts and more than 1000 requests without reserving local quota', async () => {
+  let forwarded = 0;
+  const relay = handler({ credentials: releaseCredentials, now: () => 0,
+    budget: { reserve() { assert.fail('Yes24 must not reserve quota'); } },
+    fetchImpl: async () => { forwarded++; return new Response('{}'); },
+  });
+  for (let batch = 0; batch < 110; batch++) {
+    const responses = await Promise.all(Array.from({ length: 10 }, (_, index) => {
+      const [host, token] = environments[index % environments.length];
+      return call(relay, '/yes24/v1/goods/itemDetail?query=9788937460777', { host, authorization: `Bearer ${token}` });
+    }));
+    assert.ok(responses.every(response => response.statusCode === 200));
+  }
+  assert.equal(forwarded, 1100);
+});
+
+test('Yes24 provider 429 is still preserved with its original body and Retry-After', async () => {
+  const relay = handler({ fetchImpl: async () => new Response('provider quota', {
+    status: 429, headers: { 'Retry-After': '120' },
+  }) });
+  const res = await call(relay, '/yes24/v1/goods/itemDetail?query=9788937460777');
+  assert.equal(res.statusCode, 429);
+  assert.equal(res.body.toString(), 'provider quota');
+  assert.equal(res.headers['retry-after'], '120');
 });
