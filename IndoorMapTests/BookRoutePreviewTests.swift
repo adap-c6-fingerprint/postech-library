@@ -46,7 +46,7 @@ extension IndoorMapSerialTests {
             }
             #expect(receivedMap == map && receivedLabels == labels)
             #expect(stops.map(\.book) == books)
-            #expect(stops.allSatisfy { $0.shelf.fixtureNumber == "S-3F-564-A" })
+            #expect(stops.allSatisfy { $0.candidateShelves.map(\.fixtureNumber) == ["S-3F-564-A"] })
             state.holdings[books[1].id] = .loading
             #expect(BookRoutePreviewRequest(state: state) == .waiting)
             state.holdings[books[1].id] = .failed("조회 실패")
@@ -62,7 +62,8 @@ extension IndoorMapSerialTests {
             state.map.map = map
             state.map.shelfLabels = labels
             state.holdings[book.id] = .loaded([BookRoutePreviewSample.holding])
-            for shelves in [[], Array(labels.prefix(2))] {
+            let distant = labels.filter { ["S-3F-657-A", "S-3F-524-B"].contains($0.fixtureNumber) }
+            for shelves in [[], distant] {
                 state.resolutions[book.id] = [.init(holding: BookRoutePreviewSample.holding, outcome: .candidates(shelves))]
                 guard case .failed = BookRoutePreviewRequest(state: state) else {
                     Issue.record("서가가 확정되지 않았는데 경로를 준비했습니다."); return

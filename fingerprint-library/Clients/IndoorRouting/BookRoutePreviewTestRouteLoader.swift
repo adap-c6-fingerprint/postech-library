@@ -12,7 +12,7 @@ nonisolated struct BookRoutePreviewTestRoute: Equatable, Sendable {
 
 /// 파일 검증·서가 연결·311-B 출발 정책을 담당한다. 방문 순서 계산은 Planner에 위임한다.
 nonisolated struct BookRoutePreviewTestRouteLoader {
-    func load(on map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookNavigationStop],
+    func load(on map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookRouteCandidateStop],
               in bundle: Bundle = .main) async throws -> BookNavigationSession {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
             throw IndoorMapLoadError.missingResource("IndoorMaps/POSTECHLibrary")
@@ -26,7 +26,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         directory: URL,
         on map: IndoorMap,
         labels: [IndoorShelfLabel],
-        stops: [BookNavigationStop]
+        stops: [BookRouteCandidateStop]
     ) async throws -> BookNavigationSession {
         let input = try await prepareInput(
             directory: directory,
@@ -40,10 +40,11 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
     
     @concurrent
     private func prepareInput(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
-                              stops: [BookNavigationStop]) async throws -> BookRoutePlanningInput {
-        let selections = await MainActor.run { stops.map { (id: $0.book.id, shelf: $0.shelf) } }
+                              stops: [BookRouteCandidateStop]) async throws -> BookRoutePlanningInput {
+        let selections = await MainActor.run { stops.map { (id: $0.book.id, shelves: $0.candidateShelves) } }
         guard BookRouteSelection.allows(bookCount: selections.count),
-              Set(selections.map(\.id)).count == selections.count else {
+              Set(selections.map(\.id)).count == selections.count,
+              selections.allSatisfy({ ShelfOverlapPolicy().allows($0.shelves) }) else {
             throw IndoorRoutingError.invalidDestination
         }
         let pinned = try await BundledIndoorMapLoader().load(directory: directory.appendingPathComponent("IMDFData"))
@@ -55,7 +56,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         )
         let origin = try fixedOrigin(on: map, labels: labels)
         var seen = Set<ShelfKey>()
-        let destinations = try ([origin] + selections.map(\.shelf)).compactMap { label -> ShelfDestination? in
+        let destinations = try ([origin] + selections.flatMap(\.shelves)).compactMap { label -> ShelfDestination? in
             try Task.checkCancellation()
             let destination = try destination(for: label, labels: labels, nodes: prepared.nodes)
             return seen.insert(destination.key).inserted ? destination : nil
@@ -67,6 +68,20 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
             diagnostics: prepared.diagnostics
         )
         return .init(map: map, shelfLabels: labels, navigation: navigation, origin: origin, start: start, stops: stops)
+    }
+
+    /// 기존 단일 서가 호출도 동일한 후보 계산을 사용한다.
+    func load(on map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookNavigationStop],
+              in bundle: Bundle = .main) async throws -> BookNavigationSession {
+        let candidates = await MainActor.run { stops.map(\.candidateStop) }
+        return try await load(on: map, labels: labels, stops: candidates, in: bundle)
+    }
+
+    @concurrent
+    func load(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
+              stops: [BookNavigationStop]) async throws -> BookNavigationSession {
+        let candidates = await MainActor.run { stops.map(\.candidateStop) }
+        return try await load(directory: directory, on: map, labels: labels, stops: candidates)
     }
     
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,

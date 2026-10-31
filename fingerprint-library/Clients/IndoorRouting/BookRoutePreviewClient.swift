@@ -11,7 +11,7 @@ nonisolated struct BookRoutePreviewClient: Sendable {
     var load: @Sendable (
         IndoorMap,
         [IndoorShelfLabel],
-        [BookNavigationStop]
+        [BookRouteCandidateStop]
     ) async throws -> BookNavigationSession
 }
 

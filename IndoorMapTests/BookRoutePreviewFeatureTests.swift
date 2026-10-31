@@ -32,7 +32,7 @@ extension IndoorMapSerialTests {
             await store.send(.requestChanged(.ready(
                 map: sample.map,
                 labels: sample.shelfLabels,
-                stops: sample.stops
+                stops: sample.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -86,14 +86,14 @@ extension IndoorMapSerialTests {
                     await MainActor.run {
                         #expect(map == sample.map)
                         #expect(labels == sample.shelfLabels)
-                        #expect(stops == sample.stops)
+                        #expect(stops == sample.stops.map(\.candidateStop))
                     }
                     return sample
                 }
             }
 
             await store.send(.requestChanged(.ready(
-                map: sample.map, labels: sample.shelfLabels, stops: sample.stops
+                map: sample.map, labels: sample.shelfLabels, stops: sample.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -119,7 +119,7 @@ extension IndoorMapSerialTests {
             }
 
             await store.send(.requestChanged(.ready(
-                map: sample.map, labels: sample.shelfLabels, stops: sample.stops
+                map: sample.map, labels: sample.shelfLabels, stops: sample.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -153,7 +153,7 @@ extension IndoorMapSerialTests {
             }
 
             await store.send(.requestChanged(.ready(
-                map: sample.map, labels: sample.shelfLabels, stops: sample.stops
+                map: sample.map, labels: sample.shelfLabels, stops: sample.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -190,7 +190,7 @@ extension IndoorMapSerialTests {
             }
 
             await store.send(.requestChanged(.ready(
-                map: first.map, labels: first.shelfLabels, stops: first.stops
+                map: first.map, labels: first.shelfLabels, stops: first.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -199,7 +199,7 @@ extension IndoorMapSerialTests {
             try #require(pending.didStart.value)
 
             await store.send(.requestChanged(.ready(
-                map: second.map, labels: second.shelfLabels, stops: second.stops
+                map: second.map, labels: second.shelfLabels, stops: second.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 2
             }

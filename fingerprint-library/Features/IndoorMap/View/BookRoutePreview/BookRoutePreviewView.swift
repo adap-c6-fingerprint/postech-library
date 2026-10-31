@@ -33,8 +33,7 @@ struct BookRoutePreviewView: View {
     private var readySession: BookNavigationSession? {
         guard let previewSession, case let .ready(map, labels, stops) = routeRequest,
               previewSession.map == map, previewSession.shelfLabels == labels,
-              previewSession.stops.count == stops.count,
-              previewSession.stops.allSatisfy({ stops.contains($0) }) else { return nil }
+              previewSession.matches(candidates: stops) else { return nil }
         return previewSession
     }
     private var orderedBooks: [Book] { readySession?.stops.map(\.book) ?? destination.books }

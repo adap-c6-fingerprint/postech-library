@@ -30,7 +30,8 @@ nonisolated struct BookShelfRangeMatcher {
         let cutters: [String]
 
         init?(_ value: String) {
-            let text = value.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+            let text = value.trimmingCharacters(in: .whitespacesAndNewlines)
+                .precomposedStringWithCanonicalMapping.uppercased()
             guard let match = text.range(of: #"^[A-Z]{1,3}\s*[0-9]+(?:\.[0-9]+)?"#,
                                          options: .regularExpression) else { return nil }
             let head = String(text[match]).replacingOccurrences(of: " ", with: "")
@@ -40,7 +41,8 @@ nonisolated struct BookShelfRangeMatcher {
             self.number = number
             let tail = String(text[match.upperBound...])
             // 영문·한글 저자 기호를 보존하고 공백으로 구분된 연도·권차 앞에서 멈춘다.
-            let pattern = #"^\s*\.?\s*([\p{L}]+[0-9]+)"#
+            // PL2489.논.독92처럼 숫자 없는 한글 분류 구분도 보존한다.
+            let pattern = #"^\s*\.?\s*([\p{L}]+[0-9]+|[가-힣]+(?=\s*\.))"#
             let regex = try! NSRegularExpression(pattern: pattern)
             var rest = tail
             var cutters: [String] = []
@@ -63,6 +65,12 @@ nonisolated struct BookShelfRangeMatcher {
             }
             if number != other.number { return number < other.number ? .orderedAscending : .orderedDescending }
             for (left, right) in zip(cutters, other.cutters) where left != right {
+                // 포스텍 배열 규칙: 한글 가나다순 뒤에 영문 알파벳순이 온다.
+                let leftIsKorean = left.range(of: #"^[가-힣]"#, options: .regularExpression) != nil
+                let rightIsKorean = right.range(of: #"^[가-힣]"#, options: .regularExpression) != nil
+                if leftIsKorean != rightIsKorean {
+                    return leftIsKorean ? .orderedAscending : .orderedDescending
+                }
                 // Cutter 숫자는 .12 < .2이므로 숫자 정렬을 사용하지 않는다.
                 return left < right ? .orderedAscending : .orderedDescending
             }

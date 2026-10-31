@@ -4,14 +4,14 @@ import Foundation
 enum BookRoutePreviewRequest: Equatable {
     case waiting
     case failed(String)
-    case ready(map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookNavigationStop])
+    case ready(map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookRouteCandidateStop])
 
     init(state: BookShelfMapFeature.State?) {
         guard let state else { self = .waiting; return }
         if let error = state.map.loadError ?? state.map.shelfLabelError {
             self = .failed(error); return
         }
-        var stops: [BookNavigationStop] = []
+        var stops: [BookRouteCandidateStop] = []
         for book in state.books {
             switch state.holdings[book.id] {
             case nil, .loading: self = .waiting; return
@@ -20,11 +20,11 @@ enum BookRoutePreviewRequest: Equatable {
                 guard state.map.map != nil, !state.map.isLoading, !state.map.isLoadingShelfLabels,
                       state.resolutions[book.id] != nil else { self = .waiting; return }
                 let shelves = state.shelves(for: book.id)
-                guard shelves.count == 1, let shelf = shelves.first else {
-                    self = .failed("\(BookText.plainText(book.title)): 서가 한 곳을 확정할 수 없어 경로를 계산하지 않았어요.")
+                guard ShelfOverlapPolicy().allows(shelves) else {
+                    self = .failed("\(BookText.plainText(book.title)): 안내할 서가 후보를 확인할 수 없어 경로를 계산하지 않았어요.")
                     return
                 }
-                stops.append(.init(book: book, holdings: holdings, shelf: shelf))
+                stops.append(.init(book: book, holdings: holdings, candidateShelves: shelves))
             }
         }
         guard let map = state.map.map, !stops.isEmpty else { self = .waiting; return }
