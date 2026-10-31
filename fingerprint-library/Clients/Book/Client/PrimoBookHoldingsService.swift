@@ -37,12 +37,10 @@ nonisolated struct PrimoBookHoldingsService: Sendable {
 }
 
 nonisolated enum BookHoldingsError: LocalizedError {
-    case missingAPIKey, missingProxy, invalidProxyURL, invalidRecordID, invalidResponse, serviceUnavailable
+    case invalidRecordID, invalidResponse, serviceUnavailable
 
     var errorDescription: String? {
         switch self {
-        case .missingAPIKey: "도서 위치 조회를 위한 API 키가 설정되지 않았어요."
-        case .missingProxy, .invalidProxyURL: "도서 위치 조회 서버가 설정되지 않았어요."
         case .invalidRecordID: "이 책의 도서관 자료 번호를 확인할 수 없어요."
         case .invalidResponse, .serviceUnavailable: "도서 위치를 불러오지 못했어요. 다시 시도해 주세요."
         }

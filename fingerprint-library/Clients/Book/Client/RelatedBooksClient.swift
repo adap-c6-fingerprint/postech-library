@@ -106,7 +106,6 @@ private nonisolated struct RelatedBookDTO: Decodable {
 
 nonisolated enum RelatedBooksClientError: Error {
     case invalidISBN
-    case missingAPIKey
     case invalidURL
     case invalidResponse
 }

@@ -77,7 +77,6 @@ private nonisolated struct Yes24ContentDetail: Decodable {
 }
 
 nonisolated enum BookDetailClientError: Error {
-    case missingAPIKey
     case invalidURL
     case invalidResponse
     case serviceError

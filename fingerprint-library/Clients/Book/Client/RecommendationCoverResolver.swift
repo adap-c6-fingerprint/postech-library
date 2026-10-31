@@ -7,9 +7,12 @@ nonisolated struct RecommendationCoverResolver: Sendable {
 
     static func live(
         httpClient: HTTPClient,
-        minimumImageBytes: Int
+        minimumImageBytes: Int,
+        configuration: @escaping @Sendable () async throws -> APIRelayConfiguration = {
+            try await AppConfiguration.relayConfiguration()
+        }
     ) -> Self {
-        let api = Data4LibraryAPIClient(relay: .init(httpClient: httpClient))
+        let api = Data4LibraryAPIClient(relay: .init(httpClient: httpClient, configuration: configuration))
         return Self(
             data4LibraryLookup: { isbn13 in
                 try? await api.coverURL(isbn13: isbn13)

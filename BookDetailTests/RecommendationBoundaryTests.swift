@@ -1,4 +1,5 @@
 import Foundation
+import Synchronization
 import Testing
 @testable import fingerprint_library
 
@@ -91,9 +92,31 @@ nonisolated struct RecommendationBoundaryTests {
 
     @Test("공통 표지 조회는 공급처 오류를 fallback 가능한 nil로 바꾼다")
     func resolverAllowsFallbackAfterLookupFailure() async {
+        let calls = Mutex(0)
         let resolver = RecommendationCoverResolver.live(
-            httpClient: HTTPClient(load: { _ in throw URLError(.timedOut) }),
-            minimumImageBytes: 1_000
+            httpClient: HTTPClient(load: { request in
+                #expect(request.url?.path == "/data4library/api/srchDtlList")
+                calls.withLock { $0 += 1 }
+                throw URLError(.timedOut)
+            }),
+            minimumImageBytes: 1_000,
+            configuration: {
+                .init(environment: .development, token: "unit-test-relay-token-not-a-provider-key")
+            }
+        )
+        #expect(await resolver.data4LibraryLookup("9788966260959") == nil)
+        #expect(calls.withLock { $0 } == 1)
+    }
+
+    @Test("중계 인증 설정이 없으면 표지 조회 요청 없이 fallback한다")
+    func resolverAllowsFallbackWithoutConfiguration() async {
+        let resolver = RecommendationCoverResolver.live(
+            httpClient: HTTPClient(load: { _ in
+                Issue.record("인증 설정이 없으면 네트워크를 호출하면 안 됨")
+                throw URLError(.badURL)
+            }),
+            minimumImageBytes: 1_000,
+            configuration: { throw APIRelayError.missingAccessToken }
         )
         #expect(await resolver.data4LibraryLookup("9788966260959") == nil)
     }

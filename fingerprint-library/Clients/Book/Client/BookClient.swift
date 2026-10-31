@@ -64,14 +64,10 @@ extension BookClient: DependencyKey {
     }
 
     private enum BookClientError: LocalizedError {
-        case missingAPIKey
         case invalidResponse
         
         var errorDescription: String? {
             switch self {
-            case .missingAPIKey:
-                return "API 키가 없습니다."
-                
             case .invalidResponse:
                 return "서버에서 올바르지 않은 응답을 받았습니다."
             }
