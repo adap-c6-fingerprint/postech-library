@@ -10,14 +10,8 @@ extension ColdStartRecommendationClient: DependencyKey {
         guard !ColdStartRecommendation.normalizedCodes(interests).isEmpty else {
             throw RecommendationClientError.noInterests
         }
-        guard let primoKey = await AppConfiguration.primoAPIKey else {
-            throw RecommendationClientError.missingPrimoAPIKey
-        }
-        guard let data4LibraryKey = await AppConfiguration.data4LibraryAPIKey else {
-            throw RecommendationClientError.missingData4LibraryAPIKey
-        }
         @Dependency(\.httpClient) var httpClient
-        let primo = PrimoAPIClient(httpClient: httpClient, apiKey: primoKey)
+        let primo = PrimoAPIClient(relay: .init(httpClient: httpClient))
         return try await ColdStartRecommendationService.recommend(
             interests: interests,
             dependencies: .init(
@@ -28,7 +22,7 @@ extension ColdStartRecommendationClient: DependencyKey {
                     )
                 },
                 covers: .live(
-                    httpClient: httpClient, data4LibraryAPIKey: data4LibraryKey,
+                    httpClient: httpClient,
                     minimumImageBytes: ColdStartRecommendation.minimumCoverBytes
                 )
             )

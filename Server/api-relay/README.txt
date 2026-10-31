@@ -102,3 +102,43 @@ Nginx/인증서
   키 없는 build context, 파일 권한, 자원 제한 및 기존 Nginx diff를 검토했다.
 - 개발 1단계 범위에서 필수 수정 문제는 남기지 않았다. 운영 전환 승인이나 사람 리뷰를 대신하지 않는다.
 - 메모리 카운터/고정 개발 토큰의 제약은 위에 명시했다. 복제/운영 인증으로 사용하지 않는다.
+
+단계 2 — 앱 호출 통합 (2026-10-31)
+- BookAPIClient가 고정된 네 중계 경로, 환경별 호스트와 Bearer 인증을 담당한다.
+- 공급자별 쿼리/디코딩/오류/재시도와 UI/추천/모델/캐시는 유지한다. 이미지는 원본 URL을 사용한다.
+- 앱 Info.plist와 기본 설정에서 제공사 키 및 기존 PRIMO_PROXY_URL을 제거했다.
+- Debug/시뮬레이터/명시적 내부 Release -> pobook-api-dev.fpmaps.com.
+- 검증된 StoreKit sandbox(TestFlight 내부/외부) -> pobook-api-testfligh.fpmaps.com.
+- 검증된 StoreKit production(App Store) -> pobook-api.fpmaps.com.
+- testfligh는 사용자 지정 철자다. 영수증 파일명으로 추측하거나 환경 오류에 다른 서버로 우회하지 않는다.
+- 내부 Release는 POBOOK_BUILD_CHANNEL=internal. Store/TestFlight archive는 automatic을 사용한다.
+- 자동 Release는 TESTFLIGHT/PRODUCTION 두 접근 토큰을 요구하고 내부 Release는 DEVELOPMENT만 요구한다.
+- 서버/인증서 변경은 없다. TestFlight/운영 서버와 토큰은 아직 미구성 상태이며 일반 Release archive를 차단한다.
+- 로컬 Git 제외 Secrets.xcconfig(0600)에 개발 접근 토큰만 연결했다. 제공사 키는 가져오지 않았다.
+- 중계 토큰은 앱에서 추출 가능하다. 이 설정을 강한 운영 인증으로 취급하지 않는다.
+
+단계 2 검증
+- Python 설정/자료 검사 21개 통과.
+- BookDetailTests 223개 / 39개 suite 통과, Xcode TEST SUCCEEDED.
+- 환경 선택, 토큰/쿼리 검증, 원본 상태/본문/Retry-After 보존, 검색 조건과 공급자별 해석을 확인했다.
+- 실제 앱 HTTPClient/BookAPIClient/공급자 Client로 개발 HTTPS 4개 경로를 각각 한 번 호출: 모두 200 및 기존 JSON envelope 확인.
+- 빌드 산출물 Info.plist에 제공사 키 설정 0개, 개발 토큰 주입 확인. 값은 로그에 출력하지 않았다.
+- 대체 표지 모의 검증: 9개 경로 및 중복 조회 방지/실패 후 재시도 횟수 검사 통과.
+- 소장 정보 모의 검증: 소장처 보존·정확한 자료 번호·빈 결과·401·잘못된 JSON·503 상한·429 복구 통과.
+- 현 SDK 26.5에는 기존 BookDetailView.contentMarginsRemoved(iOS 27)가 없어 원본 빌드는 실패했다.
+  저장소 코드는 수정하지 않고 해당 한 줄만 제거한 /private/tmp 사본을 VFS overlay로 사용했다.
+- 기존 BookBasketIsolationTests.swift와 *ScreenTests.swift는 기존 컴파일 문제로 제외했다.
+- 전체 테스트 시도는 별도 IndoorLocationAuthorizationMonitorTests의 offMainThread 단언 실패와
+  테스트 보조 프로세스의 simctl 조회 실패가 있어 통과로 판단하지 않는다. 위 도서 테스트는 분리 재실행 결과다.
+- 실제 기기의 TestFlight/App Store 배포 판별, 전체 UI 회귀, 장기 부하, 운영 보안/할당량 검증은 남는다.
+
+실제 개발 중계 Client 검증 재현 (프로젝트 루트, Xcode 선택 후 실행)
+  xcrun swiftc -swift-version 6 -parse-as-library \
+    fingerprint-library/Clients/Network/HTTPClient.swift \
+    fingerprint-library/Clients/Network/BookAPIClient.swift \
+    fingerprint-library/Shared/AppConfiguration.swift \
+    fingerprint-library/Clients/Book/Client/PrimoAPIClient.swift \
+    fingerprint-library/Clients/Book/Client/Data4LibraryAPIClient.swift \
+    Scripts/verify-api-relay.swift -o /tmp/pobook-relay-proof
+  /tmp/pobook-relay-proof
+이 검증은 개발 토큰을 로컬 제외 파일에서 읽고 실제 제공사 할당량을 각각 1회 사용한다.

@@ -18,23 +18,9 @@ extension BookHoldingsClient: DependencyKey {
 
     static let liveValue = Self(fetch: { recordID in
         @Dependency(\.httpClient) var httpClient
-        let service: PrimoBookHoldingsService
-        if let address = await AppConfiguration.primoProxyURL {
-            guard let url = URL(string: address), url.scheme == "https", url.host != nil,
-                  url.user == nil, url.password == nil, url.query == nil, url.fragment == nil else {
-                throw BookHoldingsError.invalidProxyURL
-            }
-            // 프록시가 기관 키를 보관한다. 앱의 키를 프록시로 전달하지 않는다.
-            service = .init(baseURL: url, httpClient: httpClient)
-        } else {
-            #if DEBUG
-            guard let key = await AppConfiguration.primoAPIKey else { throw BookHoldingsError.missingAPIKey }
-            service = .init(apiKey: key, httpClient: httpClient)
-            #else
-            throw BookHoldingsError.missingProxy
-            #endif
-        }
-        let cacheKey = service.baseURL.absoluteString + "|" + recordID
+        let configuration = try await AppConfiguration.relayConfiguration()
+        let service = PrimoBookHoldingsService(relay: .init(httpClient: httpClient, configuration: { configuration }))
+        let cacheKey = configuration.environment.baseURL.absoluteString + "|" + recordID
         if let holdings = await cache.value(for: cacheKey) { return holdings }
         let holdings = try await service.fetch(recordID: recordID)
         try Task.checkCancellation()

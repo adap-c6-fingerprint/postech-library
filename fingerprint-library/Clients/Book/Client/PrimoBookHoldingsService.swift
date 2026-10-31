@@ -2,23 +2,7 @@ import Foundation
 
 /// 호출 경계를 주입할 수 있어 동일한 요청·응답 처리를 로컬 HTTP 시뮬레이션에서도 실행한다.
 nonisolated struct PrimoBookHoldingsService: Sendable {
-    var baseURL: URL
-    var apiKey: String?
-    var httpClient: HTTPClient
-
-    init(
-        baseURL: URL = PrimoAPIClient.defaultBaseURL,
-        apiKey: String? = nil,
-        httpClient: HTTPClient = .urlSession()
-    ) {
-        self.baseURL = baseURL
-        self.apiKey = apiKey
-        self.httpClient = httpClient
-    }
-
-    init(baseURL: URL = PrimoAPIClient.defaultBaseURL, apiKey: String? = nil, session: URLSession) {
-        self.init(baseURL: baseURL, apiKey: apiKey, httpClient: .urlSession(session))
-    }
+    var relay: BookAPIClient = .init()
 
     static func isValid(recordID: String) -> Bool {
         recordID.range(of: #"^alma[0-9]{10,30}$"#, options: .regularExpression) != nil
@@ -26,7 +10,7 @@ nonisolated struct PrimoBookHoldingsService: Sendable {
 
     func fetch(recordID: String) async throws -> [BookHolding] {
         guard Self.isValid(recordID: recordID) else { throw BookHoldingsError.invalidRecordID }
-        let api = PrimoAPIClient(httpClient: httpClient, baseURL: baseURL, apiKey: apiKey)
+        let api = PrimoAPIClient(relay: relay)
         for attempt in 0..<3 {
             let result: HTTPResponse
             do {

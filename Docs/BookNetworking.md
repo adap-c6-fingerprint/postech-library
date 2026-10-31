@@ -1,7 +1,9 @@
 # 도서 API 통신 구조
 
 도서관·Yes24·정보나루의 HTTP 전송은 `Clients/Network/HTTPClient.swift`에서 실행한다.
-각 API는 요청 주소·인증·API별 응답 규칙을 관리하고, 기능 Client는 요청 목적과 도서 모델 변환을 관리한다.
+PLI-144부터 `BookAPIClient`가 도서 API의 중계 주소·배포 환경·Bearer 인증을 관리한다.
+각 API는 기존 쿼리·응답 규칙을 유지하고, 기능 Client는 요청 목적과 도서 모델 변환을 관리한다.
+이미지는 중계하지 않는다. [환경 설정](../README.md)과 [서버 운영](../Server/api-relay/README.txt)을 참고한다.
 
 ```mermaid
 flowchart TD
@@ -9,9 +11,10 @@ flowchart TD
     Clients --> Primo[PrimoAPIClient]
     Clients --> Yes24[Yes24BookDetailService]
     Clients --> Data4[Data4LibraryAPIClient]
-    Primo --> HTTP[HTTPClient]
-    Yes24 --> HTTP
-    Data4 --> HTTP
+    Primo --> Relay[BookAPIClient]
+    Yes24 --> Relay
+    Data4 --> Relay
+    Relay --> HTTP[HTTPClient]
     Images[표지 로딩 · 이미지 확인] --> HTTP
     HTTP --> Session[URLSession]
 ```
@@ -34,9 +37,10 @@ flowchart TD
 | 계층 | 책임 |
 | --- | --- |
 | `HTTPClient` | 주입된 전송기 실행, 전송 전후 취소 확인, HTTP 응답인지 검증 |
-| `PrimoAPIClient` | 도서관 기본 주소·검색 경로·공통 쿼리·인증 헤더 구성 |
-| `Data4LibraryAPIClient` | 정보나루 엔드포인트·쿼리 인증·연관 도서 유형 구성 |
-| `Yes24BookDetailService` | Yes24 인증·상품 상세 응답·소개·표지 해석 |
+| `BookAPIClient` | 고정 중계 경로·배포 환경·Bearer 인증, 원본 HTTP 응답 반환 |
+| `PrimoAPIClient` | 도서관 검색 공통 쿼리 구성 |
+| `Data4LibraryAPIClient` | 정보나루 ISBN·연관 도서 유형·표지 해석 |
+| `Yes24BookDetailService` | 상품 상세 응답·소개·표지 해석 |
 | 기능 Client와 소장 서비스 | 도서 변환·추천 흐름·기능별 오류 및 재시도 정책 |
 
 `HTTPClient`는 HTTP 오류 상태의 본문과 헤더도 반환한다. Yes24의 404 상품 없음과 소장 조회의 429·5xx 재시도를 API 계층에서 해석하기 위해서다.

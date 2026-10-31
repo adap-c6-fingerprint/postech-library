@@ -71,6 +71,10 @@
 
 ## 프록시 설정
 
+PLI-144부터 모든 도서 API가 공통 중계 Client를 사용한다. 현재 설정은
+[README](../README.md)의 환경별 중계 토큰 방식을 따른다. 기존 `PRIMO_PROXY_URL`과
+앱의 제공사 키는 더 이상 사용하지 않는다. 아래는 #75 당시 구현·검증 기록이다.
+
 기관 문서는 API 키를 백엔드 프록시에 보관하도록 요구한다.
 `Secrets.xcconfig`의 `PRIMO_PROXY_URL`에 HTTPS 프록시 기본 주소를 설정하면
 소장 조회는 그 주소의 `/primo/v1/search`를 호출하며 앱의 Primo 키를 전송하지 않는다.

@@ -1,24 +1,35 @@
 import Foundation
+import StoreKit
 
-enum AppConfiguration {
-    static var nationalLibraryAPIKey: String? {
-        value(for: "NATIONAL_LIBRARY_API_KEY")
-    }
-
-    static var yes24APIKey: String? {
-        value(for: "YES24_API_KEY")
-    }
-
-    static var data4LibraryAPIKey: String? {
-        value(for: "DATA4LIBRARY_API_KEY")
-    }
-
-    static var primoAPIKey: String? {
-        value(for: "PRIMO_API_KEY")
-    }
-
-    static var primoProxyURL: String? {
-        value(for: "PRIMO_PROXY_URL")
+nonisolated enum AppConfiguration {
+    static func relayConfiguration() async throws -> APIRelayConfiguration {
+        let channel = value(for: "POBOOK_BUILD_CHANNEL") ?? "automatic"
+        guard ["automatic", "internal"].contains(channel) else { throw APIRelayError.invalidBuildChannel }
+        let environment: APIRelayEnvironment
+        #if DEBUG || targetEnvironment(simulator)
+        environment = .development
+        #else
+        if channel == "internal" {
+            environment = .development
+        } else {
+            // 같은 Release 바이너리를 구분한다. 검증 실패를 운영 환경으로 추측하지 않는다.
+            guard case let .verified(transaction) = try await AppTransaction.shared else {
+                throw APIRelayError.unknownDistribution
+            }
+            let distribution: APIRelayEnvironment.Distribution
+            switch transaction.environment {
+            case .xcode: distribution = .xcode
+            case .sandbox: distribution = .sandbox
+            case .production: distribution = .production
+            default: throw APIRelayError.unknownDistribution
+            }
+            environment = try .select(internalBuild: false, distribution: distribution)
+        }
+        #endif
+        guard let token = value(for: "POBOOK_RELAY_TOKEN_\(environment.rawValue)") else {
+            throw APIRelayError.missingAccessToken
+        }
+        return APIRelayConfiguration(environment: environment, token: token)
     }
 
     private static func value(for key: String) -> String? {

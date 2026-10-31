@@ -13,7 +13,7 @@
 `Book` 계약과 원본 표지 URL은 바꾸지 않는다. 표지 대체 처리는 공통 로더 내부에서 이루어진다.
 
 동일 ISBN의 진행 중 Yes24 조회를 공유한다. 성공·미등록 결과는 15분 동안 최대 100개를 메모리에 보관하고, 오류는 보관하지 않는다.
-이미지 다운로드·완료 캐시는 기존 `SharedImageLoader`를 재사용한다. API 키는 기존 `YES24_API_KEY` 설정을 읽으며 요청 헤더·키를 로그나 Git에 남기지 않는다.
+이미지 다운로드·완료 캐시는 기존 `SharedImageLoader`를 재사용한다. PLI-144부터 Yes24 메타데이터는 `BookAPIClient`로 중계하고 이미지는 원본 URL을 사용한다. 제공사 키는 서버에만 둔다. [환경 설정](../README.md)을 참고한다.
 
 계약 출처: [Yes24 상품 상세 API](https://developers.yes24.com/api-doc/goods-item-detail).
 `searchType=ISBN13`, `query`, `X-Api-Key`, `data.items[].isbn13`, `cover`를 사용한다.
@@ -54,7 +54,7 @@ postman simulation run postman/simulations/book-cover-fallback.sim.yaml --port 4
 
 URL 누락, 도서관 403/404, 다른 ISBN 거부, 미등록, 표지 null, API 503 및 재시도, ISBN 누락의 9개 경로를 확인하고 HTTP 호출 횟수를 검사한다.
 모의 서버의 `request` 기록에서도 의도한 경로가 실행됐는지 확인한다. 이 검증의 이미지 디코더는 macOS AppKit이며 iOS UIKit 디코딩과는 별도다.
-로컬 `Secrets.xcconfig`의 Yes24 키를 이용한 실제 『1984』 조회는 다음과 같다.
+로컬 `Secrets.xcconfig`의 개발 중계 토큰을 이용한 실제 『1984』 조회는 다음과 같다.
 
 ```sh
 ./Scripts/verify-book-cover-fallback.sh --live

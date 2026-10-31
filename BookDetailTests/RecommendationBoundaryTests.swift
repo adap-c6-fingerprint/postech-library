@@ -5,9 +5,9 @@ import Testing
 nonisolated struct RecommendationBoundaryTests {
     @Test("추천용 Primo 조회는 성공 본문을 반환하고 HTTP 오류는 거절한다", arguments: [200, 503])
     func validatesPrimoSearchData(status: Int) async throws {
-        let api = PrimoAPIClient(httpClient: HTTPClient(load: { request in
+        let api = PrimoAPIClient(relay: .test { request in
             (Data("response".utf8), HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: nil)!)
-        }))
+        })
         if status == 200 {
             #expect(try await api.searchData(query: "any,contains,과학") == Data("response".utf8))
         } else {
@@ -59,33 +59,33 @@ nonisolated struct RecommendationBoundaryTests {
 
     @Test("정보나루 표지 응답 변환은 API 계층에서 수행하고 http 주소를 보정한다")
     func decodesData4LibraryCover() async throws {
-        let api = Data4LibraryAPIClient(httpClient: HTTPClient(load: { request in
-            #expect(request.url?.path == "/api/srchDtlList")
+        let api = Data4LibraryAPIClient(relay: .test { request in
+            #expect(request.url?.path == "/data4library/api/srchDtlList")
             let body = #"{"response":{"detail":[{"book":{"bookImageURL":"http://covers.example.com/book.jpg"}}]}}"#
             return (Data(body.utf8), HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
-        }))
-        #expect(try await api.coverURL(isbn13: "9788966260959", apiKey: "test-key")
+        })
+        #expect(try await api.coverURL(isbn13: "9788966260959")
                 == URL(string: "https://covers.example.com/book.jpg"))
     }
 
     @Test("표지 미제공은 nil이고 HTTP 장애와 잘못된 JSON은 오류다", arguments: [200, 503])
     func distinguishesMissingCoverFromFailure(status: Int) async throws {
-        let api = Data4LibraryAPIClient(httpClient: HTTPClient(load: { request in
+        let api = Data4LibraryAPIClient(relay: .test { request in
             (Data(#"{"response":{"detail":[]}}"#.utf8),
              HTTPURLResponse(url: request.url!, statusCode: status, httpVersion: nil, headerFields: nil)!)
-        }))
+        })
         if status == 200 {
-            #expect(try await api.coverURL(isbn13: "9788966260959", apiKey: "test-key") == nil)
+            #expect(try await api.coverURL(isbn13: "9788966260959") == nil)
         } else {
             await #expect(throws: Data4LibraryAPIError.self) {
-                try await api.coverURL(isbn13: "9788966260959", apiKey: "test-key")
+                try await api.coverURL(isbn13: "9788966260959")
             }
         }
-        let malformed = Data4LibraryAPIClient(httpClient: HTTPClient(load: { request in
+        let malformed = Data4LibraryAPIClient(relay: .test { request in
             (Data("invalid JSON".utf8), HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
-        }))
+        })
         await #expect(throws: (any Error).self) {
-            try await malformed.coverURL(isbn13: "9788966260959", apiKey: "test-key")
+            try await malformed.coverURL(isbn13: "9788966260959")
         }
     }
 
@@ -93,7 +93,7 @@ nonisolated struct RecommendationBoundaryTests {
     func resolverAllowsFallbackAfterLookupFailure() async {
         let resolver = RecommendationCoverResolver.live(
             httpClient: HTTPClient(load: { _ in throw URLError(.timedOut) }),
-            data4LibraryAPIKey: "test-key", minimumImageBytes: 1_000
+            minimumImageBytes: 1_000
         )
         #expect(await resolver.data4LibraryLookup("9788966260959") == nil)
     }
@@ -109,7 +109,7 @@ nonisolated struct RecommendationBoundaryTests {
                     headerFields: ["Content-Type": sample.1]
                 )!)
             }),
-            data4LibraryAPIKey: "test-key", minimumImageBytes: 1_000
+            minimumImageBytes: 1_000
         )
         #expect(await resolver.isRealImage(URL(string: "https://covers.example.com/book")!) == sample.3)
     }
