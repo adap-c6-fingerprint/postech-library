@@ -103,6 +103,8 @@ struct BookDetailFeature {
     var bookFavoritesClient
 
     @Dependency(\.bookBasketClient) var bookBasketClient
+    @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
+    // ✅ 상세 화면에 들어간 책을 '조회한 책'으로 기록한다. (Q5)
     @Dependency(\.date.now) var now
 
     var body: some Reducer<State, Action> {
@@ -110,6 +112,8 @@ struct BookDetailFeature {
             switch action {
             case .loadFavorites:
                 state.isFavorite = bookFavoritesClient.load().contains(state.book.recordKey)
+                recentlyViewedBooksClient.record(state.book)
+                // ✅ 상세 화면이 뜰 때 한 번 보내는 액션이므로 여기서 조회 기록을 남긴다.
                 return .none
 
             case .favoriteButtonTapped:

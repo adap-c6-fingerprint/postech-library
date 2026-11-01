@@ -1,34 +1,16 @@
 import ComposableArchitecture
 
 struct DepartmentPopularBooksClient: Sendable {
-    var fetch: @Sendable (_ departmentName: String, _ count: Int) async throws -> [Book]
+    var fetch: @Sendable (_ affiliationKey: [String], _ count: Int, _ isInitial: Bool) async throws -> [Book]
+    // ✅ 학과 이름 대신 소속 경로(상위·그룹·최종)를 받는다. 이름만으로는 학부·대학원의 같은 학과가 섞인다.
+    // ✅ isInitial: 온보딩 직후 첫 표시이면 true. 하드데이터만 쓰고 네트워크를 거치지 않는다.
 }
 
 extension DepartmentPopularBooksClient: DependencyKey {
-    static let liveValue: Self = .random
+    static let liveValue: Self = .dataset(dataset: .liveValue, related: .liveValue)
+    // ✅ 키워드 검색 후 임시 랜덤(.random) 대신 소속별 하드데이터를 쓴다. (DatasetRecommendationClients.swift)
 
-    // 학과별 대출 통계가 준비되기 전에는 검색 결과에서 임시 도서를 고른다.
-    // 통계 조회를 구현하면 liveValue가 선택하는 구현을 교체한다.
-    static let random = Self(
-        fetch: { _, count in
-            guard count > 0 else { return [] }
-
-            let bookClient = await MainActor.run {
-                @Dependency(\.bookClient) var bookClient
-                return bookClient
-            }
-
-            let keywords = ["소설", "과학", "역사", "예술"]
-            let keyword = keywords.randomElement() ?? "소설"
-            let books = try await bookClient.search(BookSearchRequest(
-                query: keyword, category: .monograph
-            ))
-
-            return Array(books.shuffled().prefix(count))
-        }
-    )
-
-    static let testValue = Self(fetch: { _, _ in [] })
+    static let testValue = Self(fetch: { _, _, _ in [] })
 }
 
 extension DependencyValues {
