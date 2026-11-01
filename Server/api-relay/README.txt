@@ -169,6 +169,13 @@ Nginx/인증서
 
   최초 release 토큰 발급(이미 발급된 서버에서는 실행하지 않는다):
     sudo sh -c 'umask 077; set -C; docker exec -i pobook-api-dev node --input-type=module > private/credentials.next.json' < deploy/provision-release.mjs
+  발급 명령이 성공한 경우에만, 교체 전에 실행 UID/GID와 파일 권한을 맞춘다:
+    relay_uid=$(sudo docker exec pobook-api-dev id -u) &&
+    relay_gid=$(sudo docker exec pobook-api-dev id -g) &&
+    sudo chown "$relay_uid:$relay_gid" private/credentials.next.json &&
+    sudo chmod 0600 private/credentials.next.json
+  위 UID/GID는 현재 컨테이너의 실제 RELAY_UID:RELAY_GID다. 교체 시 실행 UID/GID도 변경한다면 새 Compose 설정의 값으로 소유자를 맞춘다.
+  sudo stat -c '%u:%g %a' private/credentials.next.json 으로 소유자가 실행 UID:GID와 일치하고 권한이 600인지 확인한다. 내용은 출력하지 않는다.
   기존 마운트 credentials.json에 직접 출력하지 않는다. 실패하면 next 파일은 사용하지 않고, 성공 시에도 별도 검증·백업 후 교체하고 컨테이너를 재생성해야 한다.
   set -C는 기존 next 파일 덮어쓰기를 막는다. next 파일도 비밀 파일이므로 터미널·로그·Git에 출력하지 않는다.
 
