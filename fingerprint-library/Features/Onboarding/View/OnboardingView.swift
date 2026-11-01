@@ -8,6 +8,7 @@ import ComposableArchitecture
 
 struct OnboardingView: View {
     let store: StoreOf<OnboardingFeature>
+    private static let scrollFadeHeight: CGFloat = 24
 
     var body: some View {
         VStack(spacing: 0) {
@@ -122,9 +123,10 @@ struct OnboardingView: View {
 
     private var interests: some View {
         VStack(alignment: .leading, spacing: 0) {
-            header(title: "어떤 책에 끌리나요?", subtitle: "관심 있는 분야를 골라주세요")
+            header(title: "어떤 책에 끌리나요?",
+                   subtitle: "관심 있는 분야를 골라주세요.\n최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요")
                 .padding(.horizontal, 6)
-                .padding(.bottom, 32)
+                .padding(.bottom, 32 - Self.scrollFadeHeight)
 
             ScrollView {
                 ChipFlowLayout(spacing: 8, lineSpacing: 12) {
@@ -135,6 +137,13 @@ struct OnboardingView: View {
                 }
             }
             .scrollBounceBehavior(.basedOnSize)
+            .contentMargins(.vertical, Self.scrollFadeHeight, for: .scrollContent)
+            .overlay(alignment: .top) {
+                scrollFade(startPoint: .top, endPoint: .bottom)
+            }
+            .overlay(alignment: .bottom) {
+                scrollFade(startPoint: .bottom, endPoint: .top)
+            }
         }
         .padding(.horizontal, 10)
     }
@@ -153,6 +162,13 @@ struct OnboardingView: View {
         .lineSpacing(6)
         .padding(.top, 100)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private func scrollFade(startPoint: UnitPoint, endPoint: UnitPoint) -> some View {
+        LinearGradient(colors: [Color.basketBackground, Color.basketBackground.opacity(0)], startPoint: startPoint, endPoint: endPoint)
+            .frame(height:Self.scrollFadeHeight)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 
     private func field<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
@@ -183,6 +199,7 @@ struct OnboardingView: View {
 
     private func chip(_ name: String) -> some View {
         let isSelected = store.selectedPreferences.contains(name)
+        let isBlocked = !isSelected && store.isPreferenceLimitReached
         return Button {
             store.send(.preferenceToggled(name))
         } label: {
@@ -195,7 +212,10 @@ struct OnboardingView: View {
                 .background(isSelected ? Color.basketPrimary : Color.onboardingField, in: .capsule)
         }
         .buttonStyle(.plain)
+        .opacity(isBlocked ? 0.4 : 1)
+        .disabled(isBlocked)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityHint(isBlocked ? "최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요" : "")
     }
 
     private var pageIndicator: some View {
