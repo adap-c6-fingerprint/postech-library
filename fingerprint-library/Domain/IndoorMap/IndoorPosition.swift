@@ -8,6 +8,20 @@ nonisolated struct IndoorPosition: Equatable, Sendable {
     let horizontalAccuracy: Double?
     let timestamp: Date
     let source: Source
+    /// 북쪽이 0도이고 시계 방향으로 증가한다. 방향을 알 수 없으면 nil이다.
+    let headingDegrees: Double?
+
+    init(coordinate: IndoorMapCoordinate, floorOrdinal: Int?, horizontalAccuracy: Double?,
+         timestamp: Date, source: Source, headingDegrees: Double? = nil) {
+        self.coordinate = coordinate
+        self.floorOrdinal = floorOrdinal
+        self.horizontalAccuracy = horizontalAccuracy
+        self.timestamp = timestamp
+        self.source = source
+        self.headingDegrees = headingDegrees.flatMap {
+            $0.isFinite && (0..<360).contains($0) ? $0 : nil
+        }
+    }
 
     /// 표시·화면 중심 이동에만 쓴다. 경로 도착 판정이나 정확도 보장 기준이 아니다.
     func isRecent(at date: Date) -> Bool {

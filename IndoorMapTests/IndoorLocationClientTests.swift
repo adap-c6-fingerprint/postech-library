@@ -5,7 +5,9 @@ import Testing
 struct IndoorLocationClientTests {
     @Test("재생 위치는 실제 센서 위치로 표시하지 않는다")
     func replaySource() async {
-        let client = IndoorLocationClient.replaying([IndoorMapTestData.position()], interval: .zero)
+        let original = IndoorPosition(coordinate: IndoorMapTestData.point, floorOrdinal: 4, horizontalAccuracy: 3,
+                                      timestamp: IndoorMapTestData.now, source: .sensor, headingDegrees: 315)
+        let client = IndoorLocationClient.replaying([original], interval: .zero)
         var received: [IndoorLocationEvent] = []
         for await event in await client.events() { received.append(event) }
         #expect(received.count == 2)
@@ -17,5 +19,6 @@ struct IndoorLocationClientTests {
         #expect(position.source == .replay)
         #expect(position.coordinate == IndoorMapTestData.point)
         #expect(position.floorOrdinal == 4)
+        #expect(position.headingDegrees == 315)
     }
 }

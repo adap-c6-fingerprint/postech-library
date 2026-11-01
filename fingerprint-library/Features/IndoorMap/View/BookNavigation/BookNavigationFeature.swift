@@ -355,7 +355,8 @@ struct BookNavigationFeature {
         guard let raw = state.rawPosition else { return }
         let ordinal = state.effectiveFloorOrdinal
         let effective = IndoorPosition(coordinate: raw.coordinate, floorOrdinal: ordinal,
-            horizontalAccuracy: raw.horizontalAccuracy, timestamp: raw.timestamp, source: raw.source)
+            horizontalAccuracy: raw.horizontalAccuracy, timestamp: raw.timestamp, source: raw.source,
+            headingDegrees: raw.headingDegrees)
         guard let ordinal, state.session.map.floors.contains(where: { $0.ordinal == ordinal }) else {
             state.latestPosition = nil
             state.progress = nil

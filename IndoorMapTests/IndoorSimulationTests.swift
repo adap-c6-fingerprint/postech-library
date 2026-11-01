@@ -39,6 +39,20 @@ struct IndoorSimulationFrameTests {
         #expect(position.coordinate == IndoorMapTestData.point)
         #expect(position.timestamp == IndoorMapTestData.now)
         #expect(position.horizontalAccuracy == 0)
+        #expect(position.headingDegrees == 90)
+    }
+
+    @Test("방향이 없는 이전 프레임도 위치를 유지하고 방향만 없는 값으로 읽는다")
+    func acceptsMissingHeading() throws {
+        var body = try #require(JSONSerialization.jsonObject(with: SimulationTestFrame.body()) as? [String: Any])
+        var device = try #require(body["device"] as? [String: Any])
+        device.removeValue(forKey: "headingDegrees")
+        body["device"] = device
+        let data = try JSONSerialization.data(withJSONObject: body)
+        let frame = try JSONDecoder().decode(IndoorSimulationFrame.self, from: data)
+        let position = try frame.position(at: IndoorMapTestData.now)
+        #expect(position.coordinate == IndoorMapTestData.point)
+        #expect(position.headingDegrees == nil)
     }
 
     @Test("TCP의 잘린 헤더·본문과 합쳐진 여러 프레임을 복원한다")
