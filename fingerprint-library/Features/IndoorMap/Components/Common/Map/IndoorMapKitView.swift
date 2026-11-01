@@ -76,6 +76,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var overlayGeneration = 0
         private var positionAnnotation: PositionAnnotation?
         private var renderedPosition: IndoorPosition?
+        private var renderedPositionAppearance: Appearance?
+        private var renderedPositionNavigationAppearance = false
         private var renderedShelves: [ShelfDestination] = []
         private var renderedShelfLabels: [IndoorShelfLabel] = []
         private var shelfLabelAnnotations: [IndoorShelfLabelAnnotation] = []
@@ -142,9 +144,9 @@ struct IndoorMapKitView: UIViewRepresentable {
                 render(in: view)
             }
             view.overrideUserInterfaceStyle = parent.navigationAppearance ? .dark : .unspecified
-            view.showsUserLocation = parent.showsUserLocation
+            view.showsUserLocation = parent.showsUserLocation && parent.appearance != .home
             updatePosition(in: view)
-            updateNavigationMarkerBearing(in: view)
+            updatePositionMarkerBearing(in: view)
             updateShelves(in: view)
             updateShelfLabels(in: view)
             updateRoute(in: view)
@@ -292,7 +294,11 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
             layoutShelfLabels(in: mapView)
-            updateNavigationMarkerBearing(in: mapView)
+            updatePositionMarkerBearing(in: mapView)
+        }
+
+        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            updatePositionMarkerBearing(in: mapView)
         }
 
         func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
@@ -406,15 +412,22 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         /// 조회 층의 합성·재생·수동 위치만 별도 마커로 표시한다.
-        /// 센서 위치는 MapKit 기본 사용자 위치에 맡기며 같은 출처의 이동은 기존 annotation을 갱신한다.
+        /// 홈의 센서 위치도 원본 이미지로 표시하며 같은 출처의 이동은 기존 annotation을 갱신한다.
         func updatePosition(in view: MKMapView) {
             let visible = parent.position.flatMap { position -> IndoorPosition? in
-                guard (position.source != .sensor || parent.navigationAppearance), position.floorOrdinal == parent.floor.ordinal else { return nil }
+                guard (position.source != .sensor || parent.navigationAppearance || parent.appearance == .home),
+                      position.floorOrdinal == parent.floor.ordinal
+                        || (parent.appearance == .home && position.source == .sensor && position.floorOrdinal == nil)
+                else { return nil }
                 return position
             }
-            guard visible != renderedPosition else { return }
+            let styleChanged = renderedPositionAppearance != parent.appearance
+                || renderedPositionNavigationAppearance != parent.navigationAppearance
+            guard visible != renderedPosition || styleChanged else { return }
             renderedPosition = visible
-            if let visible, let annotation = positionAnnotation, visible.source == annotation.position.source {
+            renderedPositionAppearance = parent.appearance
+            renderedPositionNavigationAppearance = parent.navigationAppearance
+            if !styleChanged, let visible, let annotation = positionAnnotation, visible.source == annotation.position.source {
                 annotation.update(visible)
                 return
             }
@@ -423,10 +436,12 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = positionAnnotation { view.addAnnotation(annotation) }
         }
 
-        private func updateNavigationMarkerBearing(in map: MKMapView) {
-            guard parent.navigationAppearance else { return }
-            for case let annotation as PositionAnnotation in map.annotations {
-                if let view = map.view(for: annotation) { configureNavigationBearing(view, in: map) }
+        private func updatePositionMarkerBearing(in map: MKMapView) {
+            guard let annotation = positionAnnotation, let view = map.view(for: annotation) else { return }
+            if let view = view as? HomeUserLocationAnnotationView {
+                view.configure(headingDegrees: annotation.position.headingDegrees, mapHeading: map.camera.heading)
+            } else if parent.navigationAppearance {
+                configureNavigationBearing(view, in: map)
             }
         }
 
@@ -624,6 +639,16 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
+            if let annotation = annotation as? PositionAnnotation, parent.appearance == .home,
+               annotation.position.source != .manual {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "home-user-position") as? HomeUserLocationAnnotationView
+                    ?? HomeUserLocationAnnotationView(annotation: annotation, reuseIdentifier: "home-user-position")
+                view.annotation = annotation
+                view.accessibilityLabel = annotation.title
+                view.accessibilityIdentifier = annotation.position.source == .simulation ? "simulation-position" : "user-position"
+                view.configure(headingDegrees: annotation.position.headingDegrees, mapHeading: mapView.camera.heading)
+                return view
+            }
             if let annotation = annotation as? BookNavigationDestinationAnnotation {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "navigation-book")
                     ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "navigation-book")
