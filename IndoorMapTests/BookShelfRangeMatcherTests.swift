@@ -32,7 +32,7 @@ struct BookShelfRangeMatcherTests {
     @Test("없는 층·범위 밖·해석할 수 없는 청구기호를 다른 서가로 대체하지 않는다", arguments: [
         (2, "RC263 .R632 1990"), (0, "RC263 .R632 1990"),
         (3, ""), (3, "확인 필요"), (3, "RC263 ???"), (3, "ZZ9999.A1"),
-        (3, "RC263 .R632???"), (3, "RC263 .R632 20??")
+        (3, "RC263 .R632???"), (3, "RC263 .R632 20??"), (3, "RC263 .확인필요")
     ])
     func rejectsUnmappedLocation(sample: (Int, String)) async throws {
         let map = try await BundledIndoorMapLoader().loadLibrary()
@@ -49,7 +49,9 @@ struct BookShelfRangeMatcherTests {
         ("QA10.A12", "QA10.A2", "QA10 .A19", true),
         ("TA418.9.C6.P7", "TA1632.C88", "TA418.9 .C6 P8 2020", true),
         ("PL959.65.유293.수75", "PL959.65.유293.수76", "PL959.65.유293 .수75 2023", true),
-        ("QA10.A1", "QA10.A2", "QA10.A2.B3 2024", true)
+        ("QA10.A1", "QA10.A2", "QA10.A2.B3 2024", true),
+        ("HQ1236.한16", "HQ1236.C67", "HQ1236.홍2", true),
+        ("PL2489.논.독92", "PL2489.W4", "PL2489.논.독93", true)
     ])
     func comparesCallNumbers(sample: (String, String, String, Bool)) async throws {
         let map = try await BundledIndoorMapLoader().loadLibrary()

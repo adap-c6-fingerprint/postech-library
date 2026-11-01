@@ -5,6 +5,19 @@ struct BookNavigationStop: Equatable, Sendable {
     let book: Book
     let holdings: [BookHolding]
     let shelf: IndoorShelfLabel
+    let candidateShelves: [IndoorShelfLabel]
+
+    init(book: Book, holdings: [BookHolding], shelf: IndoorShelfLabel,
+         candidateShelves: [IndoorShelfLabel]? = nil) {
+        self.book = book
+        self.holdings = holdings
+        self.shelf = shelf
+        self.candidateShelves = (candidateShelves ?? [shelf]).sorted { $0.fixtureNumber < $1.fixtureNumber }
+    }
+
+    var candidateStop: BookRouteCandidateStop {
+        .init(book: book, holdings: holdings, candidateShelves: candidateShelves)
+    }
 }
 
 /// 미리보기에서 확정한 안내 입력 스냅샷. 실시간 위치·진행 단계는 수신 화면에서 구현한다.
@@ -28,6 +41,10 @@ struct BookNavigationSession: Identifiable, Equatable, Sendable {
             throw IndoorRoutingError.invalidDestination
         }
         for (index, leg) in legs.enumerated() {
+            guard ShelfOverlapPolicy().allows(stops[index].candidateShelves),
+                  stops[index].candidateShelves.contains(stops[index].shelf) else {
+                throw IndoorRoutingError.invalidDestination
+            }
             guard leg.destination.value == stops[index].shelf.fixtureNumber,
                   index == 0 || legs[index - 1].nodeIDs.last == leg.nodeIDs.first else {
                 throw IndoorRoutingError.invalidGraph
@@ -49,5 +66,11 @@ struct BookNavigationSession: Identifiable, Equatable, Sendable {
         self.start = start
         self.route = route
         guidance = try RoutePreviewGuidance(route: route, graph: graph)
+    }
+
+    /// 방문 순서·목적지를 골라도 원본 책·소장·후보가 같은 계산 결과만 사용한다.
+    func matches(candidates: [BookRouteCandidateStop]) -> Bool {
+        stops.count == candidates.count
+            && stops.allSatisfy { candidates.contains($0.candidateStop) }
     }
 }

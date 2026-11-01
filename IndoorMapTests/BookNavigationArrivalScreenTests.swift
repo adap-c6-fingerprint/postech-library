@@ -58,6 +58,34 @@ extension IndoorMapSerialTests {
             else { #expect(!text.contains("1/1")) }
         }
 
+        @Test("겹친 서가의 도착 화면에 두 후보와 확인 안내를 표시한다")
+        func rendersOverlapCandidates() async throws {
+            let map = try await BundledIndoorMapLoader().loadLibrary()
+            let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
+            let holding = BookHoldingTestData.holding(call: "HD30.29.K5")
+            let shelves = BookHoldingShelfResolver().resolve([holding], on: map, labels: labels).flatMap(\.shelves)
+            let candidate = BookRouteCandidateStop(book: BookHoldingTestData.book(), holdings: [holding], candidateShelves: shelves)
+            let session = try await BookRoutePreviewTestRouteLoader().load(on: map, labels: labels, stops: [candidate])
+            let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+            let window = UIWindow(windowScene: scene)
+            let host = UIHostingController(rootView: NavigationStack {
+                BookNavigationArrivalView(session: session, currentStopIndex: 0)
+            }.frame(width: 393, height: 852))
+            window.rootViewController = host
+            window.makeKeyAndVisible()
+            defer { window.isHidden = true; window.rootViewController = nil }
+            try await Task.sleep(for: .milliseconds(700))
+            host.view.layoutIfNeeded()
+            let image = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
+            }
+            try image.pngData()?.write(to: FileManager.default.temporaryDirectory.appendingPathComponent("issue73-arrival-overlap.png"))
+            let text = try await recognizedText(image).map(\.text).joined()
+            #expect(text.contains("319-A"))
+            #expect(text.contains("319-B"))
+            #expect(text.contains("두서가를확인"))
+        }
+
         @concurrent
         private func recognizedText(_ image: UIImage) async throws -> [RecognizedRegion] {
             let request = VNRecognizeTextRequest()

@@ -21,5 +21,5 @@ nonisolated struct BookRoutePlanningInput: Sendable {
     let start: IndoorPosition
 
     // 방문할 책과 서가 목록
-    let stops: [BookNavigationStop]
+    let stops: [BookRouteCandidateStop]
 }

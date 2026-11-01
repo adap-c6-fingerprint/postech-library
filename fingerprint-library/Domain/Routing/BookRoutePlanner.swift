@@ -15,12 +15,13 @@ nonisolated struct BookRoutePlanner {
             input.stops.map {
                 (
                     bookID: $0.book.id,
-                    shelf: $0.shelf
+                    shelves: $0.candidateShelves
                 )
             }
         }
         guard BookRouteSelection.allows(bookCount: selections.count),
-              Set(selections.map(\.bookID)).count == selections.count else {
+              Set(selections.map(\.bookID)).count == selections.count,
+              selections.allSatisfy({ ShelfOverlapPolicy().allows($0.shelves) }) else {
             throw IndoorRoutingError.invalidDestination
         }
         
@@ -34,61 +35,81 @@ nonisolated struct BookRoutePlanner {
         var cache: [LegKey: IndoorRoute] = [:]
         var unreachable = Set<LegKey>()
         var bestOrder: [Int] = []
+        var bestShelves: [IndoorShelfLabel] = []
         var bestLegs: [IndoorRoute] = []
         var bestDistance = Double.infinity
         
-        for order in orders {
-            try Task.checkCancellation()
-            var legs: [IndoorRoute] = []
-            do {
-                for (index, next) in order.enumerated() {
-                    try Task.checkCancellation()
-                    let previous = index == 0 ? -1 : order[index - 1]
-                    let key = LegKey(from: previous, to: next)
-                    if unreachable.contains(key) { throw IndoorRoutingError.noRoute }
-                    if let cached = cache[key] {
-                        legs.append(cached)
-                    } else {
-                        do {
-                            let start = previous == -1 ? input.start : try position(
-                                at: selections[previous].shelf,
-                                in: input.navigation,
-                                timestamp: input.start.timestamp
-                            )
-                            let goal = try destination(
-                                for: selections[next].shelf, in: input.navigation
-                            )
-                            let leg = try route(from: start, to: goal.key, in: input.navigation)
-                            cache[key] = leg
-                            legs.append(leg)
-                        } catch IndoorRoutingError.noRoute {
-                            unreachable.insert(key)
-                            throw IndoorRoutingError.noRoute
-                        }
-                    }
+        for shelves in candidateCombinations(selections.map(\.shelves)) {
+            for order in orders {
+                try Task.checkCancellation()
+                let ordered = order.map { shelves[$0] }
+                let legs: [IndoorRoute]
+                do {
+                    legs = try buildLegs(for: ordered, input: input, cache: &cache, unreachable: &unreachable)
+                } catch IndoorRoutingError.noRoute {
+                    continue
                 }
-            } catch IndoorRoutingError.noRoute {
-                continue
-            }
-            let distance = legs.reduce(0) { $0 + $1.distanceMeters }
-            // 동률이면 기존 입력 기준의 먼저 열거한 순서를 유지
-            if distance < bestDistance {
-                bestDistance = distance
-                bestOrder = order
-                bestLegs = legs
+                let distance = legs.reduce(0) { $0 + $1.distanceMeters }
+                // 동률이면 입력 책 순서와 안정화한 후보 ID 순서를 유지한다.
+                if distance < bestDistance {
+                    bestDistance = distance
+                    bestOrder = order
+                    bestShelves = shelves
+                    bestLegs = legs
+                }
             }
         }
         guard !bestLegs.isEmpty else { throw IndoorRoutingError.noRoute }
         try Task.checkCancellation()
+        let chosenOrder = bestOrder
+        let chosenShelves = bestShelves
+        let stops = await MainActor.run {
+            chosenOrder.map { input.stops[$0].resolved(at: chosenShelves[$0]) }
+        }
         return try await BookNavigationSession(
             map: input.map,
             shelfLabels: input.shelfLabels,
-            stops: bestOrder.map { input.stops[$0] },
+            stops: stops,
             legs: bestLegs,
             graph: input.navigation.graph,
             origin: input.origin,
             start: input.start
         )
+    }
+
+    private func candidateCombinations(_ candidates: [[IndoorShelfLabel]]) -> [[IndoorShelfLabel]] {
+        candidates.reduce([[]]) { combinations, shelves in
+            combinations.flatMap { selected in shelves.map { selected + [$0] } }
+        }
+    }
+
+    private func buildLegs(for shelves: [IndoorShelfLabel], input: BookRoutePlanningInput,
+                           cache: inout [LegKey: IndoorRoute], unreachable: inout Set<LegKey>) throws -> [IndoorRoute] {
+        var legs: [IndoorRoute] = []
+        for (index, shelf) in shelves.enumerated() {
+            try Task.checkCancellation()
+            let previous = index == 0 ? nil : shelves[index - 1]
+            // 같은 책의 후보가 달라도 다른 구간의 캐시를 재사용하지 않는다.
+            let key = LegKey(from: previous?.fixtureNumber, to: shelf.fixtureNumber)
+            if unreachable.contains(key) { throw IndoorRoutingError.noRoute }
+            if let cached = cache[key] {
+                legs.append(cached)
+                continue
+            }
+            do {
+                let start = try previous.map {
+                    try position(at: $0, in: input.navigation, timestamp: input.start.timestamp)
+                } ?? input.start
+                let goal = try destination(for: shelf, in: input.navigation)
+                let leg = try route(from: start, to: goal.key, in: input.navigation)
+                cache[key] = leg
+                legs.append(leg)
+            } catch IndoorRoutingError.noRoute {
+                unreachable.insert(key)
+                throw IndoorRoutingError.noRoute
+            }
+        }
+        return legs
     }
     
     func route(
@@ -136,7 +157,7 @@ nonisolated struct BookRoutePlanner {
     }
     
     private struct LegKey: Hashable {
-        let from: Int
-        let to: Int
+        let from: String?
+        let to: String
     }
 }
