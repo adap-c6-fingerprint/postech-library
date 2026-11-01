@@ -1,5 +1,7 @@
 import importlib.util
 from pathlib import Path
+import subprocess
+import sys
 import unittest
 
 
@@ -34,6 +36,35 @@ class ReleaseConfigurationTests(unittest.TestCase):
         configuration.validate("Release", "internal", development="d" * 32)
         with self.assertRaises(ValueError):
             configuration.validate("Release", "internal", production="p" * 32)
+
+    def test_automatic_release_rejects_duplicate_tokens(self):
+        for values in [("d", "d", "p"), ("d", "t", "d"), ("d", "t", "t"), ("d", "d", "d")]:
+            tokens = dict(zip(["development", "testflight", "production"], [value * 32 for value in values]))
+            with self.subTest(values=values), self.assertRaisesRegex(ValueError, "distinct") as result:
+                configuration.validate("Release", "automatic", **tokens)
+            for token in tokens.values():
+                self.assertNotIn(token, str(result.exception))
+
+    def test_archive_requires_automatic_release(self):
+        tokens = dict(development="d" * 32, testflight="t" * 32, production="p" * 32)
+        for action in ["install", "archive"]:
+            configuration.validate("Release", "automatic", action=action, **tokens)
+            for build, channel in [("Release", "internal"), ("Debug", "internal"), ("Debug", "automatic")]:
+                with self.subTest(action=action, build=build, channel=channel), self.assertRaisesRegex(ValueError, "Archive/install"):
+                    configuration.validate(build, channel, action=action, **tokens)
+        configuration.validate("Release", "internal", development="d" * 32, action="build")
+
+    def test_build_phase_reads_archive_action_from_environment(self):
+        settings = dict(CONFIGURATION="Release", POBOOK_BUILD_CHANNEL="internal",
+                        POBOOK_RELAY_TOKEN_DEVELOPMENT="d" * 32, ACTION="install")
+        command = [sys.executable, str(spec.origin)]
+        archive = subprocess.run(command, env=settings, capture_output=True, text=True)
+        self.assertEqual(archive.returncode, 1)
+        self.assertIn("Archive/install", archive.stderr)
+        self.assertNotIn(settings["POBOOK_RELAY_TOKEN_DEVELOPMENT"], archive.stderr)
+        settings["ACTION"] = "build"
+        local = subprocess.run(command, env=settings, capture_output=True, text=True)
+        self.assertEqual(local.returncode, 0, local.stderr)
 
     def test_invalid_channel_and_errors_do_not_print_tokens(self):
         with self.assertRaises(ValueError):

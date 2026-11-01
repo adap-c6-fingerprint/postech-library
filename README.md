@@ -34,10 +34,13 @@ Release의 검증된 StoreKit `AppTransaction.environment`로 TestFlight(sandbox
 Xcode 배포 정보는 개발서버를 사용합니다. 영수증 파일 유무로 추측하거나 판별 실패 시 다른 서버로 우회하지 않습니다.
 내부용 Release는 `POBOOK_BUILD_CHANNEL=internal`로 명시하며 Store/TestFlight 배포에 사용하지 않습니다.
 Xcode Run은 Debug를 사용하세요. Release로 직접 실행하는 내부 빌드는 `internal`을 지정하세요.
+Archive/install은 `Release + automatic`만 허용하며, `internal`은 일반 Build/Run에서만 사용할 수 있습니다.
+검사는 기존 빌드 단계의 `ACTION=archive` 또는 `install`을 사용하므로 별도 업로드 스크립트는 필요하지 않습니다.
 
 Release의 `Validate API Relay Configuration` 단계는 자동 배포에
 `POBOOK_RELAY_TOKEN_DEVELOPMENT`, `POBOOK_RELAY_TOKEN_TESTFLIGHT`, `POBOOK_RELAY_TOKEN_PRODUCTION`을 모두 요구합니다.
 같은 바이너리의 Xcode 실행·TestFlight·App Store 환경 선택에 대응하므로 세 설정이 필요합니다.
+세 토큰은 서로 달라야 합니다. 같은 값을 복사한 경우에도 빌드 검사를 실패시킵니다.
 내부 Release는 개발 토큰만 요구합니다. CI에서는 비공개 빌드 설정으로 같은 변수를 주입합니다.
 앱에 포함된 중계 토큰은 추출 가능하며 사용자 인증이나 제공사 비밀키가 아닙니다.
 
