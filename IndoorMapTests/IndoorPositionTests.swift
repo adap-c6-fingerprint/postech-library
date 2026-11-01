@@ -3,6 +3,14 @@ import Testing
 @testable import fingerprint_library
 
 struct IndoorPositionTests {
+    @Test("잘못된 방향 값이 있어도 위치를 버리지 않고 방향만 숨긴다", arguments: [-1.0, 360, .nan, .infinity])
+    func ignoresInvalidHeading(_ heading: Double) {
+        let position = IndoorPosition(coordinate: IndoorMapTestData.point, floorOrdinal: 4, horizontalAccuracy: 3,
+                                      timestamp: IndoorMapTestData.now, source: .sensor, headingDegrees: heading)
+        #expect(position.headingDegrees == nil)
+        #expect(position.isRecent(at: IndoorMapTestData.now))
+    }
+
     @Test("외곽 경계와 내부 ring을 구분한다")
     func polygonContainment() {
         let geometry = IndoorMapGeometry.polygon([IndoorMapTestData.square, IndoorMapTestData.hole])

@@ -14,6 +14,7 @@ nonisolated struct IndoorSimulationFrame: Decodable, Sendable {
             let levelOrdinal: Int
         }
         let position: Position
+        let headingDegrees: Double?
     }
 
     let schemaVersion: Int
@@ -30,7 +31,7 @@ nonisolated struct IndoorSimulationFrame: Decodable, Sendable {
         let position = IndoorPosition(
             coordinate: .init(latitude: coordinate.latitude, longitude: coordinate.longitude),
             floorOrdinal: device.position.levelOrdinal, horizontalAccuracy: 0,
-            timestamp: generatedAt, source: .simulation
+            timestamp: generatedAt, source: .simulation, headingDegrees: device.headingDegrees
         )
         guard position.isRecent(at: now) else { throw IndoorSimulationError.invalidPosition }
         return position
