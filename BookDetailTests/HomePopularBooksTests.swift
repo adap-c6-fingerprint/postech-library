@@ -5,7 +5,7 @@ import Testing
 
 @MainActor
 struct HomePopularBooksTests {
-    @Test("추천 목록이 이미 있어도 하단 도서를 조회하고 프로필의 학과명을 전달한다")
+    @Test("추천 목록이 이미 있어도 하단 도서를 조회하고 프로필의 소속 경로를 전달한다")
     func loadsPopularBooksWithRecommendationsCached() async {
         let recommended = Self.book("recommended")
         let popular = Self.book("popular")
@@ -14,15 +14,21 @@ struct HomePopularBooksTests {
         let store = TestStore(initialState: initialState) { HomeFeature() }
             withDependencies: {
                 $0.userProfileClient.load = {
-                    UserProfileSnapshot(departmentName: "컴퓨터공학과", interests: [])
+                    UserProfileSnapshot(
+                        departmentName: "컴퓨터공학과", interests: [],
+                        affiliationKey: ["POSTECH 학부", "학과 및 학부", "컴퓨터공학과"]
+                    )
+                    // ✅ 소속 경로를 함께 저장한다.
                 }
                 $0.bookRecommendationClient.fetch = { _ in
                     Issue.record("이미 있는 추천 목록을 다시 조회하면 안 됩니다.")
                     return []
                 }
-                $0.departmentPopularBooksClient.fetch = { department, count in
-                    #expect(department == "컴퓨터공학과")
+                $0.departmentPopularBooksClient.fetch = { key, count, isInitial in
+                    #expect(key == ["POSTECH 학부", "학과 및 학부", "컴퓨터공학과"])
                     #expect(count == 6)
+                    #expect(isInitial == false)
+                    // ✅ 학과 이름 대신 소속 경로와 최초 표시 여부를 전달한다.
                     return [popular]
                 }
                 $0.homeRecommendationForYouClient = .live(
@@ -51,7 +57,7 @@ struct HomePopularBooksTests {
                     #expect(count == 6)
                     return [recommended]
                 }
-                $0.departmentPopularBooksClient.fetch = { _, _ in
+                $0.departmentPopularBooksClient.fetch = { _, _, _ in
                     Issue.record("이미 있는 하단 목록을 다시 조회하면 안 됩니다.")
                     return []
                 }
@@ -90,7 +96,7 @@ struct HomePopularBooksTests {
                     Issue.record("추천 목록은 보존해야 합니다.")
                     return []
                 }
-                $0.departmentPopularBooksClient.fetch = { _, _ in try await stub.fetch() }
+                $0.departmentPopularBooksClient.fetch = { _, _, _ in try await stub.fetch() }
                 $0.homeRecommendationForYouClient = .live(
                     recommendation: $0.bookRecommendationClient, cache: $0.recommendationCacheClient
                 )
@@ -113,6 +119,34 @@ struct HomePopularBooksTests {
         await store.send(.task)
         #expect(await stub.requestCount == 2)
         #expect(store.state.recommendedBooks == [recommended])
+        await store.finish()
+    }
+
+    // ✅ 이슈 #237 (Q4)
+    @Test("온보딩 직후 첫 표시에는 학과별 추천을 최초 접속으로 조회한다")
+    func passesInitialFlagAfterOnboarding() async {
+        let popular = Self.book("popular")
+        var initialState = HomeFeature.State()
+        initialState.recommendedBooks = [Self.book("recommended")]
+        initialState.isFirstVisitAfterOnboarding = true
+        let store = TestStore(initialState: initialState) { HomeFeature() }
+            withDependencies: {
+                $0.userProfileClient.load = {
+                    UserProfileSnapshot(
+                        departmentName: "수학과", interests: ["수학"],
+                        affiliationKey: ["POSTECH 대학원", "일반대학원 학과", "수학과"]
+                    )
+                }
+                $0.departmentPopularBooksClient.fetch = { key, _, isInitial in
+                    #expect(key == ["POSTECH 대학원", "일반대학원 학과", "수학과"])
+                    #expect(isInitial)
+                    return [popular]
+                }
+            }
+
+        await store.send(.task)
+        await store.receive(\.departmentChanged) { $0.departmentName = "수학과" }
+        await store.receive(\.popularBooksLoaded) { $0.popularBooks = [popular] }
         await store.finish()
     }
 

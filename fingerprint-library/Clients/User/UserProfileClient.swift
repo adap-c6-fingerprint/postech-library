@@ -7,8 +7,8 @@ nonisolated struct UserProfileClient: Sendable {
     // 저장된 프로필을 복사본으로 돌려준다. 없으면 임시값으로 만든 뒤 돌려준다.
     var hasProfile: @Sendable () async throws -> Bool
     // 온보딩을 마쳐 프로필이 저장돼 있는지 확인한다.
-    var save: @Sendable (_ departmentName: String, _ interests: [String]) async throws -> Void
-    // 온보딩에서 입력한 학과(소속)와 관심사 알파벳을 저장한다.
+    var save: @Sendable (_ affiliationKey: [String], _ departmentName: String, _ interests: [String]) async throws -> Void
+    // ✅ 온보딩에서 고른 소속 경로·최종 소속 이름·선호 분류 이름을 저장한다.
 }
 
 extension UserProfileClient: DependencyKey {
@@ -24,9 +24,10 @@ extension UserProfileClient: DependencyKey {
                 try UserProfile.exists(in: UserProfile.sharedContainer.mainContext)
             }
         },
-        save: { departmentName, interests in
+        save: { affiliationKey, departmentName, interests in
             try await MainActor.run {
                 try UserProfile.save(
+                    affiliationKey: affiliationKey,
                     departmentName: departmentName,
                     interests: interests,
                     in: UserProfile.sharedContainer.mainContext
@@ -38,7 +39,7 @@ extension UserProfileClient: DependencyKey {
     static let testValue = Self(
         load: { UserProfileSnapshot(departmentName: "", interests: []) },
         hasProfile: { true },
-        save: { _, _ in }
+        save: { _, _, _ in }
     )
 }
 
