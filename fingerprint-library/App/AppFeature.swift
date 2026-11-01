@@ -114,6 +114,8 @@ struct AppFeature {
                 return .none
             case .onboarding(.delegate(.completed)):
                 state.onboarding = nil
+                state.home.isFirstVisitAfterOnboarding = true
+                // ✅ 이번 실행의 첫 홈 표시는 하드데이터만으로 바로 보여준다. (Q4)
                 return .none
             case .onboarding:
                 return .none

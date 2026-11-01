@@ -24,8 +24,14 @@ final class UserProfile {
     private(set) var interests: [String]
     // 관심사 목록. 예: ["A", "P", "Q"]
     // 같은 이유로 private(set). 빈 값이나 중복이 검사 없이 들어가는 실수를 막는다.
+    // ✅ 이슈 #237부터는 LCC 알파벳 대신 선호 분류 이름을 저장한다. 예: ["수학", "역사"]
+    private(set) var affiliationKey: [String] = []
+    // ✅ 소속 경로 [상위 소속, 그룹, 최종 소속]. 예: ["POSTECH 학부", "학과 및 학부", "수학과"]
+    // ✅ 기본값([])이 있어서 이전 저장본도 SwiftData가 자동으로 열 수 있다(경량 마이그레이션).
+    // ✅ 비어 있으면 이전 형식의 프로필이므로 온보딩을 다시 받는다. (Q7)
 
-    init(departmentName: String, interests: [String]) throws {
+    init(departmentName: String, interests: [String], affiliationKey: [String] = []) throws {
+    // ✅ affiliationKey: 온보딩에서 고른 소속 경로. 임시 프로필(fetchOrCreate)은 빈 값으로 만든다.
     // 새 프로필을 만든다. 온보딩에서 입력이 끝났을 때 부른다.
     // 값이 규칙에 어긋나면 만들지 않고 오류를 던진다(throws).
         let department = try Self.validatedDepartmentName(departmentName)
@@ -35,6 +41,7 @@ final class UserProfile {
         self.departmentName = department
         // 검사를 통과한 값만 저장한다.
         self.interests = validInterests
+        self.affiliationKey = try affiliationKey.isEmpty ? [] : Self.validatedAffiliationKey(affiliationKey)
     }
 
     // MARK: - 설정 화면에서 수정
@@ -51,13 +58,18 @@ final class UserProfile {
         // 검사를 통과해야만 바뀐다. 실패하면 기존 값이 그대로 남는다.
     }
 
+    func updateAffiliationKey(_ key: [String]) throws {
+    // ✅ 온보딩·설정 화면에서 소속을 바꿀 때 부른다.
+        affiliationKey = try Self.validatedAffiliationKey(key)
+    }
+
     // MARK: - Foundation Model 전달용
 
     var snapshot: UserProfileSnapshot {
     // 현재 값을 복사한 "사진"을 만든다.
     // @Model 객체는 다른 스레드로 넘길 수 없어서, Foundation Model처럼
     // 비동기로 도는 코드에는 이 복사본을 넘긴다.
-        UserProfileSnapshot(departmentName: departmentName, interests: interests)
+        UserProfileSnapshot(departmentName: departmentName, interests: interests, affiliationKey: affiliationKey)
     }
 
     // MARK: - 불러오기 / 최초 생성
@@ -90,22 +102,30 @@ final class UserProfile {
     // MARK: - 온보딩 저장
 
     static func exists(in context: ModelContext) throws -> Bool {
-    // 저장된 프로필이 하나라도 있는지 확인한다. 없으면 온보딩을 보여준다.
+    // 온보딩을 마친 프로필이 있는지 확인한다. 없으면 온보딩을 보여준다.
         var descriptor = FetchDescriptor<UserProfile>()
         descriptor.fetchLimit = 1
-        return try !context.fetch(descriptor).isEmpty
+        guard let profile = try context.fetch(descriptor).first else { return false }
+        return !profile.affiliationKey.isEmpty
+        // ✅ 소속 경로가 없는 프로필(이전 형식·임시값)은 새 형식으로 바꿀 수 없으므로 온보딩을 다시 받는다. (Q7)
     }
 
-    static func save(departmentName: String, interests: [String], in context: ModelContext) throws {
+    static func save(
+        affiliationKey: [String], departmentName: String, interests: [String], in context: ModelContext
+    ) throws {
     // 온보딩에서 입력한 값을 저장한다.
     // 이미 프로필이 있으면 그 값을 바꾸고, 없으면 새로 만든다. 프로필은 항상 하나만 남는다.
+    // ✅ 소속 경로를 함께 저장한다. departmentName은 홈 화면 제목에 쓰는 최종 소속 이름이다.
         var descriptor = FetchDescriptor<UserProfile>()
         descriptor.fetchLimit = 1
         if let existing = try context.fetch(descriptor).first {
+            try existing.updateAffiliationKey(affiliationKey)
             try existing.updateDepartmentName(departmentName)
             try existing.updateInterests(interests)
         } else {
-            context.insert(try UserProfile(departmentName: departmentName, interests: interests))
+            context.insert(try UserProfile(
+                departmentName: departmentName, interests: interests, affiliationKey: affiliationKey
+            ))
         }
         try context.save()
     }
@@ -118,6 +138,15 @@ final class UserProfile {
         // 앞뒤 공백·줄바꿈을 지운다. 예: " 반도체공학과 " → "반도체공학과"
         guard !trimmed.isEmpty else { throw UserProfileError.emptyDepartmentName }
         // 비어 있으면 오류를 던진다.
+        return trimmed
+    }
+
+    private static func validatedAffiliationKey(_ key: [String]) throws -> [String] {
+    // ✅ 소속 경로는 [상위 소속, 그룹, 최종 소속] 세 값이 모두 있어야 한다.
+        let trimmed = key.map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+        guard trimmed.count == 3, !trimmed.contains(where: \.isEmpty) else {
+            throw UserProfileError.invalidAffiliation
+        }
         return trimmed
     }
 
@@ -144,6 +173,8 @@ nonisolated struct UserProfileSnapshot: Equatable, Sendable {
 // Sendable: 여러 스레드에서 동시에 써도 안전하다는 표시.
     let departmentName: String
     let interests: [String]
+    var affiliationKey: [String] = []
+    // ✅ 소속 경로. 기본값이 있어 기존 호출(departmentName:interests:)도 그대로 쓸 수 있다.
 
     var promptText: String {
     // Foundation Model 프롬프트에 그대로 넣을 수 있는 문장.
@@ -158,4 +189,6 @@ nonisolated enum UserProfileError: Error, Equatable {
     // 학과가 비어 있음.
     case emptyInterest
     // 관심사 중 빈 값이 있음.
+    case invalidAffiliation
+    // ✅ 소속 경로가 세 단계로 이루어지지 않음.
 }

@@ -8,6 +8,8 @@ struct HomeFeature {
         var recommendedBooks: [Book] = []
         var popularBooks: [Book] = []
         var departmentName = ""
+        var isFirstVisitAfterOnboarding = false
+        // ✅ 온보딩을 마치고 처음 홈을 여는 경우 true. 학과별 추천을 하드데이터 랜덤 6권으로만 보여준다. (Q4)
         var libraryInfo: [Book.ID: LibraryInfoState] = [:]
         var libraryInfoGeneration = 0
 
@@ -95,7 +97,8 @@ struct HomeFeature {
 
                 if state.popularBooks.isEmpty {
                     state.popularBooksErrorMessage = nil
-                    effects.append(loadPopularBooks())
+                    effects.append(loadPopularBooks(isInitial: state.isFirstVisitAfterOnboarding))
+                    // ✅ 최초 표시 여부를 함께 넘긴다.
                 }
 
                 return .merge(effects)
@@ -288,13 +291,14 @@ struct HomeFeature {
         .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
     }
 
-    private func loadPopularBooks() -> Effect<Action> {
+    private func loadPopularBooks(isInitial: Bool) -> Effect<Action> {
         .run { [userProfileClient, departmentPopularBooksClient] send in
             do {
-                // 저장된 프로필의 학과로 제목을 채우고 같은 학과의 인기 도서를 조회한다.
-                let departmentName = try await userProfileClient.load().departmentName
-                await send(.departmentChanged(departmentName))
-                let books = try await departmentPopularBooksClient.fetch(departmentName, 6)
+                // 저장된 프로필의 소속 이름으로 제목을 채우고 같은 소속의 추천 도서를 고른다.
+                let profile = try await userProfileClient.load()
+                await send(.departmentChanged(profile.departmentName))
+                let books = try await departmentPopularBooksClient.fetch(profile.affiliationKey, 6, isInitial)
+                // ✅ 학과 이름 대신 소속 경로로 조회한다. 같은 이름의 학부·대학원 학과가 각자의 목록을 받는다.
                 try Task.checkCancellation()
                 await send(.popularBooksLoaded(books))
             } catch is CancellationError {
