@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 
-// Execute inside the development container. No credentials or provider payloads are printed.
+// Pipe into the existing container with node --input-type=module; see README.txt. No secrets are printed.
 const credentials = JSON.parse(readFileSync('/run/secrets/relay.json', 'utf8'));
 const configurations = {
   development: ['https://pobook-api-dev.fpmaps.com', 'RELAY_TOKEN'],

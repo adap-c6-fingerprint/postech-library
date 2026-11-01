@@ -55,7 +55,7 @@ PLI-144 / GitHub #182 — 단순 API 중계
 - .env에는 RELAY_UID, RELAY_GID, RELAY_VERSION만 둔다. 외부 API 키를 Compose 환경에 넣지 않는다.
 - 초기 키 주입은 provision-credentials.mjs의 stdout을 SSH로 서버 private 파일에 직접 연결한다.
   절대 터미널/로그로 실행하지 않는다. 기존 파일을 덮어쓰지 않도록 검사한다.
-- Node 기반 이미지는 digest 고정. 외부 의존성이 없고 Dockerfile COPY도 세 파일로 제한한다.
+- Node 기반 이미지는 digest 고정. 외부 의존성이 없고 Dockerfile COPY는 런타임 파일로 제한한다. 운영 도구는 이미지에 넣지 않고 아래처럼 표준입력으로 실행한다.
 
 Nginx/인증서
 - 기존 /home/ubuntu/nginx-proxy/nginx.conf의 http {}에 개발 호스트만 추가한다.
@@ -65,6 +65,10 @@ Nginx/인증서
 - nginx -t 통과 후 graceful reload. 실패하면 reload하지 않고 원본 파일로 복구한다.
 - API 호스트 access log는 끄고 error log도 원문 요청이 남지 않게 비활성화한다.
 - 인증서 갱신 작업은 개발 인증서만 대상으로 설치한다. 기존 인증서를 일괄 갱신하지 않는다.
+- 개발·release 갱신 cron은 출력과 오류를 /var/log/pobook-api-cert-renew.log에 추가 기록한다. 새 로그는 umask 077로 생성하며, 실패 시 daemon.err 시스템 로그도 남기고 비정상 종료한다.
+- 배포 시 두 cron 템플릿을 해당 /etc/cron.d/ 파일에 반영하고 deploy/pobook-api-cert-renew-logrotate를 /etc/logrotate.d/pobook-api-cert-renew에 root 소유·0644로 설치한다.
+- 기존 로그가 있다면 내용은 유지하고 root 소유·0600인지 확인한다. 관리자 점검: sudo tail -n 100 /var/log/pobook-api-cert-renew.log 및 sudo journalctl -t pobook-api-dev-cert-renew -t pobook-api-release-cert-renew.
+- 이 기록은 자동 알림 서비스가 아니다. 운영자는 갱신 실패 로그를 정기 확인해야 하며, 기존 경보가 자동 탐지한다고 가정하지 않는다.
 - Cloudflare Full(strict), 캐시 우회, 네이티브 앱에 HTML 챌린지를 내리지 않는지는 계정에서 확인 필요.
 
 복구
@@ -161,6 +165,19 @@ Nginx/인증서
 - 초기 state 파일은 관리자가 명시적으로 준비한다. 기존 개발 컨테이너를 정지한 뒤 그 실행의 로그에서 제공사별 요청 수를 보수적으로 이관한다.
 - quota 파일을 삭제/빈 파일로 교체하거나 두 프로세스가 동시에 소유하지 않는다. 복제 확장 시 공유 트랜잭션 저장소가 필요하다.
 - provision-release.mjs는 실행 컨테이너 안에서 제공사 키를 보존하고 새 release 토큰 두 개를 생성한다. stdout은 반드시 새 private 파일로 직접 연결한다.
+- 운영 도구는 이미지에 없으므로 컨테이너 내부 파일 경로로 실행하지 않는다. 아래 명령은 서버의 /home/ubuntu/pobook-api-dev에서 deploy/ 소스 파일을 준비한 뒤 실행한다.
+
+  최초 release 토큰 발급(이미 발급된 서버에서는 실행하지 않는다):
+    sudo sh -c 'umask 077; set -C; docker exec -i pobook-api-dev node --input-type=module > private/credentials.next.json' < deploy/provision-release.mjs
+  기존 마운트 credentials.json에 직접 출력하지 않는다. 실패하면 next 파일은 사용하지 않고, 성공 시에도 별도 검증·백업 후 교체하고 컨테이너를 재생성해야 한다.
+  set -C는 기존 next 파일 덮어쓰기를 막는다. next 파일도 비밀 파일이므로 터미널·로그·Git에 출력하지 않는다.
+
+  현재 환경별 동작 검증:
+    sudo docker exec -i -e RELAY_ENVIRONMENT=development pobook-api-dev node --input-type=module < deploy/smoke.mjs
+    sudo docker exec -i -e RELAY_ENVIRONMENT=testflight pobook-api-dev node --input-type=module < deploy/smoke.mjs
+    sudo docker exec -i -e RELAY_ENVIRONMENT=production pobook-api-dev node --input-type=module < deploy/smoke.mjs
+  각 실행은 실제 제공사 요청 4건(Primo 1 / Yes24 1 / 정보나루 2)을 사용하므로 필요할 때만 실행한다.
+
 - state와 private은 Git/build context에서 제외한다. 앱에는 제공사 키가 아닌 세 접근 토큰만 비공개 로컬/CI 설정으로 전달한다.
 - Scripts/verify-api-relay.swift 검증 바이너리는 DEVELOPMENT / TESTFLIGHT / PRODUCTION 인자로 각 호스트를 확인할 수 있다.
 - 제공사 실제 할당량/IP 등록은 확인 전까지 1500/1000/400의 보수적 합산 예산을 유지한다. 이 서버 밖에서 같은 키로 호출한 양은 집계하지 못한다.

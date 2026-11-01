@@ -91,9 +91,9 @@ export function createRelay({ credentials, fetchImpl = fetch, now = Date.now, da
   const tokens = new Map([...hostCredentials].filter(([, key]) => credentials[key])
     .map(([host, key]) => [host, Buffer.from(`Bearer ${credentials[key]}`)]));
   const counters = new Map();
-  function error(res, status, code) {
+  function error(res, status, code, retryAfter = '60') {
     res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store',
-      ...(status === 429 ? { 'Retry-After': '60' } : {}) });
+      ...(status === 429 ? { 'Retry-After': retryAfter } : {}) });
     res.end(JSON.stringify({ error: code }));
   }
   return async (req, res) => {
@@ -131,7 +131,7 @@ export function createRelay({ credentials, fetchImpl = fetch, now = Date.now, da
         if (counter.second !== second) { counter.second = second; counter.count = 0; }
         if (counter.active >= concurrent[provider] || counter.count >= perSecond[provider]) {
           counter = undefined;
-          return error(res, 429, 'relay_limit');
+          return error(res, 429, 'relay_limit', '1');
         }
         try {
           if (!budget.reserve(provider, timestamp, dailyLimits[provider])) {

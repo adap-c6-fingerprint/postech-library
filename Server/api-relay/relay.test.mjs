@@ -168,7 +168,9 @@ test('daily budget is provider-specific and expires after 24h', async () => {
   const relay = handler({ now: () => time, dailyLimits: { primo: 1, data4library: 1 }, fetchImpl: async () => { count++; return new Response('{}'); } });
   assert.equal((await call(relay, primoPath)).statusCode, 200);
   time = 2000;
-  assert.equal((await call(relay, primoPath)).statusCode, 429);
+  const exhausted = await call(relay, primoPath);
+  assert.equal(exhausted.statusCode, 429);
+  assert.equal(exhausted.headers['Retry-After'], '60');
   assert.equal(count, 1);
   assert.equal((await call(relay, '/data4library/api/srchDtlList?isbn13=9788937460777')).statusCode, 200);
   time = 86400001;
@@ -178,11 +180,15 @@ test('daily budget is provider-specific and expires after 24h', async () => {
 test('per-second and in-flight limits bound provider load', async () => {
   const fast = handler({ now: () => 0, fetchImpl: async () => new Response('{}') });
   for (let i = 0; i < 10; i++) assert.equal((await call(fast, primoPath)).statusCode, 200);
-  assert.equal((await call(fast, primoPath)).statusCode, 429);
+  const throttled = await call(fast, primoPath);
+  assert.equal(throttled.statusCode, 429);
+  assert.equal(throttled.headers['Retry-After'], '1');
   const releases = [];
   const busy = handler({ fetchImpl: async () => new Promise(resolve => releases.push(() => resolve(new Response('{}')))) });
   const pending = Array.from({ length: 4 }, () => call(busy, primoPath));
-  assert.equal((await call(busy, primoPath)).statusCode, 429);
+  const saturated = await call(busy, primoPath);
+  assert.equal(saturated.statusCode, 429);
+  assert.equal(saturated.headers['Retry-After'], '1');
   releases.forEach(release => release());
   await Promise.all(pending);
 });

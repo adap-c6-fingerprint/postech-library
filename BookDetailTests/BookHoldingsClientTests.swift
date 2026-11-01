@@ -87,6 +87,28 @@ struct BookHoldingsClientTests {
         }
     }
 
+    @Test("짧은 요청 제한은 재시도하고 긴 예산 제한은 즉시 중단한다", arguments: ["1", "60"])
+    func respectsRelayRetryAfter(_ retryAfter: String) async throws {
+        let calls = Mutex(0)
+        let relay = BookAPIClient.test { request in
+            let attempt = calls.withLock { $0 += 1; return $0 }
+            return (Data(#"{"docs":[]}"#.utf8), HTTPURLResponse(
+                url: request.url!, statusCode: attempt == 1 ? 429 : 200, httpVersion: nil,
+                headerFields: ["Retry-After": retryAfter]
+            )!)
+        }
+        let service = PrimoBookHoldingsService(relay: relay)
+        if retryAfter == "1" {
+            #expect(try await service.fetch(recordID: recordID) == [])
+            #expect(calls.withLock { $0 } == 2)
+        } else {
+            await #expect(throws: BookHoldingsError.serviceUnavailable) {
+                try await service.fetch(recordID: recordID)
+            }
+            #expect(calls.withLock { $0 } == 1)
+        }
+    }
+
     private func makeSession(
         _ handler: @escaping @Sendable (URLRequest) -> (Data, URLResponse)
     ) -> URLSession {
