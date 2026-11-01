@@ -32,6 +32,7 @@ struct LibraryTopBar: ToolbarContent {
             .tint(.white)
             .accessibilityIdentifier("library-top-bar-basket")
         }
+        // 하트와 카트는 하나의 시스템 Liquid Glass 배경을 공유한다.
         .sharedBackgroundVisibility(.visible)
 
         ToolbarSpacer(.fixed, placement: .topBarTrailing)
@@ -45,6 +46,7 @@ struct LibraryTopBar: ToolbarContent {
             .disabled(onProfile == nil)
             .accessibilityIdentifier("library-top-bar-profile")
         }
+        .sharedBackgroundVisibility(.visible)
     }
 }
 

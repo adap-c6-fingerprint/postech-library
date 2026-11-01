@@ -42,7 +42,7 @@ struct IndoorMapView: View {
     /// 지도 위에 조작 UI를 배치하고, 실제 위치의 층과 별개인 조회 층을 전달한다.
     private func mapContent(map: IndoorMap, floor: IndoorMapFloor) -> some View {
         GeometryReader { geometry in
-            ZStack {
+            ZStack(alignment: .bottomTrailing) {
                 IndoorMapKitView(
                     map: map, floor: floor, selectedFeatureID: nil,
                     position: store.currentPosition,
@@ -56,8 +56,8 @@ struct IndoorMapView: View {
                         ? store.selectedShelfKey : (showsRoute ? store.routeDestinationKey : nil),
                     onSelectShelf: { if showsDestinationCard { store.send(.shelfSelected($0)) } },
                     route: !showsDestinationCard && showsRoute ? store.route : nil,
-                    viewportInsets: .init(top: 60 + topContentInset, left: 0, bottom: bottomContentInset,
-                                          right: appearance == .home ? 72 : 0),
+                    viewportInsets: .init(top: 60 + topContentInset, left: appearance == .home ? 77 : 0,
+                                          bottom: bottomContentInset, right: 0),
                     shelfLabels: store.shelfLabels,
                     highlightedFeatureIDs: highlightedFeatureIDs,
                     appearance: appearance
@@ -95,46 +95,80 @@ struct IndoorMapView: View {
                     }
 
                     Spacer(minLength: 0)
-                    HStack(alignment: .bottom) {
-                        if appearance == .home {
-                            if showsDestinationCard { IndoorRouteControls(store: store) }
-                            Spacer(minLength: 12)
-                        }
-                        VStack(spacing: 12) {
-                            if appearance == .home, showsCurrentLocationButton { currentLocationButton }
+                    HStack(alignment: .bottom, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 12) {
+                            if appearance == .home { amenitiesButton }
                             floorPicker(
                                 map: map, floor: floor,
                                 maxHeight: max(44, geometry.size.height - bottomContentInset - topContentInset - 200)
                             )
                         }
-                        if appearance == .standard { Spacer(minLength: 0) }
+                        .frame(width: appearance == .home ? 61 : nil, alignment: .leading)
+                        if appearance == .home, showsDestinationCard { IndoorRouteControls(store: store) }
+                        Spacer(minLength: 0)
                     }
+                    .padding(.trailing, appearance == .home && showsCurrentLocationButton ? 62 : 0)
                     if showsDestinationCard, appearance == .standard {
                         IndoorRouteControls(store: store)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                .padding(16)
-                .padding(.top, topContentInset)
-                .padding(.bottom, bottomContentInset)
+                .padding(.leading, 16)
+                .padding(.trailing, appearance == .home ? 25 : 16)
+                .padding(.top, 16 + topContentInset)
+                .padding(.bottom, (appearance == .home ? 20 : 16) + bottomContentInset)
+
+                if appearance == .home, showsCurrentLocationButton {
+                    currentLocationButton
+                        .padding(.trailing, 25)
+                        .padding(.bottom, 20 + bottomContentInset)
+                }
             }
         }
     }
 
+    private var amenitiesButton: some View {
+        Button {} label: {
+            HStack(alignment: .center, spacing: 10) {
+                Text("편의시설")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color(red: 0.88, green: 0.95, blue: 0.19))
+                    .fixedSize()
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .frame(width: 61, height: 34, alignment: .center)
+            .background(Color(red: 0.6, green: 0.6, blue: 0.6).opacity(0.17))
+            .cornerRadius(12)
+            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("map-amenities")
+    }
+
     private var currentLocationButton: some View {
         Button { store.send(.currentLocationTapped) } label: {
-            HStack(spacing: 8) {
-                Image(systemName: "scope").font(.title3.weight(.medium))
-                if !showsDestinationCard {
-                    Text(currentFloorLabel).font(.subheadline.weight(.medium)).lineLimit(1)
+            if appearance == .home {
+                HStack(alignment: .center, spacing: 4) {
+                    Image(systemName: "scope").font(.title3.weight(.medium))
                 }
+                .padding(0)
+                .frame(width: 50, height: 50, alignment: .center)
+                .cornerRadius(1000)
+                .glassEffect(.regular, in: .circle)
+            } else {
+                HStack(spacing: 8) {
+                    Image(systemName: "scope").font(.title3.weight(.medium))
+                    if !showsDestinationCard {
+                        Text(currentFloorLabel).font(.subheadline.weight(.medium)).lineLimit(1)
+                    }
+                }
+                .padding(.horizontal, showsDestinationCard ? 0 : 14)
+                .frame(minWidth: 48, minHeight: 48)
+                .background(Color(uiColor: .systemBackground), in: Capsule())
+                .overlay(Capsule().strokeBorder(Color(uiColor: .separator).opacity(0.4)))
+                .shadow(color: .black.opacity(0.12), radius: 6, y: 3)
             }
-            .padding(.horizontal, showsDestinationCard ? 0 : 14)
-            .frame(minWidth: 48, minHeight: 48)
-            .background(appearance == .home ? .clear : Color(uiColor: .systemBackground), in: Capsule())
-            .glassEffect(appearance == .home ? .regular : .identity, in: .capsule)
-            .overlay(Capsule().strokeBorder(Color(uiColor: .separator).opacity(appearance == .home ? 0 : 0.4)))
-            .shadow(color: .black.opacity(appearance == .home ? 0 : 0.12), radius: 6, y: 3)
         }
         .buttonStyle(.plain)
         .accessibilityLabel("현재 위치로 지도 이동")
@@ -154,16 +188,20 @@ struct IndoorMapView: View {
     /// 위층부터 층 버튼을 표시하고 작은 표시 영역에서는 선택한 층을 스크롤로 드러낸다.
     private func floorPicker(map: IndoorMap, floor: IndoorMapFloor, maxHeight: CGFloat) -> some View
     {
-        ScrollViewReader { proxy in
+        let isHome = appearance == .home
+        let pickerHeight: CGFloat = isHome ? 169 : min(CGFloat(map.floors.count) * 44, maxHeight)
+        let rowHeight: CGFloat = isHome ? 169 / CGFloat(max(map.floors.count, 1)) : 44
+
+        return ScrollViewReader { proxy in
             ScrollView {
-                VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     ForEach(map.floors.reversed()) { item in
                         Button {
                             store.send(.floorSelected(item.id))
                         } label: {
                             Text(appearance == .home ? "\(item.ordinal + 1)F" : item.name)
                                 .font(.subheadline.weight(item.id == floor.id ? .bold : .regular))
-                                .frame(width: 56, height: 44)
+                                .frame(width: isHome ? 61 : 56, height: rowHeight)
                                 .background(
                                     item.id == floor.id
                                         ? (appearance == .home ? Color(red: 0.88, green: 0.95, blue: 0.19) : Color(uiColor: .label))
@@ -186,9 +224,13 @@ struct IndoorMapView: View {
                         .id(item.id)
                     }
                 }
+                .padding(0)
+                .frame(maxWidth: isHome ? .infinity : nil,
+                       minHeight: isHome ? 169 : nil, maxHeight: isHome ? 169 : nil,
+                       alignment: .topLeading)
             }
             .scrollIndicators(.hidden)
-            .frame(width: 56, height: min(CGFloat(map.floors.count) * 44, maxHeight))
+            .frame(width: isHome ? 61 : 56, height: pickerHeight, alignment: .topLeading)
             .background(appearance == .home ? .clear : Color(uiColor: .systemBackground))
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .glassEffect(appearance == .home ? .regular : .identity, in: .rect(cornerRadius: 12))
@@ -196,7 +238,8 @@ struct IndoorMapView: View {
                 RoundedRectangle(cornerRadius: 12).strokeBorder(
                     Color(uiColor: .separator).opacity(0.6))
             )
-            .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
+            .shadow(color: .black.opacity(isHome ? 0.1 : 0.08), radius: isHome ? 2.5 : 4,
+                    x: isHome ? 1 : 0, y: isHome ? 1 : 2)
             .onAppear { proxy.scrollTo(floor.id, anchor: .center) }
             .onChange(of: floor.id) { _, id in proxy.scrollTo(id, anchor: .center) }
             .onChange(of: maxHeight) { _, _ in proxy.scrollTo(floor.id, anchor: .center) }
