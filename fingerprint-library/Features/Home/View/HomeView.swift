@@ -151,8 +151,7 @@ struct HomeView: View {
                 store.send(.popularBooksButtonTapped)
             } label: {
                 HStack(spacing: 12) {
-                    Text("‘\(store.departmentName)’ 추천 도서")
-                    // ✅ 대출 순위가 아니라 소속별 주제 큐레이션 데이터이므로 문구를 바꾼다. (Q8, 디자인 확인 필요)
+                    Text("‘\(store.departmentName)’에서 많이 빌린")
                         .font(.system(size: 18, weight: .semibold))
                         .multilineTextAlignment(.leading)
                     

@@ -37,8 +37,6 @@ struct OnboardingView: View {
         } message: {
             Text(store.errorMessage ?? "")
         }
-        .task { store.send(.task) }
-        // ✅ 소속·선호 분류 선택지를 앱에 넣은 하드데이터에서 읽는다.
     }
 
     // MARK: - 단계별 화면
@@ -61,57 +59,47 @@ struct OnboardingView: View {
     private var affiliation: some View {
         VStack(alignment: .leading, spacing: 0) {
             header(
-                title: "소속을 알려주세요",
-                subtitle: "소속을 알려주면 관련 분야의 책을\n더 잘 추천할 수 있어요."
+                title: "소속과 학과를 알려주세요",
+                subtitle: "학과를 알려주면 관련 분야의 책을\n더 잘 추천할 수 있어요."
             )
             .padding(.bottom, 32)
 
-            // ✅ 상위 소속 → 그룹 → 최종 소속 3단계로 고른다. 앞 단계를 고르기 전에는 다음 단계를 고를 수 없다.
             VStack(alignment: .leading, spacing: 24) {
                 field(title: "소속") {
                     Menu {
-                        ForEach(store.parents, id: \.self) { parent in
-                            Button(parent) { store.send(.parentSelected(parent)) }
+                        ForEach(PostechStatus.allCases) { status in
+                            Button(status.koreanName) { store.send(.statusSelected(status)) }
                         }
                     } label: {
-                        fieldRow(store.selectedParent, placeholder: "소속을 선택해주세요", isEnabled: !store.parents.isEmpty)
+                        fieldRow(store.status?.koreanName, placeholder: "소속을 선택해주세요", isEnabled: true)
                     }
-                    .disabled(store.parents.isEmpty)
                 }
 
-                field(title: "세부 분류") {
-                    Menu {
-                        ForEach(store.groups, id: \.self) { group in
-                            Button(group) { store.send(.groupSelected(group)) }
+                if store.status?.requiresDepartment ?? true {
+                    field(title: "학과") {
+                        Menu {
+                            ForEach(departmentSections, id: \.title) { section in
+                                Section(section.title) {
+                                    ForEach(section.departments, id: \.self) { department in
+                                        Button(department.koreanName) {
+                                            store.send(.departmentSelected(department))
+                                        }
+                                    }
+                                }
+                            }
+                        } label: {
+                            fieldRow(
+                                store.department?.koreanName,
+                                placeholder: "학과를 선택해주세요",
+                                isEnabled: store.status != nil
+                            )
                         }
-                    } label: {
-                        fieldRow(store.selectedGroup, placeholder: "세부 분류를 선택해주세요", isEnabled: store.selectedParent != nil)
+                        .disabled(store.status == nil)
+                        // 소속을 고르기 전에는 학과를 고를 수 없다.
                     }
-                    .disabled(store.selectedParent == nil)
                 }
 
-                field(title: "학과·부서") {
-                    Menu {
-                        ForEach(store.affiliationChoices, id: \.self) { path in
-                            Button(path.name) { store.send(.affiliationSelected(path)) }
-                        }
-                    } label: {
-                        fieldRow(
-                            store.selectedAffiliation?.name,
-                            placeholder: "학과·부서를 선택해주세요",
-                            isEnabled: store.selectedGroup != nil
-                        )
-                    }
-                    .disabled(store.selectedGroup == nil)
-                }
-
-                if let message = store.optionsErrorMessage {
-                    Text("선택지를 불러오지 못했어요. \(message)")
-                        .font(.system(size: 12))
-                        .foregroundStyle(.red)
-                }
-
-                Text("*소속은 나중에 변경 가능해요.")
+                Text("*소속과 학과는 나중에 변경 가능해요.")
                     .font(.system(size: 12))
                     .foregroundStyle(Color.onboardingCaption)
             }
@@ -128,10 +116,9 @@ struct OnboardingView: View {
 
             ScrollView {
                 ChipFlowLayout(spacing: 8, lineSpacing: 12) {
-                    ForEach(store.preferenceNames, id: \.self) { name in
-                        chip(name)
+                    ForEach(UserInterest.allCases) { interest in
+                        chip(interest)
                     }
-                    // ✅ 도서관 분류(LCC) 대신 서점 기준 선호 분류 20개를 보여준다.
                 }
             }
             .scrollBounceBehavior(.basedOnSize)
@@ -181,12 +168,12 @@ struct OnboardingView: View {
         .opacity(isEnabled ? 1 : 0.4)
     }
 
-    private func chip(_ name: String) -> some View {
-        let isSelected = store.selectedPreferences.contains(name)
+    private func chip(_ interest: UserInterest) -> some View {
+        let isSelected = store.selectedInterests.contains(interest)
         return Button {
-            store.send(.preferenceToggled(name))
+            store.send(.interestToggled(interest))
         } label: {
-            Text(name)
+            Text(interest.koreanName)
                 .font(.system(size: 16))
                 .foregroundStyle(isSelected ? Color.basketBackground : Color.onboardingTextPrimary)
                 .padding(.horizontal, 25)
@@ -250,7 +237,26 @@ struct OnboardingView: View {
         case .interests: store.canFinish
         }
     }
-    // ✅ 학부·대학원별 학과 묶음(departmentSections)은 하드데이터의 세부 분류로 대체했다.
+
+    private var departmentSections: [(title: String, departments: [PostechDepartment])] {
+        switch store.status {
+        case .undergraduate:
+            PostechDepartment.Undergraduate.Field.allCases.map { field in
+                (title: field.koreanName, departments: PostechDepartment.Undergraduate.allCases
+                    .filter { $0.field == field }
+                    .map(PostechDepartment.undergraduate))
+            }
+        case .graduate:
+            PostechDepartment.Graduate.School.allCases.map { school in
+                (title: school.koreanName, departments: PostechDepartment.Graduate.allCases
+                    .filter { $0.school == school }
+                    .map(PostechDepartment.graduate))
+            }
+        case .staff, .appleDeveloperAcademy, nil:
+            []
+        }
+    }
+    // 학부는 계열별, 대학원은 대학원 종류별로 묶어 보여준다.
 }
 
 // 칩을 한 줄에 들어가는 만큼 놓고 넘치면 다음 줄로 넘긴다.
