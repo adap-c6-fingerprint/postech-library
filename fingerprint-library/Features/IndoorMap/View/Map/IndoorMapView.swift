@@ -97,7 +97,7 @@ struct IndoorMapView: View {
                     Spacer(minLength: 0)
                     HStack(alignment: .bottom, spacing: 12) {
                         VStack(alignment: .leading, spacing: 12) {
-                            if appearance == .home { amenitiesButton }
+                            if appearance == .home { amenitiesPlaceholder }
                             floorPicker(
                                 map: map, floor: floor,
                                 maxHeight: max(44, geometry.size.height - bottomContentInset - topContentInset - 200)
@@ -127,23 +127,20 @@ struct IndoorMapView: View {
         }
     }
 
-    private var amenitiesButton: some View {
-        Button {} label: {
-            HStack(alignment: .center, spacing: 10) {
-                Text("편의시설")
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color(red: 0.88, green: 0.95, blue: 0.19))
-                    .fixedSize()
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
+    /// 편의시설 동작을 제공하기 전까지 조작 가능한 버튼으로 노출하지 않는다.
+    private var amenitiesPlaceholder: some View {
+        Text("편의시설")
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(Color(red: 0.88, green: 0.95, blue: 0.19))
+            .lineLimit(1)
+            .minimumScaleFactor(0.25)
+            .padding(.horizontal, 4)
             .frame(width: 61, height: 34, alignment: .center)
             .background(Color(red: 0.6, green: 0.6, blue: 0.6).opacity(0.17))
             .cornerRadius(12)
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
-        }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("map-amenities")
+            .allowsHitTesting(false)
+            .accessibilityIdentifier("map-amenities")
     }
 
     private var currentLocationButton: some View {
@@ -190,7 +187,8 @@ struct IndoorMapView: View {
     {
         let isHome = appearance == .home
         let pickerHeight: CGFloat = isHome ? 169 : min(CGFloat(map.floors.count) * 44, maxHeight)
-        let rowHeight: CGFloat = isHome ? 169 / CGFloat(max(map.floors.count, 1)) : 44
+        let rowHeight: CGFloat = isHome ? max(44, 169 / CGFloat(max(map.floors.count, 1))) : 44
+        let contentHeight: CGFloat? = isHome ? rowHeight * CGFloat(map.floors.count) : nil
 
         return ScrollViewReader { proxy in
             ScrollView {
@@ -226,7 +224,7 @@ struct IndoorMapView: View {
                 }
                 .padding(0)
                 .frame(maxWidth: isHome ? .infinity : nil,
-                       minHeight: isHome ? 169 : nil, maxHeight: isHome ? 169 : nil,
+                       minHeight: contentHeight, maxHeight: contentHeight,
                        alignment: .topLeading)
             }
             .scrollIndicators(.hidden)
