@@ -1,6 +1,6 @@
 # 길안내 진행에 따른 지도 포커스와 확대
 
-기존 `/Users/dd/Documents/postech-library/fingerprint-library.xcodeproj`에서 빌드한다. 길안내에서 검증한 현재 위치와 진행도를 사용해 카메라를 갱신한다. 먼 뒤쪽 통로가 지도 범위를 고정하지 않도록 현재 위치와 다음 안내 구간을 중심으로 보여 준다.
+기존 `postech-library/fingerprint-library.xcodeproj`에서 빌드한다. 길안내에서 검증한 현재 위치와 진행도를 사용해 카메라를 갱신한다. 먼 뒤쪽 통로가 지도 범위를 고정하지 않도록 현재 위치와 다음 안내 구간을 중심으로 보여 준다.
 
 ## 동작
 
