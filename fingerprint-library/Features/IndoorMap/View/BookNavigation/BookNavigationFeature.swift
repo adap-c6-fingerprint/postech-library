@@ -25,6 +25,8 @@ struct BookNavigationFeature {
         var isCancelConfirmationPresented = false
         var exitReason: ExitReason?
         var cameraRequest: IndoorMapCameraRequest
+        var followsNavigationCamera = true
+        var cameraTracking = BookNavigationCameraTracking()
 
         init(session: BookNavigationSession) {
             self.session = session
@@ -135,6 +137,7 @@ struct BookNavigationFeature {
         case currentFloorConfirmed(Int)
         case requestLocationPermission
         case recenterTapped
+        case mapInteractionBegan
         case arrivalTestTapped
         case arrivalPresentationChanged(Bool)
         case continueFromArrival(stopIndex: Int)
@@ -165,6 +168,8 @@ struct BookNavigationFeature {
 
             case .recenterTapped:
                 guard state.exitReason == nil else { return .none }
+                state.followsNavigationCamera = true
+                if updateCamera(&state, force: true) { return .none }
                 if let position = state.latestPosition {
                     state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .position(position.coordinate))
                     return .none
@@ -173,6 +178,11 @@ struct BookNavigationFeature {
                     return .run { _ in await locationClient.requestPermission() }
                 }
                 state.statusMessage = "현재 위치를 확인한 뒤 지도를 이동할게요."
+                return .none
+
+            case .mapInteractionBegan:
+                guard state.exitReason == nil else { return .none }
+                state.followsNavigationCamera = false
                 return .none
 
             case .requestLocationPermission:
@@ -264,6 +274,7 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil, state.isArrivalPresented,
                       stopIndex == state.currentStopIndex, state.currentStop != nil, state.hasNextStop else { return .none }
                 state.currentStopIndex += 1
+                state.followsNavigationCamera = true
                 fitCurrentRoute(&state)
                 state.isArrivalPresented = false
                 state.progress = nil
@@ -330,9 +341,11 @@ struct BookNavigationFeature {
         state.latestPosition = nil
         state.progress = nil
         state.statusMessage = message
+        state.cameraTracking = .init()
     }
 
     private func fitCurrentRoute(_ state: inout State) {
+        state.cameraTracking = .init()
         guard let route = state.currentRoute, let stop = state.currentStop else { return }
         state.cameraRequest = .init(id: state.cameraRequest.id + 1,
             target: .route(route, featureIDs: stop.candidateShelves.map(\.mapElementID)))
@@ -348,6 +361,7 @@ struct BookNavigationFeature {
             state.progress = nil
             state.statusMessage = raw.source == .simulation
                 ? "시뮬레이터의 도면과 층을 확인해 주세요." : "현재 층을 선택해 주세요."
+            state.cameraTracking = .init()
             return
         }
         let previousFloor = state.currentFloor?.id
@@ -356,14 +370,17 @@ struct BookNavigationFeature {
         guard let plan = state.currentPlan else {
             state.progress = nil
             state.statusMessage = "경로 안내 데이터를 확인해 주세요."
+            state.cameraTracking = .init()
             return
         }
         do {
             state.progress = try plan.progress(for: effective, at: now, previous: state.progress,
                 elapsed: previousTimestamp.map { effective.timestamp.timeIntervalSince($0) })
             state.statusMessage = nil
+            updateCamera(&state)
         } catch {
             state.progress = nil
+            state.cameraTracking = .init()
             switch error as? RouteGuidanceError {
             case .unknownFloor: state.statusMessage = "현재 층에는 안내 경로가 없어요. 층을 확인해 주세요."
             case .ambiguousPosition: state.statusMessage = "경로에서 현재 위치를 구분하기 어려워요. 위치를 다시 확인해 주세요."
@@ -373,5 +390,17 @@ struct BookNavigationFeature {
                 state.statusMessage = "현재 위치로 안내할 수 없어요. 새로운 위치 정보를 기다리고 있어요."
             }
         }
+    }
+
+    @discardableResult
+    private func updateCamera(_ state: inout State, force: Bool = false) -> Bool {
+        guard state.followsNavigationCamera, state.isActive, state.exitReason == nil,
+              !state.isArrivalPresented, let position = state.latestPosition,
+              let progress = state.progress, let plan = state.currentPlan,
+              let floor = state.currentFloor,
+              let focus = state.cameraTracking.focus(position: position, progress: progress,
+                  plan: plan, floorID: floor.id, force: force) else { return false }
+        state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .navigation(focus))
+        return true
     }
 }

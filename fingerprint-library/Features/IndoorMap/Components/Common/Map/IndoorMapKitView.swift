@@ -32,6 +32,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var navigationAppearance = false
     var navigationBearingRadians: Double?
     var navigationDestination: BookNavigationMapDestination?
+    var onUserCameraInteraction: () -> Void = {}
     var appearance: Appearance = .standard
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
@@ -294,6 +295,20 @@ struct IndoorMapKitView: UIViewRepresentable {
             updateNavigationMarkerBearing(in: mapView)
         }
 
+        func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+            guard parent.navigationAppearance, !isApplyingCamera,
+                  Self.hasActiveGesture(in: mapView) else { return }
+            // 손으로 움직이기 시작한 뒤 보류 중인 자동 요청이 화면을 되돌리지 않게 한다.
+            lastCameraRequest = parent.cameraRequest
+            pendingCameraRequest = nil
+            parent.onUserCameraInteraction()
+        }
+
+        private static func hasActiveGesture(in view: UIView) -> Bool {
+            view.gestureRecognizers?.contains { $0.state == .began || $0.state == .changed } == true
+                || view.subviews.contains { hasActiveGesture(in: $0) }
+        }
+
         /// 등록 직후의 rendererFor보다 늦은 시점이다. 이 콜백에서는 renderer가 지도에 부착돼 있다.
         func mapView(_ mapView: MKMapView, didAdd renderers: [MKOverlayRenderer]) {
             guard mapView === self.mapView else { return }
@@ -435,6 +450,21 @@ struct IndoorMapKitView: UIViewRepresentable {
         @discardableResult
         func moveCamera(_ request: IndoorMapCameraRequest, in view: MKMapView, animated: Bool = true) -> Bool {
             switch request.target {
+            case .navigation(let focus):
+                guard focus.floorID == parent.floor.id, !focus.coordinates.isEmpty,
+                      focus.coordinates.allSatisfy(\.isValid), focus.minimumSpanMeters.isFinite,
+                      focus.minimumSpanMeters > 0 else { return false }
+                let padding = UIEdgeInsets(top: 32 + parent.viewportInsets.top, left: 32 + parent.viewportInsets.left,
+                                           bottom: 32 + parent.viewportInsets.bottom, right: 32 + parent.viewportInsets.right)
+                guard view.bounds.width > padding.left + padding.right,
+                      view.bounds.height > padding.top + padding.bottom else { return false }
+                if view.camera.pitch != 0 {
+                    let camera = view.camera.copy() as! MKMapCamera
+                    camera.pitch = 0
+                    view.setCamera(camera, animated: false)
+                }
+                guard let camera = BookNavigationCameraFitter.camera(for: focus, in: view, padding: padding) else { return false }
+                view.setCamera(camera, animated: animated && !UIAccessibility.isReduceMotionEnabled)
             case .initialFloor(let id), .floor(let id):
                 let padding = UIEdgeInsets(
                     top: 24 + parent.viewportInsets.top, left: 80 + parent.viewportInsets.left,
