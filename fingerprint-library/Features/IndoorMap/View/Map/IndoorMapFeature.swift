@@ -588,6 +588,8 @@ nonisolated struct IndoorMapCameraRequest: Equatable, Sendable {
         case features([IndoorMapElement.ID])
         /// 표시 층의 경로 전체와 출발·도착 서가 도형을 함께 맞춘다.
         case route(IndoorRoute, featureIDs: [IndoorMapElement.ID])
+        /// 안내 중 현재 위치와 다음 구간에 맞춰 포커스와 확대 범위를 갱신한다.
+        case navigation(BookNavigationCameraFocus)
     }
     let id: Int
     let target: Target
