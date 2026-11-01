@@ -112,13 +112,17 @@ struct BookNavigationCameraTrackingTests {
         let narrowFocus = tracking.focus(position: position, progress: progress, plan: plan,
                                         floorID: plan.destination.floorID)
         let narrow = try #require(narrowFocus)
-        let uncertain = F.position(x: 58, accuracy: 10)
+        let uncertain = F.position(x: 58, accuracy: 5)
         let widerFocus = tracking.focus(position: uncertain, progress: progress, plan: plan,
                                        floorID: plan.destination.floorID)
         let wider = try #require(widerFocus)
         #expect(wider.minimumSpanMeters > narrow.minimumSpanMeters)
         #expect(tracking.focus(position: position, progress: progress, plan: plan,
                                floorID: plan.destination.floorID) == nil)
+        #expect(tracking.focus(position: F.position(x: 58, accuracy: 5.4), progress: progress, plan: plan,
+                               floorID: plan.destination.floorID) == nil)
+        #expect(tracking.focus(position: F.position(x: 58, accuracy: 5.6), progress: progress, plan: plan,
+                               floorID: plan.destination.floorID) != nil)
         #expect(tracking.focus(position: F.position(x: 58, accuracy: 11), progress: progress, plan: plan,
                                floorID: plan.destination.floorID) == nil)
         #expect(tracking.focus(position: F.position(x: 58, level: 1), progress: progress, plan: plan,

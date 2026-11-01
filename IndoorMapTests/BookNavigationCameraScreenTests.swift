@@ -10,26 +10,23 @@ extension IndoorMapSerialTests {
     struct BookNavigationCameraScreenTests {
         private typealias F = NavigationGuidanceTestFixture
 
-        @Test("실제 안내 화면에서 위치 스트림이 단계를 진행시키면 카메라 중심과 확대 범위가 바뀐다", arguments: [false, true])
-        func followsProgressOnScreen(winding: Bool) async throws {
+        @Test("실제 안내 화면에서 위치 스트림이 단계를 진행시키면 카메라 중심과 확대 범위가 바뀐다",
+              arguments: [(false, Duration.zero), (true, .zero), (true, .milliseconds(300))])
+        func followsProgressOnScreen(winding: Bool, subscriptionDelay: Duration) async throws {
             let session = try winding ? F.windingSession() : F.session()
             let coordinate = LockIsolated(F.position(x: 0).coordinate)
             let stream = AsyncStream<IndoorLocationEvent>.makeStream(bufferingPolicy: .bufferingNewest(10))
             let store = Store(initialState: BookNavigationFeature.State(session: session)) {
                 BookNavigationFeature()
             } withDependencies: {
-                $0.indoorLocationClient = .init(events: { stream.stream }, requestPermission: {})
+                $0.indoorLocationClient = .init(events: {
+                    do { try await Task.sleep(for: subscriptionDelay) }
+                    catch { return AsyncStream { $0.finish() } }
+                    stream.continuation.yield(.authorization(.authorized(precise: true)))
+                    return stream.stream
+                }, requestPermission: {})
                 $0.continuousClock = ContinuousClock()
                 $0.date = .init { Date() }
-            }
-            let producer = Task { @MainActor in
-                stream.continuation.yield(.authorization(.authorized(precise: true)))
-                while !Task.isCancelled {
-                    stream.continuation.yield(.position(.init(coordinate: coordinate.value,
-                        floorOrdinal: session.start.floorOrdinal, horizontalAccuracy: 0,
-                        timestamp: Date(), source: .simulation)))
-                    do { try await Task.sleep(for: .milliseconds(20)) } catch { break }
-                }
             }
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
@@ -37,12 +34,22 @@ extension IndoorMapSerialTests {
             window.rootViewController = host
             window.makeKeyAndVisible()
             defer {
-                producer.cancel()
                 stream.continuation.finish()
                 store.send(.disappeared)
                 window.isHidden = true
                 window.rootViewController = nil
             }
+            // 구독과 권한 처리가 끝나기 전에는 위치 이벤트로 버퍼를 채우지 않는다.
+            try await waitUntil { store.authorization == .authorized(precise: true) }
+            let producer = Task { @MainActor in
+                while !Task.isCancelled {
+                    stream.continuation.yield(.position(.init(coordinate: coordinate.value,
+                        floorOrdinal: session.start.floorOrdinal, horizontalAccuracy: 0,
+                        timestamp: Date(), source: .simulation)))
+                    do { try await Task.sleep(for: .milliseconds(20)) } catch { break }
+                }
+            }
+            defer { producer.cancel() }
             try await waitUntil {
                 guard let map = self.map(in: host.view), let coordinator = map.delegate as? IndoorMapKitView.Coordinator,
                       case .navigation = coordinator.lastCameraRequest?.target else { return false }
