@@ -123,7 +123,7 @@ Nginx/인증서
 - 검증된 StoreKit production(App Store) -> pobook-api.fpmaps.com.
 - testfligh는 사용자 지정 철자다. 영수증 파일명으로 추측하거나 환경 오류에 다른 서버로 우회하지 않는다.
 - 내부 Release는 POBOOK_BUILD_CHANNEL=internal. Store/TestFlight archive는 automatic을 사용한다.
-- 자동 Release는 TESTFLIGHT/PRODUCTION 두 접근 토큰을 요구하고 내부 Release는 DEVELOPMENT만 요구한다.
+- 자동 Release는 DEVELOPMENT/TESTFLIGHT/PRODUCTION 세 접근 토큰을 요구하고 내부 Release는 DEVELOPMENT만 요구한다.
 - 서버/인증서 변경은 없다. TestFlight/운영 서버와 토큰은 아직 미구성 상태이며 일반 Release archive를 차단한다.
 - 로컬 Git 제외 Secrets.xcconfig(0600)에 개발 접근 토큰만 연결했다. 제공사 키는 가져오지 않았다.
 - 중계 토큰은 앱에서 추출 가능하다. 이 설정을 강한 운영 인증으로 취급하지 않는다.

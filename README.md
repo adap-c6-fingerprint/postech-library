@@ -36,8 +36,8 @@ Xcode 배포 정보는 개발서버를 사용합니다. 영수증 파일 유무�
 Xcode Run은 Debug를 사용하세요. Release로 직접 실행하는 내부 빌드는 `internal`을 지정하세요.
 
 Release의 `Validate API Relay Configuration` 단계는 자동 배포에
-`POBOOK_RELAY_TOKEN_TESTFLIGHT`와 `POBOOK_RELAY_TOKEN_PRODUCTION`을 모두 요구합니다.
-같은 바이너리가 TestFlight에서 App Store로 승격되므로 두 설정이 필요합니다.
+`POBOOK_RELAY_TOKEN_DEVELOPMENT`, `POBOOK_RELAY_TOKEN_TESTFLIGHT`, `POBOOK_RELAY_TOKEN_PRODUCTION`을 모두 요구합니다.
+같은 바이너리의 Xcode 실행·TestFlight·App Store 환경 선택에 대응하므로 세 설정이 필요합니다.
 내부 Release는 개발 토큰만 요구합니다. CI에서는 비공개 빌드 설정으로 같은 변수를 주입합니다.
 앱에 포함된 중계 토큰은 추출 가능하며 사용자 인증이나 제공사 비밀키가 아닙니다.
 

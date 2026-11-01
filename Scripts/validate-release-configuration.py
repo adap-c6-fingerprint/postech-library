@@ -10,7 +10,9 @@ def validate(configuration: str, channel: str, development: str = "", testflight
         raise ValueError("POBOOK_BUILD_CHANNEL must be automatic or internal.")
     if configuration != "Release":
         return
-    required = {"DEVELOPMENT": development} if channel == "internal" else {"TESTFLIGHT": testflight, "PRODUCTION": production}
+    required = {"DEVELOPMENT": development} if channel == "internal" else {
+        "DEVELOPMENT": development, "TESTFLIGHT": testflight, "PRODUCTION": production
+    }
     for name, value in required.items():
         if len(value) < 32 or value.startswith("$(") or any(not 0x21 <= ord(character) <= 0x7e for character in value):
             raise ValueError(f"Release requires a valid POBOOK_RELAY_TOKEN_{name} in private build settings.")
