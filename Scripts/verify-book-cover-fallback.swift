@@ -9,28 +9,35 @@ enum VerifyBookCoverFallback {
         let arguments = CommandLine.arguments
         let live = arguments.contains("--live")
         let base = URL(string: "http://127.0.0.1:4174/covers")!
-        let key: String
+        let token: String
         if live {
             let config = try String(contentsOfFile: "Secrets.xcconfig", encoding: .utf8)
-            key = try require(config.split(separator: "\n").compactMap { line -> String? in
+            token = try require(config.split(separator: "\n").compactMap { line -> String? in
                 let parts = line.split(separator: "=", maxSplits: 1)
-                guard parts.count == 2, parts[0].trimmingCharacters(in: .whitespaces) == "YES24_API_KEY" else { return nil }
+                guard parts.count == 2, parts[0].trimmingCharacters(in: .whitespaces) == "POBOOK_RELAY_TOKEN_DEVELOPMENT" else { return nil }
                 return parts[1].trimmingCharacters(in: .whitespaces).trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-            }.first, "로컬 Yes24 키가 필요합니다")
-        } else { key = "proof-key" }
+            }.first, "로컬 개발 중계 토큰이 필요합니다")
+        } else { token = "local-proof-relay-token-with-at-least-32-characters" }
 
         let load: @Sendable (URLRequest) async throws -> (Data, URLResponse) = { original in
             var request = original
             if !live, let url = original.url, url.host != "127.0.0.1" {
                 var routed = URLComponents(url: base, resolvingAgainstBaseURL: false)!
-                routed.path += url.path
+                routed.path += url.path.replacingOccurrences(of: "/yes24/v1/", with: "/v1/")
                 routed.percentEncodedQuery = URLComponents(url: url, resolvingAgainstBaseURL: false)?.percentEncodedQuery
                 request.url = routed.url
+                if url.path.hasPrefix("/yes24/") {
+                    // 로컬 공급자 mock만 가짜 제공사 키를 사용한다. 실제 앱은 중계 토큰만 보낸다.
+                    request.setValue(nil, forHTTPHeaderField: "Authorization")
+                    request.setValue("proof-key", forHTTPHeaderField: "X-Api-Key")
+                }
             }
             return try await URLSession.shared.data(for: request)
         }
-        let service = Yes24BookDetailService(load: load)
-        let resolver = Yes24BookCoverResolver { try await service.fetchCoverURL(isbn13: $0, apiKey: key) }
+        let service = Yes24BookDetailService(relay: .init(httpClient: HTTPClient(load: load), configuration: {
+            .init(environment: .development, token: token)
+        }))
+        let resolver = Yes24BookCoverResolver { try await service.fetchCoverURL(isbn13: $0) }
         let loader = SharedImageLoader<Data>(cost: { $0.count }) { url in
             var request = URLRequest(url: url)
             request.timeoutInterval = 15

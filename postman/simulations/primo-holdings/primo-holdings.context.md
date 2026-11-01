@@ -21,7 +21,7 @@ postman simulation run postman/simulations/primo-holdings/primo-holdings.sim.yam
 Once the `listening` event reports port 47575, compile and run in another:
 
 ```sh
-swiftc -swift-version 6 -parse-as-library fingerprint-library/Clients/Network/HTTPClient.swift fingerprint-library/Clients/Book/Client/PrimoAPIClient.swift fingerprint-library/Domain/Book/BookHolding.swift fingerprint-library/Domain/Book/BookCardLibraryInfo.swift fingerprint-library/Clients/Book/Client/PrimoHoldingsMapper.swift fingerprint-library/Clients/Book/Client/PrimoBookHoldingsService.swift Scripts/verify-primo-holdings.swift -o /tmp/primo-holdings-proof
+swiftc -swift-version 6 -parse-as-library fingerprint-library/Clients/Network/HTTPClient.swift fingerprint-library/Clients/Network/BookAPIClient.swift fingerprint-library/Shared/AppConfiguration.swift fingerprint-library/Clients/Book/Client/PrimoAPIClient.swift fingerprint-library/Domain/Book/BookHolding.swift fingerprint-library/Domain/Book/BookCardLibraryInfo.swift fingerprint-library/Clients/Book/Client/PrimoHoldingsMapper.swift fingerprint-library/Clients/Book/Client/PrimoBookHoldingsService.swift Scripts/verify-primo-holdings.swift -o /tmp/primo-holdings-proof
 /tmp/primo-holdings-proof http://127.0.0.1:47575/library
 ```
 

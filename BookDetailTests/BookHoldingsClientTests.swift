@@ -24,8 +24,8 @@ struct BookHoldingsClientTests {
     func preservesAllHoldings() async throws {
         let recordID = recordID
         let session = makeSession { request in
-            #expect(request.url?.host == "api-ap.hosted.exlibrisgroup.com")
-            #expect(request.value(forHTTPHeaderField: "Authorization") == nil)
+            #expect(request.url?.host == "pobook-api-dev.fpmaps.com")
+            #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer unit-test-relay-token-not-a-provider-key")
             let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)!.queryItems!
             #expect(query.first { $0.name == "q" }?.value == "any,contains,991000958759703286")
             #expect(query.first { $0.name == "skipDelivery" }?.value == "false")
@@ -37,7 +37,7 @@ struct BookHoldingsClientTests {
             """)
         }
         defer { session.invalidateAndCancel() }
-        let result = try await PrimoBookHoldingsService(session: session).fetch(recordID: recordID)
+        let result = try await PrimoBookHoldingsService(relay: .test { try await session.data(for: $0) }).fetch(recordID: recordID)
         #expect(result.map(\.callNumber) == ["UNAVAILABLE", "QA76.9 .A43"])
         #expect(result.map(\.availability) == ["unavailable", "available"])
         #expect(result[1].locationCode == "c3b")
@@ -52,7 +52,7 @@ struct BookHoldingsClientTests {
             """)
         }
         defer { session.invalidateAndCancel() }
-        let result = try await PrimoBookHoldingsService(session: session).fetch(recordID: recordID)
+        let result = try await PrimoBookHoldingsService(relay: .test { try await session.data(for: $0) }).fetch(recordID: recordID)
         #expect(result.first?.availability == status)
         #expect(result.first?.availabilityText == "대출 상태 확인 필요")
     }
@@ -63,7 +63,7 @@ struct BookHoldingsClientTests {
             response(request, #"{"docs":[{"pnx":{"control":{"recordid":["alma991000958759703280"]}},"delivery":{"holding":[{"callNumber":"WRONG"}]}}]}"#)
         }
         defer { session.invalidateAndCancel() }
-        #expect(try await PrimoBookHoldingsService(session: session).fetch(recordID: recordID) == [])
+        #expect(try await PrimoBookHoldingsService(relay: .test { try await session.data(for: $0) }).fetch(recordID: recordID) == [])
     }
 
     @Test("유효하지 않은 자료번호는 네트워크 호출 전에 거절한다")
@@ -74,7 +74,7 @@ struct BookHoldingsClientTests {
         }
         defer { session.invalidateAndCancel() }
         await #expect(throws: BookHoldingsError.self) {
-            try await PrimoBookHoldingsService(session: session).fetch(recordID: "alma123")
+            try await PrimoBookHoldingsService(relay: .test { try await session.data(for: $0) }).fetch(recordID: "alma123")
         }
     }
 
@@ -83,7 +83,29 @@ struct BookHoldingsClientTests {
         let session = makeSession { request in response(request, #"{"error":"failed"}"#, status: status) }
         defer { session.invalidateAndCancel() }
         await #expect(throws: (any Error).self) {
-            try await PrimoBookHoldingsService(session: session).fetch(recordID: recordID)
+            try await PrimoBookHoldingsService(relay: .test { try await session.data(for: $0) }).fetch(recordID: recordID)
+        }
+    }
+
+    @Test("짧은 요청 제한은 재시도하고 긴 예산 제한은 즉시 중단한다", arguments: ["1", "60"])
+    func respectsRelayRetryAfter(_ retryAfter: String) async throws {
+        let calls = Mutex(0)
+        let relay = BookAPIClient.test { request in
+            let attempt = calls.withLock { $0 += 1; return $0 }
+            return (Data(#"{"docs":[]}"#.utf8), HTTPURLResponse(
+                url: request.url!, statusCode: attempt == 1 ? 429 : 200, httpVersion: nil,
+                headerFields: ["Retry-After": retryAfter]
+            )!)
+        }
+        let service = PrimoBookHoldingsService(relay: relay)
+        if retryAfter == "1" {
+            #expect(try await service.fetch(recordID: recordID) == [])
+            #expect(calls.withLock { $0 } == 2)
+        } else {
+            await #expect(throws: BookHoldingsError.serviceUnavailable) {
+                try await service.fetch(recordID: recordID)
+            }
+            #expect(calls.withLock { $0 } == 1)
         }
     }
 
