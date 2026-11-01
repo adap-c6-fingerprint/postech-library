@@ -9,10 +9,14 @@ struct BookNavigationView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     init(session: BookNavigationSession, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
-        self.onExit = onExit
-        _store = State(initialValue: Store(initialState: BookNavigationFeature.State(session: session)) {
+        self.init(store: Store(initialState: BookNavigationFeature.State(session: session)) {
             BookNavigationFeature()
-        })
+        }, onExit: onExit)
+    }
+
+    init(store: StoreOf<BookNavigationFeature>, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
+        self.onExit = onExit
+        _store = State(initialValue: store)
     }
 
     var body: some View {
@@ -182,7 +186,8 @@ struct BookNavigationView: View {
             shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),
             routeTurnArrows: store.currentTurnArrows,
             navigationAppearance: true, navigationBearingRadians: store.navigationBearing,
-            navigationDestination: store.currentPlan.map { .init(book: stop.book, coordinate: $0.destination.coordinate, floorID: stop.shelf.floorID) }
+            navigationDestination: store.currentPlan.map { .init(book: stop.book, coordinate: $0.destination.coordinate, floorID: stop.shelf.floorID) },
+            onUserCameraInteraction: { store.send(.mapInteractionBegan) }
         )
         .accessibilityIdentifier("book-navigation-map")
     }

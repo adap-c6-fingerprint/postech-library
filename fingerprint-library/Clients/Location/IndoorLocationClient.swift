@@ -15,7 +15,8 @@ nonisolated struct IndoorLocationClient: Sendable {
                         guard !Task.isCancelled else { break }
                         continuation.yield(.position(IndoorPosition(
                             coordinate: position.coordinate, floorOrdinal: position.floorOrdinal,
-                            horizontalAccuracy: position.horizontalAccuracy, timestamp: Date(), source: .replay
+                            horizontalAccuracy: position.horizontalAccuracy, timestamp: Date(), source: .replay,
+                            headingDegrees: position.headingDegrees
                         )))
                         do { try await Task.sleep(for: interval) } catch { break }
                     }

@@ -283,7 +283,7 @@ struct BookNavigationFeatureTests {
         await store.finish()
     }
 
-    @Test("위치 이동 버튼만 카메라를 재지정하고 새 위치 샘플이 사용자의 지도 이동을 덮어쓰지 않는다")
+    @Test("현재 위치 버튼은 안내 범위로 복귀하고 작은 위치 변화는 카메라를 반복 이동하지 않는다")
     func explicitRecenter() async throws {
         let clock = TestClock()
         let store = try makeStore(clock: clock)
@@ -291,7 +291,11 @@ struct BookNavigationFeatureTests {
         let first = store.state.cameraRequest.id
         await store.send(.recenterTapped)
         #expect(store.state.cameraRequest.id == first + 1)
-        #expect(store.state.cameraRequest.target == .position(F.position(x: 0).coordinate))
+        guard case let .navigation(focus) = store.state.cameraRequest.target else {
+            Issue.record("현재 위치와 남은 경로를 함께 보여야 한다")
+            return
+        }
+        #expect(focus.coordinates.contains(F.position(x: 0).coordinate))
         store.dependencies.date.now = F.now.addingTimeInterval(1)
         await store.send(.locationEvent(subscriptionID: 0, .position(F.position(x: 1, seconds: 1))))
         #expect(store.state.cameraRequest.id == first + 1)

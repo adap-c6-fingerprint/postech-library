@@ -54,6 +54,24 @@ enum NavigationGuidanceTestFixture {
     }
 
     @MainActor
+    static func windingSession() throws -> BookNavigationSession {
+        let base = try session()
+        let value = make(nodes: [IndoorRoutingTestFactory.node("a"),
+                                IndoorRoutingTestFactory.node("b", y: 20),
+                                IndoorRoutingTestFactory.node("c", x: 20, y: 20),
+                                IndoorRoutingTestFactory.node("d", x: 20, y: -20),
+                                IndoorRoutingTestFactory.node("e", x: -20, y: -20),
+                                IndoorRoutingTestFactory.node("f", x: -20, y: 40)])
+        let node = value.graph.nodes[value.graph.nodes.count - 1]
+        let shelf = IndoorShelfLabel(fixtureNumber: node.id, realNumber: node.id, side: .a, sequence: 0,
+            floorID: node.floorID, mapElementID: .init(kind: .fixture, sourceID: UUID()),
+            geometry: .point(node.coordinate), content: .emptyShelf)
+        let stop = BookNavigationStop(book: base.stops[0].book, holdings: base.stops[0].holdings, shelf: shelf)
+        return try .init(map: base.map, shelfLabels: [shelf], stops: [stop], legs: [value.route],
+                         graph: value.graph, origin: base.origin, start: base.start)
+    }
+
+    @MainActor
     static func session() throws -> BookNavigationSession {
         let (route, graph) = make()
         let back = make(reversed: true).route

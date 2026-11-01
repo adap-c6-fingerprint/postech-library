@@ -5,19 +5,22 @@ import Foundation
 @MainActor
 final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
     static let shared = LiveIndoorLocationProvider()
-    private let manager = CLLocationManager()
+    private let manager: CLLocationManager
+    private var lastLocation: CLLocation?
+    private var lastHeading: CLHeading?
     private var subscribers: [UUID: AsyncStream<IndoorLocationEvent>.Continuation] = [:]
     private lazy var authorizationMonitor = IndoorLocationAuthorizationMonitor { [weak self] value in
         guard let self else { return }
         self.publish(.authorization(value))
         if value.isAuthorized && !self.subscribers.isEmpty {
-            self.manager.startUpdatingLocation()
+            self.startUpdates()
         } else {
-            self.manager.stopUpdatingLocation()
+            self.stopUpdates()
         }
     }
 
-    private override init() {
+    init(manager: CLLocationManager = CLLocationManager()) {
+        self.manager = manager
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -37,10 +40,10 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
             guard let self else { return }
             Task { @MainActor in
                 self.subscribers.removeValue(forKey: id)
-                if self.subscribers.isEmpty { self.manager.stopUpdatingLocation() }
+                if self.subscribers.isEmpty { self.stopUpdates() }
             }
         }
-        if authorization.isAuthorized { manager.startUpdatingLocation() }
+        if authorization.isAuthorized { startUpdates() }
         return stream
     }
 
@@ -56,20 +59,65 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         for location in locations {
-            publish(.position(IndoorPosition(
-                coordinate: IndoorMapCoordinate(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude),
-                floorOrdinal: location.floor?.level, horizontalAccuracy: location.horizontalAccuracy,
-                timestamp: location.timestamp, source: .sensor
-            )))
+            if lastLocation.map({ location.timestamp >= $0.timestamp }) ?? true { lastLocation = location }
+            publish(.position(position(from: location)))
         }
     }
 
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        lastHeading = newHeading
+        publishHeadingChange()
+    }
+
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
+        if (error as? CLError)?.code == .headingFailure {
+            lastHeading = nil
+            publishHeadingChange()
+            return
+        }
+        // 방향 콜백만으로 실패 전 좌표를 다시 발행하지 않는다.
+        lastLocation = nil
         let event = Self.failureEvent(for: error)
         if case .authorization(.denied) = event {
             authorizationMonitor.update(status: .denied, precise: false)
         }
         else { publish(event) }
+    }
+
+    private func startUpdates() {
+        manager.startUpdatingLocation()
+        if CLLocationManager.headingAvailable() { manager.startUpdatingHeading() }
+    }
+
+    private func stopUpdates() {
+        manager.stopUpdatingLocation()
+        manager.stopUpdatingHeading()
+        lastLocation = nil
+        lastHeading = nil
+    }
+
+    /// 방향만 갱신될 때 위치 시각을 바꿔 오래된 좌표를 유효하게 만들지 않는다.
+    private func publishHeadingChange() {
+        guard let lastLocation else { return }
+        let position = position(from: lastLocation)
+        guard position.isRecent(at: Date()) else { return }
+        publish(.position(position))
+    }
+
+    private func position(from location: CLLocation) -> IndoorPosition {
+        let heading: Double?
+        if let lastHeading, lastHeading.headingAccuracy.isFinite, lastHeading.headingAccuracy >= 0,
+           (-5...10).contains(Date().timeIntervalSince(lastHeading.timestamp)),
+           lastHeading.trueHeading >= 0 {
+            heading = lastHeading.trueHeading
+        } else {
+            heading = nil
+        }
+        return IndoorPosition(
+            coordinate: .init(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude),
+            floorOrdinal: location.floor?.level, horizontalAccuracy: location.horizontalAccuracy,
+            timestamp: location.timestamp, source: .sensor, headingDegrees: heading
+        )
     }
 
     nonisolated static func failureEvent(for error: any Error) -> IndoorLocationEvent {
