@@ -14,15 +14,9 @@ nonisolated struct PersonalizedRecommendationClient: Sendable {
 
 extension PersonalizedRecommendationClient: DependencyKey {
     static let liveValue = Self(fetch: { input in
-        guard let primoKey = await AppConfiguration.primoAPIKey else {
-            throw RecommendationClientError.missingPrimoAPIKey
-        }
-        guard let data4LibraryKey = await AppConfiguration.data4LibraryAPIKey else {
-            throw RecommendationClientError.missingData4LibraryAPIKey
-        }
         @Dependency(\.foundationModelsClient) var model
         @Dependency(\.httpClient) var httpClient
-        let primo = PrimoAPIClient(httpClient: httpClient, apiKey: primoKey)
+        let primo = PrimoAPIClient(relay: .init(httpClient: httpClient))
         return try await PersonalizedRecommendationService.recommend(
             input,
             dependencies: .init(
@@ -31,7 +25,7 @@ extension PersonalizedRecommendationClient: DependencyKey {
                     try await primo.searchData(query: query, resourceTypes: ["printed_book"], limit: limit)
                 },
                 covers: .live(
-                    httpClient: httpClient, data4LibraryAPIKey: data4LibraryKey,
+                    httpClient: httpClient,
                     minimumImageBytes: ColdStartRecommendation.minimumCoverBytes
                 )
             )

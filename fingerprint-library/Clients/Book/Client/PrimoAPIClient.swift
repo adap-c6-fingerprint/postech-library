@@ -2,11 +2,9 @@ import Foundation
 
 /// 도서관 검색·추천·소장 조회가 공통으로 사용하는 Primo 요청 구성과 전송.
 nonisolated struct PrimoAPIClient: Sendable {
-    static let defaultBaseURL = URL(string: "https://api-ap.hosted.exlibrisgroup.com")!
+    static let defaultBaseURL = APIRelayEnvironment.development.baseURL
 
-    var httpClient: HTTPClient = .urlSession()
-    var baseURL: URL = defaultBaseURL
-    var apiKey: String? = nil
+    var relay: BookAPIClient = .init()
 
     /// 재시도 정책이 필요 없는 조회에서 HTTP 성공 응답의 본문을 반환한다.
     func searchData(
@@ -63,14 +61,9 @@ nonisolated struct PrimoAPIClient: Sendable {
         limit: Int = 20,
         timeout: TimeInterval = 60
     ) async throws -> HTTPResponse {
-        let url = try Self.searchURL(
-            baseURL: baseURL, query: query, resourceTypes: resourceTypes, offset: offset, limit: limit
-        )
-        var request = URLRequest(url: url)
-        request.timeoutInterval = timeout
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        if let apiKey { request.setValue("apikey \(apiKey)", forHTTPHeaderField: "Authorization") }
-        return try await httpClient.send(request)
+        let url = try Self.searchURL(query: query, resourceTypes: resourceTypes, offset: offset, limit: limit)
+        let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
+        return try await relay.send(.primoSearch, queryItems: items, timeout: timeout)
     }
 }
 

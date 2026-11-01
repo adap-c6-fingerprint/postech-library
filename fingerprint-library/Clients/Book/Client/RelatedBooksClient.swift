@@ -19,15 +19,11 @@ extension RelatedBooksClient: DependencyKey {
                 throw RelatedBooksClientError.invalidISBN
             }
 
-            guard let apiKey = await AppConfiguration.data4LibraryAPIKey else {
-                throw RelatedBooksClientError.missingAPIKey
-            }
-
             @Dependency(\.httpClient) var httpClient
             let result: HTTPResponse
             do {
-                result = try await Data4LibraryAPIClient(httpClient: httpClient)
-                    .fetch(.relatedBooks, isbn13: isbn13, apiKey: apiKey)
+                result = try await Data4LibraryAPIClient(relay: .init(httpClient: httpClient))
+                    .fetch(.relatedBooks, isbn13: isbn13)
             } catch is HTTPClientError {
                 throw RelatedBooksClientError.invalidResponse
             }
@@ -110,7 +106,6 @@ private nonisolated struct RelatedBookDTO: Decodable {
 
 nonisolated enum RelatedBooksClientError: Error {
     case invalidISBN
-    case missingAPIKey
     case invalidURL
     case invalidResponse
 }

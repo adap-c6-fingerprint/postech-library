@@ -116,7 +116,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 000000000000000110000000 /* Build configuration list for PBXNativeTarget "fingerprint-library" */;
 			buildPhases = (
-				750000000000000000000001 /* Validate Release Primo Proxy */,
+				750000000000000000000001 /* Validate API Relay Configuration */,
 				000000000000000120000000 /* Sources */,
 				000000000000000130000000 /* Frameworks */,
 				000000000000000140000000 /* Resources */,
@@ -242,13 +242,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		750000000000000000000001 /* Validate Release Primo Proxy */ = {
+		750000000000000000000001 /* Validate API Relay Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			inputPaths = (
 				"$(SRCROOT)/Scripts/validate-release-configuration.py",
 			);
-			name = "Validate Release Primo Proxy";
+			name = "Validate API Relay Configuration";
 			shellPath = /bin/sh;
 			shellScript = (
 				"/usr/bin/python3 \"$SRCROOT/Scripts/validate-release-configuration.py\"",

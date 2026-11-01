@@ -6,14 +6,15 @@ struct Yes24BookCoverTests {
     @Test("요청 ISBN과 정확히 일치하는 책의 HTTPS 표지만 선택한다")
     func selectsExactEdition() async throws {
         let body = #"{"success":true,"data":{"items":[{"isbn13":"9780131103627","cover":"https://image.yes24.com/goods/wrong/L"},{"isbn13":"9788937460777","cover":"https://image.yes24.com/goods/372300/L"}]}}"#
-        let service = Yes24BookDetailService(load: { request in
-            #expect(request.value(forHTTPHeaderField: "X-Api-Key") == "test-key")
+        let service = Yes24BookDetailService(relay: .test { request in
+            #expect(request.value(forHTTPHeaderField: "X-Api-Key") == nil
+            && request.value(forHTTPHeaderField: "Authorization") == "Bearer unit-test-relay-token-not-a-provider-key")
             #expect(URLComponents(url: request.url!, resolvingAgainstBaseURL: false)?.queryItems == [
                 URLQueryItem(name: "searchType", value: "ISBN13"), URLQueryItem(name: "query", value: "9788937460777")
             ])
             return (Data(body.utf8), HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
         })
-        #expect(try await service.fetchCoverURL(isbn13: "9788937460777", apiKey: "test-key")
+        #expect(try await service.fetchCoverURL(isbn13: "9788937460777")
                 == URL(string: "https://image.yes24.com/goods/372300/L"))
     }
 
@@ -26,10 +27,10 @@ struct Yes24BookCoverTests {
     ])
     func rejectsMissingOrUnsafeCover(item: String) async throws {
         let body = "{\"success\":true,\"data\":{\"items\":[\(item)]}}"
-        let service = Yes24BookDetailService(load: { request in
+        let service = Yes24BookDetailService(relay: .test { request in
             (Data(body.utf8), HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!)
         })
-        #expect(try await service.fetchCoverURL(isbn13: "9788937460777", apiKey: "test-key") == nil)
+        #expect(try await service.fetchCoverURL(isbn13: "9788937460777") == nil)
     }
 
     @Test("같은 ISBN의 동시 조회·성공·미등록 결과를 공유하고 실패는 재시도한다")

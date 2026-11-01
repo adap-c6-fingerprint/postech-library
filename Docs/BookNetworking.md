@@ -1,7 +1,9 @@
 # 도서 API 통신 구조
 
 도서관·Yes24·정보나루의 HTTP 전송은 `Clients/Network/HTTPClient.swift`에서 실행한다.
-각 API는 요청 주소·인증·API별 응답 규칙을 관리하고, 기능 Client는 요청 목적과 도서 모델 변환을 관리한다.
+PLI-144부터 `BookAPIClient`가 도서 API의 중계 주소·배포 환경·Bearer 인증을 관리한다.
+각 API는 기존 쿼리·응답 규칙을 유지하고, 기능 Client는 요청 목적과 도서 모델 변환을 관리한다.
+이미지는 중계하지 않는다. [환경 설정](../README.md)과 [서버 운영](../Server/api-relay/README.txt)을 참고한다.
 
 ```mermaid
 flowchart TD
@@ -9,9 +11,10 @@ flowchart TD
     Clients --> Primo[PrimoAPIClient]
     Clients --> Yes24[Yes24BookDetailService]
     Clients --> Data4[Data4LibraryAPIClient]
-    Primo --> HTTP[HTTPClient]
-    Yes24 --> HTTP
-    Data4 --> HTTP
+    Primo --> Relay[BookAPIClient]
+    Yes24 --> Relay
+    Data4 --> Relay
+    Relay --> HTTP[HTTPClient]
     Images[표지 로딩 · 이미지 확인] --> HTTP
     HTTP --> Session[URLSession]
 ```
@@ -34,22 +37,23 @@ flowchart TD
 | 계층 | 책임 |
 | --- | --- |
 | `HTTPClient` | 주입된 전송기 실행, 전송 전후 취소 확인, HTTP 응답인지 검증 |
-| `PrimoAPIClient` | 도서관 기본 주소·검색 경로·공통 쿼리·인증 헤더 구성 |
-| `Data4LibraryAPIClient` | 정보나루 엔드포인트·쿼리 인증·연관 도서 유형 구성 |
-| `Yes24BookDetailService` | Yes24 인증·상품 상세 응답·소개·표지 해석 |
+| `BookAPIClient` | 고정 중계 경로·배포 환경·Bearer 인증, 원본 HTTP 응답 반환 |
+| `PrimoAPIClient` | 도서관 검색 공통 쿼리 구성 |
+| `Data4LibraryAPIClient` | 정보나루 ISBN·연관 도서 유형·표지 해석 |
+| `Yes24BookDetailService` | 상품 상세 응답·소개·표지 해석 |
 | 기능 Client와 소장 서비스 | 도서 변환·추천 흐름·기능별 오류 및 재시도 정책 |
 
 `HTTPClient`는 HTTP 오류 상태의 본문과 헤더도 반환한다. Yes24의 404 상품 없음과 소장 조회의 429·5xx 재시도를 API 계층에서 해석하기 위해서다.
 HTTP 전송이 실패했을 때도 현재 Task의 취소 여부를 확인한다. 취소된 Task의 오류는 `CancellationError`로 전달하고, 취소되지 않은 Task의 원래 전송 오류는 보존한다.
 공통 계층은 재시도를 추가하지 않는다. 소장 조회는 기존의 최대 3회, `Retry-After`와 대기 시간을 유지한다.
-`BookHoldingsClient`의 Debug 직접 인증과 Release HTTPS 프록시 선택도 유지한다.
+`BookHoldingsClient`는 `AppConfiguration.relayConfiguration()`에서 선택한 환경별 중계 주소와 인증을 사용한다. Debug 직접 제공사 인증과 `PRIMO_PROXY_URL` 분기는 사용하지 않는다.
 
 검색·추천의 후속 책임 분리와 담당 파일별 점검은 [BookDependencyReview.md](BookDependencyReview.md)에 정리했다.
 
 ## 의존성 주입과 검증
 
 앱의 기능 Client와 표지 파이프라인은 `@Dependency(\.httpClient)`로 공통 전송기를 읽는다.
-독립 서비스는 `HTTPClient`를 인자로 받을 수 있고, 기존 `Yes24BookDetailService(load:)`와 소장 서비스의 `session:` 테스트 주입도 유지한다.
+`Yes24BookDetailService`와 `PrimoBookHoldingsService`는 `relay: BookAPIClient`를 주입받는다. 테스트는 `BookRelayTestSupport.swift`의 `BookAPIClient.test(load:)`로 가짜 인증과 HTTP 전송기를 함께 주입한다. 이전 `load:`·`session:` 생성자는 사용하지 않는다.
 
 `BookDetailTests/HTTPClientTests.swift`는 취소 전 요청 차단·취소 후 결과 차단·전송 실패 중 취소 변환·HTTP 응답과 전송 오류 보존을 확인한다. 외부 서버 없이 실제 URLSession을 사용하는 취소 경로도 검증한다.
 `BookDetailTests/BookAPITransportTests.swift`는 세 제공자가 같은 주입 전송기를 사용하는지, 인증 정보와 Primo 페이지·자료 유형이 보존되는지 확인한다.

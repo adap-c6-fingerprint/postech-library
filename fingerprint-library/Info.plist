@@ -4,15 +4,13 @@
 <dict>
 	<key>UIUserInterfaceStyle</key>
 	<string>Dark</string>
-	<key>DATA4LIBRARY_API_KEY</key>
-	<string>$(DATA4LIBRARY_API_KEY)</string>
-	<key>NATIONAL_LIBRARY_API_KEY</key>
-	<string>$(NATIONAL_LIBRARY_API_KEY)</string>
-	<key>PRIMO_API_KEY</key>
-	<string>$(PRIMO_API_KEY)</string>
-	<key>PRIMO_PROXY_URL</key>
-	<string>$(PRIMO_PROXY_URL)</string>
-	<key>YES24_API_KEY</key>
-	<string>$(YES24_API_KEY)</string>
+	<key>POBOOK_BUILD_CHANNEL</key>
+	<string>$(POBOOK_BUILD_CHANNEL)</string>
+	<key>POBOOK_RELAY_TOKEN_DEVELOPMENT</key>
+	<string>$(POBOOK_RELAY_TOKEN_DEVELOPMENT)</string>
+	<key>POBOOK_RELAY_TOKEN_TESTFLIGHT</key>
+	<string>$(POBOOK_RELAY_TOKEN_TESTFLIGHT)</string>
+	<key>POBOOK_RELAY_TOKEN_PRODUCTION</key>
+	<string>$(POBOOK_RELAY_TOKEN_PRODUCTION)</string>
 </dict>
 </plist>

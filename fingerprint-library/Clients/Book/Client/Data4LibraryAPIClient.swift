@@ -1,24 +1,17 @@
 import Foundation
 
-/// 정보나루 API의 주소·쿼리 인증·전송을 한곳에서 관리한다.
+/// 정보나루의 쿼리·응답 해석은 유지하고 인증·전송은 중계 Client에 맡긴다.
 nonisolated struct Data4LibraryAPIClient: Sendable {
     enum Endpoint: Sendable {
         case relatedBooks
         case bookDetail
 
-        var path: String {
-            switch self {
-            case .relatedBooks: "recommandList"
-            case .bookDetail: "srchDtlList"
-            }
-        }
     }
 
-    var httpClient: HTTPClient = .urlSession()
-    var baseURL = URL(string: "https://data4library.kr/api")!
+    var relay: BookAPIClient = .init()
 
-    func coverURL(isbn13: String, apiKey: String) async throws -> URL? {
-        let result = try await fetch(.bookDetail, isbn13: isbn13, apiKey: apiKey)
+    func coverURL(isbn13: String) async throws -> URL? {
+        let result = try await fetch(.bookDetail, isbn13: isbn13)
         guard result.isSuccessful else { throw Data4LibraryAPIError.invalidResponse }
         let decoded = try JSONDecoder().decode(DetailResponse.self, from: result.data)
         guard let raw = decoded.response.detail?.first?.book.bookImageURL else { return nil }
@@ -35,21 +28,13 @@ nonisolated struct Data4LibraryAPIClient: Sendable {
         return parts.url
     }
 
-    func fetch(_ endpoint: Endpoint, isbn13: String, apiKey: String) async throws -> HTTPResponse {
-        var components = URLComponents(
-            url: baseURL.appending(path: endpoint.path), resolvingAgainstBaseURL: false
-        )
-        var items = [
-            URLQueryItem(name: "authKey", value: apiKey),
-            URLQueryItem(name: "isbn13", value: isbn13)
-        ]
+    func fetch(_ endpoint: Endpoint, isbn13: String) async throws -> HTTPResponse {
+        var items = [URLQueryItem(name: "isbn13", value: isbn13)]
         if case .relatedBooks = endpoint {
             items.append(URLQueryItem(name: "type", value: "mania"))
         }
         items.append(URLQueryItem(name: "format", value: "json"))
-        components?.queryItems = items
-        guard let url = components?.url else { throw URLError(.badURL) }
-        return try await httpClient.send(URLRequest(url: url))
+        return try await relay.send(endpoint == .relatedBooks ? .data4LibraryRelated : .data4LibraryDetail, queryItems: items)
     }
 
     private nonisolated struct DetailResponse: Decodable {
