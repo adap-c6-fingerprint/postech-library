@@ -7,6 +7,8 @@
 
 import CoreGraphics
 
+enum DS {}
+
 extension DS {
     enum Spacing {
         static let _4: CGFloat = 4
