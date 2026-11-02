@@ -16,7 +16,6 @@ struct BookSearchView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            header
             categoryPicker
             searchContent
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -25,37 +24,11 @@ struct BookSearchView: View {
         .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
             store.send(.basketLimitAlertDismissed)
         }
-        .toolbar(.hidden, for: .navigationBar)
-        .safeAreaInset(edge: .bottom) {
-            if !store.basketBooks.isEmpty {
-                Button(action: onShowBasket) {
-                    Label(
-                        "책바구니 바로가기 (\(store.basketBooks.count)권)",
-                        systemImage: "basket"
-                    )
-                    .frame(maxWidth: .infinity, minHeight: 44)
-                }
-                .glassEffect()
-                .buttonStyle(.glassProminent)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(.bar)
-            }
+        .toolbar {
+            LibraryTopBar(title: "검색", onBasket: onShowBasket)
         }
-    }
-
-    private var header: some View {
-        HStack(spacing: 4) {
-            Text("검색")
-                .font(.system(size: 28, weight: .bold))
-            Spacer()
-            headerButton("cart", label: "책바구니", action: onShowBasket)
-            headerButton("person", label: "마이페이지", action: {})
-                .disabled(true) // 마이페이지 화면 연결 후 활성화
-        }
-        .padding(.leading, 16)
-        .padding(.trailing, 8)
-        .padding(.vertical, 8)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
     }
 
     private var categoryPicker: some View {
@@ -70,19 +43,6 @@ struct BookSearchView: View {
         .pickerStyle(.segmented)
         .padding(.horizontal, 16)
         .padding(.bottom, 16)
-    }
-
-    private func headerButton(
-        _ symbol: String, label: String, action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Image(systemName: symbol)
-                .font(.system(size: 22))
-                .frame(width: 44, height: 44)
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(.primary)
-        .accessibilityLabel(label)
     }
 
     @ViewBuilder
