@@ -113,7 +113,8 @@ extension IndoorMapSerialTests {
                     return controller.view.convert(label.bounds, from: label).insetBy(dx: -4, dy: -4)
                 }
                 let points = map.features.compactMap { feature -> CGPoint? in
-                    guard feature.kind == .fixture, feature.floorID == floor.id else { return nil }
+                    guard feature.kind == .fixture, feature.floorID == floor.id,
+                          feature.category == "furniture" || feature.category == "desk" else { return nil }
                     let rect = MapKitGeometry.mapRect(for: feature.geometry)
                     guard !rect.isNull else { return nil }
                     let center = MKMapPoint(x: rect.midX, y: rect.midY).coordinate
@@ -209,8 +210,8 @@ extension IndoorMapSerialTests {
                     context.draw(crop, in: CGRect(x: 0, y: 0, width: 5, height: 5))
                     return stride(from: 0, to: 100, by: 4).contains { index in
                         let red = Int(bytes[index]), green = Int(bytes[index + 1]), blue = Int(bytes[index + 2])
-                        return red > 180 && red < 240 && green > 145 && green < 210
-                            && blue > 100 && blue < 180 && red - green > 15 && green - blue > 20
+                        // 실제 화면에 #555555 서가가 그려졌는지 확인한다. 바닥 #353535와 구분한다.
+                        return abs(red - 85) <= 5 && abs(green - 85) <= 5 && abs(blue - 85) <= 5
                     }
                 }
             }
