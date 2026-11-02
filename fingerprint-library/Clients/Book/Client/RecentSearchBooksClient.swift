@@ -6,7 +6,7 @@ nonisolated struct RecentSearchBooksClient: Sendable {
     var load: @Sendable () -> [Book]
     var record: @Sendable (Book) -> Void
 
-    static let maxCount = 20
+    static let maxCount = 5
     private static let storageKey = "recentSearchBooks"
 
     static func userDefaults(suiteName: String? = nil) -> Self {
@@ -17,7 +17,7 @@ nonisolated struct RecentSearchBooksClient: Sendable {
             guard let data = defaults().data(forKey: storageKey),
                   let stored = try? JSONDecoder().decode([StoredBook].self, from: data)
             else { return [] }
-            return stored.map(\.book)
+            return stored.prefix(maxCount).map(\.book)
         }
         return Self(
             load: { read() },
