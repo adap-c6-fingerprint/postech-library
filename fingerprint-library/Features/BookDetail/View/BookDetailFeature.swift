@@ -25,6 +25,13 @@ struct BookDetailFeature {
         case failed
     }
 
+    enum DestinationRouteState: Equatable {
+        case idle
+        case loading
+        case loaded(BookDetailRoutePresentation)
+        case unavailable
+    }
+
     // 화면 전체의 현재 상태
     @ObservableState
     struct State: Equatable {
@@ -42,6 +49,10 @@ struct BookDetailFeature {
         var relatedBooksState: RelatedBooksState = .idle
         var holdingsState: HoldingsState = .idle
         var routeSummary: BookRouteSummary = .mock
+        var mapContext: BookDetailMapContext?
+        var destinationPresentation: BookDetailDestinationPresentation?
+        var destinationRouteState: DestinationRouteState = .idle
+        var destinationRouteRequestID = 0
 
         var displayedHolding: BookHolding? {
             guard case let .loaded(holdings) = holdingsState else { return nil }
@@ -76,6 +87,9 @@ struct BookDetailFeature {
         case holdingsLoaded([BookHolding])
         case holdingsFailed
         case routeSummaryUpdated(BookRouteSummary)
+        case mapContextChanged(BookDetailMapContext)
+        case destinationRouteLoaded(requestID: Int, BookDetailRoutePresentation)
+        case destinationRouteFailed(requestID: Int)
         case loadFavorites
         case favoriteButtonTapped
         case addToBasketButtonTapped
@@ -102,6 +116,7 @@ struct BookDetailFeature {
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient
 
+    @Dependency(\.indoorRouteClient) var indoorRouteClient
     @Dependency(\.bookBasketClient) var bookBasketClient
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
     // ✅ 상세 화면에 들어간 책을 '조회한 책'으로 기록한다. (Q5)
@@ -150,10 +165,25 @@ struct BookDetailFeature {
 
             case let .holdingsLoaded(holding):
                 state.holdingsState = .loaded(holding)
-                return .none
+                return state.mapContext == nil ? .none : refreshDestination(state: &state)
 
             case .holdingsFailed:
                 state.holdingsState = .failed
+                return state.mapContext == nil ? .none : refreshDestination(state: &state)
+
+            case let .mapContextChanged(context):
+                guard state.mapContext != context else { return .none }
+                state.mapContext = context
+                return refreshDestination(state: &state)
+
+            case let .destinationRouteLoaded(requestID, summary):
+                guard requestID == state.destinationRouteRequestID else { return .none }
+                state.destinationRouteState = .loaded(summary)
+                return .none
+
+            case let .destinationRouteFailed(requestID):
+                guard requestID == state.destinationRouteRequestID else { return .none }
+                state.destinationRouteState = .unavailable
                 return .none
 
             case let .routeSummaryUpdated(summary):
@@ -233,16 +263,79 @@ struct BookDetailFeature {
         case description
         case relatedBooks
         case holdings
+        case destinationRoute
+    }
+
+    private func refreshDestination(state: inout State) -> Effect<Action> {
+        state.destinationRouteRequestID += 1
+        let requestID = state.destinationRouteRequestID
+        let cancel: Effect<Action> = .cancel(id: CancelID.destinationRoute)
+        guard case let .loaded(holdings) = state.holdingsState else {
+            state.destinationPresentation = nil
+            state.destinationRouteState = state.holdingsState == .failed ? .unavailable : .idle
+            return cancel
+        }
+        state.destinationPresentation = BookDetailDestinationPresentation.resolve(
+            holdings: holdings, context: state.mapContext
+        )
+        guard let destination = state.destinationPresentation,
+              ShelfOverlapPolicy().allows(destination.shelves),
+              let context = state.mapContext, let navigation = context.navigation,
+              navigation.shelves.mode == .library,
+              let position = context.position, position.isRecent(at: now) else {
+            state.destinationRouteState = .unavailable
+            return cancel
+        }
+        let targets = destination.shelves.compactMap { shelf in
+            navigation.shelves.destinations.first {
+                $0.key.value == shelf.fixtureNumber && $0.mapElementID == shelf.mapElementID && $0.floorID == shelf.floorID
+            }
+        }
+        guard targets.count == destination.shelves.count else {
+            state.destinationRouteState = .unavailable
+            return cancel
+        }
+        state.destinationRouteState = .loading
+        let requests = targets.map {
+            IndoorRouteRequest(navigation: navigation, start: position, destination: $0.key, preference: context.preference)
+        }
+        return .run { [indoorRouteClient] send in
+            var best: BookDetailRoutePresentation?
+            var bestDistance = Double.infinity
+            for request in requests {
+                do {
+                    try Task.checkCancellation()
+                    guard case let .route(route) = try await indoorRouteClient.search(request),
+                          route.destination == request.destination,
+                          let summary = BookDetailRoutePresentation(route: route) else { continue }
+                    if route.distanceMeters < bestDistance {
+                        bestDistance = route.distanceMeters
+                        best = summary
+                    }
+                } catch {
+                    guard !Task.isCancelled else { return }
+                }
+            }
+            guard !Task.isCancelled else { return }
+            if let best { await send(.destinationRouteLoaded(requestID: requestID, best)) }
+            else { await send(.destinationRouteFailed(requestID: requestID)) }
+        }
+        .cancellable(id: CancelID.destinationRoute, cancelInFlight: true)
     }
 
     private func loadHoldings(state: inout State) -> Effect<Action> {
         guard state.holdingsState != .loading else { return .none }
         guard let recordID = BookHoldingsClient.recordID(for: state.book) else {
             state.holdingsState = .failed
-            return .none
+            return state.mapContext == nil ? .none : refreshDestination(state: &state)
         }
         state.holdingsState = .loading
-        return .run { [bookHoldingsClient] send in
+        if state.mapContext != nil {
+            state.destinationPresentation = nil
+            state.destinationRouteState = .idle
+            state.destinationRouteRequestID += 1
+        }
+        let effect: Effect<Action> = .run { [bookHoldingsClient] send in
             do {
                 let holding = try await bookHoldingsClient.fetch(recordID)
                 try Task.checkCancellation()
@@ -253,6 +346,7 @@ struct BookDetailFeature {
             }
         }
         .cancellable(id: CancelID.holdings, cancelInFlight: true)
+        return .merge(.cancel(id: CancelID.destinationRoute), effect)
     }
 
     // 책 소개 조회
