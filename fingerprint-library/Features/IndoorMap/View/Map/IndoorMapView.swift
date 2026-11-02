@@ -101,7 +101,6 @@ struct IndoorMapView: View {
                         if appearance == .home { amenitiesButton }
                         floorPicker(map: map, floor: floor)
                     }
-                    .frame(width: appearance == .home ? 61 : nil, alignment: .leading)
                     if appearance == .home, showsDestinationCard { IndoorRouteControls(store: store) }
                     Spacer(minLength: 0)
                 }
@@ -191,42 +190,20 @@ struct IndoorMapView: View {
         return "현재위치 · \(floor.name)"
     }
 
-    /// 위층부터 모든 층 버튼을 한 번에 표시하고 각 버튼의 터치 높이를 확보한다.
+    /// 남은 높이에 세로 목록이 들어가지 않으면 가로로 펼쳐 스크롤 없이 모든 층을 표시한다.
     private func floorPicker(map: IndoorMap, floor: IndoorMapFloor) -> some View
     {
         let isHome = appearance == .home
-        return VStack(alignment: .leading, spacing: 0) {
-            ForEach(map.floors.reversed()) { item in
-                Button {
-                    store.send(.floorSelected(item.id))
-                } label: {
-                    Text(isHome ? "\(item.ordinal + 1)F" : item.name)
-                        .font(.subheadline.weight(item.id == floor.id ? .bold : .regular))
-                        .frame(width: isHome ? 61 : 56)
-                        .frame(minHeight: 44)
-                        .background(
-                            item.id == floor.id
-                                ? (isHome ? Color(red: 0.88, green: 0.95, blue: 0.19) : Color(uiColor: .label))
-                                : Color.clear
-                        )
-                        .foregroundStyle(
-                            item.id == floor.id
-                                ? (isHome ? .black : Color(uiColor: .systemBackground))
-                                : (isHome ? .white : .primary)
-                        )
-                        .overlay(alignment: .bottom) {
-                            Rectangle().fill(Color(uiColor: .separator).opacity(0.3)).frame(height: 0.5)
-                        }
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("\(item.name) 지도 보기")
-                .accessibilityAddTraits(item.id == floor.id ? [.isSelected] : [])
-                .accessibilityIdentifier("floor-\(item.ordinal)")
+        return ViewThatFits(in: .vertical) {
+            VStack(alignment: .leading, spacing: 0) {
+                floorButtons(map: map, floor: floor, horizontal: false)
             }
+            .fixedSize()
+            HStack(spacing: 0) {
+                floorButtons(map: map, floor: floor, horizontal: true)
+            }
+            .fixedSize()
         }
-        .padding(0)
-        .frame(width: isHome ? 61 : 56, alignment: .topLeading)
-        .fixedSize(horizontal: false, vertical: true)
         .background(isHome ? .clear : Color(uiColor: .systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .glassEffect(isHome ? .regular : .identity, in: .rect(cornerRadius: 12))
@@ -235,5 +212,38 @@ struct IndoorMapView: View {
         )
         .shadow(color: .black.opacity(isHome ? 0.1 : 0.08), radius: isHome ? 2.5 : 4,
                 x: isHome ? 1 : 0, y: isHome ? 1 : 2)
+    }
+
+    /// 세로·가로 배치에서 같은 선택 동작과 최소 44pt 터치 영역을 사용한다.
+    private func floorButtons(map: IndoorMap, floor: IndoorMapFloor, horizontal: Bool) -> some View {
+        let isHome = appearance == .home
+        return ForEach(map.floors.reversed()) { item in
+            Button {
+                store.send(.floorSelected(item.id))
+            } label: {
+                Text(isHome ? "\(item.ordinal + 1)F" : item.name)
+                    .font(.subheadline.weight(item.id == floor.id ? .bold : .regular))
+                    .frame(width: horizontal ? 44 : (isHome ? 61 : 56))
+                    .frame(minHeight: 44)
+                    .background(
+                        item.id == floor.id
+                            ? (isHome ? Color(red: 0.88, green: 0.95, blue: 0.19) : Color(uiColor: .label))
+                            : Color.clear
+                    )
+                    .foregroundStyle(
+                        item.id == floor.id
+                            ? (isHome ? .black : Color(uiColor: .systemBackground))
+                            : (isHome ? .white : .primary)
+                    )
+                    .overlay(alignment: horizontal ? .trailing : .bottom) {
+                        Rectangle().fill(Color(uiColor: .separator).opacity(0.3))
+                            .frame(width: horizontal ? 0.5 : nil, height: horizontal ? nil : 0.5)
+                    }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("\(item.name) 지도 보기")
+            .accessibilityAddTraits(item.id == floor.id ? [.isSelected] : [])
+            .accessibilityIdentifier("floor-\(item.ordinal)")
+        }
     }
 }
