@@ -136,10 +136,10 @@ struct IndoorMapView: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(store.homeAnnotations.showsAmenities
                         ? Color(red: 0.88, green: 0.95, blue: 0.19) : .white)
-                    .fixedSize()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.25)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
+            .padding(.horizontal, 4)
             .frame(width: 61, height: 34, alignment: .center)
             .background(Color(red: 0.6, green: 0.6, blue: 0.6).opacity(0.17))
             .cornerRadius(12)
@@ -200,7 +200,8 @@ struct IndoorMapView: View {
     {
         let isHome = appearance == .home
         let pickerHeight: CGFloat = isHome ? 169 : min(CGFloat(map.floors.count) * 44, maxHeight)
-        let rowHeight: CGFloat = isHome ? 169 / CGFloat(max(map.floors.count, 1)) : 44
+        let rowHeight: CGFloat = isHome ? max(44, 169 / CGFloat(max(map.floors.count, 1))) : 44
+        let contentHeight: CGFloat? = isHome ? rowHeight * CGFloat(map.floors.count) : nil
 
         return ScrollViewReader { proxy in
             ScrollView {
@@ -236,7 +237,7 @@ struct IndoorMapView: View {
                 }
                 .padding(0)
                 .frame(maxWidth: isHome ? .infinity : nil,
-                       minHeight: isHome ? 169 : nil, maxHeight: isHome ? 169 : nil,
+                       minHeight: contentHeight, maxHeight: contentHeight,
                        alignment: .topLeading)
             }
             .scrollIndicators(.hidden)

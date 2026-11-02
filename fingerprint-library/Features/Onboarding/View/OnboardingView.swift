@@ -325,7 +325,7 @@ private struct ChipFlowLayout: Layout {
 
 // 피그마 온보딩 시안의 색상 토큰 (배경·강조색은 장바구니 토큰을 함께 쓴다)
 private extension Color {
-    static let onboardingTextPrimary = Color(red: 0xF9 / 255, green: 0xF9 / 255, blue: 0xF9 / 255)
+    static let onboardingTextPrimary = Color.textPrimary
     static let onboardingField = Color(red: 0x24 / 255, green: 0x24 / 255, blue: 0x24 / 255)
     static let onboardingCaption = Color(red: 0x77 / 255, green: 0x77 / 255, blue: 0x77 / 255)
     static let onboardingActionTint = Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)

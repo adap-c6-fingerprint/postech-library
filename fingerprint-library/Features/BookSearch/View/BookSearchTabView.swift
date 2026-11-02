@@ -10,17 +10,11 @@ import SwiftUI
 
 struct BookSearchTabView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-    @Environment(\.isSearching) private var isSearching
 
     var body: some View {
         NavigationStack {
             BookSearchView(
                 store: store,
-                isEditingSearch: isSearching,
-                onSelectRecentQuery: { keyword in
-                    store.send(.queryChanged(keyword))
-                    submitSearch()
-                },
                 onShowBasket: {
                     store.send(.basketButtonTapped)
                 }
@@ -51,6 +45,7 @@ struct BookSearchTabView: View {
             ),
             prompt: "책 제목이나 저자를 검색하세요"
         )
+        .searchPresentationToolbarBehavior(.avoidHidingContent)
         .onSubmit(of: .search, submitSearch)
         .task {
             store.send(.task)

@@ -8,7 +8,7 @@ nonisolated struct IndoorPosition: Equatable, Sendable {
     let horizontalAccuracy: Double?
     let timestamp: Date
     let source: Source
-    /// 북쪽이 0도이고 시계 방향으로 증가한다. 방향을 알 수 없으면 nil이다.
+    /// 진북이 0도이고 시계 방향으로 증가한다. 방향을 알 수 없으면 nil이다.
     let headingDegrees: Double?
 
     init(coordinate: IndoorMapCoordinate, floorOrdinal: Int?, horizontalAccuracy: Double?,

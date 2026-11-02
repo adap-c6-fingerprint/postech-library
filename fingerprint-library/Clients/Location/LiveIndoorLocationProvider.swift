@@ -5,7 +5,7 @@ import Foundation
 @MainActor
 final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
     static let shared = LiveIndoorLocationProvider()
-    private let manager = CLLocationManager()
+    private let manager: CLLocationManager
     private var lastLocation: CLLocation?
     private var lastHeading: CLHeading?
     private var subscribers: [UUID: AsyncStream<IndoorLocationEvent>.Continuation] = [:]
@@ -19,7 +19,8 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
         }
     }
 
-    private override init() {
+    init(manager: CLLocationManager = CLLocationManager()) {
+        self.manager = manager
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyBest
@@ -74,6 +75,8 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
             publishHeadingChange()
             return
         }
+        // 방향 콜백만으로 실패 전 좌표를 다시 발행하지 않는다.
+        lastLocation = nil
         let event = Self.failureEvent(for: error)
         if case .authorization(.denied) = event {
             authorizationMonitor.update(status: .denied, precise: false)
@@ -104,8 +107,9 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
     private func position(from location: CLLocation) -> IndoorPosition {
         let heading: Double?
         if let lastHeading, lastHeading.headingAccuracy.isFinite, lastHeading.headingAccuracy >= 0,
-           (-5...10).contains(Date().timeIntervalSince(lastHeading.timestamp)) {
-            heading = lastHeading.trueHeading >= 0 ? lastHeading.trueHeading : lastHeading.magneticHeading
+           (-5...10).contains(Date().timeIntervalSince(lastHeading.timestamp)),
+           lastHeading.trueHeading >= 0 {
+            heading = lastHeading.trueHeading
         } else {
             heading = nil
         }

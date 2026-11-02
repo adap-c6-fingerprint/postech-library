@@ -49,24 +49,71 @@ struct BookSearchCacheFeatureTests {
         }
         #expect(calls.withLock { $0 } == 1)
 
-        await store.send(.queryChanged("과학")) { $0.query = "과학" }
-        await store.send(.searchButtonTapped) {
+        await store.send(.queryChanged("과학")) {
+            $0.query = "과학"
             $0.searchGeneration += 1
             $0.books = []
+            $0.hasSearched = false
+        }
+        await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
             $0.isLoading = true
+            $0.hasSearched = true
             $0.recentQueries = ["과학", "스위프트"]
         }
         await store.receive(\.searchSucceeded) {
             $0.isLoading = false
             $0.books = [science]
         }
-        await store.send(.queryChanged("스위프트")) { $0.query = "스위프트" }
+        await store.send(.queryChanged("스위프트")) {
+            $0.query = "스위프트"
+            $0.searchGeneration += 1
+            $0.books = []
+            $0.hasSearched = false
+        }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration += 1
             $0.books = [swift]
+            $0.hasSearched = true
             $0.recentQueries = ["스위프트", "과학"]
         }
         #expect(calls.withLock { $0 } == 2)
+    }
+
+    @Test("새 검색어를 입력하는 동안 이전 결과를 숨기고 제출할 때만 선택한 분류로 조회한다")
+    func hidesPreviousResultsUntilSubmission() async {
+        let calls = Mutex<[BookSearchRequest]>([])
+        let swift = swift, science = science
+        let store = TestStore(initialState: BookSearchFeature.State(
+            query: "스위프트", recentBooks: [swift], books: [swift], hasSearched: true
+        )) {
+            BookSearchFeature()
+        } withDependencies: {
+            $0.bookSearchClient.cached = { request in
+                calls.withLock { $0.append(request) }
+                return [science]
+            }
+        }
+        await store.send(.queryChanged("과")) {
+            $0.query = "과"
+            $0.searchGeneration = 1
+            $0.books = []
+            $0.hasSearched = false
+        }
+        await store.send(.queryChanged("과학")) { $0.query = "과학" }
+        await store.send(.categoryChanged(.journal)) { $0.category = .journal }
+        #expect(calls.withLock { $0.isEmpty })
+        #expect(store.state.recentBooks == [swift])
+        #expect(store.state.recentQueries.isEmpty)
+        await store.send(.searchButtonTapped) {
+            $0.searchGeneration = 2
+            $0.hasSearched = true
+            $0.books = [science]
+            $0.recentQueries = ["과학"]
+        }
+        #expect(calls.withLock { $0 } == [.init(query: "과학", category: .journal)])
+        #expect(store.state.recentBooks == [swift])
+        await store.finish()
     }
 
     @Test("만료된 검색 결과는 API를 다시 호출한다")
@@ -137,8 +184,8 @@ struct BookSearchCacheFeatureTests {
         #expect(cache.load(.init(query: "스위프트", category: .all)) == [])
     }
 
-    @Test("검색 중 입력이 바뀌어도 제출했던 검색어에 결과를 저장한다")
-    func cachesSubmittedQueryInsteadOfEditedQuery() async {
+    @Test("검색 중 새 입력을 시작하면 이전 요청을 취소하고 늦은 결과를 표시·저장하지 않는다")
+    func cancelsSubmittedQueryWhenEditingStarts() async {
         let cache = BookSearchResultCache()
         let gate = AsyncStream<Void>.makeStream()
         let swift = swift
@@ -158,14 +205,22 @@ struct BookSearchCacheFeatureTests {
             $0.hasSearched = true
             $0.recentQueries = ["스위프트"]
         }
-        await store.send(.queryChanged("과학")) { $0.query = "과학" }
+        await store.send(.queryChanged("과학")) {
+            $0.query = "과학"
+            $0.searchGeneration += 1
+            $0.isLoading = false
+            $0.hasSearched = false
+        }
         gate.continuation.yield()
         gate.continuation.finish()
-        await store.receive(\.searchSucceeded) {
-            $0.isLoading = false
-            $0.books = [swift]
-        }
-        #expect(cache.load(.init(query: "스위프트", category: .all)) == [swift])
+        await store.finish()
+        // 취소 전에 이미 전송된 응답도 새 입력의 결과로 표시하지 않는다.
+        await store.send(.searchSucceeded(generation: 1, books: [swift]))
+        await store.send(.searchFailed(generation: 1, message: "이전 오류"))
+        #expect(store.state.books.isEmpty)
+        #expect(!store.state.hasSearched)
+        #expect(store.state.recentQueries == ["스위프트"])
+        #expect(cache.load(.init(query: "스위프트", category: .all)) == nil)
         #expect(cache.load(.init(query: "과학", category: .all)) == nil)
     }
 
