@@ -228,9 +228,9 @@ extension View {
 
 // 피그마 장바구니 시안의 색상 토큰
 extension Color {
-    static let basketBackground = Color(red: 0x12 / 255, green: 0x12 / 255, blue: 0x12 / 255)
     static let basketCard = Color(red: 0x2B / 255, green: 0x2B / 255, blue: 0x2B / 255)
-    static let basketTextSecondary = Color(red: 0xF3 / 255, green: 0xF3 / 255, blue: 0xF3 / 255)
-    static let basketTextTertiary = Color(red: 0xD9 / 255, green: 0xD9 / 255, blue: 0xD9 / 255)
-    static let basketPrimary = Color(red: 0xDD / 255, green: 0xF5 / 255, blue: 0x3C / 255)
+    static let basketBackground = DS.background.default
+    static let basketTextSecondary = DS.text.secondary
+    static let basketTextTertiary = DS.text.tertiary
+    static let basketPrimary = DS.key.base
 }
