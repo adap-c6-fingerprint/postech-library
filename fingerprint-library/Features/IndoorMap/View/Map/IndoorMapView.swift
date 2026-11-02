@@ -5,6 +5,7 @@ import SwiftUI
 /// MapKit 객체의 생성·갱신은 ``IndoorMapKitView``에 위임한다.
 struct IndoorMapView: View {
     let store: StoreOf<IndoorMapFeature>
+    @State private var homeMarkerCache = HomeMapMarkerCache()
     /// 홈에서는 선택한 서가 카드를, 경로 화면에서는 계산한 경로와 목적지를 표시하도록 구분한다.
     var showsDestinationCard = true
     /// 책 상세에서는 다른 화면에서 계산한 서가·경로를 책 위치로 오인하지 않게 숨긴다.
@@ -60,7 +61,8 @@ struct IndoorMapView: View {
                                           bottom: bottomContentInset, right: 0),
                     shelfLabels: store.shelfLabels,
                     highlightedFeatureIDs: highlightedFeatureIDs,
-                    appearance: appearance
+                    appearance: appearance,
+                    homeMarkers: homeMarkers(on: map)
                 )
                 .ignoresSafeArea(.container, edges: extendsUnderBottomSafeArea ? .bottom : [])
 
@@ -128,11 +130,12 @@ struct IndoorMapView: View {
     }
 
     private var amenitiesButton: some View {
-        Button {} label: {
+        Button { store.send(.homeAnnotations(.amenitiesTapped)) } label: {
             HStack(alignment: .center, spacing: 10) {
                 Text("편의시설")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color(red: 0.88, green: 0.95, blue: 0.19))
+                    .foregroundStyle(store.homeAnnotations.showsAmenities
+                        ? Color(red: 0.88, green: 0.95, blue: 0.19) : .white)
                     .fixedSize()
             }
             .padding(.horizontal, 16)
@@ -144,6 +147,13 @@ struct IndoorMapView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("map-amenities")
+        .accessibilityValue(store.homeAnnotations.showsAmenities ? "표시 중" : "숨김")
+    }
+
+    private func homeMarkers(on map: IndoorMap) -> [HomeMapMarker] {
+        guard appearance == .home else { return [] }
+        return homeMarkerCache.markers(on: map, labels: store.shelfLabels,
+            holdings: store.homeAnnotations.holdings, showsAmenities: store.homeAnnotations.showsAmenities)
     }
 
     private var currentLocationButton: some View {

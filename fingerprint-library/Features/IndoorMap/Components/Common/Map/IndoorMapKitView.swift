@@ -34,6 +34,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var navigationDestination: BookNavigationMapDestination?
     var onUserCameraInteraction: () -> Void = {}
     var appearance: Appearance = .standard
+    var homeMarkers: [HomeMapMarker] = []
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -82,6 +83,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var renderedShelfLabels: [IndoorShelfLabel] = []
         private var shelfLabelAnnotations: [IndoorShelfLabelAnnotation] = []
         private var displayedShelfLabelIDs = Set<String>()
+        private let homeAnnotations = HomeMapAnnotationController()
         private var renderedRoute: IndoorRoute?
         private var renderedGroupTransitionNodes: [RouteNode] = []
         private var renderedTurnArrows: [RouteTurnArrow] = []
@@ -148,6 +150,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             updatePosition(in: view)
             updatePositionMarkerBearing(in: view)
             updateShelves(in: view)
+            homeAnnotations.update(parent.appearance == .home
+                ? parent.homeMarkers.filter { $0.floorID == parent.floor.id } : [], in: view)
             updateShelfLabels(in: view)
             updateRoute(in: view)
             if selectedID != parent.selectedFeatureID || highlightedIDs != parent.highlightedFeatureIDs {
@@ -278,7 +282,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 if left != right { return left }
                 return $0.2 == $1.2 ? $0.0.label.id < $1.0.label.id : $0.2 < $1.2
             }
-            var occupied: [CGRect] = []
+            var occupied = homeAnnotations.occupiedRects(in: view)
             var chosen: [IndoorShelfLabelAnnotation] = []
             for (annotation, frame, _) in candidates where !occupied.contains(where: { $0.intersects(frame) }) {
                 chosen.append(annotation)
@@ -406,7 +410,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             pendingOverlayRedrawIDs = Set(overlays.map { ObjectIdentifier($0) })
             view.addOverlays(overlays, level: .aboveRoads)
             view.addAnnotations(features.compactMap { feature in
-                guard feature.kind == .amenity, case .point(let coordinate) = feature.geometry else { return nil }
+                guard parent.appearance != .home, feature.kind == .amenity,
+                      case .point(let coordinate) = feature.geometry else { return nil }
                 return FeatureAnnotation(feature: feature, coordinate: coordinate.clCoordinate)
             })
         }
@@ -639,6 +644,9 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
+            if let annotation = annotation as? HomeMapPointAnnotation {
+                return HomeMapAnnotationController.view(for: annotation, in: mapView)
+            }
             if let annotation = annotation as? PositionAnnotation, parent.appearance == .home,
                annotation.position.source != .manual {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "home-user-position") as? HomeUserLocationAnnotationView

@@ -44,7 +44,10 @@ extension BookClient: DependencyKey {
                 throw BookClientError.invalidResponse
             }
             guard result.isSuccessful else { throw BookClientError.invalidResponse }
-            return try BookClient.books(from: result.data)
+            let books = try BookClient.books(from: result.data)
+            @Dependency(\.bookLocationCacheClient) var locations
+            locations.recordSearchResponse(result.data, books: books)
+            return books
         }
     )
 
