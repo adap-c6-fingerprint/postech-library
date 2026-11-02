@@ -34,7 +34,7 @@ struct RecommendationShelfView: View {
                     .opacity(0.4)
 
                 PlateOutline()
-                    .fill(DS.lime.C5E300.opacity(Design.fillOpacity))
+                    .fill(Color.limeDark.opacity(Design.fillOpacity))
 
                 // 원본 PNG의 채움만 가리고 테두리·반사광·그림자를 보존한다.
                 Image("RecommendationGlass")

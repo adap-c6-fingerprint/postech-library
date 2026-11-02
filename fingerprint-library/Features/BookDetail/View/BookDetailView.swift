@@ -60,7 +60,7 @@ struct BookDetailMapView: View {
         }
         .font(.system(size: 22, weight: .regular))
         .buttonStyle(.plain)
-        .foregroundStyle(DS.text.primary)
+        .foregroundStyle(Color.textPrimary)
         .buttonBorderShape(.circle)
         .padding(.horizontal, 16)
         .padding(.top, 8)
@@ -97,7 +97,7 @@ struct BookDetailView: View {
     var body: some View {
         detailContent
             .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
-            .foregroundStyle(DS.text.primary)
+            .foregroundStyle(Color.textPrimary)
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .alert("도서 안내", isPresented: $isNoticePresented) {
@@ -179,7 +179,7 @@ struct BookDetailView: View {
             }
             routeSummary
                 .bookDetailTypography(.caption1)
-                .foregroundStyle(DS.text.tertiary)
+                .foregroundStyle(Color.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -191,8 +191,8 @@ struct BookDetailView: View {
         case .loaded:
             if let holding = store.displayedHolding {
                 Text(holding.availabilityText)
-                    .foregroundStyle(holding.availability == "available" ? Color.green : DS.text.tertiary)
-            } else { Text("소장정보 없음").foregroundStyle(DS.text.tertiary) }
+                    .foregroundStyle(holding.availability == "available" ? Color.green : Color.textTertiary)
+            } else { Text("소장정보 없음").foregroundStyle(Color.textTertiary) }
         case .failed:
             VStack(alignment: .leading, spacing: 4) {
                 Text("소장정보를 불러오지 못했어요.")
@@ -219,7 +219,7 @@ struct BookDetailView: View {
             }
             descriptionContent
                 .bookDetailTypography(.caption1)
-                .foregroundStyle(DS.text.tertiary)
+                .foregroundStyle(Color.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -270,7 +270,7 @@ struct BookDetailView: View {
             .accessibilityLabel("장바구니에 담기")
             .accessibilityIdentifier("bookDetail.addToBasket")
         }
-        .foregroundStyle(DS.text.primary)
+        .foregroundStyle(Color.textPrimary)
         .padding(.horizontal, 16)
         .padding(.top, 16)
         .background {
