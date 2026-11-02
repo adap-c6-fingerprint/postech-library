@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Map_Perspective.png",
+      "filename" : "Property 1=tv.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "Property 1=tv 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Property 1=tv 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

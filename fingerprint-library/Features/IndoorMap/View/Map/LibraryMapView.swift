@@ -37,6 +37,11 @@ struct LibraryMapView: View {
             .task {
                 searchStore.send(.task)
             }
+            .task(id: searchStore.favoriteBookKeys) {
+                mapStore.send(.homeAnnotations(.favoritesChanged(searchStore.favoriteBookKeys)))
+            }
+            .task { await mapStore.send(.homeAnnotations(.task)).finish() }
+            .onDisappear { mapStore.send(.homeAnnotations(.disappeared)) }
             .navigationDestination(
                 item: $searchStore.scope(state: \.basket, action: \.basket)
             ) { basketStore in

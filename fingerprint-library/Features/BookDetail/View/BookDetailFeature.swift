@@ -101,6 +101,7 @@ struct BookDetailFeature {
 
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient
+    @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
 
     @Dependency(\.bookBasketClient) var bookBasketClient
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
@@ -150,6 +151,7 @@ struct BookDetailFeature {
 
             case let .holdingsLoaded(holding):
                 state.holdingsState = .loaded(holding)
+                bookLocationCacheClient.record(state.book, holding)
                 return .none
 
             case .holdingsFailed:

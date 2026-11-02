@@ -52,6 +52,7 @@ struct BookShelfMapFeature {
     }
 
     @Dependency(\.bookHoldingsClient) var holdingsClient
+    @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     private nonisolated enum CancelID: Hashable, Sendable { case holdings(Book.ID) }
 
     var body: some Reducer<State, Action> {
@@ -71,6 +72,9 @@ struct BookShelfMapFeature {
                 guard state.holdings[bookID] == .loading,
                       state.holdingRequestIDs[bookID] == requestID else { return .none }
                 state.holdings[bookID] = .loaded(holdings)
+                if let book = state.books.first(where: { $0.id == bookID }) {
+                    bookLocationCacheClient.record(book, holdings)
+                }
                 return .send(.resolveLocations)
 
             case .holdingsFailed(let bookID, let requestID, let message):

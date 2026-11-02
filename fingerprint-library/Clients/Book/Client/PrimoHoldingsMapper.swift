@@ -3,17 +3,31 @@ import Foundation
 /// 실제 POSTECH 응답의 최상위 delivery를 우선한다. 문서의 pnx.delivery와 PNX 대체 표기도 수용한다.
 nonisolated enum PrimoHoldingsMapper {
     static func decode(_ data: Data, recordID: String) throws -> [BookHolding] {
+        try decodeAll(data)[recordID] ?? []
+    }
+
+    /// 일반 검색 응답에 이미 포함된 소장을 한 번만 해석한다. 추가 요청은 만들지 않는다.
+    static func decodeAll(_ data: Data) throws -> [String: [BookHolding]] {
         let response = try JSONDecoder().decode(Response.self, from: data)
-        guard let document = response.docs.first(where: {
-            $0.pnx?.control?.recordid?.contains(recordID) == true
-        }), let pnx = document.pnx else {
-            return []
+        var result: [String: [BookHolding]] = [:]
+        for document in response.docs {
+            guard let pnx = document.pnx else { continue }
+            guard let holdings = holdings(in: document, pnx: pnx) else { continue }
+            for recordID in pnx.control?.recordid ?? [] where result[recordID] == nil {
+                result[recordID] = holdings
+            }
         }
+        return result
+    }
+
+    private static func holdings(in document: Document, pnx: PNX) -> [BookHolding]? {
         // 명시적인 빈 holding 목록은 소장 정보 없음이다. 대체 필드로 과거 위치를 되살리지 않는다.
         let delivery = document.delivery ?? pnx.delivery
         if let holdings = delivery?.holding { return unique(holdings.map(\.value)) }
         if let best = delivery?.bestlocation { return [best.value] }
-        return unique((pnx.display?.availlibrary ?? []).compactMap(parseAvailability))
+        // 필드 누락은 기존 위치를 지우는 근거가 아니다. 빈 목록이 명시된 경우에만 []를 반환한다.
+        guard let availability = pnx.display?.availlibrary else { return nil }
+        return unique(availability.compactMap(parseAvailability))
     }
 
     private static func unique(_ holdings: [BookHolding]) -> [BookHolding] {
