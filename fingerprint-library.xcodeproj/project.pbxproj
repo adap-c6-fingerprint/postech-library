@@ -35,6 +35,26 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		14837A08309830EC002599A7 /* Exceptions for "fingerprint-library" folder in "IndoorMapTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Resources/Fonts/Pretendard-Bold.otf",
+				"Resources/Fonts/Pretendard-Medium.otf",
+				"Resources/Fonts/Pretendard-Regular.otf",
+				"Resources/Fonts/Pretendard-SemiBold.otf",
+			);
+			target = C50000000000000000000006 /* IndoorMapTests */;
+		};
+		14837A09309830EC002599A7 /* Exceptions for "fingerprint-library" folder in "BookDetailTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Resources/Fonts/Pretendard-Bold.otf",
+				"Resources/Fonts/Pretendard-Medium.otf",
+				"Resources/Fonts/Pretendard-Regular.otf",
+				"Resources/Fonts/Pretendard-SemiBold.otf",
+			);
+			target = B40000000000000000000006 /* BookDetailTests */;
+		};
 		1D8568C53081F84A00994B14 /* Exceptions for "fingerprint-library" folder in "fingerprint-library" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -49,6 +69,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				1D8568C53081F84A00994B14 /* Exceptions for "fingerprint-library" folder in "fingerprint-library" target */,
+				14837A08309830EC002599A7 /* Exceptions for "fingerprint-library" folder in "IndoorMapTests" target */,
+				14837A09309830EC002599A7 /* Exceptions for "fingerprint-library" folder in "BookDetailTests" target */,
 			);
 			explicitFolders = (
 				Resources/IndoorMaps,
@@ -453,7 +475,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.youngmin.fingerprint-library";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sano.fingerprint-library";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -498,7 +520,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.youngmin.fingerprint-library";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sano.fingerprint-library";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
