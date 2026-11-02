@@ -109,6 +109,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         func makeMapView() -> IndoorMapSurface {
             let view = IndoorMapSurface()
             view.delegate = self
+            view.overrideUserInterfaceStyle = .dark
             let configuration = MKStandardMapConfiguration(elevationStyle: .flat)
             configuration.pointOfInterestFilter = .excludingAll
             view.preferredConfiguration = configuration
@@ -145,7 +146,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 || renderedAppearance != parent.appearance {
                 render(in: view)
             }
-            view.overrideUserInterfaceStyle = parent.navigationAppearance ? .dark : .unspecified
+            view.overrideUserInterfaceStyle = .dark
             view.showsUserLocation = parent.showsUserLocation && parent.appearance != .home
             updatePosition(in: view)
             updatePositionMarkerBearing(in: view)
@@ -591,6 +592,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 renderer.lineWidth = 0.5
                 let shade: CGFloat = feature?.kind == .fixture ? 0.09 : (feature?.category == "walkway" ? 0.22 : 0.17)
                 renderer.fillColor = UIColor(white: shade, alpha: 1)
+                IndoorMapPalette.apply(to: renderer, feature: feature, floorOrdinal: parent.floor.ordinal)
                 if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
                     renderer.fillColor = BookNavigationPalette.uiAccent
                     renderer.strokeColor = BookNavigationPalette.uiAccent
@@ -608,6 +610,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                     renderer.strokeColor = UIColor(white: 0.35, alpha: 1)
                 default: renderer.fillColor = UIColor(white: 0.23, alpha: 1)
                 }
+                IndoorMapPalette.apply(to: renderer, feature: feature, floorOrdinal: parent.floor.ordinal)
                 if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
                     renderer.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
                     renderer.strokeColor = .systemOrange
@@ -629,6 +632,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 renderer.strokeColor = .white
             default: renderer.fillColor = UIColor.systemGray6.withAlphaComponent(0.95)
             }
+            IndoorMapPalette.apply(to: renderer, feature: feature, floorOrdinal: parent.floor.ordinal)
             if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
                 renderer.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
                 renderer.strokeColor = .systemOrange
