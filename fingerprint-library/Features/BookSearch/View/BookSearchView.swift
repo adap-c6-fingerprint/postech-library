@@ -10,7 +10,6 @@ import ComposableArchitecture
 
 struct BookSearchView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-    let isEditingSearch: Bool
     let onShowBasket: () -> Void
     @Environment(\.dismissSearch) private var dismissSearch
     
@@ -50,7 +49,7 @@ struct BookSearchView: View {
         Group {
             if store.isLoading && store.books.isEmpty {
                 ProgressView("책을 찾고 있어요")
-            } else if isEditingSearch || !store.hasSearched
+            } else if !store.hasSearched
                         || store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 recentItems
             } else if store.errorMessage != nil {

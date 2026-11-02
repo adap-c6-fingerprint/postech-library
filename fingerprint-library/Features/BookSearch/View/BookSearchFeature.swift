@@ -210,8 +210,18 @@ struct BookSearchFeature {
                 return .none
 
             case let .queryChanged(query):
+                let previousQuery = state.query.trimmingCharacters(in: .whitespacesAndNewlines)
                 state.query = query
-                return .none
+                guard previousQuery != query.trimmingCharacters(in: .whitespacesAndNewlines),
+                      state.hasSearched || state.isLoading || !state.books.isEmpty
+                        || state.errorMessage != nil else { return .none }
+                // 새 입력에는 이전 검색의 결과나 늦게 도착한 응답을 표시하지 않는다.
+                state.searchGeneration += 1
+                state.books = []
+                state.isLoading = false
+                state.errorMessage = nil
+                state.hasSearched = false
+                return .cancel(id: CancelID.search)
 
             case let .categoryChanged(category):
                 guard state.category != category else { return .none }

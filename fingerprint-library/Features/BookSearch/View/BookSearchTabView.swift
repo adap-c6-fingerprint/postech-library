@@ -10,13 +10,11 @@ import SwiftUI
 
 struct BookSearchTabView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-    @Environment(\.isSearching) private var isSearching
 
     var body: some View {
         NavigationStack {
             BookSearchView(
                 store: store,
-                isEditingSearch: isSearching,
                 onShowBasket: {
                     store.send(.basketButtonTapped)
                 }
