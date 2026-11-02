@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import Foundation
 import Testing
 @testable import fingerprint_library
@@ -76,11 +77,80 @@ struct BookLocationCacheClientTests {
         let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma991000000001"]},"display":{"title":["이미 검색한 책"]}},"delivery":{"holding":[{"organization":"82POSTECH_INST","libraryCode":"MAIN","subLocationCode":"c3b","callNumber":"RC263 .R632 1990"}]}},{"pnx":{"control":{"recordid":["alma991000000002"]},"display":{"title":["소장이 없는 책"]}},"delivery":{"holding":[],"bestlocation":{"callNumber":"되살리면 안 되는 위치"}}}] }"#.utf8)
         let books = try BookClient.books(from: data)
         let cache = BookLocationCacheClient.userDefaults(suiteName: suite)
+        cache.record(books[1], [BookHoldingTestData.holding()])
         cache.recordSearchResponse(data, books: books)
         let restored = BookLocationCacheClient.userDefaults(suiteName: suite)
         #expect(restored.load([books[0].recordKey])[books[0].recordKey]?.first?.callNumber == "RC263 .R632 1990")
         #expect(restored.load([books[1].recordKey])[books[1].recordKey] == [])
         #expect(try PrimoHoldingsMapper.decode(data, recordID: "alma991000000001").count == 1)
         #expect(try PrimoHoldingsMapper.decode(data, recordID: "alma999999999999").isEmpty)
+    }
+
+    @Test("소장 필드가 누락되거나 빈 객체인 검색 응답은 저장된 위치를 지우지 않는다", arguments: [
+        #"{"pnx":{"control":{"recordid":["alma991000000001"]},"display":{"title":["검색 결과"]}}}"#,
+        #"{"pnx":{"control":{"recordid":["alma991000000001"]},"display":{"title":["검색 결과"]}},"delivery":{}}"#,
+        #"{"pnx":{"control":{"recordid":["alma991000000001"]},"display":{"title":["검색 결과"]},"delivery":{}}}"#,
+        #"{"pnx":{"control":{"recordid":["alma991000000001"]},"display":{"title":["검색 결과"],"availlibrary":null}}}"#
+    ])
+    func preservesLocationWhenSearchOmitsHoldings(document: String) throws {
+        let suite = "location-cache-\(UUID())"
+        defer { UserDefaults(suiteName: suite)?.removePersistentDomain(forName: suite) }
+        let data = Data("{\"docs\":[\(document)]}".utf8)
+        let books = try BookClient.books(from: data)
+        let book = try #require(books.first)
+        let previous = [BookHoldingTestData.holding()]
+        let cache = BookLocationCacheClient.userDefaults(suiteName: suite)
+        cache.record(book, previous)
+        cache.recordSearchResponse(data, books: books)
+        #expect(try PrimoHoldingsMapper.decodeAll(data)["alma991000000001"] == nil)
+        #expect(try PrimoHoldingsMapper.decode(data, recordID: "alma991000000001").isEmpty)
+        #expect(cache.load([book.recordKey])[book.recordKey] == previous)
+        #expect(BookLocationCacheClient.userDefaults(suiteName: suite).load([book.recordKey])[book.recordKey] == previous)
+    }
+
+    @Test("PNX에 빈 소장 목록이 명시되면 기존 위치를 제거하고 빈 결과를 복원한다")
+    func clearsLocationForExplicitEmptyAvailability() throws {
+        let suite = "location-cache-\(UUID())"
+        defer { UserDefaults(suiteName: suite)?.removePersistentDomain(forName: suite) }
+        let data = Data(#"{"docs":[{"pnx":{"control":{"recordid":["alma991000000001"]},"display":{"title":["검색 결과"],"availlibrary":[]}}}]}"#.utf8)
+        let books = try BookClient.books(from: data)
+        let book = try #require(books.first)
+        let cache = BookLocationCacheClient.userDefaults(suiteName: suite)
+        cache.record(book, [BookHoldingTestData.holding()])
+        cache.recordSearchResponse(data, books: books)
+        #expect(cache.load([book.recordKey])[book.recordKey] == [])
+        #expect(BookLocationCacheClient.userDefaults(suiteName: suite).load([book.recordKey])[book.recordKey] == [])
+    }
+
+    @Test("검색 결과의 추가·변경·명시적 빈 소장을 한 배치로 저장하고 모두 복원한다")
+    func recordsSearchResultsInOneBatch() throws {
+        let suite = "location-cache-\(UUID())"
+        defer { UserDefaults(suiteName: suite)?.removePersistentDomain(forName: suite) }
+        let documents: [[String: Any]] = (1...3).map { index in
+            ["pnx": ["control": ["recordid": ["alma99100000000\(index)"]],
+                     "display": ["title": ["검색 결과 \(index)"]]],
+             "delivery": ["holding": index == 3 ? [] : [["callNumber": "RC\(index)"]]]]
+        }
+        let data = try JSONSerialization.data(withJSONObject: ["docs": documents])
+        let books = try BookClient.books(from: data)
+        try #require(books.count == 3)
+        var cache = BookLocationCacheClient.userDefaults(suiteName: suite)
+        cache.record(books[0], [BookHoldingTestData.holding()])
+        cache.record(books[2], [BookHoldingTestData.holding()])
+        let batch = try #require(cache.recordBatch)
+        let batchCalls = LockIsolated(0)
+        cache.recordBatch = { entries in
+            batchCalls.withValue { $0 += 1 }
+            batch(entries)
+        }
+        cache.record = { _, _ in Issue.record("검색 결과를 책마다 따로 기록하면 안 된다") }
+        cache.recordSearchResponse(data, books: books)
+        #expect(batchCalls.value == 1)
+        let keys = Set(books.map(\.recordKey))
+        let saved = cache.load(keys)
+        #expect(saved[books[0].recordKey]?.first?.callNumber == "RC1")
+        #expect(saved[books[1].recordKey]?.first?.callNumber == "RC2")
+        #expect(saved[books[2].recordKey] == [])
+        #expect(BookLocationCacheClient.userDefaults(suiteName: suite).load(keys) == saved)
     }
 }

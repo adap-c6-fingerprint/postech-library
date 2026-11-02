@@ -7,6 +7,7 @@ nonisolated struct BookLocationCacheClient: Sendable {
     var record: @Sendable (_ book: Book, _ holdings: [BookHolding]) -> Void
     var updates: @Sendable () -> AsyncStream<Void>
     var prepare: @Sendable () async -> Void = {}
+    var recordBatch: (@Sendable ([(Book, [BookHolding])]) -> Void)? = nil
 
     static func userDefaults(suiteName: String? = nil) -> Self {
         let store = LocalBookLocationStore(suiteName: suiteName)
@@ -14,15 +15,20 @@ nonisolated struct BookLocationCacheClient: Sendable {
         return Self(load: { store.load($0) }, record: { store.record($0, holdings: $1) }, updates: { store.updates() }, prepare: {
             guard let entries = try? await bundled.load(), !Task.isCancelled else { return }
             store.seed(entries)
-        })
+        }, recordBatch: { store.recordBatch($0) })
     }
 
     func recordSearchResponse(_ data: Data, books: [Book]) {
         guard let decoded = try? PrimoHoldingsMapper.decodeAll(data) else { return }
-        for book in books {
-            if let id = BookHoldingsClient.recordID(for: book), let holdings = decoded[id] {
-                record(book, holdings)
-            }
+        let entries = books.compactMap { book -> (Book, [BookHolding])? in
+            guard let id = BookHoldingsClient.recordID(for: book), let holdings = decoded[id] else { return nil }
+            return (book, holdings)
+        }
+        guard !entries.isEmpty else { return }
+        if let recordBatch {
+            recordBatch(entries)
+        } else {
+            for (book, holdings) in entries { record(book, holdings) }
         }
     }
 }
@@ -84,10 +90,21 @@ private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
     }
 
     func record(_ book: Book, holdings: [BookHolding]) {
-        let entry = Entry(key: Self.normalized(book.recordKey), isbn: BookISBN.isbn13(from: book.isbn), holdings: holdings)
+        recordBatch([(book, holdings)])
+    }
+
+    /// 검색 한 번의 변경을 모두 반영한 뒤 전체 저장과 변경 알림을 한 번만 수행한다.
+    func recordBatch(_ books: [(Book, [BookHolding])]) {
+        let updates = books.map { book, holdings in
+            Entry(key: Self.normalized(book.recordKey), isbn: BookISBN.isbn13(from: book.isbn), holdings: holdings)
+        }
         let listeners = lock.withLock { () -> [AsyncStream<Void>.Continuation] in
-            guard entries[entry.key] != entry else { return [] }
-            entries[entry.key] = entry
+            var changed = false
+            for entry in updates where entries[entry.key] != entry {
+                entries[entry.key] = entry
+                changed = true
+            }
+            guard changed else { return [] }
             if let data = try? JSONEncoder().encode(Array(entries.values)) { defaults.set(data, forKey: Self.storageKey) }
             return Array(observers.values)
         }

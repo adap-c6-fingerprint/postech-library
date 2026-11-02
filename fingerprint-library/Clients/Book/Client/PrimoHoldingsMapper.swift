@@ -12,7 +12,7 @@ nonisolated enum PrimoHoldingsMapper {
         var result: [String: [BookHolding]] = [:]
         for document in response.docs {
             guard let pnx = document.pnx else { continue }
-            let holdings = holdings(in: document, pnx: pnx)
+            guard let holdings = holdings(in: document, pnx: pnx) else { continue }
             for recordID in pnx.control?.recordid ?? [] where result[recordID] == nil {
                 result[recordID] = holdings
             }
@@ -20,12 +20,14 @@ nonisolated enum PrimoHoldingsMapper {
         return result
     }
 
-    private static func holdings(in document: Document, pnx: PNX) -> [BookHolding] {
+    private static func holdings(in document: Document, pnx: PNX) -> [BookHolding]? {
         // 명시적인 빈 holding 목록은 소장 정보 없음이다. 대체 필드로 과거 위치를 되살리지 않는다.
         let delivery = document.delivery ?? pnx.delivery
         if let holdings = delivery?.holding { return unique(holdings.map(\.value)) }
         if let best = delivery?.bestlocation { return [best.value] }
-        return unique((pnx.display?.availlibrary ?? []).compactMap(parseAvailability))
+        // 필드 누락은 기존 위치를 지우는 근거가 아니다. 빈 목록이 명시된 경우에만 []를 반환한다.
+        guard let availability = pnx.display?.availlibrary else { return nil }
+        return unique(availability.compactMap(parseAvailability))
     }
 
     private static func unique(_ holdings: [BookHolding]) -> [BookHolding] {
