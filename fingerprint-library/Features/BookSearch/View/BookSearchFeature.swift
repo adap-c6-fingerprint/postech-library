@@ -17,7 +17,11 @@ struct BookSearchFeature {
         var query: String = ""
         var category: BookSearchCategory = .all
         var searchGeneration: Int = 0
+        // 검색어 기록은 추천 입력으로 유지하고, 화면에는 선택한 도서를 표시한다.
         var recentQueries: [String] = []
+        var recentBooks: [Book] = []
+        var recentBookInfo: [Book.ID: RecentBookInfoState] = [:]
+        var recentBookInfoGeneration = 0
         var favoriteBookKeys: Set<[String?]> = []
         var books: [Book] = []
         var isLoading: Bool = false
@@ -31,9 +35,20 @@ struct BookSearchFeature {
         @Presents var shelfMap: BookShelfMapFeature.State?
     }
     
+    enum RecentBookInfoState: Equatable {
+        case loading
+        case loaded(BookCardLibraryInfo)
+        case unavailable
+        case failed
+    }
+
     // 이 기능에서 발생할 수 있는 이벤트
     enum Action {
         case task
+        case loadRecentBookInfo
+        case recentBookInfoLoaded(generation: Int, Book.ID, [BookHolding])
+        case recentBookInfoFailed(generation: Int, Book.ID)
+        case recentBookInfoCancelled
         case queryChanged(String)
         case categoryChanged(BookSearchCategory)
         case searchCancelled
@@ -62,6 +77,12 @@ struct BookSearchFeature {
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
 
+    @Dependency(\.recentSearchBooksClient)
+    var recentSearchBooksClient: RecentSearchBooksClient
+
+    @Dependency(\.bookHoldingsClient)
+    var bookHoldingsClient: BookHoldingsClient
+
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient: BookFavoritesClient
 
@@ -73,6 +94,7 @@ struct BookSearchFeature {
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case search
+        case recentBookInfo
     }
     
     // Action을 받아 State를 바꾸고, 필요한 Effect를 반환
@@ -81,9 +103,29 @@ struct BookSearchFeature {
             switch action {
             case .task:
                 state.recentQueries = searchHistoryClient.load()
+                state.recentBooks = recentSearchBooksClient.load()
                 state.favoriteBookKeys = bookFavoritesClient.load()
                 state.basketBooks = bookBasketClient.load().map(\.book)
                 return .none
+
+            case .loadRecentBookInfo:
+                return loadRecentBookInfo(state: &state)
+
+            case let .recentBookInfoLoaded(generation, bookID, holdings):
+                guard state.recentBookInfoGeneration == generation,
+                      state.recentBooks.contains(where: { $0.id == bookID }) else { return .none }
+                state.recentBookInfo[bookID] = .loaded(.init(holdings: holdings))
+                return .none
+
+            case let .recentBookInfoFailed(generation, bookID):
+                guard state.recentBookInfoGeneration == generation,
+                      state.recentBooks.contains(where: { $0.id == bookID }) else { return .none }
+                state.recentBookInfo[bookID] = .failed
+                return .none
+
+            case .recentBookInfoCancelled:
+                state.recentBookInfoGeneration += 1
+                return .cancel(id: CancelID.recentBookInfo)
 
             case let .favoriteButtonTapped(book):
                 state.favoriteBookKeys = bookFavoritesClient.load()
@@ -101,6 +143,8 @@ struct BookSearchFeature {
                 return .none
 
             case let .bookSelected(book):
+                recentSearchBooksClient.record(book)
+                state.recentBooks = recentSearchBooksClient.load()
                 state.favoriteBookKeys = bookFavoritesClient.load()
                 state.detail = BookDetailFeature.State(
                     book: book, isFavorite: state.favoriteBookKeys.contains(book.recordKey)
@@ -166,8 +210,18 @@ struct BookSearchFeature {
                 return .none
 
             case let .queryChanged(query):
+                let previousQuery = state.query.trimmingCharacters(in: .whitespacesAndNewlines)
                 state.query = query
-                return .none
+                guard previousQuery != query.trimmingCharacters(in: .whitespacesAndNewlines),
+                      state.hasSearched || state.isLoading || !state.books.isEmpty
+                        || state.errorMessage != nil else { return .none }
+                // 새 입력에는 이전 검색의 결과나 늦게 도착한 응답을 표시하지 않는다.
+                state.searchGeneration += 1
+                state.books = []
+                state.isLoading = false
+                state.errorMessage = nil
+                state.hasSearched = false
+                return .cancel(id: CancelID.search)
 
             case let .categoryChanged(category):
                 guard state.category != category else { return .none }
@@ -239,6 +293,42 @@ struct BookSearchFeature {
         .ifLet(\.$shelfMap, action: \.shelfMap) {
             BookShelfMapFeature()
         }
+    }
+
+    private func loadRecentBookInfo(state: inout State) -> Effect<Action> {
+        state.recentBookInfoGeneration += 1
+        let generation = state.recentBookInfoGeneration
+        state.recentBookInfo = [:]
+        var requests: [(bookID: Book.ID, recordID: String)] = []
+        for book in state.recentBooks {
+            guard let recordID = BookHoldingsClient.recordID(for: book) else {
+                state.recentBookInfo[book.id] = .unavailable
+                continue
+            }
+            state.recentBookInfo[book.id] = .loading
+            requests.append((book.id, recordID))
+        }
+        return .run { [bookHoldingsClient, requests] send in
+            // 도서 목록은 즉시 표시하고, 소장 정보는 최대 3권씩 조회한다.
+            for start in stride(from: 0, to: requests.count, by: 3) {
+                guard !Task.isCancelled else { return }
+                await withTaskGroup(of: Void.self) { group in
+                    for request in requests[start..<min(start + 3, requests.count)] {
+                        group.addTask {
+                            do {
+                                let holdings = try await bookHoldingsClient.fetch(request.recordID)
+                                try Task.checkCancellation()
+                                await send(.recentBookInfoLoaded(generation: generation, request.bookID, holdings))
+                            } catch {
+                                guard !Task.isCancelled else { return }
+                                await send(.recentBookInfoFailed(generation: generation, request.bookID))
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .cancellable(id: CancelID.recentBookInfo, cancelInFlight: true)
     }
 
     private func search(

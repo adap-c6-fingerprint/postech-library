@@ -69,10 +69,13 @@ struct BookSearchHistoryTests {
         await store.receive(\.searchSucceeded) { $0.isLoading = false }
         #expect(history.load() == ["사피엔스", "코스모스"])
 
-        await store.send(.queryChanged(" \n")) { $0.query = " \n" }
-        await store.send(.searchButtonTapped) {
+        await store.send(.queryChanged(" \n")) {
+            $0.query = " \n"
             $0.searchGeneration += 1
             $0.hasSearched = false
+        }
+        await store.send(.searchButtonTapped) {
+            $0.searchGeneration += 1
         }
         #expect(history.load() == ["사피엔스", "코스모스"])
     }

@@ -10,52 +10,24 @@ import ComposableArchitecture
 
 struct BookSearchView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-    let isEditingSearch: Bool
-    let onSelectRecentQuery: (String) -> Void
     let onShowBasket: () -> Void
+    @Environment(\.dismissSearch) private var dismissSearch
     
     var body: some View {
         VStack(spacing: 0) {
-            header
             categoryPicker
             searchContent
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Color(white: 17.0 / 255.0))
         .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
             store.send(.basketLimitAlertDismissed)
         }
-        .toolbar(.hidden, for: .navigationBar)
-        .safeAreaInset(edge: .bottom) {
-            if !store.basketBooks.isEmpty {
-                Button(action: onShowBasket) {
-                    Label(
-                        "책바구니 바로가기 (\(store.basketBooks.count)권)",
-                        systemImage: "basket"
-                    )
-                    .frame(maxWidth: .infinity, minHeight: 44)
-                }
-                .glassEffect()
-                .buttonStyle(.glassProminent)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(.bar)
-            }
+        .toolbar {
+            LibraryTopBar(title: "검색", onBasket: onShowBasket)
         }
-    }
-
-    private var header: some View {
-        HStack(spacing: 4) {
-            Text("검색")
-                .font(.system(size: 28, weight: .bold))
-            Spacer()
-            headerButton("cart", label: "책바구니", action: onShowBasket)
-            headerButton("person", label: "마이페이지", action: {})
-                .disabled(true) // 마이페이지 화면 연결 후 활성화
-        }
-        .padding(.leading, 16)
-        .padding(.trailing, 8)
-        .padding(.vertical, 8)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
     }
 
     private var categoryPicker: some View {
@@ -72,50 +44,24 @@ struct BookSearchView: View {
         .padding(.bottom, 16)
     }
 
-    private func headerButton(
-        _ symbol: String, label: String, action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Image(systemName: symbol)
-                .font(.system(size: 22))
-                .frame(width: 44, height: 44)
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(.primary)
-        .accessibilityLabel(label)
-    }
-
     @ViewBuilder
     private var searchContent: some View {
         Group {
             if store.isLoading && store.books.isEmpty {
                 ProgressView("책을 찾고 있어요")
-            } else if isEditingSearch || !store.hasSearched
+            } else if !store.hasSearched
                         || store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                searchHistory
+                recentItems
             } else if store.errorMessage != nil {
-                ContentUnavailableView {
-                    Label(
-                        "검색을 완료하지 못했어요",
-                        systemImage: "exclamationmark.magnifyingglass"
-                    )
-                } description: {
-                    Text("잠시 후 다시 시도해 주세요.")
-                } actions: {
-                    Button("다시 시도") {
-                        store.send(.searchButtonTapped)
-                    }
-                }
+                searchStatus(
+                    title: "검색 실패",
+                    message: "검색 중 문제가 발생했어요.\n다시 시도해주세요."
+                )
             } else if store.books.isEmpty {
-                ContentUnavailableView {
-                    Label("검색 결과가 없어요", systemImage: "magnifyingglass")
-                } description: {
-                    Text("다른 검색어로 찾아보세요.")
-                } actions: {
-                    Button("다시 검색") {
-                        store.send(.refreshButtonTapped)
-                    }
-                }
+                searchStatus(
+                    title: "검색 결과 없음",
+                    message: "결과가 없어요. 새로운 검색을 시도해보세요."
+                )
             } else {
                 ScrollView {
                     LazyVStack(spacing: 12) {
@@ -147,38 +93,101 @@ struct BookSearchView: View {
         }
     }
 
-    @ViewBuilder
-    private var searchHistory: some View {
-        if matchingRecentQueries.isEmpty {
-            ContentUnavailableView(
-                "어떤 책을 찾으시나요?",
-                systemImage: "books.vertical",
-                description: Text("제목이나 저자 이름을 입력하고 검색해 주세요.")
-            )
-        } else {
-            List {
-                Section("최근 검색어") {
-                    ForEach(matchingRecentQueries, id: \.self) { keyword in
-                        Button {
-                            onSelectRecentQuery(keyword)
-                        } label: {
-                            Label(keyword, systemImage: "clock")
-                                .foregroundStyle(.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .contentShape(Rectangle())
-                        }
-                        .accessibilityHint("이 검색어로 도서 검색")
-                    }
-                }
-            }
-            .listStyle(.plain)
-            .scrollDismissesKeyboard(.interactively)
+    private func searchStatus(title: String, message: String) -> some View {
+        VStack(spacing: 8) {
+            Text(title)
+                .font(.title2.weight(.semibold))
+                .foregroundStyle(.white)
+                .accessibilityAddTraits(.isHeader)
+
+            Text(message)
+                .font(.callout)
+                .foregroundStyle(.white.opacity(0.8))
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .multilineTextAlignment(.center)
+        .padding(.horizontal, 24)
+        // 상단 필터와 하단 검색창 사이에서 시안의 메시지 중심을 맞춘다.
+        .padding(.bottom, 96)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .combine)
     }
 
-    private var matchingRecentQueries: [String] {
-        let keyword = store.query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !keyword.isEmpty else { return store.recentQueries }
-        return store.recentQueries.filter { $0.localizedStandardContains(keyword) }
+    @ViewBuilder
+    private var recentItems: some View {
+        if store.recentBooks.isEmpty {
+            ContentUnavailableView(
+                "최근 항목이 없어요",
+                systemImage: "books.vertical",
+                description: Text("검색 결과에서 선택한 책이 여기에 표시돼요.")
+            )
+        } else {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("최근 항목")
+                        .font(.title3.bold())
+                        .accessibilityAddTraits(.isHeader)
+
+                    LazyVStack(spacing: 0) {
+                        ForEach(store.recentBooks) { book in
+                            RecentSearchBookRow(
+                                book: book,
+                                libraryInfo: store.recentBookInfo[book.id],
+                                onSelect: {
+                                    dismissSearch()
+                                    store.send(.bookSelected(book))
+                                }
+                            )
+                            if book.id != store.recentBooks.last?.id {
+                                Divider().padding(.horizontal, 16)
+                            }
+                        }
+                    }
+                    .background(Color(.secondarySystemGroupedBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .task {
+                await store.send(.loadRecentBookInfo).finish()
+            }
+            .onDisappear {
+                store.send(.recentBookInfoCancelled)
+            }
+            .refreshable {
+                await store.send(.loadRecentBookInfo).finish()
+            }
+        }
+    }
+}
+
+#Preview("검색 결과 없음") {
+    BookSearchStatusPreview(errorMessage: nil)
+}
+
+#Preview("검색 실패") {
+    BookSearchStatusPreview(errorMessage: "미리보기 오류")
+}
+
+private struct BookSearchStatusPreview: View {
+    let errorMessage: String?
+
+    var body: some View {
+        NavigationStack {
+            BookSearchView(
+                store: Store(initialState: BookSearchFeature.State(
+                    query: "검색어", errorMessage: errorMessage, hasSearched: true
+                )) {
+                    BookSearchFeature()
+                },
+                onShowBasket: {}
+            )
+        }
+        .searchable(text: .constant("검색어"), prompt: "책 제목이나 저자를 검색하세요")
+        .searchPresentationToolbarBehavior(.avoidHidingContent)
+        .preferredColorScheme(.dark)
     }
 }
