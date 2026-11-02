@@ -6,6 +6,24 @@ struct HomeView: View {
     let mapStore: StoreOf<IndoorMapFeature>
     @State private var recommendationPosition: Int? = 0
 
+    private var recommendationLayout: RecommendationLayout {
+        store.isRecommendationExpanded ? .expanded : .standard
+    }
+
+    private enum RecommendationLayout {
+        case standard
+        case expanded
+
+        var coverWidth: CGFloat { self == .expanded ? 208 : 140 }
+        var coverHeight: CGFloat { self == .expanded ? 306 : 206 }
+        var coverCornerRadius: CGFloat { self == .expanded ? 14 : 10 }
+        var spacing: CGFloat { self == .expanded ? 22 : 16 }
+        var horizontalInset: CGFloat { self == .expanded ? 66 : 48 }
+        var bottomInset: CGFloat { self == .expanded ? 22 : 14 }
+        var shelfHeight: CGFloat { self == .expanded ? 156 : 106 }
+        var carouselHeight: CGFloat { coverHeight + bottomInset }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
@@ -66,20 +84,11 @@ struct HomeView: View {
     
     private var recommendationSection: some View {
         VStack(alignment: .leading, spacing: 20) {
-            HStack(alignment: .bottom) {
-                Text("당신에게\n추천하는 책 \(store.recommendationCount)선.")
-                    .font(.system(size: 18, weight: .medium))
-                    .lineSpacing(4)
-                    .fixedSize(horizontal: false, vertical: true)
-                
-                Spacer()
-                
-                HStack(spacing: 0) {
-                    recommendationButton(direction: -1)
-                    recommendationButton(direction: 1)
-                }
-            }
-            .padding(.horizontal, 16)
+            Text("당신에게\n추천하는 책 \(store.recommendationCount)선.")
+                .font(.system(size: 22, weight: .semibold))
+                .lineSpacing(4)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 16)
             
             if store.recommendedBooks.isEmpty {
                 if store.isLoadingRecommendations || store.recommendationSessionID == nil {
@@ -89,7 +98,7 @@ struct HomeView: View {
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
-                    .frame(maxWidth: .infinity, minHeight: 206)
+                    .frame(maxWidth: .infinity, minHeight: recommendationLayout.carouselHeight)
                 }
             } else {
                 recommendationCarousel
@@ -113,36 +122,42 @@ struct HomeView: View {
     }
 
     private var recommendationCarousel: some View {
-        ZStack(alignment: .bottom) {
-                ScrollView(.horizontal) {
-                    LazyHStack(alignment: .bottom, spacing: 12) {
-                        ForEach(
-                            Array(store.recommendedBooks.prefix(6).enumerated()),
-                            id: \.element.id
-                        ) { index, book in
-                            
-                            Button {
-                                store.send(.bookSelected(book))
-                            } label: {
-                                HomeBookCover(book: book, width: 122, height: 180)
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityLabel(book.title)
-                            .id(index)
-                        }
+        ScrollView(.horizontal) {
+            LazyHStack(alignment: .bottom, spacing: recommendationLayout.spacing) {
+                ForEach(
+                    Array(store.recommendedBooks.prefix(6).enumerated()),
+                    id: \.element.id
+                ) { index, book in
+                    Button {
+                        store.send(.bookSelected(book))
+                    } label: {
+                        HomeBookCover(
+                            book: book,
+                            width: recommendationLayout.coverWidth,
+                            height: recommendationLayout.coverHeight
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: recommendationLayout.coverCornerRadius))
                     }
-                    .scrollTargetLayout()
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(book.title)
+                    .id(index)
                 }
-                .contentMargins(.horizontal, 32, for: .scrollContent)
-                .scrollIndicators(.hidden)
-                .scrollTargetBehavior(.viewAligned)
-                .scrollPosition(id: $recommendationPosition, anchor: .leading)
-                .padding(.bottom, 26)
             }
-            .frame(height: 206)
-            .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
-                recommendationPosition = 0
-            }
+            .scrollTargetLayout()
+        }
+        .contentMargins(.horizontal, recommendationLayout.horizontalInset, for: .scrollContent)
+        .scrollIndicators(.hidden)
+        .scrollTargetBehavior(.viewAligned)
+        .scrollPosition(id: $recommendationPosition, anchor: .leading)
+        .padding(.bottom, recommendationLayout.bottomInset)
+        .frame(height: recommendationLayout.carouselHeight)
+        .overlay(alignment: .bottomLeading) {
+            RecommendationShelfView(height: recommendationLayout.shelfHeight)
+                .padding(.leading, 16)
+        }
+        .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
+            recommendationPosition = 0
+        }
     }
     
     private var popularBooksSection: some View {
@@ -202,25 +217,6 @@ struct HomeView: View {
                     .padding(.horizontal, 16)
             }
         }
-    }
-    
-    private func recommendationButton(direction: Int) -> some View {
-        let position = recommendationPosition ?? 0
-        let target = min(max(position + direction, 0), store.recommendationCount - 1)
-        
-        return Button {
-            withAnimation(.easeInOut(duration: 0.25)) {
-                recommendationPosition = target
-            }
-        } label: {
-            Image(systemName: direction < 0 ? "chevron.left" : "chevron.right")
-                .font(.system(size: 18, weight: .medium))
-                .frame(width: 36, height: 44)
-        }
-        .buttonStyle(.plain)
-        .foregroundStyle(.primary)
-        .disabled(target == position)
-        .accessibilityLabel(direction < 0 ? "이전 추천 도서" : "다음 추천 도서")
     }
 }
 

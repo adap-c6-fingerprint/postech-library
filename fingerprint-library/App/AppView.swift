@@ -27,12 +27,15 @@ struct AppView: View {
     }
 
     private var tabs: some View {
-        TabView {
-            Tab("홈", systemImage: "house") {
+        TabView(selection: Binding(
+            get: { store.selectedTab },
+            set: { store.send(.tabSelected($0)) }
+        )) {
+            Tab("홈", systemImage: "house", value: AppFeature.Tab.map) {
                 LibraryMapView(store: store)
             }
 
-            Tab("추천", systemImage: "books.vertical") {
+            Tab("추천", systemImage: "books.vertical", value: AppFeature.Tab.recommendations) {
                 NavigationStack {
                     HomeView(
                         store: store.scope(state: \.home, action: \.home),
@@ -41,7 +44,7 @@ struct AppView: View {
                 }
             }
 
-            Tab(role: .search) {
+            Tab(value: AppFeature.Tab.search, role: .search) {
                 BookSearchTabView(
                     store: store.scope(state: \.bookSearch, action: \.bookSearch),
                     mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)

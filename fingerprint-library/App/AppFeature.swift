@@ -9,8 +9,15 @@ import ComposableArchitecture
 
 @Reducer
 struct AppFeature {
+    enum Tab: Hashable {
+        case map
+        case recommendations
+        case search
+    }
+
     @ObservableState
     struct State: Equatable {
+        var selectedTab = Tab.map
         var home = HomeFeature.State()
         var bookSearch = BookSearchFeature.State()
         var indoorMap = IndoorMapFeature.State()
@@ -23,6 +30,7 @@ struct AppFeature {
     }
 
     enum Action {
+        case tabSelected(Tab)
         case home(HomeFeature.Action)
         case bookSearch(BookSearchFeature.Action)
         case indoorMap(IndoorMapFeature.Action)
@@ -44,6 +52,15 @@ struct AppFeature {
         Scope(state: \.indoorMap, action: \.indoorMap) { IndoorMapFeature() }
         Reduce { state, action in
             switch action {
+            case let .tabSelected(tab):
+                state.selectedTab = tab
+                return .none
+
+            case let .bookSearch(.delegate(.recommendationLayoutRequested(isExpanded))):
+                state.home.isRecommendationExpanded = isExpanded
+                state.selectedTab = .recommendations
+                return .none
+
             case .home(.detail(.presented(.addToBasketButtonTapped))),
                  .home(.basket(.presented(.removeConfirmed))),
                  .bookSearch(.detail(.presented(.addToBasketButtonTapped))),
