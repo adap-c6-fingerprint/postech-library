@@ -17,10 +17,6 @@ struct BookSearchTabView: View {
             BookSearchView(
                 store: store,
                 isEditingSearch: isSearching,
-                onSelectRecentQuery: { keyword in
-                    store.send(.queryChanged(keyword))
-                    submitSearch()
-                },
                 onShowBasket: {
                     store.send(.basketButtonTapped)
                 }

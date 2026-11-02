@@ -11,8 +11,8 @@ import ComposableArchitecture
 struct BookSearchView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
     let isEditingSearch: Bool
-    let onSelectRecentQuery: (String) -> Void
     let onShowBasket: () -> Void
+    @Environment(\.dismissSearch) private var dismissSearch
     
     var body: some View {
         VStack(spacing: 0) {
@@ -52,7 +52,7 @@ struct BookSearchView: View {
                 ProgressView("책을 찾고 있어요")
             } else if isEditingSearch || !store.hasSearched
                         || store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                searchHistory
+                recentItems
             } else if store.errorMessage != nil {
                 ContentUnavailableView {
                     Label(
@@ -108,37 +108,51 @@ struct BookSearchView: View {
     }
 
     @ViewBuilder
-    private var searchHistory: some View {
-        if matchingRecentQueries.isEmpty {
+    private var recentItems: some View {
+        if store.recentBooks.isEmpty {
             ContentUnavailableView(
-                "어떤 책을 찾으시나요?",
+                "최근 항목이 없어요",
                 systemImage: "books.vertical",
-                description: Text("제목이나 저자 이름을 입력하고 검색해 주세요.")
+                description: Text("검색 결과에서 선택한 책이 여기에 표시돼요.")
             )
         } else {
-            List {
-                Section("최근 검색어") {
-                    ForEach(matchingRecentQueries, id: \.self) { keyword in
-                        Button {
-                            onSelectRecentQuery(keyword)
-                        } label: {
-                            Label(keyword, systemImage: "clock")
-                                .foregroundStyle(.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .contentShape(Rectangle())
-                        }
-                        .accessibilityHint("이 검색어로 도서 검색")
-                    }
-                }
-            }
-            .listStyle(.plain)
-            .scrollDismissesKeyboard(.interactively)
-        }
-    }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("최근 항목")
+                        .font(.title3.bold())
+                        .accessibilityAddTraits(.isHeader)
 
-    private var matchingRecentQueries: [String] {
-        let keyword = store.query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !keyword.isEmpty else { return store.recentQueries }
-        return store.recentQueries.filter { $0.localizedStandardContains(keyword) }
+                    LazyVStack(spacing: 0) {
+                        ForEach(store.recentBooks) { book in
+                            RecentSearchBookRow(
+                                book: book,
+                                libraryInfo: store.recentBookInfo[book.id],
+                                onSelect: {
+                                    dismissSearch()
+                                    store.send(.bookSelected(book))
+                                }
+                            )
+                            if book.id != store.recentBooks.last?.id {
+                                Divider().padding(.horizontal, 16)
+                            }
+                        }
+                    }
+                    .background(Color(.secondarySystemGroupedBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .task {
+                await store.send(.loadRecentBookInfo).finish()
+            }
+            .onDisappear {
+                store.send(.recentBookInfoCancelled)
+            }
+            .refreshable {
+                await store.send(.loadRecentBookInfo).finish()
+            }
+        }
     }
 }
