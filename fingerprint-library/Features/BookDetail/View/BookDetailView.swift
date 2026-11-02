@@ -1,7 +1,7 @@
 import SwiftUI
 import ComposableArchitecture
 
-/// 추천 탭에서 진입하는 지도 중심 책 상세 화면
+/// 추천·검색에서 진입하는 지도 중심 책 상세 화면
 /// 지도 로딩과 위치 스트림은 AppFeature가 소유한 기존 Store를 재사용
 struct BookDetailMapView: View {
     let store: StoreOf<BookDetailFeature>

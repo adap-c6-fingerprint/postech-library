@@ -43,7 +43,8 @@ struct AppView: View {
 
             Tab(role: .search) {
                 BookSearchTabView(
-                    store: store.scope(state: \.bookSearch, action: \.bookSearch)
+                    store: store.scope(state: \.bookSearch, action: \.bookSearch),
+                    mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
                 )
             }
         }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct BookSearchTabView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
+    let mapStore: StoreOf<IndoorMapFeature>
 
     var body: some View {
         NavigationStack {
@@ -28,8 +29,10 @@ struct BookSearchTabView: View {
             .navigationDestination(
                 item: $store.scope(state: \.detail, action: \.detail)
             ) { detailStore in
-                BookDetailView(store: detailStore)
-                    .toolbar(.visible, for: .navigationBar)
+                BookDetailMapView(
+                    store: detailStore,
+                    mapStore: mapStore
+                )
             }
             .navigationDestination(
                 item: $store.scope(state: \.shelfMap, action: \.shelfMap)

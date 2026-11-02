@@ -42,7 +42,10 @@ extension IndoorMapSerialTests {
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
             let root = fromSearchTab
-                ? AnyView(BookSearchTabView(store: searchStore))
+                ? AnyView(BookSearchTabView(
+                    store: searchStore,
+                    mapStore: appStore.scope(state: \.indoorMap, action: \.indoorMap)
+                ))
                 : AnyView(LibraryMapView(store: appStore, searchStore: searchStore))
             let host = UIHostingController(rootView: root)
             window.rootViewController = host
