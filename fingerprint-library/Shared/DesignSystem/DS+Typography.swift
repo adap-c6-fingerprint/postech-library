@@ -11,7 +11,7 @@ import UIKit
 /// 사용법 예시
 /// Text("도서 제목")
 ///    .typography(.bookTitle)
-///    .foregroundStyle(DS.text.primary)
+///    .foregroundStyle(.textPrimary)
 
 extension DS {
     enum FontFamily {
