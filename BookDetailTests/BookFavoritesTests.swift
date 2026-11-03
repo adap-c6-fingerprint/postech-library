@@ -46,6 +46,7 @@ struct BookFavoritesTests {
             BookSearchFeature()
         } withDependencies: {
             $0.bookFavoritesClient = client
+            $0.date.now = Date(timeIntervalSince1970: 1_790_000_000)
             $0.bookBasketClient.load = { [BookBasketItem(book: currentBook, addedAt: .distantPast)] }
         }
 
@@ -71,6 +72,7 @@ struct BookFavoritesTests {
             BookSearchFeature()
         } withDependencies: {
             $0.bookFavoritesClient = client
+            $0.date.now = Date(timeIntervalSince1970: 1_790_000_000)
         }
 
         await store.send(.favoriteButtonTapped(first)) {

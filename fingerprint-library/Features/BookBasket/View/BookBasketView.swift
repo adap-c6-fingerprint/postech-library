@@ -138,77 +138,14 @@ struct BookBasketView: View {
     }
 
     private func row(_ item: BookBasketItem) -> some View {
-        let isSelected = store.selectedIDs.contains(item.id)
         let info = store.libraryInfo[item.id]
-
-        return Button {
-            store.send(.selectionToggled(item.id))
-        } label: {
-            HStack(spacing: 16) {
-                selectionMark(isSelected: isSelected)
-
-                HStack(alignment: .top, spacing: 20) {
-                    BookCoverView(url: item.book.imageURL, isbn: item.book.isbn, allowsRetry: false)
-                        .frame(width: 78, height: 111)
-                        .background(.white.opacity(0.06))
-                        .clipShape(.rect(cornerRadius: 8))
-                        .accessibilityHidden(true)
-
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(BookText.plainText(item.book.title))
-                            .typography(.bookTitle)
-                            .foregroundStyle(Color.textPrimary)
-                            .lineLimit(2)
-
-                        Text(BookText.plainText(info?.location ?? item.book.subLocation ?? "위치 정보 없음"))
-                            .typography(.body2)
-                            .foregroundStyle(Color.textPrimary)
-                            .lineLimit(1)
-
-                        Text(BookText.plainText(item.book.author))
-                            .typography(.caption2)
-                            .foregroundStyle(Color.basketTextTertiary)
-                            .lineLimit(1)
-
-                        Spacer(minLength: 8)
-                        availabilityText(info?.availability)
-                            .typography(.caption2)
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 111, alignment: .topLeading)
-                }
-            }
-            .padding(16)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
-    }
-
-    private func selectionMark(isSelected: Bool) -> some View {
-        ZStack {
-            if isSelected {
-                Circle().fill(Color.basketPrimary)
-                Image(systemName: "checkmark")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.black)
-            } else {
-                Circle().strokeBorder(Color.basketTextTertiary, lineWidth: 2)
-            }
-        }
-        .frame(width: 24, height: 24)
-        .accessibilityHidden(true)
-    }
-
-    @ViewBuilder
-    private func availabilityText(_ availability: BookCardLibraryInfo.Availability?) -> some View {
-        switch availability {
-        case .available:
-            Text("대출 가능").foregroundStyle(.green)
-        case .unavailable:
-            Text("이용 불가").foregroundStyle(.red)
-        case .unknown, .none:
-            Text("대출 상태 확인 필요").foregroundStyle(Color.basketTextTertiary)
-        }
+        return BookSelectionRow(
+            book: item.book,
+            location: info?.location,
+            availability: info?.availability,
+            isSelected: store.selectedIDs.contains(item.id),
+            onToggle: { store.send(.selectionToggled(item.id)) }
+        )
     }
 
     private static let dayFormat = Date.FormatStyle(date: .abbreviated, time: .omitted)

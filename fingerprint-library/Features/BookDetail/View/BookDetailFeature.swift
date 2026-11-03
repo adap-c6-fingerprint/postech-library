@@ -150,6 +150,8 @@ struct BookDetailFeature {
                     keys.remove(key)
                 } else {
                     keys.insert(key)
+                    bookFavoritesClient.record(state.book, now)
+                    // 찜 목록 화면에서 날짜별로 보여 주도록 책 정보와 찜한 시각을 남긴다.
                 }
                 state.isFavorite = keys.contains(key)
                 bookFavoritesClient.save(keys)

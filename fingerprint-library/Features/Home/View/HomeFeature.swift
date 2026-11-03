@@ -17,6 +17,7 @@ struct HomeFeature {
 
         @Presents var detail: BookDetailFeature.State?
         @Presents var basket: BookBasketFeature.State?
+        @Presents var favorites: BookFavoritesFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
 
         var recommendationCount: Int {
@@ -69,9 +70,11 @@ struct HomeFeature {
 
         case bookSelected(Book)
         case basketButtonTapped
+        case favoritesButtonTapped
         case profileButtonTapped
         case detail(PresentationAction<BookDetailFeature.Action>)
         case basket(PresentationAction<BookBasketFeature.Action>)
+        case favorites(PresentationAction<BookFavoritesFeature.Action>)
         case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         case delegate(Delegate)
 
@@ -239,6 +242,13 @@ struct HomeFeature {
                 state.basket = BookBasketFeature.State()
                 return .none
 
+            case .favoritesButtonTapped:
+                state.favorites = BookFavoritesFeature.State()
+                return .none
+
+            case let .favorites(.presented(.delegate(.favoritesChanged(keys)))):
+                return .send(.delegate(.favoritesChanged(keys)))
+
             case let .basket(.presented(.delegate(.startGuidance(books)))):
                 state.shelfMap = BookShelfMapFeature.State(books: books)
                 return .none
@@ -253,7 +263,7 @@ struct HomeFeature {
             case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
                 return .send(.delegate(.favoritesChanged(keys)))
 
-            case .detail, .basket, .shelfMap, .delegate:
+            case .detail, .basket, .favorites, .shelfMap, .delegate:
                 return .none
             }
         }
@@ -262,6 +272,9 @@ struct HomeFeature {
         }
         .ifLet(\.$basket, action: \.basket) {
             BookBasketFeature()
+        }
+        .ifLet(\.$favorites, action: \.favorites) {
+            BookFavoritesFeature()
         }
         .ifLet(\.$shelfMap, action: \.shelfMap) {
             BookShelfMapFeature()

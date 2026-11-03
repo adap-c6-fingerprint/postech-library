@@ -67,7 +67,11 @@ struct AppFeature {
                  .bookSearch(.detail(.presented(.addToBasketButtonTapped))),
                  .bookSearch(.basket(.presented(.removeConfirmed))),
                  .bookSearch(.detail(.presented(.basket(.presented(.removeConfirmed))))),
-                 .bookSearch(.addToBasket(_)), .bookSearch(.removeFromBasket(_)):
+                 .bookSearch(.addToBasket(_)), .bookSearch(.removeFromBasket(_)),
+                 .home(.favorites(.presented(.delegate(.basketChanged)))),
+                 .home(.favorites(.presented(.basket(.presented(.removeConfirmed))))),
+                 .bookSearch(.favorites(.presented(.delegate(.basketChanged)))),
+                 .bookSearch(.favorites(.presented(.basket(.presented(.removeConfirmed))))):
                 synchronizeBasket(state: &state)
                 return .none
 
@@ -82,7 +86,8 @@ struct AppFeature {
 
             case .bookSearch(.bookSelected(_)),
                  .bookSearch(.favoriteButtonTapped(_)),
-                 .bookSearch(.detail(.presented(.delegate(.favoritesChanged(_))))):
+                 .bookSearch(.detail(.presented(.delegate(.favoritesChanged(_))))),
+                 .bookSearch(.favorites(.presented(.delegate(.favoritesChanged(_))))):
                 synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
                 return .none
 
@@ -158,6 +163,14 @@ struct AppFeature {
         if state.bookSearch.detail?.basket != nil {
             state.bookSearch.detail?.basket?.items = items
             state.bookSearch.detail?.basket?.selectedIDs.removeAll { !ids.contains($0) }
+        }
+        if state.bookSearch.favorites?.basket != nil {
+            state.bookSearch.favorites?.basket?.items = items
+            state.bookSearch.favorites?.basket?.selectedIDs.removeAll { !ids.contains($0) }
+        }
+        if state.home.favorites?.basket != nil {
+            state.home.favorites?.basket?.items = items
+            state.home.favorites?.basket?.selectedIDs.removeAll { !ids.contains($0) }
         }
         if state.home.detail?.basket != nil {
             state.home.detail?.basket?.items = items

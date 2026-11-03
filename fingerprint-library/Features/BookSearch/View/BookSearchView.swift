@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct BookSearchView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
     let onShowBasket: () -> Void
+    var onShowFavorites: (() -> Void)? = nil
     @Environment(\.dismissSearch) private var dismissSearch
     @Dependency(\.bookLocationCacheClient) private var bookLocationCacheClient
     
@@ -25,7 +26,7 @@ struct BookSearchView: View {
             store.send(.basketLimitAlertDismissed)
         }
         .toolbar {
-            LibraryTopBar(title: "검색", onBasket: onShowBasket)
+            LibraryTopBar(title: "검색", onFavorites: onShowFavorites, onBasket: onShowBasket)
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
