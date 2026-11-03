@@ -1,3 +1,4 @@
+import Observation
 import SwiftUI
 import Testing
 import UIKit
@@ -6,6 +7,93 @@ import UIKit
 extension IndoorMapSerialTests {
     @MainActor
     struct HomeTopBarBlurScreenTests {
+        @Test("카트 화면을 여러 번 왕복해도 배경 블러가 처음 강도를 유지한다", arguments: [false, true])
+        func blurStaysWeakAfterNavigation(usesSwiftUINavigation: Bool) async throws {
+            let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+            let window = UIWindow(windowScene: scene)
+            let root = ZStack(alignment: .top) {
+                HStack(spacing: 0) { Color.white; Color.black }
+                LibraryTopBarBackground()
+            }
+            .ignoresSafeArea()
+            .environment(\.scenePhase, .active)
+            let state = NavigationState()
+            let host = UIHostingController(rootView: usesSwiftUINavigation
+                ? AnyView(NavigationHarness(state: state, background: AnyView(root))) : AnyView(root))
+            host.overrideUserInterfaceStyle = .dark
+            if usesSwiftUINavigation {
+                window.rootViewController = host
+            } else {
+                let navigation = UINavigationController(rootViewController: host)
+                navigation.setNavigationBarHidden(true, animated: false)
+                window.rootViewController = navigation
+            }
+            window.makeKeyAndVisible()
+            defer { window.isHidden = true; window.rootViewController = nil }
+            try await Task.sleep(for: .milliseconds(300))
+            let rootController = try #require(window.rootViewController)
+            let navigation = try #require(navigation(in: rootController))
+            let edge = window.bounds.midX
+            let baseline = snapshot(window)
+            for attempt in 1...3 {
+                if usesSwiftUINavigation {
+                    state.showsCart = true
+                } else {
+                    let cart = UIHostingController(rootView: Text("책바구니").frame(maxWidth: .infinity, maxHeight: .infinity).background(.black))
+                    navigation.setNavigationBarHidden(false, animated: false)
+                    navigation.pushViewController(cart, animated: true)
+                }
+                try await Task.sleep(for: .milliseconds(700))
+                #expect(navigation.viewControllers.count == 2)
+                if usesSwiftUINavigation {
+                    state.showsCart = false
+                } else {
+                    navigation.setNavigationBarHidden(true, animated: false)
+                    navigation.popViewController(animated: true)
+                }
+                try await Task.sleep(for: .milliseconds(700))
+                #expect(navigation.viewControllers.count == 1)
+                let restored = snapshot(window)
+                for y: CGFloat in [60, 180, 250] {
+                    let before = try brightness(baseline, x: edge + 8, y: y)
+                    let after = try brightness(restored, x: edge + 8, y: y)
+                    print("TOP_BLUR_RETURN swiftui=\(usesSwiftUINavigation) attempt=\(attempt) y=\(y) before=\(before) after=\(after)")
+                    #expect(abs(after - before) < 0.03, "화면 복귀 후 블러가 진해지면 안 됩니다")
+                    let near = try brightness(restored, x: edge + 1, y: y)
+                    let far = try brightness(restored, x: edge + 30, y: y)
+                    #expect(near > far + 0.02, "복귀 후에도 옅은 블러는 남아야 합니다")
+                }
+            }
+        }
+
+        @Observable
+        final class NavigationState {
+            var showsCart = false
+        }
+
+        private struct NavigationHarness: View {
+            @Bindable var state: NavigationState
+            let background: AnyView
+
+            var body: some View {
+                NavigationStack {
+                    background
+                        .toolbar(.hidden, for: .navigationBar)
+                        .navigationDestination(isPresented: $state.showsCart) {
+                            Text("책바구니")
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(.black)
+                                .toolbar(.visible, for: .navigationBar)
+                        }
+                }
+            }
+        }
+
+        private func navigation(in controller: UIViewController) -> UINavigationController? {
+            if let value = controller as? UINavigationController { return value }
+            return controller.children.compactMap { navigation(in: $0) }.first
+        }
+
         @Test("옅은 기본 블러가 화면 위부터 인사 문구 높이까지 실제로 적용된다")
         func blurCoversGreeting() async throws {
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
@@ -48,6 +136,12 @@ extension IndoorMapSerialTests {
             if let effect = view as? UIVisualEffectView,
                effect.accessibilityIdentifier == "library-top-bar-blur" { return effect }
             return view.subviews.compactMap { findBlur(in: $0) }.first
+        }
+
+        private func snapshot(_ window: UIWindow) -> UIImage {
+            UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
+            }
         }
 
         private func brightness(_ image: UIImage, x: CGFloat, y: CGFloat) throws -> Double {

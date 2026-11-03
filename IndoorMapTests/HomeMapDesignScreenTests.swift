@@ -75,15 +75,17 @@ extension IndoorMapSerialTests {
             }
             try await waitUntil { isRecommendation ? store.home.basket != nil : store.bookSearch.basket != nil }
             try await waitUntil { navigation.viewControllers.count == 2 && !navigation.isNavigationBarHidden }
-            navigation.popViewController(animated: false)
+            navigation.popViewController(animated: true)
             try await waitUntil { isRecommendation ? store.home.basket == nil : store.bookSearch.basket == nil }
+            try await waitUntil { navigation.transitionCoordinator == nil }
             if !isRecommendation {
                 try await waitUntil { navigation.isNavigationBarHidden }
                 store.send(.bookSearch(.favoritesButtonTapped))
                 try await waitUntil { store.bookSearch.favorites != nil }
                 try await waitUntil { navigation.viewControllers.count == 2 && !navigation.isNavigationBarHidden }
-                navigation.popViewController(animated: false)
+                navigation.popViewController(animated: true)
                 try await waitUntil { store.bookSearch.favorites == nil && navigation.isNavigationBarHidden }
+                try await waitUntil { navigation.transitionCoordinator == nil }
                 try await Task.sleep(for: .milliseconds(300))
                 saveSnapshot(window, name: "home-restored")
             }

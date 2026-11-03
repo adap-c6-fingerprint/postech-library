@@ -125,17 +125,34 @@ struct LibraryTopBarBackground: View {
 }
 
 /// 불투명도 대신 시스템 효과의 보간 강도를 낮춰, 옅은 블러가 영역 전체에 남게 한다.
-private struct LibraryTopBarBlur: UIViewRepresentable {
+private struct LibraryTopBarBlur: UIViewControllerRepresentable {
     @Environment(\.scenePhase) private var scenePhase
 
-    func makeUIView(context: Context) -> BlurView { BlurView() }
+    func makeUIViewController(context: Context) -> BlurController { BlurController() }
 
-    func updateUIView(_ uiView: BlurView, context: Context) {
-        uiView.setActive(scenePhase == .active)
+    func updateUIViewController(_ uiViewController: BlurController, context: Context) {
+        uiViewController.blurView.setActive(scenePhase == .active)
     }
 
-    static func dismantleUIView(_ uiView: BlurView, coordinator: ()) {
-        uiView.stopBlur()
+    static func dismantleUIViewController(_ uiViewController: BlurController, coordinator: ()) {
+        uiViewController.blurView.stopBlur()
+    }
+
+    final class BlurController: UIViewController {
+        let blurView = BlurView()
+
+        override func loadView() { view = blurView }
+
+        override func viewDidAppear(_ animated: Bool) {
+            super.viewDidAppear(animated)
+            // 화면 전환이 끝난 뒤 UIKit이 재구성한 배경 효과에도 같은 강도를 적용한다.
+            blurView.restoreBlur()
+        }
+
+        override func viewDidDisappear(_ animated: Bool) {
+            super.viewDidDisappear(animated)
+            blurView.stopBlur()
+        }
     }
 
     final class BlurView: UIVisualEffectView {
@@ -159,20 +176,21 @@ private struct LibraryTopBarBlur: UIViewRepresentable {
                 fade.frame = bounds
                 mask = fade
                 // 마스크가 내부 효과 뷰를 재구성한 뒤에 약한 강도를 다시 적용한다.
-                applyBlur()
+                restoreBlur()
             }
         }
 
         override func didMoveToWindow() {
             super.didMoveToWindow()
-            if window != nil { applyBlur() }
+            if window != nil { restoreBlur() }
             else { stopBlur() }
         }
 
         func setActive(_ active: Bool) {
             guard isActive != active else { return }
             isActive = active
-            if active { applyBlur() }
+            if active { restoreBlur() }
+            else { stopBlur() }
         }
 
         func stopBlur() {
@@ -181,8 +199,8 @@ private struct LibraryTopBarBlur: UIViewRepresentable {
             effect = nil
         }
 
-        private func applyBlur() {
-            guard window != nil else { return }
+        func restoreBlur() {
+            guard isActive, window != nil else { return }
             stopBlur()
             let animator = UIViewPropertyAnimator(duration: 1, curve: .linear) { [weak self] in
                 self?.effect = UIBlurEffect(style: .systemUltraThinMaterialDark)
