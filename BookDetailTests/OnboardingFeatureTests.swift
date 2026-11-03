@@ -34,7 +34,7 @@ struct OnboardingFeatureTests {
         let store = TestStore(initialState: OnboardingFeature.State()) {
             OnboardingFeature()
         } withDependencies: {
-            $0.recommendationDatasetClient.load = { Self.dataset }
+            $0.recommendationDatasetClient.load = { await Self.dataset }
         }
 
         await store.send(.task)

@@ -8,7 +8,7 @@ import UIKit
 extension IndoorMapSerialTests {
     @MainActor
     struct HomeMapDesignScreenTests {
-        @Test("홈 지도 이동과 홈·추천의 장바구니 화면 복구를 확인한다", arguments: [false, true])
+        @Test("홈 지도 이동과 장바구니·찜 목록에서의 화면 복구를 확인한다", arguments: [false, true])
         func opensBasketFromSharedToolbar(isRecommendation: Bool) async throws {
             let map = try await BundledIndoorMapLoader().loadLibrary()
             let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
@@ -79,6 +79,11 @@ extension IndoorMapSerialTests {
             try await waitUntil { isRecommendation ? store.home.basket == nil : store.bookSearch.basket == nil }
             if !isRecommendation {
                 try await waitUntil { navigation.isNavigationBarHidden }
+                store.send(.bookSearch(.favoritesButtonTapped))
+                try await waitUntil { store.bookSearch.favorites != nil }
+                try await waitUntil { navigation.viewControllers.count == 2 && !navigation.isNavigationBarHidden }
+                navigation.popViewController(animated: false)
+                try await waitUntil { store.bookSearch.favorites == nil && navigation.isNavigationBarHidden }
                 try await Task.sleep(for: .milliseconds(300))
                 saveSnapshot(window, name: "home-restored")
             }

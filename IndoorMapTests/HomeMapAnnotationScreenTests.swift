@@ -79,6 +79,7 @@ extension IndoorMapSerialTests {
             initial.indoorMap.shelfLabels = labels
             initial.bookSearch.basketBooks = [book]
             let store = Store(initialState: initial) { AppFeature() } withDependencies: {
+                $0.date.now = IndoorMapTestData.now
                 $0.indoorLocationClient = .testValue
                 $0.bookFavoritesClient.load = { keyStore.value }
                 $0.bookFavoritesClient.save = { keyStore.setValue($0) }

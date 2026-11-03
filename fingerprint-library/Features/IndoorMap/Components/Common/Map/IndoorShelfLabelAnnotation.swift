@@ -97,7 +97,7 @@ final class IndoorShelfLabelView: MKAnnotationView {
         textLabel.font = Self.font
         textLabel.attributedText = Self.text(for: annotation, highlighted: highlighted)
         textLabel.transform = CGAffineTransform(rotationAngle: angle)
-        // 서가끼리만 충돌을 검사한다. 찜·편의시설은 별도 우선순위로 위에 표시한다.
+        // 겹쳐도 번호를 유지한다. 찜·편의시설은 별도 우선순위로 위에 표시한다.
         displayPriority = .required
         zPriority = .min
         selectedZPriority = .min

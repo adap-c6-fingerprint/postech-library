@@ -50,4 +50,4 @@
 - 기본 아이콘 표시 변경 후 관련 검사 12개가 통과했다. 버튼 켜기·끄기, 찜 취소, 현재 층 표시와 외부 조회가 발생하지 않는 동작을 확인했다.
 - 전체 앱 검사와 실기기 보행 검증은 포함하지 않는다.
 
-이전 길안내 이미지 통합은 `16c448d`에 별도로 보존했고, 이 작업은 최신 dev `c281cf6` 기반의 `feat/#268-shelf-label-levels` 브랜치에서 진행한다. 실행 앱은 `com.youngmin.fingerprint-library`, 표시 이름은 Po:book이다.
+이전 길안내 이미지 통합은 `16c448d`에 별도로 보존했고, PR 준비 과정에서 dev `509410e`를 병합했다. 통합 브랜치는 `feat/#268-map-ui-integration`이다. 실행 앱은 `com.youngmin.fingerprint-library`, 표시 이름은 Po:book이다.

@@ -113,7 +113,7 @@ struct DatasetRecommendationTests {
         let sources = Array(Self.pool.prefix(3))
         let related = HeldRelatedBooksClient(candidates: { source, _ in
             [Book(
-                id: "related-\(source.id)", isbn: nil, controlNumber: nil, title: "연관", author: "저자",
+                id: "related-\(await source.id)", isbn: nil, controlNumber: nil, title: "연관", author: "저자",
                 publisher: nil, publicationYear: nil, description: nil, imageURL: nil
             )]
         })
