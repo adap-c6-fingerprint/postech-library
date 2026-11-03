@@ -13,15 +13,15 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     let store: StoreOf<BookDetailFeature>
     let presentation: BookDetailSheetPresentation
     var onDismiss: () -> Void
-    var onHeightChange: (CGFloat) -> Void
+    var onFrameChange: (CGRect) -> Void
 
     func makeUIViewController(context: Context) -> Controller {
-        Controller(store: store, presentation: presentation, onDismiss: onDismiss, onHeightChange: onHeightChange)
+        Controller(store: store, presentation: presentation, onDismiss: onDismiss, onFrameChange: onFrameChange)
     }
 
     func updateUIViewController(_ controller: Controller, context: Context) {
         controller.onDismiss = onDismiss
-        controller.onHeightChange = onHeightChange
+        controller.onFrameChange = onFrameChange
     }
 
     static func dismantleUIViewController(_ controller: Controller, coordinator: ()) {
@@ -31,18 +31,18 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     final class Controller: UIViewController, UISheetPresentationControllerDelegate {
         private let store: StoreOf<BookDetailFeature>
         var onDismiss: () -> Void
-        var onHeightChange: (CGFloat) -> Void
+        var onFrameChange: (CGRect) -> Void
         private var hosting: UIHostingController<BookDetailSheet>?
         private var hasPresented = false
         private var isInvalidated = false
         private let presentation: BookDetailSheetPresentation
 
         init(store: StoreOf<BookDetailFeature>, presentation: BookDetailSheetPresentation, onDismiss: @escaping () -> Void,
-             onHeightChange: @escaping (CGFloat) -> Void) {
+             onFrameChange: @escaping (CGRect) -> Void) {
             self.store = store
             self.presentation = presentation
             self.onDismiss = onDismiss
-            self.onHeightChange = onHeightChange
+            self.onFrameChange = onFrameChange
             super.init(nibName: nil, bundle: nil)
         }
 
@@ -61,9 +61,8 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             presentation.isExpanded = false
             let content = BookDetailSheet(store: store, presentation: presentation, onDismiss: { [weak self] in
                 self?.dismissDetail()
-            }) { [weak self] height in
-                guard let self, !self.isInvalidated else { return }
-                self.onHeightChange(height)
+            }) { [weak self] _ in
+                self?.reportSheetFrame()
             }
             let hosting = UIHostingController(rootView: content)
             hosting.modalPresentationStyle = .pageSheet
@@ -85,7 +84,16 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                     hosting?.presentingViewController?.dismiss(animated: false)
                     return
                 }
+                self.reportSheetFrame()
             }
+        }
+
+        /// 실제 시트 위치를 뒤쪽 SwiftUI 화면과 같은 좌표계로 전달한다.
+        private func reportSheetFrame() {
+            guard !isInvalidated, let hosting, hosting.view.window != nil else { return }
+            let frame = hosting.view.convert(hosting.view.bounds, to: view)
+            guard frame.minY.isFinite, frame.height.isFinite, frame.height > 0 else { return }
+            onFrameChange(frame)
         }
 
         func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {

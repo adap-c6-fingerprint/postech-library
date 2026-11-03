@@ -7,7 +7,7 @@ struct BookDetailMapView: View {
     let store: StoreOf<BookDetailFeature>
     let mapStore: StoreOf<IndoorMapFeature>
     @Environment(\.dismiss) private var dismiss
-    @State private var sheetHeight: CGFloat = 0
+    @State private var sheetFrame: CGRect?
     @State private var sheetPresentation = BookDetailSheetPresentation()
 
     private var context: BookDetailMapContext {
@@ -15,14 +15,32 @@ struct BookDetailMapView: View {
               position: mapStore.currentPosition, preference: mapStore.routePreference)
     }
 
+    private var destinationFloor: IndoorMapFloor? {
+        guard let shelves = store.destinationPresentation?.shelves,
+              let floorID = shelves.first?.floorID,
+              shelves.allSatisfy({ $0.floorID == floorID }) else { return nil }
+        return mapStore.map?.floors.first { $0.id == floorID }
+    }
+
     var body: some View {
         GeometryReader { geometry in
-            IndoorMapView(
-                store: mapStore, showsDestinationCard: false, showsRoute: false,
-                bottomContentInset: min(sheetHeight, geometry.size.height),
-                highlightedFeatureIDs: Set(store.destinationPresentation?.shelves.map(\.mapElementID) ?? [])
-            )
-            .ignoresSafeArea(.container, edges: .top)
+            let coveredHeight = sheetFrame.map { max(0, geometry.size.height - $0.minY) } ?? 0
+            ZStack(alignment: .bottomTrailing) {
+                IndoorMapView(
+                    store: mapStore, showsDestinationCard: false, showsRoute: false,
+                    bottomContentInset: min(coveredHeight, geometry.size.height),
+                    highlightedFeatureIDs: Set(store.destinationPresentation?.shelves.map(\.mapElementID) ?? []),
+                    showsFloorPicker: false
+                )
+                .ignoresSafeArea(.container, edges: .top)
+
+                if !sheetPresentation.isExpanded, sheetFrame != nil, let floor = destinationFloor {
+                    destinationFloorBadge(floor)
+                        .padding(.trailing, 16)
+                        .padding(.bottom, coveredHeight + 16)
+                }
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
         .overlay {
             if sheetPresentation.isExpanded { BookDetailCoverBackground(book: store.book) }
@@ -41,10 +59,22 @@ struct BookDetailMapView: View {
         .background {
             BookDetailSheetPresenter(
                 store: store, presentation: sheetPresentation,
-                onDismiss: { dismiss() }, onHeightChange: { sheetHeight = $0 }
+                onDismiss: { dismiss() }, onFrameChange: { sheetFrame = $0 }
             )
             .id(store.book.id)
         }
+    }
+
+    private func destinationFloorBadge(_ floor: IndoorMapFloor) -> some View {
+        Text("\(floor.ordinal + 1)F")
+            .bookDetailTypography(.caption2)
+            .foregroundStyle(Color.textPrimary)
+            .padding(.horizontal, 12)
+            .frame(minWidth: 61, minHeight: 34)
+            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+            .accessibilityLabel("책 위치 \(floor.name)")
+            .accessibilityIdentifier("bookDetail.destinationFloor")
+            .allowsHitTesting(false)
     }
 
     private var mapButtons: some View {
