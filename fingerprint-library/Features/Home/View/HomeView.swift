@@ -134,9 +134,10 @@ struct HomeView: View {
                         HomeBookCover(
                             book: book,
                             width: recommendationLayout.coverWidth,
-                            height: recommendationLayout.coverHeight
+                            height: recommendationLayout.coverHeight,
+                            cornerRadius: recommendationLayout.coverCornerRadius,
+                            shelfHeight: recommendationLayout.shelfHeight
                         )
-                        .clipShape(RoundedRectangle(cornerRadius: recommendationLayout.coverCornerRadius))
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(book.title)
@@ -153,8 +154,9 @@ struct HomeView: View {
         .frame(height: recommendationLayout.carouselHeight)
         .overlay(alignment: .bottomLeading) {
             RecommendationShelfView(height: recommendationLayout.shelfHeight)
-                .padding(.leading, 16)
+                .padding(.leading, RecommendationShelfView.leadingInset)
         }
+        .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
         .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
             recommendationPosition = 0
         }
@@ -224,14 +226,35 @@ private struct HomeBookCover: View {
     let book: Book?
     let width: CGFloat
     let height: CGFloat
+    var cornerRadius: CGFloat = 4
+    var shelfHeight: CGFloat? = nil
     
     var body: some View {
         // 홈 카드는 전체가 상세 이동 버튼이다. 재시도는 열린 상세 화면에서 제공한다.
-        BookCoverView(url: book?.imageURL, isbn: book?.isbn, allowsRetry: false)
+        BookCoverView(
+            url: book?.imageURL,
+            isbn: book?.isbn,
+            allowsRetry: false,
+            coverModifier: CoverStyle(cornerRadius: cornerRadius, shelfHeight: shelfHeight)
+        )
         .frame(width: width, height: height)
-        .background(Color.primary.opacity(0.04))
-        .clipShape(RoundedRectangle(cornerRadius: 4))
         .accessibilityHidden(true)
+    }
+
+    private struct CoverStyle: ViewModifier {
+        let cornerRadius: CGFloat
+        let shelfHeight: CGFloat?
+
+        func body(content: Content) -> some View {
+            let cover = content
+                .background(Color.primary.opacity(0.04))
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            if let shelfHeight {
+                cover.modifier(RecommendationShelfView.CoverBlur(height: shelfHeight))
+            } else {
+                cover
+            }
+        }
     }
 }
 
