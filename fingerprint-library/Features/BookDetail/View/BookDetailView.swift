@@ -8,6 +8,7 @@ struct BookDetailMapView: View {
     let mapStore: StoreOf<IndoorMapFeature>
     @Environment(\.dismiss) private var dismiss
     @State private var sheetHeight: CGFloat = 0
+    @State private var sheetPresentation = BookDetailSheetPresentation()
 
     private var context: BookDetailMapContext {
         .init(map: mapStore.map, navigation: mapStore.navigation, labels: mapStore.shelfLabels,
@@ -23,7 +24,12 @@ struct BookDetailMapView: View {
             )
             .ignoresSafeArea(.container, edges: .top)
         }
-        .overlay(alignment: .top) { mapButtons }
+        .overlay {
+            if sheetPresentation.isExpanded { BookDetailCoverBackground(book: store.book) }
+        }
+        .overlay(alignment: .top) {
+            if !sheetPresentation.isExpanded { mapButtons }
+        }
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .preferredColorScheme(.dark)
         .onChange(of: store.destinationPresentation?.shelves, initial: true) { _, shelves in
@@ -34,7 +40,8 @@ struct BookDetailMapView: View {
         .task(id: context) { store.send(.mapContextChanged(context)) }
         .background {
             BookDetailSheetPresenter(
-                store: store, onDismiss: { dismiss() }, onHeightChange: { sheetHeight = $0 }
+                store: store, presentation: sheetPresentation,
+                onDismiss: { dismiss() }, onHeightChange: { sheetHeight = $0 }
             )
             .id(store.book.id)
         }
@@ -70,11 +77,13 @@ struct BookDetailMapView: View {
 
 struct BookDetailSheet: View {
     let store: StoreOf<BookDetailFeature>
+    let presentation: BookDetailSheetPresentation
+    var onDismiss: () -> Void
     var onHeightChange: (CGFloat) -> Void = { _ in }
 
     var body: some View {
         NavigationStack {
-            BookDetailView(store: store)
+            BookDetailView(store: store, isExpanded: presentation.isExpanded, onDismiss: onDismiss)
                 .containerBackground(.clear, for: .navigation)
                 .toolbar(.hidden, for: .navigationBar)
         }
@@ -88,6 +97,8 @@ struct BookDetailSheet: View {
 
 struct BookDetailView: View {
     @Bindable var store: StoreOf<BookDetailFeature>
+    var isExpanded = false
+    var onDismiss: () -> Void = { }
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
     @State private var isNoticePresented = false
@@ -96,7 +107,13 @@ struct BookDetailView: View {
 
     var body: some View {
         detailContent
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if isExpanded { expandedTopBar }
+            }
             .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
+            .background {
+                if isExpanded { BookDetailCoverBackground(book: store.book) }
+            }
             .foregroundStyle(Color.textPrimary)
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
@@ -120,7 +137,9 @@ struct BookDetailView: View {
 
     @ViewBuilder
     private var detailContent: some View {
-        if !dynamicTypeSize.isAccessibilitySize && !isVoiceOverEnabled {
+        if isExpanded {
+            expandedContent
+        } else if !dynamicTypeSize.isAccessibilitySize && !isVoiceOverEnabled {
             VStack(alignment: .leading, spacing: 36) {
                 header
                     .padding(.horizontal, 16)
@@ -135,6 +154,61 @@ struct BookDetailView: View {
                     .padding(.horizontal, 16).padding(.top, 20).padding(.bottom, 20)
             }
         }
+    }
+
+    private var expandedContent: some View {
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    BookCoverView(url: store.book.imageURL, isbn: store.book.isbn)
+                        .frame(width: min(218, geometry.size.width * 0.55), height: 310)
+                        .background(.quaternary)
+                        .clipShape(RoundedRectangle(cornerRadius: 3))
+                        .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 30)
+                        .padding(.bottom, 32)
+                        .accessibilityIdentifier("bookDetail.expandedCover")
+                    VStack(alignment: .leading, spacing: 8) {
+                        holdingStatus.bookDetailTypography(.caption2)
+                        bookTitle
+                            .lineLimit(dynamicTypeSize.isAccessibilitySize || isVoiceOverEnabled ? nil : 2)
+                            .truncationMode(.tail)
+                        holdingLocation
+                        expandedRouteSummary
+                    }
+                    descriptionSection.padding(.top, 24)
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 20)
+            }
+            .accessibilityIdentifier("bookDetail.expandedContent")
+        }
+    }
+
+    private var expandedTopBar: some View {
+        HStack {
+            Button(action: onDismiss) {
+                Image(systemName: "chevron.left").frame(width: 44, height: 44)
+                    .glassEffect(.regular.interactive(), in: Circle())
+            }
+            .accessibilityLabel("뒤로가기")
+            .accessibilityIdentifier("bookDetail.expandedBack")
+            Spacer()
+            Button { store.send(.favoriteButtonTapped) } label: {
+                Image(systemName: store.isFavorite ? "heart.fill" : "heart")
+                    .frame(width: 44, height: 44)
+                    .glassEffect(.regular.interactive(), in: Circle())
+            }
+            .accessibilityLabel(store.isFavorite ? "찜 해제" : "찜하기")
+            .accessibilityValue(store.isFavorite ? "찜됨" : "찜 안 됨")
+            .accessibilityIdentifier("bookDetail.expandedFavorite")
+        }
+        .font(.system(size: 22, weight: .regular))
+        .buttonStyle(.plain)
+        .buttonBorderShape(.circle)
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
     }
 
     @ViewBuilder
@@ -161,27 +235,36 @@ struct BookDetailView: View {
         VStack(alignment: .leading, spacing: 8) {
             holdingStatus
                 .bookDetailTypography(.caption2)
-            Text(BookText.plainText(store.book.title))
-                .bookDetailTypography(.bookTitle)
-                .fixedSize(horizontal: false, vertical: true)
-                .accessibilityAddTraits(.isHeader)
-                .accessibilityAction(named: Text(store.isFavorite ? "찜 해제" : "찜하기")) {
-                    store.send(.favoriteButtonTapped)
-                }
-            if case .loaded = store.holdingsState {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(store.destinationPresentation?.locationText
-                         ?? store.displayedHolding?.locationName ?? "위치 정보 없음")
-                    Text(store.displayedHolding?.callNumber ?? "청구기호 정보 없음")
-                        .textSelection(.enabled)
-                }
-                .bookDetailTypography(.body2)
-            }
+            bookTitle
+            holdingLocation
             routeSummary
                 .bookDetailTypography(.caption1)
                 .foregroundStyle(Color.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var bookTitle: some View {
+        Text(BookText.plainText(store.book.title))
+            .bookDetailTypography(.bookTitle)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityAddTraits(.isHeader)
+            .accessibilityAction(named: Text(store.isFavorite ? "찜 해제" : "찜하기")) {
+                store.send(.favoriteButtonTapped)
+            }
+    }
+
+    @ViewBuilder
+    private var holdingLocation: some View {
+        if case .loaded = store.holdingsState {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(store.destinationPresentation?.locationText
+                     ?? store.displayedHolding?.locationName ?? "위치 정보 없음")
+                Text(store.displayedHolding?.callNumber ?? "청구기호 정보 없음")
+                    .textSelection(.enabled)
+            }
+            .bookDetailTypography(.body2)
+        }
     }
 
     @ViewBuilder
@@ -209,6 +292,38 @@ struct BookDetailView: View {
         case .unavailable: Text("거리 확인 불가")
         case .loaded(let summary): Text(summary.text)
         }
+    }
+
+    private var expandedRouteSummary: some View {
+        HStack(spacing: 16) {
+            Spacer(minLength: 0)
+            if case let .loaded(summary) = store.destinationRouteState {
+                HStack(spacing: 6) {
+                    routeIcon("figure.walk", color: Color(white: 0.45))
+                    Text("\(summary.isEstimated ? "약 " : "")\(summary.distanceMeters)m")
+                }
+                HStack(spacing: 6) {
+                    routeIcon("figure.stairs", color: .green)
+                    Text("\(summary.floorChangeCount)회")
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("층 이동 \(summary.floorChangeCount)회")
+            } else {
+                routeSummary
+            }
+        }
+        .bookDetailTypography(.caption1)
+        .foregroundStyle(Color.textSecondary)
+        .padding(.top, 2)
+    }
+
+    private func routeIcon(_ name: String, color: Color) -> some View {
+        Image(systemName: name)
+            .font(.system(size: 18, weight: .medium))
+            .foregroundStyle(.white)
+            .frame(width: 28, height: 28)
+            .background(color, in: Circle())
+            .accessibilityHidden(true)
     }
 
     private var descriptionSection: some View {
@@ -277,6 +392,32 @@ struct BookDetailView: View {
             LinearGradient(colors: [.clear, .black.opacity(0.25)], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea(.container, edges: .bottom)
         }
+    }
+}
+
+private struct BookDetailCoverBackground: View {
+    let book: Book
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .top) {
+                Color(white: 0.06)
+                BookCoverView(url: book.imageURL, isbn: book.isbn, allowsRetry: false)
+                    .frame(width: geometry.size.width, height: geometry.size.height * 0.7)
+                    .scaleEffect(1.8)
+                    .blur(radius: 60)
+                LinearGradient(stops: [
+                    .init(color: .black.opacity(0.35), location: 0),
+                    .init(color: .black.opacity(0.45), location: 0.3),
+                    .init(color: Color(white: 0.06), location: 0.65),
+                    .init(color: Color(white: 0.06), location: 1)
+                ], startPoint: .top, endPoint: .bottom)
+            }
+            .clipped()
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 

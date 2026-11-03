@@ -1,15 +1,22 @@
 import ComposableArchitecture
+import Observation
 import SwiftUI
 import UIKit
+
+@MainActor @Observable
+final class BookDetailSheetPresentation {
+    var isExpanded = false
+}
 
 /// 책 상세 네이티브 시트의 표시·종료를 소유한다.
 struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     let store: StoreOf<BookDetailFeature>
+    let presentation: BookDetailSheetPresentation
     var onDismiss: () -> Void
     var onHeightChange: (CGFloat) -> Void
 
     func makeUIViewController(context: Context) -> Controller {
-        Controller(store: store, onDismiss: onDismiss, onHeightChange: onHeightChange)
+        Controller(store: store, presentation: presentation, onDismiss: onDismiss, onHeightChange: onHeightChange)
     }
 
     func updateUIViewController(_ controller: Controller, context: Context) {
@@ -28,10 +35,12 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         private var hosting: UIHostingController<BookDetailSheet>?
         private var hasPresented = false
         private var isInvalidated = false
+        private let presentation: BookDetailSheetPresentation
 
-        init(store: StoreOf<BookDetailFeature>, onDismiss: @escaping () -> Void,
+        init(store: StoreOf<BookDetailFeature>, presentation: BookDetailSheetPresentation, onDismiss: @escaping () -> Void,
              onHeightChange: @escaping (CGFloat) -> Void) {
             self.store = store
+            self.presentation = presentation
             self.onDismiss = onDismiss
             self.onHeightChange = onHeightChange
             super.init(nibName: nil, bundle: nil)
@@ -49,7 +58,10 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             super.viewDidAppear(animated)
             guard !hasPresented, !isInvalidated, view.window != nil else { return }
             hasPresented = true
-            let content = BookDetailSheet(store: store) { [weak self] height in
+            presentation.isExpanded = false
+            let content = BookDetailSheet(store: store, presentation: presentation, onDismiss: { [weak self] in
+                self?.dismissDetail()
+            }) { [weak self] height in
                 guard let self, !self.isInvalidated else { return }
                 self.onHeightChange(height)
             }
@@ -74,6 +86,21 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                     return
                 }
             }
+        }
+
+        func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+            guard !isInvalidated else { return }
+            withAnimation(.easeInOut(duration: 0.25)) {
+                presentation.isExpanded = sheetPresentationController.selectedDetentIdentifier == .large
+            }
+        }
+
+        private func dismissDetail() {
+            guard !isInvalidated else { return }
+            isInvalidated = true
+            let onDismiss = onDismiss
+            hosting?.dismiss(animated: true, completion: onDismiss)
+            hosting = nil
         }
 
         func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
