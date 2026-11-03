@@ -14,8 +14,8 @@ struct HomeView: View {
         case standard
         case expanded
 
-        var coverWidth: CGFloat { self == .expanded ? 208 : 140 }
-        var coverHeight: CGFloat { self == .expanded ? 306 : 206 }
+        var coverWidth: CGFloat { self == .expanded ? 208 : 141.06 }
+        var coverHeight: CGFloat { self == .expanded ? 306 : 206.42 }
         var coverCornerRadius: CGFloat { self == .expanded ? 14 : 10 }
         var spacing: CGFloat { self == .expanded ? 22 : 16 }
         var horizontalInset: CGFloat { self == .expanded ? 66 : 48 }
@@ -238,10 +238,12 @@ private struct HomeBookCover: View {
 private struct HomePopularBookCard: View {
     let book: Book?
     let libraryInfo: HomeFeature.LibraryInfoState?
-    
+
+    private let coverWidth: CGFloat = 97
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HomeBookCover(book: book, width: 96, height: 140)
+            HomeBookCover(book: book, width: coverWidth, height: 141.94)
                 .padding(.bottom, 8)
             
             if let book {
@@ -261,7 +263,7 @@ private struct HomePopularBookCard: View {
             
             libraryInformation
         }
-        .frame(width: 96, alignment: .leading)
+        .frame(width: coverWidth, alignment: .leading)
         .accessibilityElement(children: .combine)
     }
 
