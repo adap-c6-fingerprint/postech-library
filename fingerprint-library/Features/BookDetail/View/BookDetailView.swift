@@ -417,7 +417,6 @@ struct BookDetailView: View {
             Button { isRoutePreviewPresented = true } label: {
                 Text("바로 안내 시작").bookDetailTypography(.bookTitle).frame(maxWidth: .infinity)
             }
-            .buttonStyle(.glass)
             .buttonBorderShape(.capsule)
             .buttonSizing(.flexible)
             .controlSize(.large)
@@ -426,13 +425,13 @@ struct BookDetailView: View {
             Button {
                 store.send(.addToBasketButtonTapped)
             } label: { Image(systemName: "cart.fill").font(.system(size: 23, weight: .semibold)) }
-            .buttonStyle(.glass)
             .buttonBorderShape(.circle)
             .controlSize(.large)
             .frame(width: 50, height: 50)
             .accessibilityLabel("장바구니에 담기")
             .accessibilityIdentifier("bookDetail.addToBasket")
         }
+        .buttonStyle(.glass(.regular.tint(Color(white: 32.0 / 255).opacity(0.45))))
         .foregroundStyle(Color.textPrimary)
         .padding(.horizontal, 16)
         .padding(.top, 16)
