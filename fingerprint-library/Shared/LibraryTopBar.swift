@@ -124,44 +124,17 @@ struct LibraryTopBarBackground: View {
     }
 }
 
-/// 불투명도 대신 시스템 효과의 보간 강도를 낮춰, 옅은 블러가 영역 전체에 남게 한다.
-private struct LibraryTopBarBlur: UIViewControllerRepresentable {
-    @Environment(\.scenePhase) private var scenePhase
+/// 고정된 기본 블러를 직접 마스크로 옅게 합성한다. 전환 중 보간 상태를 유지하지 않는다.
+private struct LibraryTopBarBlur: UIViewRepresentable {
+    func makeUIView(context: Context) -> BlurView { BlurView() }
 
-    func makeUIViewController(context: Context) -> BlurController { BlurController() }
-
-    func updateUIViewController(_ uiViewController: BlurController, context: Context) {
-        uiViewController.blurView.setActive(scenePhase == .active)
-    }
-
-    static func dismantleUIViewController(_ uiViewController: BlurController, coordinator: ()) {
-        uiViewController.blurView.stopBlur()
-    }
-
-    final class BlurController: UIViewController {
-        let blurView = BlurView()
-
-        override func loadView() { view = blurView }
-
-        override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
-            // 화면 전환이 끝난 뒤 UIKit이 재구성한 배경 효과에도 같은 강도를 적용한다.
-            blurView.restoreBlur()
-        }
-
-        override func viewDidDisappear(_ animated: Bool) {
-            super.viewDidDisappear(animated)
-            blurView.stopBlur()
-        }
-    }
+    func updateUIView(_ uiView: BlurView, context: Context) {}
 
     final class BlurView: UIVisualEffectView {
         private let fade = FadeMaskView()
-        private var animator: UIViewPropertyAnimator?
-        private var isActive = true
 
         init() {
-            super.init(effect: nil)
+            super.init(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
             isUserInteractionEnabled = false
             accessibilityIdentifier = "library-top-bar-blur"
             accessibilityElementsHidden = true
@@ -175,41 +148,7 @@ private struct LibraryTopBarBlur: UIViewControllerRepresentable {
                 mask = nil
                 fade.frame = bounds
                 mask = fade
-                // 마스크가 내부 효과 뷰를 재구성한 뒤에 약한 강도를 다시 적용한다.
-                restoreBlur()
             }
-        }
-
-        override func didMoveToWindow() {
-            super.didMoveToWindow()
-            if window != nil { restoreBlur() }
-            else { stopBlur() }
-        }
-
-        func setActive(_ active: Bool) {
-            guard isActive != active else { return }
-            isActive = active
-            if active { restoreBlur() }
-            else { stopBlur() }
-        }
-
-        func stopBlur() {
-            animator?.stopAnimation(true)
-            animator = nil
-            effect = nil
-        }
-
-        func restoreBlur() {
-            guard isActive, window != nil else { return }
-            stopBlur()
-            let animator = UIViewPropertyAnimator(duration: 1, curve: .linear) { [weak self] in
-                self?.effect = UIBlurEffect(style: .systemUltraThinMaterialDark)
-            }
-            animator.pausesOnCompletion = true
-            self.animator = animator
-            animator.startAnimation()
-            animator.pauseAnimation()
-            animator.fractionComplete = 0.05
         }
     }
 
@@ -219,7 +158,8 @@ private struct LibraryTopBarBlur: UIViewControllerRepresentable {
         init() {
             super.init(frame: .zero)
             let gradient = layer as! CAGradientLayer
-            gradient.colors = [UIColor.white.cgColor, UIColor.white.cgColor, UIColor.clear.cgColor]
+            let subtle = UIColor.white.withAlphaComponent(0.15).cgColor
+            gradient.colors = [subtle, subtle, UIColor.clear.cgColor]
             gradient.locations = [0, 0.85, 1]
             gradient.startPoint = CGPoint(x: 0.5, y: 0)
             gradient.endPoint = CGPoint(x: 0.5, y: 1)

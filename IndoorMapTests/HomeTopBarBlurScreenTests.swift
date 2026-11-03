@@ -35,6 +35,7 @@ extension IndoorMapSerialTests {
             let navigation = try #require(navigation(in: rootController))
             let edge = window.bounds.midX
             let baseline = snapshot(window)
+            var transitionSamples = 0
             for attempt in 1...3 {
                 if usesSwiftUINavigation {
                     state.showsCart = true
@@ -45,13 +46,35 @@ extension IndoorMapSerialTests {
                 }
                 try await Task.sleep(for: .milliseconds(700))
                 #expect(navigation.viewControllers.count == 2)
+                let departingView = try #require(navigation.topViewController?.view)
                 if usesSwiftUINavigation {
                     state.showsCart = false
                 } else {
                     navigation.setNavigationBarHidden(true, animated: false)
                     navigation.popViewController(animated: true)
                 }
-                try await Task.sleep(for: .milliseconds(700))
+                for sample in 1...10 {
+                    try await Task.sleep(for: .milliseconds(80))
+                    let blur = try #require(findBlur(in: host.view))
+                    let layer = blur.layer.presentation() ?? blur.layer
+                    let windowLayer = window.layer.presentation() ?? window.layer
+                    let point = layer.convert(CGPoint(x: blur.bounds.midX, y: 180), to: windowLayer)
+                    let departingLayer = departingView.layer.presentation() ?? departingView.layer
+                    let coveredFromX = departingView.window == nil ? window.bounds.width
+                        : departingLayer.convert(.zero, to: windowLayer).x
+                    guard point.x > 12, point.x + 30 < coveredFromX else { continue }
+                    let frame = snapshot(window, afterScreenUpdates: false)
+                    var sharpestStep = 0.0
+                    for offset in -10..<10 {
+                        let left = try brightness(frame, x: point.x + CGFloat(offset), y: point.y)
+                        let right = try brightness(frame, x: point.x + CGFloat(offset + 1), y: point.y)
+                        sharpestStep = max(sharpestStep, left - right)
+                    }
+                    let inTransition = navigation.transitionCoordinator != nil
+                    if inTransition { transitionSamples += 1 }
+                    print("TOP_BLUR_TRANSITION swiftui=\(usesSwiftUINavigation) attempt=\(attempt) sample=\(sample) transitioning=\(inTransition) sharpestStep=\(sharpestStep)")
+                    #expect(sharpestStep > 0.25, "복귀 애니메이션 중에도 경계가 강하게 흐려지면 안 됩니다")
+                }
                 #expect(navigation.viewControllers.count == 1)
                 let restored = snapshot(window)
                 for y: CGFloat in [60, 180, 250] {
@@ -64,6 +87,7 @@ extension IndoorMapSerialTests {
                     #expect(near > far + 0.02, "복귀 후에도 옅은 블러는 남아야 합니다")
                 }
             }
+            #expect(transitionSamples > 0, "복귀가 끝나기 전의 화면도 검사해야 합니다")
         }
 
         @Observable
@@ -138,9 +162,9 @@ extension IndoorMapSerialTests {
             return view.subviews.compactMap { findBlur(in: $0) }.first
         }
 
-        private func snapshot(_ window: UIWindow) -> UIImage {
+        private func snapshot(_ window: UIWindow, afterScreenUpdates: Bool = true) -> UIImage {
             UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
-                window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: afterScreenUpdates)
             }
         }
 
