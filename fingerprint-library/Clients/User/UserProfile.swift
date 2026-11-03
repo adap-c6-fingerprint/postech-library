@@ -24,11 +24,9 @@ final class UserProfile {
     private(set) var interests: [String]
     // 관심사 목록. 예: ["A", "P", "Q"]
     // 같은 이유로 private(set). 빈 값이나 중복이 검사 없이 들어가는 실수를 막는다.
-    // ✅ 이슈 #237부터는 LCC 알파벳 대신 선호 분류 이름을 저장한다. 예: ["수학", "역사"]
+
     private(set) var affiliationKey: [String] = []
-    // ✅ 소속 경로 [상위 소속, 그룹, 최종 소속]. 예: ["POSTECH 학부", "학과 및 학부", "수학과"]
-    // ✅ 기본값([])이 있어서 이전 저장본도 SwiftData가 자동으로 열 수 있다(경량 마이그레이션).
-    // ✅ 비어 있으면 이전 형식의 프로필이므로 온보딩을 다시 받는다. (Q7)
+    // ✅ 비어 있으면 이전 형식의 프로필이므로 온보딩을 다시 받는다.
 
     init(departmentName: String, interests: [String], affiliationKey: [String] = []) throws {
     // ✅ affiliationKey: 온보딩에서 고른 소속 경로. 임시 프로필(fetchOrCreate)은 빈 값으로 만든다.
@@ -107,7 +105,7 @@ final class UserProfile {
         descriptor.fetchLimit = 1
         guard let profile = try context.fetch(descriptor).first else { return false }
         return !profile.affiliationKey.isEmpty
-        // ✅ 소속 경로가 없는 프로필(이전 형식·임시값)은 새 형식으로 바꿀 수 없으므로 온보딩을 다시 받는다. (Q7)
+        // 소속 경로가 없는 프로필(이전 형식·임시값)은 새 형식으로 바꿀 수 없으므로 온보딩을 다시 받는다.
     }
 
     static func save(
@@ -115,7 +113,7 @@ final class UserProfile {
     ) throws {
     // 온보딩에서 입력한 값을 저장한다.
     // 이미 프로필이 있으면 그 값을 바꾸고, 없으면 새로 만든다. 프로필은 항상 하나만 남는다.
-    // ✅ 소속 경로를 함께 저장한다. departmentName은 홈 화면 제목에 쓰는 최종 소속 이름이다.
+    // 소속 경로를 함께 저장한다. departmentName은 홈 화면 제목에 쓰는 최종 소속 이름이다.
         var descriptor = FetchDescriptor<UserProfile>()
         descriptor.fetchLimit = 1
         if let existing = try context.fetch(descriptor).first {

@@ -8,7 +8,7 @@ nonisolated struct UserProfileClient: Sendable {
     var hasProfile: @Sendable () async throws -> Bool
     // 온보딩을 마쳐 프로필이 저장돼 있는지 확인한다.
     var save: @Sendable (_ affiliationKey: [String], _ departmentName: String, _ interests: [String]) async throws -> Void
-    // ✅ 온보딩에서 고른 소속 경로·최종 소속 이름·선호 분류 이름을 저장한다.
+    // 온보딩에서 고른 소속 경로·최종 소속 이름·선호 분류 이름을 저장한다.
 }
 
 extension UserProfileClient: DependencyKey {
