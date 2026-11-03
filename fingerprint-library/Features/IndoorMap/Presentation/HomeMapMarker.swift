@@ -5,6 +5,13 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
         case favorite, stairs, elevator, toilet, shop, printer, studio
         case cafe, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone, other
 
+        var isAlwaysVisible: Bool {
+            switch self {
+            case .favorite, .stairs, .elevator: true
+            default: false
+            }
+        }
+
         var assetName: String? {
             switch self {
             case .favorite: "annotation_liked"
@@ -150,7 +157,7 @@ final class HomeMapMarkerCache {
             self.holdings = holdings
         }
         self.map = map
-        if showsAmenities, amenityMarkers == nil { amenityMarkers = HomeMapMarkerBuilder.amenities(on: map) }
-        return favoriteMarkers + (showsAmenities ? amenityMarkers ?? [] : [])
+        if amenityMarkers == nil { amenityMarkers = HomeMapMarkerBuilder.amenities(on: map) }
+        return favoriteMarkers + (amenityMarkers ?? []).filter { showsAmenities || $0.kind.isAlwaysVisible }
     }
 }

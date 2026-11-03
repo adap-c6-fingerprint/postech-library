@@ -57,6 +57,7 @@ extension IndoorMapSerialTests {
             }
             try await Task.sleep(for: .milliseconds(700))
             let map = try #require(map(in: host.view))
+            try checkPositionArtwork(in: map, bearing: store.navigationBearing)
             let firstWidth = map.visibleMapRect.width
             let firstCenter = map.centerCoordinate
             let firstRequest = store.cameraRequest.id
@@ -81,6 +82,30 @@ extension IndoorMapSerialTests {
                 from: .init(latitude: firstCenter.latitude, longitude: firstCenter.longitude),
                 to: .init(latitude: map.centerCoordinate.latitude, longitude: map.centerCoordinate.longitude))
             #expect(moved > 2, "현재 위치와 다음 구간에 맞춰 포커스가 이동해야 합니다")
+            try checkPositionArtwork(in: map, bearing: store.navigationBearing)
+            if !winding {
+                let image = UIGraphicsImageRenderer(bounds: host.view.bounds).image { _ in
+                    host.view.drawHierarchy(in: host.view.bounds, afterScreenUpdates: true)
+                }
+                try image.pngData()?.write(to: FileManager.default.temporaryDirectory
+                    .appendingPathComponent("pobook-navigation-assets.png"))
+            }
+        }
+
+        private func checkPositionArtwork(in map: MKMapView, bearing: Double?) throws {
+            let marker = try #require(map.annotations.compactMap {
+                map.view(for: $0) as? MapUserLocationAnnotationView
+            }.first)
+            #expect(marker.accessibilityIdentifier == "book-navigation-position")
+            let container = try #require(marker.subviews.first {
+                $0.accessibilityIdentifier == "user-location-heading-container"
+            })
+            if let bearing {
+                #expect(!container.isHidden)
+                let angle = bearing - map.camera.heading * .pi / 180
+                #expect(abs(container.transform.a - cos(angle)) < 0.000_001)
+                #expect(abs(container.transform.b - sin(angle)) < 0.000_001)
+            }
         }
 
         private func map(in view: UIView) -> MKMapView? {

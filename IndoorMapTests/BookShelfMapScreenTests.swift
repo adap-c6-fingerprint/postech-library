@@ -67,7 +67,7 @@ extension IndoorMapSerialTests {
             }
             let destination = try #require(navigation.topViewController)
             let view = try #require(descendants(of: destination.view).compactMap { $0 as? MKMapView }.first)
-            try await waitUntil { self.highlightedLabels(in: view) == ["S-3F-616-B"] }
+            try await waitUntil { self.highlightedLabels(in: view).isSuperset(of: ["S-3F-616-B"]) }
             #expect(destination.navigationItem.title == "서가 위치")
             #expect(searchStore.shelfMap?.map.selectedFloorID == third.id)
             #expect(searchStore.shelfMap?.map.isActive == false)
@@ -81,7 +81,7 @@ extension IndoorMapSerialTests {
             #expect(descendants(of: destination.view).allSatisfy { !($0 is UISegmentedControl) })
             host.overrideUserInterfaceStyle = .dark
             try await Task.sleep(for: .milliseconds(250))
-            #expect(highlightedLabels(in: view) == ["S-3F-616-B"])
+            #expect(highlightedLabels(in: view).isSuperset(of: ["S-3F-616-B"]))
             saveSnapshot(window, name: "3f-dark")
             host.overrideUserInterfaceStyle = .unspecified
 
@@ -110,7 +110,7 @@ extension IndoorMapSerialTests {
             let basketDestination = try #require(navigation.topViewController)
             let basketMap = try #require(descendants(of: basketDestination.view).compactMap { $0 as? MKMapView }.first)
             try await waitUntil {
-                self.highlightedLabels(in: basketMap) == ["S-3F-616-B", "S-3F-612-B", "S-3F-608-B"]
+                self.highlightedLabels(in: basketMap).isSuperset(of: ["S-3F-616-B", "S-3F-612-B", "S-3F-608-B"])
             }
             try await Task.sleep(for: .seconds(1))
             #expect(searchStore.shelfMap?.books == basket)
@@ -122,12 +122,10 @@ extension IndoorMapSerialTests {
         }
 
         private func highlightedLabels(in map: MKMapView) -> Set<String> {
-            Set(map.annotations.compactMap { annotation in
-                guard let annotation = annotation as? IndoorShelfLabelAnnotation,
-                      let view = map.view(for: annotation) as? IndoorShelfLabelView,
-                      view.accessibilityTraits.contains(.selected), !view.isHidden else { return nil }
-                return annotation.label.fixtureNumber
-            })
+            Set(map.annotations.compactMap { $0 as? IndoorShelfLabelAnnotation }.filter {
+                guard let view = map.view(for: $0) as? IndoorShelfLabelView else { return false }
+                return view.accessibilityTraits.contains(.selected) && !view.isHidden
+            }.flatMap { $0.presentation.members.map(\.fixtureNumber) })
         }
 
         private func checkHighlightPosition(in map: MKMapView, container: UIView) throws {

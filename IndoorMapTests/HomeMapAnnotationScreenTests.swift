@@ -16,11 +16,12 @@ extension IndoorMapSerialTests {
                 let marker = HomeMapMarker(id: kind.rawValue, kind: kind, floorID: IndoorMapTestData.groundID,
                     coordinate: IndoorMapTestData.point, title: "테스트")
                 let view = HomeMapAnnotationController.view(for: HomeMapPointAnnotation(marker), in: map)
-                let image = try #require(view.image)
+                let image = try #require(view.image, "어노테이션 이미지 누락: \(kind.assetName ?? kind.rawValue)")
                 #expect(image.renderingMode == .alwaysOriginal)
+                #expect(image.size == CGSize(width: 30, height: 30))
+                #expect(view.bounds.size == CGSize(width: 30, height: 30))
                 if let assetName = kind.assetName {
                     let original = try #require(UIImage(named: assetName))
-                    #expect(image.size == CGSize(width: 30, height: 30))
                     #expect(image.cgImage?.width == original.cgImage?.width)
                     #expect(image.cgImage?.height == original.cgImage?.height)
                 }
@@ -78,6 +79,7 @@ extension IndoorMapSerialTests {
             initial.indoorMap.shelfLabels = labels
             initial.bookSearch.basketBooks = [book]
             let store = Store(initialState: initial) { AppFeature() } withDependencies: {
+                $0.date.now = IndoorMapTestData.now
                 $0.indoorLocationClient = .testValue
                 $0.bookFavoritesClient.load = { keyStore.value }
                 $0.bookFavoritesClient.save = { keyStore.setValue($0) }
@@ -102,7 +104,10 @@ extension IndoorMapSerialTests {
             defer { window.isHidden = true; window.rootViewController = nil }
             try await waitUntil { self.map(in: host.view) != nil }
             let surface = try #require(self.map(in: host.view))
-            #expect(!surface.annotations.contains { $0 is HomeMapPointAnnotation })
+            let basic = surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }
+            #expect(basic.contains { $0.marker.kind == .stairs })
+            #expect(basic.contains { $0.marker.kind == .elevator })
+            #expect(basic.allSatisfy { [.stairs, .elevator].contains($0.marker.kind) })
             #expect(requests.value == 0)
             store.send(.bookSearch(.favoriteButtonTapped(book)))
             try await waitUntil { store.indoorMap.homeAnnotations.favoriteKeys.contains(book.recordKey) }
@@ -116,7 +121,7 @@ extension IndoorMapSerialTests {
             try await waitUntil { surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.contains { $0.marker.kind == .favorite } }
             #expect(requests.value == 0)
             store.send(.indoorMap(.homeAnnotations(.amenitiesTapped)))
-            try await waitUntil { surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.contains { $0.marker.kind == .stairs } }
+            try await waitUntil { surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.contains { $0.marker.kind == .toilet } }
             // 표시한 서가와 시설을 한 화면에 담아 실제 지도 합성을 확인한다.
             var rect = MKMapRect.null
             for annotation in surface.annotations.compactMap({ $0 as? HomeMapPointAnnotation }) {
@@ -130,10 +135,17 @@ extension IndoorMapSerialTests {
             }
             try image.pngData()?.write(to: FileManager.default.temporaryDirectory.appendingPathComponent("issue229-home-annotations.png"))
             store.send(.indoorMap(.homeAnnotations(.amenitiesTapped)))
-            try await waitUntil { !surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.contains { $0.marker.kind != .favorite } }
+            try await waitUntil {
+                surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.allSatisfy {
+                    [.favorite, .stairs, .elevator].contains($0.marker.kind)
+                }
+            }
+            #expect(surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.contains { $0.marker.kind == .stairs })
+            #expect(surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.contains { $0.marker.kind == .favorite })
             #expect(requests.value == 0)
             store.send(.bookSearch(.favoriteButtonTapped(book)))
-            try await waitUntil { surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.isEmpty }
+            try await waitUntil { !surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.contains { $0.marker.kind == .favorite } }
+            #expect(surface.annotations.compactMap { $0 as? HomeMapPointAnnotation }.contains { $0.marker.kind == .elevator })
             #expect(store.indoorMap.homeAnnotations.holdings.isEmpty)
             #expect(requests.value == 0)
         }

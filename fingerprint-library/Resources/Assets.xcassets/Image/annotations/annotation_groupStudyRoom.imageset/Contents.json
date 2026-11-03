@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=meeting room, 속성 2=group study room.png",
+      "filename" : "group-study-room-1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=meeting room, 속성 2=group study room 1.png",
+      "filename" : "group-study-room-2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=meeting room, 속성 2=group study room 2.png",
+      "filename" : "group-study-room-3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

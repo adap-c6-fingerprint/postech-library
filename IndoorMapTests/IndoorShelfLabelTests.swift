@@ -67,10 +67,11 @@ struct IndoorShelfLabelTests {
         view.configure(annotation)
         #expect(annotation.title == "301-A")
         #expect(annotation.subtitle == "AC1.G72 ~ AM79.K8")
-        #expect(view.bounds.height >= 30)
-        #expect(view.image?.size == view.bounds.size)
+        #expect(view.bounds.height >= 13)
+        #expect(view.image == nil)
+        #expect(view.backgroundColor == .clear)
         #expect(view.collisionMode == .rectangle)
-        #expect(view.displayPriority == .defaultHigh)
+        #expect(view.displayPriority == .required)
         let empty = try #require(labels.first { $0.content == .emptyShelf })
         #expect(IndoorShelfLabelAnnotation(empty).subtitle == "빈 서가")
     }
@@ -100,7 +101,7 @@ struct IndoorShelfLabelTests {
             coordinator.update(parent: parent(ordinal), in: view)
             let visible = view.annotations.compactMap { $0 as? IndoorShelfLabelAnnotation }
             #expect(ordinal == 0 ? visible.isEmpty : !visible.isEmpty)
-            #expect(visible.allSatisfy { $0.label.floorID == parent(ordinal).floor.id })
+            #expect(visible.allSatisfy { $0.presentation.floorID == parent(ordinal).floor.id })
             #expect(view.camera.centerCoordinate.latitude == camera.centerCoordinate.latitude)
             #expect(view.camera.centerCoordinate.longitude == camera.centerCoordinate.longitude)
             #expect(view.camera.centerCoordinateDistance == camera.centerCoordinateDistance)

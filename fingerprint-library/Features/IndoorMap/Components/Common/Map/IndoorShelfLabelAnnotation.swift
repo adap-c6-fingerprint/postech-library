@@ -1,106 +1,108 @@
 import MapKit
 
-/// 레이블의 기준점은 서가 도형 중심이다. 길찾기 도착 좌표로 사용하지 않는다.
+/// 표시 전용 레이블이다. 길찾기와 소장 위치는 members의 원본 도형을 계속 사용한다.
 final class IndoorShelfLabelAnnotation: NSObject, MKAnnotation {
-    let label: IndoorShelfLabel
-    let coordinate: CLLocationCoordinate2D
-    lazy var labelSize: CGSize = IndoorShelfLabelView.size(for: self)
-    var title: String? { "\(label.realNumber)-\(label.side.rawValue)" }
+    let presentation: IndoorShelfLabelPresentation
+    var coordinate: CLLocationCoordinate2D { presentation.coordinate }
+    var title: String? { presentation.text }
+    var displayText: String {
+        presentation.level == .group && !presentation.text.contains("\n")
+            ? presentation.text.replacingOccurrences(of: "~", with: "\n~") : presentation.text
+    }
     var subtitle: String? {
-        switch label.content {
-        case .callNumberRange(let start, let end): "\(start) ~ \(end)"
-        case .category(let category): category
-        case .emptyShelf: "빈 서가"
-        }
+        presentation.members.map { label in
+            switch label.content {
+            case .callNumberRange(let start, let end): "\(start) ~ \(end)"
+            case .category(let category): category
+            case .emptyShelf: "빈 서가"
+            }
+        }.joined(separator: ", ")
     }
+    lazy var labelSize = IndoorShelfLabelView.size(for: self)
+    var layoutAngle: CGFloat = 0
+    var layoutOffset: CGPoint = .zero
 
-    init(_ label: IndoorShelfLabel) {
-        self.label = label
-        let rect = MapKitGeometry.mapRect(for: label.geometry)
-        coordinate = MKMapPoint(x: rect.midX, y: rect.midY).coordinate
-        super.init()
-    }
+    init(_ presentation: IndoorShelfLabelPresentation) { self.presentation = presentation }
+    convenience init(_ label: IndoorShelfLabel) { self.init(.side(label)) }
 }
 
-/// 번호·범위를 화면 크기로 제공한다. 표시할 레이블의 겹침은 Coordinator에서 처리한다.
+/// 카드·청구기호 없이 번호만 그린다. 번호·면 레이블은 서가 방향을 따르되 거꾸로 뒤집지 않는다.
 final class IndoorShelfLabelView: MKAnnotationView {
     static let reuseID = "indoor-shelf-label"
-    private let numberLabel = UILabel()
-    private let rangeLabel = UILabel()
-    private var highlightsShelf = false
-    private var navigationAppearance = false
+    private let textLabel = UILabel()
 
     override init(annotation: (any MKAnnotation)?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        numberLabel.font = .systemFont(ofSize: 11, weight: .semibold)
-        numberLabel.textColor = .label
-        numberLabel.textAlignment = .center
-        rangeLabel.font = .monospacedSystemFont(ofSize: 8, weight: .regular)
-        rangeLabel.textColor = .secondaryLabel
-        rangeLabel.textAlignment = .center
-        rangeLabel.numberOfLines = 2
-        rangeLabel.lineBreakMode = .byCharWrapping
+        backgroundColor = .clear
         collisionMode = .rectangle
-        displayPriority = .defaultHigh
         clusteringIdentifier = nil
         isEnabled = false
         isAccessibilityElement = true
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: IndoorShelfLabelView, _: UITraitCollection) in
-            if let annotation = view.annotation as? IndoorShelfLabelAnnotation {
-                view.configure(annotation, highlighted: view.highlightsShelf, navigationAppearance: view.navigationAppearance)
-            }
-        }
+        textLabel.textAlignment = .center
+        textLabel.numberOfLines = 0
+        textLabel.backgroundColor = .clear
+        textLabel.isUserInteractionEnabled = false
+        textLabel.accessibilityIdentifier = "shelf-label-text"
+        textLabel.layer.shadowColor = UIColor.black.cgColor
+        textLabel.layer.shadowOpacity = 0.25
+        textLabel.layer.shadowRadius = 1
+        textLabel.layer.shadowOffset = .zero
+        addSubview(textLabel)
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    static func size(for annotation: IndoorShelfLabelAnnotation) -> CGSize {
-        let range = UILabel()
-        range.font = .monospacedSystemFont(ofSize: 8, weight: .regular)
-        range.numberOfLines = 2
-        range.lineBreakMode = .byCharWrapping
-        range.text = annotation.subtitle
-        let width = min(156, max(64, range.sizeThatFits(CGSize(width: 156, height: 100)).width))
-        return CGSize(width: width + 12, height: 22 + range.sizeThatFits(CGSize(width: width, height: 100)).height)
+    private static let typography = DS.Typography.caption1
+
+    private static var font: UIFont {
+        UIFont(name: typography.fontName, size: typography.size)
+            ?? .systemFont(ofSize: typography.size, weight: .regular)
     }
 
-    func configure(_ annotation: IndoorShelfLabelAnnotation, highlighted: Bool = false, navigationAppearance: Bool = false) {
+    private static func text(for annotation: IndoorShelfLabelAnnotation, highlighted: Bool = false) -> NSAttributedString {
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .center
+        paragraph.minimumLineHeight = typography.lineHeight
+        paragraph.maximumLineHeight = typography.lineHeight
+        return NSAttributedString(string: annotation.displayText, attributes: [
+            .font: font,
+            .kern: typography.letterSpacing,
+            .paragraphStyle: paragraph,
+            .foregroundColor: UIColor.white.withAlphaComponent(highlighted ? 1 : 0.82),
+            .strokeColor: UIColor.black.withAlphaComponent(0.75),
+            .strokeWidth: -2.5
+        ])
+    }
+
+    static func size(for annotation: IndoorShelfLabelAnnotation) -> CGSize {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = font
+        label.attributedText = text(for: annotation)
+        let size = label.sizeThatFits(CGSize(width: 180, height: 100))
+        return CGSize(width: ceil(size.width) + 4, height: ceil(size.height) + 2)
+    }
+
+    func configure(_ annotation: IndoorShelfLabelAnnotation, highlighted: Bool = false) {
         self.annotation = annotation
-        highlightsShelf = highlighted
-        self.navigationAppearance = navigationAppearance
-        displayPriority = highlighted ? .required : .defaultHigh
-        numberLabel.text = annotation.title
-        rangeLabel.text = annotation.subtitle
-        numberLabel.textColor = navigationAppearance ? .black : UIColor.label.resolvedColor(with: traitCollection)
-        rangeLabel.textColor = navigationAppearance ? .black : UIColor.secondaryLabel.resolvedColor(with: traitCollection)
         let size = annotation.labelSize
-        let contentWidth = size.width - 12
-        let rangeHeight = size.height - 22
-        numberLabel.frame = CGRect(x: 0, y: 0, width: contentWidth, height: 14)
-        rangeLabel.frame = CGRect(x: 0, y: 0, width: contentWidth, height: rangeHeight)
-        // 이미지 크기를 MapKit에도 전달해 번호·범위 전체를 레이블 충돌 영역으로 인식하게 한다.
-        image = UIGraphicsImageRenderer(size: size).image { context in
-            let rect = CGRect(origin: .zero, size: size).insetBy(dx: 0.5, dy: 0.5)
-            let card = UIBezierPath(roundedRect: rect, cornerRadius: 5)
-            (navigationAppearance ? BookNavigationPalette.uiAccent : UIColor.systemBackground.resolvedColor(with: traitCollection)).setFill()
-            card.fill()
-            if highlighted && !navigationAppearance {
-                UIColor.systemOrange.withAlphaComponent(0.2).resolvedColor(with: traitCollection).setFill()
-                card.fill()
-            }
-            (navigationAppearance ? BookNavigationPalette.uiAccent : (highlighted ? UIColor.systemOrange : UIColor.separator)).resolvedColor(with: traitCollection).setStroke()
-            card.lineWidth = highlighted ? 2 : 0.5
-            card.stroke()
-            context.cgContext.saveGState()
-            context.cgContext.translateBy(x: 6, y: 3)
-            numberLabel.layer.render(in: context.cgContext)
-            context.cgContext.restoreGState()
-            context.cgContext.translateBy(x: 6, y: 18)
-            rangeLabel.layer.render(in: context.cgContext)
-        }
-        centerOffset = .zero
-        accessibilityIdentifier = "shelf-label-\(annotation.label.fixtureNumber)"
-        accessibilityLabel = "서가 \(annotation.label.realNumber), \(annotation.label.side.rawValue)면"
+        let angle = annotation.layoutAngle
+        let width = abs(cos(angle)) * size.width + abs(sin(angle)) * size.height
+        let height = abs(sin(angle)) * size.width + abs(cos(angle)) * size.height
+        bounds = CGRect(x: 0, y: 0, width: width, height: height)
+        centerOffset = annotation.layoutOffset
+        textLabel.transform = .identity
+        textLabel.bounds = CGRect(origin: .zero, size: size)
+        textLabel.center = CGPoint(x: bounds.midX, y: bounds.midY)
+        textLabel.font = Self.font
+        textLabel.attributedText = Self.text(for: annotation, highlighted: highlighted)
+        textLabel.transform = CGAffineTransform(rotationAngle: angle)
+        // 겹쳐도 번호를 유지한다. 찜·편의시설은 별도 우선순위로 위에 표시한다.
+        displayPriority = .required
+        zPriority = MapAnnotationPriority.shelf
+        selectedZPriority = MapAnnotationPriority.shelf
+        accessibilityIdentifier = "shelf-label-\(annotation.presentation.id)"
+        accessibilityLabel = "서가 \(annotation.presentation.text.replacingOccurrences(of: "\n", with: ", "))"
         accessibilityValue = annotation.subtitle
         accessibilityTraits = highlighted ? [.staticText, .selected] : [.staticText]
     }

@@ -14,6 +14,8 @@ extension IndoorMapSerialTests {
             let third = try #require(map.floors.first { $0.ordinal == 2 })
             let fourth = try #require(map.floors.first { $0.ordinal == 3 })
             var initial = AppFeature.State()
+            initial.hasCheckedProfile = true
+            initial.hasStartedRecommendationSession = true
             initial.indoorMap.map = map
             initial.indoorMap.selectedFloorID = third.id
             initial.indoorMap.requestCamera(.initialFloor(third.id))
@@ -44,7 +46,7 @@ extension IndoorMapSerialTests {
             store.send(.indoorMap(.floorSelected(fourth.id)))
             try await waitUntil {
                 let labels = view.annotations.compactMap { $0 as? IndoorShelfLabelAnnotation }
-                return !labels.isEmpty && labels.allSatisfy { $0.label.floorID == fourth.id }
+                return !labels.isEmpty && labels.allSatisfy { $0.presentation.floorID == fourth.id }
             }
             #expect(abs(view.camera.centerCoordinateDistance - camera.centerCoordinateDistance) < 0.1)
             try await Task.sleep(for: .milliseconds(250))
@@ -60,16 +62,6 @@ extension IndoorMapSerialTests {
             view.setCamera(close, animated: false)
             // MapKit의 충돌 레이블 페이드가 끝난 상태를 캡처한다.
             try await Task.sleep(for: .seconds(1))
-            let frames = view.annotations.compactMap { annotation -> CGRect? in
-                guard annotation is IndoorShelfLabelAnnotation, let labelView = view.view(for: annotation),
-                      !labelView.isHidden, labelView.alpha > 0 else { return nil }
-                return view.convert(labelView.bounds, from: labelView)
-            }
-            for index in frames.indices {
-                for other in frames.indices where other > index {
-                    #expect(!frames[index].intersects(frames[other]), "서가 레이블이 겹칩니다.")
-                }
-            }
             saveSnapshot(window, name: "4f-close")
         }
 

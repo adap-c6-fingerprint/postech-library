@@ -80,9 +80,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var renderedPositionAppearance: Appearance?
         private var renderedPositionNavigationAppearance = false
         private var renderedShelves: [ShelfDestination] = []
-        private var renderedShelfLabels: [IndoorShelfLabel] = []
-        private var shelfLabelAnnotations: [IndoorShelfLabelAnnotation] = []
-        private var displayedShelfLabelIDs = Set<String>()
+        private let shelfLabelController = IndoorShelfLabelController()
         private let homeAnnotations = HomeMapAnnotationController()
         private var renderedRoute: IndoorRoute?
         private var renderedGroupTransitionNodes: [RouteNode] = []
@@ -117,7 +115,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.isRotateEnabled = true
             view.showsCompass = false
             view.showsScale = false
-            view.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 25, maxCenterCoordinateDistance: 5_000), animated: false)
+            view.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 5, maxCenterCoordinateDistance: 5_000), animated: false)
             view.accessibilityIdentifier = "indoor-map"
             let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))
             tap.cancelsTouchesInView = false
@@ -163,12 +161,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                         style(renderer, overlay: overlay)
                     }
                 }
-                for case let annotation as IndoorShelfLabelAnnotation in view.annotations {
-                    (view.view(for: annotation) as? IndoorShelfLabelView)?.configure(
-                        annotation, highlighted: highlightedIDs.contains(annotation.label.mapElementID),
-                        navigationAppearance: parent.navigationAppearance
-                    )
-                }
+                layoutShelfLabels(in: view)
             }
             pendingCameraRequest = parent.cameraRequest == lastCameraRequest ? nil : parent.cameraRequest
             if pendingCameraRequest != nil { view.setNeedsLayout() }
@@ -254,47 +247,21 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
         }
 
-        /// 현재 층의 서가 면에 번호·범위를 표시한다. 일반 위치 갱신에서는 annotation을 재사용한다.
+        /// 현재 층의 표시 전용 군집·번호·면 레이블을 갱신한다.
         private func updateShelfLabels(in view: MKMapView) {
-            let labels = parent.shelfLabels.filter { $0.floorID == parent.floor.id }
-            if labels != renderedShelfLabels {
-                view.removeAnnotations(view.annotations.filter { $0 is IndoorShelfLabelAnnotation })
-                renderedShelfLabels = labels
-                shelfLabelAnnotations = labels.map { IndoorShelfLabelAnnotation($0) }
-                displayedShelfLabelIDs = []
-            }
+            shelfLabelController.update(parent.shelfLabels.filter { $0.floorID == parent.floor.id }, in: view)
             layoutShelfLabels(in: view)
         }
 
-        /// 화면 중심에 가까운 레이블부터 겹치지 않게 배치한다. 촬영 순서는 사용하지 않는다.
         private func layoutShelfLabels(in view: MKMapView) {
-            guard view.bounds.width > 0, view.bounds.height > 0 else { return }
-            let center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
-            let candidates = shelfLabelAnnotations.compactMap { annotation -> (IndoorShelfLabelAnnotation, CGRect, CGFloat)? in
-                let point = view.convert(annotation.coordinate, toPointTo: view)
-                let size = annotation.labelSize
-                let frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2,
-                                   width: size.width, height: size.height)
-                guard frame.intersects(view.bounds) else { return nil }
-                return (annotation, frame.insetBy(dx: -3, dy: -3), hypot(point.x - center.x, point.y - center.y))
-            }.sorted {
-                let left = parent.highlightedFeatureIDs.contains($0.0.label.mapElementID)
-                let right = parent.highlightedFeatureIDs.contains($1.0.label.mapElementID)
-                if left != right { return left }
-                return $0.2 == $1.2 ? $0.0.label.id < $1.0.label.id : $0.2 < $1.2
+            shelfLabelController.layout(in: view, highlighted: parent.highlightedFeatureIDs)
+        }
+
+        func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+            for view in views where view.annotation is MKUserLocation {
+                view.zPriority = MapAnnotationPriority.user
+                view.selectedZPriority = MapAnnotationPriority.user
             }
-            var occupied = homeAnnotations.occupiedRects(in: view)
-            var chosen: [IndoorShelfLabelAnnotation] = []
-            for (annotation, frame, _) in candidates where !occupied.contains(where: { $0.intersects(frame) }) {
-                chosen.append(annotation)
-                occupied.append(frame)
-            }
-            let ids = Set(chosen.map { $0.label.id })
-            guard ids != displayedShelfLabelIDs else { return }
-            view.removeAnnotations(view.annotations.compactMap { $0 as? IndoorShelfLabelAnnotation }
-                .filter { !ids.contains($0.label.id) })
-            view.addAnnotations(chosen.filter { !displayedShelfLabelIDs.contains($0.label.id) })
-            displayedShelfLabelIDs = ids
         }
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -303,6 +270,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            layoutShelfLabels(in: mapView)
             updatePositionMarkerBearing(in: mapView)
         }
 
@@ -443,19 +411,24 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         private func updatePositionMarkerBearing(in map: MKMapView) {
-            guard let annotation = positionAnnotation, let view = map.view(for: annotation) else { return }
-            if let view = view as? HomeUserLocationAnnotationView {
-                view.configure(headingDegrees: annotation.position.headingDegrees, mapHeading: map.camera.heading)
-            } else if parent.navigationAppearance {
-                configureNavigationBearing(view, in: map)
-            }
+            guard let annotation = positionAnnotation,
+                  let view = map.view(for: annotation) as? MapUserLocationAnnotationView else { return }
+            configurePositionBearing(view, position: annotation.position, in: map)
         }
 
-        private func configureNavigationBearing(_ view: MKAnnotationView, in map: MKMapView) {
-            guard let arrow = view.viewWithTag(8_124) as? UIImageView else { return }
-            arrow.image = UIImage(systemName: parent.navigationBearingRadians == nil ? "circle.fill" : "location.north.fill")
-            let angle = parent.navigationBearingRadians.map { $0 - map.camera.heading * .pi / 180 } ?? 0
-            arrow.transform = CGAffineTransform(rotationAngle: CGFloat(angle))
+        /// 홈은 사용자 방향, 길안내는 계산한 경로 방향을 같은 헤드 에셋에 적용한다.
+        private func configurePositionBearing(_ view: MapUserLocationAnnotationView,
+                                              position: IndoorPosition, in map: MKMapView) {
+            let headingDegrees: Double?
+            if parent.navigationAppearance {
+                headingDegrees = parent.navigationBearingRadians.map {
+                    let degrees = ($0 * 180 / .pi).truncatingRemainder(dividingBy: 360)
+                    return degrees < 0 ? degrees + 360 : degrees
+                }
+            } else {
+                headingDegrees = position.headingDegrees
+            }
+            view.configure(headingDegrees: headingDegrees, mapHeading: map.camera.heading)
         }
 
         /// 최초 확대·층 전체 맞춤 또는 특정 좌표 중심 이동을 명시적으로 적용한다.
@@ -651,14 +624,17 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = annotation as? HomeMapPointAnnotation {
                 return HomeMapAnnotationController.view(for: annotation, in: mapView)
             }
-            if let annotation = annotation as? PositionAnnotation, parent.appearance == .home,
-               annotation.position.source != .manual {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "home-user-position") as? HomeUserLocationAnnotationView
-                    ?? HomeUserLocationAnnotationView(annotation: annotation, reuseIdentifier: "home-user-position")
+            if let annotation = annotation as? PositionAnnotation,
+               parent.navigationAppearance || (parent.appearance == .home && annotation.position.source != .manual) {
+                let reuseID = parent.navigationAppearance ? "navigation-position" : "home-user-position"
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID) as? MapUserLocationAnnotationView
+                    ?? MapUserLocationAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
                 view.annotation = annotation
                 view.accessibilityLabel = annotation.title
-                view.accessibilityIdentifier = annotation.position.source == .simulation ? "simulation-position" : "user-position"
-                view.configure(headingDegrees: annotation.position.headingDegrees, mapHeading: mapView.camera.heading)
+                view.accessibilityValue = parent.navigationAppearance ? "경로 진행 방향" : nil
+                view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position"
+                    : (annotation.position.source == .simulation ? "simulation-position" : "user-position")
+                configurePositionBearing(view, position: annotation.position, in: mapView)
                 return view
             }
             if let annotation = annotation as? BookNavigationDestinationAnnotation {
@@ -677,38 +653,13 @@ struct IndoorMapKitView: UIViewRepresentable {
                 content.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 view.addSubview(content)
                 view.displayPriority = .required
+                view.zPriority = MapAnnotationPriority.route
+                view.selectedZPriority = MapAnnotationPriority.route
                 view.collisionMode = .circle
                 view.isEnabled = false
                 view.isAccessibilityElement = true
                 view.accessibilityLabel = "목적지: \(annotation.title ?? "도서")"
                 view.accessibilityIdentifier = "book-navigation-destination"
-                return view
-            }
-            if let annotation = annotation as? PositionAnnotation, parent.navigationAppearance {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "navigation-position")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "navigation-position")
-                view.annotation = annotation
-                let size = CGSize(width: 72, height: 58)
-                view.image = UIGraphicsImageRenderer(size: size).image { _ in
-                    let oval = UIBezierPath(ovalIn: CGRect(x: 4, y: 12, width: 64, height: 34))
-                    UIColor.black.setFill(); oval.fill()
-                    BookNavigationPalette.uiAccent.setStroke(); oval.lineWidth = 4; oval.stroke()
-                }
-                if view.viewWithTag(8_124) == nil {
-                    let arrow = UIImageView(frame: CGRect(x: 24, y: 17, width: 24, height: 24))
-                    arrow.tag = 8_124; arrow.contentMode = .scaleAspectFit
-                    arrow.tintColor = BookNavigationPalette.uiAccent
-                    view.addSubview(arrow)
-                }
-                view.layer.shadowColor = BookNavigationPalette.uiAccent.cgColor
-                view.layer.shadowOpacity = 0.75; view.layer.shadowRadius = 12
-                view.layer.shadowOffset = .zero
-                view.displayPriority = .required; view.isEnabled = false
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = annotation.title
-                view.accessibilityValue = "경로 진행 방향"
-                view.accessibilityIdentifier = "book-navigation-position"
-                configureNavigationBearing(view, in: mapView)
                 return view
             }
             if let annotation = annotation as? MKPointAnnotation,
@@ -726,7 +677,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                     circle.stroke()
                 }
                 view.centerOffset = .zero
-                view.zPriority = .max
+                view.zPriority = MapAnnotationPriority.route
+                view.selectedZPriority = MapAnnotationPriority.route
                 view.displayPriority = .required
                 view.collisionMode = .circle
                 view.clusteringIdentifier = nil
@@ -740,8 +692,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: IndoorShelfLabelView.reuseID)
                     as? IndoorShelfLabelView
                     ?? IndoorShelfLabelView(annotation: annotation, reuseIdentifier: IndoorShelfLabelView.reuseID)
-                view.configure(annotation, highlighted: parent.highlightedFeatureIDs.contains(annotation.label.mapElementID),
-                               navigationAppearance: parent.navigationAppearance)
+                view.configure(annotation, highlighted: annotation.presentation.isHighlighted(by: parent.highlightedFeatureIDs))
                 return view
             }
             if let annotation = annotation as? IndoorRouteTransitionAnnotation {
@@ -750,6 +701,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.annotation = annotation
                 view.image = annotation.markerImage
                 view.centerOffset = .zero
+                view.zPriority = MapAnnotationPriority.route
+                view.selectedZPriority = MapAnnotationPriority.route
                 view.collisionMode = .circle
                 view.displayPriority = .required
                 view.clusteringIdentifier = nil
@@ -776,6 +729,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                     view.addSubview(dot)
                 }
                 view.displayPriority = .required
+                view.zPriority = MapAnnotationPriority.user
+                view.selectedZPriority = MapAnnotationPriority.user
                 view.isEnabled = false
                 view.isAccessibilityElement = true
                 view.accessibilityLabel = "시뮬레이션 위치"
@@ -791,6 +746,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.canShowCallout = true
                 view.titleVisibility = .visible
                 view.displayPriority = .required
+                view.zPriority = MapAnnotationPriority.marker
+                view.selectedZPriority = MapAnnotationPriority.marker
                 view.clusteringIdentifier = nil
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = annotation.subtitle
@@ -803,6 +760,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.canShowCallout = false
             view.titleVisibility = .hidden
             view.displayPriority = .defaultLow
+            view.zPriority = MapAnnotationPriority.marker
+            view.selectedZPriority = MapAnnotationPriority.marker
             view.clusteringIdentifier = nil
             if let annotation = annotation as? FeatureAnnotation {
                 view.glyphImage = UIImage(systemName: Self.symbol(for: annotation.feature.category))
@@ -812,6 +771,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.glyphImage = UIImage(systemName: annotation.position.source == .replay ? "play.fill" : "mappin")
                 view.markerTintColor = annotation.position.source == .replay ? .systemOrange : .systemPurple
                 view.displayPriority = .required
+                view.zPriority = MapAnnotationPriority.user
+                view.selectedZPriority = MapAnnotationPriority.user
                 view.accessibilityLabel = annotation.title
             }
             return view

@@ -16,28 +16,22 @@ final class HomeMapAnnotationController {
         map.addAnnotations(markers.filter { byID[$0.id]?.marker != $0 }.map(HomeMapPointAnnotation.init))
     }
 
-    func occupiedRects(in map: MKMapView) -> [CGRect] {
-        markers.map {
-            let point = map.convert($0.coordinate.clCoordinate, toPointTo: map)
-            return CGRect(x: point.x - 19, y: point.y - 19, width: 38, height: 38)
-        }
-    }
-
     static func view(for annotation: HomeMapPointAnnotation, in map: MKMapView) -> MKAnnotationView {
         let reuseID = "home-map-icon"
         let view = map.dequeueReusableAnnotationView(withIdentifier: reuseID)
             ?? MKAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
         view.annotation = annotation
         if let name = annotation.marker.kind.assetName {
-            view.image = icon(named: name)
+            view.image = MapAnnotationImage.asset(named: name)
         } else {
-            view.image = UIImage(systemName: "mappin.circle.fill",
-                withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?
-                .withTintColor(.systemCyan, renderingMode: .alwaysOriginal)
+            view.image = MapAnnotationImage.symbol(named: "mappin.circle.fill", tintColor: .systemCyan)
         }
+        view.bounds = CGRect(origin: .zero, size: MapAnnotationImage.size)
         view.centerOffset = .zero
         view.canShowCallout = true
-        view.displayPriority = annotation.marker.kind == .favorite ? .required : .defaultHigh
+        view.displayPriority = .required
+        view.zPriority = MapAnnotationPriority.marker
+        view.selectedZPriority = MapAnnotationPriority.marker
         view.collisionMode = .circle
         view.clusteringIdentifier = nil
         view.isAccessibilityElement = true
@@ -47,12 +41,6 @@ final class HomeMapAnnotationController {
         return view
     }
 
-    /// 에셋의 픽셀 크기·배율과 관계없이 지도에서는 30pt로 표시한다. 원본 픽셀과 색상은 유지한다.
-    private static func icon(named name: String) -> UIImage? {
-        guard let image = UIImage(named: name), let pixels = image.cgImage else { return nil }
-        return UIImage(cgImage: pixels, scale: CGFloat(pixels.width) / 30, orientation: image.imageOrientation)
-            .withRenderingMode(.alwaysOriginal)
-    }
 }
 
 @MainActor

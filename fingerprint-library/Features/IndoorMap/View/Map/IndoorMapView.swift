@@ -104,7 +104,9 @@ struct IndoorMapView: View {
                             floorPicker(map: map, floor: floor)
                         }
                     }
-                    if appearance == .home, showsDestinationCard { IndoorRouteControls(store: store) }
+                    if appearance == .home, showsDestinationCard {
+                        IndoorRouteControls(store: store)
+                    }
                     Spacer(minLength: 0)
                 }
                 .padding(.trailing, appearance == .home && showsCurrentLocationButton ? 62 : 0)
@@ -145,7 +147,7 @@ struct IndoorMapView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("map-amenities")
-        .accessibilityValue(store.homeAnnotations.showsAmenities ? "표시 중" : "숨김")
+        .accessibilityValue(store.homeAnnotations.showsAmenities ? "전체 시설 표시 중" : "기본 아이콘만 표시 중")
     }
 
     private func homeMarkers(on map: IndoorMap) -> [HomeMapMarker] {
@@ -197,28 +199,54 @@ struct IndoorMapView: View {
     private func floorPicker(map: IndoorMap, floor: IndoorMapFloor) -> some View
     {
         let isHome = appearance == .home
+        let height = CGFloat(map.floors.count) * 34
         return ViewThatFits(in: .vertical) {
             VStack(alignment: .leading, spacing: 0) {
-                floorButtons(map: map, floor: floor, horizontal: false)
+                floorButtons(map: map, floor: floor)
             }
-            .fixedSize()
+            .padding(0)
+            .frame(maxWidth: .infinity, minHeight: height, maxHeight: height, alignment: .topLeading)
+            .frame(width: isHome ? 61 : 56)
             HStack(spacing: 0) {
-                floorButtons(map: map, floor: floor, horizontal: true)
+                floorButtons(map: map, floor: floor)
             }
             .fixedSize()
         }
         .background(isHome ? .clear : Color(uiColor: .systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .glassEffect(isHome ? .regular : .identity, in: .rect(cornerRadius: 12))
+        .overlay {
+            GeometryReader { geometry in
+                if map.floors.count > 1 {
+                    Path { path in
+                        let size = geometry.size
+                        let horizontal = size.width > size.height
+                        for index in 1..<map.floors.count {
+                            let fraction = CGFloat(index) / CGFloat(map.floors.count)
+                            if horizontal {
+                                let x = size.width * fraction
+                                path.move(to: CGPoint(x: x, y: 0))
+                                path.addLine(to: CGPoint(x: x, y: size.height))
+                            } else {
+                                let y = size.height * fraction
+                                path.move(to: CGPoint(x: 0, y: y))
+                                path.addLine(to: CGPoint(x: size.width, y: y))
+                            }
+                        }
+                    }
+                    .stroke(isHome ? Color.white.opacity(0.35) : Color(uiColor: .separator), lineWidth: 1)
+                }
+            }
+            .allowsHitTesting(false)
+        }
         .overlay(
             RoundedRectangle(cornerRadius: 12).strokeBorder(Color(uiColor: .separator).opacity(0.6))
         )
-        .shadow(color: .black.opacity(isHome ? 0.1 : 0.08), radius: isHome ? 2.5 : 4,
-                x: isHome ? 1 : 0, y: isHome ? 1 : 2)
+        .shadow(color: .black.opacity(0.1), radius: 2.5, x: 1, y: 1)
     }
 
-    /// 세로·가로 배치에서 같은 선택 동작과 최소 44pt 터치 영역을 사용한다.
-    private func floorButtons(map: IndoorMap, floor: IndoorMapFloor, horizontal: Bool) -> some View {
+    /// 세로·가로 배치 모두 34pt 높이와 같은 글자 여백을 사용한다.
+    private func floorButtons(map: IndoorMap, floor: IndoorMapFloor) -> some View {
         let isHome = appearance == .home
         return ForEach(map.floors.reversed()) { item in
             Button {
@@ -226,8 +254,12 @@ struct IndoorMapView: View {
             } label: {
                 Text(isHome ? "\(item.ordinal + 1)F" : item.name)
                     .font(.subheadline.weight(item.id == floor.id ? .bold : .regular))
-                    .frame(width: horizontal ? 44 : (isHome ? 61 : 56))
-                    .frame(minHeight: 44)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 16)
+                    .frame(width: isHome ? 61 : 56, height: 34)
                     .background(
                         item.id == floor.id
                             ? (isHome ? Color(red: 0.88, green: 0.95, blue: 0.19) : Color(uiColor: .label))
@@ -238,10 +270,6 @@ struct IndoorMapView: View {
                             ? (isHome ? .black : Color(uiColor: .systemBackground))
                             : (isHome ? .white : .primary)
                     )
-                    .overlay(alignment: horizontal ? .trailing : .bottom) {
-                        Rectangle().fill(Color(uiColor: .separator).opacity(0.3))
-                            .frame(width: horizontal ? 0.5 : nil, height: horizontal ? nil : 0.5)
-                    }
             }
             .buttonStyle(.plain)
             .accessibilityLabel("\(item.name) 지도 보기")
