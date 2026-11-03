@@ -30,7 +30,11 @@ struct LibraryMapView: View {
                 .overlay(alignment: .topLeading) { homeHeader }
                 .background(.black)
                 .toolbar {
-                    LibraryTopBar(title: "홈", onBasket: { searchStore.send(.basketButtonTapped) })
+                    LibraryTopBar(
+                        title: "홈",
+                        onFavorites: { searchStore.send(.favoritesButtonTapped) },
+                        onBasket: { searchStore.send(.basketButtonTapped) }
+                    )
                 }
                 .toolbarBackground(.hidden, for: .navigationBar)
                 .toolbarColorScheme(.dark, for: .navigationBar)
@@ -47,6 +51,11 @@ struct LibraryMapView: View {
             ) { basketStore in
                 BookBasketView(store: basketStore)
                     .toolbar(.visible, for: .navigationBar)
+            }
+            .navigationDestination(
+                item: $searchStore.scope(state: \.favorites, action: \.favorites)
+            ) { favoritesStore in
+                BookFavoritesView(store: favoritesStore)
             }
             .navigationDestination(
                 item: $searchStore.scope(state: \.detail, action: \.detail)

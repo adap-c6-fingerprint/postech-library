@@ -38,7 +38,11 @@ struct HomeView: View {
         }
         .background(Color(uiColor: .systemBackground))
         .toolbar {
-            LibraryTopBar(title: "추천", onBasket: { store.send(.basketButtonTapped) })
+            LibraryTopBar(
+                title: "추천",
+                onFavorites: { store.send(.favoritesButtonTapped) },
+                onBasket: { store.send(.basketButtonTapped) }
+            )
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
@@ -63,6 +67,11 @@ struct HomeView: View {
         ) { basketStore in
             BookBasketView(store: basketStore)
                 .toolbar(.visible, for: .navigationBar)
+        }
+        .navigationDestination(
+            item: $store.scope(state: \.favorites, action: \.favorites)
+        ) { favoritesStore in
+            BookFavoritesView(store: favoritesStore)
         }
         .navigationDestination(
             item: $store.scope(state: \.shelfMap, action: \.shelfMap)
