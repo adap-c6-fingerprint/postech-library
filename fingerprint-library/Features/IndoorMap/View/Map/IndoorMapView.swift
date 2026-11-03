@@ -16,6 +16,7 @@ struct IndoorMapView: View {
     var appearance: IndoorMapKitView.Appearance = .standard
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
     var showsCurrentLocationButton = true
+    var showsFloorPicker = true
     /// 하단 안내 카드가 있는 화면에서는 지도·카메라 영역을 카드 위로 제한한다.
     var extendsUnderBottomSafeArea = true
 
@@ -99,7 +100,9 @@ struct IndoorMapView: View {
                 HStack(alignment: .bottom, spacing: 12) {
                     VStack(alignment: .leading, spacing: 12) {
                         if appearance == .home { amenitiesButton }
-                        floorPicker(map: map, floor: floor)
+                        if showsFloorPicker {
+                            floorPicker(map: map, floor: floor)
+                        }
                     }
                     if appearance == .home, showsDestinationCard { IndoorRouteControls(store: store) }
                     Spacer(minLength: 0)

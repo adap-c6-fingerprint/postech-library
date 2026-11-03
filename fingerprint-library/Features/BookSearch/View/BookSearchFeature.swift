@@ -68,6 +68,11 @@ struct BookSearchFeature {
         case directionsButtonTapped(Book)
         case basketDirectionsButtonTapped(Set<Book.ID>)
         case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
+        case delegate(Delegate)
+
+        enum Delegate {
+            case recommendationLayoutRequested(isExpanded: Bool)
+        }
     }
     
     // 검색에 사용할 BookClient 값
@@ -240,8 +245,25 @@ struct BookSearchFeature {
                 return .cancel(id: CancelID.search)
                 
             case .searchButtonTapped:
+                let command = state.query.trimmingCharacters(in: .whitespacesAndNewlines)
+                if command == "/ver1" || command == "/ver2" {
+                    state.searchGeneration += 1
+                    state.query = ""
+                    state.books = []
+                    state.isLoading = false
+                    state.errorMessage = nil
+                    state.hasSearched = false
+                    // 화면 비교용 명령은 검색 API나 추천 입력용 검색 기록에 보내지 않는다.
+                    return .merge(
+                        .cancel(id: CancelID.search),
+                        .send(.delegate(.recommendationLayoutRequested(isExpanded: command == "/ver2")))
+                    )
+                }
                 guard !state.isLoading else { return .none }
                 return search(state: &state)
+
+            case .delegate:
+                return .none
 
             case .refreshButtonTapped:
                 guard !state.isLoading else { return .none }

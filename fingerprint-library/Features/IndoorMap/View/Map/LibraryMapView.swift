@@ -51,7 +51,10 @@ struct LibraryMapView: View {
             .navigationDestination(
                 item: $searchStore.scope(state: \.detail, action: \.detail)
             ) { detailStore in
-                BookDetailView(store: detailStore)
+                BookDetailMapView(
+                    store: detailStore,
+                    mapStore: mapStore
+                )
             }
             .navigationDestination(
                 item: $searchStore.scope(state: \.shelfMap, action: \.shelfMap)

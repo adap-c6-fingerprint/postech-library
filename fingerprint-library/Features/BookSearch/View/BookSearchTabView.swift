@@ -10,6 +10,8 @@ import SwiftUI
 
 struct BookSearchTabView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
+    let mapStore: StoreOf<IndoorMapFeature>
+    @State private var isSearchPresented = false
 
     var body: some View {
         NavigationStack {
@@ -28,8 +30,10 @@ struct BookSearchTabView: View {
             .navigationDestination(
                 item: $store.scope(state: \.detail, action: \.detail)
             ) { detailStore in
-                BookDetailView(store: detailStore)
-                    .toolbar(.visible, for: .navigationBar)
+                BookDetailMapView(
+                    store: detailStore,
+                    mapStore: mapStore
+                )
             }
             .navigationDestination(
                 item: $store.scope(state: \.shelfMap, action: \.shelfMap)
@@ -43,6 +47,7 @@ struct BookSearchTabView: View {
                 get: { store.query },
                 set: { store.send(.queryChanged($0)) }
             ),
+            isPresented: $isSearchPresented,
             prompt: "책 제목이나 저자를 검색하세요"
         )
         .searchPresentationToolbarBehavior(.avoidHidingContent)
@@ -56,5 +61,8 @@ struct BookSearchTabView: View {
         guard !store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         else { return }
         store.send(.searchButtonTapped)
+        if store.query.isEmpty {
+            isSearchPresented = false
+        }
     }
 }
