@@ -71,6 +71,8 @@ struct OnboardingFeature {
         case groupSelected(String)
         case affiliationSelected(AffiliationPath)
         case nextButtonTapped
+        case backButtonTapped
+        // ✅ 내비게이션 뒤로가기(버튼·스와이프)로 화면이 pop될 때
         case preferenceToggled(String)
         case finishButtonTapped
         case saveSucceeded
@@ -139,7 +141,13 @@ struct OnboardingFeature {
                 guard state.isAffiliationComplete else { return .none }
                 state.step = .interests
                 return .none
-                
+
+            case .backButtonTapped:
+                guard let previous = Step(rawValue: state.step.rawValue - 1) else { return .none }
+                state.step = previous
+                // ✅ 이전 단계로만 돌아가고, 이미 고른 소속·선호 분류는 그대로 둔다.
+                return .none
+
             case let .preferenceToggled(name):
                 if let index = state.selectedPreferences.firstIndex(of: name) {
                     state.selectedPreferences.remove(at: index)
