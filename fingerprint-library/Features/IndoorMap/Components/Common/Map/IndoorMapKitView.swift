@@ -443,19 +443,24 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         private func updatePositionMarkerBearing(in map: MKMapView) {
-            guard let annotation = positionAnnotation, let view = map.view(for: annotation) else { return }
-            if let view = view as? HomeUserLocationAnnotationView {
-                view.configure(headingDegrees: annotation.position.headingDegrees, mapHeading: map.camera.heading)
-            } else if parent.navigationAppearance {
-                configureNavigationBearing(view, in: map)
-            }
+            guard let annotation = positionAnnotation,
+                  let view = map.view(for: annotation) as? MapUserLocationAnnotationView else { return }
+            configurePositionBearing(view, position: annotation.position, in: map)
         }
 
-        private func configureNavigationBearing(_ view: MKAnnotationView, in map: MKMapView) {
-            guard let arrow = view.viewWithTag(8_124) as? UIImageView else { return }
-            arrow.image = UIImage(systemName: parent.navigationBearingRadians == nil ? "circle.fill" : "location.north.fill")
-            let angle = parent.navigationBearingRadians.map { $0 - map.camera.heading * .pi / 180 } ?? 0
-            arrow.transform = CGAffineTransform(rotationAngle: CGFloat(angle))
+        /// 홈은 사용자 방향, 길안내는 계산한 경로 방향을 같은 헤드 에셋에 적용한다.
+        private func configurePositionBearing(_ view: MapUserLocationAnnotationView,
+                                              position: IndoorPosition, in map: MKMapView) {
+            let headingDegrees: Double?
+            if parent.navigationAppearance {
+                headingDegrees = parent.navigationBearingRadians.map {
+                    let degrees = ($0 * 180 / .pi).truncatingRemainder(dividingBy: 360)
+                    return degrees < 0 ? degrees + 360 : degrees
+                }
+            } else {
+                headingDegrees = position.headingDegrees
+            }
+            view.configure(headingDegrees: headingDegrees, mapHeading: map.camera.heading)
         }
 
         /// 최초 확대·층 전체 맞춤 또는 특정 좌표 중심 이동을 명시적으로 적용한다.
@@ -651,14 +656,17 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = annotation as? HomeMapPointAnnotation {
                 return HomeMapAnnotationController.view(for: annotation, in: mapView)
             }
-            if let annotation = annotation as? PositionAnnotation, parent.appearance == .home,
-               annotation.position.source != .manual {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "home-user-position") as? HomeUserLocationAnnotationView
-                    ?? HomeUserLocationAnnotationView(annotation: annotation, reuseIdentifier: "home-user-position")
+            if let annotation = annotation as? PositionAnnotation,
+               parent.navigationAppearance || (parent.appearance == .home && annotation.position.source != .manual) {
+                let reuseID = parent.navigationAppearance ? "navigation-position" : "home-user-position"
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID) as? MapUserLocationAnnotationView
+                    ?? MapUserLocationAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
                 view.annotation = annotation
                 view.accessibilityLabel = annotation.title
-                view.accessibilityIdentifier = annotation.position.source == .simulation ? "simulation-position" : "user-position"
-                view.configure(headingDegrees: annotation.position.headingDegrees, mapHeading: mapView.camera.heading)
+                view.accessibilityValue = parent.navigationAppearance ? "경로 진행 방향" : nil
+                view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position"
+                    : (annotation.position.source == .simulation ? "simulation-position" : "user-position")
+                configurePositionBearing(view, position: annotation.position, in: mapView)
                 return view
             }
             if let annotation = annotation as? BookNavigationDestinationAnnotation {
@@ -682,33 +690,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.isAccessibilityElement = true
                 view.accessibilityLabel = "목적지: \(annotation.title ?? "도서")"
                 view.accessibilityIdentifier = "book-navigation-destination"
-                return view
-            }
-            if let annotation = annotation as? PositionAnnotation, parent.navigationAppearance {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "navigation-position")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "navigation-position")
-                view.annotation = annotation
-                let size = CGSize(width: 72, height: 58)
-                view.image = UIGraphicsImageRenderer(size: size).image { _ in
-                    let oval = UIBezierPath(ovalIn: CGRect(x: 4, y: 12, width: 64, height: 34))
-                    UIColor.black.setFill(); oval.fill()
-                    BookNavigationPalette.uiAccent.setStroke(); oval.lineWidth = 4; oval.stroke()
-                }
-                if view.viewWithTag(8_124) == nil {
-                    let arrow = UIImageView(frame: CGRect(x: 24, y: 17, width: 24, height: 24))
-                    arrow.tag = 8_124; arrow.contentMode = .scaleAspectFit
-                    arrow.tintColor = BookNavigationPalette.uiAccent
-                    view.addSubview(arrow)
-                }
-                view.layer.shadowColor = BookNavigationPalette.uiAccent.cgColor
-                view.layer.shadowOpacity = 0.75; view.layer.shadowRadius = 12
-                view.layer.shadowOffset = .zero
-                view.displayPriority = .required; view.isEnabled = false
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = annotation.title
-                view.accessibilityValue = "경로 진행 방향"
-                view.accessibilityIdentifier = "book-navigation-position"
-                configureNavigationBearing(view, in: mapView)
                 return view
             }
             if let annotation = annotation as? MKPointAnnotation,

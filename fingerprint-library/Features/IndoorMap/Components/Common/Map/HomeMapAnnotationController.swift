@@ -29,7 +29,7 @@ final class HomeMapAnnotationController {
             ?? MKAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
         view.annotation = annotation
         if let name = annotation.marker.kind.assetName {
-            view.image = icon(named: name)
+            view.image = MapAnnotationImage.asset(named: name, size: 30)
         } else {
             view.image = UIImage(systemName: "mappin.circle.fill",
                 withConfiguration: UIImage.SymbolConfiguration(pointSize: 28))?
@@ -47,12 +47,6 @@ final class HomeMapAnnotationController {
         return view
     }
 
-    /// 에셋의 픽셀 크기·배율과 관계없이 지도에서는 30pt로 표시한다. 원본 픽셀과 색상은 유지한다.
-    private static func icon(named name: String) -> UIImage? {
-        guard let image = UIImage(named: name), let pixels = image.cgImage else { return nil }
-        return UIImage(cgImage: pixels, scale: CGFloat(pixels.width) / 30, orientation: image.imageOrientation)
-            .withRenderingMode(.alwaysOriginal)
-    }
 }
 
 @MainActor

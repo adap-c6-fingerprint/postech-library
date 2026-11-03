@@ -16,7 +16,7 @@ extension IndoorMapSerialTests {
                 let marker = HomeMapMarker(id: kind.rawValue, kind: kind, floorID: IndoorMapTestData.groundID,
                     coordinate: IndoorMapTestData.point, title: "테스트")
                 let view = HomeMapAnnotationController.view(for: HomeMapPointAnnotation(marker), in: map)
-                let image = try #require(view.image)
+                let image = try #require(view.image, "어노테이션 이미지 누락: \(kind.assetName ?? kind.rawValue)")
                 #expect(image.renderingMode == .alwaysOriginal)
                 if let assetName = kind.assetName {
                     let original = try #require(UIImage(named: assetName))

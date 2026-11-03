@@ -9,7 +9,7 @@ extension IndoorMapSerialTests {
     struct HomeUserLocationAnnotationTests {
         @Test("위치 원과 헤드의 원본 에셋을 표시하고 32pt 배경 중심을 실제 좌표에 둔다")
         func usesCenteredGeometry() async throws {
-            let marker = HomeUserLocationAnnotationView(annotation: nil, reuseIdentifier: "test")
+            let marker = MapUserLocationAnnotationView(annotation: nil, reuseIdentifier: "test")
             marker.configure(headingDegrees: 0, mapHeading: 0)
             marker.layoutIfNeeded()
             let dot = try image(in: marker, id: "user-location-dot-image")
@@ -63,7 +63,7 @@ extension IndoorMapSerialTests {
         @Test("헤드 원본 이미지를 유지하면서 사용자 방향과 지도 회전을 부모에 반영한다",
               arguments: [(0.0, 0.0), (90, 0), (180, 0), (270, 0), (0, 90), (150, 0), (270, 40)])
         func rotatesHeadingOnly(headingDegrees: Double, mapHeading: Double) throws {
-            let marker = HomeUserLocationAnnotationView(annotation: nil, reuseIdentifier: "test")
+            let marker = MapUserLocationAnnotationView(annotation: nil, reuseIdentifier: "test")
             marker.configure(headingDegrees: headingDegrees, mapHeading: mapHeading)
             marker.layoutIfNeeded()
             let heading = try image(in: marker, id: "user-location-heading-image")
@@ -115,7 +115,7 @@ extension IndoorMapSerialTests {
             let annotation = try #require(map.annotations.first { !($0 is MKUserLocation) })
             let deadline = Date().addingTimeInterval(5)
             while map.view(for: annotation) == nil, Date() < deadline { try await Task.sleep(for: .milliseconds(20)) }
-            let marker = try #require(map.view(for: annotation) as? HomeUserLocationAnnotationView)
+            let marker = try #require(map.view(for: annotation) as? MapUserLocationAnnotationView)
             #expect(!map.showsUserLocation)
             parent = IndoorMapKitView(map: data, floor: floor, selectedFeatureID: nil,
                 position: position(180), showsUserLocation: true, isPlacingOrigin: false, cameraRequest: nil,

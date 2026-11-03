@@ -37,6 +37,14 @@ final class IndoorRouteTransitionAnnotation: NSObject, MKAnnotation {
     }
 
     var markerImage: UIImage {
+        let assetName: String? = switch category {
+        case .elevator: "annotation_elevator"
+        case .stairs: "annotation_stairs"
+        default: nil
+        }
+        if let assetName, let image = MapAnnotationImage.asset(named: assetName, size: 36) {
+            return image
+        }
         let size = CGSize(width: 36, height: 36)
         return UIGraphicsImageRenderer(size: size).image { _ in
             let circle = UIBezierPath(ovalIn: CGRect(origin: .zero, size: size).insetBy(dx: 1, dy: 1))

@@ -13,9 +13,9 @@ Refs #5. 실제 Blue Dot 측위·보정과 C5 현장 측위 검증은 마지막 
 1. `2026-c6-pre-fingerprint/IndoorPositioningSimulator`에서 Indoor Sensor Simulator를 실행한다.
 2. 앱 번들의 `Resources/IndoorMaps/POSTECHLibrary/IMDFData`와 같은 도면을 연다.
 3. **Wi-Fi 위치 기반 측위**를 끈다. `groundTruth` 모드의 정확한 가상 좌표·층을 사용한다.
-4. postech-library를 **Debug iOS Simulator**로 실행한다. 기본으로 로컬 시뮬레이터에 연결한다.
+4. 원본 `postech-library/fingerprint-library.xcodeproj`에서 **Po:book**을 **Debug iOS Simulator**로 실행한다. 최신 dev와 같은 앱 식별자 `com.youngmin.fingerprint-library`를 사용하며 기본으로 로컬 위치 시뮬레이터에 연결한다. 별도 `com.sano.fingerprint-library` 설치본과 혼용하지 않는다.
 5. Mac 시뮬레이터에서 방향키로 이동하고 계단·엘리베이터 영역에서 층을 바꾼다.
-   앱의 파란 점이 같은 좌표·층을 반영한다. 층이 바뀔 때 지도도 해당 층으로 이동한다.
+   앱의 현재 위치 표시가 같은 좌표·층을 반영한다. 층이 바뀔 때 지도도 해당 층으로 이동한다.
    같은 층에서 사용자가 다른 층의 지도를 조회하는 동작은 계속 허용한다.
 6. C5 회귀 검증용 지도를 사용하는 경우 서가 핀을 누르면 가상 서가 이름을 확인한다. **경로 보기**를 누르면 경로 설정 화면으로 이동해
    현재 위치에서 해당 서가까지의 경로를 계산한다.

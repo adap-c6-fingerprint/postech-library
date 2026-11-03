@@ -97,6 +97,17 @@ struct IndoorRouteOverlayTests {
         #expect(UIImage(systemName: entry.symbolName) != nil)
         let badge = try #require(coordinator.mapView(view, viewFor: entry))
         #expect(badge.image?.size == CGSize(width: 36, height: 36))
+        let assetName: String? = switch category {
+        case .stairs: "annotation_stairs"
+        case .elevator: "annotation_elevator"
+        default: nil
+        }
+        if let assetName {
+            let original = try #require(UIImage(named: assetName))
+            #expect(badge.image?.renderingMode == .alwaysOriginal)
+            #expect(badge.image?.cgImage?.width == original.cgImage?.width)
+            #expect(badge.image?.cgImage?.height == original.cgImage?.height)
+        }
         #expect(badge.centerOffset == .zero)
         #expect(badge.accessibilityLabel == entry.title)
         coordinator.update(parent: parent(1, route: route), in: view)

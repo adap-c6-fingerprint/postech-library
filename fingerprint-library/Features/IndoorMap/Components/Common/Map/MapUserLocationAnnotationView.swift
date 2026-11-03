@@ -1,9 +1,9 @@
 import MapKit
 import UIKit
 
-/// 위치 원의 중심을 실제 좌표에 고정하고 헤드만 그 주위에서 회전시킨다.
+/// 홈과 길안내에서 같은 위치 에셋을 쓰고 헤드만 실제 좌표 주위에서 회전시킨다.
 @MainActor
-final class HomeUserLocationAnnotationView: MKAnnotationView {
+final class MapUserLocationAnnotationView: MKAnnotationView {
     private let dotView = UIImageView(image: UIImage(named: "MapUserLocation")?.withRenderingMode(.alwaysOriginal))
     private let headingView = UIImageView(image: UIImage(named: "MapUserHeading")?.withRenderingMode(.alwaysOriginal))
     private let headingContainer = UIView()
