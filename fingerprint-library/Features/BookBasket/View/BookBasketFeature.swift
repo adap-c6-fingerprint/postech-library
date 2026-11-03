@@ -11,7 +11,7 @@ struct BookBasketFeature {
     @ObservableState
     struct State: Equatable {
         var items: [BookBasketItem] = []
-        var isSelectingForGuidance = false
+        var libraryInfo: [Book.ID: LibraryInfo] = [:]
         // 길안내할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
         var isSelectionLimitAlertPresented = false
@@ -21,7 +21,7 @@ struct BookBasketFeature {
             BookBasketSection.grouped(items, calendar: .current)
         }
 
-        var selectedCount: Int { selectedIDs.count }
+        var selectedCount: Int { selectedBooks.count }
 
         // 아직 장바구니에 남아 있는 선택 책만 고른 순서대로 돌려준다.
         var selectedBooks: [Book] {
@@ -29,10 +29,15 @@ struct BookBasketFeature {
         }
     }
 
+    struct LibraryInfo: Equatable {
+        let location: String?
+        let availability: BookCardLibraryInfo.Availability?
+    }
+
     enum Action {
         case task
-        case selectButtonTapped
-        case doneButtonTapped
+        case loadLibraryInfo
+        case libraryInfoLoaded(Book.ID, [BookHolding])
         case selectionToggled(Book.ID)
         case selectionLimitAlertDismissed
         case startGuidanceButtonTapped
@@ -51,26 +56,34 @@ struct BookBasketFeature {
     @Dependency(\.bookBasketClient)
     var bookBasketClient: BookBasketClient
 
+    @Dependency(\.bookHoldingsClient) var bookHoldingsClient
+    @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
+
+    private nonisolated enum CancelID: Hashable, Sendable {
+        case libraryInfo
+    }
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
                 state.items = bookBasketClient.load()
+                let itemIDs = Set(state.items.map(\.id))
+                state.selectedIDs.removeAll { !itemIDs.contains($0) }
                 return .none
 
-            case .selectButtonTapped:
-                state.isSelectingForGuidance = true
-                return .none
+            case .loadLibraryInfo:
+                return loadLibraryInfo(state: &state)
 
-            case .doneButtonTapped:
-                state.isSelectingForGuidance = false
-                state.selectedIDs = []
+            case let .libraryInfoLoaded(id, holdings):
+                guard let book = state.items.first(where: { $0.id == id })?.book else { return .none }
+                let info = BookCardLibraryInfo(holdings: holdings)
+                state.libraryInfo[id] = LibraryInfo(location: info.location, availability: info.availability)
+                bookLocationCacheClient.record(book, holdings)
                 return .none
 
             case let .selectionToggled(id):
-                guard state.isSelectingForGuidance,
-                      state.items.contains(where: { $0.id == id })
-                else { return .none }
+                guard state.items.contains(where: { $0.id == id }) else { return .none }
                 if let index = state.selectedIDs.firstIndex(of: id) {
                     state.selectedIDs.remove(at: index)
                 } else if state.selectedIDs.count >= BookBasketItem.maxGuidanceCount {
@@ -113,5 +126,45 @@ struct BookBasketFeature {
                 return .none
             }
         }
+    }
+
+    private func loadLibraryInfo(state: inout State) -> Effect<Action> {
+        let books = state.items.map(\.book)
+        let keys = Set(books.map(\.recordKey))
+        let cached = bookLocationCacheClient.load(keys)
+        let recent = bookLocationCacheClient.loadRecent(keys)
+        state.libraryInfo = [:]
+        var requests: [(id: Book.ID, recordID: String)] = []
+
+        for book in books {
+            if let holdings = recent[book.recordKey] {
+                let info = BookCardLibraryInfo(holdings: holdings)
+                state.libraryInfo[book.id] = LibraryInfo(location: info.location, availability: info.availability)
+            } else {
+                if let holdings = cached[book.recordKey] {
+                    let location = BookCardLibraryInfo(holdings: holdings).location
+                    state.libraryInfo[book.id] = LibraryInfo(location: location, availability: nil)
+                }
+                if let recordID = BookHoldingsClient.recordID(for: book) {
+                    requests.append((book.id, recordID))
+                }
+            }
+        }
+
+        return .run { [bookHoldingsClient, requests] send in
+            for start in stride(from: 0, to: requests.count, by: 3) {
+                guard !Task.isCancelled else { return }
+                await withTaskGroup(of: Void.self) { group in
+                    for request in requests[start..<min(start + 3, requests.count)] {
+                        group.addTask {
+                            guard let holdings = try? await bookHoldingsClient.fetch(request.recordID),
+                                  !Task.isCancelled else { return }
+                            await send(.libraryInfoLoaded(request.id, holdings))
+                        }
+                    }
+                }
+            }
+        }
+        .cancellable(id: CancelID.libraryInfo, cancelInFlight: true)
     }
 }

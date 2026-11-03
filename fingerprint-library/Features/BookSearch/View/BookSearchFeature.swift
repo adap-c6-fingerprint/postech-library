@@ -156,7 +156,8 @@ struct BookSearchFeature {
                 )
                 return .none
 
-            case .detail(.presented(.addToBasketButtonTapped)):
+            case .detail(.presented(.addToBasketButtonTapped)),
+                 .detail(.presented(.basket(.presented(.removeConfirmed)))):
                 state.basketBooks = bookBasketClient.load().map(\.book)
                 return .none
 

@@ -90,8 +90,19 @@ struct BookBasketTests {
             $0.date.now = now
         }
 
-        await store.send(.addToBasketButtonTapped)
-        await store.send(.addToBasketButtonTapped)
+        await store.send(.addToBasketButtonTapped) { $0.basketNotice = .added }
+        await store.send(.basketNoticeDismissed) { $0.basketNotice = nil }
+        #expect(client.load() == [BookBasketItem(book: selected, addedAt: now)])
+
+        await store.send(.addToBasketButtonTapped) { $0.basketNotice = .alreadyAdded }
+        await store.send(.basketNoticeDismissed) { $0.basketNotice = nil }
+        await store.send(.basketShortcutTapped) {
+            $0.basket = BookBasketFeature.State()
+        }
+        await store.send(.basket(.presented(.task))) {
+            $0.basket?.items = [BookBasketItem(book: selected, addedAt: now)]
+        }
+        await store.send(.basket(.dismiss)) { $0.basket = nil }
         #expect(client.load() == [BookBasketItem(book: selected, addedAt: now)])
     }
 
@@ -175,31 +186,25 @@ struct BookBasketTests {
         #expect(sections.flatMap(\.items).count == items.count)
     }
 
-    @Test("선택 모드에서 길안내할 책을 선택·해제하고 완료하면 선택을 비운다")
+    @Test("장바구니를 열면 모드 전환 없이 책을 선택·해제할 수 있다")
     func toggleGuidanceSelection() async {
         let store = TestStore(initialState: BookBasketFeature.State(items: [item("a"), item("b")])) {
             BookBasketFeature()
         }
 
-        await store.send(.selectionToggled("a"))
-        await store.send(.selectButtonTapped) { $0.isSelectingForGuidance = true }
         await store.send(.selectionToggled("a")) { $0.selectedIDs = ["a"] }
         await store.send(.selectionToggled("b")) { $0.selectedIDs = ["a", "b"] }
         #expect(store.state.selectedCount == 2)
         await store.send(.selectionToggled("a")) { $0.selectedIDs = ["b"] }
         #expect(store.state.selectedCount == 1)
         await store.send(.selectionToggled("missing"))
-        await store.send(.doneButtonTapped) {
-            $0.isSelectingForGuidance = false
-            $0.selectedIDs = []
-        }
+        await store.send(.selectionToggled("b")) { $0.selectedIDs = [] }
     }
 
     @Test("네 번째 책 선택은 막고 기존 세 권을 유지하며 한도 팝업을 띄운다")
     func blockFourthSelection() async {
         let store = TestStore(initialState: BookBasketFeature.State(
             items: ["a", "b", "c", "d"].map { item($0) },
-            isSelectingForGuidance: true,
             selectedIDs: ["a", "b", "c"]
         )) {
             BookBasketFeature()
@@ -217,7 +222,6 @@ struct BookBasketTests {
         let items = ["a", "b", "c"].map { item($0) }
         let store = TestStore(initialState: BookBasketFeature.State(
             items: items,
-            isSelectingForGuidance: true,
             selectedIDs: ["c", "missing", "a"]
         )) {
             BookBasketFeature()
@@ -230,8 +234,7 @@ struct BookBasketTests {
     @Test("선택한 책이 0권이면 길안내를 시작하지 않는다")
     func noGuidanceWithoutSelection() async {
         let store = TestStore(initialState: BookBasketFeature.State(
-            items: [item("a")],
-            isSelectingForGuidance: true
+            items: [item("a")]
         )) {
             BookBasketFeature()
         }
@@ -243,7 +246,6 @@ struct BookBasketTests {
     func noGuidanceWithStaleSelection() async {
         let store = TestStore(initialState: BookBasketFeature.State(
             items: [item("a")],
-            isSelectingForGuidance: true,
             selectedIDs: ["missing"]
         )) {
             BookBasketFeature()
@@ -262,7 +264,6 @@ struct BookBasketTests {
         client.save(items)
         let store = TestStore(initialState: BookBasketFeature.State(
             items: items,
-            isSelectingForGuidance: true,
             selectedIDs: ["a", "c"]
         )) {
             BookBasketFeature()
