@@ -14,6 +14,12 @@ struct LibraryMapView: View {
     @Bindable private var searchStore: StoreOf<BookSearchFeature>
     @ScaledMetric(relativeTo: .title) private var headerHeight: CGFloat = 160
 
+    struct Constants {
+      static let colorTextTitle: Color = Color(red: 0.98, green: 0.98, blue: 0.98)
+      static let FontSize24: CGFloat = 24
+      static let FontFamilyPretendard: String = "Pretendard"
+    }
+
     init(store: StoreOf<AppFeature>, searchStore: StoreOf<BookSearchFeature>? = nil) {
         self.store = store
         self.searchStore = searchStore ?? store.scope(state: \.bookSearch, action: \.bookSearch)
@@ -27,13 +33,22 @@ struct LibraryMapView: View {
         NavigationStack {
             IndoorMapView(store: mapStore, topContentInset: headerHeight, appearance: .home)
                 .ignoresSafeArea(.container, edges: .top)
+                .overlay(alignment: .topLeading) {
+                    // 전체 높이의 컨테이너가 상단 안전 영역까지 확장되어 배경은 기기 맨 위에서 시작한다.
+                    VStack(spacing: 0) {
+                        LibraryTopBarBackground()
+                        Spacer(minLength: 0)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .ignoresSafeArea(.container, edges: [.top, .horizontal])
+                    .allowsHitTesting(false)
+                }
                 .overlay(alignment: .topLeading) { homeHeader }
                 .background(.black)
-                .toolbar {
-                    LibraryTopBar(title: "홈", onBasket: { searchStore.send(.basketButtonTapped) })
+                .safeAreaInset(edge: .top, spacing: 0) {
+                    LibraryMapTopBar(title: "홈", onBasket: { searchStore.send(.basketButtonTapped) })
                 }
-                .toolbarBackground(.hidden, for: .navigationBar)
-                .toolbarColorScheme(.dark, for: .navigationBar)
+                .toolbar(.hidden, for: .navigationBar)
             .task {
                 searchStore.send(.task)
             }
@@ -76,13 +91,12 @@ struct LibraryMapView: View {
     
     private var homeHeader: some View {
         Text("오늘은 어떤 책을\n읽어볼까요?")
-            .font(.title.weight(.bold))
+            .font(Font.custom(Constants.FontFamilyPretendard, size: Constants.FontSize24)
+                .weight(.semibold))
             .lineSpacing(6)
-            .foregroundStyle(.white)
             .padding(.horizontal, 20)
             .padding(.top, 20)
             .frame(maxWidth: .infinity, minHeight: headerHeight, alignment: .topLeading)
-            .background { LibraryTopBarBackground().ignoresSafeArea(.container, edges: .top) }
             .allowsHitTesting(false)
             .accessibilityIdentifier("library-home-greeting")
     }

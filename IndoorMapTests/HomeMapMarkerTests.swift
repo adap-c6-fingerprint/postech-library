@@ -106,14 +106,22 @@ struct HomeMapMarkerTests {
         let key: [String?] = ["control", "alma991000000001"]
         let holdings = [key: [BookHoldingTestData.holding()]]
         let cache = HomeMapMarkerCache()
-        let favorites = cache.markers(on: map, labels: labels, holdings: holdings, showsAmenities: false)
+        let basic = cache.markers(on: map, labels: labels, holdings: holdings, showsAmenities: false)
+        let favorites = basic.filter { $0.kind == .favorite }
+        let permanent = basic.filter { $0.kind != .favorite }
         #expect(favorites.count == 1)
+        #expect(Set(basic.map(\.kind)) == [.favorite, .stairs, .elevator])
+        #expect(permanent.filter { $0.kind == .stairs }.count == 22)
+        #expect(permanent.filter { $0.kind == .elevator }.count == 12)
+        #expect(!basic.contains { $0.kind == .shop })
         let all = cache.markers(on: map, labels: labels, holdings: holdings, showsAmenities: true)
         #expect(all.filter { $0.kind == .favorite } == favorites)
-        #expect(all.contains { $0.kind == .stairs })
-        #expect(cache.markers(on: map, labels: labels, holdings: holdings, showsAmenities: false) == favorites)
-        #expect(cache.markers(on: map, labels: [], holdings: holdings, showsAmenities: false).isEmpty)
-        #expect(cache.markers(on: map, labels: labels, holdings: holdings, showsAmenities: false) == favorites)
-        #expect(cache.markers(on: map, labels: labels, holdings: [:], showsAmenities: false).isEmpty)
+        #expect(all.filter { $0.kind == .shop }.count == 1)
+        #expect(all.contains { $0.kind == .toilet })
+        #expect(all.contains { $0.kind == .printer })
+        #expect(cache.markers(on: map, labels: labels, holdings: holdings, showsAmenities: false) == basic)
+        #expect(cache.markers(on: map, labels: [], holdings: holdings, showsAmenities: false) == permanent)
+        #expect(cache.markers(on: map, labels: labels, holdings: holdings, showsAmenities: false) == basic)
+        #expect(cache.markers(on: map, labels: labels, holdings: [:], showsAmenities: false) == permanent)
     }
 }

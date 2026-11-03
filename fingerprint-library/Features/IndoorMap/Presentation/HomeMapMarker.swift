@@ -5,6 +5,13 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
         case favorite, stairs, elevator, toilet, shop, printer, studio
         case cafe, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone, other
 
+        var isAlwaysVisible: Bool {
+            switch self {
+            case .favorite, .stairs, .elevator: true
+            default: false
+            }
+        }
+
         var assetName: String? {
             switch self {
             case .favorite: "annotation_liked"
@@ -30,6 +37,7 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     let coordinate: IndoorMapCoordinate
     let title: String
     var subtitle: String? = nil
+    var shelfID: IndoorMapElement.ID? = nil
 }
 
 nonisolated enum HomeMapMarkerBuilder {
@@ -79,7 +87,8 @@ nonisolated enum HomeMapMarkerBuilder {
             return HomeMapMarker(id: "favorite-\(group.shelf.mapElementID.sourceID)", kind: .favorite,
                 floorID: group.shelf.floorID, coordinate: coordinate,
                 title: "찜한 도서 \(group.keys.count)권",
-                subtitle: "\(group.shelf.realNumber) 서가\(group.isCandidate ? " · 위치 후보" : "")")
+                subtitle: "\(group.shelf.realNumber) 서가\(group.isCandidate ? " · 위치 후보" : "")",
+                shelfID: group.shelf.mapElementID)
         }.sorted { $0.id < $1.id }
     }
 
@@ -150,7 +159,7 @@ final class HomeMapMarkerCache {
             self.holdings = holdings
         }
         self.map = map
-        if showsAmenities, amenityMarkers == nil { amenityMarkers = HomeMapMarkerBuilder.amenities(on: map) }
-        return favoriteMarkers + (showsAmenities ? amenityMarkers ?? [] : [])
+        if amenityMarkers == nil { amenityMarkers = HomeMapMarkerBuilder.amenities(on: map) }
+        return favoriteMarkers + (amenityMarkers ?? []).filter { showsAmenities || $0.kind.isAlwaysVisible }
     }
 }

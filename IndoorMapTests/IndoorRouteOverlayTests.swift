@@ -96,7 +96,7 @@ struct IndoorRouteOverlayTests {
         #expect(entry.coordinate.longitude == b.coordinate.longitude)
         #expect(UIImage(systemName: entry.symbolName) != nil)
         let badge = try #require(coordinator.mapView(view, viewFor: entry))
-        #expect(badge.image?.size == CGSize(width: 36, height: 36))
+        #expect(badge.image?.size == CGSize(width: 30, height: 30))
         let assetName: String? = switch category {
         case .stairs: "annotation_stairs"
         case .elevator: "annotation_elevator"

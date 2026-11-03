@@ -8,7 +8,7 @@ import UIKit
 extension IndoorMapSerialTests {
     @MainActor
     struct HomeMapDesignScreenTests {
-        @Test("홈·추천의 공통 툴바에서 장바구니 이동 후 화면을 복구한다", arguments: [false, true])
+        @Test("홈 지도 이동과 홈·추천의 장바구니 화면 복구를 확인한다", arguments: [false, true])
         func opensBasketFromSharedToolbar(isRecommendation: Bool) async throws {
             let map = try await BundledIndoorMapLoader().loadLibrary()
             let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
@@ -46,7 +46,7 @@ extension IndoorMapSerialTests {
                              mapStore: store.scope(state: \.indoorMap, action: \.indoorMap))
                 })
                 : AnyView(AppView(store: store))
-            let host = UIHostingController(rootView: root)
+            let host = UIHostingController(rootView: root.environment(\.scenePhase, .active))
             host.overrideUserInterfaceStyle = .dark
             window.rootViewController = host
             window.makeKeyAndVisible()
@@ -55,17 +55,35 @@ extension IndoorMapSerialTests {
             let navigation = try #require(navigation(in: host))
             try await Task.sleep(for: .seconds(2))
             saveSnapshot(window, name: isRecommendation ? "recommendation" : "home")
-            let items = navigation.navigationBar.items ?? []
-            let buttons = items.flatMap { $0.trailingItemGroups.flatMap(\.barButtonItems) + ($0.rightBarButtonItems ?? []) }
-            let basket = try #require(buttons.first {
-                $0.accessibilityIdentifier == "library-top-bar-basket" || $0.accessibilityLabel == "책바구니" || $0.title == "책바구니"
-            })
-            let action = try #require(basket.action)
-            #expect(UIApplication.shared.sendAction(action, to: basket.target, from: basket, for: nil))
+            if !isRecommendation {
+                let mapView = try #require(findMap(in: host.view))
+                let probe = HomeMapCameraFrameProbe(map: mapView)
+                probe.start()
+                defer { probe.stop() }
+                try await Task.sleep(for: .seconds(3))
+                print("HOME_MAP_CAMERA_METRICS \(probe.report())")
+            }
+            if isRecommendation {
+                let items = navigation.navigationBar.items ?? []
+                let buttons = items.flatMap { $0.trailingItemGroups.flatMap(\.barButtonItems) + ($0.rightBarButtonItems ?? []) }
+                let basket = try #require(buttons.first {
+                    $0.accessibilityIdentifier == "library-top-bar-basket" || $0.accessibilityLabel == "책바구니" || $0.title == "책바구니"
+                })
+                let action = try #require(basket.action)
+                #expect(UIApplication.shared.sendAction(action, to: basket.target, from: basket, for: nil))
+            } else {
+                #expect(navigation.isNavigationBarHidden)
+                store.send(.bookSearch(.basketButtonTapped))
+            }
             try await waitUntil { isRecommendation ? store.home.basket != nil : store.bookSearch.basket != nil }
-            try await waitUntil { navigation.viewControllers.count == 2 }
+            try await waitUntil { navigation.viewControllers.count == 2 && !navigation.isNavigationBarHidden }
             navigation.popViewController(animated: false)
             try await waitUntil { isRecommendation ? store.home.basket == nil : store.bookSearch.basket == nil }
+            if !isRecommendation {
+                try await waitUntil { navigation.isNavigationBarHidden }
+                try await Task.sleep(for: .milliseconds(300))
+                saveSnapshot(window, name: "home-restored")
+            }
             #expect(store.indoorMap.selectedFloorID == floor.id)
             #expect(store.home.recommendedBooks == books)
         }
@@ -73,6 +91,11 @@ extension IndoorMapSerialTests {
         private func navigation(in controller: UIViewController) -> UINavigationController? {
             if let value = controller as? UINavigationController { return value }
             return controller.children.compactMap { navigation(in: $0) }.first
+        }
+
+        private func findMap(in view: UIView) -> MKMapView? {
+            if let map = view as? MKMapView { return map }
+            return view.subviews.compactMap { findMap(in: $0) }.first
         }
 
         private func waitUntil(_ predicate: () -> Bool) async throws {

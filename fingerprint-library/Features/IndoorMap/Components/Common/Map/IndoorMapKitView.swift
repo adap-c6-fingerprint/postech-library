@@ -80,9 +80,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var renderedPositionAppearance: Appearance?
         private var renderedPositionNavigationAppearance = false
         private var renderedShelves: [ShelfDestination] = []
-        private var renderedShelfLabels: [IndoorShelfLabel] = []
-        private var shelfLabelAnnotations: [IndoorShelfLabelAnnotation] = []
-        private var displayedShelfLabelIDs = Set<String>()
+        private let shelfLabelController = IndoorShelfLabelController()
         private let homeAnnotations = HomeMapAnnotationController()
         private var renderedRoute: IndoorRoute?
         private var renderedGroupTransitionNodes: [RouteNode] = []
@@ -117,7 +115,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.isRotateEnabled = true
             view.showsCompass = false
             view.showsScale = false
-            view.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 25, maxCenterCoordinateDistance: 5_000), animated: false)
+            view.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 5, maxCenterCoordinateDistance: 5_000), animated: false)
             view.accessibilityIdentifier = "indoor-map"
             let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))
             tap.cancelsTouchesInView = false
@@ -163,12 +161,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                         style(renderer, overlay: overlay)
                     }
                 }
-                for case let annotation as IndoorShelfLabelAnnotation in view.annotations {
-                    (view.view(for: annotation) as? IndoorShelfLabelView)?.configure(
-                        annotation, highlighted: highlightedIDs.contains(annotation.label.mapElementID),
-                        navigationAppearance: parent.navigationAppearance
-                    )
-                }
+                layoutShelfLabels(in: view)
             }
             pendingCameraRequest = parent.cameraRequest == lastCameraRequest ? nil : parent.cameraRequest
             if pendingCameraRequest != nil { view.setNeedsLayout() }
@@ -254,47 +247,16 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
         }
 
-        /// 현재 층의 서가 면에 번호·범위를 표시한다. 일반 위치 갱신에서는 annotation을 재사용한다.
+        /// 현재 층의 표시 전용 군집·번호·면 레이블을 갱신한다.
         private func updateShelfLabels(in view: MKMapView) {
-            let labels = parent.shelfLabels.filter { $0.floorID == parent.floor.id }
-            if labels != renderedShelfLabels {
-                view.removeAnnotations(view.annotations.filter { $0 is IndoorShelfLabelAnnotation })
-                renderedShelfLabels = labels
-                shelfLabelAnnotations = labels.map { IndoorShelfLabelAnnotation($0) }
-                displayedShelfLabelIDs = []
-            }
+            shelfLabelController.update(parent.shelfLabels.filter { $0.floorID == parent.floor.id }, in: view)
             layoutShelfLabels(in: view)
         }
 
-        /// 화면 중심에 가까운 레이블부터 겹치지 않게 배치한다. 촬영 순서는 사용하지 않는다.
         private func layoutShelfLabels(in view: MKMapView) {
-            guard view.bounds.width > 0, view.bounds.height > 0 else { return }
-            let center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
-            let candidates = shelfLabelAnnotations.compactMap { annotation -> (IndoorShelfLabelAnnotation, CGRect, CGFloat)? in
-                let point = view.convert(annotation.coordinate, toPointTo: view)
-                let size = annotation.labelSize
-                let frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2,
-                                   width: size.width, height: size.height)
-                guard frame.intersects(view.bounds) else { return nil }
-                return (annotation, frame.insetBy(dx: -3, dy: -3), hypot(point.x - center.x, point.y - center.y))
-            }.sorted {
-                let left = parent.highlightedFeatureIDs.contains($0.0.label.mapElementID)
-                let right = parent.highlightedFeatureIDs.contains($1.0.label.mapElementID)
-                if left != right { return left }
-                return $0.2 == $1.2 ? $0.0.label.id < $1.0.label.id : $0.2 < $1.2
-            }
-            var occupied = homeAnnotations.occupiedRects(in: view)
-            var chosen: [IndoorShelfLabelAnnotation] = []
-            for (annotation, frame, _) in candidates where !occupied.contains(where: { $0.intersects(frame) }) {
-                chosen.append(annotation)
-                occupied.append(frame)
-            }
-            let ids = Set(chosen.map { $0.label.id })
-            guard ids != displayedShelfLabelIDs else { return }
-            view.removeAnnotations(view.annotations.compactMap { $0 as? IndoorShelfLabelAnnotation }
-                .filter { !ids.contains($0.label.id) })
-            view.addAnnotations(chosen.filter { !displayedShelfLabelIDs.contains($0.label.id) })
-            displayedShelfLabelIDs = ids
+            let favorites = Set(parent.homeMarkers.compactMap(\.shelfID))
+            shelfLabelController.layout(in: view, highlighted: parent.highlightedFeatureIDs,
+                favorites: favorites)
         }
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -303,6 +265,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            layoutShelfLabels(in: mapView)
             updatePositionMarkerBearing(in: mapView)
         }
 
@@ -721,8 +684,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: IndoorShelfLabelView.reuseID)
                     as? IndoorShelfLabelView
                     ?? IndoorShelfLabelView(annotation: annotation, reuseIdentifier: IndoorShelfLabelView.reuseID)
-                view.configure(annotation, highlighted: parent.highlightedFeatureIDs.contains(annotation.label.mapElementID),
-                               navigationAppearance: parent.navigationAppearance)
+                view.configure(annotation, highlighted: annotation.presentation.isHighlighted(by: parent.highlightedFeatureIDs))
                 return view
             }
             if let annotation = annotation as? IndoorRouteTransitionAnnotation {
