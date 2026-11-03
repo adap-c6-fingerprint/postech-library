@@ -63,8 +63,10 @@ struct AppFeature {
 
             case .home(.detail(.presented(.addToBasketButtonTapped))),
                  .home(.basket(.presented(.removeConfirmed))),
+                 .home(.detail(.presented(.basket(.presented(.removeConfirmed))))),
                  .bookSearch(.detail(.presented(.addToBasketButtonTapped))),
                  .bookSearch(.basket(.presented(.removeConfirmed))),
+                 .bookSearch(.detail(.presented(.basket(.presented(.removeConfirmed))))),
                  .bookSearch(.addToBasket(_)), .bookSearch(.removeFromBasket(_)):
                 synchronizeBasket(state: &state)
                 return .none
@@ -113,7 +115,7 @@ struct AppFeature {
                 return isPresented
                     ? .send(.indoorMap(.routeRequested)) : .send(.indoorMap(.routeCleared))
             case .home:
-                // TODO: 홈 delegate 액션으로 책바구니·프로필·전체 보기를 연결한다.
+                // TODO: 홈 delegate 액션으로 책바구니·프로필을 연결한다.
                 return .none
             case .indoorMap:
                 return .none
@@ -152,6 +154,14 @@ struct AppFeature {
         if state.home.basket != nil {
             state.home.basket?.items = items
             state.home.basket?.selectedIDs.removeAll { !ids.contains($0) }
+        }
+        if state.bookSearch.detail?.basket != nil {
+            state.bookSearch.detail?.basket?.items = items
+            state.bookSearch.detail?.basket?.selectedIDs.removeAll { !ids.contains($0) }
+        }
+        if state.home.detail?.basket != nil {
+            state.home.detail?.basket?.items = items
+            state.home.detail?.basket?.selectedIDs.removeAll { !ids.contains($0) }
         }
     }
 

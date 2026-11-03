@@ -80,6 +80,7 @@ struct BookHoldingsIntegrationTests {
             $0.date.now = Date(timeIntervalSince1970: 1_000)
         }
         await store.send(.home(.detail(.presented(.addToBasketButtonTapped)))) {
+            $0.home.detail?.basketNotice = .added
             $0.bookSearch.basketBooks = [other, selected]
         }
         await store.send(.bookSearch(.removeFromBasket([other.id]))) { $0.bookSearch.basketBooks = [selected] }

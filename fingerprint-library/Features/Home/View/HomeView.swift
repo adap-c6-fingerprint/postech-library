@@ -14,8 +14,8 @@ struct HomeView: View {
         case standard
         case expanded
 
-        var coverWidth: CGFloat { self == .expanded ? 208 : 140 }
-        var coverHeight: CGFloat { self == .expanded ? 306 : 206 }
+        var coverWidth: CGFloat { self == .expanded ? 208 : 141.06 }
+        var coverHeight: CGFloat { self == .expanded ? 306 : 206.42 }
         var coverCornerRadius: CGFloat { self == .expanded ? 14 : 10 }
         var spacing: CGFloat { self == .expanded ? 22 : 16 }
         var horizontalInset: CGFloat { self == .expanded ? 66 : 48 }
@@ -27,7 +27,7 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 28) {
+                VStack(alignment: .leading, spacing: 20) {
                     recommendationSection
                     popularBooksSection
                 }
@@ -134,9 +134,10 @@ struct HomeView: View {
                         HomeBookCover(
                             book: book,
                             width: recommendationLayout.coverWidth,
-                            height: recommendationLayout.coverHeight
+                            height: recommendationLayout.coverHeight,
+                            cornerRadius: recommendationLayout.coverCornerRadius,
+                            shelfHeight: recommendationLayout.shelfHeight
                         )
-                        .clipShape(RoundedRectangle(cornerRadius: recommendationLayout.coverCornerRadius))
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(book.title)
@@ -153,8 +154,9 @@ struct HomeView: View {
         .frame(height: recommendationLayout.carouselHeight)
         .overlay(alignment: .bottomLeading) {
             RecommendationShelfView(height: recommendationLayout.shelfHeight)
-                .padding(.leading, 16)
+                .padding(.leading, RecommendationShelfView.leadingInset)
         }
+        .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
         .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
             recommendationPosition = 0
         }
@@ -162,28 +164,32 @@ struct HomeView: View {
     
     private var popularBooksSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Button {
-                store.send(.popularBooksButtonTapped)
+            NavigationLink {
+                Color.clear
+                    .navigationTitle(store.departmentName.isEmpty ? "많이 빌린 도서" : "\(store.departmentName)에서 많이 빌린")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar(.visible, for: .navigationBar)
             } label: {
                 HStack(spacing: 12) {
                     Text("‘\(store.departmentName)’ 추천 도서")
-                    // ✅ 대출 순위가 아니라 소속별 주제 큐레이션 데이터이므로 문구를 바꾼다. (Q8, 디자인 확인 필요)
-                        .font(.system(size: 18, weight: .semibold))
+                        .typography(.title2)
                         .multilineTextAlignment(.leading)
-                    
+                        .accessibilityAddTraits(.isHeader)
+
                     Spacer(minLength: 0)
-                    
+
                     Image(systemName: "chevron.right")
                         .font(.system(size: 16, weight: .medium))
+                        .padding(.trailing, 8)
+                        .accessibilityHidden(true)
                 }
-                .foregroundStyle(.primary)
-                .frame(minHeight: 44)
+                .foregroundStyle(.textPrimary)
+                .frame(minHeight: 28)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .disabled(true) // TODO: AppFeature의 전체 보기 화면 연결 후 활성화
             .padding(.horizontal, 16)
-            
+
             ScrollView(.horizontal) {
                 LazyHStack(alignment: .top, spacing: 12) {
                     if store.popularBooks.isEmpty {
@@ -224,24 +230,47 @@ private struct HomeBookCover: View {
     let book: Book?
     let width: CGFloat
     let height: CGFloat
+    var cornerRadius: CGFloat = 4
+    var shelfHeight: CGFloat? = nil
     
     var body: some View {
         // 홈 카드는 전체가 상세 이동 버튼이다. 재시도는 열린 상세 화면에서 제공한다.
-        BookCoverView(url: book?.imageURL, isbn: book?.isbn, allowsRetry: false)
+        BookCoverView(
+            url: book?.imageURL,
+            isbn: book?.isbn,
+            allowsRetry: false,
+            coverModifier: CoverStyle(cornerRadius: cornerRadius, shelfHeight: shelfHeight)
+        )
         .frame(width: width, height: height)
-        .background(Color.primary.opacity(0.04))
-        .clipShape(RoundedRectangle(cornerRadius: 4))
         .accessibilityHidden(true)
+    }
+
+    private struct CoverStyle: ViewModifier {
+        let cornerRadius: CGFloat
+        let shelfHeight: CGFloat?
+
+        func body(content: Content) -> some View {
+            let cover = content
+                .background(Color.primary.opacity(0.04))
+                .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            if let shelfHeight {
+                cover.modifier(RecommendationShelfView.CoverBlur(height: shelfHeight))
+            } else {
+                cover
+            }
+        }
     }
 }
 
 private struct HomePopularBookCard: View {
     let book: Book?
     let libraryInfo: HomeFeature.LibraryInfoState?
-    
+
+    private let coverWidth: CGFloat = 97
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HomeBookCover(book: book, width: 96, height: 140)
+            HomeBookCover(book: book, width: coverWidth, height: 141.94)
                 .padding(.bottom, 8)
             
             if let book {
@@ -261,7 +290,7 @@ private struct HomePopularBookCard: View {
             
             libraryInformation
         }
-        .frame(width: 96, alignment: .leading)
+        .frame(width: coverWidth, alignment: .leading)
         .accessibilityElement(children: .combine)
     }
 

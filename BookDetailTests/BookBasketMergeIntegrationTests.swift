@@ -16,10 +16,10 @@ struct BookBasketMergeIntegrationTests {
         initial.bookSearch.category = .journal
         initial.bookSearch.basketBooks = items.map(\.book)
         initial.home.basket = BookBasketFeature.State(
-            items: items, isSelectingForGuidance: true, selectedIDs: [items[0].id]
+            items: items, selectedIDs: [items[0].id]
         )
         initial.bookSearch.basket = BookBasketFeature.State(
-            items: items, isSelectingForGuidance: true, selectedIDs: items.map(\.id)
+            items: items, selectedIDs: items.map(\.id)
         )
         let store = TestStore(initialState: initial) { AppFeature() } withDependencies: {
             $0.bookBasketClient = client
@@ -37,6 +37,45 @@ struct BookBasketMergeIntegrationTests {
         #expect(store.state.bookSearch.category == .journal)
         #expect(store.state.bookSearch.basketBooks == [items[1].book])
         await store.finish()
+    }
+
+    @Test("상세 바로가기로 연 책바구니에서 삭제하면 다른 탭에도 반영된다")
+    func detailShortcutDeletionSynchronizesOtherTabs() async {
+        let suite = "BookBasketMergeIntegrationTests.\(UUID().uuidString)"
+        defer { UserDefaults.standard.removePersistentDomain(forName: suite) }
+        let client = BookBasketClient.userDefaults(suiteName: suite)
+        let selected = item("a")
+        client.save([selected])
+
+        var initial = AppFeature.State()
+        initial.bookSearch.basketBooks = [selected.book]
+        initial.bookSearch.detail = BookDetailFeature.State(book: selected.book)
+        initial.bookSearch.detail?.basketNotice = .alreadyAdded
+        initial.home.basket = BookBasketFeature.State(items: [selected], selectedIDs: [selected.id])
+
+        let store = TestStore(initialState: initial) { AppFeature() } withDependencies: {
+            $0.bookBasketClient = client
+        }
+
+        await store.send(.bookSearch(.detail(.presented(.basketShortcutTapped)))) {
+            $0.bookSearch.detail?.basketNotice = nil
+            $0.bookSearch.detail?.basket = BookBasketFeature.State()
+        }
+        await store.send(.bookSearch(.detail(.presented(.basket(.presented(.task)))))) {
+            $0.bookSearch.detail?.basket?.items = [selected]
+        }
+        await store.send(.bookSearch(.detail(.presented(.basket(.presented(.selectionToggled(selected.id))))))) {
+            $0.bookSearch.detail?.basket?.selectedIDs = [selected.id]
+        }
+        await store.send(.bookSearch(.detail(.presented(.basket(.presented(.removeButtonTapped)))))) {
+            $0.bookSearch.detail?.basket?.isRemoveAlertPresented = true
+        }
+        await store.send(.bookSearch(.detail(.presented(.basket(.presented(.removeConfirmed)))))) {
+            $0.bookSearch.detail?.basket = BookBasketFeature.State()
+            $0.bookSearch.basketBooks = []
+            $0.home.basket = BookBasketFeature.State()
+        }
+        #expect(client.load().isEmpty)
     }
 
     @Test("검색에서 담으면 열린 홈 책바구니에도 반영하고 중복 담기는 시각을 바꾸지 않는다")
@@ -70,7 +109,7 @@ struct BookBasketMergeIntegrationTests {
             hasSearched: true, basketBooks: items.map(\.book)
         )
         initial.basket = BookBasketFeature.State(
-            items: items, isSelectingForGuidance: true, selectedIDs: [items[1].id, items[0].id]
+            items: items, selectedIDs: [items[1].id, items[0].id]
         )
         let store = TestStore(initialState: initial) { BookSearchFeature() }
         await store.send(.basket(.presented(.startGuidanceButtonTapped)))
@@ -87,7 +126,7 @@ struct BookBasketMergeIntegrationTests {
         let selected = item("a")
         var initial = HomeFeature.State()
         initial.basket = BookBasketFeature.State(
-            items: [selected], isSelectingForGuidance: true, selectedIDs: [selected.id]
+            items: [selected], selectedIDs: [selected.id]
         )
         initial.detail = BookDetailFeature.State(book: selected.book, isFavorite: true)
         let store = TestStore(initialState: initial) { HomeFeature() }
