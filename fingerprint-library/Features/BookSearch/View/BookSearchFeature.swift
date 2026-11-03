@@ -32,6 +32,7 @@ struct BookSearchFeature {
         var isBasketLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
         @Presents var basket: BookBasketFeature.State?
+        @Presents var favorites: BookFavoritesFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
     }
     
@@ -60,6 +61,8 @@ struct BookSearchFeature {
         
         case addToBasket(Book)
         case basketButtonTapped
+        case favoritesButtonTapped
+        case favorites(PresentationAction<BookFavoritesFeature.Action>)
         case basket(PresentationAction<BookBasketFeature.Action>)
         case basketLimitAlertDismissed
         case removeFromBasket(Set<Book.ID>)
@@ -139,6 +142,8 @@ struct BookSearchFeature {
                     state.favoriteBookKeys.remove(key)
                 } else {
                     state.favoriteBookKeys.insert(key)
+                    bookFavoritesClient.record(book, now)
+                    // 찜 목록 화면에서 날짜별로 보여 주도록 책 정보와 찜한 시각을 남긴다.
                 }
                 bookFavoritesClient.save(state.favoriteBookKeys)
                 if let detailBook = state.detail?.book {
@@ -186,7 +191,22 @@ struct BookSearchFeature {
                 state.shelfMap = BookShelfMapFeature.State(books: books)
                 return .none
 
-            case .detail, .basket:
+            case .favoritesButtonTapped:
+                state.favorites = BookFavoritesFeature.State()
+                return .none
+
+            case let .favorites(.presented(.delegate(.favoritesChanged(keys)))):
+                state.favoriteBookKeys = keys
+                // 지도 찜 표시와 검색 결과 하트가 찜 목록 화면에서 지운 내용을 따라가게 한다.
+                return .none
+
+            case .favorites(.presented(.delegate(.basketChanged))),
+                 .favorites(.presented(.basket(.presented(.removeConfirmed)))),
+                 .favorites(.dismiss):
+                state.basketBooks = bookBasketClient.load().map(\.book)
+                return .none
+
+            case .detail, .basket, .favorites:
                 return .none
 
             case .directionsButtonTapped(let book):
@@ -312,6 +332,9 @@ struct BookSearchFeature {
         }
         .ifLet(\.$basket, action: \.basket) {
             BookBasketFeature()
+        }
+        .ifLet(\.$favorites, action: \.favorites) {
+            BookFavoritesFeature()
         }
         .ifLet(\.$shelfMap, action: \.shelfMap) {
             BookShelfMapFeature()

@@ -19,8 +19,16 @@ struct BookSearchTabView: View {
                 store: store,
                 onShowBasket: {
                     store.send(.basketButtonTapped)
+                },
+                onShowFavorites: {
+                    store.send(.favoritesButtonTapped)
                 }
             )
+            .navigationDestination(
+                item: $store.scope(state: \.favorites, action: \.favorites)
+            ) { favoritesStore in
+                BookFavoritesView(store: favoritesStore)
+            }
             .navigationDestination(
                 item: $store.scope(state: \.basket, action: \.basket)
             ) { basketStore in
