@@ -9,115 +9,62 @@ import SwiftUI
 
 struct BookSearchResultRow: View {
     let book: Book
-    let isFavorite: Bool
+    let libraryInfo: BookCardLibraryInfo?
     let onShowDetail: () -> Void
-    let onToggleFavorite: () -> Void
-    let onAddToBasket: () -> Void
-    let onShowDirections: () -> Void
+
+    private let coverHeight: CGFloat = 111
 
     var body: some View {
-        VStack(spacing: 12) {
-            HStack(alignment: .top, spacing: 16) {
-                coverImage
-                Button(action: onShowDetail) {
-                    HStack(alignment: .top, spacing: 16) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text(cleaned(book.title))
-                                .font(.headline)
-                                .foregroundStyle(.primary)
-                                .lineLimit(3)
+        HStack(alignment: .top, spacing: 20) {
+            BookCoverView(url: book.imageURL, isbn: book.isbn, onOpen: onShowDetail)
+                .frame(width: 78, height: coverHeight)
+                .background(.white.opacity(0.06))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
 
-                            Text(book.subLocation.map(cleaned) ?? "위치 정보 없음")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(2)
+            Button(action: onShowDetail) {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(BookText.plainText(book.title))
+                        .typography(.bookTitle)
+                        .foregroundStyle(.white)
+                        .lineLimit(2)
 
-                            Text(cleaned(book.author))
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .lineLimit(2)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .contentShape(Rectangle())
+                    Text(BookText.plainText(locationText))
+                        .typography(.body2)
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+
+                    Text(BookText.plainText(book.author))
+                        .typography(.caption2)
+                        .foregroundStyle(.white.opacity(0.65))
+                        .lineLimit(1)
+
+                    Spacer(minLength: 8)
+
+                    availabilityText
+                        .typography(.caption2)
                 }
-                .buttonStyle(.plain)
-                .accessibilityHint("책 소개 보기")
+                .frame(maxWidth: .infinity, minHeight: coverHeight, alignment: .leading)
+                .contentShape(Rectangle())
             }
-
-            actionButtons
+            .buttonStyle(.plain)
+            .accessibilityHint("책 소개 보기")
         }
         .padding(16)
-        .background(Color(.secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .overlay {
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.gray.opacity(0.15))
+    }
+
+    private var locationText: String {
+        libraryInfo?.location ?? book.subLocation ?? "위치 정보 없음"
+    }
+
+    @ViewBuilder
+    private var availabilityText: some View {
+        switch libraryInfo?.availability {
+        case .available:
+            Text("대출 가능").foregroundStyle(.green)
+        case .unavailable:
+            Text("이용 불가").foregroundStyle(.red)
+        case .unknown, .none:
+            Text("대출 상태 확인 필요").foregroundStyle(.white.opacity(0.65))
         }
-    }
-
-    private var actionButtons: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 6) {
-                favoriteButton
-                basketButton
-                directionsButton
-            }
-            .fixedSize(horizontal: true, vertical: false)
-
-            // 큰 글자나 좁은 화면에서는 버튼을 세로로 배치한다.
-            VStack(alignment: .trailing, spacing: 6) {
-                favoriteButton
-                basketButton
-                directionsButton
-            }
-        }
-        .font(.caption)
-        .controlSize(.small)
-        .frame(maxWidth: .infinity, alignment: .trailing)
-    }
-
-    private var favoriteButton: some View {
-        Button(action: onToggleFavorite) {
-            Image(systemName: isFavorite ? "heart.fill" : "heart")
-                .frame(minWidth: 28, minHeight: 32)
-        }
-        .buttonStyle(.bordered)
-        .tint(isFavorite ? .red : .primary)
-        .accessibilityLabel(isFavorite ? "찜 해제" : "찜하기")
-        .accessibilityValue(isFavorite ? "찜됨" : "찜 안 됨")
-        .accessibilityIdentifier("book-favorite-\(book.id)")
-    }
-
-    private var basketButton: some View {
-        Button(action: onAddToBasket) {
-            Text("책바구니 담기")
-                .frame(minHeight: 32)
-        }
-        .buttonStyle(.borderedProminent)
-    }
-
-    private var directionsButton: some View {
-        Button(action: onShowDirections) {
-            Text("길안내 받기")
-                .frame(minHeight: 32)
-        }
-        .buttonStyle(.bordered)
-        .accessibilityIdentifier("book-directions-\(book.id)")
-    }
-
-    private var coverImage: some View {
-        // 상세 이동 버튼 안에 재시도 버튼을 중첩하지 않는다.
-        BookCoverView(url: book.imageURL, isbn: book.isbn, onOpen: onShowDetail)
-        .frame(width: 72, height: 104)
-        .background(Color.gray.opacity(0.08))
-        .clipShape(RoundedRectangle(cornerRadius: 6))
-    }
-
-    private func cleaned(_ text: String) -> String {
-        BookText.plainText(text)
     }
 }

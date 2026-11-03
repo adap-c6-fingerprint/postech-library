@@ -12,6 +12,7 @@ struct BookSearchView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
     let onShowBasket: () -> Void
     @Environment(\.dismissSearch) private var dismissSearch
+    @Dependency(\.bookLocationCacheClient) private var bookLocationCacheClient
     
     var body: some View {
         VStack(spacing: 0) {
@@ -63,33 +64,49 @@ struct BookSearchView: View {
                     message: "결과가 없어요. 새로운 검색을 시도해보세요."
                 )
             } else {
-                ScrollView {
-                    LazyVStack(spacing: 12) {
-                        ForEach(store.books) { book in
-                            BookSearchResultRow(
-                                book: book,
-                                isFavorite: store.favoriteBookKeys.contains(book.recordKey),
-                                onShowDetail: {
-                                    store.send(.bookSelected(book))
-                                },
-                                onToggleFavorite: {
-                                    store.send(.favoriteButtonTapped(book))
-                                },
-                                onAddToBasket: {
-                                    store.send(.addToBasket(book))
-                                },
-                                onShowDirections: {
-                                    store.send(.directionsButtonTapped(book))
-                                })
+                searchResults
+            }
+        }
+    }
+
+    private var searchResults: some View {
+        let books = store.books
+        let holdings = bookLocationCacheClient.loadRecent(Set(books.map(\.recordKey)))
+
+        return ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("검색 결과 \(books.count)건")
+                    .typography(.title1)
+                    .foregroundStyle(.white)
+                    .accessibilityAddTraits(.isHeader)
+
+                LazyVStack(spacing: 0) {
+                    ForEach(books) { book in
+                        BookSearchResultRow(
+                            book: book,
+                            libraryInfo: holdings[book.recordKey].map { BookCardLibraryInfo(holdings: $0) },
+                            onShowDetail: {
+                                store.send(.bookSelected(book))
+                            }
+                        )
+
+                        if book.id != books.last?.id {
+                            Divider()
+                                .overlay(.white.opacity(0.22))
+                                .padding(.horizontal, 16)
                         }
                     }
-                    .padding(16)
                 }
-                .scrollDismissesKeyboard(.interactively)
-                .refreshable {
-                    await store.send(.refreshButtonTapped).finish()
-                }
+                .background(Color(white: 42.0 / 255.0))
+                .clipShape(RoundedRectangle(cornerRadius: 20))
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 6)
+            .padding(.bottom, 16)
+        }
+        .scrollDismissesKeyboard(.interactively)
+        .refreshable {
+            await store.send(.refreshButtonTapped).finish()
         }
     }
 
