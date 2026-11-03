@@ -30,6 +30,7 @@ struct BookDetailMapView: View {
                     store: mapStore, showsDestinationCard: false, showsRoute: false,
                     bottomContentInset: min(coveredHeight, geometry.size.height),
                     highlightedFeatureIDs: Set(store.destinationPresentation?.shelves.map(\.mapElementID) ?? []),
+                    showsCurrentLocationButton: false,
                     showsFloorPicker: false
                 )
                 .ignoresSafeArea(.container, edges: .top)
