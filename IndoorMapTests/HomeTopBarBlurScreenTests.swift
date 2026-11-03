@@ -44,8 +44,7 @@ extension IndoorMapSerialTests {
                     navigation.setNavigationBarHidden(false, animated: false)
                     navigation.pushViewController(cart, animated: true)
                 }
-                try await Task.sleep(for: .milliseconds(700))
-                #expect(navigation.viewControllers.count == 2)
+                try await waitUntil { navigation.viewControllers.count == 2 && navigation.transitionCoordinator == nil }
                 let departingView = try #require(navigation.topViewController?.view)
                 if usesSwiftUINavigation {
                     state.showsCart = false
@@ -75,7 +74,7 @@ extension IndoorMapSerialTests {
                     print("TOP_BLUR_TRANSITION swiftui=\(usesSwiftUINavigation) attempt=\(attempt) sample=\(sample) transitioning=\(inTransition) sharpestStep=\(sharpestStep)")
                     #expect(sharpestStep > 0.25, "복귀 애니메이션 중에도 경계가 강하게 흐려지면 안 됩니다")
                 }
-                #expect(navigation.viewControllers.count == 1)
+                try await waitUntil { navigation.viewControllers.count == 1 && navigation.transitionCoordinator == nil }
                 let restored = snapshot(window)
                 for y: CGFloat in [60, 180, 250] {
                     let before = try brightness(baseline, x: edge + 8, y: y)
@@ -116,6 +115,14 @@ extension IndoorMapSerialTests {
         private func navigation(in controller: UIViewController) -> UINavigationController? {
             if let value = controller as? UINavigationController { return value }
             return controller.children.compactMap { navigation(in: $0) }.first
+        }
+
+        private func waitUntil(_ predicate: () -> Bool) async throws {
+            for _ in 0..<100 {
+                if predicate() { return }
+                try await Task.sleep(for: .milliseconds(50))
+            }
+            try #require(predicate(), "화면 전환 완료 대기 시간이 초과됐습니다")
         }
 
         @Test("옅은 기본 블러가 화면 위부터 인사 문구 높이까지 실제로 적용된다")

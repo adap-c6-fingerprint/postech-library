@@ -49,7 +49,8 @@ struct BookRoutePreviewTestRouteTests {
             })
             let badge = try #require(coordinator.mapView(view, viewFor: marker))
             #expect(badge.image?.size == CGSize(width: 24, height: 24))
-            #expect(badge.zPriority == .max)
+            #expect(badge.zPriority.rawValue > MapAnnotationPriority.marker.rawValue)
+            #expect(badge.zPriority.rawValue < MapAnnotationPriority.user.rawValue)
             #expect(badge.displayPriority == .required)
             #expect(badge.accessibilityIdentifier == "route-group-transition-\(node.id)")
         }

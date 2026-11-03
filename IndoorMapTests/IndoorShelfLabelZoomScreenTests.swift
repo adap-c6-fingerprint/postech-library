@@ -16,7 +16,7 @@ extension IndoorMapSerialTests {
             let group = try #require(layout.groups.first { $0.members.contains { $0.realNumber == shelfNumber } })
             let coordinate = IndoorMapCoordinate(latitude: shelf.coordinate.latitude, longitude: shelf.coordinate.longitude)
             let marker = HomeMapMarker(id: "favorite-test", kind: .favorite, floorID: floor.id,
-                coordinate: coordinate, title: "찜한 도서", shelfID: shelf.members[0].mapElementID)
+                coordinate: coordinate, title: "찜한 도서")
             let facility = HomeMapMarker(id: "facility-test", kind: .printer, floorID: floor.id,
                 coordinate: .init(latitude: group.coordinate.latitude, longitude: group.coordinate.longitude), title: "프린터")
             let parent = IndoorMapKitView(map: map, floor: floor, selectedFeatureID: nil,
@@ -102,7 +102,8 @@ extension IndoorMapSerialTests {
                     for annotation in view.annotations.compactMap({ $0 as? HomeMapPointAnnotation }) {
                         if let icon = view.view(for: annotation) {
                             #expect(icon.centerOffset == .zero)
-                            #expect(icon.zPriority == .max)
+                            #expect(icon.zPriority.rawValue > MapAnnotationPriority.shelf.rawValue)
+                            #expect(icon.zPriority.rawValue < MapAnnotationPriority.user.rawValue)
                             #expect(icon.displayPriority == .required)
                         }
                     }

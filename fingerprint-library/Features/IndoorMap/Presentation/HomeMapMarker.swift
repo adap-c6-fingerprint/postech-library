@@ -37,7 +37,6 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     let coordinate: IndoorMapCoordinate
     let title: String
     var subtitle: String? = nil
-    var shelfID: IndoorMapElement.ID? = nil
 }
 
 nonisolated enum HomeMapMarkerBuilder {
@@ -87,8 +86,7 @@ nonisolated enum HomeMapMarkerBuilder {
             return HomeMapMarker(id: "favorite-\(group.shelf.mapElementID.sourceID)", kind: .favorite,
                 floorID: group.shelf.floorID, coordinate: coordinate,
                 title: "찜한 도서 \(group.keys.count)권",
-                subtitle: "\(group.shelf.realNumber) 서가\(group.isCandidate ? " · 위치 후보" : "")",
-                shelfID: group.shelf.mapElementID)
+                subtitle: "\(group.shelf.realNumber) 서가\(group.isCandidate ? " · 위치 후보" : "")")
         }.sorted { $0.id < $1.id }
     }
 

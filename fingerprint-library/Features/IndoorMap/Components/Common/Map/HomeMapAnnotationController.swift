@@ -30,8 +30,8 @@ final class HomeMapAnnotationController {
         view.centerOffset = .zero
         view.canShowCallout = true
         view.displayPriority = .required
-        view.zPriority = .max
-        view.selectedZPriority = .max
+        view.zPriority = MapAnnotationPriority.marker
+        view.selectedZPriority = MapAnnotationPriority.marker
         view.collisionMode = .circle
         view.clusteringIdentifier = nil
         view.isAccessibilityElement = true

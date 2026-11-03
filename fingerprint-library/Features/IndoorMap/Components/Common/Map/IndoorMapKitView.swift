@@ -254,9 +254,14 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         private func layoutShelfLabels(in view: MKMapView) {
-            let favorites = Set(parent.homeMarkers.compactMap(\.shelfID))
-            shelfLabelController.layout(in: view, highlighted: parent.highlightedFeatureIDs,
-                favorites: favorites)
+            shelfLabelController.layout(in: view, highlighted: parent.highlightedFeatureIDs)
+        }
+
+        func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+            for view in views where view.annotation is MKUserLocation {
+                view.zPriority = MapAnnotationPriority.user
+                view.selectedZPriority = MapAnnotationPriority.user
+            }
         }
 
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -648,6 +653,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 content.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 view.addSubview(content)
                 view.displayPriority = .required
+                view.zPriority = MapAnnotationPriority.route
+                view.selectedZPriority = MapAnnotationPriority.route
                 view.collisionMode = .circle
                 view.isEnabled = false
                 view.isAccessibilityElement = true
@@ -670,7 +677,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                     circle.stroke()
                 }
                 view.centerOffset = .zero
-                view.zPriority = .max
+                view.zPriority = MapAnnotationPriority.route
+                view.selectedZPriority = MapAnnotationPriority.route
                 view.displayPriority = .required
                 view.collisionMode = .circle
                 view.clusteringIdentifier = nil
@@ -693,6 +701,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.annotation = annotation
                 view.image = annotation.markerImage
                 view.centerOffset = .zero
+                view.zPriority = MapAnnotationPriority.route
+                view.selectedZPriority = MapAnnotationPriority.route
                 view.collisionMode = .circle
                 view.displayPriority = .required
                 view.clusteringIdentifier = nil
@@ -719,6 +729,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                     view.addSubview(dot)
                 }
                 view.displayPriority = .required
+                view.zPriority = MapAnnotationPriority.user
+                view.selectedZPriority = MapAnnotationPriority.user
                 view.isEnabled = false
                 view.isAccessibilityElement = true
                 view.accessibilityLabel = "시뮬레이션 위치"
@@ -734,6 +746,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.canShowCallout = true
                 view.titleVisibility = .visible
                 view.displayPriority = .required
+                view.zPriority = MapAnnotationPriority.marker
+                view.selectedZPriority = MapAnnotationPriority.marker
                 view.clusteringIdentifier = nil
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = annotation.subtitle
@@ -746,6 +760,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.canShowCallout = false
             view.titleVisibility = .hidden
             view.displayPriority = .defaultLow
+            view.zPriority = MapAnnotationPriority.marker
+            view.selectedZPriority = MapAnnotationPriority.marker
             view.clusteringIdentifier = nil
             if let annotation = annotation as? FeatureAnnotation {
                 view.glyphImage = UIImage(systemName: Self.symbol(for: annotation.feature.category))
@@ -755,6 +771,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.glyphImage = UIImage(systemName: annotation.position.source == .replay ? "play.fill" : "mappin")
                 view.markerTintColor = annotation.position.source == .replay ? .systemOrange : .systemPurple
                 view.displayPriority = .required
+                view.zPriority = MapAnnotationPriority.user
+                view.selectedZPriority = MapAnnotationPriority.user
                 view.accessibilityLabel = annotation.title
             }
             return view

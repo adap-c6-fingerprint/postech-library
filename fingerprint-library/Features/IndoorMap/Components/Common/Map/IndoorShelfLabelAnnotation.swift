@@ -99,8 +99,8 @@ final class IndoorShelfLabelView: MKAnnotationView {
         textLabel.transform = CGAffineTransform(rotationAngle: angle)
         // 겹쳐도 번호를 유지한다. 찜·편의시설은 별도 우선순위로 위에 표시한다.
         displayPriority = .required
-        zPriority = .min
-        selectedZPriority = .min
+        zPriority = MapAnnotationPriority.shelf
+        selectedZPriority = MapAnnotationPriority.shelf
         accessibilityIdentifier = "shelf-label-\(annotation.presentation.id)"
         accessibilityLabel = "서가 \(annotation.presentation.text.replacingOccurrences(of: "\n", with: ", "))"
         accessibilityValue = annotation.subtitle

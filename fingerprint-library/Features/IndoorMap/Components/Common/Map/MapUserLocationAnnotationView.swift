@@ -29,6 +29,8 @@ final class MapUserLocationAnnotationView: MKAnnotationView {
         centerOffset = .zero
         clipsToBounds = false
         displayPriority = .required
+        zPriority = MapAnnotationPriority.user
+        selectedZPriority = MapAnnotationPriority.user
         collisionMode = .circle
         isEnabled = false
         isAccessibilityElement = true
