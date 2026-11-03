@@ -24,6 +24,7 @@ struct BookDetailFavoritesTests {
         initial.holdingsState = .failed
         let store = TestStore(initialState: initial) { BookDetailFeature() } withDependencies: {
             $0.bookFavoritesClient = client
+            $0.date.now = Date(timeIntervalSince1970: 1_790_000_000)
         }
 
         await store.send(.loadFavorites) { $0.isFavorite = true }
@@ -51,6 +52,7 @@ struct BookDetailFavoritesTests {
             BookSearchFeature()
         } withDependencies: {
             $0.bookFavoritesClient = client
+            $0.date.now = Date(timeIntervalSince1970: 1_790_000_000)
         }
 
         await store.send(.bookSelected(selected)) {
@@ -84,6 +86,7 @@ struct BookDetailFavoritesTests {
         initial.bookSearch.detail = BookDetailFeature.State(book: selected)
         let store = TestStore(initialState: initial) { AppFeature() } withDependencies: {
             $0.bookFavoritesClient = client
+            $0.date.now = Date(timeIntervalSince1970: 1_790_000_000)
         }
 
         await store.send(.home(.detail(.presented(.favoriteButtonTapped)))) {

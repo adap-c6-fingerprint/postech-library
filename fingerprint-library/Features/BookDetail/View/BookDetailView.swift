@@ -30,6 +30,7 @@ struct BookDetailMapView: View {
                     store: mapStore, showsDestinationCard: false, showsRoute: false,
                     bottomContentInset: min(coveredHeight, geometry.size.height),
                     highlightedFeatureIDs: Set(store.destinationPresentation?.shelves.map(\.mapElementID) ?? []),
+                    showsCurrentLocationButton: false,
                     showsFloorPicker: false
                 )
                 .ignoresSafeArea(.container, edges: .top)
@@ -131,8 +132,6 @@ struct BookDetailView: View {
     var onDismiss: () -> Void = { }
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
-    @State private var isNoticePresented = false
-    @State private var noticeMessage = ""
     @State private var isRoutePreviewPresented = false
 
     var body: some View {
@@ -147,14 +146,23 @@ struct BookDetailView: View {
             .foregroundStyle(Color.textPrimary)
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("도서 안내", isPresented: $isNoticePresented) {
-                Button("확인", role: .cancel) { }
-            } message: { Text(noticeMessage) }
             .navigationDestination(item: $store.scope(state: \.shelfMap, action: \.shelfMap)) {
                 BookShelfMapView(store: $0).toolbar(.visible, for: .navigationBar)
             }
             .fullScreenCover(isPresented: $isRoutePreviewPresented) {
                 BookRoutePreviewView(books: [store.book])
+            }
+            .fullScreenCover(item: $store.scope(state: \.basket, action: \.basket)) { basketStore in
+                NavigationStack {
+                    BookBasketView(store: basketStore, onClose: { store.send(.basket(.dismiss)) })
+                }
+            }
+            .alert(basketNoticeTitle, item: basketNotice) { _ in
+                Button("취소", role: .cancel) {}
+                Button("바로가기") { store.send(.basketShortcutTapped) }
+                    .keyboardShortcut(.defaultAction)
+            } message: { _ in
+                Text("장바구니로 이동하여 책의 경로를 확인하시겠습니까?")
             }
             .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
                 store.send(.basketLimitAlertDismissed)
@@ -163,6 +171,21 @@ struct BookDetailView: View {
             .task { store.send(.loadHoldings) }
             .task { store.send(.loadDescription) }
             .task { store.send(.loadRelatedBooks) }
+    }
+
+    private var basketNoticeTitle: String {
+        store.basketNotice == .alreadyAdded ? "이미 장바구니에 담긴 책이에요." : "책이 장바구니에 담겼어요."
+    }
+
+    private var basketNotice: Binding<BookDetailFeature.BasketNotice?> {
+        Binding(
+            get: { store.basketNotice },
+            set: { notice in
+                if notice == nil, store.basketNotice != nil {
+                    store.send(.basketNoticeDismissed)
+                }
+            }
+        )
     }
 
     @ViewBuilder
@@ -395,7 +418,6 @@ struct BookDetailView: View {
             Button { isRoutePreviewPresented = true } label: {
                 Text("바로 안내 시작").bookDetailTypography(.bookTitle).frame(maxWidth: .infinity)
             }
-            .buttonStyle(.glass)
             .buttonBorderShape(.capsule)
             .buttonSizing(.flexible)
             .controlSize(.large)
@@ -403,18 +425,14 @@ struct BookDetailView: View {
             .accessibilityIdentifier("bookDetail.startGuidance")
             Button {
                 store.send(.addToBasketButtonTapped)
-                if !store.isBasketLimitAlertPresented {
-                    noticeMessage = "책바구니에서 이 책을 확인할 수 있어요."
-                    isNoticePresented = true
-                }
             } label: { Image(systemName: "cart.fill").font(.system(size: 23, weight: .semibold)) }
-            .buttonStyle(.glass)
             .buttonBorderShape(.circle)
             .controlSize(.large)
             .frame(width: 50, height: 50)
             .accessibilityLabel("장바구니에 담기")
             .accessibilityIdentifier("bookDetail.addToBasket")
         }
+        .buttonStyle(.glass(.regular.tint(Color(white: 32.0 / 255).opacity(0.45))))
         .foregroundStyle(Color.textPrimary)
         .padding(.horizontal, 16)
         .padding(.top, 16)

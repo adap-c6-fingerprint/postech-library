@@ -36,9 +36,7 @@ extension IndoorMapSerialTests {
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
             let mapStore = Store(initialState: IndoorMapFeature.State()) { IndoorMapFeature() }
-            let host = UIHostingController(rootView: NavigationStack {
-                HomeView(store: store, mapStore: mapStore)
-            })
+            let host = UIHostingController(rootView: HomeView(store: store, mapStore: mapStore))
             window.rootViewController = host
             window.makeKeyAndVisible()
             defer { window.isHidden = true; window.rootViewController = nil }

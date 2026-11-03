@@ -38,6 +38,7 @@ struct LibraryTopBar: ToolbarContent {
 /// 홈 지도에서는 시스템 바의 경계 효과 없이 기존 그라데이션 위에 메뉴를 배치한다.
 struct LibraryMapTopBar: View {
     let title: String
+    let onFavorites: () -> Void
     let onBasket: () -> Void
 
     var body: some View {
@@ -46,7 +47,7 @@ struct LibraryMapTopBar: View {
                 .padding(.leading, 4)
             Spacer(minLength: 12)
             HStack(spacing: 8) {
-                LibraryTopBarButton(title: "관심 도서", symbol: "heart.fill", identifier: "library-top-bar-favorites", action: nil, size: 44)
+                LibraryTopBarButton(title: "관심 도서", symbol: "heart.fill", identifier: "library-top-bar-favorites", action: onFavorites, size: 44)
                     .frame(width: 44, height: 44)
                 LibraryTopBarButton(title: "책바구니", symbol: "cart.fill", identifier: "library-top-bar-basket", action: onBasket, size: 44)
                     .frame(width: 44, height: 44)

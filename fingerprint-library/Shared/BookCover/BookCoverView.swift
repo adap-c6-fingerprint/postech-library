@@ -1,21 +1,29 @@
 import SwiftUI
 import UIKit
 
-struct BookCoverView: View {
+struct BookCoverView<CoverModifier: ViewModifier>: View {
     let url: URL?
     let isbn: String?
     let onOpen: (() -> Void)?
     let allowsRetry: Bool
+    private let coverModifier: CoverModifier
     @State private var retryID = 0
     @State private var model: BookCoverModel<UIImage>
 
-    init(url: URL?, isbn: String? = nil, onOpen: (() -> Void)? = nil, allowsRetry: Bool = true) {
+    init(
+        url: URL?,
+        isbn: String? = nil,
+        onOpen: (() -> Void)? = nil,
+        allowsRetry: Bool = true,
+        coverModifier: CoverModifier
+    ) {
         self.url = url
         self.isbn = isbn
         self.onOpen = onOpen
         self.allowsRetry = allowsRetry
+        self.coverModifier = coverModifier
         _model = State(initialValue: BookCoverModel(url: url, isbn: isbn, pipeline: BookCoverPipeline.shared,
-            fallback: { try await BookCoverPipeline.fallback.coverURL(for: $0) }))
+            fallback: { try await BookCoverPipeline.fallback.url(for: $0) }))
     }
 
     var body: some View {
@@ -34,6 +42,7 @@ struct BookCoverView: View {
         }
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .modifier(coverModifier)
         .task(id: LoadID(url: url, isbn13: BookISBN.isbn13(from: isbn), retry: retryID)) { await model.load(url, isbn: isbn) }
     }
 
@@ -65,5 +74,11 @@ struct BookCoverView: View {
         let url: URL?
         let isbn13: String?
         let retry: Int
+    }
+}
+
+extension BookCoverView where CoverModifier == EmptyModifier {
+    init(url: URL?, isbn: String? = nil, onOpen: (() -> Void)? = nil, allowsRetry: Bool = true) {
+        self.init(url: url, isbn: isbn, onOpen: onOpen, allowsRetry: allowsRetry, coverModifier: EmptyModifier())
     }
 }

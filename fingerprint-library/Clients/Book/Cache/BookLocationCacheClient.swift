@@ -8,6 +8,8 @@ nonisolated struct BookLocationCacheClient: Sendable {
     var updates: @Sendable () -> AsyncStream<Void>
     var prepare: @Sendable () async -> Void = {}
     var recordBatch: (@Sendable ([(Book, [BookHolding])]) -> Void)? = nil
+    // 대출 상태를 표시할 때에는 오래된 로컬 사본과 번들 자료를 제외한다.
+    var loadRecent: @Sendable (_ keys: Set<[String?]>) -> [[String?]: [BookHolding]] = { _ in [:] }
 
     static func userDefaults(suiteName: String? = nil) -> Self {
         let store = LocalBookLocationStore(suiteName: suiteName)
@@ -15,7 +17,7 @@ nonisolated struct BookLocationCacheClient: Sendable {
         return Self(load: { store.load($0) }, record: { store.record($0, holdings: $1) }, updates: { store.updates() }, prepare: {
             guard let entries = try? await bundled.load(), !Task.isCancelled else { return }
             store.seed(entries)
-        }, recordBatch: { store.recordBatch($0) })
+        }, recordBatch: { store.recordBatch($0) }, loadRecent: { store.loadRecent($0) })
     }
 
     func recordSearchResponse(_ data: Data, books: [Book]) {
@@ -59,6 +61,7 @@ private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
     private let lock = NSLock()
     private let defaults: UserDefaults
     private var entries: [[String?]: Entry] = [:]
+    private var recentObservations: [[String?]: Date] = [:]
     private var observers: [UUID: AsyncStream<Void>.Continuation] = [:]
     private var hasSeededBundle = false
 
@@ -89,6 +92,19 @@ private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
         }
     }
 
+    func loadRecent(_ keys: Set<[String?]>) -> [[String?]: [BookHolding]] {
+        let cutoff = Date().addingTimeInterval(-60)
+        return lock.withLock {
+            var result: [[String?]: [BookHolding]] = [:]
+            for key in keys {
+                let normalizedKey = Self.normalized(key)
+                guard let observedAt = recentObservations[normalizedKey], observedAt > cutoff else { continue }
+                result[key] = entries[normalizedKey]?.holdings
+            }
+            return result
+        }
+    }
+
     func record(_ book: Book, holdings: [BookHolding]) {
         recordBatch([(book, holdings)])
     }
@@ -99,6 +115,13 @@ private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
             Entry(key: Self.normalized(book.recordKey), isbn: BookISBN.isbn13(from: book.isbn), holdings: holdings)
         }
         let listeners = lock.withLock { () -> [AsyncStream<Void>.Continuation] in
+            let now = Date()
+            let cutoff = now.addingTimeInterval(-60)
+            recentObservations = recentObservations.filter { $0.value > cutoff }
+            for entry in updates {
+                recentObservations[entry.key] = now
+            }
+
             var changed = false
             for entry in updates where entries[entry.key] != entry {
                 entries[entry.key] = entry

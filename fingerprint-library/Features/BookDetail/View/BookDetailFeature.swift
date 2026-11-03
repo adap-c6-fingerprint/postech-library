@@ -32,6 +32,11 @@ struct BookDetailFeature {
         case unavailable
     }
 
+    enum BasketNotice: Equatable {
+        case added
+        case alreadyAdded
+    }
+
     // 화면 전체의 현재 상태
     @ObservableState
     struct State: Equatable {
@@ -60,6 +65,8 @@ struct BookDetailFeature {
         }
 
         // 장바구니
+        var basketNotice: BasketNotice?
+        @Presents var basket: BookBasketFeature.State?
         var isBasketLimitAlertPresented = false
 
         var isbn13: String? {
@@ -93,6 +100,9 @@ struct BookDetailFeature {
         case loadFavorites
         case favoriteButtonTapped
         case addToBasketButtonTapped
+        case basketNoticeDismissed
+        case basketShortcutTapped
+        case basket(PresentationAction<BookBasketFeature.Action>)
         case basketLimitAlertDismissed
         case startGuidanceButtonTapped
         case delegate(Delegate)
@@ -140,6 +150,8 @@ struct BookDetailFeature {
                     keys.remove(key)
                 } else {
                     keys.insert(key)
+                    bookFavoritesClient.record(state.book, now)
+                    // 찜 목록 화면에서 날짜별로 보여 주도록 책 정보와 찜한 시각을 남긴다.
                 }
                 state.isFavorite = keys.contains(key)
                 bookFavoritesClient.save(keys)
@@ -238,11 +250,28 @@ struct BookDetailFeature {
                 return .none
 
             case .addToBasketButtonTapped:
-                // 이미 한도까지 담겨 있으면 저장하지 않고 한도 팝업을 띄운다.
-                if bookBasketClient.add(state.book, at: now) == .limitExceeded {
+                switch bookBasketClient.add(state.book, at: now) {
+                case .added:
+                    state.basketNotice = .added
+                case .alreadyAdded:
+                    state.basketNotice = .alreadyAdded
+                case .limitExceeded:
                     state.isBasketLimitAlertPresented = true
                 }
+                return .none
 
+            case .basketNoticeDismissed:
+                state.basketNotice = nil
+                return .none
+
+            case .basketShortcutTapped:
+                // 시스템 얼럿이 버튼 액션보다 먼저 표시 상태를 초기화할 수 있다.
+                guard state.basket == nil else { return .none }
+                state.basketNotice = nil
+                state.basket = BookBasketFeature.State()
+                return .none
+
+            case .basket:
                 return .none
 
             case .basketLimitAlertDismissed:
@@ -259,6 +288,7 @@ struct BookDetailFeature {
             }
         }
         .ifLet(\.$shelfMap, action: \.shelfMap) { BookShelfMapFeature() }
+        .ifLet(\.$basket, action: \.basket) { BookBasketFeature() }
     }
 
     private nonisolated enum CancelID: Hashable, Sendable {

@@ -58,18 +58,21 @@ extension BookRecommendationClient {
 }
 
 extension DepartmentPopularBooksClient {
-    /// 학과별(소속별) 추천.
+    /// 소속별 전체 목록과 홈 미리보기를 제공한다. 아래 규칙은 홈 미리보기에 적용된다.
     /// - 최초 접속(온보딩 직후 첫 표시): 소속 목록 20권에서 랜덤 6권 (Q4)
     /// - 이후 접속: 소속 목록에서 랜덤 6권 → 원본마다 연관도서 1권
     nonisolated static func dataset(
         dataset: RecommendationDatasetClient, related: HeldRelatedBooksClient
     ) -> Self {
-        Self(fetch: { affiliationKey, count, isInitial in
-            guard count > 0 else { return [] }
+        let fetchAll: @Sendable ([String]) async throws -> [Book] = { affiliationKey in
             guard let path = RecommendationDataset.AffiliationPath(key: affiliationKey) else {
                 throw DepartmentPopularBooksError.missingAffiliation
             }
-            let pool = try await dataset.load().books(forAffiliation: path)
+            return try await dataset.load().books(forAffiliation: path)
+        }
+        return Self(fetch: { affiliationKey, count, isInitial in
+            guard count > 0 else { return [] }
+            let pool = try await fetchAll(affiliationKey)
             var generator = SystemRandomNumberGenerator()
             let sources = DatasetRecommendation.randomPicks(from: pool, count: count, using: &generator)
             guard !isInitial else { return sources }
@@ -77,7 +80,7 @@ extension DepartmentPopularBooksClient {
             return await RelatedRecommendationAssembler.assemble(
                 sources: sources, fallback: fallback, count: count, related: related
             )
-        })
+        }, fetchAll: fetchAll)
     }
 }
 

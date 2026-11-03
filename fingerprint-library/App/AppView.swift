@@ -36,12 +36,10 @@ struct AppView: View {
             }
 
             Tab("추천", systemImage: "books.vertical", value: AppFeature.Tab.recommendations) {
-                NavigationStack {
-                    HomeView(
-                        store: store.scope(state: \.home, action: \.home),
-                        mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
-                    )
-                }
+                HomeView(
+                    store: store.scope(state: \.home, action: \.home),
+                    mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
+                )
             }
 
             Tab(value: AppFeature.Tab.search, role: .search) {

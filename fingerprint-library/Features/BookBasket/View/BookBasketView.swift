@@ -10,12 +10,13 @@ import SwiftUI
 
 struct BookBasketView: View {
     @Bindable var store: StoreOf<BookBasketFeature>
+    var onClose: (() -> Void)? = nil
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .trailing, spacing: 0) {
+            VStack(alignment: .trailing, spacing: 4) {
                 Text("총 \(store.items.count)권")
-                    .font(.system(size: 16))
+                    .typography(.body2)
                     .foregroundStyle(Color.basketTextSecondary)
 
                 LazyVStack(alignment: .leading, spacing: 28) {
@@ -25,82 +26,32 @@ struct BookBasketView: View {
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.top, 16)
+            .padding(.top, 24)
             .padding(.bottom, 24)
         }
         .overlay {
             if store.items.isEmpty {
                 ContentUnavailableView(
                     "책바구니가 비어 있어요",
-                    systemImage: "basket",
-                    description: Text(
-                        "검색 화면에서 책을 담아 주세요."
-                    )
+                    systemImage: "cart",
+                    description: Text("도서 상세에서 책을 담아 주세요.")
                 )
             }
         }
-        .background(Color.basketBackground)
+        .background { Color.basketBackground.ignoresSafeArea() }
         .navigationTitle("장바구니")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
-        // 장바구니는 하단 버튼 영역을 쓰므로 탭바를 숨긴다.
+        .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
-            if store.isSelectingForGuidance {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("완료") { store.send(.doneButtonTapped) }
+            if let onClose {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("뒤로", systemImage: "chevron.left", action: onClose)
                 }
             }
         }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            VStack(spacing: 12) {
-                if store.isSelectingForGuidance {
-                    NavigationLink {
-                        BookRoutePreviewView(books: store.selectedBooks)
-                    } label: {
-                        Text("선택한 \(store.selectedCount)권 경로 미리보기")
-                            .frame(maxWidth: .infinity, minHeight: 44)
-                    }
-                    .buttonStyle(.bordered)
-                    .disabled(store.selectedCount == 0)
-                    .accessibilityIdentifier("basket-route-preview")
-
-                    HStack(spacing: 16) {
-                        Button("선택한 책 삭제", systemImage: "trash") {
-                            store.send(.removeButtonTapped)
-                        }
-                        .labelStyle(.iconOnly)
-                        .frame(minWidth: 44, minHeight: 44)
-                        .disabled(store.selectedCount == 0)
-
-                        Button {
-                            store.send(.startGuidanceButtonTapped)
-                        } label: {
-                            Text("서가 위치 보기 (\(store.selectedCount)권)")
-                                .frame(maxWidth: .infinity, minHeight: 44)
-                        }
-                        .buttonStyle(.glassProminent)
-                        .tint(Color.basketPrimary)
-                        .foregroundStyle(.black)
-                        .disabled(store.selectedCount == 0)
-                        .accessibilityIdentifier("basket-directions")
-                    }
-                    Text("길안내는 한 번에 최대 \(BookBasketItem.maxGuidanceCount)권까지 가능해요.")
-                        .font(.caption)
-                        .foregroundStyle(Color.basketTextTertiary)
-                } else {
-                    Button("길안내할 책 선택", systemImage: "checkmark.circle") {
-                        store.send(.selectButtonTapped)
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 44)
-                    .buttonStyle(.glassProminent)
-                    .tint(Color.basketPrimary)
-                    .foregroundStyle(.black)
-                    .disabled(store.items.isEmpty)
-                }
-            }
-            .padding(16)
-            .background(Color.basketBackground)
-        }
+        .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
         .alert(
             "길안내는 최대 \(BookBasketItem.maxGuidanceCount)권까지 가능해요",
             isPresented: Binding(
@@ -119,96 +70,87 @@ struct BookBasketView: View {
                 set: { if !$0 { store.send(.removeAlertDismissed) } }
             )
         ) {
-            Button("삭제하기", role: .destructive) {
+            Button("삭제", role: .destructive) {
                 store.send(.removeConfirmed)
             }
-            Button("취소하기", role: .cancel) {}
+            Button("취소", role: .cancel) {}
         } message: {
-            Text("장바구니에서만 삭제돼요. 도서관 소장 정보에는 영향이 없어요.")
+            Text("이 책은 장바구니에서만 삭제돼요.\n다시 검색하여 찾아 추가할 수 있어요.")
         }
-        .task {
-            store.send(.task)
+        .task { store.send(.task) }
+        .task(id: store.items.map(\.id)) { await store.send(.loadLibraryInfo).finish() }
+    }
+
+    private var bottomActions: some View {
+        HStack(spacing: 16) {
+            Button {
+                store.send(.removeButtonTapped)
+            } label: {
+                Image(systemName: "trash")
+                    .font(.system(size: 22))
+                    .frame(width: 48, height: 48)
+            }
+            .buttonStyle(.glass)
+            .buttonBorderShape(.circle)
+            .accessibilityLabel("선택한 책 삭제")
+
+            Spacer()
+
+            NavigationLink {
+                BookRoutePreviewView(books: store.selectedBooks)
+            } label: {
+                Text(store.selectedCount == 0 ? "안내 시작하기" : "안내 시작하기 (\(store.selectedCount)권)")
+                    .font(.body.weight(.medium))
+                    .foregroundStyle(store.selectedCount == 0 ? Color.white : Color.black)
+                    .padding(.horizontal, 14)
+                    .frame(minHeight: 48)
+                    .background(Color.basketPrimary, in: .capsule)
+            }
+            .buttonStyle(.plain)
+            .accessibilityIdentifier("basket-directions")
         }
+        .disabled(store.selectedCount == 0)
+        .padding(.horizontal, 28)
+        .padding(.vertical, 12)
+        .background(Color.basketBackground)
     }
 
     private func sectionView(_ section: BookBasketSection) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(section.day, format: Self.dayFormat)
-                .font(.system(size: 20, weight: .medium))
-                .foregroundStyle(Color.basketTextTertiary)
+                .typography(.title2)
+                .foregroundStyle(Color.basketTextSecondary)
+                .accessibilityAddTraits(.isHeader)
 
-            VStack(alignment: .leading, spacing: 16) {
-                ForEach(Array(section.items.enumerated()), id: \.element.id) { index, item in
-                    if index > 0 {
-                        Divider().overlay(Color.basketTextTertiary.opacity(0.3))
-                    }
+            VStack(spacing: 0) {
+                ForEach(section.items) { item in
                     row(item)
+
+                    if item.id != section.items.last?.id {
+                        Divider()
+                            .overlay(Color.basketTextTertiary.opacity(0.3))
+                            .padding(.horizontal, 16)
+                    }
                 }
             }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color.basketCard, in: .rect(cornerRadius: 20))
         }
     }
 
-    @ViewBuilder
     private func row(_ item: BookBasketItem) -> some View {
-        if store.isSelectingForGuidance {
-            Button {
-                store.send(.selectionToggled(item.id))
-            } label: {
-                HStack(spacing: 21) {
-                    selectionMark(isSelected: store.selectedIDs.contains(item.id))
-                    bookInfo(item)
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityAddTraits(
-                store.selectedIDs.contains(item.id) ? .isSelected : []
-            )
-        } else {
-            bookInfo(item)
-        }
+        let info = store.libraryInfo[item.id]
+        return BookSelectionRow(
+            book: item.book,
+            location: info?.location,
+            availability: info?.availability,
+            isSelected: store.selectedIDs.contains(item.id),
+            onToggle: { store.send(.selectionToggled(item.id)) }
+        )
     }
 
-    private func selectionMark(isSelected: Bool) -> some View {
-        Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-            .font(.system(size: 24))
-            .symbolRenderingMode(.palette)
-            .foregroundStyle(isSelected ? Color.white : Color.basketTextTertiary, Color.blue)
-            .frame(width: 24, height: 24)
-            .accessibilityHidden(true)
-    }
-
-    private func bookInfo(_ item: BookBasketItem) -> some View {
-        HStack(spacing: 21) {
-            BookCoverView(url: item.book.imageURL, isbn: item.book.isbn, allowsRetry: false)
-                .frame(width: 80, height: 113)
-                .background(Color.basketTextTertiary)
-                .clipShape(.rect(cornerRadius: 12))
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(item.book.title)
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundStyle(.white)
-                    .lineLimit(2)
-
-                Text(item.book.author)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(Color.basketTextTertiary)
-                    .lineLimit(1)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .accessibilityElement(children: .combine)
-    }
-
-    // 피그마 시안의 날짜 표기(Oct 12, 2026)를 따른다.
     private static let dayFormat = Date.FormatStyle(date: .abbreviated, time: .omitted)
         .locale(Locale(identifier: "en_US"))
 }
-
 extension View {
     // 장바구니 보관 한도를 넘겨 새 책을 담지 못했을 때 띄우는 팝업
     func basketLimitAlert(isPresented: Bool, onDismiss: @escaping () -> Void) -> some View {

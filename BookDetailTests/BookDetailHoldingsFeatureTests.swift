@@ -53,10 +53,13 @@ struct BookDetailHoldingsFeatureTests {
         for attempt in 0..<2 {
             if attempt == 0 {
                 await store.send(.home(.detail(.presented(.addToBasketButtonTapped)))) {
+                    $0.home.detail?.basketNotice = .added
                     $0.bookSearch.basketBooks = [book]
                 }
             } else {
-                await store.send(.home(.detail(.presented(.addToBasketButtonTapped))))
+                await store.send(.home(.detail(.presented(.addToBasketButtonTapped)))) {
+                    $0.home.detail?.basketNotice = .alreadyAdded
+                }
             }
         }
         #expect(client.load().map(\.book) == [book])
