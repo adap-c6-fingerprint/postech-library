@@ -13,7 +13,7 @@ struct BookNavigationSessionTests {
             directory: fixture.root, on: fixture.map, labels: fixture.labels, destination: fixture.goal)
         #expect(stop.book.id != BookRoutePreviewSample.book.id)
         #expect(session.stops == [stop])
-        #expect(session.origin.realNumber == "311" && session.origin.side == .b)
+        #expect(session.start.coordinate == original.start.coordinate)
         #expect(session.route == original.route)
         #expect(session.guidance == original.guidance)
         #expect(session.graph == original.graph)
@@ -94,7 +94,7 @@ struct BookNavigationSessionTests {
         }
 
         func load(_ stops: [BookNavigationStop]) async throws -> BookNavigationSession {
-            try await BookRoutePreviewTestRouteLoader().load(directory: root, on: map, labels: labels, stops: stops)
+            try await BookRoutePreviewTestRouteLoader().load(directory: root, on: map, labels: labels, start: try await bookRouteTestStart(on: map, labels: labels), stops: stops)
         }
     }
 }

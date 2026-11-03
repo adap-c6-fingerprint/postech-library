@@ -19,7 +19,7 @@ extension IndoorMapSerialTests {
             let isMultiple = scenario == "middle" || scenario == "last"
             let session = try BookNavigationSession(map: base.map, shelfLabels: base.shelfLabels,
                 stops: isMultiple ? [first, base.stops[1]] : [first], legs: isMultiple ? base.legs : [base.legs[0]],
-                graph: base.graph, origin: base.origin, start: base.start)
+                graph: base.graph, start: base.start)
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
             let size = scenario == "compact" ? CGSize(width: 320, height: 568) : CGSize(width: 393, height: 852)
@@ -65,7 +65,7 @@ extension IndoorMapSerialTests {
             let holding = BookHoldingTestData.holding(call: "HD30.29.K5")
             let shelves = BookHoldingShelfResolver().resolve([holding], on: map, labels: labels).flatMap(\.shelves)
             let candidate = BookRouteCandidateStop(book: BookHoldingTestData.book(), holdings: [holding], candidateShelves: shelves)
-            let session = try await BookRoutePreviewTestRouteLoader().load(on: map, labels: labels, stops: [candidate])
+            let session = try await BookRoutePreviewTestRouteLoader().load(on: map, labels: labels, start: try await bookRouteTestStart(on: map, labels: labels), stops: [candidate])
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
             let host = UIHostingController(rootView: NavigationStack {

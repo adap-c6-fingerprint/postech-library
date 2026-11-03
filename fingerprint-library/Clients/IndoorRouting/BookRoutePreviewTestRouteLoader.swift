@@ -10,15 +10,15 @@ nonisolated struct BookRoutePreviewTestRoute: Equatable, Sendable {
     let graph: RoutingGraph
 }
 
-/// 파일 검증·서가 연결·311-B 출발 정책을 담당한다. 방문 순서 계산은 Planner에 위임한다.
+/// 파일 검증·서가 연결을 담당한다. 앱이 전달한 출발 위치로 방문 순서를 계산한다.
 nonisolated struct BookRoutePreviewTestRouteLoader {
-    func load(on map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookRouteCandidateStop],
+    func load(on map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [BookRouteCandidateStop],
               in bundle: Bundle = .main) async throws -> BookNavigationSession {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
             throw IndoorMapLoadError.missingResource("IndoorMaps/POSTECHLibrary")
         }
         return try await load(directory: root.appendingPathComponent("POSTECHLibrary"),
-                              on: map, labels: labels, stops: stops)
+                              on: map, labels: labels, start: start, stops: stops)
     }
     
     @concurrent
@@ -26,12 +26,14 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         directory: URL,
         on map: IndoorMap,
         labels: [IndoorShelfLabel],
+        start: IndoorPosition,
         stops: [BookRouteCandidateStop]
     ) async throws -> BookNavigationSession {
         let input = try await prepareInput(
             directory: directory,
             on: map,
             labels: labels,
+            start: start,
             stops: stops
         )
 
@@ -40,7 +42,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
     
     @concurrent
     private func prepareInput(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
-                              stops: [BookRouteCandidateStop]) async throws -> BookRoutePlanningInput {
+                              start: IndoorPosition, stops: [BookRouteCandidateStop]) async throws -> BookRoutePlanningInput {
         let selections = await MainActor.run { stops.map { (id: $0.book.id, shelves: $0.candidateShelves) } }
         guard BookRouteSelection.allows(bookCount: selections.count),
               Set(selections.map(\.id)).count == selections.count,
@@ -54,36 +56,35 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
             graph: read("routing-graph.geojson", at: directory),
             links: read("navigation-feature-links.json", at: directory)
         )
-        let origin = try fixedOrigin(on: map, labels: labels)
         var seen = Set<ShelfKey>()
-        let destinations = try ([origin] + selections.flatMap(\.shelves)).compactMap { label -> ShelfDestination? in
+        let destinations = try selections.flatMap(\.shelves).compactMap { label -> ShelfDestination? in
             try Task.checkCancellation()
             let destination = try destination(for: label, labels: labels, nodes: prepared.nodes)
             return seen.insert(destination.key).inserted ? destination : nil
         }
-        let start = try position(at: origin, labels: labels, nodes: prepared.nodes)
         let navigation = IndoorNavigationData(
             graph: prepared.graph,
             shelves: .init(datasetID: "postech-library-preview-test", mode: .library, destinations: destinations),
             diagnostics: prepared.diagnostics
         )
-        return .init(map: map, shelfLabels: labels, navigation: navigation, origin: origin, start: start, stops: stops)
+        return .init(map: map, shelfLabels: labels, navigation: navigation, start: start, stops: stops)
     }
 
     /// 기존 단일 서가 호출도 동일한 후보 계산을 사용한다.
-    func load(on map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookNavigationStop],
+    func load(on map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [BookNavigationStop],
               in bundle: Bundle = .main) async throws -> BookNavigationSession {
         let candidates = await MainActor.run { stops.map(\.candidateStop) }
-        return try await load(on: map, labels: labels, stops: candidates, in: bundle)
+        return try await load(on: map, labels: labels, start: start, stops: candidates, in: bundle)
     }
 
     @concurrent
     func load(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
-              stops: [BookNavigationStop]) async throws -> BookNavigationSession {
+              start: IndoorPosition, stops: [BookNavigationStop]) async throws -> BookNavigationSession {
         let candidates = await MainActor.run { stops.map(\.candidateStop) }
-        return try await load(directory: directory, on: map, labels: labels, stops: candidates)
+        return try await load(directory: directory, on: map, labels: labels, start: start, stops: candidates)
     }
     
+    /// 카메라·경로 회귀 테스트용 고정 출발점. 앱의 도서 길안내에서는 호출하지 않는다.
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,
               in bundle: Bundle = .main) async throws -> BookRoutePreviewTestRoute {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {

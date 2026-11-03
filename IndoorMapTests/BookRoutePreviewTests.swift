@@ -41,10 +41,12 @@ extension IndoorMapSerialTests {
                 state.resolutions[book.id] = BookHoldingShelfResolver().resolve(
                     [BookRoutePreviewSample.holding], on: map, labels: labels)
             }
-            guard case let .ready(receivedMap, receivedLabels, stops) = BookRoutePreviewRequest(state: state) else {
+            let start = try await bookRouteTestStart(on: map, labels: labels)
+            guard case let .ready(receivedMap, receivedLabels, receivedStart, stops) = BookRoutePreviewRequest(state: state, start: start) else {
                 Issue.record("조회 완료 후 경로 계산 준비가 되지 않았습니다."); return
             }
             #expect(receivedMap == map && receivedLabels == labels)
+            #expect(receivedStart == start)
             #expect(stops.map(\.book) == books)
             #expect(stops.allSatisfy { $0.candidateShelves.map(\.fixtureNumber) == ["S-3F-564-A"] })
             state.holdings[books[1].id] = .loading

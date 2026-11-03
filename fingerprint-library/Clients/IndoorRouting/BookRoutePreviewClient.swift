@@ -11,23 +11,25 @@ nonisolated struct BookRoutePreviewClient: Sendable {
     var load: @Sendable (
         IndoorMap,
         [IndoorShelfLabel],
+        IndoorPosition,
         [BookRouteCandidateStop]
     ) async throws -> BookNavigationSession
 }
 
 extension BookRoutePreviewClient: DependencyKey {
     static let liveValue = BookRoutePreviewClient(
-        load: { map, labels, stops in
+        load: { map, labels, start, stops in
             try await BookRoutePreviewTestRouteLoader().load(
                 on: map,
                 labels: labels,
+                start: start,
                 stops: stops
             )
         }
     )
     
     static let testValue = BookRoutePreviewClient(
-        load: { _, _, _ in
+        load: { _, _, _, _ in
             throw IndoorRoutingError.noRoute
         }
     )
