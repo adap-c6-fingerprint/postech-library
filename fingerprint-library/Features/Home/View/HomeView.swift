@@ -6,6 +6,10 @@ struct HomeView: View {
     let mapStore: StoreOf<IndoorMapFeature>
     @State private var recommendationPosition: Int? = 0
 
+    private enum Destination: Hashable {
+        case departmentRecommendations
+    }
+
     private var recommendationLayout: RecommendationLayout {
         store.isRecommendationExpanded ? .expanded : .standard
     }
@@ -25,6 +29,18 @@ struct HomeView: View {
     }
 
     var body: some View {
+        NavigationStack {
+            homeContent
+        }
+        .task { store.send(.task) }
+        // 추천 홈에서 목록으로 이동해도 두 화면이 공유하는 소장 정보 조회를 이어간다.
+        .task(id: LibraryInfoTaskID(bookIDs: store.booksForLibraryInfo.map(\.id), sessionID: store.recommendationSessionID)) {
+            await store.send(.loadLibraryInfo).finish()
+        }
+        .onDisappear { store.send(.libraryInfoCancelled) }
+    }
+
+    private var homeContent: some View {
         VStack(spacing: 0) {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -42,13 +58,11 @@ struct HomeView: View {
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
-        .task { store.send(.task) }
-        .task(id: LibraryInfoTaskID(bookIDs: store.popularBooks.map(\.id), sessionID: store.recommendationSessionID)) {
-            await store.send(.loadLibraryInfo).finish()
-        }
-        .onDisappear { store.send(.libraryInfoCancelled) }
         .task(id: upcomingCoverURLs) {
             await store.send(.upcomingCoversChanged(upcomingCoverURLs)).finish()
+        }
+        .navigationDestination(for: Destination.self) { _ in
+            DepartmentRecommendationsView(store: store)
         }
         .navigationDestination(
             item: $store.scope(state: \.detail, action: \.detail)
@@ -164,14 +178,9 @@ struct HomeView: View {
     
     private var popularBooksSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            NavigationLink {
-                Color.clear
-                    .navigationTitle(store.departmentName.isEmpty ? "많이 빌린 도서" : "\(store.departmentName)에서 많이 빌린")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar(.visible, for: .navigationBar)
-            } label: {
+            NavigationLink(value: Destination.departmentRecommendations) {
                 HStack(spacing: 12) {
-                    Text("‘\(store.departmentName)’ 추천 도서")
+                    Text(store.departmentName.isEmpty ? "많이 빌린 도서" : "'\(store.departmentName)'에서 많이 빌린")
                         .typography(.title2)
                         .multilineTextAlignment(.leading)
                         .accessibilityAddTraits(.isHeader)
@@ -216,7 +225,7 @@ struct HomeView: View {
             .contentMargins(.horizontal, 16, for: .scrollContent)
             .scrollIndicators(.hidden)
 
-            if store.libraryInfo.values.contains(.failed) {
+            if store.popularBooks.contains(where: { store.libraryInfo[$0.id] == .failed }) {
                 Button("소장 정보 다시 불러오기") { store.send(.loadLibraryInfo) }
                     .font(.footnote)
                     .buttonStyle(.bordered)
@@ -338,11 +347,9 @@ private struct HomePopularBookCard: View {
 }
 
 #Preview("추천 홈 · 다크") {
-    NavigationStack {
-        HomeView(
-            store: Store(initialState: HomeFeature.State()) { HomeFeature() },
-            mapStore: Store(initialState: IndoorMapFeature.State()) { IndoorMapFeature() }
-        )
-    }
+    HomeView(
+        store: Store(initialState: HomeFeature.State()) { HomeFeature() },
+        mapStore: Store(initialState: IndoorMapFeature.State()) { IndoorMapFeature() }
+    )
     .preferredColorScheme(.dark)
 }

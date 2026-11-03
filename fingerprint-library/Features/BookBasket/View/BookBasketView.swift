@@ -70,12 +70,12 @@ struct BookBasketView: View {
                 set: { if !$0 { store.send(.removeAlertDismissed) } }
             )
         ) {
-            Button("삭제하기", role: .destructive) {
+            Button("삭제", role: .destructive) {
                 store.send(.removeConfirmed)
             }
             Button("취소", role: .cancel) {}
         } message: {
-            Text("장바구니에서만 삭제돼요. 도서관 소장 정보에는 영향이 없어요.")
+            Text("이 책은 장바구니에서만 삭제돼요.\n다시 검색하여 찾아 추가할 수 있어요.")
         }
         .task { store.send(.task) }
         .task(id: store.items.map(\.id)) { await store.send(.loadLibraryInfo).finish() }

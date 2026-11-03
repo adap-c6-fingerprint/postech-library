@@ -1,5 +1,5 @@
 //
-//  BookSearchResultRow.swift
+//  BookListRow.swift
 //  fingerprint-library
 //
 //  Created by Youngmin Cho on 10/17/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BookSearchResultRow: View {
+struct BookListRow: View {
     let book: Book
     let libraryInfo: BookCardLibraryInfo?
     let onShowDetail: () -> Void

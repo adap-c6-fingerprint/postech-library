@@ -41,10 +41,8 @@ extension IndoorMapSerialTests {
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
             let root = isRecommendation
-                ? AnyView(NavigationStack {
-                    HomeView(store: store.scope(state: \.home, action: \.home),
-                             mapStore: store.scope(state: \.indoorMap, action: \.indoorMap))
-                })
+                ? AnyView(HomeView(store: store.scope(state: \.home, action: \.home),
+                                   mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)))
                 : AnyView(AppView(store: store))
             let host = UIHostingController(rootView: root)
             host.overrideUserInterfaceStyle = .dark
