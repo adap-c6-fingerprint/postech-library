@@ -10,6 +10,7 @@ struct IndoorMapFeature {
     /// 지도 화면에 필요한 값 상태. 표시 중인 층과 실제 위치의 층은 서로 다를 수 있다.
     @ObservableState
     struct State: Equatable {
+        var homeAnnotations = HomeMapAnnotationsFeature.State()
         /// 검증을 마친 도면. navigation의 성공 여부와 독립적으로 유지한다.
         var map: IndoorMap?
         var isLoading = false
@@ -93,6 +94,7 @@ struct IndoorMapFeature {
 
     /// 사용자 조작과 Clients의 비동기 결과를 처리하고, 앱 전체 화면 이동은 delegate로 전달한다.
     enum Action: Equatable {
+        case homeAnnotations(HomeMapAnnotationsFeature.Action)
         case task
         case retryTapped
         case mapLoaded(IndoorMap)
@@ -141,8 +143,11 @@ struct IndoorMapFeature {
     nonisolated private enum CancelID: Hashable, Sendable { case map, navigation, shelfLabels, location, route }
 
     var body: some Reducer<State, Action> {
+        Scope(state: \.homeAnnotations, action: \.homeAnnotations) { HomeMapAnnotationsFeature() }
         Reduce { state, action in
             switch action {
+            case .homeAnnotations:
+                return .none
             case .task:
                 state.isActive = true
                 let loading = state.map == nil || state.loadError != nil ? loadMap(&state) : loadNavigation(&state)

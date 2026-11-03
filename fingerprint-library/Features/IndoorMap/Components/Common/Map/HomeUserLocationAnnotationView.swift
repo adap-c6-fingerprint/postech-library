@@ -1,11 +1,18 @@
 import MapKit
 import UIKit
 
-/// 원본 위치 링과 방향 부채꼴을 사용한다. 링 중심은 항상 실제 지도 좌표에 고정한다.
+/// 위치 원의 중심을 실제 좌표에 고정하고 헤드만 그 주위에서 회전시킨다.
 @MainActor
 final class HomeUserLocationAnnotationView: MKAnnotationView {
     private let dotView = UIImageView(image: UIImage(named: "MapUserLocation")?.withRenderingMode(.alwaysOriginal))
     private let headingView = UIImageView(image: UIImage(named: "MapUserHeading")?.withRenderingMode(.alwaysOriginal))
+    private let headingContainer = UIView()
+    private let haloView = UIView()
+
+    // 테두리를 포함한 원본 에셋의 표시 크기다.
+    private static let dotArtworkDiameter: CGFloat = 17
+    private static let headingSize = CGSize(width: 15.89314, height: 12.36133)
+    private static let headingGap: CGFloat = 2
 
     override init(annotation: (any MKAnnotation)?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -18,7 +25,7 @@ final class HomeUserLocationAnnotationView: MKAnnotationView {
     }
 
     private func configureViews() {
-        bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+        bounds = CGRect(x: 0, y: 0, width: 32, height: 32)
         centerOffset = .zero
         clipsToBounds = false
         displayPriority = .required
@@ -27,30 +34,52 @@ final class HomeUserLocationAnnotationView: MKAnnotationView {
         isAccessibilityElement = true
         dotView.contentMode = .scaleAspectFit
         dotView.accessibilityIdentifier = "user-location-dot-image"
-        headingView.contentMode = .scaleAspectFit
+        haloView.backgroundColor = .clear
+        // 지정한 원형 경로를 흐리게 그린다. 화면 safe area와 무관하게 원 중심에 고정된다.
+        haloView.layer.shadowColor = UIColor(red: 0.87, green: 0.96, blue: 0.24, alpha: 1).cgColor
+        haloView.layer.shadowOpacity = 0.3
+        haloView.layer.shadowRadius = 1.65517
+        haloView.layer.shadowOffset = .zero
+        haloView.clipsToBounds = false
+        haloView.isUserInteractionEnabled = false
+        haloView.accessibilityIdentifier = "user-location-halo"
+        headingContainer.isUserInteractionEnabled = false
+        headingContainer.accessibilityIdentifier = "user-location-heading-container"
         headingView.accessibilityIdentifier = "user-location-heading-image"
-        headingView.bounds = CGRect(x: 0, y: 0, width: 49, height: 39)
-        headingView.layer.anchorPoint = CGPoint(x: 0, y: 1)
-        headingView.isHidden = true
-        addSubview(headingView)
+        headingView.bounds = CGRect(origin: .zero, size: Self.headingSize)
+        headingView.contentMode = .scaleAspectFit
+        headingView.isUserInteractionEnabled = false
+        headingContainer.isHidden = true
+        addSubview(haloView)
+        addSubview(headingContainer)
+        headingContainer.addSubview(headingView)
         addSubview(dotView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        dotView.frame = bounds
-        headingView.layer.position = CGPoint(x: bounds.midX, y: bounds.midY)
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        haloView.frame = bounds
+        haloView.layer.shadowPath = UIBezierPath(ovalIn: haloView.bounds).cgPath
+        dotView.bounds = CGRect(x: 0, y: 0, width: Self.dotArtworkDiameter, height: Self.dotArtworkDiameter)
+        dotView.center = center
+        // transform이 적용돼 있어도 bounds와 중심을 따로 갱신해 회전축이 움직이지 않게 한다.
+        headingContainer.bounds = bounds
+        headingContainer.center = center
+        let distance = Self.dotArtworkDiameter / 2 + Self.headingGap + Self.headingSize.height / 2
+        // 위쪽을 향한 원본 이미지에 맞춰 북쪽 기준 위치를 원의 바로 위에 둔다.
+        headingView.center = CGPoint(x: center.x, y: center.y - distance)
     }
 
-    /// 방향은 북쪽 기준 시계 방향 각도다. 지도 회전과 원본 이미지의 북동쪽 방향을 보정한다.
+    /// 위쪽을 향한 원본 이미지를 기준으로 사용자 방향에서 지도 회전만 뺀다.
     func configure(headingDegrees: Double?, mapHeading: Double) {
         guard let headingDegrees, headingDegrees.isFinite, (0..<360).contains(headingDegrees),
               mapHeading.isFinite else {
-            headingView.isHidden = true
+            headingContainer.isHidden = true
             return
         }
-        headingView.isHidden = false
-        let angle = (headingDegrees - mapHeading) * .pi / 180 - .pi / 4
-        headingView.transform = CGAffineTransform(rotationAngle: angle)
+        headingContainer.isHidden = false
+        let angle = (headingDegrees - mapHeading) * .pi / 180
+        headingContainer.transform = CGAffineTransform(rotationAngle: angle)
     }
 }

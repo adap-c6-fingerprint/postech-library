@@ -8,24 +8,27 @@ import ComposableArchitecture
 
 struct OnboardingView: View {
     let store: StoreOf<OnboardingFeature>
-    private static let scrollFadeHeight: CGFloat = 24
+    private static let chipTopBlurHeight: CGFloat = 30
+    // 칩 영역 위쪽 블러 높이
+    private static let chipBottomBlurHeight: CGFloat = 30
+    // 칩 영역 아래쪽 블러 높이
+    private static let chipScrollSpace = "onboardingChipScroll"
+    // ✅ 칩 영역(ScrollView) 기준 좌표계 이름
+    @State private var chipViewportHeight: CGFloat = .infinity
+    // ✅ 칩 영역의 보이는 높이
+    private static let affiliationHeaderTopPadding: CGFloat = 38
+    private static let interestsHeaderTopPadding: CGFloat = 30
+    // ✅ push된 화면 제목 위 여백. 내비게이션 바 아래에서 피그마 제목 위치(소속 168.59, 선호 분류 160.6)에 오도록 맞춘 값
 
     var body: some View {
-        VStack(spacing: 0) {
-            switch store.step {
-            case .welcome: welcome
-            case .affiliation: affiliation
-            case .interests: interests
-            }
-
-            pageIndicator
-                .padding(.bottom, 20)
-            actionButton
-                .padding(.horizontal, 36)
-                .padding(.bottom, 24)
+        NavigationStack(path: navigationPath) {
+            page(.welcome)
+                .toolbar(.hidden, for: .navigationBar)
+                .navigationDestination(for: OnboardingFeature.Step.self) { step in
+                    page(step)
+                }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.basketBackground)
+        // ✅ 단계 전환을 push navigation으로 한다. 시작 화면이 루트이고, 소속·선호 분류 화면을 차례로 push한다.
         .preferredColorScheme(.dark)
         .alert(
             "저장하지 못했어요",
@@ -42,14 +45,56 @@ struct OnboardingView: View {
         // ✅ 소속·선호 분류 선택지를 앱에 넣은 하드데이터에서 읽는다.
     }
 
+    // MARK: - 화면 전환
+
+    private var navigationPath: Binding<[OnboardingFeature.Step]> {
+        Binding(
+            get: { OnboardingFeature.Step.allCases.filter { $0 != .welcome && $0.rawValue <= store.step.rawValue } },
+            set: { newPath in
+                let poppedCount = store.step.rawValue - newPath.count
+                for _ in 0..<max(poppedCount, 0) {
+                    store.send(.backButtonTapped)
+                }
+            }
+        )
+    }
+    // ✅ 지금 단계까지의 화면을 push 경로로 만든다. 뒤로가기·스와이프로 pop되면 그만큼 이전 단계로 돌아간다.
+
+    private func page(_ step: OnboardingFeature.Step) -> some View {
+        VStack(spacing: 0) {
+            switch step {
+            case .welcome: welcome
+            case .affiliation: affiliation
+            case .interests: interests
+            }
+
+            pageIndicator(step)
+                .padding(.bottom, 20)
+            actionButton(step)
+                .padding(.horizontal, 36)
+                .padding(.bottom, 24)
+        }
+        // ✅ 화면마다 내용 아래에 페이지 표시·버튼을 둔다(push 전환 시 화면과 함께 움직인다).
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.basketBackground)
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(!isBackButtonVisible(step))
+        // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 08-2(소속 선택 전)에는 숨기고, 08-3(소속 선택 후)부터 보인다.
+    }
+
     // MARK: - 단계별 화면
 
     private var welcome: some View {
         VStack(alignment: .leading, spacing: 0) {
             header(
                 title: "읽고 싶은 책까지,\nPo:Book이 이어줄게요 📚📍",
-                subtitle: "내 취향에 맞는 책을 발견하고\n도서관에서 쉽게 찾아보세요."
+                subtitle: "내 취향에 맞는 책을 발견하고\n도서관에서 쉽게 찾아보세요.",
+                subtitleTypography: .bookTitle,
+                spacing: 8,
+                topPadding: 100
             )
+            // ✅ 시작 화면은 내비게이션 바가 없으므로 기존처럼 safe area에서 100 아래
+            // ✅ 시작 화면 부제는 Book Title(18pt), 제목과 간격 8
             .padding(.horizontal, 20)
 
             Spacer()
@@ -62,59 +107,68 @@ struct OnboardingView: View {
     private var affiliation: some View {
         VStack(alignment: .leading, spacing: 0) {
             header(
-                title: "소속을 알려주세요",
-                subtitle: "소속을 알려주면 관련 분야의 책을\n더 잘 추천할 수 있어요."
+                title: "소속과 학과를 알려주세요",
+                subtitle: "학과를 알려주면 관련 분야의 책을\n더 잘 추천할 수 있어요.",
+                topPadding: Self.affiliationHeaderTopPadding
             )
+            // ✅ 시안 문구로 변경
             .padding(.bottom, 32)
 
-            // ✅ 상위 소속 → 그룹 → 최종 소속 3단계로 고른다. 앞 단계를 고르기 전에는 다음 단계를 고를 수 없다.
-            VStack(alignment: .leading, spacing: 24) {
-                field(title: "소속") {
-                    Menu {
-                        ForEach(store.parents, id: \.self) { parent in
-                            Button(parent) { store.send(.parentSelected(parent)) }
+            // 상위 소속 → 그룹 → 최종 소속 3단계로 고른다. 앞 단계를 고르기 전에는 다음 단계를 고를 수 없다.
+            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 24) {
+                    let isParentEnabled = !store.parents.isEmpty
+                    field(title: "소속", isEnabled: isParentEnabled) {
+                        Menu {
+                            ForEach(store.parents, id: \.self) { parent in
+                                Button(parent) { store.send(.parentSelected(parent)) }
+                            }
+                        } label: {
+                            fieldRow(store.selectedParent, placeholder: "소속을 선택해주세요", isEnabled: isParentEnabled)
                         }
-                    } label: {
-                        fieldRow(store.selectedParent, placeholder: "소속을 선택해주세요", isEnabled: !store.parents.isEmpty)
+                        .disabled(!isParentEnabled)
                     }
-                    .disabled(store.parents.isEmpty)
-                }
 
-                field(title: "세부 분류") {
-                    Menu {
-                        ForEach(store.groups, id: \.self) { group in
-                            Button(group) { store.send(.groupSelected(group)) }
+                    let isGroupEnabled = store.selectedParent != nil
+                    field(title: "세부 분류", isEnabled: isGroupEnabled) {
+                        Menu {
+                            ForEach(store.groups, id: \.self) { group in
+                                Button(group) { store.send(.groupSelected(group)) }
+                            }
+                        } label: {
+                            fieldRow(store.selectedGroup, placeholder: "세부 분류를 선택해주세요", isEnabled: isGroupEnabled)
                         }
-                    } label: {
-                        fieldRow(store.selectedGroup, placeholder: "세부 분류를 선택해주세요", isEnabled: store.selectedParent != nil)
+                        .disabled(!isGroupEnabled)
                     }
-                    .disabled(store.selectedParent == nil)
-                }
 
-                field(title: "학과·부서") {
-                    Menu {
-                        ForEach(store.affiliationChoices, id: \.self) { path in
-                            Button(path.name) { store.send(.affiliationSelected(path)) }
+                    let isDepartmentEnabled = store.selectedGroup != nil
+                    field(title: "학과", isEnabled: isDepartmentEnabled) {
+                        Menu {
+                            ForEach(store.affiliationChoices, id: \.self) { path in
+                                Button(path.name) { store.send(.affiliationSelected(path)) }
+                            }
+                        } label: {
+                            fieldRow(
+                                store.selectedAffiliation?.name,
+                                placeholder: "학과를 선택해주세요",
+                                isEnabled: isDepartmentEnabled
+                            )
                         }
-                    } label: {
-                        fieldRow(
-                            store.selectedAffiliation?.name,
-                            placeholder: "학과·부서를 선택해주세요",
-                            isEnabled: store.selectedGroup != nil
-                        )
+                        .disabled(!isDepartmentEnabled)
                     }
-                    .disabled(store.selectedGroup == nil)
+                    // ✅ 시안 용어에 맞춰 "학과·부서" → "학과"
                 }
 
                 if let message = store.optionsErrorMessage {
                     Text("선택지를 불러오지 못했어요. \(message)")
-                        .font(.system(size: 12))
+                        .typography(.caption2)
                         .foregroundStyle(.red)
                 }
 
-                Text("*소속은 나중에 변경 가능해요.")
-                    .font(.system(size: 12))
+                Text("*소속과 학과는 나중에 변경 가능해요.")
+                    .typography(.caption2)
                     .foregroundStyle(Color.onboardingCaption)
+                // ✅ 시안 문구·Caption 2. 학과 입력칸과의 간격 16
             }
             Spacer()
         }
@@ -122,79 +176,103 @@ struct OnboardingView: View {
     }
 
     private var interests: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        let topBlurHeight = Self.chipTopBlurHeight
+        let bottomBlurHeight = Self.chipBottomBlurHeight
+        let viewportHeight = chipViewportHeight
+        let scrollSpace = Self.chipScrollSpace
+        return VStack(alignment: .leading, spacing: 0) {
             header(title: "어떤 책에 끌리나요?",
-                   subtitle: "관심 있는 분야를 골라주세요.\n최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요")
-                .padding(.horizontal, 6)
-                .padding(.bottom, 32 - Self.scrollFadeHeight)
+                   subtitle: "관심 있는 분야를 골라주세요\n최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요",
+                   topPadding: Self.interestsHeaderTopPadding)
+                // ✅ 시안 문구에 맞춰 첫 줄 마침표를 뺐다.
+                .padding(.horizontal, 16)
+                .padding(.bottom, 32 - topBlurHeight)
+                // ✅ 기존 gradient 레이어처럼 블러 띠 높이만큼 칩 영역을 위로 넓힌다(제목과 첫 줄 간격 32는 그대로).
 
             ScrollView {
                 ChipFlowLayout(spacing: 8, lineSpacing: 12) {
                     ForEach(store.preferenceNames, id: \.self) { name in
                         chip(name)
+                            .visualEffect { content, proxy in
+                                let frame = proxy.frame(in: .named(scrollSpace))
+                                let isUnderEdge = frame.midY < topBlurHeight || frame.midY > viewportHeight - bottomBlurHeight
+                                return content.blur(radius: isUnderEdge ? 5 : 0)
+                            }
+                        // ✅ 칩 영역(ScrollView) 기준 좌표로 위·아래 블러 띠에 칩 가운데가 들어가면 칩을 흐리게 그린다.
+                        // 칩 자체를 흐리게 하므로 블러 띠 위에서도 탭이 그대로 칩에 들어간다.
                     }
                     // ✅ 도서관 분류(LCC) 대신 서점 기준 선호 분류 20개를 보여준다.
                 }
+                .padding(.horizontal, 10)
             }
+            .contentMargins(.top, topBlurHeight, for: .scrollContent)
+            // ✅ 정지 상태에서 첫 줄은 위쪽 블러 띠 아래에 놓여 선명하다(피그마와 같음). 스크롤로 올라갈 때만 흐려진다.
+            .coordinateSpace(.named(Self.chipScrollSpace))
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { chipViewportHeight = $0 }
+            // ✅ 칩 영역의 보이는 높이. 아래쪽 블러 띠의 기준이다.
             .scrollBounceBehavior(.basedOnSize)
-            .contentMargins(.vertical, Self.scrollFadeHeight, for: .scrollContent)
-            .overlay(alignment: .top) {
-                scrollFade(startPoint: .top, endPoint: .bottom)
-            }
-            .overlay(alignment: .bottom) {
-                scrollFade(startPoint: .bottom, endPoint: .top)
-            }
+            // 칩이 한 화면에 다 들어가면 스크롤되지 않고, 작은 기기·큰 글꼴에서 잘릴 때만 스크롤된다.
         }
-        .padding(.horizontal, 10)
     }
 
     // MARK: - 구성 요소
 
-    private func header(title: String, subtitle: String) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+    private func header(
+        title: String,
+        subtitle: String,
+        subtitleTypography: DS.Typography = .title2,
+        spacing: CGFloat = DS.Spacing._4,
+        topPadding: CGFloat
+    ) -> some View {
+        VStack(alignment: .leading, spacing: spacing) {
             Text(title)
-                .font(.system(size: 26, weight: .semibold))
+                .typography(.title1)
                 .foregroundStyle(Color.onboardingTextPrimary)
             Text(subtitle)
-                .font(.system(size: 20, weight: .medium))
-                .foregroundStyle(Color.basketTextTertiary)
+                .typography(subtitleTypography)
+                .foregroundStyle(Color.textTertiary)
         }
-        .lineSpacing(6)
-        .padding(.top, 100)
+        // ✅ 제목 Title 1(24pt), 부제 Title 2(20pt)·Text Tertiary. 디자인시스템 토큰을 쓴다.
+        .padding(.top, topPadding)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-    
-    private func scrollFade(startPoint: UnitPoint, endPoint: UnitPoint) -> some View {
-        LinearGradient(colors: [Color.basketBackground, Color.basketBackground.opacity(0)], startPoint: startPoint, endPoint: endPoint)
-            .frame(height:Self.scrollFadeHeight)
-            .allowsHitTesting(false)
-            .accessibilityHidden(true)
+
+
+
+    private func isBackButtonVisible(_ step: OnboardingFeature.Step) -> Bool {
+        switch step {
+        case .welcome: false
+        case .affiliation: store.selectedParent != nil
+        case .interests: true
+        }
     }
 
-    private func field<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
+    private func field<Content: View>(title: String, isEnabled: Bool, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(.system(size: 16))
-                .foregroundStyle(Color.onboardingTextPrimary)
+                .typography(.body2)
+                .foregroundStyle(isEnabled ? Color.onboardingTextPrimary : Color.onboardingCaption)
+            // ✅ 비활성 입력칸 제목은 Gray 500(#777)
             content()
         }
     }
 
     private func fieldRow(_ value: String?, placeholder: String, isEnabled: Bool) -> some View {
-        HStack {
+        let foreground = isEnabled ? Color.onboardingTextPrimary : Color.onboardingDisabledText
+        return HStack {
             Text(value ?? placeholder)
-                .font(.system(size: 16))
-                .foregroundStyle(Color.onboardingTextPrimary)
+                .typography(.body2)
+                .foregroundStyle(foreground)
             Spacer()
             Image(systemName: "chevron.right")
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(Color.onboardingTextPrimary)
+                .foregroundStyle(foreground)
         }
         .padding(.leading, 20)
         .padding(.trailing, 23)
         .frame(height: 52)
-        .background(Color.onboardingField, in: .rect(cornerRadius: 20))
-        .opacity(isEnabled ? 1 : 0.4)
+        .background(isEnabled ? Color.onboardingField : Color.onboardingDisabledField, in: .rect(cornerRadius: 20))
+        // ✅ 비활성 입력칸은 불투명도 대신 시안의 색(배경 Gray 1100 #161616, 글자 Gray 400 #999)으로 표시한다.
     }
 
     private func chip(_ name: String) -> some View {
@@ -204,7 +282,8 @@ struct OnboardingView: View {
             store.send(.preferenceToggled(name))
         } label: {
             Text(name)
-                .font(.system(size: 16))
+                .typography(.body2)
+                // ✅ Body 2 타이포그래피
                 .foregroundStyle(isSelected ? Color.basketBackground : Color.onboardingTextPrimary)
                 .padding(.horizontal, 25)
                 .frame(height: 52)
@@ -218,29 +297,29 @@ struct OnboardingView: View {
         .accessibilityHint(isBlocked ? "최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요" : "")
     }
 
-    private var pageIndicator: some View {
+    private func pageIndicator(_ page: OnboardingFeature.Step) -> some View {
         HStack(spacing: 9) {
             ForEach(OnboardingFeature.Step.allCases, id: \.self) { step in
                 Circle()
-                    .fill(Color.onboardingTextPrimary.opacity(step == store.step ? 1 : 0.3))
+                    .fill(Color.onboardingTextPrimary.opacity(step == page ? 1 : 0.3))
                     .frame(width: 7, height: 7)
             }
         }
         .accessibilityElement()
-        .accessibilityLabel("\(store.step.rawValue + 1) / \(OnboardingFeature.Step.allCases.count) 단계")
+        .accessibilityLabel("\(page.rawValue + 1) / \(OnboardingFeature.Step.allCases.count) 단계")
     }
 
-    private var actionButton: some View {
-        let isPrimary = store.step == .interests && store.canFinish
+    private func actionButton(_ step: OnboardingFeature.Step) -> some View {
+        let isPrimary = step == .interests && store.canFinish
         // 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다.
         return Button {
-            switch store.step {
+            switch step {
             case .welcome: store.send(.startButtonTapped)
             case .affiliation: store.send(.nextButtonTapped)
             case .interests: store.send(.finishButtonTapped)
             }
         } label: {
-            Text(actionTitle)
+            Text(actionTitle(step))
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(isPrimary ? Color.basketBackground : Color.onboardingTextPrimary)
                 .frame(maxWidth: .infinity)
@@ -252,28 +331,28 @@ struct OnboardingView: View {
             .regular.tint(isPrimary ? Color.basketPrimary : Color.onboardingActionTint).interactive(),
             in: .capsule
         )
-        .disabled(!isActionEnabled)
+        .disabled(!isActionEnabled(step))
     }
 
-    private var actionTitle: String {
-        switch store.step {
+    private func actionTitle(_ step: OnboardingFeature.Step) -> String {
+        switch step {
         case .welcome: "시작하기"
         case .affiliation: store.isAffiliationComplete ? "다음으로" : "선택을 완료해주세요"
         case .interests: "시작하기"
         }
     }
 
-    private var isActionEnabled: Bool {
-        switch store.step {
+    private func isActionEnabled(_ step: OnboardingFeature.Step) -> Bool {
+        switch step {
         case .welcome: true
         case .affiliation: store.isAffiliationComplete
         case .interests: store.canFinish
         }
     }
-    // ✅ 학부·대학원별 학과 묶음(departmentSections)은 하드데이터의 세부 분류로 대체했다.
 }
 
-// 칩을 한 줄에 들어가는 만큼 놓고 넘치면 다음 줄로 넘긴다.
+// 칩을 넓은 것부터 들어갈 수 있는 첫 줄에 채운다(First-Fit Decreasing). 원래 순서와 달라도 줄 수가 가장 적어지게 조합한다.
+// 칩 크기를 매번 측정하므로 기기·화면 크기·글꼴 크기(Dynamic Type)가 바뀌어도 같은 원칙으로 다시 배치된다.
 private struct ChipFlowLayout: Layout {
     var spacing: CGFloat
     var lineSpacing: CGFloat
@@ -305,20 +384,25 @@ private struct ChipFlowLayout: Layout {
     }
 
     private func rows(for subviews: Subviews, width: CGFloat) -> [Row] {
+        let sizes = subviews.map { $0.sizeThatFits(.unspecified) }
+        let widestFirst = subviews.indices.sorted { sizes[$0].width != sizes[$1].width ? sizes[$0].width > sizes[$1].width : $0 < $1 }
+        // 넓은 칩부터 배치한다. 너비가 같으면 원래 순서를 따른다.
         var rows: [Row] = []
-        var current = Row()
-        for index in subviews.indices {
-            let size = subviews[index].sizeThatFits(.unspecified)
-            let nextWidth = current.indices.isEmpty ? size.width : current.width + spacing + size.width
-            if nextWidth > width, !current.indices.isEmpty {
-                rows.append(current)
-                current = Row()
+        for index in widestFirst {
+            let size = sizes[index]
+            if let rowIndex = rows.firstIndex(where: { $0.width + spacing + size.width <= width }) {
+                rows[rowIndex].width += spacing + size.width
+                rows[rowIndex].height = max(rows[rowIndex].height, size.height)
+                rows[rowIndex].indices.append(index)
+            } else {
+                rows.append(Row(indices: [index], width: size.width, height: size.height))
             }
-            current.width = current.indices.isEmpty ? size.width : current.width + spacing + size.width
-            current.height = max(current.height, size.height)
-            current.indices.append(index)
+            // ✅ 남은 폭에 들어가는 첫 줄에 넣고, 어느 줄에도 안 들어가면 새 줄을 만든다.
         }
-        if !current.indices.isEmpty { rows.append(current) }
+        for rowIndex in rows.indices {
+            rows[rowIndex].indices.sort()
+        }
+        // ✅ 한 줄 안에서는 원래 순서대로 놓는다.
         return rows
     }
 }
@@ -329,4 +413,34 @@ private extension Color {
     static let onboardingField = Color(red: 0x24 / 255, green: 0x24 / 255, blue: 0x24 / 255)
     static let onboardingCaption = Color(red: 0x77 / 255, green: 0x77 / 255, blue: 0x77 / 255)
     static let onboardingActionTint = Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)
+    static let onboardingDisabledField = Color(red: 0x16 / 255, green: 0x16 / 255, blue: 0x16 / 255)
+    static let onboardingDisabledText = Color(red: 0x99 / 255, green: 0x99 / 255, blue: 0x99 / 255)
+    // ✅ 비활성 입력칸 색 (피그마 Black/Gray 1100, Gray 400)
+}
+
+
+#Preview("08-1 시작") {
+    OnboardingView(
+        store: Store(initialState: OnboardingFeature.State()) { OnboardingFeature() }
+    )
+}
+
+#Preview("08-2 소속") {
+    OnboardingView(
+        store: Store(initialState: {
+            var state = OnboardingFeature.State()
+            state.step = .affiliation
+            return state
+        }()) { OnboardingFeature() }
+    )
+}
+
+#Preview("08-5 선호 분류") {
+    OnboardingView(
+        store: Store(initialState: {
+            var state = OnboardingFeature.State()
+            state.step = .interests
+            return state
+        }()) { OnboardingFeature() }
+    )
 }

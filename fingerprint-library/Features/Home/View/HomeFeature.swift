@@ -78,6 +78,7 @@ struct HomeFeature {
 
     @Dependency(\.bookFavoritesClient) var bookFavoritesClient
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient // 대출가능여부
+    @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.userProfileClient) var userProfileClient
     @Dependency(\.uuid) var uuid
 
@@ -164,6 +165,9 @@ struct HomeFeature {
                 guard state.libraryInfoGeneration == generation,
                       state.popularBooks.contains(where: { $0.id == bookID }) else { return .none }
                 state.libraryInfo[bookID] = .loaded(BookCardLibraryInfo(holdings: holdings))
+                if let book = (state.recommendedBooks + state.popularBooks).first(where: { $0.id == bookID }) {
+                    bookLocationCacheClient.record(book, holdings)
+                }
                 return .none
 
             case let .libraryInfoFailed(generation, bookID):

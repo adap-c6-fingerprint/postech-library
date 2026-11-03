@@ -82,6 +82,7 @@ struct BookDetailDestinationTests {
         var initial = BookDetailFeature.State(book: book)
         initial.holdingsState = .loaded([holding])
         let store = TestStore(initialState: initial) { BookDetailFeature() } withDependencies: {
+            $0.date.now = Date(timeIntervalSince1970: 1_800_000_000)
             $0.indoorRouteClient.search = { request in
                 #expect(request.destination == result.destination)
                 #expect(request.start == context.position)
@@ -118,6 +119,44 @@ struct BookDetailDestinationTests {
             $0.destinationRouteRequestID = 1
             $0.destinationRouteState = .unavailable
         }
+        await store.finish()
+    }
+
+    @Test("소장 응답을 위치 캐시에 저장하고 지도가 연결되어 있으면 경로도 갱신한다", arguments: [true, false])
+    func cachesHoldingsAndRefreshesRoute(hasMapContext: Bool) async throws {
+        let suite = "detail-merge-\(UUID())"
+        defer { UserDefaults(suiteName: suite)?.removePersistentDomain(forName: suite) }
+        let cache = BookLocationCacheClient.userDefaults(suiteName: suite)
+        let context = context()
+        let route = route(in: context)
+        let summary = try #require(BookDetailRoutePresentation(route: route))
+        let destination = BookDetailDestinationPresentation.resolve(holdings: [holding], context: context)
+        let requests = LockIsolated(0)
+        var initial = BookDetailFeature.State(book: book)
+        initial.holdingsState = .loading
+        initial.mapContext = hasMapContext ? context : nil
+        let store = TestStore(initialState: initial) { BookDetailFeature() } withDependencies: {
+            $0.date.now = Date(timeIntervalSince1970: 1_800_000_000)
+            $0.bookLocationCacheClient = cache
+            $0.indoorRouteClient.search = { _ in
+                requests.withValue { $0 += 1 }
+                return .route(route)
+            }
+        }
+
+        await store.send(.holdingsLoaded([holding])) {
+            $0.holdingsState = .loaded([holding])
+            if hasMapContext {
+                $0.destinationPresentation = destination
+                $0.destinationRouteRequestID = 1
+                $0.destinationRouteState = .loading
+            }
+        }
+        if hasMapContext {
+            await store.receive(\.destinationRouteLoaded) { $0.destinationRouteState = .loaded(summary) }
+        }
+        #expect(cache.load([book.recordKey])[book.recordKey] == [holding])
+        #expect(requests.value == (hasMapContext ? 1 : 0))
         await store.finish()
     }
 }

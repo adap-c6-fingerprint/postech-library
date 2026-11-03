@@ -115,6 +115,7 @@ struct BookDetailFeature {
 
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient
+    @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
 
     @Dependency(\.indoorRouteClient) var indoorRouteClient
     @Dependency(\.bookBasketClient) var bookBasketClient
@@ -165,6 +166,7 @@ struct BookDetailFeature {
 
             case let .holdingsLoaded(holding):
                 state.holdingsState = .loaded(holding)
+                bookLocationCacheClient.record(state.book, holding)
                 return state.mapContext == nil ? .none : refreshDestination(state: &state)
 
             case .holdingsFailed:
