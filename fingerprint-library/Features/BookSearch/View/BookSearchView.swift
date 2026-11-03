@@ -82,7 +82,7 @@ struct BookSearchView: View {
 
                 LazyVStack(spacing: 0) {
                     ForEach(books) { book in
-                        BookSearchResultRow(
+                        BookListRow(
                             book: book,
                             libraryInfo: holdings[book.recordKey].map { BookCardLibraryInfo(holdings: $0) },
                             onShowDetail: {

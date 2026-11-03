@@ -5,6 +5,32 @@ import Testing
 
 @MainActor
 struct HomePopularBooksTests {
+    @Test("학과 전체 보기에서 소속 목록의 모든 도서를 불러오고 홈 미리보기는 유지한다")
+    func loadsAllDepartmentBooksSeparatelyFromPreview() async {
+        let affiliationKey = ["POSTECH 대학원", "일반대학원 학과", "수학과"]
+        let departmentBooks = (0..<21).map { Self.book("department-\($0)") }
+        let previewBooks = [departmentBooks[0], Self.book("related")]
+        var initialState = HomeFeature.State()
+        initialState.popularBooks = previewBooks
+        let store = TestStore(initialState: initialState) { HomeFeature() } withDependencies: {
+            $0.userProfileClient.load = {
+                .init(departmentName: "수학과", interests: [], affiliationKey: affiliationKey)
+            }
+            $0.departmentPopularBooksClient.fetchAll = { key in
+                #expect(key == affiliationKey)
+                return departmentBooks
+            }
+        }
+
+        await store.send(.departmentRecommendationsRequested)
+        await store.receive(\.departmentRecommendationsLoaded) {
+            $0.departmentRecommendations = .loaded(departmentName: "수학과", books: departmentBooks)
+        }
+        #expect(store.state.popularBooks == previewBooks)
+        #expect(store.state.booksForLibraryInfo == previewBooks + departmentBooks.dropFirst())
+        await store.finish()
+    }
+
     @Test("추천 목록이 이미 있어도 하단 도서를 조회하고 프로필의 소속 경로를 전달한다")
     func loadsPopularBooksWithRecommendationsCached() async {
         let recommended = Self.book("recommended")
