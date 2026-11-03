@@ -15,7 +15,7 @@ struct BookCoverView: View {
         self.onOpen = onOpen
         self.allowsRetry = allowsRetry
         _model = State(initialValue: BookCoverModel(url: url, isbn: isbn, pipeline: BookCoverPipeline.shared,
-            fallback: { try await BookCoverPipeline.fallback.coverURL(for: $0) }))
+            fallback: { try await BookCoverPipeline.fallback.url(for: $0) }))
     }
 
     var body: some View {

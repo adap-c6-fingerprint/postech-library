@@ -14,6 +14,9 @@ nonisolated struct BookCoverClient: Sendable {
     // 표지 주소들을 미리 내려받아 메모리에 넣어 둔다.
     var pngData: @Sendable (URL) async throws -> Data
     // 표지 하나를 내려받아(이미 받았으면 메모리에서) PNG 데이터로 돌려준다.
+    var spinePngData: @Sendable (String) async throws -> Data
+    // 책등 표지를 내려받아 PNG 데이터로 돌려준다
+    // 책등은 URL기반이 아니라 ISBN 13자리 기반이라서 String임
 }
 
 extension BookCoverClient: DependencyKey {
@@ -30,13 +33,25 @@ extension BookCoverClient: DependencyKey {
                 throw RecommendationCacheStore.CacheError.invalidImage
             }
             return data
+        },
+        spinePngData: { isbn in
+            guard let url = try await BookCoverPipeline.bookSpineCover.url(for: isbn) else {
+                throw RecommendationCacheStore.CacheError.invalidImage
+            }
+            let image = try await BookCoverPipeline.shared.image(for: url)
+            guard let data = await MainActor.run(body: { image.pngData() }) else {
+                throw RecommendationCacheStore.CacheError.invalidImage
+            }
+            return data
         }
     )
     static let testValue = Self(
         prefetch: { _ in },
-        pngData: { _ in throw RecommendationCacheStore.CacheError.invalidImage }
+        pngData: { _ in throw RecommendationCacheStore.CacheError.invalidImage },
+        spinePngData: { _ in throw RecommendationCacheStore.CacheError.invalidImage }
     )
 }
+
 
 extension DependencyValues {
     var bookCoverClient: BookCoverClient {

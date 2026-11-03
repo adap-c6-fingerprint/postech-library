@@ -42,13 +42,13 @@ struct Yes24BookCoverTests {
             for await _ in gate.stream { break }
             return URL(string: "https://image.yes24.com/goods/372300/L")
         }
-        let first = Task { try await resolver.coverURL(for: "8937460777") }
-        let second = Task { try await resolver.coverURL(for: "9788937460777") }
+        let first = Task { try await resolver.url(for: "8937460777") }
+        let second = Task { try await resolver.url(for: "9788937460777") }
         while await calls.values.isEmpty { await Task.yield() }
         gate.continuation.yield()
         gate.continuation.finish()
         #expect(try await first.value == second.value)
-        _ = try await resolver.coverURL(for: "9788937460777")
+        _ = try await resolver.url(for: "9788937460777")
         #expect(await calls.values == ["9788937460777"])
 
         let attempts = Calls()
@@ -57,10 +57,10 @@ struct Yes24BookCoverTests {
             if count == 1 { throw URLError(.timedOut) }
             return nil
         }
-        await #expect(throws: URLError.self) { try await retrying.coverURL(for: "9788937460777") }
-        #expect(try await retrying.coverURL(for: "9788937460777") == nil)
-        #expect(try await retrying.coverURL(for: "9788937460777") == nil)
-        #expect(try await retrying.coverURL(for: "invalid") == nil)
+        await #expect(throws: URLError.self) { try await retrying.url(for: "9788937460777") }
+        #expect(try await retrying.url(for: "9788937460777") == nil)
+        #expect(try await retrying.url(for: "9788937460777") == nil)
+        #expect(try await retrying.url(for: "invalid") == nil)
         #expect(await attempts.values.count == 2)
     }
 
@@ -71,8 +71,8 @@ struct Yes24BookCoverTests {
             await calls.record(isbn)
             return nil
         }
-        _ = try await resolver.coverURL(for: "9788937460777")
-        _ = try await resolver.coverURL(for: "9788937460777")
+        _ = try await resolver.url(for: "9788937460777")
+        _ = try await resolver.url(for: "9788937460777")
         #expect(await calls.values.count == 2)
     }
 

@@ -24,7 +24,7 @@ actor Yes24BookCoverResolver {
         self.lifetime = lifetime
     }
 
-    func coverURL(for isbn: String) async throws -> URL? {
+    func url(for isbn: String) async throws -> URL? {
         try Task.checkCancellation()
         guard let isbn13 = BookISBN.isbn13(from: isbn) else { return nil }
         if let cached = cache[isbn13], cached.expiresAt > now() { return cached.url }
