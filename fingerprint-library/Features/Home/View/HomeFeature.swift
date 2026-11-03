@@ -54,7 +54,6 @@ struct HomeFeature {
         case bookSelected(Book)
         case basketButtonTapped
         case profileButtonTapped
-        case popularBooksButtonTapped
         case detail(PresentationAction<BookDetailFeature.Action>)
         case basket(PresentationAction<BookBasketFeature.Action>)
         case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
@@ -66,7 +65,6 @@ struct HomeFeature {
         enum Delegate {
             case favoritesChanged(Set<[String?]>)
             case showProfile
-            case showPopularBooks
         }
     }
 
@@ -212,9 +210,6 @@ struct HomeFeature {
 
             case .profileButtonTapped:
                 return .send(.delegate(.showProfile))
-
-            case .popularBooksButtonTapped:
-                return .send(.delegate(.showPopularBooks))
 
             case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
                 return .send(.delegate(.favoritesChanged(keys)))

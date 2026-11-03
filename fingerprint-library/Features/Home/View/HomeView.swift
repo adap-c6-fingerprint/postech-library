@@ -27,7 +27,7 @@ struct HomeView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollView {
-                VStack(alignment: .leading, spacing: 28) {
+                VStack(alignment: .leading, spacing: 20) {
                     recommendationSection
                     popularBooksSection
                 }
@@ -164,28 +164,32 @@ struct HomeView: View {
     
     private var popularBooksSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Button {
-                store.send(.popularBooksButtonTapped)
+            NavigationLink {
+                Color.clear
+                    .navigationTitle(store.departmentName.isEmpty ? "많이 빌린 도서" : "\(store.departmentName)에서 많이 빌린")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar(.visible, for: .navigationBar)
             } label: {
                 HStack(spacing: 12) {
                     Text("‘\(store.departmentName)’ 추천 도서")
-                    // ✅ 대출 순위가 아니라 소속별 주제 큐레이션 데이터이므로 문구를 바꾼다. (Q8, 디자인 확인 필요)
-                        .font(.system(size: 18, weight: .semibold))
+                        .typography(.title2)
                         .multilineTextAlignment(.leading)
-                    
+                        .accessibilityAddTraits(.isHeader)
+
                     Spacer(minLength: 0)
-                    
+
                     Image(systemName: "chevron.right")
                         .font(.system(size: 16, weight: .medium))
+                        .padding(.trailing, 8)
+                        .accessibilityHidden(true)
                 }
-                .foregroundStyle(.primary)
-                .frame(minHeight: 44)
+                .foregroundStyle(.textPrimary)
+                .frame(minHeight: 28)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .disabled(true) // TODO: AppFeature의 전체 보기 화면 연결 후 활성화
             .padding(.horizontal, 16)
-            
+
             ScrollView(.horizontal) {
                 LazyHStack(alignment: .top, spacing: 12) {
                     if store.popularBooks.isEmpty {

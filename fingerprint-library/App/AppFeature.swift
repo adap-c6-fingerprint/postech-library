@@ -115,7 +115,7 @@ struct AppFeature {
                 return isPresented
                     ? .send(.indoorMap(.routeRequested)) : .send(.indoorMap(.routeCleared))
             case .home:
-                // TODO: 홈 delegate 액션으로 책바구니·프로필·전체 보기를 연결한다.
+                // TODO: 홈 delegate 액션으로 책바구니·프로필을 연결한다.
                 return .none
             case .indoorMap:
                 return .none
