@@ -542,7 +542,16 @@ struct IndoorMapKitView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
             let renderer: MKOverlayPathRenderer
             if let polygon = overlay as? MKPolygon { renderer = MKPolygonRenderer(polygon: polygon) }
-            else if let line = overlay as? MKPolyline { renderer = MKPolylineRenderer(polyline: line) }
+            else if let line = overlay as? MKPolyline {
+                if parent.navigationAppearance, routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
+                    let dotted = NavigationDottedRouteRenderer(polyline: line)
+                    // MapKit의 벡터 캐시 확대·축소 대신 현재 zoomScale로 다시 그린다.
+                    dotted.shouldRasterize = true
+                    renderer = dotted
+                } else {
+                    renderer = MKPolylineRenderer(polyline: line)
+                }
+            }
             else if let circle = overlay as? MKCircle { renderer = MKCircleRenderer(circle: circle) }
             else { return MKOverlayRenderer(overlay: overlay) }
             style(renderer, overlay: overlay)
