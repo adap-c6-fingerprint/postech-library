@@ -124,7 +124,8 @@ struct OnboardingView: View {
             // ✅ 시안 문구로 변경
             .padding(.bottom, 32)
 
-            // 상위 소속 → 그룹 → 최종 소속 3단계로 고른다. 앞 단계를 고르기 전에는 다음 단계를 고를 수 없다.
+            // 상위 소속 → 학과 2단계로 고른다. 학과 메뉴는 그룹(예: "학과 및 학부")별로 묶어 보여준다.
+            // 상위 소속을 고르기 전에는 학과를 고를 수 없다.
             VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 24) {
                     let isParentEnabled = !store.parents.isEmpty
@@ -139,23 +140,15 @@ struct OnboardingView: View {
                         .disabled(!isParentEnabled)
                     }
 
-                    let isGroupEnabled = store.selectedParent != nil
-                    field(title: "세부 분류", isEnabled: isGroupEnabled) {
-                        Menu {
-                            ForEach(store.groups, id: \.self) { group in
-                                Button(group) { store.send(.groupSelected(group)) }
-                            }
-                        } label: {
-                            fieldRow(store.selectedGroup, placeholder: "세부 분류를 선택해주세요", isEnabled: isGroupEnabled)
-                        }
-                        .disabled(!isGroupEnabled)
-                    }
-
-                    let isDepartmentEnabled = store.selectedGroup != nil
+                    let isDepartmentEnabled = store.selectedParent != nil
                     field(title: "학과", isEnabled: isDepartmentEnabled) {
                         Menu {
-                            ForEach(store.affiliationChoices, id: \.self) { path in
-                                Button(path.name) { store.send(.affiliationSelected(path)) }
+                            ForEach(store.groups, id: \.self) { group in
+                                Section(group) {
+                                    ForEach(store.state.affiliationChoices(in: group), id: \.self) { path in
+                                        Button(path.name) { store.send(.affiliationSelected(path)) }
+                                    }
+                                }
                             }
                         } label: {
                             fieldRow(

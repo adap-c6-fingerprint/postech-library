@@ -129,7 +129,6 @@ struct MyPageFeatureTests {
         // 저장된 소속 그대로면 변경하기 버튼이 꺼져 있다.
 
         await store.send(.parentSelected("POSTECH 대학원"))
-        await store.send(.groupSelected("독립 대학원 및 학부"))
         await store.send(.affiliationSelected(Self.graduateAI))
         #expect(store.state.canSave)
 

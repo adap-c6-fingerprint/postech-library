@@ -43,7 +43,7 @@ struct OnboardingFeatureTests {
         #expect(store.state.preferenceNames == ["수학", "역사", "여행"])
     }
 
-    @Test("소속 3단계와 선호 분류를 고르면 소속 경로·소속 이름·선호 분류 이름으로 함께 쓰는 프로필에 저장하고 완료를 알린다")
+    @Test("소속 2단계(상위 소속·학과)와 선호 분류를 고르면 소속 경로·소속 이름·선호 분류 이름으로 함께 쓰는 프로필에 저장하고 완료를 알린다")
     func completesWithAffiliationPath() async throws {
         var initialState = OnboardingFeature.State()
         initialState.dataset = Self.dataset
@@ -53,7 +53,6 @@ struct OnboardingFeatureTests {
         await store.send(.parentSelected("POSTECH 대학원")) { $0.selectedParent = "POSTECH 대학원" }
         // 최종 소속을 고르기 전에는 다음 단계로 넘어가지 않는다.
         await store.send(.nextButtonTapped)
-        await store.send(.groupSelected("일반대학원 학과")) { $0.selectedGroup = "일반대학원 학과" }
         await store.send(.affiliationSelected(Self.graduateMath)) { $0.selectedAffiliation = Self.graduateMath }
         await store.send(.nextButtonTapped) { $0.step = .interests }
         await store.send(.preferenceToggled("역사")) { $0.selectedPreferences = ["역사"] }
@@ -73,7 +72,7 @@ struct OnboardingFeatureTests {
         // 다른 화면이 같은 키로 읽어도 온보딩에서 저장한 값과 같다.
     }
 
-    @Test("상위 소속이나 그룹을 바꾸면 아래 단계 선택을 지우고, 다른 그룹의 항목은 받지 않는다")
+    @Test("상위 소속을 바꾸면 학과 선택을 지우고, 다른 상위 소속의 학과는 받지 않는다")
     func resetsLowerSelections() async {
         var initialState = OnboardingFeature.State()
         initialState.dataset = Self.dataset
@@ -81,19 +80,20 @@ struct OnboardingFeatureTests {
         let store = TestStore(initialState: initialState) { OnboardingFeature() }
 
         await store.send(.parentSelected("POSTECH 학부")) { $0.selectedParent = "POSTECH 학부" }
-        await store.send(.groupSelected("학과 및 학부")) { $0.selectedGroup = "학과 및 학부" }
-        // 같은 이름이어도 대학원 수학과는 학부 그룹의 선택지가 아니다.
+        #expect(store.state.groups == ["학과 및 학부"])
+        #expect(store.state.affiliationChoices(in: "학과 및 학부") == [Self.undergraduateMath])
+        // 학과 메뉴는 그룹을 묶음 제목으로 쓰고, 그 아래에 학과를 보여준다.
+        // 같은 이름이어도 대학원 수학과는 학부의 선택지가 아니다.
         await store.send(.affiliationSelected(Self.graduateMath))
         await store.send(.affiliationSelected(Self.undergraduateMath)) {
             $0.selectedAffiliation = Self.undergraduateMath
         }
         await store.send(.parentSelected("POSTECH 대학원")) {
             $0.selectedParent = "POSTECH 대학원"
-            $0.selectedGroup = nil
             $0.selectedAffiliation = nil
         }
-        // 다른 상위 소속의 그룹은 받지 않는다.
-        await store.send(.groupSelected("학과 및 학부"))
+        // 다른 상위 소속의 학과는 받지 않는다.
+        await store.send(.affiliationSelected(Self.undergraduateMath))
     }
 
     @Test("선호 분류를 고르지 않으면 저장하지 않고, 다시 누르면 선택을 해제한다")
@@ -102,7 +102,6 @@ struct OnboardingFeatureTests {
         initialState.dataset = Self.dataset
         initialState.step = .interests
         initialState.selectedParent = "POSTECH 학부"
-        initialState.selectedGroup = "학과 및 학부"
         initialState.selectedAffiliation = Self.undergraduateMath
         let store = TestStore(initialState: initialState) { OnboardingFeature() }
 

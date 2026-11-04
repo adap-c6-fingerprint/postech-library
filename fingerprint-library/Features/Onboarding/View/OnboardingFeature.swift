@@ -35,10 +35,9 @@ struct OnboardingFeature {
         var optionsErrorMessage: String?
         var selectedParent: String?
         // 1단계: 상위 소속. 예: "POSTECH 학부"
-        var selectedGroup: String?
-        // 2단계: 그룹. 예: "학과 및 학부"
         var selectedAffiliation: AffiliationPath?
-        // 3단계: 최종 소속. 이름이 아니라 세 단계 경로로 보관해 학부·대학원의 같은 학과를 구분한다.
+        // 2단계: 최종 소속. 이름이 아니라 세 단계 경로(상위 소속·그룹·이름)로 보관해 학부·대학원의 같은 학과를 구분한다.
+        // 그룹(예: "학과 및 학부")은 따로 고르지 않고, 학과 메뉴 안에서 학과들을 묶는 제목으로만 보여준다.
         var selectedPreferences: [String] = []
         // 고른 순서대로 보관하는 선호 분류 이름. 예: ["수학", "역사"]
         var errorMessage: String?
@@ -50,11 +49,18 @@ struct OnboardingFeature {
         var groups: [String] {
             selectedParent.map { dataset.groups(in: $0) } ?? []
         }
-        
-        var affiliationChoices: [AffiliationPath] {
-            guard let selectedParent, let selectedGroup else { return [] }
-            return dataset.paths(in: selectedParent, group: selectedGroup)
+        // 학과 메뉴의 묶음 제목들. 고른 상위 소속에 속한 그룹을 원본 순서대로.
+
+        func affiliationChoices(in group: String) -> [AffiliationPath] {
+            guard let selectedParent else { return [] }
+            return dataset.paths(in: selectedParent, group: group)
         }
+        // 한 묶음 제목 아래에 보여줄 학과들
+
+        var affiliationChoices: [AffiliationPath] {
+            groups.flatMap(affiliationChoices(in:))
+        }
+        // 고른 상위 소속의 모든 학과
         
         var preferenceNames: [String] { dataset.preferenceNames }
         
@@ -94,7 +100,6 @@ struct OnboardingFeature {
         case optionsFailed(String)
         case startButtonTapped
         case parentSelected(String)
-        case groupSelected(String)
         case affiliationSelected(AffiliationPath)
         case nextButtonTapped
         case backButtonTapped
@@ -145,18 +150,11 @@ struct OnboardingFeature {
                 guard state.selectedParent != parent else { return .none }
                 // 상위 소속을 바꾸면 아래 단계의 선택을 지운다.
                 state.selectedParent = parent
-                state.selectedGroup = nil
-                state.selectedAffiliation = nil
-                return .none
-                
-            case let .groupSelected(group):
-                guard state.groups.contains(group), state.selectedGroup != group else { return .none }
-                state.selectedGroup = group
                 state.selectedAffiliation = nil
                 return .none
                 
             case let .affiliationSelected(path):
-                // 지금 고른 상위 소속·그룹에 속한 항목만 받는다.
+                // 지금 고른 상위 소속에 속한 항목만 받는다.
                 guard state.affiliationChoices.contains(path) else { return .none }
                 state.selectedAffiliation = path
                 return .none
