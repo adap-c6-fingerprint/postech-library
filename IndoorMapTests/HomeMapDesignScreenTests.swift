@@ -89,7 +89,12 @@ extension IndoorMapSerialTests {
             initial.hasStartedRecommendationSession = true
             initial.home.recommendedBooks = books
             initial.home.popularBooks = books
-            initial.home.departmentName = "반도체공학과"
+            initial.home.$userProfile.withLock {
+                $0 = try? UserProfile(
+                    affiliationKey: ["POSTECH 학부", "학과 및 학부", "반도체공학과"],
+                    departmentName: "반도체공학과", interests: ["수학"]
+                )
+            }
             initial.indoorMap.map = map
             initial.indoorMap.navigation = navigationData
             initial.indoorMap.shelfLabels = labels

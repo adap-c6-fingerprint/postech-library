@@ -21,14 +21,24 @@ struct OnboardingView: View {
     // ✅ push된 화면 제목 위 여백. 내비게이션 바 아래에서 피그마 제목 위치(소속 168.59, 선호 분류 160.6)에 오도록 맞춘 값
 
     var body: some View {
-        NavigationStack(path: navigationPath) {
-            page(.welcome)
-                .toolbar(.hidden, for: .navigationBar)
-                .navigationDestination(for: OnboardingFeature.Step.self) { step in
-                    page(step)
+        Group {
+            switch store.entry {
+            case .firstRun:
+                NavigationStack(path: navigationPath) {
+                    page(.welcome)
+                        .toolbar(.hidden, for: .navigationBar)
+                        .navigationDestination(for: OnboardingFeature.Step.self) { step in
+                            page(step)
+                        }
                 }
+                // ✅ 단계 전환을 push navigation으로 한다. 시작 화면이 루트이고, 소속·선호 분류 화면을 차례로 push한다.
+            case .changeInterests:
+                page(.interests)
+                    .toolbar(.visible, for: .navigationBar)
+                    .toolbar(.hidden, for: .tabBar)
+                // 마이페이지의 내비게이션에 선호 분류 화면을 그대로 push한다. 뒤로가기는 마이페이지로 돌아간다.
+            }
         }
-        // ✅ 단계 전환을 push navigation으로 한다. 시작 화면이 루트이고, 소속·선호 분류 화면을 차례로 push한다.
         .preferredColorScheme(.dark)
         .alert(
             "저장하지 못했어요",

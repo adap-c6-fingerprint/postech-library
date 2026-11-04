@@ -35,7 +35,8 @@ struct HomeView: View {
         NavigationStack {
             homeContent
         }
-        .task { store.send(.task) }
+        .task(id: store.userProfile) { store.send(.task) }
+        // 프로필(소속·관심 분야)이 바뀌면 다시 실행해 바뀐 목록을 새로 불러온다. 마이페이지에서 돌아올 때 바로 반영된다.
         // 추천 홈에서 목록으로 이동해도 두 화면이 공유하는 소장 정보 조회를 이어간다.
         .task(id: LibraryInfoTaskID(bookIDs: store.booksForLibraryInfo.map(\.id), sessionID: store.recommendationSessionID)) {
             await store.send(.loadLibraryInfo).finish()

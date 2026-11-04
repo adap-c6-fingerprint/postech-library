@@ -30,11 +30,11 @@ struct MyPageView: View {
                 // 피그마: 선반 아래 끝(408.8)과 "설정 및 안내"(447) 사이 간격
                 SettingsSection(rows: [
                     .init(title: "소속 및 학과 정보 변경") { store.send(.editAffiliationRowTapped) },
-                    .init(title: "관심 분야 변경하기"),
+                    .init(title: "관심 분야 변경하기") { store.send(.editInterestsRowTapped) },
                     .init(title: "위치 권한 설정"),
                     .init(title: "이용 안내")
                 ])
-                // 소속 변경 외 세 행은 아직 기능명세가 없어 행만 둔다.
+                // 위치 권한 설정·이용 안내는 아직 기능명세가 없어 행만 둔다.
                 .padding(.horizontal, 16)
                 .padding(.bottom, 80)
                 Text("킥킥..\n@GosanJohnKoriMewOwenSano")
@@ -61,6 +61,11 @@ struct MyPageView: View {
             item: $store.scope(state: \.editAffiliation, action: \.editAffiliation)
         ) { editStore in
             EditMyAffiliationView(store: editStore)
+        }
+        .navigationDestination(
+            item: $store.scope(state: \.editInterests, action: \.editInterests)
+        ) { editStore in
+            OnboardingView(store: editStore)
         }
     }
 

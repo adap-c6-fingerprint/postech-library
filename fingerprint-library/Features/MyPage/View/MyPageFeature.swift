@@ -19,6 +19,8 @@ struct MyPageFeature {
         // 마이페이지 책장 카드. 최근 찾은 책 화면과 같은 State를 쓴다.
         @Presents var recentlyFound: RecentlyFoundBookFeature.State?
         @Presents var editAffiliation: EditMyAffiliationFeature.State?
+        @Presents var editInterests: OnboardingFeature.State?
+        // 관심 분야 변경은 별도 화면 없이 온보딩의 선호 분류 화면을 그대로 쓴다.
     }
 
     enum Action {
@@ -26,8 +28,10 @@ struct MyPageFeature {
         case addButtonTapped
         // "최근 찾은 책 목록" 오른쪽 + 버튼
         case editAffiliationRowTapped
+        case editInterestsRowTapped
         case recentlyFound(PresentationAction<RecentlyFoundBookFeature.Action>)
         case editAffiliation(PresentationAction<EditMyAffiliationFeature.Action>)
+        case editInterests(PresentationAction<OnboardingFeature.Action>)
     }
 
     var body: some Reducer<State, Action> {
@@ -48,11 +52,21 @@ struct MyPageFeature {
                 // 소속을 저장하면 마이페이지로 돌아온다.
                 return .none
 
-            case .shelf, .recentlyFound, .editAffiliation:
+            case .editInterestsRowTapped:
+                state.editInterests = .changingInterests()
+                return .none
+
+            case .editInterests(.presented(.delegate(.completed))):
+                state.editInterests = nil
+                // 관심 분야를 저장하면 마이페이지로 돌아온다.
+                return .none
+
+            case .shelf, .recentlyFound, .editAffiliation, .editInterests:
                 return .none
             }
         }
         .ifLet(\.$recentlyFound, action: \.recentlyFound) { RecentlyFoundBookFeature() }
         .ifLet(\.$editAffiliation, action: \.editAffiliation) { EditMyAffiliationFeature() }
+        .ifLet(\.$editInterests, action: \.editInterests) { OnboardingFeature() }
     }
 }
