@@ -155,6 +155,51 @@ extension IndoorMapSerialTests {
             #expect(received.value == [start], "미리보기 결과는 위치 갱신만으로 재계산하지 않아야 합니다.")
         }
 
+        @Test("별도 UIKit 상세 시트도 블루닷을 가진 같은 지도 Store를 전달받는다")
+        func nativeDetailSheetKeepsSimulationMapStore() async throws {
+            let fixture = try await Fixture.load()
+            let start = try fixture.position(level: 2, index: 1)
+            var mapState = IndoorMapFeature.State()
+            mapState.map = fixture.map
+            mapState.latestPosition = start
+            mapState.authorization = .authorized(precise: true)
+            let mapStore = Store(initialState: mapState) { IndoorMapFeature() } withDependencies: {
+                $0.date = .constant(start.timestamp)
+            }
+            var detailState = BookDetailFeature.State(book: fixture.stop.book)
+            detailState.hasLoaded = true
+            detailState.holdingsState = .loaded(fixture.stop.holdings)
+            detailState.relatedBooksState = .loaded([])
+            let detailStore = Store(initialState: detailState) { BookDetailFeature() } withDependencies: {
+                $0.date = .constant(start.timestamp)
+                $0.bookFavoritesClient.load = { [] }
+            }
+            let controller = BookDetailSheetPresenter.Controller(
+                store: detailStore, mapStore: mapStore, presentation: BookDetailSheetPresentation(),
+                onDismiss: {}, onFrameChange: { _ in })
+            let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
+            let window = UIWindow(windowScene: scene)
+            window.rootViewController = controller
+            window.makeKeyAndVisible()
+            defer { controller.tearDown(); window.isHidden = true; window.rootViewController = nil }
+            let deadline = Date().addingTimeInterval(5)
+            while controller.presentedViewController == nil || controller.transitionCoordinator != nil {
+                try #require(Date() < deadline, "네이티브 상세 시트 표시가 완료되지 않았습니다")
+                try await Task.sleep(for: .milliseconds(30))
+            }
+            let sheet = try #require(controller.presentedViewController as? UIHostingController<BookDetailSheet>)
+            #expect(sheet.rootView.mapStore === mapStore)
+            #expect(sheet.rootView.mapStore.currentPosition == start)
+            let moved = try fixture.position(level: 2, index: 2)
+            mapStore.send(.locationEvent(.position(moved)))
+            #expect(sheet.rootView.mapStore.currentPosition == moved)
+            controller.tearDown()
+            while sheet.presentingViewController != nil {
+                try #require(Date() < deadline, "상세 시트 종료가 완료되지 않았습니다")
+                try await Task.sleep(for: .milliseconds(30))
+            }
+        }
+
         private struct Fixture {
             let map: IndoorMap
             let labels: [IndoorShelfLabel]
