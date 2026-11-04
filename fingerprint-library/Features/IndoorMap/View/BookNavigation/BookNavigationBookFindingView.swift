@@ -231,16 +231,25 @@ struct BookNavigationBookFindingView: View {
 
     @ViewBuilder
     private func spineView(width: CGFloat) -> some View {
-        if let image = spineImage {
-            Image(uiImage: image)
-                .resizable()
-                .frame(width: width, height: Design.spineHeight)
-                .accessibilityLabel("\(title) 책등")
-                .accessibilityIdentifier("book-navigation-spine")
-        } else {
+        switch spine {
+        case .loaded:
+            if let image = spineImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .frame(width: width, height: Design.spineHeight)
+                    .accessibilityLabel("\(title) 책등")
+                    .accessibilityIdentifier("book-navigation-spine")
+            } else {
+                placeholderSpine(width: width)
+            }
+        case .unavailable:
             placeholderSpine(width: width)
+        case .loading, nil:
+            Rectangle()
+                .fill(Color.gray.opacity(0.4))
+                .frame(width: width, height: Design.spineHeight)
+                .accessibilityLabel("책등 불러오는 중")
         }
-        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우 모두 bookSpinePlaceHolder 에셋으로 그린다.
     }
 
     private func placeholderSpine(width: CGFloat) -> some View {
@@ -308,8 +317,13 @@ struct BookNavigationBookFindingView: View {
             return Design.spineHeight * image.size.width / image.size.height
             // 피그마 주석: 높이는 고정하고, 너비는 책등 원본 비율을 따른다.
         }
-        return Design.spineHeight * Design.placeholderAspectRatio
-        // 대체 에셋은 "책표지 준비중" 글자가 찌그러지지 않게 원본 비율을 지킨다. (411 높이에서 약 47)
+        switch spine {
+        case .loaded, .unavailable:
+            return Design.spineHeight * Design.placeholderAspectRatio
+            // 대체 에셋은 "책표지 준비중" 글자가 찌그러지지 않게 원본 비율을 지킨다. (411 높이에서 약 47)
+        case .loading, nil:
+            return Design.referenceSpineWidth
+        }
     }
 
     private var title: String {
