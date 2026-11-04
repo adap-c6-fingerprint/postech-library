@@ -25,7 +25,7 @@ nonisolated struct IndoorSimulationConfiguration: Equatable, Sendable {
 
     static func connection(environment: [String: String], isSimulator: Bool) throws -> Self {
         let host = environment["INDOOR_SIMULATOR_HOST"]?.trimmingCharacters(in: .whitespacesAndNewlines)
-        if let host, host.isEmpty { throw IndoorSimulationError.invalidConfiguration }
+        if let host, host.isEmpty || host.contains("://") { throw IndoorSimulationError.invalidConfiguration }
         let port: UInt16
         if let value = environment["INDOOR_SIMULATOR_PORT"] {
             guard let parsed = UInt16(value), parsed > 0 else {
@@ -45,7 +45,7 @@ nonisolated enum IndoorSimulationLocationProvider {
 
     static func events() -> AsyncStream<IndoorLocationEvent> {
         do {
-            let configuration = try IndoorSimulationConfiguration.connection(
+            let configuration = try IndoorSimulationSettings.load().connection(
                 environment: ProcessInfo.processInfo.environment,
                 isSimulator: IndoorSimulationConfiguration.isSimulator
             )
