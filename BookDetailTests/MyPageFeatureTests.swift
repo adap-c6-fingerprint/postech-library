@@ -26,12 +26,13 @@ struct MyPageFeatureTests {
         let failing = book("b", isbn: "9788966260960")
         let noISBN = book("c", isbn: nil)
         let png = Data([0x89, 0x50])
+        let foundISBN = found.isbn
         let store = TestStore(initialState: RecentlyFoundBookFeature.State()) {
             RecentlyFoundBookFeature()
         } withDependencies: {
             $0.recentlyFoundBooksClient.load = { [found, failing, noISBN] }
             $0.bookCoverClient.spinePngData = { isbn in
-                guard isbn == found.isbn else { throw RecommendationCacheStore.CacheError.invalidImage }
+                guard isbn == foundISBN else { throw RecommendationCacheStore.CacheError.invalidImage }
                 return png
             }
         }
@@ -116,7 +117,7 @@ struct MyPageFeatureTests {
         } withDependencies: {
             $0.userProfileClient.load = { profile }
             $0.userProfileClient.save = { key, name, interests in saved.setValue((key, name, interests)) }
-            $0.recommendationDatasetClient.load = { Self.dataset }
+            $0.recommendationDatasetClient.load = { await Self.dataset }
         }
         store.exhaustivity = .off
 
