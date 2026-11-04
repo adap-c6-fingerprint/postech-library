@@ -24,6 +24,7 @@ extension IndoorMapSerialTests {
             ) {
                 BookRoutePreviewFeature()
             } withDependencies: {
+                $0.date.now = NavigationGuidanceTestFixture.now
                 // 실제 로더 대신 항상 실패하는 Client를 사용
                 $0.bookRoutePreviewClient = .testValue
             }
@@ -31,7 +32,7 @@ extension IndoorMapSerialTests {
             // 경로 요청을 보내면 로딩이 시작되어야 함
             await store.send(.requestChanged(.ready(
                 map: sample.map,
-                labels: sample.shelfLabels,
+                labels: sample.shelfLabels, start: sample.start,
                 stops: sample.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
@@ -82,10 +83,12 @@ extension IndoorMapSerialTests {
             let store = TestStore(initialState: initial) {
                 BookRoutePreviewFeature()
             } withDependencies: {
-                $0.bookRoutePreviewClient.load = { map, labels, stops in
+                $0.date.now = NavigationGuidanceTestFixture.now
+                $0.bookRoutePreviewClient.load = { map, labels, start, stops in
                     await MainActor.run {
                         #expect(map == sample.map)
                         #expect(labels == sample.shelfLabels)
+                        #expect(start == sample.start)
                         #expect(stops == sample.stops.map(\.candidateStop))
                     }
                     return sample
@@ -93,7 +96,7 @@ extension IndoorMapSerialTests {
             }
 
             await store.send(.requestChanged(.ready(
-                map: sample.map, labels: sample.shelfLabels, stops: sample.stops.map(\.candidateStop)
+                map: sample.map, labels: sample.shelfLabels, start: sample.start, stops: sample.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -113,13 +116,14 @@ extension IndoorMapSerialTests {
             let store = TestStore(initialState: BookRoutePreviewFeature.State()) {
                 BookRoutePreviewFeature()
             } withDependencies: {
-                $0.bookRoutePreviewClient.load = { _, _, _ in
+                $0.date.now = NavigationGuidanceTestFixture.now
+                $0.bookRoutePreviewClient.load = { _, _, _, _ in
                     try await pending.load(sample)
                 }
             }
 
             await store.send(.requestChanged(.ready(
-                map: sample.map, labels: sample.shelfLabels, stops: sample.stops.map(\.candidateStop)
+                map: sample.map, labels: sample.shelfLabels, start: sample.start, stops: sample.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -147,13 +151,14 @@ extension IndoorMapSerialTests {
             let store = TestStore(initialState: BookRoutePreviewFeature.State()) {
                 BookRoutePreviewFeature()
             } withDependencies: {
-                $0.bookRoutePreviewClient.load = { _, _, _ in
+                $0.date.now = NavigationGuidanceTestFixture.now
+                $0.bookRoutePreviewClient.load = { _, _, _, _ in
                     try await pending.load(sample)
                 }
             }
 
             await store.send(.requestChanged(.ready(
-                map: sample.map, labels: sample.shelfLabels, stops: sample.stops.map(\.candidateStop)
+                map: sample.map, labels: sample.shelfLabels, start: sample.start, stops: sample.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -181,7 +186,8 @@ extension IndoorMapSerialTests {
             let store = TestStore(initialState: BookRoutePreviewFeature.State()) {
                 BookRoutePreviewFeature()
             } withDependencies: {
-                $0.bookRoutePreviewClient.load = { map, _, _ in
+                $0.date.now = NavigationGuidanceTestFixture.now
+                $0.bookRoutePreviewClient.load = { map, _, _, _ in
                     if map.venue.sourceID == firstVenueID {
                         return try await pending.load(first)
                     }
@@ -190,7 +196,7 @@ extension IndoorMapSerialTests {
             }
 
             await store.send(.requestChanged(.ready(
-                map: first.map, labels: first.shelfLabels, stops: first.stops.map(\.candidateStop)
+                map: first.map, labels: first.shelfLabels, start: first.start, stops: first.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
@@ -199,7 +205,7 @@ extension IndoorMapSerialTests {
             try #require(pending.didStart.value)
 
             await store.send(.requestChanged(.ready(
-                map: second.map, labels: second.shelfLabels, stops: second.stops.map(\.candidateStop)
+                map: second.map, labels: second.shelfLabels, start: second.start, stops: second.stops.map(\.candidateStop)
             ))) {
                 $0.requestID = 2
             }

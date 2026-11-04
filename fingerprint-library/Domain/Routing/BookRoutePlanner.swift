@@ -72,7 +72,6 @@ nonisolated struct BookRoutePlanner {
             stops: stops,
             legs: bestLegs,
             graph: input.navigation.graph,
-            origin: input.origin,
             start: input.start
         )
     }

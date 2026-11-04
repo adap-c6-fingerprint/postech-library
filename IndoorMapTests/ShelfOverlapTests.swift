@@ -174,7 +174,7 @@ struct ShelfOverlapTests {
         }
 
         func plan(_ candidates: [BookRouteCandidateStop], directory: URL? = nil) async throws -> BookNavigationSession {
-            try await BookRoutePreviewTestRouteLoader().load(directory: directory ?? root, on: map, labels: labels, stops: candidates)
+            try await BookRoutePreviewTestRouteLoader().load(directory: directory ?? root, on: map, labels: labels, start: try await bookRouteTestStart(on: map, labels: labels), stops: candidates)
         }
 
         func leg(to shelf: IndoorShelfLabel, from previous: IndoorShelfLabel? = nil) throws -> BookRoutePreviewTestRoute {

@@ -68,7 +68,7 @@ enum NavigationGuidanceTestFixture {
             geometry: .point(node.coordinate), content: .emptyShelf)
         let stop = BookNavigationStop(book: base.stops[0].book, holdings: base.stops[0].holdings, shelf: shelf)
         return try .init(map: base.map, shelfLabels: [shelf], stops: [stop], legs: [value.route],
-                         graph: value.graph, origin: base.origin, start: base.start)
+                         graph: value.graph, start: base.start)
     }
 
     @MainActor
@@ -89,7 +89,7 @@ enum NavigationGuidanceTestFixture {
             BookNavigationStop(book: BookHoldingTestData.book(index), holdings: [BookHoldingTestData.holding(index)], shelf: shelf)
         }
         return try .init(map: map, shelfLabels: [origin, goal], stops: stops, legs: [route, back], graph: graph,
-            origin: origin, start: .init(coordinate: first.coordinate, floorOrdinal: first.level,
+            start: .init(coordinate: first.coordinate, floorOrdinal: first.level,
                                        horizontalAccuracy: 0, timestamp: now, source: .simulation))
     }
 }

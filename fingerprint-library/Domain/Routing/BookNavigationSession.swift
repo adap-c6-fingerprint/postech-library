@@ -28,13 +28,12 @@ struct BookNavigationSession: Identifiable, Equatable, Sendable {
     let stops: [BookNavigationStop]
     let legs: [IndoorRoute]
     let graph: RoutingGraph
-    let origin: IndoorShelfLabel
     let start: IndoorPosition
     let route: IndoorRoute
     let guidance: RoutePreviewGuidance
 
     init(map: IndoorMap, shelfLabels: [IndoorShelfLabel], stops: [BookNavigationStop],
-         legs: [IndoorRoute], graph: RoutingGraph, origin: IndoorShelfLabel, start: IndoorPosition) throws {
+         legs: [IndoorRoute], graph: RoutingGraph, start: IndoorPosition) throws {
         guard BookRouteSelection.allows(bookCount: stops.count),
               Set(stops.map { $0.book.id }).count == stops.count,
               stops.count == legs.count, let first = legs.first, let last = legs.last else {
@@ -62,7 +61,6 @@ struct BookNavigationSession: Identifiable, Equatable, Sendable {
         self.stops = stops
         self.legs = legs
         self.graph = graph
-        self.origin = origin
         self.start = start
         self.route = route
         guidance = try RoutePreviewGuidance(route: route, graph: graph)
