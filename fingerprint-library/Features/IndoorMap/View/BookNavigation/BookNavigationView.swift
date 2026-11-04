@@ -7,10 +7,10 @@ struct BookNavigationView: View {
     private let onExit: ((BookNavigationFeature.ExitReason) -> Void)?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
-    @State private var isSheetExpanded = false
     @State private var sheetHeight: CGFloat = 113
     @State private var sheetSummaryHeight: CGFloat = 89
     @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
+    private var isSheetExpanded: Bool { store.isSheetExpanded }
 
     init(session: BookNavigationSession, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
         self.init(store: Store(initialState: BookNavigationFeature.State(session: session)) {
@@ -60,7 +60,8 @@ struct BookNavigationView: View {
                 .overlay(alignment: .bottom) {
                     if !store.isArrivalPresented, store.exitReason == nil {
                         BookNavigationBottomSheet(
-                            isExpanded: $isSheetExpanded,
+                            isExpanded: Binding(get: { store.isSheetExpanded },
+                                set: { store.send(.sheetExpansionChanged($0)) }),
                             height: min(isSheetExpanded ? expandedSheetHeight : 24 + sheetSummaryHeight + geometry.safeAreaInsets.bottom,
                                 max(24 + sheetSummaryHeight + geometry.safeAreaInsets.bottom,
                                     geometry.size.height + geometry.safeAreaInsets.bottom - 140)),
