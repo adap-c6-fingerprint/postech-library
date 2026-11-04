@@ -193,7 +193,7 @@ nonisolated struct RouteGuidancePlan: Equatable, Sendable {
         if nearDestination {
             maneuver = .nearDestination
             toManeuver = remaining
-        } else if step.changesFloor, match.fraction < 1 {
+        } else if step.changesFloor, match.fraction < 1 || continuesFloorChange(after: match.index) {
             maneuver = floorInstruction(at: match.index)
             toManeuver = 0
         } else if let upcoming {
@@ -207,6 +207,13 @@ nonisolated struct RouteGuidancePlan: Equatable, Sendable {
         }
         return .init(stepIndex: match.index, fraction: match.fraction, distanceAlongRoute: match.offset,
             coordinate: match.coordinate, maneuver: maneuver, distanceToManeuver: toManeuver, remainingMeters: remaining)
+    }
+
+    private func continuesFloorChange(after index: Int) -> Bool {
+        guard index + 1 < steps.count else { return false }
+        let current = steps[index], next = steps[index + 1]
+        return next.changesFloor && current.category == next.category && current.to.id == next.from.id
+            && (current.to.level > current.from.level) == (next.to.level > next.from.level)
     }
 
     private func floorInstruction(at index: Int) -> RouteManeuver {

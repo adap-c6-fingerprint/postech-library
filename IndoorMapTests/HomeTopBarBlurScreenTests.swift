@@ -61,12 +61,15 @@ extension IndoorMapSerialTests {
                     let departingLayer = departingView.layer.presentation() ?? departingView.layer
                     let coveredFromX = departingView.window == nil ? window.bounds.width
                         : departingLayer.convert(.zero, to: windowLayer).x
-                    guard point.x > 12, point.x + 30 < coveredFromX else { continue }
                     let frame = snapshot(window, afterScreenUpdates: false)
+                    // presentation 레이어 좌표와 drawHierarchy의 캡처 시점은 같지 않다.
+                    // 같은 이미지의 블러 아래쪽 경계로 x를 구해, 이동 중인 경계 밖을 흐림으로 오인하지 않는다.
+                    guard let edgeX = try sharpEdgeX(in: frame, y: min(window.bounds.height - 20, max(400, window.bounds.height * 0.65))),
+                          edgeX > 12, edgeX + 30 < coveredFromX else { continue }
                     var sharpestStep = 0.0
                     for offset in -10..<10 {
-                        let left = try brightness(frame, x: point.x + CGFloat(offset), y: point.y)
-                        let right = try brightness(frame, x: point.x + CGFloat(offset + 1), y: point.y)
+                        let left = try brightness(frame, x: edgeX + CGFloat(offset), y: point.y)
+                        let right = try brightness(frame, x: edgeX + CGFloat(offset + 1), y: point.y)
                         sharpestStep = max(sharpestStep, left - right)
                     }
                     let inTransition = navigation.transitionCoordinator != nil
@@ -173,6 +176,26 @@ extension IndoorMapSerialTests {
             UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
                 window.drawHierarchy(in: window.bounds, afterScreenUpdates: afterScreenUpdates)
             }
+        }
+
+        private func sharpEdgeX(in image: UIImage, y: CGFloat) throws -> CGFloat? {
+            let source = try #require(image.cgImage)
+            let row = try #require(source.cropping(to: CGRect(x: 0, y: y * image.scale, width: CGFloat(source.width), height: 1)))
+            var bytes = [UInt8](repeating: 0, count: row.width * 4)
+            try bytes.withUnsafeMutableBytes { buffer in
+                let context = try #require(CGContext(data: buffer.baseAddress, width: row.width, height: 1,
+                    bitsPerComponent: 8, bytesPerRow: row.width * 4, space: CGColorSpaceCreateDeviceRGB(),
+                    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+                context.draw(row, in: CGRect(x: 0, y: 0, width: CGFloat(row.width), height: 1))
+            }
+            var best: (x: CGFloat, contrast: Double)?
+            for x in 12..<(Int(image.size.width) - 30) {
+                let left = Int(CGFloat(x) * image.scale) * 4
+                let right = Int(CGFloat(x + 1) * image.scale) * 4
+                let contrast = (Double(bytes[left]) - Double(bytes[right])) / 255
+                if contrast > (best?.contrast ?? 0.25) { best = (CGFloat(x), contrast) }
+            }
+            return best?.x
         }
 
         private func brightness(_ image: UIImage, x: CGFloat, y: CGFloat) throws -> Double {

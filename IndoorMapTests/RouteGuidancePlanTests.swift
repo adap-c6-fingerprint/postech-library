@@ -133,6 +133,17 @@ struct RouteGuidancePlanTests {
         #expect(abs((after.remainingMeters ?? 0) - 5) < 0.01)
     }
 
+    @Test("연속 층간 이동의 중간 층에서도 최종 도착 층까지 이동을 안내한다", arguments: [false, true], [RouteEdgeCategory.elevator, .stairs])
+    func continuousElevatorAtIntermediateFloor(hasEdgeDistances: Bool, category: RouteEdgeCategory) throws {
+        let data = F.make(nodes: [N.node("a"), N.node("b", level: 1), N.node("c", level: 2), N.node("d", x: 10, level: 2)],
+                          categories: [category, category, .walkway])
+        var route = data.route
+        if hasEdgeDistances { route.edgeDistancesMeters = [1, 1, route.distanceMeters - 2] }
+        let plan = try RouteGuidancePlan(route: route, graph: data.graph)
+        let progress = try plan.progress(for: F.position(x: 0, level: 1), at: F.now)
+        #expect(progress.maneuver == .changeFloor(category, to: data.graph.nodes[2].floorID))
+    }
+
     @Test("0간선 경로에서도 실제 위치가 도착 노드 근처인 경우에만 서가 근처로 표시한다")
     func zeroLengthRoute() throws {
         let data = F.make(nodes: [N.node("a")])
