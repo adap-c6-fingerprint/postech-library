@@ -1,0 +1,169 @@
+//
+//  EditMyAffiliationView.swift
+//  fingerprint-library
+//
+//  Created by 이시온 on 11/3/26.
+//
+//  마이페이지 > 소속 및 학과 정보 변경 화면
+//  온보딩의 소속 선택 화면(OnboardingView.affiliation)과 같은 구성을 쓴다.
+//
+
+import ComposableArchitecture
+import SwiftUI
+
+struct EditMyAffiliationView: View {
+    let store: StoreOf<EditMyAffiliationFeature>
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            header
+                .padding(.top, 38)
+                .padding(.bottom, 32)
+            fields
+            Spacer()
+            changeButton
+                .padding(.horizontal, 20)
+                .padding(.bottom, 16)
+        }
+        .padding(.horizontal, 16)
+        .background { Color.backgroundDefault.ignoresSafeArea() }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
+        .toolbar(.hidden, for: .tabBar)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .alert(
+            "저장하지 못했어요",
+            isPresented: Binding(
+                get: { store.errorMessage != nil },
+                set: { if !$0 { store.send(.errorAlertDismissed) } }
+            )
+        ) {
+            Button("확인") {}
+        } message: {
+            Text(store.errorMessage ?? "")
+        }
+        .task { store.send(.task) }
+    }
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing._4) {
+            Text("소속과 학과를 변경할래요")
+                .typography(.title1)
+                .foregroundStyle(Color.textPrimary)
+            Text("학과를 알려주면 관련 분야의 책을\n더 잘 추천할 수 있어요.")
+                .typography(.title2)
+                .foregroundStyle(Color.textTertiary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var fields: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 24) {
+                let isParentEnabled = !store.parents.isEmpty
+                field(title: "소속", isEnabled: isParentEnabled) {
+                    Menu {
+                        ForEach(store.parents, id: \.self) { parent in
+                            Button(parent) { store.send(.parentSelected(parent)) }
+                        }
+                    } label: {
+                        fieldRow(store.selectedParent, placeholder: "소속을 선택해주세요", isEnabled: isParentEnabled)
+                    }
+                    .disabled(!isParentEnabled)
+                }
+
+                let isGroupEnabled = store.selectedParent != nil && !store.groups.isEmpty
+                field(title: "세부 분류", isEnabled: isGroupEnabled) {
+                    Menu {
+                        ForEach(store.groups, id: \.self) { group in
+                            Button(group) { store.send(.groupSelected(group)) }
+                        }
+                    } label: {
+                        fieldRow(store.selectedGroup, placeholder: "세부 분류를 선택해주세요", isEnabled: isGroupEnabled)
+                    }
+                    .disabled(!isGroupEnabled)
+                }
+
+                let isDepartmentEnabled = store.selectedGroup != nil && !store.affiliationChoices.isEmpty
+                field(title: "학과", isEnabled: isDepartmentEnabled) {
+                    Menu {
+                        ForEach(store.affiliationChoices, id: \.self) { path in
+                            Button(path.name) { store.send(.affiliationSelected(path)) }
+                        }
+                    } label: {
+                        fieldRow(store.selectedAffiliation?.name, placeholder: "학과를 선택해주세요", isEnabled: isDepartmentEnabled)
+                    }
+                    .disabled(!isDepartmentEnabled)
+                }
+            }
+
+            if let message = store.optionsErrorMessage {
+                Text("선택지를 불러오지 못했어요. \(message)")
+                    .typography(.caption2)
+                    .foregroundStyle(.red)
+            }
+
+            Text("*소속과 학과는 나중에 변경 가능해요.")
+                .typography(.caption2)
+                .foregroundStyle(Color.editAffiliationCaption)
+        }
+    }
+
+    private func field<Content: View>(title: String, isEnabled: Bool, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .typography(.body2)
+                .foregroundStyle(isEnabled ? Color.textPrimary : Color.editAffiliationCaption)
+            content()
+        }
+    }
+
+    private func fieldRow(_ value: String?, placeholder: String, isEnabled: Bool) -> some View {
+        let foreground = isEnabled ? Color.textPrimary : Color.editAffiliationDisabledText
+        return HStack {
+            Text(value ?? placeholder)
+                .typography(.body2)
+                .foregroundStyle(foreground)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(foreground)
+        }
+        .padding(.leading, 20)
+        .padding(.trailing, 23)
+        .frame(height: 52)
+        .background(
+            isEnabled ? Color.editAffiliationField : Color.editAffiliationDisabledField,
+            in: .rect(cornerRadius: 20)
+        )
+    }
+
+    private var changeButton: some View {
+        Button {
+            store.send(.changeButtonTapped)
+        } label: {
+            Text("변경하기")
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(store.canSave ? Color.backgroundDefault : Color.textPrimary)
+                .frame(maxWidth: .infinity)
+                .frame(height: 52)
+                .contentShape(.capsule)
+        }
+        .buttonStyle(.plain)
+        .glassEffect(
+            .regular.tint(store.canSave ? Color.limeBase : Color.editAffiliationActionTint).interactive(),
+            in: .capsule
+        )
+        .disabled(!store.canSave)
+        // 바꾼 소속이 있을 때만 라임색으로 켜진다.
+    }
+}
+
+// 온보딩 소속 화면과 같은 색 (OnboardingView의 private 색상 토큰과 같은 값)
+private extension Color {
+    static let editAffiliationField = Color(red: 0x24 / 255, green: 0x24 / 255, blue: 0x24 / 255)
+    static let editAffiliationCaption = Color(red: 0x77 / 255, green: 0x77 / 255, blue: 0x77 / 255)
+    static let editAffiliationActionTint = Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)
+    static let editAffiliationDisabledField = Color(red: 0x16 / 255, green: 0x16 / 255, blue: 0x16 / 255)
+    static let editAffiliationDisabledText = Color(red: 0x99 / 255, green: 0x99 / 255, blue: 0x99 / 255)
+}

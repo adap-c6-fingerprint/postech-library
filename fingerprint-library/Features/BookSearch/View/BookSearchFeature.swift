@@ -34,6 +34,7 @@ struct BookSearchFeature {
         @Presents var basket: BookBasketFeature.State?
         @Presents var favorites: BookFavoritesFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
+        @Presents var myPage: MyPageFeature.State?
     }
     
     enum RecentBookInfoState: Equatable {
@@ -63,6 +64,8 @@ struct BookSearchFeature {
         case basketButtonTapped
         case favoritesButtonTapped
         case favorites(PresentationAction<BookFavoritesFeature.Action>)
+        case profileButtonTapped
+        case myPage(PresentationAction<MyPageFeature.Action>)
         case basket(PresentationAction<BookBasketFeature.Action>)
         case basketLimitAlertDismissed
         case removeFromBasket(Set<Book.ID>)
@@ -207,7 +210,11 @@ struct BookSearchFeature {
                 state.basketBooks = bookBasketClient.load().map(\.book)
                 return .none
 
-            case .detail, .basket, .favorites:
+            case .profileButtonTapped:
+                state.myPage = MyPageFeature.State()
+                return .none
+
+            case .detail, .basket, .favorites, .myPage:
                 return .none
 
             case .directionsButtonTapped(let book):
@@ -343,6 +350,9 @@ struct BookSearchFeature {
         }
         .ifLet(\.$shelfMap, action: \.shelfMap) {
             BookShelfMapFeature()
+        }
+        .ifLet(\.$myPage, action: \.myPage) {
+            MyPageFeature()
         }
     }
 

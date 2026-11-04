@@ -22,6 +22,9 @@ struct BookSearchTabView: View {
                 },
                 onShowFavorites: {
                     store.send(.favoritesButtonTapped)
+                },
+                onShowProfile: {
+                    store.send(.profileButtonTapped)
                 }
             )
             .navigationDestination(
@@ -48,6 +51,11 @@ struct BookSearchTabView: View {
             ) { shelfMapStore in
                 BookShelfMapView(store: shelfMapStore)
                     .toolbar(.visible, for: .navigationBar)
+            }
+            .navigationDestination(
+                item: $store.scope(state: \.myPage, action: \.myPage)
+            ) { myPageStore in
+                MyPageView(store: myPageStore, mapStore: mapStore)
             }
         }
         .searchable(

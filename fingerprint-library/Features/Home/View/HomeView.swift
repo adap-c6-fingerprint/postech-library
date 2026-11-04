@@ -66,7 +66,8 @@ struct HomeView: View {
             LibraryTopBar(
                 title: "추천",
                 onFavorites: { store.send(.favoritesButtonTapped) },
-                onBasket: { store.send(.basketButtonTapped) }
+                onBasket: { store.send(.basketButtonTapped) },
+                onProfile: { store.send(.profileButtonTapped) }
             )
         }
         .toolbarBackground(.hidden, for: .navigationBar)
@@ -101,6 +102,11 @@ struct HomeView: View {
         ) { shelfMapStore in
             BookShelfMapView(store: shelfMapStore)
                 .toolbar(.visible, for: .navigationBar)
+        }
+        .navigationDestination(
+            item: $store.scope(state: \.myPage, action: \.myPage)
+        ) { myPageStore in
+            MyPageView(store: myPageStore, mapStore: mapStore)
         }
     }
 

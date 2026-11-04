@@ -11,12 +11,15 @@ final class BookDetailSheetPresentation {
 /// 책 상세 네이티브 시트의 표시·종료를 소유한다.
 struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     let store: StoreOf<BookDetailFeature>
+    let mapStore: StoreOf<IndoorMapFeature>
     let presentation: BookDetailSheetPresentation
     var onDismiss: () -> Void
     var onCompactFrameChange: (CGRect) -> Void
 
     func makeUIViewController(context: Context) -> Controller {
-        Controller(store: store, presentation: presentation, onDismiss: onDismiss, onCompactFrameChange: onCompactFrameChange)
+        Controller(
+            store: store, mapStore: mapStore, presentation: presentation,
+            onDismiss: onDismiss, onCompactFrameChange: onCompactFrameChange)
     }
 
     func updateUIViewController(_ controller: Controller, context: Context) {
@@ -32,6 +35,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         private static let compactID = UISheetPresentationController.Detent.Identifier("bookDetail.compact")
 
         private let store: StoreOf<BookDetailFeature>
+        private let mapStore: StoreOf<IndoorMapFeature>
         var onDismiss: () -> Void
         var onCompactFrameChange: (CGRect) -> Void
         private var hosting: UIHostingController<BookDetailSheet>?
@@ -40,9 +44,13 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         private var isInvalidated = false
         private let presentation: BookDetailSheetPresentation
 
-        init(store: StoreOf<BookDetailFeature>, presentation: BookDetailSheetPresentation, onDismiss: @escaping () -> Void,
-             onCompactFrameChange: @escaping (CGRect) -> Void) {
+        init(
+            store: StoreOf<BookDetailFeature>, mapStore: StoreOf<IndoorMapFeature>,
+            presentation: BookDetailSheetPresentation, onDismiss: @escaping () -> Void,
+            onCompactFrameChange: @escaping (CGRect) -> Void
+        ) {
             self.store = store
+            self.mapStore = mapStore
             self.presentation = presentation
             self.onDismiss = onDismiss
             self.onCompactFrameChange = onCompactFrameChange
@@ -62,7 +70,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             guard !hasPresented, !isInvalidated, view.window != nil else { return }
             hasPresented = true
             presentation.isExpanded = false
-            let content = BookDetailSheet(store: store, presentation: presentation, onDismiss: { [weak self] in
+            let content = BookDetailSheet(store: store, mapStore: mapStore, presentation: presentation, onDismiss: { [weak self] in
                 self?.dismissDetail()
             }) { [weak self] _ in
                 self?.reportCompactFrame()

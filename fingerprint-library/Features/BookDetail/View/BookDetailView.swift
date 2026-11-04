@@ -72,7 +72,7 @@ struct BookDetailMapView: View {
         .task(id: context) { store.send(.mapContextChanged(context)) }
         .background {
             BookDetailSheetPresenter(
-                store: store, presentation: sheetPresentation,
+                store: store, mapStore: mapStore, presentation: sheetPresentation,
                 onDismiss: { dismiss() }, onCompactFrameChange: { compactSheetFrame = $0 }
             )
             .id(store.book.id)
@@ -121,6 +121,7 @@ struct BookDetailMapView: View {
 
 struct BookDetailSheet: View {
     let store: StoreOf<BookDetailFeature>
+    let mapStore: StoreOf<IndoorMapFeature>
     let presentation: BookDetailSheetPresentation
     var onDismiss: () -> Void
     var onHeightChange: (CGFloat) -> Void = { _ in }
@@ -131,6 +132,8 @@ struct BookDetailSheet: View {
                 .containerBackground(.clear, for: .navigation)
                 .toolbar(.hidden, for: .navigationBar)
         }
+        // 새 UIHostingController는 앱 루트의 SwiftUI 환경을 상속하지 않으므로 다시 연결한다.
+        .environment(\.indoorRouteMapStore, mapStore)
         .preferredColorScheme(.dark)
         .onGeometryChange(for: CGFloat.self) { $0.size.height + $0.safeAreaInsets.bottom } action: { height in
             guard height.isFinite, height > 0 else { return }
@@ -428,7 +431,10 @@ struct BookDetailView: View {
 
     private var bottomActions: some View {
         HStack(spacing: 12) {
-            Button { isRoutePreviewPresented = true } label: {
+            Button {
+                store.send(.guidanceStarted)
+                isRoutePreviewPresented = true
+            } label: {
                 Text("바로 안내 시작").bookDetailTypography(.bookTitle).frame(maxWidth: .infinity)
             }
             .buttonBorderShape(.capsule)

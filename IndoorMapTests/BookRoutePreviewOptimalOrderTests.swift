@@ -105,12 +105,12 @@ struct BookRoutePreviewOptimalOrderTests {
             try JSONSerialization.data(withJSONObject: metadata).write(to: directory.appendingPathComponent("navigation.json"))
         }
         try write(nodes + edges)
-        let session = try await BookRoutePreviewTestRouteLoader().load(directory: directory, on: fixture.map, labels: fixture.labels, stops: received)
+        let session = try await BookRoutePreviewTestRouteLoader().load(directory: directory, on: fixture.map, labels: fixture.labels, start: try await bookRouteTestStart(on: fixture.map, labels: fixture.labels), stops: received)
         #expect(session.stops == [received[1], received[0]])
         #expect(session.route.edgeIDs == reference.route.edgeIDs)
         try write(nodes)
         await #expect(throws: IndoorRoutingError.noRoute) {
-            try await BookRoutePreviewTestRouteLoader().load(directory: directory, on: fixture.map, labels: fixture.labels, stops: received)
+            try await BookRoutePreviewTestRouteLoader().load(directory: directory, on: fixture.map, labels: fixture.labels, start: try await bookRouteTestStart(on: fixture.map, labels: fixture.labels), stops: received)
         }
     }
 
@@ -139,7 +139,7 @@ struct BookRoutePreviewOptimalOrderTests {
             }
         }
         func load(_ stops: [BookNavigationStop]) async throws -> BookNavigationSession {
-            try await BookRoutePreviewTestRouteLoader().load(directory: root, on: map, labels: labels, stops: stops)
+            try await BookRoutePreviewTestRouteLoader().load(directory: root, on: map, labels: labels, start: try await bookRouteTestStart(on: map, labels: labels), stops: stops)
         }
         func json(_ file: String) throws -> [String: Any] {
             try #require(JSONSerialization.jsonObject(with: Data(contentsOf: root.appendingPathComponent(file))) as? [String: Any])

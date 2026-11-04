@@ -105,6 +105,8 @@ struct BookDetailFeature {
         case basket(PresentationAction<BookBasketFeature.Action>)
         case basketLimitAlertDismissed
         case startGuidanceButtonTapped
+        case guidanceStarted
+        // "바로 안내 시작"으로 경로 미리보기를 열 때. 마이페이지 최근 찾은 책에 기록한다.
         case delegate(Delegate)
 
         @CasePathable
@@ -130,6 +132,7 @@ struct BookDetailFeature {
     @Dependency(\.indoorRouteClient) var indoorRouteClient
     @Dependency(\.bookBasketClient) var bookBasketClient
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
+    @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
     // ✅ 상세 화면에 들어간 책을 '조회한 책'으로 기록한다. (Q5)
     @Dependency(\.date.now) var now
 
@@ -282,6 +285,11 @@ struct BookDetailFeature {
             case .startGuidanceButtonTapped:
                 // 장바구니를 거치지 않고 이 책 1권으로 길안내를 시작한다.
                 return .send(.delegate(.startGuidance(state.book)))
+
+            case .guidanceStarted:
+                recentlyFoundBooksClient.record([state.book])
+                // 장바구니를 거치지 않은 1권도 최근 찾은 책 책장 맨 왼쪽에 꽂힌다.
+                return .none
 
             case .delegate:
                 return .none

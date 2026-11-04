@@ -107,6 +107,8 @@ struct BookBasketView: View {
                     .background(Color.basketPrimary, in: .capsule)
             }
             .buttonStyle(.plain)
+            .simultaneousGesture(TapGesture().onEnded { store.send(.guidanceLinkTapped) })
+            // NavigationLink는 화면 이동만 하므로, 같은 탭에서 최근 찾은 책 기록을 남긴다.
             .accessibilityIdentifier("basket-directions")
         }
         .disabled(store.selectedCount == 0)

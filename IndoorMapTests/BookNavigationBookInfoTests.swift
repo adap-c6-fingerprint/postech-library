@@ -25,7 +25,7 @@ enum BookNavigationDetailsTestFixture {
             BookNavigationStop(book: BookHoldingTestData.book(1),
                 holdings: [BookHoldingTestData.holding(1, call: "QA150 .B1 2021")], shelf: origin)]
         return try .init(map: map, shelfLabels: [origin, goal], stops: stops, legs: [data.route, back],
-            graph: data.graph, origin: origin, start: .init(coordinate: nodes[0].coordinate, floorOrdinal: 2,
+            graph: data.graph, start: .init(coordinate: nodes[0].coordinate, floorOrdinal: 2,
                 horizontalAccuracy: nil, timestamp: NavigationGuidanceTestFixture.now, source: .manual))
     }
 }

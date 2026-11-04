@@ -15,7 +15,8 @@ struct ShelfOverlapRequestTests {
         state.map.shelfLabels = labels
         state.holdings[book.id] = .loaded([holding])
         state.resolutions[book.id] = BookHoldingShelfResolver().resolve([holding], on: map, labels: labels)
-        guard case .ready(_, _, let received) = BookRoutePreviewRequest(state: state) else {
+        let start = try await bookRouteTestStart(on: map, labels: labels)
+        guard case .ready(_, _, _, let received) = BookRoutePreviewRequest(state: state, start: start) else {
             Issue.record("확인된 인접 후보를 경로 입력에 전달하지 못했습니다."); return
         }
         #expect(received.count == 1)
