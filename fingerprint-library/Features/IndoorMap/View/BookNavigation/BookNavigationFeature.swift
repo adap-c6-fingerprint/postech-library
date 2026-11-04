@@ -35,6 +35,7 @@ struct BookNavigationFeature {
         var isActive = false
         var subscriptionID = 0
         var isArrivalPresented = false
+        var isSheetExpanded = false
         var automaticallyArrivedStopIndices: Set<Int> = []
         var isCancelConfirmationPresented = false
         var exitReason: ExitReason?
@@ -157,6 +158,7 @@ struct BookNavigationFeature {
         case recenterTapped
         case mapInteractionBegan
         case viewportChanged
+        case sheetExpansionChanged(Bool)
         case arrivalTestTapped
         case arrivalPresentationChanged(Bool)
         case arrivalSpineTask(stopIndex: Int)
@@ -214,6 +216,11 @@ struct BookNavigationFeature {
             case .viewportChanged:
                 guard state.exitReason == nil, !state.isArrivalPresented, state.followsNavigationCamera else { return .none }
                 if !updateCamera(&state, force: true) { fitCurrentRoute(&state) }
+                return .none
+
+            case let .sheetExpansionChanged(expanded):
+                guard state.exitReason == nil, !state.isArrivalPresented else { return .none }
+                state.isSheetExpanded = expanded
                 return .none
 
             case .requestLocationPermission:

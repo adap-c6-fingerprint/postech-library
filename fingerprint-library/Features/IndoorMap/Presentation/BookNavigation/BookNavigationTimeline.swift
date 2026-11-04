@@ -10,6 +10,8 @@ struct BookNavigationTimeline: Equatable {
         let kind: Kind
         let meters: Double
         let startMeters: Double
+        let fromFloorID: UUID
+        let toFloorID: UUID
     }
     enum MarkerKind: Equatable { case walk, elevator, stairs, book, waypoint(Int), waypoints([Int]) }
     struct Marker: Equatable, Identifiable {
@@ -51,7 +53,8 @@ struct BookNavigationTimeline: Equatable {
                 }
                 if meters > 0 {
                     segments.append(.init(id: segments.count, stopIndex: stopIndex, steps: first..<index,
-                        kind: kind, meters: meters, startMeters: offset))
+                        kind: kind, meters: meters, startMeters: offset,
+                        fromFloorID: step.from.floorID, toFloorID: plan.steps[index - 1].to.floorID))
                     // 책 경유지와 다음 보행 시작 아이콘이 같은 자리에 겹치지 않게 한다.
                     if first != 0 || stopIndex == 0 {
                         let marker: MarkerKind = switch kind {
@@ -98,6 +101,25 @@ struct BookNavigationTimeline: Equatable {
 
     func fraction(for segment: Segment) -> Double {
         totalMeters > 0 ? segment.meters / totalMeters : 0
+    }
+
+    func description(for segment: Segment, floors: [IndoorMapFloor]) -> String {
+        let from = floors.first { $0.id == segment.fromFloorID }?.name
+        let to = floors.first { $0.id == segment.toFloorID }?.name
+        switch segment.kind {
+        case .elevator, .stairs:
+            let facility = segment.kind == .elevator ? "엘리베이터" : "계단"
+            if let from, let to { return "\(facility) \(from) → \(to)" }
+            return facility + "로 층 이동"
+        case .walk:
+            let next = segments.first { $0.id == segment.id + 1 && $0.stopIndex == segment.stopIndex }
+            let destination: String = switch next?.kind {
+            case .elevator: "엘리베이터까지"
+            case .stairs: "계단까지"
+            default: "서가까지"
+            }
+            return (from.map { "\($0)에서 " } ?? "") + destination + " 이동"
+        }
     }
 
     func completion(of segment: Segment, stopIndex: Int, progress: RouteGuidanceProgress?) -> Double {

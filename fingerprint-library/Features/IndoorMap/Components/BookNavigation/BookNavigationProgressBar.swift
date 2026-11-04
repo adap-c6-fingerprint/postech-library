@@ -4,6 +4,7 @@ struct BookNavigationProgressBar: View {
     let timeline: BookNavigationTimeline
     let stopIndex: Int
     let progress: RouteGuidanceProgress?
+    var floors: [IndoorMapFloor] = []
 
     var body: some View {
         Group {
@@ -19,6 +20,19 @@ struct BookNavigationProgressBar: View {
                                 .overlay(alignment: .leading) {
                                     Capsule().fill(BookNavigationPalette.accent)
                                         .frame(width: max(0, length - 2) * timeline.completion(of: segment, stopIndex: stopIndex, progress: progress))
+                                }
+                                .overlay {
+                                    if length >= 48 {
+                                        ViewThatFits(in: .horizontal) {
+                                            Text(timeline.description(for: segment, floors: floors)).fixedSize()
+                                            Text(shortTitle(for: segment)).fixedSize()
+                                            Color.clear
+                                        }
+                                        .font(.system(size: 8, weight: .medium))
+                                        .foregroundStyle(timeline.completion(of: segment, stopIndex: stopIndex, progress: progress) > 0.5
+                                            ? Color.black : Color.white.opacity(0.85))
+                                        .padding(.leading, 16).padding(.trailing, 8)
+                                    }
                                 }
                                 .offset(x: x + 12)
                         }
@@ -37,8 +51,17 @@ struct BookNavigationProgressBar: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("경로 진행, \(stopIndex + 1)번째 책 안내 중")
+        .accessibilityLabel("경로 진행, \(stopIndex + 1)번째 책 안내 중. "
+            + timeline.segments.map { timeline.description(for: $0, floors: floors) }.joined(separator: ", "))
         .accessibilityIdentifier("book-navigation-progress")
+    }
+
+    private func shortTitle(for segment: BookNavigationTimeline.Segment) -> String {
+        switch segment.kind {
+        case .walk: "도보 이동"
+        case .elevator: "엘리베이터"
+        case .stairs: "계단"
+        }
     }
 
     @ViewBuilder private func markerView(_ kind: BookNavigationTimeline.MarkerKind) -> some View {
