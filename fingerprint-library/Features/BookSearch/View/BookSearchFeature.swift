@@ -75,6 +75,7 @@ struct BookSearchFeature {
 
         enum Delegate {
             case recommendationLayoutRequested(isExpanded: Bool)
+            case kulumiCoversRequested
         }
     }
     
@@ -267,21 +268,25 @@ struct BookSearchFeature {
                 
             case .searchButtonTapped:
                 let command = state.query.trimmingCharacters(in: .whitespacesAndNewlines)
-                if command == "/ver1" || command == "/ver2" {
-                    state.searchGeneration += 1
-                    state.query = ""
-                    state.books = []
-                    state.isLoading = false
-                    state.errorMessage = nil
-                    state.hasSearched = false
-                    // 화면 비교용 명령은 검색 API나 추천 입력용 검색 기록에 보내지 않는다.
-                    return .merge(
-                        .cancel(id: CancelID.search),
-                        .send(.delegate(.recommendationLayoutRequested(isExpanded: command == "/ver2")))
-                    )
+                let delegate: Action.Delegate
+                switch command {
+                case "/ver1", "/ver2":
+                    delegate = .recommendationLayoutRequested(isExpanded: command == "/ver2")
+                case "/kulumi":
+                    delegate = .kulumiCoversRequested
+                default:
+                    guard !state.isLoading else { return .none }
+                    return search(state: &state)
                 }
-                guard !state.isLoading else { return .none }
-                return search(state: &state)
+
+                state.searchGeneration += 1
+                state.query = ""
+                state.books = []
+                state.isLoading = false
+                state.errorMessage = nil
+                state.hasSearched = false
+                // 숨겨진 명령은 검색 API나 추천 입력용 검색 기록에 보내지 않는다.
+                return .merge(.cancel(id: CancelID.search), .send(.delegate(delegate)))
 
             case .delegate:
                 return .none

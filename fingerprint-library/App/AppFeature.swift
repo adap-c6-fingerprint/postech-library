@@ -61,6 +61,11 @@ struct AppFeature {
                 state.selectedTab = .recommendations
                 return .none
 
+            case .bookSearch(.delegate(.kulumiCoversRequested)):
+                state.home.showsKulumiCovers = true
+                state.selectedTab = .recommendations
+                return .none
+
             case .home(.detail(.presented(.addToBasketButtonTapped))),
                  .home(.basket(.presented(.removeConfirmed))),
                  .home(.detail(.presented(.basket(.presented(.removeConfirmed))))),
