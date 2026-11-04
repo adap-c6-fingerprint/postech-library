@@ -42,6 +42,8 @@ nonisolated struct IndoorRoute: Equatable, Sendable {
     let distanceMeters: Double
     let usesEstimatedDistances: Bool
     let start: RouteStartAttachment
+    /// 탐색 시 확정한 간선별 이동거리. 화면이 층간 거리를 임의로 나누지 않게 보존한다.
+    var edgeDistancesMeters: [Double]? = nil
     /// 그래프에 연결한 출발 노드가 목적지와 같다는 뜻이다. 실제 위치의 도착 판정은 아니다.
     var startsAtDestinationNode: Bool { edgeIDs.isEmpty }
 }

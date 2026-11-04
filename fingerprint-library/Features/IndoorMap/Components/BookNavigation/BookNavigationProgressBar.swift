@@ -1,0 +1,67 @@
+import SwiftUI
+
+struct BookNavigationProgressBar: View {
+    let timeline: BookNavigationTimeline
+    let stopIndex: Int
+    let progress: RouteGuidanceProgress?
+
+    var body: some View {
+        Group {
+            if timeline.hasCompleteDistances {
+                GeometryReader { geometry in
+                    let width = max(0, geometry.size.width - 24)
+                    ZStack(alignment: .leading) {
+                        ForEach(timeline.segments) { segment in
+                            let length = width * timeline.fraction(for: segment)
+                            let x = timeline.totalMeters > 0 ? width * segment.startMeters / timeline.totalMeters : 0
+                            Capsule().fill(.white.opacity(0.16))
+                                .frame(width: max(0, length - 2), height: 14)
+                                .overlay(alignment: .leading) {
+                                    Capsule().fill(BookNavigationPalette.accent)
+                                        .frame(width: max(0, length - 2) * timeline.completion(of: segment, stopIndex: stopIndex, progress: progress))
+                                }
+                                .offset(x: x + 12)
+                        }
+                        ForEach(timeline.markers) { marker in
+                            markerView(marker.kind)
+                                .frame(width: 24, height: 24)
+                                .offset(x: width * marker.fraction)
+                        }
+                    }
+                    .frame(height: geometry.size.height)
+                }
+                .frame(height: 28)
+            } else {
+                Label("구간별 거리 확인 필요", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("경로 진행, \(stopIndex + 1)번째 책 안내 중")
+        .accessibilityIdentifier("book-navigation-progress")
+    }
+
+    @ViewBuilder private func markerView(_ kind: BookNavigationTimeline.MarkerKind) -> some View {
+        switch kind {
+        case let .waypoint(number):
+            Text(String(number)).font(.caption2.bold()).foregroundStyle(.black)
+                .frame(width: 20, height: 20).background(BookNavigationPalette.accent, in: Circle())
+        case let .waypoints(numbers):
+            Text(numbers.map(String.init).joined(separator: "·"))
+                .font(.caption2.bold()).foregroundStyle(.black).fixedSize()
+                .padding(.horizontal, 4).frame(height: 20)
+                .background(BookNavigationPalette.accent, in: Capsule())
+        default:
+            Image(asset(for: kind)).resizable().scaledToFit()
+        }
+    }
+
+    private func asset(for kind: BookNavigationTimeline.MarkerKind) -> String {
+        switch kind {
+        case .walk: "annotation_walk"
+        case .elevator: "annotation_elevator"
+        case .stairs: "annotation_stairs"
+        case .book, .waypoint, .waypoints: "annotation_book"
+        }
+    }
+}

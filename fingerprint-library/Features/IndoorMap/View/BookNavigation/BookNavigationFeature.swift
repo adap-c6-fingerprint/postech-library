@@ -19,6 +19,7 @@ struct BookNavigationFeature {
         let plans: [RouteGuidancePlan?]
         let bookInfos: [BookNavigationBookInfo?]
         let turnArrowsByStop: [[RouteTurnArrow]]
+        let timeline: BookNavigationTimeline
         var currentStopIndex = 0
         var progress: RouteGuidanceProgress?
         var rawPosition: IndoorPosition?
@@ -30,6 +31,7 @@ struct BookNavigationFeature {
         var isActive = false
         var subscriptionID = 0
         var isArrivalPresented = false
+        var automaticallyArrivedStopIndices: Set<Int> = []
         var isCancelConfirmationPresented = false
         var exitReason: ExitReason?
         var cameraRequest: IndoorMapCameraRequest
@@ -42,6 +44,7 @@ struct BookNavigationFeature {
             self.session = session
             let plans = session.legs.map { try? RouteGuidancePlan(route: $0, graph: session.graph) }
             self.plans = plans
+            timeline = .init(plans: plans, bookCount: session.stops.count)
             bookInfos = session.stops.indices.map { BookNavigationBookInfo(session: session, stopIndex: $0) }
             turnArrowsByStop = plans.map { plan in plan.map { RouteTurnArrow.make(from: $0) } ?? [] }
             cameraRequest = .init(id: 0, target: .route(session.legs.first ?? session.route,
@@ -148,6 +151,7 @@ struct BookNavigationFeature {
         case requestLocationPermission
         case recenterTapped
         case mapInteractionBegan
+        case viewportChanged
         case arrivalTestTapped
         case arrivalPresentationChanged(Bool)
         case arrivalSpineTask(stopIndex: Int)
@@ -157,6 +161,7 @@ struct BookNavigationFeature {
         case cancelTapped
         case cancelDismissed
         case cancelConfirmed
+        case nextBookTapped
     }
 
     @Dependency(\.indoorLocationClient) var locationClient
@@ -196,6 +201,11 @@ struct BookNavigationFeature {
             case .mapInteractionBegan:
                 guard state.exitReason == nil else { return .none }
                 state.followsNavigationCamera = false
+                return .none
+
+            case .viewportChanged:
+                guard state.exitReason == nil, !state.isArrivalPresented, state.followsNavigationCamera else { return .none }
+                if !updateCamera(&state, force: true) { fitCurrentRoute(&state) }
                 return .none
 
             case .requestLocationPermission:
@@ -314,6 +324,19 @@ struct BookNavigationFeature {
                 if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
                 return .none
 
+            case .nextBookTapped:
+                guard state.exitReason == nil, state.hasNextStop,
+                      state.progress?.maneuver == .nearDestination else { return .none }
+                state.isCancelConfirmationPresented = false
+                state.currentStopIndex += 1
+                state.followsNavigationCamera = true
+                state.isArrivalPresented = false
+                state.progress = nil
+                fitCurrentRoute(&state)
+                state.statusMessage = "다음 책까지의 위치를 확인하고 있어요."
+                if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
+                return .none
+
             case let .finishFromArrival(stopIndex):
                 guard state.exitReason == nil, state.isArrivalPresented,
                       stopIndex == state.currentStopIndex, !state.hasNextStop,
@@ -410,6 +433,11 @@ struct BookNavigationFeature {
             state.progress = try plan.progress(for: effective, at: now, previous: state.progress,
                 elapsed: previousTimestamp.map { effective.timestamp.timeIntervalSince($0) })
             state.statusMessage = nil
+            if state.isActive, state.exitReason == nil,
+               state.progress?.maneuver == .nearDestination,
+               state.automaticallyArrivedStopIndices.insert(state.currentStopIndex).inserted {
+                state.isArrivalPresented = true
+            }
             updateCamera(&state)
         } catch {
             state.progress = nil

@@ -13,3 +13,10 @@ final class BookNavigationDestinationAnnotation: NSObject, MKAnnotation {
 
     init(_ destination: BookNavigationMapDestination) { self.destination = destination }
 }
+
+final class BookNavigationStartAnnotation: NSObject, MKAnnotation {
+    let coordinate: CLLocationCoordinate2D
+    var title: String? { "출발 위치" }
+
+    init(coordinate: IndoorMapCoordinate) { self.coordinate = coordinate.clCoordinate }
+}

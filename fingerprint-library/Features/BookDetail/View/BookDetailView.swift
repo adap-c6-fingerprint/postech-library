@@ -166,7 +166,7 @@ struct BookDetailView: View {
                 BookShelfMapView(store: $0).toolbar(.visible, for: .navigationBar)
             }
             .fullScreenCover(isPresented: $isRoutePreviewPresented) {
-                BookRoutePreviewView(books: [store.book])
+                BookRoutePreviewView(books: [store.book], entryMode: .direct)
             }
             .fullScreenCover(item: $store.scope(state: \.basket, action: \.basket)) { basketStore in
                 NavigationStack {

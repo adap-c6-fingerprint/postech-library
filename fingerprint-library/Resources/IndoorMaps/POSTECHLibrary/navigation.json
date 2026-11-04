@@ -47,10 +47,18 @@
     {
       "id" : "86ed9f13-d9a4-4e98-9a48-a87859843809",
       "name" : "4층 책장 사이"
+    },
+    {
+      "id" : "4fecf528-6b5d-4d25-b042-c53494b0cb81",
+      "name" : "좌우 연결"
+    },
+    {
+      "id" : "16eb3c1b-2f53-409b-857b-5750dd1103df",
+      "name" : "상하 연결"
     }
   ],
   "feature_links_file" : "navigation-feature-links.json",
-  "feature_links_sha256" : "4aef9a279aaf3727d3dab29d17e84d5b9f2d8265e60ac809fc76119d29053052",
+  "feature_links_sha256" : "fcbe16865196186adf3867ebef90dcc12b4e42ea5e206768f33b4a2bcf51774f",
   "kind" : "navigation-only",
   "layout_version" : "layout-1",
   "levels" : [
@@ -86,6 +94,6 @@
     }
   ],
   "routing_file" : "routing-graph.geojson",
-  "routing_sha256" : "2fe17357e151c5824261fdf9c98b54415a366d64188c5bffc26d659cb7d1bfcb",
+  "routing_sha256" : "8c810fdda5fe462f6a4361d1b5d9db6f9112f8c43149a743ef522eb5ceea21f7",
   "schema_version" : 1
 }

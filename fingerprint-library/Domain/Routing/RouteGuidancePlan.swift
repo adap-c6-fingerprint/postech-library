@@ -57,6 +57,13 @@ nonisolated struct RouteGuidancePlan: Equatable, Sendable {
         }
         let nodes = Dictionary(uniqueKeysWithValues: graph.nodes.map { ($0.id, $0) })
         let edges = Dictionary(uniqueKeysWithValues: graph.edges.map { ($0.id, $0) })
+        if let distances = route.edgeDistancesMeters {
+            guard distances.count == route.edgeIDs.count,
+                  distances.allSatisfy({ $0.isFinite && $0 >= 0 }),
+                  abs(distances.reduce(0, +) - route.distanceMeters) < 0.1 else {
+                throw RouteGuidanceError.invalidRoute
+            }
+        }
         let projectedStart = route.nodeIDs.count == route.edgeIDs.count && !route.edgeIDs.isEmpty
         guard projectedStart || route.nodeIDs.count == route.edgeIDs.count + 1 else {
             throw RouteGuidanceError.invalidRoute
@@ -90,14 +97,15 @@ nonisolated struct RouteGuidancePlan: Equatable, Sendable {
             let changesFloor = from.floorID != to.floorID
             if changesFloor, edge.category == .walkway { throw RouteGuidanceError.invalidRoute }
             pieces.append(.init(from: from, to: to, category: edge.category, groupID: edge.groupID,
-                coordinates: coordinates, meters: changesFloor ? nil : RoutingGeometry.polylineLengthMeters(coordinates)))
+                coordinates: coordinates, meters: route.edgeDistancesMeters?[index]
+                    ?? (changesFloor ? nil : RoutingGeometry.polylineLengthMeters(coordinates))))
         }
         let horizontal = pieces.compactMap(\.meters).reduce(0, +)
         guard horizontal <= route.distanceMeters + 0.1 else { throw RouteGuidanceError.invalidRoute }
         let transitions = pieces.indices.filter { pieces[$0].changesFloor }
         // 층간 간선이 하나면 전체 비용에서 평면 길이를 빼 잔여 비용을 복원할 수 있다.
         // 여러 간선의 개별 비용은 IndoorRoute에 없으므로 임의로 나눠 넣지 않는다.
-        if transitions.count == 1 {
+        if route.edgeDistancesMeters == nil, transitions.count == 1 {
             pieces[transitions[0]].meters = max(0, route.distanceMeters - horizontal)
         }
         var distance = 0.0
@@ -185,7 +193,7 @@ nonisolated struct RouteGuidancePlan: Equatable, Sendable {
         if nearDestination {
             maneuver = .nearDestination
             toManeuver = remaining
-        } else if step.changesFloor, match.fraction < 1 {
+        } else if step.changesFloor, match.fraction < 1 || continuesFloorChange(after: match.index) {
             maneuver = floorInstruction(at: match.index)
             toManeuver = 0
         } else if let upcoming {
@@ -199,6 +207,13 @@ nonisolated struct RouteGuidancePlan: Equatable, Sendable {
         }
         return .init(stepIndex: match.index, fraction: match.fraction, distanceAlongRoute: match.offset,
             coordinate: match.coordinate, maneuver: maneuver, distanceToManeuver: toManeuver, remainingMeters: remaining)
+    }
+
+    private func continuesFloorChange(after index: Int) -> Bool {
+        guard index + 1 < steps.count else { return false }
+        let current = steps[index], next = steps[index + 1]
+        return next.changesFloor && current.category == next.category && current.to.id == next.from.id
+            && (current.to.level > current.from.level) == (next.to.level > next.from.level)
     }
 
     private func floorInstruction(at index: Int) -> RouteManeuver {
