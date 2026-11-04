@@ -7,8 +7,15 @@ struct BookDetailMapView: View {
     let store: StoreOf<BookDetailFeature>
     let mapStore: StoreOf<IndoorMapFeature>
     @Environment(\.dismiss) private var dismiss
-    @State private var sheetFrame: CGRect?
+    @State private var compactSheetFrame: CGRect?
+    @State private var detailCamera: IndoorMapCameraRequest?
     @State private var sheetPresentation = BookDetailSheetPresentation()
+
+    private struct ShelfFocus: Equatable {
+        let featureIDs: [IndoorMapElement.ID]
+        let mapSize: CGSize
+        let bottomInset: CGFloat
+    }
 
     private var context: BookDetailMapContext {
         .init(map: mapStore.map, navigation: mapStore.navigation, labels: mapStore.shelfLabels,
@@ -24,24 +31,35 @@ struct BookDetailMapView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let coveredHeight = sheetFrame.map { max(0, geometry.size.height - $0.minY) } ?? 0
+            let floor = destinationFloor
+            let shelves = floor == nil ? [] : store.destinationPresentation?.shelves ?? []
+            let coveredHeight = compactSheetFrame.map { max(0, geometry.size.height - max(0, $0.minY)) } ?? 0
+            let bottomInset = compactSheetFrame == nil ? 0 : coveredHeight + geometry.safeAreaInsets.bottom
+            let focus = compactSheetFrame != nil && !shelves.isEmpty
+                ? ShelfFocus(featureIDs: shelves.map(\.mapElementID), mapSize: geometry.size, bottomInset: bottomInset)
+                : nil
+            let target = focus.map { IndoorMapCameraRequest.Target.features($0.featureIDs) }
             ZStack(alignment: .bottomTrailing) {
                 IndoorMapView(
                     store: mapStore, showsDestinationCard: false, showsRoute: false,
-                    bottomContentInset: min(coveredHeight, geometry.size.height),
-                    highlightedFeatureIDs: Set(store.destinationPresentation?.shelves.map(\.mapElementID) ?? []),
-                    showsCurrentLocationButton: false,
-                    showsFloorPicker: false
+                    bottomContentInset: bottomInset,
+                    showsCurrentLocationButton: false, showsFloorPicker: false,
+                    bookDetail: .init(floor: floor, shelves: shelves,
+                                      cameraRequest: detailCamera?.target == target ? detailCamera : nil)
                 )
                 .ignoresSafeArea(.container, edges: .top)
 
-                if !sheetPresentation.isExpanded, sheetFrame != nil, let floor = destinationFloor {
+                if !sheetPresentation.isExpanded, compactSheetFrame != nil, let floor {
                     destinationFloorBadge(floor)
                         .padding(.trailing, 16)
                         .padding(.bottom, coveredHeight + 16)
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
+            .onChange(of: focus, initial: true) { _, focus in
+                guard let focus else { return }
+                detailCamera = .init(id: (detailCamera?.id ?? 0) + 1, target: .features(focus.featureIDs))
+            }
         }
         .overlay {
             if sheetPresentation.isExpanded { BookDetailCoverBackground(book: store.book) }
@@ -51,16 +69,11 @@ struct BookDetailMapView: View {
         }
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .preferredColorScheme(.dark)
-        .onChange(of: store.destinationPresentation?.shelves, initial: true) { _, shelves in
-            guard let shelves, let floorID = shelves.first?.floorID,
-                  shelves.allSatisfy({ $0.floorID == floorID }) else { return }
-            if mapStore.selectedFloorID != floorID { mapStore.send(.floorSelected(floorID)) }
-        }
         .task(id: context) { store.send(.mapContextChanged(context)) }
         .background {
             BookDetailSheetPresenter(
                 store: store, mapStore: mapStore, presentation: sheetPresentation,
-                onDismiss: { dismiss() }, onFrameChange: { sheetFrame = $0 }
+                onDismiss: { dismiss() }, onCompactFrameChange: { compactSheetFrame = $0 }
             )
             .id(store.book.id)
         }

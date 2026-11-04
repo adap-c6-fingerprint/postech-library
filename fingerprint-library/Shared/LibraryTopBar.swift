@@ -40,8 +40,7 @@ struct LibraryMapTopBar: View {
     let title: String
     let onFavorites: () -> Void
     let onBasket: () -> Void
-    var onProfile: (() -> Void)?
-    // 홈 지도에서도 마이페이지 버튼을 연결한다. (LibraryMapView가 넘긴다)
+    let onProfile: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {
