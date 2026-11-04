@@ -129,8 +129,11 @@ struct BookNavigationBookFindingView: View {
 
     private var shelf: some View {
         GeometryReader { geometry in
-            let spineWidth = spineWidth
-            let ratio = spineWidth / Design.referenceSpineWidth
+            let image = loadedSpineImage
+            let imageSize = (image ?? UIImage(resource: .bookSpinePlaceholder)).size
+            let spineWidth = Design.spineHeight * imageSize.width / imageSize.height
+            // 책등 위 번호표가 왼쪽 확대 번호표보다 커지지 않도록 배율을 제한한다.
+            let ratio = min(spineWidth / Design.referenceSpineWidth, 1 / Design.smallLabelScale)
             let spineRight = geometry.size.width - Design.spineTrailingInset
             let spineLeft = spineRight - spineWidth
             let smallLabelWidth = Design.smallLabelWidth * ratio
@@ -149,7 +152,7 @@ struct BookNavigationBookFindingView: View {
                     .frame(width: Design.extraBooksRightSize.width, height: Design.extraBooksRightSize.height)
                     .offset(x: spineRight, y: Design.spineHeight - Design.extraBooksRightSize.height)
                 // 피그마 주석: 기준선은 기준도서 우측 세로선. 우측 보조도서는 고정한다.
-                spineView(width: spineWidth)
+                spineView(image: image, width: spineWidth)
                     .offset(x: spineLeft)
                 if let info = bookInformation, let number = callNumber(info) {
                     BookNavigationCallNumberLabel(callNumber: number, width: smallLabelWidth,
@@ -157,7 +160,7 @@ struct BookNavigationBookFindingView: View {
                                                   emphasizesFirstLine: false)
                         .offset(x: spineRight - smallLabelWidth, y: smallLabelTop)
                         .accessibilityHidden(true)
-                    // 피그마 주석: 번호표도 책 두께 비율에 맞게 줄어들거나 늘어난다.
+                    // 정상 책등의 두께를 따르되 확대 번호표 크기까지만 늘어난다.
                     lightBeam(smallLabel: CGRect(x: spineRight - smallLabelWidth, y: smallLabelTop,
                                                  width: smallLabelWidth, height: smallLabelHeight))
                     BookNavigationCallNumberLabel(callNumber: number, width: BookNavigationCallNumberLabel.Design.width,
@@ -173,39 +176,20 @@ struct BookNavigationBookFindingView: View {
     }
 
     @ViewBuilder
-    private func spineView(width: CGFloat) -> some View {
+    private func spineView(image: UIImage?, width: CGFloat) -> some View {
         switch spine {
-        case let .loaded(data):
-            if let image = UIImage(data: data) {
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(width: width, height: Design.spineHeight)
-                    .accessibilityLabel("\(title) 책등")
-                    .accessibilityIdentifier("book-navigation-spine")
-            } else {
-                titleSpine(width: width)
-            }
-        case .unavailable:
-            titleSpine(width: width)
+        case .loaded, .unavailable:
+            Image(uiImage: image ?? UIImage(resource: .bookSpinePlaceholder))
+                .resizable()
+                .frame(width: width, height: Design.spineHeight)
+                .accessibilityLabel(image == nil ? "책등 이미지 준비 중" : "\(title) 책등")
+                .accessibilityIdentifier("book-navigation-spine")
         case .loading, nil:
             Rectangle()
                 .fill(Color.gray.opacity(0.4))
                 .frame(width: width, height: Design.spineHeight)
                 .accessibilityLabel("책등 불러오는 중")
         }
-    }
-
-    private func titleSpine(width: CGFloat) -> some View {
-        Text(title)
-            .typography(.caption2)
-            .foregroundStyle(Color.backgroundDefault)
-            .lineLimit(1)
-            .frame(width: Design.spineHeight - 16)
-            .rotationEffect(.degrees(90))
-            .frame(width: width, height: Design.spineHeight)
-            .background(Color.limeDark)
-            .accessibilityLabel(title)
-        // 책등 이미지가 없으면 최근 찾은 책 책장과 같이 LimeDark 막대에 제목만 세로로 적는다.
     }
 
     /// 확대 번호표에서 책등 위 작은 번호표로 이어지는 빛. 피그마 주석: 책 두께에 따라 꼭짓점을 조절한다.
@@ -252,13 +236,14 @@ struct BookNavigationBookFindingView: View {
 
     // MARK: - 값
 
-    private var spineWidth: CGFloat {
-        guard case let .loaded(data) = spine, let image = UIImage(data: data), image.size.height > 0 else {
-            return Design.referenceSpineWidth
-        }
-        return Design.spineHeight * image.size.width / image.size.height
+    private var loadedSpineImage: UIImage? {
+        guard case let .loaded(data) = spine, let image = UIImage(data: data),
+              image.size.height > 0, image.size.width > 0,
+              image.size.width / image.size.height <= Design.maximumSpineAspectRatio else { return nil }
+        return image
     }
-    // 피그마 주석: 높이는 고정하고, 너비는 책등 원본 비율을 따른다.
+    // 표지처럼 넓은 이미지가 들어오면 책등 대신 준비 중 이미지를 사용한다.
+    // 정상 책등은 높이를 고정하고 원본 너비 비율을 유지한다.
 
     private var title: String {
         guard let info = bookInformation else { return "" }
@@ -292,6 +277,8 @@ struct BookNavigationBookFindingView: View {
         static let spineHeight: CGFloat = 411
         static let referenceSpineWidth: CGFloat = 25
         // 피그마 기준도서(image 129) 크기 25 × 411
+        static let maximumSpineAspectRatio: CGFloat = 1.0 / 3.0
+        // 가로:세로 1:3보다 넓은 이미지는 책등으로 표시하지 않는다.
         static let spineTrailingInset: CGFloat = 78
         // 402pt 화면에서 기준도서 우측 세로선이 x = 324
         static let extraBooksLeftSize = CGSize(width: 298.75, height: 382.75)
