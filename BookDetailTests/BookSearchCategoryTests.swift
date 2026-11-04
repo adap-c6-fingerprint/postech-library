@@ -44,17 +44,33 @@ struct BookSearchRequestTests {
 }
 
 @MainActor
+struct BookSearchFilteringTests {
+    @Test("자료 유형 별칭을 구분하고 미제공·미지원 유형은 전체에만 표시한다", arguments: [
+        ("book", BookSearchCategory.monograph), ("books", .monograph), ("printed_book", .monograph),
+        (" BOOK ", .monograph), ("journal", .journal), ("journals", .journal),
+        (nil, nil), ("", nil), ("article", nil)
+    ] as [(String?, BookSearchCategory?)])
+    func includesResourceType(sample: (String?, BookSearchCategory?)) {
+        let book = categoryBook("result", type: sample.0)
+        #expect(BookSearchCategory.all.includes(book))
+        #expect(BookSearchCategory.monograph.includes(book) == (sample.1 == .monograph))
+        #expect(BookSearchCategory.journal.includes(book) == (sample.1 == .journal))
+    }
+}
+
+@MainActor
 struct BookSearchCategoryTests {
-    @Test("검색 전에는 분류만 선택하고 제출할 때 선택한 유형으로 검색한다")
+    @Test("검색 전에 선택한 탭과 관계없이 전체를 한 번 검색하고 선택한 유형만 표시한다")
     func selectsBeforeSearching() async {
         let calls = Mutex<[BookSearchRequest]>([])
+        let books = [categoryBook("book", type: "book"), categoryBook("journal", type: "journal")]
         let store = TestStore(initialState: BookSearchFeature.State(query: "Nature")) {
             BookSearchFeature()
         } withDependencies: {
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { request in
                 calls.withLock { $0.append(request) }
-                return []
+                return books
             }
             $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: BookSearchResultCache())
         }
@@ -66,25 +82,36 @@ struct BookSearchCategoryTests {
             $0.isLoading = true
             $0.recentQueries = ["Nature"]
         }
-        await store.receive(\.searchSucceeded) { $0.isLoading = false }
-        #expect(calls.withLock { $0 } == [.init(query: "Nature", category: .journal)])
+        await store.receive(\.searchSucceeded) {
+            $0.isLoading = false
+            $0.books = books
+        }
+        #expect(calls.withLock { $0 } == [.init(query: "Nature", category: .all)])
+        #expect(store.state.visibleBooks == [books[1]])
     }
 
-    @Test("검색 후 분류를 바꾸면 재검색하고 돌아온 분류의 캐시를 재사용한다")
-    func searchesAndReusesCategoryCache() async {
+    @Test("검색 후 캐시가 만료돼도 탭 전환은 원본을 필터링하며 추가 조회·기록·로딩이 없다")
+    func filtersWithoutSearchingAfterCacheExpires() async {
+        let now = Mutex(Date(timeIntervalSince1970: 100))
         let calls = Mutex<[BookSearchCategory]>([])
+        let cacheReads = Mutex(0)
         let historyWrites = Mutex(0)
-        let cache = BookSearchResultCache()
-        let allBook = categoryBook("all"), journalBook = categoryBook("journal")
+        let cache = BookSearchResultCache(now: { now.withLock { $0 } })
+        let books = [categoryBook("book", type: "printed_book"),
+                     categoryBook("journal", type: "journals"), categoryBook("unknown")]
         let store = TestStore(initialState: BookSearchFeature.State(query: "Nature")) {
             BookSearchFeature()
         } withDependencies: {
             $0.searchHistoryClient.save = { _ in historyWrites.withLock { $0 += 1 } }
             $0.bookClient.search = { request in
                 calls.withLock { $0.append(request.category) }
-                return request.category == .all ? [allBook] : [journalBook]
+                return books
             }
             $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
+            $0.bookSearchClient.cached = { request in
+                cacheReads.withLock { $0 += 1 }
+                return cache.load(request)
+            }
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration = 1
@@ -94,44 +121,36 @@ struct BookSearchCategoryTests {
         }
         await store.receive(\.searchSucceeded) {
             $0.isLoading = false
-            $0.books = [allBook]
+            $0.books = books
         }
-        await store.send(.categoryChanged(.journal)) {
-            $0.category = .journal
-            $0.searchGeneration = 2
-            $0.isLoading = true
-            $0.books = []
-        }
-        await store.receive(\.searchSucceeded) {
-            $0.isLoading = false
-            $0.books = [journalBook]
-        }
-        await store.send(.categoryChanged(.all)) {
-            $0.category = .all
-            $0.searchGeneration = 3
-            $0.books = [allBook]
-        }
+        now.withLock { $0 = $0.addingTimeInterval(60) }
+        await store.send(.categoryChanged(.monograph)) { $0.category = .monograph }
+        #expect(store.state.visibleBooks == [books[0]])
+        await store.send(.categoryChanged(.journal)) { $0.category = .journal }
+        #expect(store.state.visibleBooks == [books[1]])
+        await store.send(.categoryChanged(.all)) { $0.category = .all }
+        #expect(store.state.visibleBooks == books)
         await store.send(.categoryChanged(.all))
-        #expect(calls.withLock { $0 } == [.all, .journal])
+        #expect(calls.withLock { $0 } == [.all])
+        #expect(cacheReads.withLock { $0 } == 1)
         #expect(historyWrites.withLock { $0 } == 1)
         await store.finish()
     }
 
-    @Test("검색 중 분류 변경은 이전 요청을 취소하고 새 분류 결과만 표시·저장한다")
-    func replacesInFlightSearch() async {
+    @Test("검색 중 탭을 바꿔도 기존 요청을 유지하고 완료 시 현재 탭으로 필터링한다")
+    func filtersInFlightSearchWithoutReplacingIt() async {
         let gate = AsyncStream<Void>.makeStream()
+        let calls = Mutex<[BookSearchCategory]>([])
         let cache = BookSearchResultCache()
-        let oldBook = categoryBook("old"), journalBook = categoryBook("journal")
+        let books = [categoryBook("book", type: "book"), categoryBook("journal", type: "journal")]
         let store = TestStore(initialState: BookSearchFeature.State(query: "Nature")) {
             BookSearchFeature()
         } withDependencies: {
             $0.searchHistoryClient.save = { _ in }
             $0.bookClient.search = { request in
-                if request.category == .all {
-                    for await _ in gate.stream { break }
-                    return [oldBook]
-                }
-                return [journalBook]
+                calls.withLock { $0.append(request.category) }
+                for await _ in gate.stream { break }
+                return books
             }
             $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
@@ -141,84 +160,109 @@ struct BookSearchCategoryTests {
             $0.isLoading = true
             $0.recentQueries = ["Nature"]
         }
-        await store.send(.categoryChanged(.journal)) {
-            $0.category = .journal
-            $0.searchGeneration = 2
-        }
+        await store.send(.categoryChanged(.monograph)) { $0.category = .monograph }
+        await store.send(.categoryChanged(.journal)) { $0.category = .journal }
+        gate.continuation.yield()
+        gate.continuation.finish()
         await store.receive(\.searchSucceeded) {
             $0.isLoading = false
-            $0.books = [journalBook]
+            $0.books = books
         }
-        gate.continuation.finish()
+        #expect(store.state.visibleBooks == [books[1]])
+        #expect(calls.withLock { $0 } == [.all])
+        #expect(cache.load(.init(query: "Nature", category: .all)) == books)
+        #expect(cache.load(.init(query: "Nature", category: .journal)) == nil)
         await store.finish()
-        #expect(cache.load(.init(query: "Nature", category: .all)) == nil)
-        #expect(cache.load(.init(query: "Nature", category: .journal)) == [journalBook])
-        // 취소 직전 이미 큐에 들어간 성공·실패도 최신 결과를 덮지 않는다.
-        await store.send(.searchSucceeded(generation: 1, books: [oldBook]))
-        await store.send(.searchFailed(generation: 1, message: "이전 오류"))
     }
 
-    @Test("조회 중 캐시가 있는 분류로 바꾸면 즉시 표시하고 이전 요청을 취소한다")
-    func switchesToCachedCategoryDuringSearch() async {
+    @Test("선택된 탭에서도 전체 캐시를 즉시 재사용한다")
+    func reusesAllCategoryCache() async {
         let cache = BookSearchResultCache()
-        let journalBook = categoryBook("journal")
-        cache.save([journalBook], for: .init(query: "Nature", category: .journal))
-        let store = TestStore(initialState: BookSearchFeature.State(query: "Nature")) {
+        let books = [categoryBook("book", type: "book"), categoryBook("journal", type: "journal")]
+        cache.save(books, for: .init(query: "Nature", category: .all))
+        let store = TestStore(initialState: BookSearchFeature.State(query: "Nature", category: .journal)) {
             BookSearchFeature()
         } withDependencies: {
             $0.searchHistoryClient.save = { _ in }
-            $0.bookClient.search = { _ in
-                try await Task.sleep(for: .seconds(60))
+            $0.bookSearchClient.cached = { cache.load($0) }
+            $0.bookSearchClient.search = { _, _ in
+                Issue.record("전체 캐시가 있으면 서버에 요청하지 않아야 한다")
                 return []
             }
-            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
         await store.send(.searchButtonTapped) {
             $0.searchGeneration = 1
             $0.hasSearched = true
-            $0.isLoading = true
             $0.recentQueries = ["Nature"]
+            $0.books = books
         }
-        await store.send(.categoryChanged(.journal)) {
-            $0.category = .journal
-            $0.searchGeneration = 2
-            $0.isLoading = false
-            $0.books = [journalBook]
-        }
+        #expect(store.state.visibleBooks == [books[1]])
         await store.finish()
     }
 
-    @Test("같은 분류로 돌아와도 이전 세대의 성공·실패 응답은 무시한다")
-    func rejectsOlderGenerationForSameCategory() async {
+    @Test("선택한 유형의 결과가 없어도 원본은 보존하고 전체 탭으로 돌아올 수 있다")
+    func preservesSourceWhenFilterIsEmpty() async {
+        let books = [categoryBook("book", type: "book"), categoryBook("unknown")]
         let store = TestStore(initialState: BookSearchFeature.State(
-            query: "Nature", category: .all, searchGeneration: 3,
-            isLoading: true, hasSearched: true
+            query: "Nature", books: books, hasSearched: true
         )) { BookSearchFeature() }
-        await store.send(.searchSucceeded(generation: 1, books: [categoryBook("old")]))
-        await store.send(.searchFailed(generation: 1, message: "이전 오류"))
-        await store.send(.searchSucceeded(generation: 3, books: [])) {
-            $0.isLoading = false
-        }
+        await store.send(.categoryChanged(.journal)) { $0.category = .journal }
+        #expect(store.state.visibleBooks.isEmpty)
+        #expect(store.state.books == books)
+        await store.send(.categoryChanged(.all)) { $0.category = .all }
+        #expect(store.state.visibleBooks == books)
+        await store.finish()
     }
 
-    @Test("검색어를 지운 뒤 분류를 바꾸면 통신 없이 검색 상태를 정리한다")
-    func emptyQueryDoesNotSearch() async {
+    @Test("검색 실패 후 탭 전환은 오류를 유지하고 재요청하지 않는다")
+    func preservesFailureUntilExplicitSearch() async {
         let store = TestStore(initialState: BookSearchFeature.State(
-            query: " \n", books: [categoryBook("old")], errorMessage: "이전 오류",
-            hasSearched: true
+            query: "Nature", errorMessage: "네트워크 오류", hasSearched: true
         )) { BookSearchFeature() }
-        await store.send(.categoryChanged(.journal)) {
-            $0.category = .journal
-            $0.searchGeneration = 1
-            $0.books = []
-            $0.errorMessage = nil
-            $0.hasSearched = false
+        await store.send(.categoryChanged(.journal)) { $0.category = .journal }
+        #expect(store.state.errorMessage == "네트워크 오류")
+        await store.finish()
+    }
+
+    @Test("필터 중 새로고침은 전체를 갱신하고 완료 시 최신 탭을 적용한다")
+    func refreshesAllResultsWhileFiltering() async {
+        let calls = Mutex<[BookSearchRequest]>([])
+        let gate = AsyncStream<Void>.makeStream()
+        let oldBooks = [categoryBook("old", type: "journal")]
+        let books = [categoryBook("book", type: "book"), categoryBook("journal", type: "journal")]
+        let cache = BookSearchResultCache()
+        cache.save(oldBooks, for: .init(query: "Nature", category: .all))
+        let store = TestStore(initialState: BookSearchFeature.State(
+            query: "Nature", category: .journal, books: oldBooks, hasSearched: true
+        )) { BookSearchFeature() } withDependencies: {
+            $0.searchHistoryClient.save = { _ in }
+            $0.bookClient.search = { request in
+                calls.withLock { $0.append(request) }
+                for await _ in gate.stream { break }
+                return books
+            }
+            $0.bookSearchClient = .live(bookClient: $0.bookClient, cache: cache)
         }
+        await store.send(.refreshButtonTapped) {
+            $0.searchGeneration = 1
+            $0.isLoading = true
+            $0.recentQueries = ["Nature"]
+        }
+        await store.send(.categoryChanged(.monograph)) { $0.category = .monograph }
+        gate.continuation.yield()
+        gate.continuation.finish()
+        await store.receive(\.searchSucceeded) {
+            $0.isLoading = false
+            $0.books = books
+        }
+        #expect(store.state.visibleBooks == [books[0]])
+        #expect(calls.withLock { $0 } == [.init(query: "Nature", category: .all)])
+        #expect(cache.load(.init(query: "Nature", category: .all)) == books)
         await store.finish()
     }
 }
 
-private nonisolated func categoryBook(_ id: String) -> Book {
+private nonisolated func categoryBook(_ id: String, type: String? = nil) -> Book {
     Book(id: id, isbn: nil, controlNumber: id, title: id, author: "저자",
-         publisher: nil, publicationYear: nil, description: nil, imageURL: nil)
+         publisher: nil, publicationYear: nil, description: nil, imageURL: nil, resourceTypes: type.map { [$0] } ?? [])
 }
