@@ -264,13 +264,6 @@ struct HomeView: View {
             }
             .contentMargins(.horizontal, 16, for: .scrollContent)
             .scrollIndicators(.hidden)
-
-            if store.popularBooks.contains(where: { store.libraryInfo[$0.id] == .failed }) {
-                Button("소장 정보 다시 불러오기") { store.send(.loadLibraryInfo) }
-                    .font(.footnote)
-                    .buttonStyle(.bordered)
-                    .padding(.horizontal, 16)
-            }
         }
     }
 }
