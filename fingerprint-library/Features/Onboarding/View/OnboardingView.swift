@@ -168,7 +168,7 @@ struct OnboardingView: View {
                         .foregroundStyle(.red)
                 }
 
-                Text("*소속과 학과는 나중에 변경 가능해요.")
+                Text("* 소속과 학과는 나중에 변경 가능해요.")
                     .typography(.caption2)
                     .foregroundStyle(Color.onboardingCaption)
                 // ✅ 시안 문구·Caption 2. 학과 입력칸과의 간격 16
