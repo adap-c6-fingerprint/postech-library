@@ -1,4 +1,4 @@
-#if DEBUG && targetEnvironment(simulator)
+#if DEBUG
 import Foundation
 
 /// IndoorPositioningSimulator의 schema 1 중 위치 QA에 필요한 필드만 읽는다.
@@ -62,6 +62,7 @@ nonisolated struct IndoorSimulationStreamDecoder: Sendable {
 
 nonisolated enum IndoorSimulationError: Error, LocalizedError {
     case unsupportedSchema, radioMode, invalidPosition, invalidFrameLength, disconnected, timedOut
+    case invalidConfiguration, multipleControllers
 
     var errorDescription: String? {
         switch self {
@@ -71,6 +72,8 @@ nonisolated enum IndoorSimulationError: Error, LocalizedError {
         case .invalidFrameLength: "시뮬레이터 데이터 크기가 올바르지 않습니다."
         case .disconnected: "시뮬레이터 연결이 끊겼습니다. 다시 연결하고 있어요."
         case .timedOut: "시뮬레이터 위치 수신을 기다리고 있어요."
+        case .invalidConfiguration: "INDOOR_SIMULATOR_HOST와 INDOOR_SIMULATOR_PORT 설정을 확인해주세요."
+        case .multipleControllers: "Mac 시뮬레이터를 하나만 실행하거나 INDOOR_SIMULATOR_HOST로 연결할 Mac을 지정해주세요."
         }
     }
 }

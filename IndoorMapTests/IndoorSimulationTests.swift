@@ -29,6 +29,37 @@ enum SimulationTestFrame {
 }
 
 struct IndoorSimulationFrameTests {
+    @Test("실제 기기는 simulation을 명시할 때만 가상 위치를 사용하고 Simulator의 기본 동작은 유지한다")
+    func selectsPositionSource() {
+        #expect(!IndoorSimulationConfiguration.usesSimulation(environment: [:], isSimulator: false))
+        #expect(IndoorSimulationConfiguration.usesSimulation(
+            environment: ["INDOOR_POSITION_SOURCE": "simulation"], isSimulator: false))
+        #expect(IndoorSimulationConfiguration.usesSimulation(environment: [:], isSimulator: true))
+        for isSimulator in [true, false] {
+            #expect(!IndoorSimulationConfiguration.usesSimulation(
+                environment: ["INDOOR_POSITION_SOURCE": "live"], isSimulator: isSimulator))
+        }
+    }
+
+    @Test("기기는 Bonjour로 Mac을 찾고 Simulator는 localhost를 쓰며 직접 주소도 지정할 수 있다")
+    func selectsControllerAddress() throws {
+        let device = try IndoorSimulationConfiguration.connection(environment: [:], isSimulator: false)
+        #expect(device.host == nil)
+        #expect(device.port == 57_575)
+        #expect(try IndoorSimulationConfiguration.connection(environment: [:], isSimulator: true).host == "127.0.0.1")
+        let direct = try IndoorSimulationConfiguration.connection(environment: [
+            "INDOOR_SIMULATOR_HOST": " 192.168.0.10 ", "INDOOR_SIMULATOR_PORT": "57576"
+        ], isSimulator: false)
+        #expect(direct.host == "192.168.0.10")
+        #expect(direct.port == 57_576)
+        for environment in [["INDOOR_SIMULATOR_HOST": " "], ["INDOOR_SIMULATOR_PORT": "0"],
+                            ["INDOOR_SIMULATOR_PORT": "65536"], ["INDOOR_SIMULATOR_PORT": "tcp"]] {
+            #expect(throws: IndoorSimulationError.self) {
+                try IndoorSimulationConfiguration.connection(environment: environment, isSimulator: false)
+            }
+        }
+    }
+
     @Test("기존 producer의 Date·좌표·음수 층을 그대로 읽고 합성 위치로 구분한다")
     func decodesProducerContract() throws {
         let frame = try JSONDecoder().decode(IndoorSimulationFrame.self,
@@ -94,9 +125,10 @@ struct IndoorSimulationFrameTests {
 extension IndoorMapSerialTests {
     @MainActor
     struct IndoorSimulationTransportTests {
-        @Test("실제 TCP로 분할 프레임·중복 무시·연결 해제·새 세션 재연결과 취소를 검증한다")
-        func transportLifecycle() async throws {
-            let server = try SimulationTCPTestServer()
+        @Test("직접 TCP와 Bonjour 발견으로 분할 수신·중복 무시·단절·재연결·취소를 검증한다", arguments: [false, true])
+        func transportLifecycle(usesBonjour: Bool) async throws {
+            let controllerName = "Po-book test \(UUID())"
+            let server = try SimulationTCPTestServer(serviceName: usesBonjour ? controllerName : nil)
             let port = try await server.start()
             defer { server.stop() }
             server.onConnection = { connection, count in
@@ -121,7 +153,9 @@ extension IndoorMapSerialTests {
                 group.addTask {
                     var events: [IndoorLocationEvent] = []
                     var positions = 0
-                    for await event in IndoorSimulationLocationProvider.events(port: port) {
+                    for await event in IndoorSimulationLocationProvider.events(
+                        host: usesBonjour ? nil : "127.0.0.1", port: port, controllerName: controllerName
+                    ) {
                         events.append(event)
                         if case .position = event {
                             positions += 1
@@ -165,7 +199,12 @@ private final class SimulationTCPTestServer {
     var activeConnections: Int { connections.count }
     var onConnection: ((NWConnection, Int) -> Void)?
 
-    init() throws { listener = try NWListener(using: .tcp, on: .any) }
+    init(serviceName: String? = nil) throws {
+        listener = try NWListener(using: .tcp, on: .any)
+        if let serviceName {
+            listener.service = NWListener.Service(name: serviceName, type: IndoorSimulationConfiguration.serviceType)
+        }
+    }
 
     func start() async throws -> UInt16 {
         try await withCheckedThrowingContinuation { continuation in

@@ -35,7 +35,7 @@
 - [IndoorLocationClient.swift](../fingerprint-library/Clients/Location/IndoorLocationClient.swift): Debug iOS Simulator에서 기본으로 합성 위치를 선택한다. `INDOOR_POSITION_SOURCE=live`이면 실제 위치 공급으로 전환한다.
 - [IndoorSimulationLocationProvider.swift](../fingerprint-library/Clients/Location/Simulation/IndoorSimulationLocationProvider.swift): `127.0.0.1:57575`에 연결하고, 끊어지면 다시 연결한다.
 - [IndoorSimulationFrame.swift](../fingerprint-library/Clients/Location/Simulation/IndoorSimulationFrame.swift): 전송된 위치와 층을 읽는다. Mac 시뮬레이터의 ‘Wi-Fi 위치 기반 측위’를 꺼 `groundTruth` 모드로 사용한다.
-- 시뮬레이터에도 앱과 같은 도서관 도면을 등록하고 같은 층에서 확인한다. Release와 실제 iPhone에는 이 연결을 사용하지 않는다.
+- 시뮬레이터에도 앱과 같은 도서관 도면을 등록하고 같은 층에서 확인한다. 실제 iPhone은 Debug의 `Po-book-Mac-Simulation` scheme으로 연결할 수 있다. [기기 연결 안내](IndoorMapSimulation.md)를 참고한다. Release에는 이 연결을 사용하지 않는다.
 
 ## 검증 범위와 제한
 

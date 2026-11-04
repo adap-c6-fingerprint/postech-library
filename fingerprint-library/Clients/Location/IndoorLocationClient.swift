@@ -30,15 +30,18 @@ nonisolated struct IndoorLocationClient: Sendable {
 
 extension IndoorLocationClient: DependencyKey {
     static let usesSimulation: Bool = {
-        #if DEBUG && targetEnvironment(simulator)
-        return ProcessInfo.processInfo.environment["INDOOR_POSITION_SOURCE"] != "live"
+        #if DEBUG
+        return IndoorSimulationConfiguration.usesSimulation(
+            environment: ProcessInfo.processInfo.environment,
+            isSimulator: IndoorSimulationConfiguration.isSimulator
+        )
         #else
         return false
         #endif
     }()
 
     static let liveValue: Self = {
-        #if DEBUG && targetEnvironment(simulator)
+        #if DEBUG
         if usesSimulation {
             return Self(events: { IndoorSimulationLocationProvider.events() }, requestPermission: {})
         }

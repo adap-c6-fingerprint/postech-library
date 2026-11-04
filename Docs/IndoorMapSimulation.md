@@ -26,10 +26,37 @@ Refs #5. 실제 Blue Dot 측위·보정과 C5 현장 측위 검증은 마지막 
 앱 비활성화 시 위치 연결·진행 중 탐색을 취소하며 완료된 경로는 유지한다. 홈과 경로 설정 사이
 push/pop은 위치 구독을 유지하고, 경로 설정에서 뒤로가면 경로를 닫는다.
 
-실제 Core Location 경로가 필요할 때만 실행 환경 변수 `INDOOR_POSITION_SOURCE=live`를
-설정한다. Release·실제 기기에는 TCP 위치 공급 코드를 포함하지 않는다. 가상 위치는
+Simulator에서 실제 Core Location 경로가 필요할 때는 실행 환경 변수 `INDOOR_POSITION_SOURCE=live`를
+설정한다. 실제 iPhone의 기본 실행은 Core Location을 사용한다. Release에는 TCP 위치 공급 코드를 포함하지 않는다. 가상 위치는
 `IndoorPosition.Source.simulation`으로 전달하며, MapKit 기본 `MKUserLocation`과 겹쳐 표시하지 않는다.
 표시용 정확도 0은 가상 좌표를 그대로 사용한다는 뜻이며 실제 측위 정확도 보장이 아니다.
+
+## 실제 iPhone에서 Mac에 연결하기
+
+1. Mac과 iPhone을 같은 Wi-Fi에 연결한다. USB는 설치·디버깅에 사용할 수 있지만 위치 데이터는 로컬 네트워크로 전달한다.
+2. Mac 시뮬레이터를 최신 소스로 다시 빌드하고 실행한다. 앱과 같은 도서관 도면을 열고 **Wi-Fi 위치 기반 측위**를 끈다.
+3. `fingerprint-library.xcodeproj`의 scheme을 **Po-book-Mac-Simulation**으로 선택하고 실행 대상을 실제 iPhone으로 선택해 `⌘R`한다.
+4. iPhone에서 **로컬 네트워크 접근**을 허용한다. Mac에서도 해당 요청이나 방화벽의 수신 연결 허용 요청이 나타나면 허용한다.
+5. 지도 화면을 열면 Bonjour로 Mac 컨트롤러를 찾아 연결한다. Mac의 **센서 브리지 1개 앱** 표시와 iPhone의 위치·층 변화를 확인한다.
+
+이 scheme은 Debug 실행에만 `INDOOR_POSITION_SOURCE=simulation`을 전달한다.
+앱을 완전히 종료한 뒤 기본 scheme이나 홈 화면에서 새로 실행하면 실제 위치 공급자를 사용한다.
+연결이 끊겨도 실제 위치로 자동 전환하지 않고 가상 위치를 비운 뒤 Mac 재연결을 기다린다.
+
+자동 검색이 차단된 네트워크에서는 **Edit Scheme → Run → Arguments → Environment Variables**에서
+`INDOOR_SIMULATOR_HOST`를 활성화하고 Mac 시뮬레이터의 **iPhone 연결 → 직접 연결 주소** 또는
+Mac의 Wi-Fi IP 주소를 입력한다. 포트 없이 호스트만 입력한다. 기본 포트는 `57575`이며
+별도 포트의 컨트롤러는 `INDOOR_SIMULATOR_PORT`로 지정한다. 여러 Mac 컨트롤러가 검색돼도 직접 주소로 대상을 정할 수 있다.
+클라이언트 간 통신을 막는 게스트·기관 Wi-Fi에서는 직접 주소로도 연결되지 않을 수 있으므로 같은 사설 네트워크에서 확인한다.
+로컬 네트워크 권한을 거부했다면 iPhone의 **설정 → 개인정보 보호 및 보안 → 로컬 네트워크 → Po:book**에서 다시 허용한다.
+
+### 2026-11-04 기기 연결 확장의 검증
+
+- iPhone용 Debug 빌드와 개발 서명이 성공했고, 연결된 `Gosan` iPhone에 설치·실행한 프로세스를 확인했다.
+- iOS Simulator에서 위치 프레임·실행 모드·주소 선택·직접 TCP·Bonjour 검색·단절 후 재연결·구독 취소 검사 8개가 통과했다.
+- 최초 Bonjour 검사는 선언하지 않은 임의 서비스 종류를 사용해 iOS에서 `NoAuth`로 실패했다. 앱에 선언한 `_indoor-sim._tcp`와 고유 인스턴스 이름을 사용하도록 수정한 뒤 통과했다.
+- Mac 컨트롤러의 기존 14개 검사와 앱 번들 빌드가 통과했다.
+- 실제 iPhone의 로컬 네트워크 허용 후 지도 이동·층 변경 수신은 사용자 확인이 남아 있다. 설치·프로세스 실행 확인과 실제 화면 동작 검증을 구분한다.
 
 ## 위치 전송 계약
 
@@ -37,7 +64,7 @@ push/pop은 위치 구독을 유지하고, 경로 설정에서 뒤로가면 경�
 시뮬레이터 코드나 사용자 로컬 경로를 Xcode 패키지 의존성으로 추가하지 않는다.
 앱의 위치 어댑터가 기존 전송 형식 중 필요한 필드를 읽으며 센서 원시값은 사용하지 않는다.
 
-- 주소: `127.0.0.1:57575`, TCP. HTTP 인터페이스가 아니다.
+- 주소: Simulator는 `127.0.0.1:57575`, 실제 iPhone은 Bonjour `_indoor-sim._tcp`로 발견한 Mac의 TCP 주소. 직접 호스트 지정도 지원한다. HTTP 인터페이스가 아니다.
 - 경계: 4바이트 big-endian body 길이 + UTF-8 JSON. 분할 수신·한 번에 여러 프레임 수신을 지원한다.
 - 최대 body 길이: 앱에서 1 MiB. 0 또는 이를 넘는 길이는 연결을 다시 시도한다.
 - `schemaVersion`: 1.
