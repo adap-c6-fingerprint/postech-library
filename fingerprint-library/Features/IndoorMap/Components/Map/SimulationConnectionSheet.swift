@@ -1,34 +1,8 @@
 #if DEBUG
 import SwiftUI
 
-/// Debug 지도에서 앱 재실행 없이 위치 공급자와 Mac 연결을 전환한다.
-struct SimulationConnectionControl: View {
-    let position: IndoorPosition?
-    let floorName: String?
-    let message: String?
-    let onReconnect: () -> Void
-    @State private var isPresented = false
-
-    var body: some View {
-        Button {
-            isPresented = true
-        } label: {
-            Label("시뮬레이터", systemImage: "link")
-                .font(.caption.weight(.semibold))
-                .padding(.horizontal, 12)
-                .padding(.vertical, 9)
-                .background(.regularMaterial, in: Capsule())
-        }
-        .buttonStyle(.plain)
-        .accessibilityIdentifier("simulation-connection-button")
-        .sheet(isPresented: $isPresented) {
-            SimulationConnectionSheet(position: position, floorName: floorName,
-                                      message: message, onReconnect: onReconnect)
-        }
-    }
-}
-
-private struct SimulationConnectionSheet: View {
+/// Debug 전용 진입점에서 표시하는 위치 공급자·Mac 연결 설정 팝업.
+struct SimulationConnectionSheet: View {
     let position: IndoorPosition?
     let floorName: String?
     let message: String?

@@ -46,20 +46,6 @@ struct IndoorMapView: View {
             }
         }
         .background(Color(uiColor: .systemGroupedBackground))
-        #if DEBUG
-        .overlay(alignment: .topTrailing) {
-            if bookDetail == nil, showsCurrentLocationButton {
-                SimulationConnectionControl(
-                    position: store.latestPosition,
-                    floorName: store.map?.floors.first { $0.ordinal == store.latestPosition?.floorOrdinal }?.name,
-                    message: store.locationMessage,
-                    onReconnect: { store.send(.simulationConnectionChanged) }
-                )
-                .padding(.top, 16 + topContentInset)
-                .padding(.trailing, 16)
-            }
-        }
-        #endif
     }
 
     /// 지도 위에 조작 UI를 배치하고, 실제 위치의 층과 별개인 조회 층을 전달한다.
