@@ -23,9 +23,8 @@ struct BookNavigationBottomSheet<Content: View>: View {
         }
         .padding(.bottom, bottomInset)
         .frame(maxWidth: .infinity).frame(height: height)
-        .background(Color(white: 0.14).opacity(0.8))
         .clipShape(RoundedRectangle(cornerRadius: 28))
-        .overlay(RoundedRectangle(cornerRadius: 28).strokeBorder(.black, lineWidth: 1))
+        .glassEffect(.regular.tint(.black.opacity(0.45)), in: RoundedRectangle(cornerRadius: 28))
         .contentShape(Rectangle())
         .simultaneousGesture(DragGesture(minimumDistance: 12).onEnded { value in
             let travel = value.predictedEndTranslation.height
