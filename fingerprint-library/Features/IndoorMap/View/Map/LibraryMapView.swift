@@ -49,7 +49,8 @@ struct LibraryMapView: View {
                     LibraryMapTopBar(
                         title: "홈",
                         onFavorites: { searchStore.send(.favoritesButtonTapped) },
-                        onBasket: { searchStore.send(.basketButtonTapped) }
+                        onBasket: { searchStore.send(.basketButtonTapped) },
+                        onProfile: { searchStore.send(.profileButtonTapped) }
                     )
                 }
                 .toolbar(.hidden, for: .navigationBar)
@@ -86,6 +87,11 @@ struct LibraryMapView: View {
             ) { shelfMapStore in
                 BookShelfMapView(store: shelfMapStore)
                     .toolbar(.visible, for: .navigationBar)
+            }
+            .navigationDestination(
+                item: $searchStore.scope(state: \.myPage, action: \.myPage)
+            ) { myPageStore in
+                MyPageView(store: myPageStore, mapStore: mapStore)
             }
             .navigationDestination(
                 isPresented: Binding(

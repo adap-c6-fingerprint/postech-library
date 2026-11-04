@@ -415,7 +415,10 @@ struct BookDetailView: View {
 
     private var bottomActions: some View {
         HStack(spacing: 12) {
-            Button { isRoutePreviewPresented = true } label: {
+            Button {
+                store.send(.guidanceStarted)
+                isRoutePreviewPresented = true
+            } label: {
                 Text("바로 안내 시작").bookDetailTypography(.bookTitle).frame(maxWidth: .infinity)
             }
             .buttonBorderShape(.capsule)
