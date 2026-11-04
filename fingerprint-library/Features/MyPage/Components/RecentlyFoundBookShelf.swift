@@ -34,22 +34,19 @@ struct RecentlyFoundBookShelf: View {
         // Recommendation Glass Overlay_Large 높이
         let bookLeadingInset: CGFloat
         // 책 묶음 시작 x. 선반 시작 x는 두 화면 모두 RecommendationShelfView.leadingInset(16)
-        let fallbackWidths: ClosedRange<CGFloat>
-        // 책등을 불러오는 중에 쓰는 회색 막대 너비 범위
 
         static let card = Size(
             maxSpineHeight: 213.84, minSpineHeight: 171, shelfHeight: 97.81,
-            bookLeadingInset: 53, fallbackWidths: 18...34
+            bookLeadingInset: 53
         )
         // 피그마 09.마이페이지 (3478:26915)
 
         static let large = Size(
             maxSpineHeight: 378.38, minSpineHeight: 304.5, shelfHeight: 155.46,
-            bookLeadingInset: 84, fallbackWidths: 32...60
+            bookLeadingInset: 84
         )
         // 피그마 09.마이페이지_최근 찾은 목록 (3499:27619)
         // 피그마 프레임이 이미 넘긴 상태라 첫 책 시작 x는 카드 값(53)을 선반 배율(155.46 ÷ 97.81 ≈ 1.59)로 키운 값
-        // 막대 너비는 책 배율(378.38 ÷ 213.84 ≈ 1.77)로 키운 값
     }
 
     var body: some View {
@@ -147,19 +144,10 @@ struct RecentlyFoundBookShelf: View {
 
     /// 책 한 권이 차지할 크기
     private func spineFrame(_ book: Book, image: UIImage?, tallest: CGFloat, hasSameHeights: Bool) -> CGSize {
-        let bar = fallbackSize(book)
-        switch spines[book.id] ?? .loading {
-        case .loading:
-            return bar
-            // 불러오는 중에는 책마다 정해 둔 막대 크기를 쓴다.
-        case .unavailable:
-            return placeholderFrame(height: bar.height)
-        case .loaded:
-            break
-        }
-        guard let image else { return placeholderFrame(height: bar.height) }
-        // 받은 데이터를 이미지로 바꾸지 못한 경우도 책등이 없는 책과 같이 그린다.
-        let heightRatio = hasSameHeights ? bar.height / size.maxSpineHeight : image.size.height / tallest
+        let fallbackHeight = fallbackHeight(book)
+        guard let image else { return placeholderFrame(height: fallbackHeight) }
+        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우는 모두 대체 에셋 크기를 쓴다.
+        let heightRatio = hasSameHeights ? fallbackHeight / size.maxSpineHeight : image.size.height / tallest
         let height = size.maxSpineHeight * heightRatio
         return CGSize(width: height * image.size.width / image.size.height, height: height)
         // 피그마 주석: 가장 큰 책이 최대 높이(카드 213.84, 큰 책장 378.38)가 되도록 모든 책을 같은 배율로 줄이고, 너비는 원본 비율을 지킨다.
@@ -168,24 +156,16 @@ struct RecentlyFoundBookShelf: View {
 
     @ViewBuilder
     private func spine(_ book: Book, image: UIImage?, frame: CGSize) -> some View {
-        switch spines[book.id] ?? .loading {
-        case .loaded:
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(width: frame.width, height: frame.height)
-                    .accessibilityLabel(book.title)
-            } else {
-                placeholderSpine(book, frame: frame)
-            }
-        case .loading:
-            Rectangle()
-                .fill(Color.gray.opacity(0.4))
+        if let image {
+            Image(uiImage: image)
+                .resizable()
                 .frame(width: frame.width, height: frame.height)
-                .accessibilityLabel("책등 불러오는 중")
-        case .unavailable:
+                .accessibilityLabel(book.title)
+        } else {
             placeholderSpine(book, frame: frame)
         }
+        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우 모두 bookSpinePlaceHolder 에셋으로 그린다.
+        // image는 loadedImages에서 .loaded이고 책등 비율인 경우에만 들어온다.
     }
 
     /// bookSpinePlaceHolder 에셋을 원본 비율 그대로 주어진 높이에 맞춘 크기
@@ -209,17 +189,13 @@ struct RecentlyFoundBookShelf: View {
         // 책등 이미지가 없으면 bookSpinePlaceHolder 에셋으로 대신 그린다.
     }
 
-    /// 불러오는 중 막대·대체 에셋은 크기가 모두 같으면 직사각형으로 보이므로, 책마다 다른 크기를 준다.
+    /// 대체 에셋은 높이가 모두 같으면 윗면이 일자로 보이므로, 책마다 다른 높이를 준다.
     /// 피그마 주석: 너비가 같다면 책마다 줄이거나 키워 전체가 직사각형이 되지 않게 한다.
-    private func fallbackSize(_ book: Book) -> CGSize {
+    private func fallbackHeight(_ book: Book) -> CGFloat {
         let seed = book.id.unicodeScalars.reduce(UInt64(5381)) { ($0 &* 33) &+ UInt64($1.value) }
-        // String.hashValue는 실행마다 바뀌므로, 같은 책이 늘 같은 크기가 되도록 직접 계산한다.
-        let widthRatio = CGFloat(seed % 100) / 99
+        // String.hashValue는 실행마다 바뀌므로, 같은 책이 늘 같은 높이가 되도록 직접 계산한다.
         let heightRatio = CGFloat((seed / 100) % 100) / 99
-        let widths = size.fallbackWidths
-        return CGSize(
-            width: widths.lowerBound + (widths.upperBound - widths.lowerBound) * widthRatio,
-            height: size.minSpineHeight + (size.maxSpineHeight - size.minSpineHeight) * heightRatio
-        )
+        return size.minSpineHeight + (size.maxSpineHeight - size.minSpineHeight) * heightRatio
+        // 너비는 placeholderFrame이 에셋 비율로 정한다.
     }
 }
