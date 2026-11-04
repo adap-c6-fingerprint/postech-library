@@ -22,23 +22,41 @@ struct RecentlyFoundBookShelf: View {
     var onSelect: ((Book) -> Void)?
     // 최근 찾은 책 화면에서는 책등 하나하나를 눌러 그 책의 상세로 간다.
 
-    // 피그마 09.마이페이지 (iPhone 17 기준)
-    private enum Design {
-        static let maxSpineHeight: CGFloat = 213.84
+    var size: Size = .card
+    // 마이페이지 카드와 최근 찾은 책 화면은 같은 모양의 책장을 서로 다른 크기로 그린다.
+
+    /// 피그마(iPhone 17 기준)에서 잰 화면별 책장 크기
+    struct Size {
+        let maxSpineHeight: CGFloat
         // 피그마 주석: 각 책의 최대 높이
-        static let minSpineHeight: CGFloat = 171
-        static let shelfHeight: CGFloat = 97.81
+        let minSpineHeight: CGFloat
+        let shelfHeight: CGFloat
         // Recommendation Glass Overlay_Large 높이
-        static let bookLeadingInset: CGFloat = 53
-        // 책 묶음 시작 x. 선반 시작 x는 RecommendationShelfView.leadingInset(16)
-        static let fallbackWidths: ClosedRange<CGFloat> = 18...34
+        let bookLeadingInset: CGFloat
+        // 책 묶음 시작 x. 선반 시작 x는 두 화면 모두 RecommendationShelfView.leadingInset(16)
+        let fallbackWidths: ClosedRange<CGFloat>
+        // 책등 이미지가 없을 때 쓰는 막대 너비 범위
+
+        static let card = Size(
+            maxSpineHeight: 213.84, minSpineHeight: 171, shelfHeight: 97.81,
+            bookLeadingInset: 53, fallbackWidths: 18...34
+        )
+        // 피그마 09.마이페이지 (3478:26915)
+
+        static let large = Size(
+            maxSpineHeight: 378.38, minSpineHeight: 304.5, shelfHeight: 155.46,
+            bookLeadingInset: 84, fallbackWidths: 32...60
+        )
+        // 피그마 09.마이페이지_최근 찾은 목록 (3499:27619)
+        // 피그마 프레임이 이미 넘긴 상태라 첫 책 시작 x는 카드 값(53)을 선반 배율(155.46 ÷ 97.81 ≈ 1.59)로 키운 값
+        // 막대 너비는 책 배율(378.38 ÷ 213.84 ≈ 1.77)로 키운 값
     }
 
     var body: some View {
         shelf
-            .frame(height: Design.maxSpineHeight)
+            .frame(height: size.maxSpineHeight)
             .overlay(alignment: .bottomLeading) {
-                RecommendationShelfView(height: Design.shelfHeight)
+                RecommendationShelfView(height: size.shelfHeight)
                     .padding(.leading, RecommendationShelfView.leadingInset)
             }
             .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
@@ -67,13 +85,13 @@ struct RecentlyFoundBookShelf: View {
             ScrollView(.horizontal) {
                 spineRow
             }
-            .contentMargins(.leading, Design.bookLeadingInset, for: .scrollContent)
+            .contentMargins(.leading, size.bookLeadingInset, for: .scrollContent)
             .contentMargins(.trailing, RecommendationShelfView.leadingInset, for: .scrollContent)
             .scrollIndicators(.hidden)
         } else {
             spineRow
                 .fixedSize(horizontal: true, vertical: false)
-                .padding(.leading, Design.bookLeadingInset)
+                .padding(.leading, size.bookLeadingInset)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .clipped()
             // 책등 줄의 원래 폭을 유지한 채 왼쪽에 붙이고, 화면 밖으로 나간 부분은 잘라 낸다.
@@ -90,12 +108,12 @@ struct RecentlyFoundBookShelf: View {
             ForEach(books) { book in
                 selectable(book) {
                     spine(book, image: images[book.id], tallest: tallest, hasSameHeights: hasSameHeights)
-                        .modifier(RecommendationShelfView.CoverBlur(height: Design.shelfHeight))
+                        .modifier(RecommendationShelfView.CoverBlur(height: size.shelfHeight))
                     // 홈 추천 표지처럼 선반 유리 뒤에 들어간 부분만 흐리게 보인다.
                 }
             }
         }
-        .frame(height: Design.maxSpineHeight, alignment: .bottom)
+        .frame(height: size.maxSpineHeight, alignment: .bottom)
     }
 
     @ViewBuilder
@@ -122,39 +140,39 @@ struct RecentlyFoundBookShelf: View {
 
     @ViewBuilder
     private func spine(_ book: Book, image: UIImage?, tallest: CGFloat, hasSameHeights: Bool) -> some View {
-        let size = fallbackSize(book)
+        let bar = fallbackSize(book)
         switch spines[book.id] ?? .loading {
         case .loaded:
             if let image {
-                let heightRatio = hasSameHeights ? size.height / Design.maxSpineHeight : image.size.height / tallest
-                let height = Design.maxSpineHeight * heightRatio
+                let heightRatio = hasSameHeights ? bar.height / size.maxSpineHeight : image.size.height / tallest
+                let height = size.maxSpineHeight * heightRatio
                 Image(uiImage: image)
                     .resizable()
                     .frame(width: height * image.size.width / image.size.height, height: height)
                     .accessibilityLabel(book.title)
-                // 피그마 주석: 가장 큰 책이 213.84가 되도록 모든 책을 같은 배율로 줄이고, 너비는 원본 비율을 지킨다.
-                // 원본 높이가 모두 같으면 책마다 정해 둔 높이(171~213.84)로 줄여 윗면이 일자가 되지 않게 한다.
+                // 피그마 주석: 가장 큰 책이 최대 높이(카드 213.84, 큰 책장 378.38)가 되도록 모든 책을 같은 배율로 줄이고, 너비는 원본 비율을 지킨다.
+                // 원본 높이가 모두 같으면 책마다 정해 둔 높이(최소~최대 높이 사이)로 줄여 윗면이 일자가 되지 않게 한다.
             } else {
-                titleSpine(book, size: size)
+                titleSpine(book, bar: bar)
             }
         case .loading:
             Rectangle()
                 .fill(Color.gray.opacity(0.4))
-                .frame(width: size.width, height: size.height)
+                .frame(width: bar.width, height: bar.height)
                 .accessibilityLabel("책등 불러오는 중")
         case .unavailable:
-            titleSpine(book, size: size)
+            titleSpine(book, bar: bar)
         }
     }
 
-    private func titleSpine(_ book: Book, size: CGSize) -> some View {
+    private func titleSpine(_ book: Book, bar: CGSize) -> some View {
         Text(book.title)
             .typography(.caption2)
             .foregroundStyle(Color.backgroundDefault)
             .lineLimit(1)
-            .frame(width: size.height - 16)
+            .frame(width: bar.height - 16)
             .rotationEffect(.degrees(90))
-            .frame(width: size.width, height: size.height)
+            .frame(width: bar.width, height: bar.height)
             .background(Color.limeDark)
             .accessibilityLabel(book.title)
         // 책등 이미지가 없으면 LimeDark 막대에 제목만 세로로 적는다.
@@ -167,10 +185,10 @@ struct RecentlyFoundBookShelf: View {
         // String.hashValue는 실행마다 바뀌므로, 같은 책이 늘 같은 크기가 되도록 직접 계산한다.
         let widthRatio = CGFloat(seed % 100) / 99
         let heightRatio = CGFloat((seed / 100) % 100) / 99
-        let widths = Design.fallbackWidths
+        let widths = size.fallbackWidths
         return CGSize(
             width: widths.lowerBound + (widths.upperBound - widths.lowerBound) * widthRatio,
-            height: Design.minSpineHeight + (Design.maxSpineHeight - Design.minSpineHeight) * heightRatio
+            height: size.minSpineHeight + (size.maxSpineHeight - size.minSpineHeight) * heightRatio
         )
     }
 }

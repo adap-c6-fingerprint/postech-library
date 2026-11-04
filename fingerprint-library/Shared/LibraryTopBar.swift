@@ -40,6 +40,8 @@ struct LibraryMapTopBar: View {
     let title: String
     let onFavorites: () -> Void
     let onBasket: () -> Void
+    var onProfile: (() -> Void)?
+    // 홈 지도에서도 프로필 버튼으로 마이페이지를 연다.
 
     var body: some View {
         HStack(spacing: 12) {
@@ -53,7 +55,7 @@ struct LibraryMapTopBar: View {
                     .frame(width: 44, height: 44)
             }
             .glassEffect(.regular.interactive(), in: .capsule)
-            LibraryTopBarButton(title: "마이페이지", symbol: "person.fill", identifier: "library-top-bar-profile", action: nil, size: 44)
+            LibraryTopBarButton(title: "마이페이지", symbol: "person.fill", identifier: "library-top-bar-profile", action: onProfile, size: 44)
                 .frame(width: 44, height: 44)
                 .glassEffect(.regular, in: .circle)
         }

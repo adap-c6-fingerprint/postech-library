@@ -22,7 +22,8 @@ struct RecentlyFoundBookView: View {
                 .padding(.bottom, 64)
             RecentlyFoundBookShelf(
                 books: store.books, spines: store.spines, isScrollable: true,
-                onSelect: { book in store.send(.bookSelected(book)) }
+                onSelect: { book in store.send(.bookSelected(book)) },
+                size: .large
             )
             Spacer()
         }
