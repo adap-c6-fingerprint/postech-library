@@ -91,10 +91,11 @@ struct BookNavigationView: View {
                     spine: store.arrivalSpines[index],
                     onTask: { store.send(.arrivalSpineTask(stopIndex: index)) },
                     onContinue: { store.send(.continueFromArrival(stopIndex: index)) },
-                    onFinish: { store.send(.finishFromArrival(stopIndex: index)) }
+                    onFinish: { store.send(.finishFromArrival(stopIndex: index)) },
+                    onCancel: { store.send(.cancelTapped) }
                 )
                 .id(index)
-                // 기존 BookNavigationArrivalView는 삭제하지 않고 남겨 둔다. (15) 책찾기 화면 문서)
+                // 기존 BookNavigationArrivalView는 책등 화면에서 아래로 3초 이상 당기면 열린다. (15) 책찾기 화면 문서)
             }
         }
         .interactiveDismissDisabled()
