@@ -25,12 +25,12 @@ struct EditMyAffiliationFeature {
         // 2단계: 그룹. 예: "학과 및 학부"
         var selectedAffiliation: AffiliationPath?
         // 3단계: 최종 소속
-        var savedAffiliationKey: [String] = []
-        // 지금 저장돼 있는 소속 경로. 같은 값으로는 저장하지 않는다.
-        var interests: [String] = []
-        // save가 관심 분야까지 함께 받으므로, 저장된 값을 그대로 다시 넘긴다.
-        var isSaving = false
         var errorMessage: String?
+        @Shared(.userProfile) var userProfile: UserProfile?
+        // 앱 전체가 함께 쓰는 프로필. 온보딩에서 저장한 바로 그 값이다.
+
+        var savedAffiliationKey: [String] { userProfile?.affiliationKey ?? [] }
+        // 지금 저장돼 있는 소속 경로. 같은 값으로는 저장하지 않는다.
 
         var parents: [String] { dataset.parents }
 
@@ -44,22 +44,19 @@ struct EditMyAffiliationFeature {
         }
 
         var canSave: Bool {
-            guard let selectedAffiliation, !isSaving else { return false }
+            guard let selectedAffiliation, userProfile != nil else { return false }
             return selectedAffiliation.key != savedAffiliationKey
         }
     }
 
     enum Action {
         case task
-        case profileLoaded(UserProfileSnapshot)
         case optionsLoaded(RecommendationDataset)
         case optionsFailed(String)
         case parentSelected(String)
         case groupSelected(String)
         case affiliationSelected(AffiliationPath)
         case changeButtonTapped
-        case saveSucceeded
-        case saveFailed(String)
         case errorAlertDismissed
         case delegate(Delegate)
 
@@ -70,7 +67,6 @@ struct EditMyAffiliationFeature {
         }
     }
 
-    @Dependency(\.userProfileClient) var userProfileClient
     @Dependency(\.recommendationDatasetClient) var recommendationDatasetClient
 
     var body: some Reducer<State, Action> {
@@ -78,31 +74,20 @@ struct EditMyAffiliationFeature {
             switch action {
             case .task:
                 guard state.dataset.affiliationPaths.isEmpty else { return .none }
-                return .merge(
-                    .run { [userProfileClient] send in
-                        if let profile = try? await userProfileClient.load() {
-                            await send(.profileLoaded(profile))
-                        }
-                    },
-                    .run { [recommendationDatasetClient] send in
-                        do {
-                            await send(.optionsLoaded(try await recommendationDatasetClient.load()))
-                        } catch {
-                            await send(.optionsFailed(error.localizedDescription))
-                        }
+                if state.selectedAffiliation == nil,
+                   let key = state.userProfile?.affiliationKey, let saved = AffiliationPath(key: key) {
+                    state.selectedParent = saved.parent
+                    state.selectedGroup = saved.group
+                    state.selectedAffiliation = saved
+                    // 지금 저장된 소속을 미리 골라 둔 상태로 보여준다.
+                }
+                return .run { [recommendationDatasetClient] send in
+                    do {
+                        await send(.optionsLoaded(try await recommendationDatasetClient.load()))
+                    } catch {
+                        await send(.optionsFailed(error.localizedDescription))
                     }
-                )
-
-            case let .profileLoaded(profile):
-                state.interests = profile.interests
-                state.savedAffiliationKey = profile.affiliationKey
-                let key = profile.affiliationKey
-                guard key.count == 3 else { return .none }
-                state.selectedParent = key[0]
-                state.selectedGroup = key[1]
-                state.selectedAffiliation = AffiliationPath(parent: key[0], group: key[1], name: key[2])
-                // 지금 저장된 소속을 미리 골라 둔 상태로 보여준다.
-                return .none
+                }
 
             case let .optionsLoaded(dataset):
                 state.dataset = dataset
@@ -134,26 +119,18 @@ struct EditMyAffiliationFeature {
                 return .none
 
             case .changeButtonTapped:
-                guard state.canSave, let affiliation = state.selectedAffiliation else { return .none }
-                state.isSaving = true
-                let interests = state.interests
-                return .run { [userProfileClient] send in
-                    do {
-                        try await userProfileClient.save(affiliation.key, affiliation.name, interests)
-                        await send(.saveSucceeded)
-                    } catch {
-                        await send(.saveFailed(error.localizedDescription))
-                    }
+                guard state.canSave, let affiliation = state.selectedAffiliation,
+                      let current = state.userProfile else { return .none }
+                do {
+                    let updated = try current.updatingAffiliation(key: affiliation.key, departmentName: affiliation.name)
+                    // 관심 분야는 그대로 두고 소속·학과만 바꾼다.
+                    state.$userProfile.withLock { $0 = updated }
+                    // 함께 쓰는 프로필을 바꾸면 홈 등 이 값을 쓰는 모든 화면에 바로 반영된다.
+                    return .send(.delegate(.saved))
+                } catch {
+                    state.errorMessage = error.localizedDescription
+                    return .none
                 }
-
-            case .saveSucceeded:
-                state.isSaving = false
-                return .send(.delegate(.saved))
-
-            case let .saveFailed(message):
-                state.isSaving = false
-                state.errorMessage = message
-                return .none
 
             case .errorAlertDismissed:
                 state.errorMessage = nil

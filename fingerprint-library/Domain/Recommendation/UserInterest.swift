@@ -9,7 +9,7 @@ import Foundation
 
 nonisolated enum UserInterest: String, CaseIterable, Codable, Identifiable, Sendable {
 // 온보딩에서 고르는 관심사 키워드.
-// 각 키워드는 LCC 대분류 알파벳에 맵핑되어 UserProfile.interests에 알파벳으로 저장된다.
+// 각 키워드는 LCC 대분류 알파벳에 맵핑된다. 온보딩은 이슈 #237부터 이 키워드 대신 선호 분류 이름을 저장한다.
 // 총류(A)와 서지학·도서관학(Z)은 관심사 키워드에서 제외한다.
     case philosophyPsychologyReligion
     case archaeology

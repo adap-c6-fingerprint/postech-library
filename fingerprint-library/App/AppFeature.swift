@@ -27,6 +27,8 @@ struct AppFeature {
         // 저장된 프로필을 확인하기 전에는 탭 화면도 온보딩도 띄우지 않는다.
         var hasCheckedProfile = false
         var onboarding: OnboardingFeature.State?
+        @Shared(.userProfile) var userProfile: UserProfile?
+        // 앱 전체가 함께 쓰는 프로필 하나. nil이면 온보딩을 보여준다.
     }
 
     enum Action {
@@ -39,12 +41,13 @@ struct AppFeature {
         case appEnteredBackground
         case appBecameActive
         case profileCheckRequested
-        case profileChecked(hasProfile: Bool)
+        case legacyProfileLoaded(UserProfile?)
+        // 새 저장소가 비어 있을 때 이전 저장소(SwiftData)에서 읽어 온 프로필
         case onboarding(OnboardingFeature.Action)
     }
 
     @Dependency(\.bookBasketClient) var bookBasketClient
-    @Dependency(\.userProfileClient) var userProfileClient
+    @Dependency(\.legacyUserProfileClient) var legacyUserProfileClient
 
     var body: some Reducer<State, Action> {
         Scope(state: \.home, action: \.home) { HomeFeature() }
@@ -132,14 +135,22 @@ struct AppFeature {
 
             case .profileCheckRequested:
                 guard !state.hasCheckedProfile else { return .none }
-                return .run { [userProfileClient] send in
-                    // 확인에 실패하면 온보딩을 보여준다. 저장할 때 기존 프로필이 있으면 덮어쓴다.
-                    let hasProfile = (try? await userProfileClient.hasProfile()) ?? false
-                    await send(.profileChecked(hasProfile: hasProfile))
+                if state.userProfile != nil {
+                    state.hasCheckedProfile = true
+                    return .none
                 }
-            case let .profileChecked(hasProfile):
+                // 새 저장소가 비어 있으면, 이전 버전에서 온보딩을 마친 기기일 수 있으니 이전 저장소를 한 번 확인한다.
+                return .run { [legacyUserProfileClient] send in
+                    await send(.legacyProfileLoaded(await legacyUserProfileClient.load()))
+                }
+            case let .legacyProfileLoaded(profile):
                 state.hasCheckedProfile = true
-                state.onboarding = hasProfile ? nil : OnboardingFeature.State()
+                if let profile {
+                    state.$userProfile.withLock { $0 = profile }
+                    // 이전 값을 새 저장소로 옮긴다. 이후로는 새 저장소만 쓴다.
+                } else {
+                    state.onboarding = OnboardingFeature.State()
+                }
                 return .none
             case .onboarding(.delegate(.completed)):
                 state.onboarding = nil
