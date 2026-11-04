@@ -116,10 +116,11 @@ struct HomeView: View {
     }
     
     private var recommendationSection: some View {
+        let recipient = store.showsKulumiCovers ? "쿠루미에게" : "당신에게"
         let count = store.showsKulumiCovers ? Self.kulumiCoverNames.count : store.recommendationCount
 
         return VStack(alignment: .leading, spacing: 20) {
-            Text("당신에게\n추천하는 책 \(count)선.")
+            Text("\(recipient)\n추천하는 책 \(count)선.")
                 .font(.system(size: 22, weight: .semibold))
                 .lineSpacing(4)
                 .fixedSize(horizontal: false, vertical: true)
@@ -211,7 +212,7 @@ struct HomeView: View {
             .buttonStyle(.plain)
             .accessibilityLabel(book.title)
         } else {
-            cover.accessibilityLabel("쿨루미 사진")
+            cover.accessibilityLabel("쿠루미 사진")
         }
     }
     
