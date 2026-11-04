@@ -27,7 +27,8 @@ struct HomeView: View {
         var spacing: CGFloat { self == .expanded ? 22 : 16 }
         var horizontalInset: CGFloat { self == .expanded ? 66 : 48 }
         var bottomInset: CGFloat { self == .expanded ? 22 : 14 }
-        var shelfHeight: CGFloat { self == .expanded ? 156 : 106 }
+        var shelfHeight: CGFloat { self == .expanded ? 156 : 110 }
+        var shelfWidth: CGFloat? { self == .standard ? 707 : nil }
         var carouselHeight: CGFloat { coverHeight + bottomInset }
     }
 
@@ -62,16 +63,15 @@ struct HomeView: View {
             }
         }
         .background(Color(uiColor: .systemBackground))
-        .toolbar {
-            LibraryTopBar(
+        .safeAreaInset(edge: .top, spacing: 0) {
+            LibraryTabTopBar(
                 title: "추천",
                 onFavorites: { store.send(.favoritesButtonTapped) },
                 onBasket: { store.send(.basketButtonTapped) },
                 onProfile: { store.send(.profileButtonTapped) }
             )
         }
-        .toolbarBackground(.hidden, for: .navigationBar)
-        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar(.hidden, for: .navigationBar)
         .task(id: upcomingCoverURLs) {
             await store.send(.upcomingCoversChanged(upcomingCoverURLs)).finish()
         }
@@ -188,8 +188,12 @@ struct HomeView: View {
         .padding(.bottom, recommendationLayout.bottomInset)
         .frame(height: recommendationLayout.carouselHeight)
         .overlay(alignment: .bottomLeading) {
-            RecommendationShelfView(height: recommendationLayout.shelfHeight)
-                .padding(.leading, RecommendationShelfView.leadingInset)
+            RecommendationShelfView(
+                height: recommendationLayout.shelfHeight,
+                width: recommendationLayout.shelfWidth,
+                fillOpacity: 0.3
+            )
+            .padding(.leading, RecommendationShelfView.leadingInset)
         }
         .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
         .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
@@ -206,6 +210,7 @@ struct HomeView: View {
             height: recommendationLayout.coverHeight,
             cornerRadius: recommendationLayout.coverCornerRadius,
             shelfHeight: recommendationLayout.shelfHeight,
+            shelfWidth: recommendationLayout.shelfWidth,
             photoName: photoName
         )
 
@@ -280,10 +285,11 @@ private struct HomeBookCover: View {
     let height: CGFloat
     var cornerRadius: CGFloat = 4
     var shelfHeight: CGFloat? = nil
+    var shelfWidth: CGFloat? = nil
     var photoName: String? = nil
     
     var body: some View {
-        let style = CoverStyle(cornerRadius: cornerRadius, shelfHeight: shelfHeight)
+        let style = CoverStyle(cornerRadius: cornerRadius, shelfHeight: shelfHeight, shelfWidth: shelfWidth)
 
         Group {
             if let photoName {
@@ -314,13 +320,14 @@ private struct HomeBookCover: View {
     private struct CoverStyle: ViewModifier {
         let cornerRadius: CGFloat
         let shelfHeight: CGFloat?
+        let shelfWidth: CGFloat?
 
         func body(content: Content) -> some View {
             let cover = content
                 .background(Color.primary.opacity(0.04))
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             if let shelfHeight {
-                cover.modifier(RecommendationShelfView.CoverBlur(height: shelfHeight))
+                cover.modifier(RecommendationShelfView.CoverBlur(height: shelfHeight, width: shelfWidth))
             } else {
                 cover
             }

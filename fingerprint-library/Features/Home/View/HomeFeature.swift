@@ -9,7 +9,7 @@ struct HomeFeature {
         var popularBooks: [Book] = []
         var departmentRecommendations: DepartmentRecommendationsState = .loading
         var departmentName = ""
-        var isRecommendationExpanded = false
+        var isRecommendationExpanded = true
         var showsKulumiCovers = false
         var isFirstVisitAfterOnboarding = false
         // ✅ 온보딩을 마치고 처음 홈을 여는 경우 true. 학과별 추천을 하드데이터 랜덤 6권으로만 보여준다. (Q4)
