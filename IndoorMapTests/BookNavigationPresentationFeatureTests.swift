@@ -45,23 +45,34 @@ extension IndoorMapSerialTests {
         @Test("현재 서가 도착 후에도 현재 위치에서 다음 책 경로로 전환한다")
         func nextBookAfterArrival() async throws {
             let session = try NavigationGuidanceTestFixture.session()
-            let position = NavigationGuidanceTestFixture.position(x: 20, y: 20)
+            let position = NavigationGuidanceTestFixture.position(x: 20, y: 19)
+            let route = NavigationGuidanceTestFixture.make(reversed: true, projectedStart: position.coordinate).route
             let recalculated = try BookNavigationSession(map: session.map, shelfLabels: session.shelfLabels,
-                stops: [session.stops[1]], legs: [session.legs[1]], graph: session.graph, start: position)
+                stops: [session.stops[1]], legs: [route], graph: session.graph, start: position)
             var initial = BookNavigationFeature.State(session: session)
             initial.isCancelConfirmationPresented = true
+            initial.isArrivalPresented = true
+            initial.automaticallyArrivedStopIndices = [0]
             initial.rawPosition = position
             initial.latestPosition = position
             initial.progress = try initial.currentPlan?.progress(for: position, at: position.timestamp)
+            #expect(initial.progress?.maneuver == .nearDestination)
             let store = TestStore(initialState: initial) { BookNavigationFeature() } withDependencies: {
                 $0.date = .constant(position.timestamp)
-                $0.bookRoutePreviewClient.load = { _, _, _, _ in recalculated }
+                $0.bookRoutePreviewClient.load = { _, _, start, _ in
+                    #expect(start == position)
+                    return recalculated
+                }
             }
             store.exhaustivity = .off
             await store.send(.nextBookTapped)
-            await store.receive(.nextBookRouteLoaded(requestID: 1, stopIndex: 1, session.legs[1]))
+            await store.receive(.nextBookRouteLoaded(requestID: 1, stopIndex: 1, route))
             #expect(store.state.currentStop?.book == session.stops[1].book)
-            #expect(store.state.currentRoute == session.legs[1])
+            #expect(store.state.currentRoute == route)
+            #expect(store.state.currentRoute?.start.actualCoordinate == position.coordinate)
+            #expect(store.state.currentRoute != session.legs[1], "재계산된 경로를 무시하면 안 됩니다")
+            #expect(!store.state.isArrivalPresented)
+            #expect(!store.state.isReroutingToNextBook)
             await store.send(.nextBookTapped)
             await store.finish()
         }
