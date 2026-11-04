@@ -72,24 +72,17 @@ struct EditMyAffiliationView: View {
                     .disabled(!isParentEnabled)
                 }
 
-                let isGroupEnabled = store.selectedParent != nil && !store.groups.isEmpty
-                field(title: "세부 분류", isEnabled: isGroupEnabled) {
-                    Menu {
-                        ForEach(store.groups, id: \.self) { group in
-                            Button(group) { store.send(.groupSelected(group)) }
-                        }
-                    } label: {
-                        fieldRow(store.selectedGroup, placeholder: "세부 분류를 선택해주세요", isEnabled: isGroupEnabled)
-                    }
-                    .disabled(!isGroupEnabled)
-                }
-
-                let isDepartmentEnabled = store.selectedGroup != nil && !store.affiliationChoices.isEmpty
+                let isDepartmentEnabled = store.selectedParent != nil && !store.affiliationChoices.isEmpty
                 field(title: "학과", isEnabled: isDepartmentEnabled) {
                     Menu {
-                        ForEach(store.affiliationChoices, id: \.self) { path in
-                            Button(path.name) { store.send(.affiliationSelected(path)) }
+                        ForEach(store.groups, id: \.self) { group in
+                            Section(group) {
+                                ForEach(store.state.affiliationChoices(in: group), id: \.self) { path in
+                                    Button(path.name) { store.send(.affiliationSelected(path)) }
+                                }
+                            }
                         }
+                        // 그룹(예: "학과 및 학부")을 묶음 제목으로 학과를 나눠 보여준다.
                     } label: {
                         fieldRow(store.selectedAffiliation?.name, placeholder: "학과를 선택해주세요", isEnabled: isDepartmentEnabled)
                     }
