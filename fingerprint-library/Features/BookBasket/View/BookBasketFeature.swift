@@ -41,6 +41,8 @@ struct BookBasketFeature {
         case selectionToggled(Book.ID)
         case selectionLimitAlertDismissed
         case startGuidanceButtonTapped
+        case guidanceLinkTapped
+        // "안내 시작하기"를 눌러 경로 미리보기로 넘어갈 때. 마이페이지 최근 찾은 책에 기록한다.
         case removeButtonTapped
         case removeConfirmed
         case removeAlertDismissed
@@ -58,6 +60,7 @@ struct BookBasketFeature {
 
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
+    @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case libraryInfo
@@ -104,6 +107,13 @@ struct BookBasketFeature {
                     return .none
                 }
                 return .send(.delegate(.startGuidance(books)))
+
+            case .guidanceLinkTapped:
+                let books = state.selectedBooks
+                guard !books.isEmpty else { return .none }
+                recentlyFoundBooksClient.record(books)
+                // 고른 순서대로 책장 왼쪽부터 꽂힌다.
+                return .none
 
             case .removeButtonTapped:
                 guard !state.selectedBooks.isEmpty else { return .none }
