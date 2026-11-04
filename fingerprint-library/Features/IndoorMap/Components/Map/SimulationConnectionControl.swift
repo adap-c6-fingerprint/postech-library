@@ -91,7 +91,7 @@ private struct SimulationConnectionSheet: View {
                         Text(validationMessage).font(.caption).foregroundStyle(.red)
                     }
                 } footer: {
-                    Text("선택한 설정은 Debug 앱에 저장됩니다. 앱을 다시 켜도 유지되며 이 화면에서 실제 위치로 전환할 수 있습니다.")
+                    Text("Debug 앱은 실제 iPhone에서도 Mac 시뮬레이터에 기본 연결합니다. 선택한 설정은 저장되며 이 화면에서 실제 위치로 전환할 수 있습니다. 배포용 앱은 Core Location을 사용합니다.")
                 }
             }
             .navigationTitle("위치 시뮬레이터")
@@ -112,8 +112,7 @@ private struct SimulationConnectionSheet: View {
 
     private func reload() {
         let settings = IndoorSimulationSettings.load()
-        usesSimulation = settings.usesSimulation(environment: ProcessInfo.processInfo.environment,
-                                                isSimulator: IndoorSimulationConfiguration.isSimulator)
+        usesSimulation = settings.usesSimulation(environment: ProcessInfo.processInfo.environment)
         // 저장한 값이 없을 때만 실행 환경의 직접 주소를 표시한다.
         host = settings.host ?? ProcessInfo.processInfo.environment["INDOOR_SIMULATOR_HOST"] ?? ""
         port = settings.port.map(String.init)

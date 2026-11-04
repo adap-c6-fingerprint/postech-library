@@ -15,11 +15,11 @@ nonisolated struct IndoorSimulationConfiguration: Equatable, Sendable {
         #endif
     }
 
-    static func usesSimulation(environment: [String: String], isSimulator: Bool) -> Bool {
+    static func usesSimulation(environment: [String: String]) -> Bool {
         switch environment["INDOOR_POSITION_SOURCE"] {
         case "simulation": true
         case "live": false
-        default: isSimulator
+        default: true
         }
     }
 

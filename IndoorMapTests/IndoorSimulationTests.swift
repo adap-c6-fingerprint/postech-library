@@ -39,13 +39,13 @@ struct IndoorSimulationFrameTests {
         let loaded = IndoorSimulationSettings.load(from: defaults)
         #expect(loaded == settings)
         let environment = ["INDOOR_POSITION_SOURCE": "live", "INDOOR_SIMULATOR_HOST": "old.local"]
-        #expect(loaded.usesSimulation(environment: environment, isSimulator: false))
+        #expect(loaded.usesSimulation(environment: environment))
         let connection = try loaded.connection(environment: environment, isSimulator: false)
         #expect(connection.host == "192.168.0.20")
         #expect(connection.port == 57576)
         IndoorSimulationSettings.reset(in: defaults)
         #expect(IndoorSimulationSettings.load(from: defaults) == IndoorSimulationSettings())
-        #expect(!IndoorSimulationSettings.load(from: defaults).usesSimulation(environment: environment, isSimulator: false))
+        #expect(!IndoorSimulationSettings.load(from: defaults).usesSimulation(environment: environment))
     }
 
     @Test("자동 주소 선택은 이전 직접 주소를 해제하고 실제 위치 전환도 실행 설정을 덮어쓴다")
@@ -54,7 +54,7 @@ struct IndoorSimulationFrameTests {
         let automatic = IndoorSimulationSettings(source: .simulation, host: "", port: 57575)
         #expect(try automatic.connection(environment: environment, isSimulator: false).host == nil)
         #expect(try automatic.connection(environment: environment, isSimulator: true).host == "127.0.0.1")
-        #expect(!IndoorSimulationSettings(source: .live).usesSimulation(environment: environment, isSimulator: true))
+        #expect(!IndoorSimulationSettings(source: .live).usesSimulation(environment: environment))
         #expect(throws: IndoorSimulationError.self) {
             try IndoorSimulationSettings(source: .simulation, host: "http://old.local", port: 57575)
                 .connection(environment: [:], isSimulator: false)
@@ -65,15 +65,15 @@ struct IndoorSimulationFrameTests {
         }
     }
 
-    @Test("실제 기기는 simulation을 명시할 때만 가상 위치를 사용하고 Simulator의 기본 동작은 유지한다")
-    func selectsPositionSource() {
-        #expect(!IndoorSimulationConfiguration.usesSimulation(environment: [:], isSimulator: false))
-        #expect(IndoorSimulationConfiguration.usesSimulation(
-            environment: ["INDOOR_POSITION_SOURCE": "simulation"], isSimulator: false))
-        #expect(IndoorSimulationConfiguration.usesSimulation(environment: [:], isSimulator: true))
+    @Test("Debug는 기기 종류와 무관하게 가상 위치가 기본이고 live를 명시할 때 실제 위치를 선택한다")
+    func selectsPositionSource() throws {
+        #expect(IndoorSimulationConfiguration.usesSimulation(environment: [:]))
+        #expect(IndoorSimulationConfiguration.usesSimulation(environment: ["INDOOR_POSITION_SOURCE": "simulation"]))
+        #expect(!IndoorSimulationConfiguration.usesSimulation(environment: ["INDOOR_POSITION_SOURCE": "live"]))
+        #expect(IndoorSimulationSettings().usesSimulation(environment: [:]))
         for isSimulator in [true, false] {
-            #expect(!IndoorSimulationConfiguration.usesSimulation(
-                environment: ["INDOOR_POSITION_SOURCE": "live"], isSimulator: isSimulator))
+            let configuration = try IndoorSimulationSettings().connection(environment: [:], isSimulator: isSimulator)
+            #expect(configuration.host == (isSimulator ? "127.0.0.1" : nil))
         }
     }
 

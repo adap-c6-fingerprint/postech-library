@@ -24,10 +24,10 @@ nonisolated struct IndoorSimulationSettings: Codable, Equatable, Sendable {
         defaults.removeObject(forKey: storageKey)
     }
 
-    func usesSimulation(environment: [String: String], isSimulator: Bool) -> Bool {
+    func usesSimulation(environment: [String: String]) -> Bool {
         switch source {
         case .automatic:
-            IndoorSimulationConfiguration.usesSimulation(environment: environment, isSimulator: isSimulator)
+            IndoorSimulationConfiguration.usesSimulation(environment: environment)
         case .simulation: true
         case .live: false
         }

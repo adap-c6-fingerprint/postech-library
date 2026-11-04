@@ -32,8 +32,7 @@ extension IndoorLocationClient: DependencyKey {
     nonisolated static var usesSimulation: Bool {
         #if DEBUG
         return IndoorSimulationSettings.load().usesSimulation(
-            environment: ProcessInfo.processInfo.environment,
-            isSimulator: IndoorSimulationConfiguration.isSimulator
+            environment: ProcessInfo.processInfo.environment
         )
         #else
         return false

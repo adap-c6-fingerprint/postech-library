@@ -43,12 +43,18 @@ Debug 빌드의 지도 오른쪽 위 **시뮬레이터** 버튼으로 연결 설
 앱 비활성화 시 위치 연결·진행 중 탐색을 취소하며 완료된 경로는 유지한다. 홈과 경로 설정 사이
 push/pop은 위치 구독을 유지하고, 경로 설정에서 뒤로가면 경로를 닫는다.
 
-Simulator에서 실제 Core Location 경로가 필요할 때는 실행 환경 변수 `INDOOR_POSITION_SOURCE=live`를
-설정한다. 실제 iPhone의 기본 실행은 Core Location을 사용한다. Release에는 TCP 위치 공급 코드를 포함하지 않는다. 가상 위치는
+Debug는 iOS Simulator와 실제 iPhone 모두 Mac의 가상 위치가 기본이다. 실제 Core Location 경로가 필요할 때는 연결 화면에서 실제 위치로 전환하거나 `INDOOR_POSITION_SOURCE=live`를 지정한다. Release는 항상 Core Location을 사용하며 TCP 위치 공급 코드를 포함하지 않는다. 가상 위치는
 `IndoorPosition.Source.simulation`으로 전달하며, MapKit 기본 `MKUserLocation`과 겹쳐 표시하지 않는다.
 표시용 정확도 0은 가상 좌표를 그대로 사용한다는 뜻이며 실제 측위 정확도 보장이 아니다.
 
 ## 실제 iPhone에서 Mac에 연결하기
+
+### Debug 기본값과 배포 정책
+
+- Debug는 실제 iPhone과 iOS Simulator를 구분해 공급자를 선택하지 않는다. 사용자 설정과 `live` 명시가 없으면 Mac 가상 위치가 기본이다.
+- 기기 종류는 접속 주소에만 영향을 준다. Simulator는 localhost, 실제 iPhone은 Bonjour로 Mac을 검색한다.
+- 일반 Debug scheme으로 서명한 앱을 실제 iPhone에 설치하고, 홈 화면에서 직접 실행해 **Mac 위치 수신 중** 표시를 사용자 확인했다.
+- 관련 iOS 검사 20개와 Debug 기기 빌드가 통과했다. Release도 `automatic` 채널로 빌드한 뒤 바이너리에 가상 위치 공급자·Debug 설정·연결 화면 심볼이 없고 Core Location 공급자가 남아 있는 것을 확인했다. Release 검증에는 유효한 형식의 비운영 테스트 토큰을 사용했고 이 산출물은 기기에 설치·배포하지 않았다.
 
 1. Mac과 iPhone을 같은 Wi-Fi에 연결한다. USB는 설치·디버깅에 사용할 수 있지만 위치 데이터는 로컬 네트워크로 전달한다.
 2. Mac 시뮬레이터를 최신 소스로 다시 빌드하고 실행한다. 앱과 같은 도서관 도면을 열고 **Wi-Fi 위치 기반 측위**를 끈다.
@@ -56,8 +62,7 @@ Simulator에서 실제 Core Location 경로가 필요할 때는 실행 환경 �
 4. iPhone에서 **로컬 네트워크 접근**을 허용한다. Mac에서도 해당 요청이나 방화벽의 수신 연결 허용 요청이 나타나면 허용한다.
 5. 지도 화면을 열면 Bonjour로 Mac 컨트롤러를 찾아 연결한다. Mac의 **센서 브리지 1개 앱** 표시와 iPhone의 위치·층 변화를 확인한다.
 
-이 scheme은 Debug 실행에만 `INDOOR_POSITION_SOURCE=simulation`을 전달한다.
-앱 안에 별도로 저장한 설정이 없다면, 앱을 완전히 종료한 뒤 기본 scheme이나 홈 화면에서 새로 실행하면 실제 위치 공급자를 사용한다. 화면에서 Mac 시뮬레이터 사용을 저장한 경우에는 그 설정이 유지된다.
+이 scheme은 Debug 실행에 `INDOOR_POSITION_SOURCE=simulation`을 명시하지만 필수는 아니다. 일반 `fingerprint-library` scheme의 Debug와 홈 화면에서 직접 실행한 Debug 설치본도 기본으로 Mac에 연결한다. 화면에서 실제 위치 사용을 명시해 저장했다면 그 선택을 유지하며, **실행 설정으로 되돌리기**를 누르면 Debug의 기본 가상 위치로 복원한다.
 연결이 끊겨도 실제 위치로 자동 전환하지 않고 가상 위치를 비운 뒤 Mac 재연결을 기다린다.
 
 자동 검색이 차단된 네트워크에서는 **Edit Scheme → Run → Arguments → Environment Variables**에서
