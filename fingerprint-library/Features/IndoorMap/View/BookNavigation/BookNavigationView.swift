@@ -92,6 +92,7 @@ struct BookNavigationView: View {
                     onFinish: { store.send(.finishFromArrival(stopIndex: index)) },
                     onCancel: { store.send(.cancelTapped) }
                 )
+                .id(index)
             }
         }
         .interactiveDismissDisabled()

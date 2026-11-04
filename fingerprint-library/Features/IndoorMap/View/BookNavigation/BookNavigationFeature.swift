@@ -23,6 +23,7 @@ struct BookNavigationFeature {
         var isActive = false
         var subscriptionID = 0
         var isArrivalPresented = false
+        var automaticallyArrivedStopIndices: Set<Int> = []
         var isCancelConfirmationPresented = false
         var exitReason: ExitReason?
         var cameraRequest: IndoorMapCameraRequest
@@ -400,6 +401,11 @@ struct BookNavigationFeature {
             state.progress = try plan.progress(for: effective, at: now, previous: state.progress,
                 elapsed: previousTimestamp.map { effective.timestamp.timeIntervalSince($0) })
             state.statusMessage = nil
+            if state.isActive, state.exitReason == nil,
+               state.progress?.maneuver == .nearDestination,
+               state.automaticallyArrivedStopIndices.insert(state.currentStopIndex).inserted {
+                state.isArrivalPresented = true
+            }
             updateCamera(&state)
         } catch {
             state.progress = nil

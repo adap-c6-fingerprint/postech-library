@@ -3,6 +3,10 @@ import SwiftUI
 
 /// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
 struct BookRoutePreviewView: View {
+    enum EntryMode { case preview, direct }
+
+    // 미리보기 복원 시 진입 지점에서 .preview를 전달한다.
+    private let entryMode: EntryMode
     @State private var routeStore: StoreOf<BookRoutePreviewFeature>
     
     @State private var destination: BookRoutePreviewDestination
@@ -45,7 +49,9 @@ struct BookRoutePreviewView: View {
     }
     private var orderedBooks: [Book] { readySession?.stops.map(\.book) ?? destination.books }
 
-    init(books: [Book] = [], routeStore: StoreOf<BookRoutePreviewFeature>? = nil) {
+    init(books: [Book] = [], entryMode: EntryMode = .preview,
+         routeStore: StoreOf<BookRoutePreviewFeature>? = nil) {
+        self.entryMode = entryMode
         let destination = BookRoutePreviewDestination(books: books)
         _routeStore = State(initialValue: routeStore ?? Store(initialState: BookRoutePreviewFeature.State()) {
             BookRoutePreviewFeature()
@@ -70,7 +76,7 @@ struct BookRoutePreviewView: View {
         }
     }
 
-    var body: some View {
+    private var previewContent: some View {
         BookRoutePreviewMapSheet(onBack: { dismiss() }, onViewportChange: {
             if previewSession == nil { destinationStore?.send(.focusShelfTapped) }
         }) { insets, cameraRevision in
@@ -144,19 +150,58 @@ struct BookRoutePreviewView: View {
                 }
                 .scrollIndicators(.hidden)
             }
-            .fullScreenCover(item: $navigationFlow.session, onDismiss: {
-                if navigationFlow.presentationDismissed() { dismiss() }
-            }) { session in
-                BookNavigationView(session: session) { _ in
-                    navigationFlow.navigationEnded()
-                }
+        }
+    }
+
+    private var directContent: some View {
+        VStack(spacing: 20) {
+            if let routeError {
+                ContentUnavailableView("길안내를 시작할 수 없어요", systemImage: "location.slash",
+                    description: Text(routeError))
+                Button("다시 시도") { retryDirectNavigation() }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(isLoadingRoute)
+            } else {
+                ProgressView("길안내를 준비하고 있어요")
+            }
+            Button("돌아가기") { dismiss() }
+                .buttonStyle(.bordered)
+        }
+        .padding(24)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityIdentifier("book-navigation-preparing")
+    }
+
+    private func retryDirectNavigation() {
+        if currentStart == nil { mapStore?.send(.currentLocationTapped) }
+        let request = BookRoutePreviewRequest(state: destinationStore?.state, start: currentStart)
+        if request == routeRequest {
+            routeStore.send(.startRequested(request))
+        } else {
+            previewStart = currentStart
+        }
+    }
+
+    var body: some View {
+        Group {
+            if entryMode == .direct {
+                directContent
+            } else {
+                previewContent
+            }
+        }
+        .fullScreenCover(item: $navigationFlow.session, onDismiss: {
+            if navigationFlow.presentationDismissed() { dismiss() }
+        }) { session in
+            BookNavigationView(session: session) { _ in
+                navigationFlow.navigationEnded()
             }
         }
         .background(Color(uiColor: .systemBackground))
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .overlay(alignment: .topTrailing) {
-            if let previewSession {
+            if entryMode == .preview, let previewSession {
                 Menu("층 보기", systemImage: "square.3.layers.3d") {
                     ForEach(previewSession.map.floors) { floor in
                         Button("\(floor.ordinal + 1)층") { routeFloorID = floor.id }
@@ -189,10 +234,17 @@ struct BookRoutePreviewView: View {
             await destinationStore.send(.task).finish()
         }
         .task(id: routeRequest) {
-            let request = routeRequest
+            // 소장·지도 로딩이 끝난 시점의 블루닷에서 안내를 시작한다.
+            let request = entryMode == .direct
+                ? BookRoutePreviewRequest(state: destinationStore?.state, start: currentStart)
+                : routeRequest
             routeFloorID = nil
 
-            await routeStore.send(.requestChanged(request)).finish()
+            if entryMode == .direct {
+                await routeStore.send(.startRequested(request)).finish()
+            } else {
+                await routeStore.send(.requestChanged(request)).finish()
+            }
         }
         .onDisappear {
             routeStore.send(.disappeared)
