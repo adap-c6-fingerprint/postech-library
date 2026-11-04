@@ -90,6 +90,8 @@ extension IndoorMapSerialTests {
                 try image.pngData()?.write(to: FileManager.default.temporaryDirectory
                     .appendingPathComponent("pobook-navigation-assets.png"))
             }
+            store.send(.cancelConfirmed)
+            try await waitUntil { host.presentedViewController == nil && host.transitionCoordinator == nil }
         }
 
         private func checkPositionArtwork(in map: MKMapView, bearing: Double?) throws {

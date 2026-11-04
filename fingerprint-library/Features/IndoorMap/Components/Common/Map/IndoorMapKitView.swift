@@ -178,7 +178,9 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.removeOverlays(turnArrowOverlays)
             view.removeAnnotations(routeTransitionAnnotations)
             view.removeAnnotations(groupTransitionAnnotations)
-            view.removeAnnotations(view.annotations.filter { $0 is BookNavigationDestinationAnnotation })
+            view.removeAnnotations(view.annotations.filter {
+                $0 is BookNavigationDestinationAnnotation || $0 is BookNavigationStartAnnotation
+            })
             routeOverlays.removeAll()
             turnArrowOverlays.removeAll()
             turnArrowOverlayIDs.removeAll()
@@ -195,8 +197,11 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let points = segment.coordinates.map(\.clCoordinate)
                 routeOverlays.append(MKPolyline(coordinates: points, count: points.count))
             }
-            if route.start.floorID == parent.floor.id {
+            if route.start.floorID == parent.floor.id, !parent.navigationAppearance {
                 routeOverlays.append(MKCircle(center: route.start.routeCoordinate.clCoordinate, radius: 1))
+            }
+            if parent.navigationAppearance, route.start.floorID == parent.floor.id {
+                view.addAnnotation(BookNavigationStartAnnotation(coordinate: route.start.actualCoordinate))
             }
             for (index, node) in parent.groupTransitionNodes.enumerated() where node.floorID == parent.floor.id {
                 let annotation = MKPointAnnotation()
@@ -206,8 +211,11 @@ struct IndoorMapKitView: UIViewRepresentable {
                 groupTransitionAnnotations.append(annotation)
             }
             for change in route.floorChanges {
+                let from = parent.map.floors.first { $0.id == change.fromFloorID }?.ordinal
+                let to = parent.map.floors.first { $0.id == change.toFloorID }?.ordinal
+                let movesUp = from.flatMap { from in to.map { $0 > from } }
                 if change.fromFloorID == parent.floor.id {
-                    routeTransitionAnnotations.append(.init(change: change, isEntry: true))
+                    routeTransitionAnnotations.append(.init(change: change, isEntry: true, movesUp: movesUp))
                 }
                 if change.toFloorID == parent.floor.id {
                     routeTransitionAnnotations.append(.init(change: change, isEntry: false))
@@ -557,6 +565,10 @@ struct IndoorMapKitView: UIViewRepresentable {
                 renderer.lineWidth = overlay is MKPolyline ? (parent.navigationAppearance ? 7 : 5) : 2
                 renderer.lineCap = .round
                 renderer.lineJoin = .round
+                if parent.navigationAppearance, overlay is MKPolyline {
+                    renderer.lineWidth = 5
+                    renderer.lineDashPattern = [0, 9]
+                }
                 return
             }
             let feature = overlayFeatures[ObjectIdentifier(overlay)]
@@ -637,29 +649,23 @@ struct IndoorMapKitView: UIViewRepresentable {
                 configurePositionBearing(view, position: annotation.position, in: mapView)
                 return view
             }
-            if let annotation = annotation as? BookNavigationDestinationAnnotation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "navigation-book")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "navigation-book")
+            if annotation is BookNavigationDestinationAnnotation || annotation is BookNavigationStartAnnotation {
+                let isStart = annotation is BookNavigationStartAnnotation
+                let reuseID = isStart ? "navigation-start-pin" : "navigation-end-pin"
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID)
+                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
                 view.annotation = annotation
-                view.subviews.forEach { $0.removeFromSuperview() }
-                view.frame.size = CGSize(width: 40, height: 40)
-                let content = UIHostingConfiguration {
-                    BookCoverView(url: annotation.destination.book.imageURL, isbn: annotation.destination.book.isbn)
-                        .frame(width: 32, height: 32).clipShape(Circle())
-                        .padding(3).background(BookNavigationPalette.accent, in: Circle())
-                }.margins(.all, 0).makeContentView()
-                content.frame = view.bounds
-                content.backgroundColor = .clear
-                content.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                view.addSubview(content)
+                view.image = UIImage(named: isStart ? "MapLocationStart" : "MapLocationEnd")
+                view.centerOffset = CGPoint(x: 0, y: -16)
                 view.displayPriority = .required
                 view.zPriority = MapAnnotationPriority.route
                 view.selectedZPriority = MapAnnotationPriority.route
-                view.collisionMode = .circle
+                view.collisionMode = .rectangle
+                view.clusteringIdentifier = nil
                 view.isEnabled = false
                 view.isAccessibilityElement = true
-                view.accessibilityLabel = "목적지: \(annotation.title ?? "도서")"
-                view.accessibilityIdentifier = "book-navigation-destination"
+                view.accessibilityLabel = isStart ? "출발 위치" : "목적지: \(annotation.title ?? "도서")"
+                view.accessibilityIdentifier = isStart ? "book-navigation-start" : "book-navigation-destination"
                 return view
             }
             if let annotation = annotation as? MKPointAnnotation,
@@ -699,7 +705,12 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-transition")
                     ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-transition")
                 view.annotation = annotation
-                view.image = annotation.markerImage
+                if parent.navigationAppearance, annotation.isEntry,
+                   [.elevator, .stairs].contains(annotation.category), let movesUp = annotation.movesUp {
+                    view.image = MapAnnotationImage.asset(named: movesUp ? "annotation_up" : "annotation_Down")
+                } else {
+                    view.image = annotation.markerImage
+                }
                 view.centerOffset = .zero
                 view.zPriority = MapAnnotationPriority.route
                 view.selectedZPriority = MapAnnotationPriority.route

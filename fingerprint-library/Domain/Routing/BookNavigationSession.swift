@@ -55,7 +55,9 @@ struct BookNavigationSession: Identifiable, Equatable, Sendable {
             edgeIDs: legs.flatMap { $0.edgeIDs }, segments: legs.flatMap { $0.segments },
             floorChanges: legs.flatMap { $0.floorChanges },
             distanceMeters: legs.reduce(0) { $0 + $1.distanceMeters },
-            usesEstimatedDistances: legs.contains { $0.usesEstimatedDistances }, start: first.start)
+            usesEstimatedDistances: legs.contains { $0.usesEstimatedDistances }, start: first.start,
+            edgeDistancesMeters: legs.allSatisfy { $0.edgeDistancesMeters != nil }
+                ? legs.flatMap { $0.edgeDistancesMeters ?? [] } : nil)
         self.map = map
         self.shelfLabels = shelfLabels
         self.stops = stops

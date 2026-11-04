@@ -6,11 +6,13 @@ final class IndoorRouteTransitionAnnotation: NSObject, MKAnnotation {
     let category: RouteEdgeCategory
     let coordinate: CLLocationCoordinate2D
     let isEntry: Bool
+    let movesUp: Bool?
 
-    init(change: RouteFloorChange, isEntry: Bool) {
+    init(change: RouteFloorChange, isEntry: Bool, movesUp: Bool? = nil) {
         category = change.category
         coordinate = (isEntry ? change.fromCoordinate : change.toCoordinate).clCoordinate
         self.isEntry = isEntry
+        self.movesUp = movesUp
     }
 
     var title: String? {

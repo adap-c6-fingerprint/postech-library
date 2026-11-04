@@ -72,6 +72,7 @@ nonisolated struct IndoorRouteSearchEngine: Sendable {
         return IndoorRoute(
             destination: destination.key, nodeIDs: nodeIDs, edgeIDs: path.map(\.edgeID),
             segments: segments, floorChanges: changes, distanceMeters: path.reduce(0) { $0 + $1.distanceMeters },
-            usesEstimatedDistances: path.contains(where: \.isEstimated), start: start.attachment)
+            usesEstimatedDistances: path.contains(where: \.isEstimated), start: start.attachment,
+            edgeDistancesMeters: path.map(\.distanceMeters))
     }
 }
