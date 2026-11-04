@@ -5,6 +5,14 @@ import Foundation
 @Reducer
 struct BookNavigationFeature {
     enum ExitReason: Equatable, Sendable { case cancelled, completed }
+    enum SpinePhase: Equatable {
+        case loading
+        // 책등 이미지를 받는 중
+        case loaded(Data)
+        // 받은 책등 PNG 데이터
+        case unavailable
+        // ISBN이 없거나 책등 이미지를 받지 못한 책
+    }
     @ObservableState
     struct State: Equatable {
         let session: BookNavigationSession
@@ -29,6 +37,8 @@ struct BookNavigationFeature {
         var cameraRequest: IndoorMapCameraRequest
         var followsNavigationCamera = true
         var cameraTracking = BookNavigationCameraTracking()
+        var arrivalSpines: [Int: SpinePhase] = [:]
+        // 책장 앞 책찾기 화면에 그릴 책등. 키는 목적지 순서(stopIndex)
 
         init(session: BookNavigationSession) {
             self.session = session
@@ -144,6 +154,8 @@ struct BookNavigationFeature {
         case viewportChanged
         case arrivalTestTapped
         case arrivalPresentationChanged(Bool)
+        case arrivalSpineTask(stopIndex: Int)
+        case arrivalSpineLoaded(stopIndex: Int, Data?)
         case continueFromArrival(stopIndex: Int)
         case finishFromArrival(stopIndex: Int)
         case cancelTapped
@@ -155,6 +167,7 @@ struct BookNavigationFeature {
     @Dependency(\.indoorLocationClient) var locationClient
     @Dependency(\.date.now) var now
     @Dependency(\.continuousClock) var clock
+    @Dependency(\.bookCoverClient) var bookCoverClient
     private nonisolated enum CancelID: Hashable, Sendable { case location, expiry }
 
     var body: some Reducer<State, Action> {
@@ -278,6 +291,25 @@ struct BookNavigationFeature {
             case let .arrivalPresentationChanged(isPresented):
                 state.isArrivalPresented = isPresented && state.exitReason == nil
                     && state.currentStop != nil && state.currentRoute != nil
+                return .none
+
+            case let .arrivalSpineTask(stopIndex):
+                guard state.arrivalSpines[stopIndex] == nil,
+                      state.session.stops.indices.contains(stopIndex) else { return .none }
+                guard let isbn = state.session.stops[stopIndex].book.isbn else {
+                    state.arrivalSpines[stopIndex] = .unavailable
+                    return .none
+                }
+                state.arrivalSpines[stopIndex] = .loading
+                return .run { [bookCoverClient] send in
+                    let data = try? await bookCoverClient.spinePngData(isbn)
+                    await send(.arrivalSpineLoaded(stopIndex: stopIndex, data))
+                }
+                // 책찾기 화면이 나타날 때 한 번만 요청한다. 같은 책을 다시 열면 받아 둔 책등을 쓴다.
+
+            case let .arrivalSpineLoaded(stopIndex, data):
+                state.arrivalSpines[stopIndex] = data.map(SpinePhase.loaded) ?? .unavailable
+                // spinePngData는 "책등 없음"과 "실패"를 같은 에러로 던지므로 둘 다 대체 막대로 그린다.
                 return .none
 
             case let .continueFromArrival(stopIndex):

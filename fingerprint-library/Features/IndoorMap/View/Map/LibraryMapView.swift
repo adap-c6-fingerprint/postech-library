@@ -31,6 +31,13 @@ struct LibraryMapView: View {
 
     var body: some View {
         NavigationStack {
+            moreDestinations(destinations(mapContent))
+        }
+        .tint(.primary)
+    }
+    // 수식어가 한 줄로 길게 이어지면 컴파일러가 타입 검사를 제시간에 끝내지 못해 지도 화면과 이동 목적지를 나눈다.
+
+    private var mapLayout: some View {
             IndoorMapView(store: mapStore, topContentInset: headerHeight, appearance: .home)
                 .ignoresSafeArea(.container, edges: .top)
                 .overlay(alignment: .topLeading) {
@@ -54,6 +61,10 @@ struct LibraryMapView: View {
                     )
                 }
                 .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var mapContent: some View {
+        mapLayout
             .task {
                 searchStore.send(.task)
             }
@@ -62,6 +73,10 @@ struct LibraryMapView: View {
             }
             .task { await mapStore.send(.homeAnnotations(.task)).finish() }
             .onDisappear { mapStore.send(.homeAnnotations(.disappeared)) }
+    }
+
+    private func destinations(_ content: some View) -> some View {
+        content
             .navigationDestination(
                 item: $searchStore.scope(state: \.basket, action: \.basket)
             ) { basketStore in
@@ -82,6 +97,10 @@ struct LibraryMapView: View {
                     mapStore: mapStore
                 )
             }
+    }
+
+    private func moreDestinations(_ content: some View) -> some View {
+        content
             .navigationDestination(
                 item: $searchStore.scope(state: \.shelfMap, action: \.shelfMap)
             ) { shelfMapStore in
@@ -101,8 +120,6 @@ struct LibraryMapView: View {
             ) {
                 IndoorRouteSettingsView(store: mapStore)
             }
-        }
-        .tint(.primary)
     }
     
     private var homeHeader: some View {

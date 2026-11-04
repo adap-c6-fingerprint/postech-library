@@ -23,10 +23,10 @@ struct MyPageFeatureTests {
     @Test("책장은 기록을 읽어 책등을 받고, ISBN이 없거나 받지 못한 책은 제목 막대로 둔다")
     func shelfLoadsSpines() async {
         let found = book("a", isbn: "9788966260959")
+        let foundISBN = found.isbn
         let failing = book("b", isbn: "9788966260960")
         let noISBN = book("c", isbn: nil)
         let png = Data([0x89, 0x50])
-        let foundISBN = found.isbn
         let store = TestStore(initialState: RecentlyFoundBookFeature.State()) {
             RecentlyFoundBookFeature()
         } withDependencies: {
@@ -109,6 +109,7 @@ struct MyPageFeatureTests {
     @Test("소속 변경 화면은 저장된 소속을 미리 고르고, 바꾼 소속을 관심 분야와 함께 저장한다")
     func editAffiliationSaves() async {
         let saved = LockIsolated<([String], String, [String])?>(nil)
+        let dataset = Self.dataset
         let profile = UserProfileSnapshot(
             departmentName: "수학과", interests: ["수학"], affiliationKey: Self.undergraduateMath.key
         )
@@ -117,7 +118,7 @@ struct MyPageFeatureTests {
         } withDependencies: {
             $0.userProfileClient.load = { profile }
             $0.userProfileClient.save = { key, name, interests in saved.setValue((key, name, interests)) }
-            $0.recommendationDatasetClient.load = { await Self.dataset }
+            $0.recommendationDatasetClient.load = { dataset }
         }
         store.exhaustivity = .off
 

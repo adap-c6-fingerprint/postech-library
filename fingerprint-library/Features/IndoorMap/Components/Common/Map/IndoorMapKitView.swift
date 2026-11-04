@@ -5,7 +5,11 @@ import SwiftUI
 ///
 /// 선택과 카메라 이동 의도는 값·콜백으로 주고받고, MKMapView와 overlay의 수명은 Coordinator가 관리한다.
 struct IndoorMapKitView: UIViewRepresentable {
-    enum Appearance: Equatable { case standard, home }
+    enum Appearance: Equatable {
+        case standard, home, bookDetail
+
+        var usesHomeStyle: Bool { self != .standard }
+    }
     /// 최초 도면의 확대 배율. 1은 층 전체 맞춤이며, 3은 그보다 3배 크게 표시한다.
     /// 층 전환·현재 위치 포커스에는 다시 적용하지 않는다.
     static let initialZoomScale = 3.0
@@ -35,6 +39,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var onUserCameraInteraction: () -> Void = {}
     var appearance: Appearance = .standard
     var homeMarkers: [HomeMapMarker] = []
+    var detailShelfLabels: [IndoorShelfLabel] = []
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -81,6 +86,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var renderedPositionNavigationAppearance = false
         private var renderedShelves: [ShelfDestination] = []
         private let shelfLabelController = IndoorShelfLabelController()
+        private var renderedDetailShelfLabels: [IndoorShelfLabel] = []
         private let homeAnnotations = HomeMapAnnotationController()
         private var renderedRoute: IndoorRoute?
         private var renderedGroupTransitionNodes: [RouteNode] = []
@@ -145,13 +151,14 @@ struct IndoorMapKitView: UIViewRepresentable {
                 render(in: view)
             }
             view.overrideUserInterfaceStyle = .dark
-            view.showsUserLocation = parent.showsUserLocation && parent.appearance != .home
+            view.showsUserLocation = parent.showsUserLocation && !parent.appearance.usesHomeStyle
             updatePosition(in: view)
             updatePositionMarkerBearing(in: view)
             updateShelves(in: view)
-            homeAnnotations.update(parent.appearance == .home
+            homeAnnotations.update(parent.appearance.usesHomeStyle
                 ? parent.homeMarkers.filter { $0.floorID == parent.floor.id } : [], in: view)
             updateShelfLabels(in: view)
+            updateDetailShelfBadges(in: view)
             updateRoute(in: view)
             if selectedID != parent.selectedFeatureID || highlightedIDs != parent.highlightedFeatureIDs {
                 selectedID = parent.selectedFeatureID
@@ -257,11 +264,21 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         /// 현재 층의 표시 전용 군집·번호·면 레이블을 갱신한다.
         private func updateShelfLabels(in view: MKMapView) {
-            shelfLabelController.update(parent.shelfLabels.filter { $0.floorID == parent.floor.id }, in: view)
+            let labels = parent.appearance == .bookDetail ? [] : parent.shelfLabels.filter { $0.floorID == parent.floor.id }
+            shelfLabelController.update(labels, in: view)
             layoutShelfLabels(in: view)
         }
 
+        private func updateDetailShelfBadges(in view: MKMapView) {
+            let labels = parent.detailShelfLabels.filter { $0.floorID == parent.floor.id }
+            guard renderedDetailShelfLabels != labels else { return }
+            renderedDetailShelfLabels = labels
+            view.removeAnnotations(view.annotations.filter { $0 is BookDetailShelfBadge })
+            view.addAnnotations(IndoorShelfLabelLayout(labels: labels).numbers.map(BookDetailShelfBadge.init))
+        }
+
         private func layoutShelfLabels(in view: MKMapView) {
+            guard parent.appearance != .bookDetail else { return }
             shelfLabelController.layout(in: view, highlighted: parent.highlightedFeatureIDs)
         }
 
@@ -387,7 +404,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             pendingOverlayRedrawIDs = Set(overlays.map { ObjectIdentifier($0) })
             view.addOverlays(overlays, level: .aboveRoads)
             view.addAnnotations(features.compactMap { feature in
-                guard parent.appearance != .home, feature.kind == .amenity,
+                guard !parent.appearance.usesHomeStyle, feature.kind == .amenity,
                       case .point(let coordinate) = feature.geometry else { return nil }
                 return FeatureAnnotation(feature: feature, coordinate: coordinate.clCoordinate)
             })
@@ -397,7 +414,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 홈의 센서 위치도 원본 이미지로 표시하며 같은 출처의 이동은 기존 annotation을 갱신한다.
         func updatePosition(in view: MKMapView) {
             let visible = parent.position.flatMap { position -> IndoorPosition? in
-                guard (position.source != .sensor || parent.navigationAppearance || parent.appearance == .home),
+                guard (position.source != .sensor || parent.navigationAppearance || parent.appearance.usesHomeStyle),
                       position.floorOrdinal == parent.floor.ordinal
                         || (parent.appearance == .home && position.source == .sensor && position.floorOrdinal == nil)
                 else { return nil }
@@ -593,7 +610,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 }
                 return
             }
-            if parent.appearance == .home {
+            if parent.appearance.usesHomeStyle {
                 renderer.strokeColor = UIColor(white: 0.12, alpha: 1)
                 renderer.lineWidth = 0.8
                 switch feature?.kind {
@@ -606,8 +623,13 @@ struct IndoorMapKitView: UIViewRepresentable {
                 }
                 IndoorMapPalette.apply(to: renderer, feature: feature, floorOrdinal: parent.floor.ordinal)
                 if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
-                    renderer.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
-                    renderer.strokeColor = .systemOrange
+                    if parent.appearance == .bookDetail {
+                        renderer.fillColor = BookNavigationPalette.uiAccent
+                        renderer.strokeColor = BookNavigationPalette.uiAccent
+                    } else {
+                        renderer.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
+                        renderer.strokeColor = .systemOrange
+                    }
                     renderer.lineWidth = 3
                 }
                 return
@@ -642,11 +664,18 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
+            if let badge = annotation as? BookDetailShelfBadge {
+                let view = mapView.dequeueReusableAnnotationView(withIdentifier: BookDetailShelfBadgeView.reuseID)
+                    as? BookDetailShelfBadgeView
+                    ?? BookDetailShelfBadgeView(annotation: badge, reuseIdentifier: BookDetailShelfBadgeView.reuseID)
+                view.configure(badge)
+                return view
+            }
             if let annotation = annotation as? HomeMapPointAnnotation {
                 return HomeMapAnnotationController.view(for: annotation, in: mapView)
             }
             if let annotation = annotation as? PositionAnnotation,
-               parent.navigationAppearance || (parent.appearance == .home && annotation.position.source != .manual) {
+               parent.navigationAppearance || (parent.appearance.usesHomeStyle && annotation.position.source != .manual) {
                 let reuseID = parent.navigationAppearance ? "navigation-position" : "home-user-position"
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID) as? MapUserLocationAnnotationView
                     ?? MapUserLocationAnnotationView(annotation: annotation, reuseIdentifier: reuseID)

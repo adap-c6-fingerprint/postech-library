@@ -85,14 +85,16 @@ struct BookNavigationView: View {
                 set: { store.send(.arrivalPresentationChanged($0)) }
             )) {
                 let index = store.currentStopIndex
-                BookNavigationArrivalView(
+                BookNavigationBookFindingView(
                     session: store.session, currentStopIndex: index,
                     bookInformation: store.currentBookInfo,
+                    spine: store.arrivalSpines[index],
+                    onTask: { store.send(.arrivalSpineTask(stopIndex: index)) },
                     onContinue: { store.send(.continueFromArrival(stopIndex: index)) },
-                    onFinish: { store.send(.finishFromArrival(stopIndex: index)) },
-                    onCancel: { store.send(.cancelTapped) }
+                    onFinish: { store.send(.finishFromArrival(stopIndex: index)) }
                 )
                 .id(index)
+                // 기존 BookNavigationArrivalView는 삭제하지 않고 남겨 둔다. (15) 책찾기 화면 문서)
             }
         }
         .interactiveDismissDisabled()

@@ -40,7 +40,7 @@ struct LibraryMapTopBar: View {
     let title: String
     let onFavorites: () -> Void
     let onBasket: () -> Void
-    var onProfile: (() -> Void)? = nil
+    let onProfile: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {
