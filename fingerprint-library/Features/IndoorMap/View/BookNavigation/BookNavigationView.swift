@@ -1,15 +1,16 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 현재 책까지의 지도와, 거리 비율 진행 바·현재 안내·도서 정보를 담은 네이티브 시트.
+/// 현재 책까지의 지도와, 화면 폭을 채우는 길안내 시트.
 struct BookNavigationView: View {
     @State private var store: StoreOf<BookNavigationFeature>
     private let onExit: ((BookNavigationFeature.ExitReason) -> Void)?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
-    @State private var presentsSheet = false
-    @State private var sheetHeight: CGFloat = 118
-    @State private var detent: PresentationDetent = .height(118)
+    @State private var isSheetExpanded = false
+    @State private var sheetHeight: CGFloat = 113
+    @State private var sheetSummaryHeight: CGFloat = 89
+    @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
 
     init(session: BookNavigationSession, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
         self.init(store: Store(initialState: BookNavigationFeature.State(session: session)) {
@@ -54,30 +55,27 @@ struct BookNavigationView: View {
                         }
                     }
                     .padding(.horizontal, 20)
-                    .padding(.bottom, max(16, sheetHeight - geometry.safeAreaInsets.bottom + 16))
+                    .padding(.bottom, sheetHeight + 16)
                 }
-                .sheet(isPresented: Binding(
-                    get: { presentsSheet && !store.isArrivalPresented && store.exitReason == nil },
-                    set: { presentsSheet = $0 }
-                )) {
-                    guidanceSheet
-                        .alert("안내를 잠시 멈췄어요.", isPresented: pauseBinding(forArrival: false)) {
-                            pauseButtons
-                        } message: { pauseMessage }
-                        .presentationDetents([.height(118), .medium, .large], selection: $detent)
-                        .presentationDragIndicator(.visible)
-                        .presentationCornerRadius(24)
-                        .presentationBackground(Color(uiColor: .secondarySystemBackground))
-                        .presentationBackgroundInteraction(.enabled)
-                        .presentationContentInteraction(.resizes)
-                        .interactiveDismissDisabled()
-                        .preferredColorScheme(.dark)
-                        .onGeometryChange(for: CGFloat.self) { $0.size.height + $0.safeAreaInsets.bottom } action: { height in
+                .overlay(alignment: .bottom) {
+                    if !store.isArrivalPresented, store.exitReason == nil {
+                        BookNavigationBottomSheet(
+                            isExpanded: $isSheetExpanded,
+                            height: min(isSheetExpanded ? expandedSheetHeight : 24 + sheetSummaryHeight + geometry.safeAreaInsets.bottom,
+                                max(24 + sheetSummaryHeight + geometry.safeAreaInsets.bottom,
+                                    geometry.size.height + geometry.safeAreaInsets.bottom - 140)),
+                            bottomInset: geometry.safeAreaInsets.bottom
+                        ) {
+                            guidanceSheet
+                        }
+                        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
                             guard height > 0, abs(height - sheetHeight) > 1 else { return }
                             sheetHeight = height
                             store.send(.viewportChanged)
                         }
+                    }
                 }
+                .ignoresSafeArea(.container, edges: .bottom)
             }
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(isPresented: Binding(
@@ -98,18 +96,14 @@ struct BookNavigationView: View {
             }
         }
         .interactiveDismissDisabled()
-        .alert("안내를 잠시 멈췄어요.", isPresented: pauseBinding(forArrival: true)) {
+        .alert("안내를 잠시 멈췄어요.", isPresented: pauseBinding) {
             pauseButtons
         } message: { pauseMessage }
         .onChange(of: store.exitReason) { _, reason in
             guard let reason else { return }
             if let onExit { onExit(reason) } else { dismiss() }
         }
-        .onChange(of: store.isArrivalPresented) { _, isPresented in
-            if !isPresented, store.exitReason == nil { presentsSheet = true }
-        }
         .task {
-            presentsSheet = true
             await store.send(.task).finish()
         }
         .onChange(of: scenePhase) { _, phase in store.send(.sceneActiveChanged(phase == .active)) }
@@ -118,8 +112,8 @@ struct BookNavigationView: View {
         .accessibilityIdentifier("book-navigation")
     }
 
-    private func pauseBinding(forArrival: Bool) -> Binding<Bool> {
-        Binding(get: { store.isCancelConfirmationPresented && store.isArrivalPresented == forArrival },
+    private var pauseBinding: Binding<Bool> {
+        Binding(get: { store.isCancelConfirmationPresented },
                 set: { if !$0 { store.send(.cancelDismissed) } })
     }
 
@@ -160,44 +154,40 @@ struct BookNavigationView: View {
     }
 
     private var guidanceSheet: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 8) {
-                Image(systemName: store.instructionSymbol).frame(width: 20)
-                Text(store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
-                    .font(.subheadline.weight(.semibold)).lineLimit(2)
-                Spacer(minLength: 0)
-                Button { store.send(.arrivalTestTapped) } label: {
-                    Image(systemName: "checkmark.circle").font(.title3)
-                        .frame(width: 32, height: 32)
-                }
-                .accessibilityLabel("도착 확인")
-                .accessibilityIdentifier("book-navigation-arrival-trigger")
-            }
-            .accessibilityIdentifier("book-navigation-instruction")
-            BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex, progress: store.progress)
-            if detent != .height(118), let info = store.currentBookInfo {
-                ScrollView {
-                    HStack(alignment: .top, spacing: 18) {
-                        BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
-                            .frame(width: 96, height: 144).clipShape(RoundedRectangle(cornerRadius: 8))
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("현재 책").font(.caption.bold()).foregroundStyle(BookNavigationPalette.accent)
-                            BookNavigationBookInformationView(info: info)
-                            Text(store.remainingMeters.map { "약 \($0.formatted(.number.precision(.fractionLength(0))))m 남음" } ?? "현재 위치 확인 중")
-                                .font(.caption).foregroundStyle(.secondary)
-                                .accessibilityIdentifier("book-navigation-remaining-metrics")
-                        }
+        VStack(alignment: .leading, spacing: 0) {
+            VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack(spacing: 8) {
+                        Image(systemName: store.instructionSymbol)
+                            .font(.system(size: 14, weight: .semibold))
+                            .frame(width: 24, height: 24)
+                            .background(.black, in: Circle())
+                        Text(store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
+                            .font(.body.weight(.medium)).lineLimit(2)
+                        Spacer(minLength: 0)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 12)
+                    .frame(minHeight: 28)
+                    .accessibilityIdentifier("book-navigation-instruction")
+                    BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
+                        progress: store.progress, floors: store.session.map.floors)
                 }
-                .scrollIndicators(.hidden)
-                .id(store.currentStopIndex)
-                .accessibilityIdentifier("book-navigation-current-book")
+                .padding(.horizontal, 16)
+                Rectangle().fill(.white.opacity(0.08)).frame(height: 1)
+                    .padding(.horizontal, 14).padding(.top, 20)
+                    .accessibilityHidden(true)
             }
-            Spacer(minLength: 0)
+            .fixedSize(horizontal: false, vertical: true)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
+                // 접힌 높이는 디바이더 위치로 정한다. 안내가 두 줄이 되어도 잘리지 않는다.
+                if abs(height - sheetSummaryHeight) > 0.5 { sheetSummaryHeight = height }
+            }
+            if isSheetExpanded, let info = store.currentBookInfo, let route = store.currentRoute {
+                BookNavigationCurrentBookCard(info: info, route: route)
+                    .padding(.horizontal, 16).padding(.top, 24)
+                    .id(store.currentStopIndex)
+            }
         }
-        .padding(.horizontal, 20).padding(.top, 24)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .tint(BookNavigationPalette.accent)
     }
 
