@@ -176,7 +176,7 @@ extension IndoorMapSerialTests {
             }
             let controller = BookDetailSheetPresenter.Controller(
                 store: detailStore, mapStore: mapStore, presentation: BookDetailSheetPresentation(),
-                onDismiss: {}, onFrameChange: { _ in })
+                onDismiss: {}, onCompactFrameChange: { _ in })
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
             window.rootViewController = controller
