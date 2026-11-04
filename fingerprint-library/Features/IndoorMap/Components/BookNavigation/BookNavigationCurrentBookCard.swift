@@ -29,7 +29,7 @@ struct BookNavigationCurrentBookCard: View {
                     Text(info.callNumbers.isEmpty ? "청구기호 확인 필요" : info.callNumbers.joined(separator: " · "))
                         .font(.subheadline).lineLimit(2)
                         .accessibilityIdentifier("book-navigation-current-call-number")
-                    Text("\(route.distanceMeters.formatted(.number.precision(.fractionLength(0))))m · 총 층 이동 \(route.floorChanges.count)회")
+                    Text("\(route.distanceMeters.formatted(.number.precision(.fractionLength(0))))m · 층 이동 \(route.floorChanges.count)회")
                         .font(.caption).foregroundStyle(.white.opacity(0.8))
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.top, 16)
