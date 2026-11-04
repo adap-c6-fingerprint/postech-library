@@ -163,6 +163,18 @@
       "node_id" : "943e5315-de3f-4cf2-97e6-106b1b100c71"
     },
     {
+      "feature_id" : "252269f1-2721-48e0-830c-3af6ddd8426a",
+      "feature_type" : "fixture",
+      "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "node_id" : "3fb2c0d8-1e49-40b7-9ab5-8047c8b4254b"
+    },
+    {
+      "feature_id" : "26c23df9-b4f9-48f7-a2e6-56a24a2a146f",
+      "feature_type" : "fixture",
+      "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "node_id" : "e7f26eb6-1bcd-4caf-bf9d-df84d619315c"
+    },
+    {
       "feature_id" : "27f1e47d-7ba0-4b78-9d16-1d8827728b1c",
       "feature_type" : "fixture",
       "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
@@ -325,6 +337,12 @@
       "node_id" : "8b453086-1c44-40a9-a5e2-608e993091ae"
     },
     {
+      "feature_id" : "4d508e88-ea37-4327-b0a5-05a8b78f671e",
+      "feature_type" : "fixture",
+      "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "node_id" : "2b0900be-badb-4306-9150-cdaa90e7b6b4"
+    },
+    {
       "feature_id" : "531f0cc2-66ce-4f30-96f7-a8e4d243cfdb",
       "feature_type" : "fixture",
       "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
@@ -359,6 +377,12 @@
       "feature_type" : "fixture",
       "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
       "node_id" : "3b26146f-9e0d-4bd5-a3c4-a789d4cac523"
+    },
+    {
+      "feature_id" : "59ec65a3-7767-4871-9711-c25b6521df84",
+      "feature_type" : "fixture",
+      "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "node_id" : "8a67b331-1080-4dbd-8c62-0238bb44c2c2"
     },
     {
       "feature_id" : "5d420810-fe11-4fd2-9289-0b9167e2da1e",
@@ -403,6 +427,12 @@
       "node_id" : "0873dd6d-de85-4509-9173-436657355d9a"
     },
     {
+      "feature_id" : "6f3aa66a-a2e2-43f7-a632-5a5d2f0ffb38",
+      "feature_type" : "fixture",
+      "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "node_id" : "bef5ff82-478a-45c0-90b0-aadcea2b5638"
+    },
+    {
       "feature_id" : "6fb132b4-b235-4119-8dea-723a672f8681",
       "feature_type" : "fixture",
       "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
@@ -443,6 +473,12 @@
       "feature_type" : "fixture",
       "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
       "node_id" : "03233534-0d9d-4483-bb50-2b2e1a87e7dc"
+    },
+    {
+      "feature_id" : "7ad1e42f-79ed-4d88-b237-811a502090fb",
+      "feature_type" : "fixture",
+      "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "node_id" : "e7f26eb6-1bcd-4caf-bf9d-df84d619315c"
     },
     {
       "feature_id" : "7f0b9479-45d5-4388-b035-278492784d9d",
@@ -599,6 +635,12 @@
       "feature_type" : "fixture",
       "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
       "node_id" : "4a9f61fb-95db-43d6-be0c-bbec7c192031"
+    },
+    {
+      "feature_id" : "aee89cc3-23c1-46ea-bcd1-fc8a4206af57",
+      "feature_type" : "fixture",
+      "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "node_id" : "bef5ff82-478a-45c0-90b0-aadcea2b5638"
     },
     {
       "feature_id" : "b2055261-99d7-41d7-a5e5-1d31be141c45",
@@ -833,6 +875,12 @@
       "feature_type" : "fixture",
       "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
       "node_id" : "a447eb73-4b0b-4adf-b71b-105c31b899c1"
+    },
+    {
+      "feature_id" : "f0051160-0f55-481e-93b5-c5a4a9f29891",
+      "feature_type" : "fixture",
+      "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+      "node_id" : "2b0900be-badb-4306-9150-cdaa90e7b6b4"
     },
     {
       "feature_id" : "f023c15f-c98c-441e-b4c4-832b759d6272",
@@ -1145,6 +1193,21 @@
     {
       "features" : [
         {
+          "feature_id" : "4d508e88-ea37-4327-b0a5-05a8b78f671e",
+          "feature_type" : "fixture",
+          "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc"
+        },
+        {
+          "feature_id" : "f0051160-0f55-481e-93b5-c5a4a9f29891",
+          "feature_type" : "fixture",
+          "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc"
+        }
+      ],
+      "node_id" : "2b0900be-badb-4306-9150-cdaa90e7b6b4"
+    },
+    {
+      "features" : [
+        {
           "feature_id" : "2e98d9c8-1d43-4b8c-afbe-4a63d612bc65",
           "feature_type" : "fixture",
           "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79"
@@ -1281,6 +1344,16 @@
         }
       ],
       "node_id" : "3eef78cf-61b2-41bc-aedf-ee90cc037f4e"
+    },
+    {
+      "features" : [
+        {
+          "feature_id" : "252269f1-2721-48e0-830c-3af6ddd8426a",
+          "feature_type" : "fixture",
+          "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc"
+        }
+      ],
+      "node_id" : "3fb2c0d8-1e49-40b7-9ab5-8047c8b4254b"
     },
     {
       "features" : [
@@ -1670,6 +1743,16 @@
     {
       "features" : [
         {
+          "feature_id" : "59ec65a3-7767-4871-9711-c25b6521df84",
+          "feature_type" : "fixture",
+          "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc"
+        }
+      ],
+      "node_id" : "8a67b331-1080-4dbd-8c62-0238bb44c2c2"
+    },
+    {
+      "features" : [
+        {
           "feature_id" : "4d417b82-65a3-409d-b9a1-429324653148",
           "feature_type" : "fixture",
           "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79"
@@ -1855,6 +1938,21 @@
     {
       "features" : [
         {
+          "feature_id" : "6f3aa66a-a2e2-43f7-a632-5a5d2f0ffb38",
+          "feature_type" : "fixture",
+          "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc"
+        },
+        {
+          "feature_id" : "aee89cc3-23c1-46ea-bcd1-fc8a4206af57",
+          "feature_type" : "fixture",
+          "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc"
+        }
+      ],
+      "node_id" : "bef5ff82-478a-45c0-90b0-aadcea2b5638"
+    },
+    {
+      "features" : [
+        {
           "feature_id" : "93ce6151-f4df-4a25-ba26-99012f7dd322",
           "feature_type" : "fixture",
           "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79"
@@ -2036,6 +2134,21 @@
         }
       ],
       "node_id" : "e68015de-adc8-47ca-8fcc-32dbe9d6b6be"
+    },
+    {
+      "features" : [
+        {
+          "feature_id" : "26c23df9-b4f9-48f7-a2e6-56a24a2a146f",
+          "feature_type" : "fixture",
+          "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc"
+        },
+        {
+          "feature_id" : "7ad1e42f-79ed-4d88-b237-811a502090fb",
+          "feature_type" : "fixture",
+          "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc"
+        }
+      ],
+      "node_id" : "e7f26eb6-1bcd-4caf-bf9d-df84d619315c"
     },
     {
       "features" : [

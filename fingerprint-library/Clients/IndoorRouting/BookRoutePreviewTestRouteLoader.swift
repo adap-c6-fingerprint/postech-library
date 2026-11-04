@@ -65,7 +65,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         let navigation = IndoorNavigationData(
             graph: prepared.graph,
             shelves: .init(datasetID: "postech-library-preview-test", mode: .library, destinations: destinations),
-            diagnostics: prepared.diagnostics
+            diagnostics: prepared.diagnostics, transitionDistances: prepared.transitionDistances
         )
         return .init(map: map, shelfLabels: labels, navigation: navigation, start: start, stops: stops)
     }
@@ -116,7 +116,7 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         let navigation = IndoorNavigationData(
             graph: prepared.graph,
             shelves: .init(datasetID: goal.key.datasetID, mode: .library, destinations: [goal]),
-            diagnostics: prepared.diagnostics
+            diagnostics: prepared.diagnostics, transitionDistances: prepared.transitionDistances
         )
         let route = try BookRoutePlanner().route(from: start, to: goal.key, in: navigation)
         return .init(origin: origin, destination: destination, start: start, route: route,
@@ -124,7 +124,8 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
     }
 
     private func prepareNavigation(on map: IndoorMap, metadata: Data, graph graphData: Data, links linkData: Data)
-        throws -> (graph: RoutingGraph, diagnostics: RoutingGraphDiagnostics, nodes: [IndoorMapElement.ID: RouteNode]) {
+        throws -> (graph: RoutingGraph, diagnostics: RoutingGraphDiagnostics, nodes: [IndoorMapElement.ID: RouteNode],
+                   transitionDistances: [String: RouteEdgeDistance]) {
         try Task.checkCancellation()
         let descriptor: Descriptor = try decode(metadata, file: "navigation.json")
         guard descriptor.schemaVersion == 1, descriptor.kind == "navigation-only",
@@ -137,7 +138,20 @@ nonisolated struct BookRoutePreviewTestRouteLoader {
         let normalized = try normalize(rawGraph, descriptor: descriptor, on: map)
         let (graph, diagnostics) = try RoutingGraphMapper().map(normalized, on: map, layoutVersion: descriptor.layoutVersion)
         let links: FeatureLinks = try decode(linkData, file: "navigation-feature-links.json")
-        return (graph, diagnostics, try featureNodes(links, graph: graph, map: map))
+        return (graph, diagnostics, try featureNodes(links, graph: graph, map: map), estimatedTransitionDistances(in: graph))
+    }
+
+    /// 실측 거리 제공 전까지 사용자가 승인한 층당 높이 5m로 계산한다.
+    /// 계단 등의 수평 이동을 포함하며, 실측값으로 저장하거나 표시하지 않는다.
+    private func estimatedTransitionDistances(in graph: RoutingGraph) -> [String: RouteEdgeDistance] {
+        let nodes = Dictionary(uniqueKeysWithValues: graph.nodes.map { ($0.id, $0) })
+        return Dictionary(uniqueKeysWithValues: graph.edges.compactMap { edge in
+            guard let from = nodes[edge.fromNodeID], let to = nodes[edge.toNodeID],
+                  from.floorID != to.floorID else { return nil }
+            let height = Double(abs(to.level - from.level)) * 5
+            let horizontal = RoutingGeometry.polylineLengthMeters(edge.coordinates)
+            return (edge.id, RouteEdgeDistance(meters: hypot(horizontal, height), source: .estimated))
+        })
     }
 
     private func fixedOrigin(on map: IndoorMap, labels: [IndoorShelfLabel]) throws -> IndoorShelfLabel {
