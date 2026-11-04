@@ -150,6 +150,38 @@ extension IndoorMapSerialTests {
             }
         }
 
+        @Test("책 상세 지도는 시트 위에 대상 서가와 번호 배지만 맞춘다")
+        func fitsDetailShelfAboveSheet() async throws {
+            let map = try await BundledIndoorMapLoader().loadLibrary()
+            let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
+            let shelf = try #require(labels.first { $0.fixtureNumber == "S-3F-564-A" })
+            let floor = try #require(map.floors.first { $0.id == shelf.floorID })
+            let request = IndoorMapCameraRequest(id: 1, target: .features([shelf.mapElementID]))
+            let parent = IndoorMapKitView(map: map, floor: floor, selectedFeatureID: nil,
+                position: nil, showsUserLocation: false, isPlacingOrigin: false, cameraRequest: request,
+                onSelect: { _ in }, onPlaceOrigin: { _ in },
+                viewportInsets: .init(top: 60, left: 0, bottom: 430, right: 0),
+                shelfLabels: labels, highlightedFeatureIDs: [shelf.mapElementID],
+                appearance: .bookDetail, detailShelfLabels: [shelf])
+            let coordinator = parent.makeCoordinator()
+            let view = coordinator.makeMapView()
+            coordinator.update(parent: parent, in: view)
+            let window = try host(view, size: CGSize(width: 390, height: 800))
+            defer { window.isHidden = true; coordinator.detachMapView() }
+
+            try await waitUntil { coordinator.lastCameraRequest == request }
+            let badge = try #require(view.annotations.compactMap { $0 as? BookDetailShelfBadge }.first)
+            try await waitUntil { view.view(for: badge) != nil }
+            let badgeView = try #require(view.view(for: badge))
+            let viewport = view.bounds.inset(by: parent.viewportInsets)
+            #expect(badgeView.accessibilityLabel == "337번 서가")
+            #expect(viewport.contains(view.convert(badgeView.bounds, from: badgeView)))
+            #expect(shelf.geometry.coordinates.allSatisfy {
+                viewport.contains(view.convert($0.clCoordinate, toPointTo: view))
+            })
+            #expect(view.annotations.allSatisfy { !($0 is IndoorShelfLabelAnnotation) })
+        }
+
         private func syntheticParent(floorIndex: Int = 0, requestID: Int = 1) -> IndoorMapKitView {
             let source = IndoorMapTestData.map()
             let geometry = IndoorMapGeometry.polygon([IndoorMapTestData.square.map {

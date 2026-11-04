@@ -4,9 +4,9 @@ import Foundation
 enum BookRoutePreviewRequest: Equatable {
     case waiting
     case failed(String)
-    case ready(map: IndoorMap, labels: [IndoorShelfLabel], stops: [BookRouteCandidateStop])
+    case ready(map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [BookRouteCandidateStop])
 
-    init(state: BookShelfMapFeature.State?) {
+    init(state: BookShelfMapFeature.State?, start: IndoorPosition? = nil) {
         guard let state else { self = .waiting; return }
         if let error = state.map.loadError ?? state.map.shelfLabelError {
             self = .failed(error); return
@@ -28,6 +28,12 @@ enum BookRoutePreviewRequest: Equatable {
             }
         }
         guard let map = state.map.map, !stops.isEmpty else { self = .waiting; return }
-        self = .ready(map: map, labels: state.map.shelfLabels, stops: stops)
+        guard let start else {
+            self = .failed(IndoorRoutingError.invalidPosition.localizedDescription); return
+        }
+        guard let ordinal = start.floorOrdinal, map.floors.contains(where: { $0.ordinal == ordinal }) else {
+            self = .failed(IndoorRoutingError.unknownFloor.localizedDescription); return
+        }
+        self = .ready(map: map, labels: state.map.shelfLabels, start: start, stops: stops)
     }
 }

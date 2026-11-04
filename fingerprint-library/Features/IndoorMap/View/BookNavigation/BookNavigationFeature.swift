@@ -35,7 +35,7 @@ struct BookNavigationFeature {
             bookInfos = session.stops.indices.map { BookNavigationBookInfo(session: session, stopIndex: $0) }
             turnArrowsByStop = plans.map { plan in plan.map { RouteTurnArrow.make(from: $0) } ?? [] }
             cameraRequest = .init(id: 0, target: .route(session.legs.first ?? session.route,
-                featureIDs: [session.origin.mapElementID] + session.stops.prefix(1).map { $0.shelf.mapElementID }))
+                featureIDs: session.stops.prefix(1).map { $0.shelf.mapElementID }))
         }
 
         var currentStop: BookNavigationStop? {

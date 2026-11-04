@@ -16,10 +16,14 @@ struct BookRoutePreviewFeature {
         var isLoadingRoute = false
         var routeError: String?
         var requestID = 0
+        var startsNavigationWhenLoaded = false
+        var navigationSession: BookNavigationSession?
     }
     
     enum Action: Equatable {
         case requestChanged(BookRoutePreviewRequest)
+        case startRequested(BookRoutePreviewRequest)
+        case navigationStarted
         case routeLoaded(requestID: Int, BookNavigationSession)
         case routeFailed(requestID: Int, String)
         case reset
@@ -28,6 +32,7 @@ struct BookRoutePreviewFeature {
     
     @Dependency(\.bookRoutePreviewClient)
     private var routePreviewClient
+    @Dependency(\.date.now) private var now
     
     private nonisolated enum CancelID: Hashable, Sendable {
         case route
@@ -36,21 +41,34 @@ struct BookRoutePreviewFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .requestChanged(let request):
+            case .requestChanged(let request), .startRequested(let request):
                 state.requestID += 1
                 state.previewSession = nil
                 state.isLoadingRoute = false
                 state.routeError = nil
+                state.navigationSession = nil
+                if case .startRequested = action {
+                    state.startsNavigationWhenLoaded = true
+                } else {
+                    state.startsNavigationWhenLoaded = false
+                }
                 
                 switch request {
                 case .waiting:
+                    state.startsNavigationWhenLoaded = false
                     return .cancel(id: CancelID.route)
                     
                 case .failed(let message):
                     state.routeError = message
+                    state.startsNavigationWhenLoaded = false
                     return .cancel(id: CancelID.route)
                     
-                case let .ready(map, labels, stops):
+                case let .ready(map, labels, start, stops):
+                    guard start.isRecent(at: now) else {
+                        state.routeError = IndoorRoutingError.invalidPosition.localizedDescription
+                        state.startsNavigationWhenLoaded = false
+                        return .cancel(id: CancelID.route)
+                    }
                     state.isLoadingRoute = true
                     let requestID = state.requestID
                     
@@ -59,7 +77,7 @@ struct BookRoutePreviewFeature {
                             try Task.checkCancellation()
                             
                             let session = try await routePreviewClient.load(
-                                map, labels, stops
+                                map, labels, start, stops
                             )
                             
                             try Task.checkCancellation()
@@ -92,6 +110,15 @@ struct BookRoutePreviewFeature {
                 
                 state.isLoadingRoute = false
                 state.previewSession = session
+                if state.startsNavigationWhenLoaded {
+                    state.startsNavigationWhenLoaded = false
+                    guard session.start.isRecent(at: now) else {
+                        state.previewSession = nil
+                        state.routeError = IndoorRoutingError.invalidPosition.localizedDescription
+                        return .none
+                    }
+                    state.navigationSession = session
+                }
                 return .none
                 
             case let .routeFailed(requestID, message):
@@ -102,6 +129,11 @@ struct BookRoutePreviewFeature {
                 
                 state.isLoadingRoute = false
                 state.routeError = message
+                state.startsNavigationWhenLoaded = false
+                return .none
+
+            case .navigationStarted:
+                state.navigationSession = nil
                 return .none
                 
             case .reset:
@@ -109,11 +141,15 @@ struct BookRoutePreviewFeature {
                 state.previewSession = nil
                 state.isLoadingRoute = false
                 state.routeError = nil
+                state.startsNavigationWhenLoaded = false
+                state.navigationSession = nil
                 return .cancel(id: CancelID.route)
                 
             case .disappeared:
                 state.requestID += 1
                 state.isLoadingRoute = false
+                state.startsNavigationWhenLoaded = false
+                state.navigationSession = nil
                 return .cancel(id: CancelID.route)
             }
         }

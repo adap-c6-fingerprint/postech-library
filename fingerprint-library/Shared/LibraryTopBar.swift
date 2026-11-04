@@ -40,8 +40,7 @@ struct LibraryMapTopBar: View {
     let title: String
     let onFavorites: () -> Void
     let onBasket: () -> Void
-    var onProfile: (() -> Void)?
-    // 홈 지도에서도 프로필 버튼으로 마이페이지를 연다.
+    let onProfile: () -> Void
 
     var body: some View {
         HStack(spacing: 12) {

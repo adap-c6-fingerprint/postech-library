@@ -5,6 +5,9 @@ struct HomeView: View {
     @Bindable var store: StoreOf<HomeFeature>
     let mapStore: StoreOf<IndoorMapFeature>
     @State private var recommendationPosition: Int? = 0
+    @State private var homeScrollPosition = ScrollPosition(edge: .top)
+
+    private static let kulumiCoverNames = (1...6).map { "KulumiCover\($0)" }
 
     private enum Destination: Hashable {
         case departmentRecommendations
@@ -51,6 +54,12 @@ struct HomeView: View {
                 .padding(.bottom, 24)
             }
             .scrollIndicators(.hidden)
+            .scrollPosition($homeScrollPosition)
+            .onChange(of: store.showsKulumiCovers) { _, isActive in
+                guard isActive else { return }
+                homeScrollPosition.scrollTo(edge: .top)
+                recommendationPosition = 0
+            }
         }
         .background(Color(uiColor: .systemBackground))
         .toolbar {
@@ -107,30 +116,32 @@ struct HomeView: View {
     }
     
     private var upcomingCoverURLs: [URL] {
+        guard !store.showsKulumiCovers else { return [] }
         let nextIndex = max(0, (recommendationPosition ?? 0) + 1)
         return store.recommendedBooks.dropFirst(nextIndex).prefix(2).compactMap(\.imageURL)
     }
     
     private var recommendationSection: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text("당신에게\n추천하는 책 \(store.recommendationCount)선.")
+        let recipient = store.showsKulumiCovers ? "쿠루미에게" : "당신에게"
+        let count = store.showsKulumiCovers ? Self.kulumiCoverNames.count : store.recommendationCount
+
+        return VStack(alignment: .leading, spacing: 20) {
+            Text("\(recipient)\n추천하는 책 \(count)선.")
                 .font(.system(size: 22, weight: .semibold))
                 .lineSpacing(4)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 16)
             
-            if store.recommendedBooks.isEmpty {
-                if store.isLoadingRecommendations || store.recommendationSessionID == nil {
-                    VStack(spacing: 8) {
-                        ProgressView("추천 도서를 준비하고 있어요")
-                        Text("처음에는 잠시 걸릴 수 있어요.")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, minHeight: recommendationLayout.carouselHeight)
-                }
-            } else {
+            if store.showsKulumiCovers || !store.recommendedBooks.isEmpty {
                 recommendationCarousel
+            } else if store.isLoadingRecommendations || store.recommendationSessionID == nil {
+                VStack(spacing: 8) {
+                    ProgressView("추천 도서를 준비하고 있어요")
+                    Text("처음에는 잠시 걸릴 수 있어요.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, minHeight: recommendationLayout.carouselHeight)
             }
 
             if let message = store.recommendationErrorMessage {
@@ -151,26 +162,21 @@ struct HomeView: View {
     }
 
     private var recommendationCarousel: some View {
-        ScrollView(.horizontal) {
+        let books = store.recommendedBooks
+
+        return ScrollView(.horizontal) {
             LazyHStack(alignment: .bottom, spacing: recommendationLayout.spacing) {
-                ForEach(
-                    Array(store.recommendedBooks.prefix(6).enumerated()),
-                    id: \.element.id
-                ) { index, book in
-                    Button {
-                        store.send(.bookSelected(book))
-                    } label: {
-                        HomeBookCover(
-                            book: book,
-                            width: recommendationLayout.coverWidth,
-                            height: recommendationLayout.coverHeight,
-                            cornerRadius: recommendationLayout.coverCornerRadius,
-                            shelfHeight: recommendationLayout.shelfHeight
-                        )
+                if store.showsKulumiCovers {
+                    ForEach(Self.kulumiCoverNames.indices, id: \.self) { index in
+                        let book = books.indices.contains(index) ? books[index] : nil
+                        recommendationCard(book, photoName: Self.kulumiCoverNames[index])
+                            .id(index)
                     }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(book.title)
-                    .id(index)
+                } else {
+                    ForEach(Array(books.prefix(6).enumerated()), id: \.element.id) { index, book in
+                        recommendationCard(book)
+                            .id(index)
+                    }
                 }
             }
             .scrollTargetLayout()
@@ -187,7 +193,32 @@ struct HomeView: View {
         }
         .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
         .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
+            guard !store.showsKulumiCovers else { return }
             recommendationPosition = 0
+        }
+    }
+
+    @ViewBuilder
+    private func recommendationCard(_ book: Book?, photoName: String? = nil) -> some View {
+        let cover = HomeBookCover(
+            book: book,
+            width: recommendationLayout.coverWidth,
+            height: recommendationLayout.coverHeight,
+            cornerRadius: recommendationLayout.coverCornerRadius,
+            shelfHeight: recommendationLayout.shelfHeight,
+            photoName: photoName
+        )
+
+        if let book {
+            Button {
+                store.send(.bookSelected(book))
+            } label: {
+                cover.accessibilityHidden(true)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(book.title)
+        } else {
+            cover.accessibilityLabel("쿠루미 사진")
         }
     }
     
@@ -239,13 +270,6 @@ struct HomeView: View {
             }
             .contentMargins(.horizontal, 16, for: .scrollContent)
             .scrollIndicators(.hidden)
-
-            if store.popularBooks.contains(where: { store.libraryInfo[$0.id] == .failed }) {
-                Button("소장 정보 다시 불러오기") { store.send(.loadLibraryInfo) }
-                    .font(.footnote)
-                    .buttonStyle(.bordered)
-                    .padding(.horizontal, 16)
-            }
         }
     }
 }
@@ -256,17 +280,35 @@ private struct HomeBookCover: View {
     let height: CGFloat
     var cornerRadius: CGFloat = 4
     var shelfHeight: CGFloat? = nil
+    var photoName: String? = nil
     
     var body: some View {
-        // 홈 카드는 전체가 상세 이동 버튼이다. 재시도는 열린 상세 화면에서 제공한다.
-        BookCoverView(
-            url: book?.imageURL,
-            isbn: book?.isbn,
-            allowsRetry: false,
-            coverModifier: CoverStyle(cornerRadius: cornerRadius, shelfHeight: shelfHeight)
-        )
+        let style = CoverStyle(cornerRadius: cornerRadius, shelfHeight: shelfHeight)
+
+        Group {
+            if let photoName {
+                let photo = Image(photoName).resizable()
+                photo
+                    .scaledToFit()
+                    .frame(width: width, height: height, alignment: .top)
+                    .background {
+                        photo.scaledToFill()
+                            .frame(width: width, height: height)
+                            .blur(radius: 16)
+                            .accessibilityHidden(true)
+                    }
+                    .modifier(style)
+            } else {
+                // 홈 카드는 전체가 상세 이동 버튼이다. 재시도는 열린 상세 화면에서 제공한다.
+                BookCoverView(
+                    url: book?.imageURL,
+                    isbn: book?.isbn,
+                    allowsRetry: false,
+                    coverModifier: style
+                )
+            }
+        }
         .frame(width: width, height: height)
-        .accessibilityHidden(true)
     }
 
     private struct CoverStyle: ViewModifier {
@@ -295,6 +337,7 @@ private struct HomePopularBookCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HomeBookCover(book: book, width: coverWidth, height: 141.94)
+                .accessibilityHidden(true)
                 .padding(.bottom, 8)
             
             if let book {

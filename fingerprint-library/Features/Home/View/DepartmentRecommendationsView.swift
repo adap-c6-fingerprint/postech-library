@@ -83,12 +83,6 @@ struct DepartmentRecommendationsView: View {
                     }
                 }
                 .background(Color(white: 42.0 / 255.0), in: RoundedRectangle(cornerRadius: 20))
-
-                if books.contains(where: { store.libraryInfo[$0.id] == .failed }) {
-                    Button("소장 정보 다시 불러오기") { store.send(.loadLibraryInfo) }
-                        .font(.footnote)
-                        .buttonStyle(.bordered)
-                }
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 16)

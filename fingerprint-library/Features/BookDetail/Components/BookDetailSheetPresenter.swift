@@ -11,17 +11,20 @@ final class BookDetailSheetPresentation {
 /// 책 상세 네이티브 시트의 표시·종료를 소유한다.
 struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     let store: StoreOf<BookDetailFeature>
+    let mapStore: StoreOf<IndoorMapFeature>
     let presentation: BookDetailSheetPresentation
     var onDismiss: () -> Void
-    var onFrameChange: (CGRect) -> Void
+    var onCompactFrameChange: (CGRect) -> Void
 
     func makeUIViewController(context: Context) -> Controller {
-        Controller(store: store, presentation: presentation, onDismiss: onDismiss, onFrameChange: onFrameChange)
+        Controller(
+            store: store, mapStore: mapStore, presentation: presentation,
+            onDismiss: onDismiss, onCompactFrameChange: onCompactFrameChange)
     }
 
     func updateUIViewController(_ controller: Controller, context: Context) {
         controller.onDismiss = onDismiss
-        controller.onFrameChange = onFrameChange
+        controller.onCompactFrameChange = onCompactFrameChange
     }
 
     static func dismantleUIViewController(_ controller: Controller, coordinator: ()) {
@@ -29,20 +32,28 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     }
 
     final class Controller: UIViewController, UISheetPresentationControllerDelegate {
+        private static let compactID = UISheetPresentationController.Detent.Identifier("bookDetail.compact")
+
         private let store: StoreOf<BookDetailFeature>
+        private let mapStore: StoreOf<IndoorMapFeature>
         var onDismiss: () -> Void
-        var onFrameChange: (CGRect) -> Void
+        var onCompactFrameChange: (CGRect) -> Void
         private var hosting: UIHostingController<BookDetailSheet>?
         private var hasPresented = false
+        private var didFinishPresentation = false
         private var isInvalidated = false
         private let presentation: BookDetailSheetPresentation
 
-        init(store: StoreOf<BookDetailFeature>, presentation: BookDetailSheetPresentation, onDismiss: @escaping () -> Void,
-             onFrameChange: @escaping (CGRect) -> Void) {
+        init(
+            store: StoreOf<BookDetailFeature>, mapStore: StoreOf<IndoorMapFeature>,
+            presentation: BookDetailSheetPresentation, onDismiss: @escaping () -> Void,
+            onCompactFrameChange: @escaping (CGRect) -> Void
+        ) {
             self.store = store
+            self.mapStore = mapStore
             self.presentation = presentation
             self.onDismiss = onDismiss
-            self.onFrameChange = onFrameChange
+            self.onCompactFrameChange = onCompactFrameChange
             super.init(nibName: nil, bundle: nil)
         }
 
@@ -59,22 +70,21 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             guard !hasPresented, !isInvalidated, view.window != nil else { return }
             hasPresented = true
             presentation.isExpanded = false
-            let content = BookDetailSheet(store: store, presentation: presentation, onDismiss: { [weak self] in
+            let content = BookDetailSheet(store: store, mapStore: mapStore, presentation: presentation, onDismiss: { [weak self] in
                 self?.dismissDetail()
             }) { [weak self] _ in
-                self?.reportSheetFrame()
+                self?.reportCompactFrame()
             }
             let hosting = UIHostingController(rootView: content)
             hosting.modalPresentationStyle = .pageSheet
             hosting.view.backgroundColor = .clear
             hosting.overrideUserInterfaceStyle = .dark
             if let sheet = hosting.sheetPresentationController {
-                let compactID = UISheetPresentationController.Detent.Identifier("bookDetail.compact")
-                sheet.detents = [.custom(identifier: compactID) { $0.maximumDetentValue * 0.52 }, .large()]
-                sheet.selectedDetentIdentifier = compactID
+                sheet.detents = [.custom(identifier: Self.compactID) { $0.maximumDetentValue * 0.52 }, .large()]
+                sheet.selectedDetentIdentifier = Self.compactID
                 sheet.prefersGrabberVisible = false
                 sheet.preferredCornerRadius = 28
-                sheet.largestUndimmedDetentIdentifier = compactID
+                sheet.largestUndimmedDetentIdentifier = Self.compactID
                 // 기본 Liquid Glass와 높이에 따른 재질 전환은 시스템에 맡긴다.
                 sheet.delegate = self
             }
@@ -84,16 +94,19 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                     hosting?.presentingViewController?.dismiss(animated: false)
                     return
                 }
-                self.reportSheetFrame()
+                self.didFinishPresentation = true
+                self.reportCompactFrame()
             }
         }
 
-        /// 실제 시트 위치를 뒤쪽 SwiftUI 화면과 같은 좌표계로 전달한다.
-        private func reportSheetFrame() {
-            guard !isInvalidated, let hosting, hosting.view.window != nil else { return }
+        /// 펼친 시트가 지도를 가리는 동안에는 접힌 시트의 마지막 위치를 유지한다.
+        private func reportCompactFrame() {
+            guard !isInvalidated, didFinishPresentation, let hosting, hosting.view.window != nil,
+                  hosting.sheetPresentationController?.selectedDetentIdentifier == Self.compactID
+            else { return }
             let frame = hosting.view.convert(hosting.view.bounds, to: view)
             guard frame.minY.isFinite, frame.height.isFinite, frame.height > 0 else { return }
-            onFrameChange(frame)
+            onCompactFrameChange(frame)
         }
 
         func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {

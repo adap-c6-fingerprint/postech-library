@@ -16,8 +16,7 @@ nonisolated struct BookRoutePlanningInput: Sendable {
     // 경로 계산에 필요한 통로 그래프와 서가별 도착 노드
     let navigation: IndoorNavigationData
 
-    // 출발 서가 표시 정보와 실제 계산용 출발 위치
-    let origin: IndoorShelfLabel
+    // 앱에서 확인한 실제 계산용 출발 위치. 출발점은 서가에 한정되지 않는다.
     let start: IndoorPosition
 
     // 방문할 책과 서가 목록

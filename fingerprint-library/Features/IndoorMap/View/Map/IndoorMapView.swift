@@ -4,6 +4,12 @@ import SwiftUI
 /// TCA 상태로 지도·층 선택·위치 포커싱과 로딩 상태를 표시한다.
 /// MapKit 객체의 생성·갱신은 ``IndoorMapKitView``에 위임한다.
 struct IndoorMapView: View {
+    struct BookDetailPresentation {
+        let floor: IndoorMapFloor?
+        let shelves: [IndoorShelfLabel]
+        let cameraRequest: IndoorMapCameraRequest?
+    }
+
     let store: StoreOf<IndoorMapFeature>
     @State private var homeMarkerCache = HomeMapMarkerCache()
     /// 홈에서는 선택한 서가 카드를, 경로 화면에서는 계산한 경로와 목적지를 표시하도록 구분한다.
@@ -19,10 +25,11 @@ struct IndoorMapView: View {
     var showsFloorPicker = true
     /// 하단 안내 카드가 있는 화면에서는 지도·카메라 영역을 카드 위로 제한한다.
     var extendsUnderBottomSafeArea = true
+    var bookDetail: BookDetailPresentation?
 
     var body: some View {
         Group {
-            if let map = store.map, let floor = store.selectedFloor {
+            if let map = store.map, let floor = bookDetail?.floor ?? store.selectedFloor {
                 mapContent(map: map, floor: floor)
             } else if store.isLoading {
                 ProgressView("실내지도를 불러오고 있어요")
@@ -48,7 +55,7 @@ struct IndoorMapView: View {
                 map: map, floor: floor, selectedFeatureID: nil,
                 position: store.currentPosition,
                 showsUserLocation: store.showsNativeUserLocation,
-                isPlacingOrigin: false, cameraRequest: store.cameraRequest,
+                isPlacingOrigin: false, cameraRequest: cameraRequest(for: floor),
                 onSelect: { _ in },
                 onPlaceOrigin: { _ in },
                 shelves: showsDestinationCard
@@ -60,9 +67,10 @@ struct IndoorMapView: View {
                 viewportInsets: .init(top: 60 + topContentInset, left: appearance == .home ? 77 : 0,
                                       bottom: bottomContentInset, right: 0),
                 shelfLabels: store.shelfLabels,
-                highlightedFeatureIDs: highlightedFeatureIDs,
-                appearance: appearance,
-                homeMarkers: homeMarkers(on: map)
+                highlightedFeatureIDs: bookDetail.map { Set($0.shelves.map(\.mapElementID)) } ?? highlightedFeatureIDs,
+                appearance: bookDetail == nil ? appearance : .bookDetail,
+                homeMarkers: homeMarkers(on: map),
+                detailShelfLabels: bookDetail?.shelves ?? []
             )
             .ignoresSafeArea(.container, edges: extendsUnderBottomSafeArea ? .bottom : [])
 
@@ -150,8 +158,13 @@ struct IndoorMapView: View {
         .accessibilityValue(store.homeAnnotations.showsAmenities ? "전체 시설 표시 중" : "기본 아이콘만 표시 중")
     }
 
+    private func cameraRequest(for floor: IndoorMapFloor) -> IndoorMapCameraRequest? {
+        guard let bookDetail else { return store.cameraRequest }
+        return bookDetail.cameraRequest ?? .init(id: 0, target: .initialFloor(floor.id))
+    }
+
     private func homeMarkers(on map: IndoorMap) -> [HomeMapMarker] {
-        guard appearance == .home else { return [] }
+        guard appearance == .home || bookDetail != nil else { return [] }
         return homeMarkerCache.markers(on: map, labels: store.shelfLabels,
             holdings: store.homeAnnotations.holdings, showsAmenities: store.homeAnnotations.showsAmenities)
     }

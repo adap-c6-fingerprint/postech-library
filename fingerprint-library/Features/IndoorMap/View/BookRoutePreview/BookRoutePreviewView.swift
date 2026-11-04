@@ -3,16 +3,14 @@ import SwiftUI
 
 /// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
 struct BookRoutePreviewView: View {
-    @State private var routeStore = Store(
-        initialState: BookRoutePreviewFeature.State()
-    ) {
-        BookRoutePreviewFeature()
-    }
+    @State private var routeStore: StoreOf<BookRoutePreviewFeature>
     
     @State private var destination: BookRoutePreviewDestination
     @State private var destinationStore: StoreOf<BookShelfMapFeature>?
     @State private var navigationFlow = BookRoutePreviewNavigationState()
     @State private var routeFloorID: UUID?
+    @State private var previewStart: IndoorPosition?
+    @Environment(\.indoorRouteMapStore) private var mapStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -29,17 +27,29 @@ struct BookRoutePreviewView: View {
     }
     
     private let accent = Color(red: 0.88, green: 0.95, blue: 0.19)
-    private var routeRequest: BookRoutePreviewRequest { .init(state: destinationStore?.state) }
+    private var currentStart: IndoorPosition? {
+        guard let mapStore, let position = mapStore.currentPosition,
+              position.source == .manual || mapStore.authorization.isAuthorized,
+              position.isRecent(at: Date()) else { return nil }
+        return position
+    }
+    private var routeRequest: BookRoutePreviewRequest {
+        .init(state: destinationStore?.state, start: previewStart)
+    }
     private var readySession: BookNavigationSession? {
-        guard let previewSession, case let .ready(map, labels, stops) = routeRequest,
+        guard let previewSession, case let .ready(map, labels, start, stops) = routeRequest,
               previewSession.map == map, previewSession.shelfLabels == labels,
+              previewSession.start == start,
               previewSession.matches(candidates: stops) else { return nil }
         return previewSession
     }
     private var orderedBooks: [Book] { readySession?.stops.map(\.book) ?? destination.books }
 
-    init(books: [Book] = []) {
+    init(books: [Book] = [], routeStore: StoreOf<BookRoutePreviewFeature>? = nil) {
         let destination = BookRoutePreviewDestination(books: books)
+        _routeStore = State(initialValue: routeStore ?? Store(initialState: BookRoutePreviewFeature.State()) {
+            BookRoutePreviewFeature()
+        })
         _destination = State(initialValue: destination)
         _destinationStore = State(initialValue: Self.makeStore(for: destination))
     }
@@ -66,12 +76,15 @@ struct BookRoutePreviewView: View {
         }) { insets, cameraRevision in
             Group {
                 if let previewSession,
-                   let floor = previewSession.map.floors.first(where: { $0.id == (routeFloorID ?? previewSession.origin.floorID) }) {
+                   let floor = previewSession.map.floors.first(where: { floor in
+                       routeFloorID.map { $0 == floor.id }
+                           ?? (floor.ordinal == previewSession.start.floorOrdinal)
+                   }) {
                     IndoorMapKitView(
                         map: previewSession.map, floor: floor, selectedFeatureID: nil,
                         position: previewSession.start, showsUserLocation: false, isPlacingOrigin: false,
                         cameraRequest: .init(id: cameraRevision * 100 + floor.ordinal, target: .route(previewSession.route,
-                            featureIDs: [previewSession.origin.mapElementID] + previewSession.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })),
+                            featureIDs: previewSession.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })),
                         onSelect: { _ in }, onPlaceOrigin: { _ in },
                         route: previewSession.route,
                         groupTransitionNodes: previewSession.guidance.groupTransitionNodes,
@@ -111,6 +124,7 @@ struct BookRoutePreviewView: View {
                     
                     routeStore.send(.reset)
                     routeFloorID = nil
+                    previewStart = currentStart
                     
                     destination.useTestMode()
                     destinationStore = Self.makeStore(for: destination)
@@ -153,6 +167,22 @@ struct BookRoutePreviewView: View {
             }
         }
         .accessibilityIdentifier("book-route-preview")
+        .onChange(of: currentStart, initial: true) { _, position in
+            // 처음 위치·층을 받으면 계산한다. 완료·실패 후 위치 수신마다 재계산하지 않는다.
+            if previewSession == nil, !isLoadingRoute,
+               previewStart == nil || previewStart?.floorOrdinal == nil {
+                previewStart = position
+            }
+        }
+        .onChange(of: routeStore.navigationSession) { _, session in
+            guard let session else { return }
+            guard currentStart != nil else {
+                routeStore.send(.startRequested(.failed(IndoorRoutingError.invalidPosition.localizedDescription)))
+                return
+            }
+            navigationFlow.start(session)
+            routeStore.send(.navigationStarted)
+        }
         .task(id: destinationStore.map { ObjectIdentifier($0) }) { [destinationStore] in
             // Store 교체 시 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
             guard let destinationStore else { return }
@@ -183,15 +213,25 @@ struct BookRoutePreviewView: View {
                     .accessibilityIdentifier("preview-test-mode-status")
             }
             if destinationStore != nil, previewSession == nil, routeError == nil {
-                ProgressView(isLoadingRoute ? "311-B에서 목적지까지 경로 계산 중" : "도서·서가 위치 확인 중")
+                ProgressView(isLoadingRoute ? "현재 위치에서 목적지까지 경로 계산 중" : "도서·서가 위치 확인 중")
                     .font(.caption)
             }
             if let routeError {
                 Text(routeError).font(.caption).foregroundStyle(.red)
                     .accessibilityIdentifier("preview-test-route-error")
+                Button("경로 다시 계산") {
+                    let request = BookRoutePreviewRequest(state: destinationStore?.state, start: currentStart)
+                    if request == routeRequest {
+                        routeStore.send(.requestChanged(request))
+                    } else {
+                        previewStart = currentStart
+                    }
+                }
+                .buttonStyle(.bordered)
+                .disabled(isLoadingRoute || currentStart == nil)
             }
             if let previewSession {
-                Text("311-B → " + previewSession.stops.map { "\($0.shelf.realNumber)-\($0.shelf.side.rawValue)" }.joined(separator: " → "))
+                Text("현재 위치 → " + previewSession.stops.map { "\($0.shelf.realNumber)-\($0.shelf.side.rawValue)" }.joined(separator: " → "))
                     .font(.caption).foregroundStyle(.secondary)
             }
             layout {
@@ -203,23 +243,32 @@ struct BookRoutePreviewView: View {
                     metric("거리", unit: "m", value: previewSession.map { $0.route.distanceMeters.formatted(.number.precision(.fractionLength(0))) })
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                Button("출발") { navigationFlow.start(readySession) }
+                Button("출발") {
+                    // 미리보기를 보는 동안 이동했을 수 있으므로 탭 시점의 위치로 다시 계산한다.
+                    routeStore.send(.startRequested(.init(state: destinationStore?.state, start: currentStart)))
+                }
                     .font(.headline)
                     .buttonStyle(.borderedProminent)
                     .tint(accent)
                     .controlSize(.large)
                     .fixedSize()
-                    .disabled(readySession == nil || isLoadingRoute || routeError != nil)
+                    .disabled(readySession == nil || currentStart == nil || isLoadingRoute || routeError != nil)
                     .accessibilityIdentifier("book-route-preview-start")
-                    .accessibilityHint("계산한 경로 정보를 실시간 길안내 개발용 화면으로 전달해요")
+                    .accessibilityHint("최신 현재 위치에서 경로를 계산하고 길안내를 시작해요")
             }
             .padding(16)
             .background(Color(uiColor: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
 
             Text(previewSession == nil ? "경로 계산 후 시간·단계·거리가 표시돼요."
-                 : "시속 5km 기준 예상 시간이에요(10m ≈ 7.2초). 단계는 그룹 전환 횟수 + 1이며, 주황색 원은 전환 노드예요. 모든 방문 순서 중 실제 이동거리가 가장 짧은 경로예요. 출발점은 테스트용 고정 위치예요.")
+                 : "시속 5km 기준 예상 시간이에요(10m ≈ 7.2초). 단계는 그룹 전환 횟수 + 1이며, 주황색 원은 전환 노드예요. 모든 방문 순서 중 실제 이동거리가 가장 짧은 경로예요. 출발을 누르면 최신 현재 위치로 다시 계산해요.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            if currentStart == nil {
+                Label("현재 위치를 확인한 뒤 길안내를 시작할 수 있어요.", systemImage: "location.slash")
+                    .font(.caption)
+                Button("현재 위치 확인") { mapStore?.send(.currentLocationTapped) }
+                    .disabled(mapStore == nil)
+            }
         }
     }
 
@@ -241,7 +290,7 @@ struct BookRoutePreviewView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("경로 요약").font(.headline)
             VStack(alignment: .leading, spacing: 12) {
-                Label("출발 · 3층 311-B (테스트 고정)", systemImage: "location.circle.fill")
+                Label("출발 · 현재 위치", systemImage: "location.circle.fill")
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.white, .blue)
                 Divider().padding(.leading, 28)
