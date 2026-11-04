@@ -16,10 +16,14 @@ struct BookNavigationFeature {
     @ObservableState
     struct State: Equatable {
         let session: BookNavigationSession
-        let plans: [RouteGuidancePlan?]
+        var plans: [RouteGuidancePlan?]
         let bookInfos: [BookNavigationBookInfo?]
-        let turnArrowsByStop: [[RouteTurnArrow]]
-        let timeline: BookNavigationTimeline
+        var turnArrowsByStop: [[RouteTurnArrow]]
+        var timeline: BookNavigationTimeline
+        var reroutedLegs: [Int: IndoorRoute] = [:]
+        var isReroutingToNextBook = false
+        var nextBookRequestID = 0
+        var nextBookRouteError: String?
         var currentStopIndex = 0
         var progress: RouteGuidanceProgress?
         var rawPosition: IndoorPosition?
@@ -55,7 +59,8 @@ struct BookNavigationFeature {
             session.stops.indices.contains(currentStopIndex) ? session.stops[currentStopIndex] : nil
         }
         var currentRoute: IndoorRoute? {
-            session.legs.indices.contains(currentStopIndex) ? session.legs[currentStopIndex] : nil
+            reroutedLegs[currentStopIndex]
+                ?? (session.legs.indices.contains(currentStopIndex) ? session.legs[currentStopIndex] : nil)
         }
         var currentPlan: RouteGuidancePlan? {
             plans.indices.contains(currentStopIndex) ? plans[currentStopIndex] : nil
@@ -162,13 +167,16 @@ struct BookNavigationFeature {
         case cancelDismissed
         case cancelConfirmed
         case nextBookTapped
+        case nextBookRouteLoaded(requestID: Int, stopIndex: Int, IndoorRoute)
+        case nextBookRouteFailed(requestID: Int, String)
     }
 
     @Dependency(\.indoorLocationClient) var locationClient
     @Dependency(\.date.now) var now
     @Dependency(\.continuousClock) var clock
     @Dependency(\.bookCoverClient) var bookCoverClient
-    private nonisolated enum CancelID: Hashable, Sendable { case location, expiry }
+    @Dependency(\.bookRoutePreviewClient) var routePreviewClient
+    private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -325,16 +333,64 @@ struct BookNavigationFeature {
                 return .none
 
             case .nextBookTapped:
-                guard state.exitReason == nil, state.hasNextStop,
-                      state.progress?.maneuver == .nearDestination else { return .none }
+                guard state.exitReason == nil, state.hasNextStop, !state.isReroutingToNextBook else { return .none }
                 state.isCancelConfirmationPresented = false
-                state.currentStopIndex += 1
+                state.nextBookRouteError = nil
+                guard let position = state.latestPosition, position.isRecent(at: now),
+                      (-2...RouteGuidancePlan.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
+                    state.nextBookRouteError = "현재 위치를 확인한 뒤 다시 시도해 주세요."
+                    return .none
+                }
+                let nextIndex = state.currentStopIndex + 1
+                let nextStop = state.session.stops[nextIndex]
+                // 방문 순서와 이미 선택한 서가를 유지한다. 남은 책의 순서를 다시 최적화하지 않는다.
+                let destination = BookRouteCandidateStop(book: nextStop.book, holdings: nextStop.holdings,
+                    candidateShelves: [nextStop.shelf])
+                let map = state.session.map, labels = state.session.shelfLabels
+                state.nextBookRequestID += 1
+                let requestID = state.nextBookRequestID
+                state.isReroutingToNextBook = true
+                state.progress = nil
+                state.statusMessage = "현재 위치에서 다음 책까지의 경로를 계산하고 있어요."
+                return .run { [routePreviewClient] send in
+                    do {
+                        let session = try await routePreviewClient.load(map, labels, position, [destination])
+                        try Task.checkCancellation()
+                        guard let route = session.legs.first else { throw IndoorRoutingError.noRoute }
+                        await send(.nextBookRouteLoaded(requestID: requestID, stopIndex: nextIndex, route))
+                    } catch is CancellationError {
+                        return
+                    } catch {
+                        await send(.nextBookRouteFailed(requestID: requestID, error.localizedDescription))
+                    }
+                }.cancellable(id: CancelID.nextBookRoute, cancelInFlight: true)
+
+            case let .nextBookRouteLoaded(requestID, stopIndex, route):
+                guard state.isReroutingToNextBook, state.exitReason == nil,
+                      requestID == state.nextBookRequestID, stopIndex == state.currentStopIndex + 1 else { return .none }
+                state.isReroutingToNextBook = false
+                guard route.destination == state.session.legs[stopIndex].destination,
+                      let plan = try? RouteGuidancePlan(route: route, graph: state.session.graph) else {
+                    state.nextBookRouteError = "다음 책의 경로를 확인할 수 없어요. 다시 시도해 주세요."
+                    return .none
+                }
+                state.reroutedLegs[stopIndex] = route
+                state.plans[stopIndex] = plan
+                state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
+                state.timeline = .init(plans: state.plans, bookCount: state.session.stops.count)
+                state.currentStopIndex = stopIndex
                 state.followsNavigationCamera = true
                 state.isArrivalPresented = false
                 state.progress = nil
                 fitCurrentRoute(&state)
                 state.statusMessage = "다음 책까지의 위치를 확인하고 있어요."
                 if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
+                return .none
+
+            case let .nextBookRouteFailed(requestID, message):
+                guard state.isReroutingToNextBook, requestID == state.nextBookRequestID else { return .none }
+                state.isReroutingToNextBook = false
+                state.nextBookRouteError = "다음 책 경로를 계산하지 못했어요. \(message)"
                 return .none
 
             case let .finishFromArrival(stopIndex):
@@ -345,6 +401,7 @@ struct BookNavigationFeature {
 
             case .cancelTapped:
                 guard state.exitReason == nil else { return .none }
+                state.nextBookRouteError = nil
                 state.isCancelConfirmationPresented = true
                 return .none
 
@@ -387,8 +444,12 @@ struct BookNavigationFeature {
 
     private func stop(_ state: inout State) -> Effect<Action> {
         state.isActive = false
+        if state.isReroutingToNextBook {
+            state.isReroutingToNextBook = false
+            state.nextBookRequestID += 1
+        }
         invalidate(&state, message: state.exitReason == nil ? "안내가 일시 정지됐어요." : "안내를 종료했어요.")
-        return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.expiry))
+        return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.expiry), .cancel(id: CancelID.nextBookRoute))
     }
 
     private func invalidate(_ state: inout State, message: String) {
@@ -422,6 +483,11 @@ struct BookNavigationFeature {
         }
         let previousFloor = state.currentFloor?.id
         state.latestPosition = effective
+        if state.isReroutingToNextBook {
+            state.progress = nil
+            state.statusMessage = "현재 위치에서 다음 책까지의 경로를 계산하고 있어요."
+            return
+        }
         if previousFloor != state.currentFloor?.id { fitCurrentRoute(&state) }
         guard let plan = state.currentPlan else {
             state.progress = nil

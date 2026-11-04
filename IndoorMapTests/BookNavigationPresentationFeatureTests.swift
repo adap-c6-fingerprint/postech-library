@@ -5,31 +5,61 @@ import Testing
 extension IndoorMapSerialTests {
     @MainActor
     struct BookNavigationPresentationFeatureTests {
-        @Test("현재 책 근처에 도착하기 전에는 다음 책 경로로 건너뛰지 않는다")
-        func cannotSkipUnreachedStop() async throws {
-            var initial = BookNavigationFeature.State(session: try NavigationGuidanceTestFixture.session())
+        @Test("현재 책에 도착하기 전에도 현재 위치에서 다음 책으로 다시 안내한다")
+        func skipUnreachedStopFromCurrentPosition() async throws {
+            let session = try NavigationGuidanceTestFixture.session()
+            let position = NavigationGuidanceTestFixture.position(x: 5)
+            let route = NavigationGuidanceTestFixture.make(nodes: [IndoorRoutingTestFactory.node("a"),
+                IndoorRoutingTestFactory.node("b", x: 20)], reversed: true, projectedStart: position.coordinate).route
+            let recalculated = try BookNavigationSession(map: session.map, shelfLabels: session.shelfLabels,
+                stops: [session.stops[1]], legs: [route], graph: session.graph, start: position)
+            var initial = BookNavigationFeature.State(session: session)
             initial.isCancelConfirmationPresented = true
-            let store = TestStore(initialState: initial) { BookNavigationFeature() }
+            initial.rawPosition = position
+            initial.latestPosition = position
+            initial.progress = try initial.currentPlan?.progress(for: position, at: position.timestamp)
+            let store = TestStore(initialState: initial) { BookNavigationFeature() } withDependencies: {
+                $0.date = .constant(position.timestamp)
+                $0.bookRoutePreviewClient.load = { _, _, start, stops in
+                    #expect(start == position)
+                    await MainActor.run {
+                        #expect(stops.map(\.book.id) == [session.stops[1].book.id])
+                        #expect(stops[0].candidateShelves == [session.stops[1].shelf])
+                    }
+                    return recalculated
+                }
+            }
+            store.exhaustivity = .off
             await store.send(.nextBookTapped)
+            await store.receive(.nextBookRouteLoaded(requestID: 1, stopIndex: 1, route))
+            #expect(store.state.currentStopIndex == 1)
+            #expect(store.state.currentStop?.book == session.stops[1].book)
+            #expect(store.state.currentRoute?.start.actualCoordinate == position.coordinate)
+            #expect(store.state.currentRoute != session.legs[1], "이전 서가를 출발점으로 둔 경로를 재사용하면 안 됩니다")
+            #expect(store.state.currentPlan?.destination.id == route.nodeIDs.last)
+            #expect(!store.state.isReroutingToNextBook)
+            #expect(!store.state.isCancelConfirmationPresented)
             await store.finish()
         }
 
-        @Test("현재 서가 도착 후에는 다음 책의 경로·헤더·진행 구간으로 전환한다")
+        @Test("현재 서가 도착 후에도 현재 위치에서 다음 책 경로로 전환한다")
         func nextBookAfterArrival() async throws {
             let session = try NavigationGuidanceTestFixture.session()
+            let position = NavigationGuidanceTestFixture.position(x: 20, y: 20)
+            let recalculated = try BookNavigationSession(map: session.map, shelfLabels: session.shelfLabels,
+                stops: [session.stops[1]], legs: [session.legs[1]], graph: session.graph, start: position)
             var initial = BookNavigationFeature.State(session: session)
             initial.isCancelConfirmationPresented = true
-            initial.progress = try initial.currentPlan?.progress(
-                for: NavigationGuidanceTestFixture.position(x: 20, y: 20), at: NavigationGuidanceTestFixture.now)
-            let store = TestStore(initialState: initial) { BookNavigationFeature() }
-            await store.send(.nextBookTapped) {
-                $0.currentStopIndex = 1
-                $0.isCancelConfirmationPresented = false
-                $0.progress = nil
-                $0.statusMessage = "다음 책까지의 위치를 확인하고 있어요."
-                $0.cameraRequest = .init(id: 1, target: .route(session.legs[1],
-                    featureIDs: session.stops[1].candidateShelves.map(\.mapElementID)))
+            initial.rawPosition = position
+            initial.latestPosition = position
+            initial.progress = try initial.currentPlan?.progress(for: position, at: position.timestamp)
+            let store = TestStore(initialState: initial) { BookNavigationFeature() } withDependencies: {
+                $0.date = .constant(position.timestamp)
+                $0.bookRoutePreviewClient.load = { _, _, _, _ in recalculated }
             }
+            store.exhaustivity = .off
+            await store.send(.nextBookTapped)
+            await store.receive(.nextBookRouteLoaded(requestID: 1, stopIndex: 1, session.legs[1]))
             #expect(store.state.currentStop?.book == session.stops[1].book)
             #expect(store.state.currentRoute == session.legs[1])
             await store.send(.nextBookTapped)

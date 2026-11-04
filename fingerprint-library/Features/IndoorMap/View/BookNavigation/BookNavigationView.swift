@@ -127,7 +127,7 @@ struct BookNavigationView: View {
         Button("돌아가기", role: .cancel) { store.send(.cancelDismissed) }
         if store.hasNextStop {
             Button("다음 책 찾기") { store.send(.nextBookTapped) }
-                .disabled(store.progress?.maneuver != .nearDestination)
+                .disabled(store.isReroutingToNextBook)
         }
         Button("안내 종료하기", role: .destructive) { store.send(.cancelConfirmed) }
     }
@@ -163,7 +163,7 @@ struct BookNavigationView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
                 Image(systemName: store.instructionSymbol).frame(width: 20)
-                Text(store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
+                Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
                     .font(.subheadline.weight(.semibold)).lineLimit(2)
                 Spacer(minLength: 0)
                 Button { store.send(.arrivalTestTapped) } label: {
