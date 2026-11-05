@@ -72,11 +72,12 @@ nonisolated struct AnalyticsEvent: Equatable, Sendable {
     }
 
     static func bookID(_ book: Book) -> String {
-        let id = book.controlNumber ?? book.id
-        let raw = id.hasPrefix("primo:") ? String(id.dropFirst(6)) : id
-        guard raw.count <= 60, raw.hasPrefix("alma"), !raw.dropFirst(4).isEmpty,
-              raw.dropFirst(4).allSatisfy({ $0.isASCII && $0.isNumber }) else { return "unknown" }
-        return raw
+        for id in [book.controlNumber, book.id].compactMap({ $0 }) {
+            let raw = id.hasPrefix("primo:") ? String(id.dropFirst(6)) : id
+            if raw.count <= 60, raw.hasPrefix("alma"), !raw.dropFirst(4).isEmpty,
+               raw.dropFirst(4).allSatisfy({ $0.isASCII && $0.isNumber }) { return raw }
+        }
+        return "unknown"
     }
 }
 

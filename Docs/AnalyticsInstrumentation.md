@@ -62,7 +62,7 @@ profile_version_id는 임의 UUID이며 이벤트를 같은 프로필 버전으�
 
 - build_environment: simulator / development / testflight / production / unknown.
 - Simulator는 항상 simulator, Debug 실기기는 development. Release는 검증된 AppTransaction 환경으로 구분하며 확인 실패 시 unknown이다.
-- 같은 Firebase 프로젝트이므로 콘솔과 BigQuery에 테스트 데이터도 들어간다. 운영 분석은 production만 필터링한다. 환경 판별 직전의 첫 자동 SDK 이벤트는 unknown이거나 앱의 공통 필드가 없을 수 있다.
+- 같은 Firebase 프로젝트이므로 콘솔과 BigQuery에 테스트 데이터도 들어간다. 운영 분석은 production만 필터링한다. Release 환경 판별이 끝나기 전에는 앱이 직접 기록하는 app_visit_started·screen_view 등의 이벤트도 unknown으로 남을 수 있어 이 필터에서 제외된다. 자동 SDK 이벤트는 앱의 공통 필드가 없을 수도 있다. 초기 이벤트를 보류하거나 소급 수정하지 않는다.
 - 테스트모드 버튼과 simulation/replay 안내에 is_test=yes를 붙인다. 실제 사용자 행동만 볼 때 is_test=yes를 제외한다.
 - GA의 기본 session과 앱의 visit_id는 별도다. 앱 visit는 30분 이상 비활성 뒤 새로 생성한다.
 - UUID 식별자를 GA 맞춤 측정기준으로 등록하면 값이 너무 다양해진다. ID 연결은 BigQuery에서 하고, GA에서는 낮은 다양성의 코드와 개수 중심으로 본다.
@@ -70,14 +70,17 @@ profile_version_id는 임의 UUID이며 이벤트를 같은 프로필 버전으�
 ## 오류 진단과 symbols
 
 Crashlytics 자동 보고는 계속 false다. 진단 SDK가 기기에 로컬 기록을 만드는 것 자체를 막는 설정은 아니다.
-처음 동의하거나 실행 중 철회한 실행의 보고서는 다음 실행에서 폐기한다. 실행 시작부터 종료까지 진단 동의가 유지된 실행의 보고서만 다음 실행에서 전송한다.
+진단 동의를 처음 허용하거나 실행 중 철회하면, Firebase가 구성된 실행에서는 그 시점까지 쌓인 미전송 보고서를 즉시 폐기한다.
+동의를 바꾼 뒤 같은 실행에서 기록된 보고서는 다음 실행 시작 시 폐기한다. Firebase가 구성되지 않은 실행에서도 철회 기록은 저장하며 다음 정상 실행에서 이전 보고서를 폐기한다.
+실행 시작부터 종료까지 진단 동의가 유지된 실행의 보고서만 다음 실행에서 전송한다.
 이미 시작된 업로드나 서버에 도착한 보고서를 철회로 회수할 수는 없다.
-breadcrumb는 행동 코드만, 사용자 지정 키는 화면 코드·navigation ID·빌드 환경이다. 전체 reducer action/state/error 원문을 덤프하지 않는다.
+breadcrumb는 행동 코드만 기록한다. 사용자 지정 키는 screen_code, last_action_code, navigation_id, visit_id, launch_id, build_environment다.
+진단 동의 철회 시 screen_code, last_action_code, navigation_id, visit_id, launch_id를 초기화하며 build_environment는 유지한다. 전체 reducer action/state/error 원문을 덤프하지 않는다.
 
 Debug 설정 화면에는 사용자가 확인한 뒤 누르는 비치명 오류 테스트 버튼이 있다. 첫 진단 동의 후 한 번 재실행하고 사용한다.
 진짜 크래시 테스트는 자동 실행하지 않았다.
 
-Archive에만 마지막 Crashlytics symbols 업로드 단계를 실행한다. Release dSYM 설정은 기존 설정을 유지한다.
+Archive에만 마지막 Crashlytics symbols 업로드 단계를 실행한다. upload-symbols --build-phase를 전경에서 실행해 실패가 빌드 로그와 종료 코드에 드러나도록 한다. 실행 파일은 샌드박스 입력 경로에도 선언한다. Release dSYM 설정은 기존 설정을 유지한다.
 표준 Xcode SourcePackages 경로를 사용한다. 별도 -clonedSourcePackagesDirPath를 쓰는 CI는 해당 단계의 SDK 경로도 그 환경에 맞춰야 한다.
 Archive에는 로컬/CI가 제공하는 GoogleService-Info.plist가 필요하다. 파일은 계속 Git에서 제외하며 일반 Debug 빌드에는 symbols 업로드를 실행하지 않는다.
 

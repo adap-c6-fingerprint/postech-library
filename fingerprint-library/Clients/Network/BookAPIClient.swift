@@ -105,7 +105,7 @@ nonisolated struct BookAPIClient: Sendable {
         var request = URLRequest(url: url)
         request.timeoutInterval = timeout
         // 정보나루는 application/json Accept 요청에 406을 반환한다.
-        request.setValue(endpoint.provider == .primo ? "application/json" : "*/*", forHTTPHeaderField: "Accept")
+        request.setValue(endpoint.provider == .data4Library ? "*/*" : "application/json", forHTTPHeaderField: "Accept")
         switch endpoint.provider {
         case .primo: request.setValue("apikey \(key)", forHTTPHeaderField: "Authorization")
         case .yes24: request.setValue(key, forHTTPHeaderField: "X-Api-Key")

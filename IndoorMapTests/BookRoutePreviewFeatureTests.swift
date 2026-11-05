@@ -37,6 +37,7 @@ extension IndoorMapSerialTests {
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
+                $0.analyticsRequestIsTest = true
             }
 
             // Feature가 실패 Action을 보내면 상태가 바뀌어야 함
@@ -100,6 +101,7 @@ extension IndoorMapSerialTests {
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
+                $0.analyticsRequestIsTest = true
                 $0.routeError = nil
             }
             await store.receive(.routeLoaded(requestID: 1, sample)) {
@@ -127,6 +129,7 @@ extension IndoorMapSerialTests {
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
+                $0.analyticsRequestIsTest = true
             }
             await pending.clock.advance()
             try #require(pending.didStart.value)
@@ -162,6 +165,7 @@ extension IndoorMapSerialTests {
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
+                $0.analyticsRequestIsTest = true
             }
             await pending.clock.advance()
             try #require(pending.didStart.value)
@@ -200,6 +204,7 @@ extension IndoorMapSerialTests {
             ))) {
                 $0.requestID = 1
                 $0.isLoadingRoute = true
+                $0.analyticsRequestIsTest = true
             }
             await pending.clock.advance()
             try #require(pending.didStart.value)
@@ -239,6 +244,36 @@ extension IndoorMapSerialTests {
                 $0.previewSession = nil
             }
             await store.finish()
+        }
+
+        @Test("실패·취소 이벤트는 화면 모드가 바뀌어도 시작 시점의 테스트 표시를 유지한다",
+              arguments: [false, true])
+        func preservesRequestTestFlag(cancel: Bool) async {
+            let events = LockIsolated<[AnalyticsEvent]>([])
+            var initial = BookRoutePreviewFeature.State()
+            initial.isLoadingRoute = true
+            initial.requestID = 1
+            initial.analyticsIsTest = true
+            initial.analyticsRequestIsTest = true
+            let store = TestStore(initialState: initial) { BookRoutePreviewFeature() } withDependencies: {
+                $0.analyticsClient.record = { event in events.withValue { $0.append(event) } }
+            }
+            await store.send(.analyticsTestModeChanged(false)) { $0.analyticsIsTest = false }
+            if cancel {
+                await store.send(.disappeared) {
+                    $0.requestID = 2
+                    $0.isLoadingRoute = false
+                }
+            } else {
+                await store.send(.routeFailed(requestID: 1, "failed")) {
+                    $0.isLoadingRoute = false
+                    $0.routeError = "failed"
+                }
+            }
+            #expect(events.value.count == 1)
+            #expect(events.value.first?.code == (cancel ? .routeCalculationCancelled : .routeCalculationFailed))
+            #expect(events.value.first?.fields[.isTest] == .flag(true))
+            #expect(events.value.first?.fields[.operationID] == .text(initial.analyticsOperation))
         }
 
         /// 실제 파일·시간을 사용하지 않고, 취소될 때까지 계산을 보류

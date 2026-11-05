@@ -79,12 +79,15 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
             let previous = storedConsent
             storedConsent = AnalyticsConsent(analytics: choice.analytics, diagnostics: choice.diagnostics, hasChosen: true)
             defaults.set(try? JSONEncoder().encode(storedConsent), forKey: AnalyticsConsent.storageKey)
-            profileRevision += 1
-            operations.reset()
-            lastNavigationState.removeAll()
-            visitID = nil
-            profileVersion = nil
-            intervalStart = nil
+            let analyticsChanged = previous.analytics != choice.analytics
+            if analyticsChanged {
+                profileRevision += 1
+                operations.reset()
+                lastNavigationState.removeAll()
+                visitID = nil
+                profileVersion = nil
+                intervalStart = nil
+            }
             if previous.analytics && !choice.analytics, configured {
                 Analytics.setAnalyticsCollectionEnabled(false)
                 Analytics.setUserID(nil)
@@ -97,19 +100,22 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
                     defaults.removeObject(forKey: key)
                 }
             }
+            // Firebase 미설정 실행의 철회도 다음 실행의 보고서 전송을 막는다.
+            if !choice.diagnostics {
+                defaults.set(false, forKey: Self.diagnosticEligibilityKey)
+            }
             if configured {
                 if previous.diagnostics != choice.diagnostics || !choice.diagnostics {
                     Crashlytics.crashlytics().deleteUnsentReports()
                 }
                 if !choice.diagnostics {
-                    defaults.set(false, forKey: Self.diagnosticEligibilityKey)
                     Crashlytics.crashlytics().setUserID("")
                     for key in ["screen_code", "last_action_code", "navigation_id", "visit_id", "launch_id"] {
                         Crashlytics.crashlytics().setCustomValue("", forKey: key)
                     }
                 }
                 applySDKConsent()
-                if active { beginVisitIfNeeded() }
+                if active, analyticsChanged { beginVisitIfNeeded() }
             }
         }
         NotificationCenter.default.post(name: Self.consentChanged, object: nil)
@@ -243,6 +249,7 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
         if storedConsent.diagnostics {
             Crashlytics.crashlytics().setCustomValue(launchID, forKey: "launch_id")
             Crashlytics.crashlytics().setCustomValue(environment, forKey: "build_environment")
+            Crashlytics.crashlytics().setCustomValue(visitID ?? "", forKey: "visit_id")
         }
     }
     private func setEnvironment(_ name: String) {

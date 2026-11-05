@@ -26,6 +26,8 @@ nonisolated struct APIRoutingTests {
             #expect(url.host == endpoint.directURL.host)
             #expect(url.path == endpoint.directURL.path)
             #expect(request.timeoutInterval == 15)
+            #expect(request.value(forHTTPHeaderField: "Accept") ==
+                (endpoint.provider == .data4Library ? "*/*" : "application/json"))
             let items = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems)
             #expect(items.first { $0.name == "q" }?.value == "과학 & 역사")
             switch endpoint.provider {
