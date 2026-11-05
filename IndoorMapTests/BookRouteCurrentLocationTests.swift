@@ -155,7 +155,7 @@ extension IndoorMapSerialTests {
             #expect(received.value == [start], "미리보기 결과는 위치 갱신만으로 재계산하지 않아야 합니다.")
         }
 
-        @Test("별도 UIKit 상세 시트도 블루닷을 가진 같은 지도 Store를 전달받는다")
+        @Test("상세 시트는 medium으로 열리고 세 높이 전환 후에도 같은 지도 Store를 유지한다")
         func nativeDetailSheetKeepsSimulationMapStore() async throws {
             let fixture = try await Fixture.load()
             let start = try fixture.position(level: 2, index: 1)
@@ -174,9 +174,11 @@ extension IndoorMapSerialTests {
                 $0.date = .constant(start.timestamp)
                 $0.bookFavoritesClient.load = { [] }
             }
+            let presentation = BookDetailSheetPresentation()
+            var frames: [CGRect] = []
             let controller = BookDetailSheetPresenter.Controller(
-                store: detailStore, mapStore: mapStore, presentation: BookDetailSheetPresentation(),
-                onDismiss: {}, onCompactFrameChange: { _ in })
+                store: detailStore, mapStore: mapStore, presentation: presentation,
+                onDismiss: {}, onCompactFrameChange: { frames.append($0) })
             let scene = try #require(UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first)
             let window = UIWindow(windowScene: scene)
             window.rootViewController = controller
@@ -188,6 +190,35 @@ extension IndoorMapSerialTests {
                 try await Task.sleep(for: .milliseconds(30))
             }
             let sheet = try #require(controller.presentedViewController as? UIHostingController<BookDetailSheet>)
+            let sheetController = try #require(sheet.sheetPresentationController)
+            let compactID = BookDetailSheetPresenter.Controller.compactID
+            #expect(sheetController.detents.map(\.identifier) == [compactID, .medium, .large])
+            #expect(sheetController.selectedDetentIdentifier == .medium)
+            #expect(sheetController.largestUndimmedDetentIdentifier == .medium)
+            #expect(presentation.detent == .medium)
+            while frames.isEmpty {
+                try #require(Date() < deadline, "기본 medium 높이가 지도에 전달되지 않았습니다")
+                try await Task.sleep(for: .milliseconds(30))
+            }
+            let mediumFrame = try #require(frames.last)
+            for (identifier, detent) in [(compactID, BookDetailSheetDetent.compact),
+                                         (.medium, .medium), (.large, .large)] {
+                sheetController.animateChanges { sheetController.selectedDetentIdentifier = identifier }
+                // 프로그램으로 바꾼 detent는 사용자 드래그의 delegate 호출을 대신하지 않는다.
+                controller.sheetPresentationControllerDidChangeSelectedDetentIdentifier(sheetController)
+                #expect(presentation.detent == detent)
+                if detent == .compact {
+                    while (frames.last?.height ?? .infinity) >= mediumFrame.height - 1 {
+                        try #require(Date() < deadline, "최소 높이가 지도에 반영되지 않았습니다")
+                        try await Task.sleep(for: .milliseconds(30))
+                    }
+                } else if detent == .medium {
+                    while abs((frames.last?.height ?? 0) - mediumFrame.height) > 1 {
+                        try #require(Date() < deadline, "medium 복귀 높이가 지도에 반영되지 않았습니다")
+                        try await Task.sleep(for: .milliseconds(30))
+                    }
+                }
+            }
             #expect(sheet.rootView.mapStore === mapStore)
             #expect(sheet.rootView.mapStore.currentPosition == start)
             let moved = try fixture.position(level: 2, index: 2)

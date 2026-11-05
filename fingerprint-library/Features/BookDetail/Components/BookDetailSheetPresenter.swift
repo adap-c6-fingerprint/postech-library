@@ -5,7 +5,8 @@ import UIKit
 
 @MainActor @Observable
 final class BookDetailSheetPresentation {
-    var isExpanded = false
+    var detent: BookDetailSheetDetent = .medium
+    var isExpanded: Bool { detent == .large }
 }
 
 /// 책 상세 네이티브 시트의 표시·종료를 소유한다.
@@ -32,7 +33,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     }
 
     final class Controller: UIViewController, UISheetPresentationControllerDelegate {
-        private static let compactID = UISheetPresentationController.Detent.Identifier("bookDetail.compact")
+        static let compactID = UISheetPresentationController.Detent.Identifier("bookDetail.compact")
 
         private let store: StoreOf<BookDetailFeature>
         private let mapStore: StoreOf<IndoorMapFeature>
@@ -69,10 +70,10 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             super.viewDidAppear(animated)
             guard !hasPresented, !isInvalidated, view.window != nil else { return }
             hasPresented = true
-            presentation.isExpanded = false
+            presentation.detent = .medium
             let content = BookDetailSheet(store: store, mapStore: mapStore, presentation: presentation, onDismiss: { [weak self] in
                 self?.dismissDetail()
-            }) { [weak self] _ in
+            }) { [weak self] in
                 self?.reportCompactFrame()
             }
             let hosting = UIHostingController(rootView: content)
@@ -80,11 +81,19 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             hosting.view.backgroundColor = .clear
             hosting.overrideUserInterfaceStyle = .dark
             if let sheet = hosting.sheetPresentationController {
-                sheet.detents = [.custom(identifier: Self.compactID) { $0.maximumDetentValue * 0.52 }, .large()]
-                sheet.selectedDetentIdentifier = Self.compactID
+                sheet.detents = [.custom(identifier: Self.compactID) { context in
+                    let height = UIFontMetrics(forTextStyle: .body).scaledValue(
+                        for: BookDetailCompactLayout.height,
+                        compatibleWith: context.containerTraitCollection)
+                    // 가로 화면·큰 글자에서 medium보다 낮은 요약 화면을 확보할 수 없으면 생략한다.
+                    guard let medium = UISheetPresentationController.Detent.medium().resolvedValue(in: context),
+                          height < medium else { return nil }
+                    return height
+                }, .medium(), .large()]
+                sheet.selectedDetentIdentifier = .medium
                 sheet.prefersGrabberVisible = false
                 sheet.preferredCornerRadius = 28
-                sheet.largestUndimmedDetentIdentifier = Self.compactID
+                sheet.largestUndimmedDetentIdentifier = .medium
                 // 기본 Liquid Glass와 높이에 따른 재질 전환은 시스템에 맡긴다.
                 sheet.delegate = self
             }
@@ -99,10 +108,10 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             }
         }
 
-        /// 펼친 시트가 지도를 가리는 동안에는 접힌 시트의 마지막 위치를 유지한다.
+        /// compact·medium의 실제 위치를 지도에 전달하고 large에서는 마지막 위치를 유지한다.
         private func reportCompactFrame() {
             guard !isInvalidated, didFinishPresentation, let hosting, hosting.view.window != nil,
-                  hosting.sheetPresentationController?.selectedDetentIdentifier == Self.compactID
+                  hosting.sheetPresentationController?.selectedDetentIdentifier != .large
             else { return }
             let frame = hosting.view.convert(hosting.view.bounds, to: view)
             guard frame.minY.isFinite, frame.height.isFinite, frame.height > 0 else { return }
@@ -112,8 +121,13 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
             guard !isInvalidated else { return }
             withAnimation(.easeInOut(duration: 0.25)) {
-                presentation.isExpanded = sheetPresentationController.selectedDetentIdentifier == .large
+                switch sheetPresentationController.selectedDetentIdentifier {
+                case Self.compactID: presentation.detent = .compact
+                case .large: presentation.detent = .large
+                default: presentation.detent = .medium
+                }
             }
+            reportCompactFrame()
         }
 
         private func dismissDetail() {

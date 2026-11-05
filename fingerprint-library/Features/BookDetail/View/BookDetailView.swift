@@ -124,27 +124,29 @@ struct BookDetailSheet: View {
     let mapStore: StoreOf<IndoorMapFeature>
     let presentation: BookDetailSheetPresentation
     var onDismiss: () -> Void
-    var onHeightChange: (CGFloat) -> Void = { _ in }
+    var onLayoutChange: () -> Void = { }
 
     var body: some View {
         NavigationStack {
-            BookDetailView(store: store, isExpanded: presentation.isExpanded, onDismiss: onDismiss)
+            BookDetailView(store: store, detent: presentation.detent, onDismiss: onDismiss)
                 .containerBackground(.clear, for: .navigation)
                 .toolbar(.hidden, for: .navigationBar)
         }
         // 새 UIHostingController는 앱 루트의 SwiftUI 환경을 상속하지 않으므로 다시 연결한다.
         .environment(\.indoorRouteMapStore, mapStore)
         .preferredColorScheme(.dark)
-        .onGeometryChange(for: CGFloat.self) { $0.size.height + $0.safeAreaInsets.bottom } action: { height in
-            guard height.isFinite, height > 0 else { return }
-            onHeightChange(height)
+        .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame in
+            guard frame.minY.isFinite, frame.height.isFinite, frame.height > 0 else { return }
+            onLayoutChange()
         }
     }
 }
 
 struct BookDetailView: View {
     @Bindable var store: StoreOf<BookDetailFeature>
-    var isExpanded = false
+    var detent: BookDetailSheetDetent = .medium
+    private var isExpanded: Bool { detent == .large }
+    private var usesAccessibleLayout: Bool { dynamicTypeSize.isAccessibilitySize || isVoiceOverEnabled }
     var onDismiss: () -> Void = { }
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
@@ -208,6 +210,8 @@ struct BookDetailView: View {
     private var detailContent: some View {
         if isExpanded {
             expandedContent
+        } else if detent == .compact {
+            compactContent
         } else if !dynamicTypeSize.isAccessibilitySize && !isVoiceOverEnabled {
             VStack(alignment: .leading, spacing: 36) {
                 header
@@ -222,6 +226,26 @@ struct BookDetailView: View {
                 VStack(alignment: .leading, spacing: 36) { header; descriptionSection }
                     .padding(.horizontal, 16).padding(.top, 20).padding(.bottom, 20)
             }
+        }
+    }
+
+    @ViewBuilder
+    private var compactContent: some View {
+        if usesAccessibleLayout {
+            ScrollView {
+                header.padding(.horizontal, BookDetailCompactLayout.horizontalPadding)
+                    .padding(.top, 20).padding(.bottom, 20)
+            }
+            .accessibilityIdentifier("bookDetail.compactContent")
+        } else {
+            HStack(alignment: .top, spacing: 14) {
+                cover
+                bibliography.padding(.top, 16)
+            }
+            .padding(.horizontal, BookDetailCompactLayout.horizontalPadding)
+            .padding(.top, BookDetailCompactLayout.topPadding)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .accessibilityIdentifier("bookDetail.compactContent")
         }
     }
 
@@ -294,7 +318,8 @@ struct BookDetailView: View {
 
     private var cover: some View {
         BookCoverView(url: store.book.imageURL, isbn: store.book.isbn)
-            .frame(width: 140, height: 186)
+            .frame(width: BookDetailCompactLayout.coverSize.width,
+                   height: BookDetailCompactLayout.coverSize.height)
             .background(.quaternary)
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .accessibilityIdentifier("bookDetail.cover")
@@ -311,6 +336,7 @@ struct BookDetailView: View {
                 .foregroundStyle(Color.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .lineLimit(detent == .compact && !usesAccessibleLayout ? 1 : nil)
     }
 
     private var bookTitle: some View {
@@ -406,6 +432,7 @@ struct BookDetailView: View {
                 .foregroundStyle(Color.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityIdentifier("bookDetail.description")
     }
 
     @ViewBuilder
