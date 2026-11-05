@@ -47,13 +47,21 @@ struct HomeView: View {
     }
 
     private var homeContent: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 13.59) {
+            LibraryTabTopBar(
+                title: "추천",
+                onFavorites: { store.send(.favoritesButtonTapped) },
+                onBasket: { store.send(.basketButtonTapped) },
+                onProfile: { store.send(.profileButtonTapped) },
+                titleAlignment: .bottom,
+                contentHeight: nil
+            )
+            // 제목의 아래쪽과 첫 추천 문구 사이에 13.59pt를 확보한다.
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     recommendationSection
                     popularBooksSection
                 }
-                .padding(.top, 22)
                 .padding(.bottom, 24)
             }
             .scrollIndicators(.hidden)
@@ -65,14 +73,6 @@ struct HomeView: View {
             }
         }
         .background(Color(uiColor: .systemBackground))
-        .safeAreaInset(edge: .top, spacing: 0) {
-            LibraryTabTopBar(
-                title: "추천",
-                onFavorites: { store.send(.favoritesButtonTapped) },
-                onBasket: { store.send(.basketButtonTapped) },
-                onProfile: { store.send(.profileButtonTapped) }
-            )
-        }
         .toolbar(.hidden, for: .navigationBar)
         .task(id: upcomingCoverURLs) {
             await store.send(.upcomingCoversChanged(upcomingCoverURLs)).finish()

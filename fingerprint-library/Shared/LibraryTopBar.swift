@@ -41,9 +41,11 @@ struct LibraryTabTopBar: View {
     let onFavorites: () -> Void
     let onBasket: () -> Void
     let onProfile: () -> Void
+    var titleAlignment: VerticalAlignment = .center
+    var contentHeight: CGFloat? = 54
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(alignment: titleAlignment, spacing: 12) {
             LibraryTopBarTitle(title: title)
                 .padding(.leading, 4)
             Spacer(minLength: 12)
@@ -59,7 +61,7 @@ struct LibraryTabTopBar: View {
                 .glassEffect(.regular, in: .circle)
         }
         .font(.system(size: 24))
-        .frame(height: 54, alignment: .top)
+        .frame(height: contentHeight, alignment: .top)
         .padding(.horizontal, 16)
         .padding(.top, 13)
         .environment(\.colorScheme, .dark)
