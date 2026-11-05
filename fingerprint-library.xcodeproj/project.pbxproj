@@ -32,7 +32,7 @@
 
 /* Begin PBXFileReference section */
 		000000000000000000000120 /* fingerprint-library.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "fingerprint-library.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1D392B3C3081B38F0060B244 /* Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Base.xcconfig; sourceTree = "<group>"; };
+		1D392B3C3081B38F0060B244 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
 		B40000000000000000000001 /* BookDetailTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BookDetailTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C50000000000000000000001 /* IndoorMapTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IndoorMapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -81,16 +81,6 @@
 			path = "fingerprint-library";
 			sourceTree = "<group>";
 		};
-		B40000000000000000000002 /* BookDetailTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = BookDetailTests;
-			sourceTree = "<group>";
-		};
-		C50000000000000000000002 /* IndoorMapTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = IndoorMapTests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,10 +109,8 @@
 		000000000000000000000001 = {
 			isa = PBXGroup;
 			children = (
-				1D392B3C3081B38F0060B244 /* Base.xcconfig */,
+				1D392B3C3081B38F0060B244 /* Secrets.xcconfig */,
 				000000000000000000000010 /* fingerprint-library */,
-				C50000000000000000000002 /* IndoorMapTests */,
-				B40000000000000000000002 /* BookDetailTests */,
 				000000000000000000000020 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -179,9 +167,6 @@
 			dependencies = (
 				B4000000000000000000000B /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				B40000000000000000000002 /* BookDetailTests */,
-			);
 			name = BookDetailTests;
 			productName = BookDetailTests;
 			productReference = B40000000000000000000001 /* BookDetailTests.xctest */;
@@ -199,9 +184,6 @@
 			);
 			dependencies = (
 				C5000000000000000000000B /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				C50000000000000000000002 /* IndoorMapTests */,
 			);
 			name = IndoorMapTests;
 			productName = IndoorMapTests;
@@ -404,6 +386,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				POBOOK_BUILD_CHANNEL = automatic;
 				PROJECT_UNIQUE_VALUE = BP06D0UR;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
@@ -468,6 +451,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 27.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				POBOOK_BUILD_CHANNEL = automatic;
 				PROJECT_UNIQUE_VALUE = BP06D0UR;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -479,7 +463,7 @@
 		};
 		000000000000000111000000 /* Debug configuration for PBXNativeTarget "fingerprint-library" */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Base.xcconfig */;
+			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = PobookIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -529,7 +513,7 @@
 		};
 		000000000000000112000000 /* Release configuration for PBXNativeTarget "fingerprint-library" */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Base.xcconfig */;
+			baseConfigurationReference = 1D392B3C3081B38F0060B244 /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = PobookIcon;
 				CODE_SIGN_STYLE = Automatic;
