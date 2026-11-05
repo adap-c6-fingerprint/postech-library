@@ -324,7 +324,7 @@ struct BookNavigationFeature {
 
             case let .arrivalSpineLoaded(stopIndex, data):
                 state.arrivalSpines[stopIndex] = data.map(SpinePhase.loaded) ?? .unavailable
-                // spinePngData는 "책등 없음"과 "실패"를 같은 에러로 던지므로 둘 다 대체 막대로 그린다.
+                // spinePngData는 "책등 없음"과 "실패"를 같은 에러로 던지므로 둘 다 준비 중 이미지로 그린다.
                 return .none
 
             case let .continueFromArrival(stopIndex):
