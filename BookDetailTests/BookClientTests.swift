@@ -95,4 +95,33 @@ struct BookClientTests {
         let books = try BookClient.books(from: data)
         #expect(books.map(\.subLocation) == ["단행본3층", nil, nil])
     }
+    @Test("Primo 자료 유형을 보존하고 누락·빈 값은 display.type으로 대체한다")
+    func preservesResourceType() throws {
+        let documents: [[String: Any]] = [
+            ["pnx": ["control": ["recordid": ["book"]],
+                     "display": ["title": ["단행본"], "type": ["book"]]]],
+            ["pnx": ["control": ["recordid": ["journal"]],
+                     "display": ["title": ["학술지"], "type": ["journal"]]]],
+            ["pnx": ["control": ["recordid": ["facet"]],
+                     "display": ["title": ["유형 코드"], "type": ["book"]],
+                     "facets": ["rsrctype": [" printed_book ", "journals"]]]],
+            ["pnx": ["control": ["recordid": ["fallback"]],
+                     "display": ["title": ["대체 유형"], "type": [" ", "journal"]],
+                     "facets": ["rsrctype": [" "]]]],
+            ["pnx": ["control": ["recordid": ["unknown"]],
+                     "display": ["title": ["미지원 유형"], "type": ["article"]]]],
+            ["pnx": ["control": ["recordid": ["missing"]], "display": ["title": ["유형 없음"]]]]
+        ]
+        let data = try JSONSerialization.data(withJSONObject: ["docs": documents])
+        let books = try BookClient.books(from: data)
+        #expect(books.map(\.resourceTypes) == [["book"], ["journal"], ["printed_book", "journals"], ["journal"], ["article"], []])
+        #expect(books.filter(BookSearchCategory.monograph.includes).map(\.id) == ["primo:book", "primo:facet"])
+        #expect(books.filter(BookSearchCategory.journal.includes).map(\.id) == ["primo:journal", "primo:facet", "primo:fallback"])
+        #expect(books.filter(BookSearchCategory.all.includes) == books)
+        let cache = BookSearchResultCache()
+        let request = BookSearchRequest(query: "자료 유형", category: .all)
+        cache.save(books, for: request)
+        #expect(cache.load(request) == books)
+    }
+
 }

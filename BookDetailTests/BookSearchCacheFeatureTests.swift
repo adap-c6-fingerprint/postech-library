@@ -80,7 +80,7 @@ struct BookSearchCacheFeatureTests {
         #expect(calls.withLock { $0 } == 2)
     }
 
-    @Test("새 검색어를 입력하는 동안 이전 결과를 숨기고 제출할 때만 선택한 분류로 조회한다")
+    @Test("새 검색어를 입력하는 동안 이전 결과를 숨기고 제출할 때만 전체를 조회한다")
     func hidesPreviousResultsUntilSubmission() async {
         let calls = Mutex<[BookSearchRequest]>([])
         let swift = swift, science = science
@@ -111,7 +111,8 @@ struct BookSearchCacheFeatureTests {
             $0.books = [science]
             $0.recentQueries = ["과학"]
         }
-        #expect(calls.withLock { $0 } == [.init(query: "과학", category: .journal)])
+        #expect(calls.withLock { $0 } == [.init(query: "과학", category: .all)])
+        #expect(store.state.visibleBooks.isEmpty)
         #expect(store.state.recentBooks == [swift])
         await store.finish()
     }

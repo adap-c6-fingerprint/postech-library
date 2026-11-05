@@ -94,3 +94,18 @@ HomeView는 추천 목록의 현재 위치 다음 최대 2권의 표지 URL을 �
 - 실제 키·Secrets.xcconfig는 읽지 않았다. 검증용 설정에는 가짜 값만 사용했다. 초기 검증 당시 인증 API 호출·실기기 앱 재설치·Git commit·push는 수행하지 않았다. 후속 통합에서는 사용자의 명시적 요청으로 로컬 커밋을 생성했다.
 
 실기기 후속 비교는 같은 추천 목록에서 좌우 왕복 3회·탭 왕복 3회, `스위프트→스위프트→과학→스위프트` 순서로 수행한다. 캐시 유지 조건의 완료 표지에서 추가 서버 요청이 없는지, 만료 전 반복 검색의 client 호출이 생략되는지, 새로고침·만료 후 조회가 수행되는지 확인한다. 화면 표시 시간과 메모리 사용량도 함께 측정한다.
+
+
+## PLI-233: 검색 결과의 자료 유형 필터 — 2026-11-05
+
+검색 화면의 전체·단행본·학술지는 이미 받아온 결과의 표시 필터다. 검색 제출과 새로고침은 선택된 탭과 관계없이 `category: .all`로 요청하고 같은 전체 캐시를 사용한다. `State.books`에는 원본을 보존하고 `visibleBooks`로 목록·건수·빈 결과를 표시한다.
+
+- 탭 변경은 선택 상태만 바꾼다. 검색 기록 저장, 캐시 조회, API 재요청, 로딩 전환, 진행 중 검색의 취소를 하지 않는다. 캐시가 만료돼도 현재 결과의 필터링은 계속 사용할 수 있다.
+- 검색·새로고침 중 탭을 바꾸면 같은 요청의 완료 결과를 현재 탭으로 필터링한다. 검색어 변경·검색 취소의 세대 검사와 취소 처리는 유지한다.
+- `PrimoBookMapper`는 `pnx.facets.rsrctype`를 우선하고, 없거나 비어 있으면 `pnx.display.type`에서 자료 유형을 읽어 `Book.resourceTypes`에 보존한다. `book`·`books`·`printed_book`은 단행본, `journal`·`journals`는 학술지로 분류한다. 유형 미제공·미지원 자료는 전체에만 표시하고 ISBN·소장 위치로 추측하지 않는다.
+- `resourceTypes`은 검색 응답과 메모리 캐시의 필터용 메타데이터다. 최근 도서·찜·장바구니 등 기존 저장 스냅샷은 변경하지 않는다.
+- 필터 범위는 기존 API 기본 페이지의 최대 20건이다. 전체 검색 결과를 추가 수집하지 않으므로, 특정 유형의 전체 서버 검색 건수와 다를 수 있다. `BookClient`의 자료 유형별 서버 검색은 추천 등 기존 호출자를 위해 유지한다.
+
+자료 유형이 여러 개이면 모두 보존해 일치하는 각 탭에 표시한다. PNX 형식의 근거: [Primo Search Output](https://developers.exlibrisgroup.com/primo/apis/search-output/), [The Facets Section](https://knowledge.exlibrisgroup.com/Primo/Product_Documentation/Primo/Technical_Guide/010The_PNX_Record/070The_Facets_Section).
+
+검증 결과: macOS용 TCA 검증 환경에서 검색·분류·캐시·취소·응답 변환·최근 도서·찜·장바구니 관련 60개 테스트(11개 suite)를 실행해 통과했다. 이 환경에서만 표지·위치의 플랫폼 어댑터를 테스트 값으로 대체했고, 검색 reducer·mapper·cache는 수정본을 그대로 컴파일했다. iOS 앱 전체 소스의 모듈 생성과 `BookDetailTests` 전체 Swift 6 타입 검사도 통과했다. 실제 시뮬레이터·실기기 화면 동작과 실서버 응답을 이용한 검증은 수행하지 않았다.

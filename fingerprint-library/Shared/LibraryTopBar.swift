@@ -35,15 +35,17 @@ struct LibraryTopBar: ToolbarContent {
     }
 }
 
-/// 홈 지도에서는 시스템 바의 경계 효과 없이 기존 그라데이션 위에 메뉴를 배치한다.
-struct LibraryMapTopBar: View {
+/// 홈과 추천 탭의 제목과 버튼을 같은 위치에 배치한다.
+struct LibraryTabTopBar: View {
     let title: String
     let onFavorites: () -> Void
     let onBasket: () -> Void
     let onProfile: () -> Void
+    var titleAlignment: VerticalAlignment = .center
+    var contentHeight: CGFloat? = 54
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(alignment: titleAlignment, spacing: 12) {
             LibraryTopBarTitle(title: title)
                 .padding(.leading, 4)
             Spacer(minLength: 12)
@@ -59,7 +61,7 @@ struct LibraryMapTopBar: View {
                 .glassEffect(.regular, in: .circle)
         }
         .font(.system(size: 24))
-        .frame(height: 54, alignment: .top)
+        .frame(height: contentHeight, alignment: .top)
         .padding(.horizontal, 16)
         .padding(.top, 13)
         .environment(\.colorScheme, .dark)

@@ -6,6 +6,8 @@ struct RecommendationShelfView: View {
     static let carouselSpace = "recommendationCarousel"
 
     var height: CGFloat = 106
+    var width: CGFloat? = nil
+    var fillOpacity: Double = 0.5
 
     // Figma 2963:9772. 화면에 배치한 높이를 기준으로 장식의 비율을 유지한다.
     private enum Design {
@@ -14,7 +16,6 @@ struct RecommendationShelfView: View {
         static let cornerRadius: CGFloat = 31.962
         static let assetSize = CGSize(width: 721, height: 170)
         static let assetTopInset: CGFloat = 3.417
-        static let fillOpacity: Double = 0.5
         static let edgeMaskOutset: CGFloat = 2
         static let boltSize: CGFloat = 17.083
         static let boltX: CGFloat = 17.083
@@ -24,12 +25,12 @@ struct RecommendationShelfView: View {
     var body: some View {
         GeometryReader { geometry in
             let scale = height / Design.height
-            let plate = CGRect(x: 0, y: 0, width: geometry.size.width, height: height)
+            let plate = CGRect(x: 0, y: 0, width: width ?? geometry.size.width, height: height)
             let asset = Self.assetFrame(for: plate)
 
             ZStack {
                 PlateOutline()
-                    .fill(Color.limeDark.opacity(Design.fillOpacity))
+                    .fill(Color.limeDark.opacity(fillOpacity))
 
                 // PNG의 채움과 라임색 가장자리를 가리고 바깥 그림자를 남긴다.
                 Image("RecommendationGlass")
@@ -88,6 +89,7 @@ struct RecommendationShelfView: View {
 
     struct CoverBlur: ViewModifier {
         let height: CGFloat
+        var width: CGFloat? = nil
         @Environment(\.layoutDirection) private var layoutDirection
         private let blurRadius: CGFloat = 2
 
@@ -95,10 +97,16 @@ struct RecommendationShelfView: View {
             GeometryReader { geometry in
                 let cover = content.frame(width: geometry.size.width, height: geometry.size.height)
                 if let carousel = geometry.bounds(of: .named(RecommendationShelfView.carouselSpace)) {
+                    let leadingInset = RecommendationShelfView.leadingInset
+                    let availableWidth = max(0, carousel.width - leadingInset)
+                    // 마스크도 SwiftUI가 반전하므로 캐러셀 위치를 leading 기준으로 변환한다.
+                    let carouselLeading = layoutDirection == .leftToRight
+                        ? carousel.minX
+                        : geometry.size.width - carousel.maxX
                     let plate = CGRect(
-                        x: carousel.minX + (layoutDirection == .leftToRight ? RecommendationShelfView.leadingInset : 0),
+                        x: carouselLeading + leadingInset,
                         y: carousel.maxY - height,
-                        width: max(0, carousel.width - RecommendationShelfView.leadingInset),
+                        width: width ?? availableWidth,
                         height: height
                     )
                     let outline = PlateOutline().path(in: RecommendationShelfView.assetFrame(for: plate))

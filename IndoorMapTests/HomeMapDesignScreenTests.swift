@@ -18,26 +18,15 @@ extension IndoorMapSerialTests {
             let navigation = try #require(navigation(in: host))
             try await Task.sleep(for: .seconds(2))
             saveSnapshot(window, name: isRecommendation ? "recommendation" : "home")
-            if isRecommendation {
-                let items = navigation.navigationBar.items ?? []
-                let buttons = items.flatMap { $0.trailingItemGroups.flatMap(\.barButtonItems) + ($0.rightBarButtonItems ?? []) }
-                let basket = try #require(buttons.first {
-                    $0.accessibilityIdentifier == "library-top-bar-basket" || $0.accessibilityLabel == "책바구니" || $0.title == "책바구니"
-                })
-                let action = try #require(basket.action)
-                #expect(UIApplication.shared.sendAction(action, to: basket.target, from: basket, for: nil))
-            } else {
-                #expect(navigation.isNavigationBarHidden)
-                // SwiftUI 버튼 탭은 시뮬레이터 UI에서 별도로 확인한다. 이 검사는 상태 전환 후 복구를 확인한다.
-                store.send(.bookSearch(.basketButtonTapped))
-            }
+            #expect(navigation.isNavigationBarHidden)
+            // 두 탭의 SwiftUI 상단바가 보내는 액션으로 화면 전환과 복귀를 확인한다.
+            store.send(isRecommendation ? .home(.basketButtonTapped) : .bookSearch(.basketButtonTapped))
             try await waitUntil { isRecommendation ? store.home.basket != nil : store.bookSearch.basket != nil }
             try await waitUntil { navigation.viewControllers.count == 2 && !navigation.isNavigationBarHidden }
             navigation.popViewController(animated: true)
             try await waitUntil { isRecommendation ? store.home.basket == nil : store.bookSearch.basket == nil }
-            try await waitUntil { navigation.transitionCoordinator == nil }
+            try await waitUntil { navigation.transitionCoordinator == nil && navigation.isNavigationBarHidden }
             if !isRecommendation {
-                try await waitUntil { navigation.isNavigationBarHidden }
                 store.send(.bookSearch(.favoritesButtonTapped))
                 try await waitUntil { store.bookSearch.favorites != nil }
                 try await waitUntil { navigation.viewControllers.count == 2 && !navigation.isNavigationBarHidden }
