@@ -10,6 +10,17 @@ final class SessionReplayRuntime {
     private var initialized = false
     private var ready = false
     private var appliedConsent: Bool?
+    private var needsBuildChannelTag = false
+
+    private static var buildChannel: String {
+        #if targetEnvironment(simulator)
+        "simulator"
+        #elseif DEBUG
+        "development"
+        #else
+        "release"
+        #endif
+    }
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -55,15 +66,7 @@ final class SessionReplayRuntime {
             ClaritySDK.setOnSessionStartedCallback { [weak self] _ in
                 guard let self else { return }
                 self.ready = true
-                if self.policy.shouldRecord {
-                    #if targetEnvironment(simulator)
-                    ClaritySDK.setCustomTag(key: "build_channel", value: "simulator")
-                    #elseif DEBUG
-                    ClaritySDK.setCustomTag(key: "build_channel", value: "development")
-                    #else
-                    ClaritySDK.setCustomTag(key: "build_channel", value: "release")
-                    #endif
-                }
+                self.needsBuildChannelTag = true
                 self.apply()
             }
         }
@@ -75,6 +78,10 @@ final class SessionReplayRuntime {
             appliedConsent = allowed
         }
         if policy.shouldRecord, appliedConsent == true {
+            if needsBuildChannelTag,
+               ClaritySDK.setCustomTag(key: "build_channel", value: Self.buildChannel) {
+                needsBuildChannelTag = false
+            }
             if ClaritySDK.isPaused() { ClaritySDK.resume() }
         } else {
             ClaritySDK.pause()

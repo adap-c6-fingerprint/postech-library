@@ -11,6 +11,8 @@ public struct ClarityConfig {
 public enum ClaritySDK {
     public static var calls: [String] = []
     public static var acceptsInitialization = true
+    public static var acceptsTags = true
+    public static var acceptsConsent = true
     private static var paused = false
     private static var callback: ((String) -> Void)?
     private static var ready = false
@@ -25,12 +27,12 @@ public enum ClaritySDK {
     @discardableResult
     public static func setCustomTag(key: String, value: String) -> Bool {
         calls.append("tag:" + key + ":" + value)
-        return true
+        return acceptsTags
     }
     @discardableResult
     public static func consent(analyticsStorage: Bool) -> Bool {
         calls.append("consent:" + String(analyticsStorage))
-        return ready
+        return ready && acceptsConsent
     }
     @discardableResult
     public static func setOnSessionStartedCallback(_ value: @escaping (String) -> Void) -> Bool {

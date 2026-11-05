@@ -35,7 +35,10 @@ SDK 준비 callback도 현재 조건을 다시 검사한다. 준비 중 철회�
 
 ## 빌드 구분
 
-Clarity 세션 callback에서 `build_channel` 태그를 추가한다.
+Clarity 세션 callback에서는 `build_channel` 태그를 대기 상태로 둔다.
+동의·앱 활성·보호 화면 없음 조건과 SDK 동의 적용이 모두 충족되면 태그를 설정한다.
+보호 화면이나 비활성 상태에서 callback이 와도 조건 회복 후 설정하며, SDK가 실패를 반환하면 다음 허용된 상태 적용에서 재시도한다.
+성공한 태그는 같은 세션에서 반복 설정하지 않는다. 태그 실패만으로 녹화를 차단하지는 않는다.
 
 - simulator: 시뮬레이터
 - development: Debug 실기기
@@ -63,6 +66,7 @@ python3 -m unittest discover -s Scripts/tests -p test_clarity_setup.py -v
 
 이 검사는 SDK 고정 버전과 앱 링크, Firebase·TCA의 고정 버전, 보호 modifier 연결을 검사한다.
 동시에 네트워크가 없는 SDK 대역으로 **실제 SessionReplayRuntime**을 컴파일해 동의 전 미초기화·비동기 준비 중 보호 화면 진입·중첩 보호·백그라운드·철회 후 늦은 callback·재실행 복원을 실행한다.
+태그 지연 적용·동의 → 태그 → 재개 순서·설정 실패 후 재시도·성공 후 중복 방지·SDK 동의 실패 중 태그 차단도 검사한다.
 실제 SDK 바이너리의 수집 결과나 콘솔 수신을 대신하는 검사는 아니다.
 
 ### 2026-11-05 검증 결과
