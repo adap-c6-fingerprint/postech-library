@@ -21,14 +21,24 @@ struct OnboardingView: View {
     // ✅ push된 화면 제목 위 여백. 내비게이션 바 아래에서 피그마 제목 위치(소속 168.59, 선호 분류 160.6)에 오도록 맞춘 값
 
     var body: some View {
-        NavigationStack(path: navigationPath) {
-            page(.welcome)
-                .toolbar(.hidden, for: .navigationBar)
-                .navigationDestination(for: OnboardingFeature.Step.self) { step in
-                    page(step)
+        Group {
+            switch store.entry {
+            case .firstRun:
+                NavigationStack(path: navigationPath) {
+                    page(.welcome)
+                        .toolbar(.hidden, for: .navigationBar)
+                        .navigationDestination(for: OnboardingFeature.Step.self) { step in
+                            page(step)
+                        }
                 }
+                // ✅ 단계 전환을 push navigation으로 한다. 시작 화면이 루트이고, 소속·선호 분류 화면을 차례로 push한다.
+            case .changeInterests:
+                page(.interests)
+                    .toolbar(.visible, for: .navigationBar)
+                    .toolbar(.hidden, for: .tabBar)
+                // 마이페이지의 내비게이션에 선호 분류 화면을 그대로 push한다. 뒤로가기는 마이페이지로 돌아간다.
+            }
         }
-        // ✅ 단계 전환을 push navigation으로 한다. 시작 화면이 루트이고, 소속·선호 분류 화면을 차례로 push한다.
         .preferredColorScheme(.dark)
         .alert(
             "저장하지 못했어요",
@@ -114,7 +124,8 @@ struct OnboardingView: View {
             // ✅ 시안 문구로 변경
             .padding(.bottom, 32)
 
-            // 상위 소속 → 그룹 → 최종 소속 3단계로 고른다. 앞 단계를 고르기 전에는 다음 단계를 고를 수 없다.
+            // 상위 소속 → 학과 2단계로 고른다. 학과 메뉴는 그룹(예: "학과 및 학부")별로 묶어 보여준다.
+            // 상위 소속을 고르기 전에는 학과를 고를 수 없다.
             VStack(alignment: .leading, spacing: 16) {
                 VStack(alignment: .leading, spacing: 24) {
                     let isParentEnabled = !store.parents.isEmpty
@@ -129,23 +140,15 @@ struct OnboardingView: View {
                         .disabled(!isParentEnabled)
                     }
 
-                    let isGroupEnabled = store.selectedParent != nil
-                    field(title: "세부 분류", isEnabled: isGroupEnabled) {
-                        Menu {
-                            ForEach(store.groups, id: \.self) { group in
-                                Button(group) { store.send(.groupSelected(group)) }
-                            }
-                        } label: {
-                            fieldRow(store.selectedGroup, placeholder: "세부 분류를 선택해주세요", isEnabled: isGroupEnabled)
-                        }
-                        .disabled(!isGroupEnabled)
-                    }
-
-                    let isDepartmentEnabled = store.selectedGroup != nil
+                    let isDepartmentEnabled = store.selectedParent != nil
                     field(title: "학과", isEnabled: isDepartmentEnabled) {
                         Menu {
-                            ForEach(store.affiliationChoices, id: \.self) { path in
-                                Button(path.name) { store.send(.affiliationSelected(path)) }
+                            ForEach(store.groups, id: \.self) { group in
+                                Section(group) {
+                                    ForEach(store.state.affiliationChoices(in: group), id: \.self) { path in
+                                        Button(path.name) { store.send(.affiliationSelected(path)) }
+                                    }
+                                }
                             }
                         } label: {
                             fieldRow(
@@ -165,7 +168,7 @@ struct OnboardingView: View {
                         .foregroundStyle(.red)
                 }
 
-                Text("*소속과 학과는 나중에 변경 가능해요.")
+                Text("* 소속과 학과는 나중에 변경 가능해요.")
                     .typography(.caption2)
                     .foregroundStyle(Color.onboardingCaption)
                 // ✅ 시안 문구·Caption 2. 학과 입력칸과의 간격 16

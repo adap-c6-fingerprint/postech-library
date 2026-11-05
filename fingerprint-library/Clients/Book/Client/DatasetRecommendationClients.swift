@@ -8,6 +8,7 @@
 //  기존 Foundation Model·콜드스타트 추천은 호출만 끊고 코드는 남긴다. (Q9)
 //
 
+import ComposableArchitecture
 import Foundation
 
 extension BookRecommendationClient {
@@ -16,13 +17,12 @@ extension BookRecommendationClient {
     /// - 조회 이력 있음: 최근 조회 최대 3권 + 하드데이터 랜덤으로 원본 6권 → 원본마다 연관도서 1권
     nonisolated static func dataset(
         dataset: RecommendationDatasetClient,
-        profile: UserProfileClient,
         recentlyViewed: RecentlyViewedBooksClient,
         related: HeldRelatedBooksClient
     ) -> Self {
         Self(fetch: { count in
             guard count > 0 else { return [] }
-            let pool = try await personalPool(dataset: dataset, profile: profile)
+            let pool = try await personalPool(dataset: dataset)
             var generator = SystemRandomNumberGenerator()
             let recent = recentlyViewed.load()
             guard !recent.isEmpty else {
@@ -40,19 +40,19 @@ extension BookRecommendationClient {
 
     /// 온보딩 직후처럼 저장된 추천이 없을 때 네트워크 없이 바로 보여줄 랜덤 6권.
     nonisolated static func initialDatasetPicks(
-        dataset: RecommendationDatasetClient, profile: UserProfileClient, count: Int
+        dataset: RecommendationDatasetClient, count: Int
     ) async -> [Book] {
-        guard let pool = try? await personalPool(dataset: dataset, profile: profile) else { return [] }
+        guard let pool = try? await personalPool(dataset: dataset) else { return [] }
         var generator = SystemRandomNumberGenerator()
         return DatasetRecommendation.randomPicks(from: pool, count: count, using: &generator)
     }
 
     /// 프로필에 저장한 선호 분류 목록을 합친 하드데이터. (Q3: recordID로 중복 제거)
-    private nonisolated static func personalPool(
-        dataset: RecommendationDatasetClient, profile: UserProfileClient
-    ) async throws -> [Book] {
+    private nonisolated static func personalPool(dataset: RecommendationDatasetClient) async throws -> [Book] {
         let data = try await dataset.load()
-        let preferences = try await profile.load().interests
+        @Shared(.userProfile) var userProfile: UserProfile?
+        // 앱 전체가 함께 쓰는 프로필에서 관심 분야를 읽는다. 마이페이지에서 바꾼 값이 다음 추천부터 바로 쓰인다.
+        let preferences = userProfile?.interests ?? []
         return data.books(forPreferences: preferences)
     }
 }

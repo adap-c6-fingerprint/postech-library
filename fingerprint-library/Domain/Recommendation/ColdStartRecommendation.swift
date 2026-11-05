@@ -42,9 +42,6 @@ nonisolated enum ColdStartRecommendation {
     // 4libs는 표지가 없으면 빈 응답(0바이트)을 준다. 실제 표지는 2~4KB였다 (2026-10-28 확인).
     static let primoGuestWindow = 500
     // 게스트 키 제한: offset + limit이 500을 넘으면 401 오류가 난다.
-    static let placeholderInterests = ["A", "P", "Q"]
-    // 온보딩 전 임시 관심사. UserProfile.placeholderInterests와 같은 값이다.
-    // TODO: #76(UserProfile)이 합쳐지면 이 상수를 지우고 UserProfile.interests를 쓴다.
 
     static func shouldApply(favoriteKeys: Set<[String?]>, recentQueries: [String]) -> Bool {
     // 이 추천을 쓸지 판단한다.

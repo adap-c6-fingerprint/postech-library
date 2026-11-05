@@ -16,35 +16,51 @@ struct OnboardingFeature {
     }
     // 시작 → 소속 → 선호 분류 순서로 진행한다.
     
+
+    enum Entry: Equatable {
+        case firstRun
+        // 앱을 처음 켰을 때: 시작 → 소속 → 선호 분류를 모두 거친다.
+        case changeInterests
+        // 마이페이지 "관심 분야 변경하기": 선호 분류 화면만 그대로 띄우고, 관심 분야만 바꿔 저장한다.
+    }
+
     typealias AffiliationPath = RecommendationDataset.AffiliationPath
     
     @ObservableState
     struct State: Equatable {
+        var entry: Entry = .firstRun
         var step: Step = .welcome
         var dataset: RecommendationDataset = .empty
         // 소속 301개·선호 분류 20개 선택지. 앱에 넣은 하드데이터에서 읽는다.
         var optionsErrorMessage: String?
         var selectedParent: String?
         // 1단계: 상위 소속. 예: "POSTECH 학부"
-        var selectedGroup: String?
-        // 2단계: 그룹. 예: "학과 및 학부"
         var selectedAffiliation: AffiliationPath?
-        // 3단계: 최종 소속. 이름이 아니라 세 단계 경로로 보관해 학부·대학원의 같은 학과를 구분한다.
+        // 2단계: 최종 소속. 이름이 아니라 세 단계 경로(상위 소속·그룹·이름)로 보관해 학부·대학원의 같은 학과를 구분한다.
+        // 그룹(예: "학과 및 학부")은 따로 고르지 않고, 학과 메뉴 안에서 학과들을 묶는 제목으로만 보여준다.
         var selectedPreferences: [String] = []
         // 고른 순서대로 보관하는 선호 분류 이름. 예: ["수학", "역사"]
-        var isSaving = false
         var errorMessage: String?
+        @Shared(.userProfile) var userProfile: UserProfile?
+        // 앱 전체가 함께 쓰는 프로필. 온보딩을 마치면 여기에 저장한다.
         
         var parents: [String] { dataset.parents }
         
         var groups: [String] {
             selectedParent.map { dataset.groups(in: $0) } ?? []
         }
-        
-        var affiliationChoices: [AffiliationPath] {
-            guard let selectedParent, let selectedGroup else { return [] }
-            return dataset.paths(in: selectedParent, group: selectedGroup)
+        // 학과 메뉴의 묶음 제목들. 고른 상위 소속에 속한 그룹을 원본 순서대로.
+
+        func affiliationChoices(in group: String) -> [AffiliationPath] {
+            guard let selectedParent else { return [] }
+            return dataset.paths(in: selectedParent, group: group)
         }
+        // 한 묶음 제목 아래에 보여줄 학과들
+
+        var affiliationChoices: [AffiliationPath] {
+            groups.flatMap(affiliationChoices(in:))
+        }
+        // 고른 상위 소속의 모든 학과
         
         var preferenceNames: [String] { dataset.preferenceNames }
         
@@ -57,7 +73,23 @@ struct OnboardingFeature {
         }
         
         var canFinish: Bool {
-            isAffiliationComplete && !selectedPreferences.isEmpty && !isSaving
+            switch entry {
+            case .firstRun:
+                isAffiliationComplete && !selectedPreferences.isEmpty
+            case .changeInterests:
+                !selectedPreferences.isEmpty && selectedPreferences != userProfile?.interests
+                // 저장된 관심 분야와 같으면 저장하지 않는다.
+            }
+        }
+
+        static func changingInterests() -> Self {
+        // 마이페이지에서 선호 분류 화면으로 바로 들어갈 때의 상태.
+            var state = Self()
+            state.entry = .changeInterests
+            state.step = .interests
+            state.selectedPreferences = state.userProfile?.interests ?? []
+            // 온보딩에서 저장한 관심 분야를 미리 골라 둔다.
+            return state
         }
     }
     
@@ -68,15 +100,12 @@ struct OnboardingFeature {
         case optionsFailed(String)
         case startButtonTapped
         case parentSelected(String)
-        case groupSelected(String)
         case affiliationSelected(AffiliationPath)
         case nextButtonTapped
         case backButtonTapped
         // ✅ 내비게이션 뒤로가기(버튼·스와이프)로 화면이 pop될 때
         case preferenceToggled(String)
         case finishButtonTapped
-        case saveSucceeded
-        case saveFailed(String)
         case errorAlertDismissed
         case delegate(Delegate)
         
@@ -86,8 +115,6 @@ struct OnboardingFeature {
         }
     }
     
-    @Dependency(\.userProfileClient)
-    var userProfileClient
     @Dependency(\.recommendationDatasetClient)
     var recommendationDatasetClient
     
@@ -107,6 +134,8 @@ struct OnboardingFeature {
             case let .optionsLoaded(dataset):
                 state.dataset = dataset
                 state.optionsErrorMessage = nil
+                state.selectedPreferences = state.selectedPreferences.filter(dataset.preferenceNames.contains)
+                // 선택지에 없는 이름(예: 이전 형식의 관심사)은 칩이 없어 해제할 수 없으므로 뺀다.
                 return .none
                 
             case let .optionsFailed(message):
@@ -121,18 +150,11 @@ struct OnboardingFeature {
                 guard state.selectedParent != parent else { return .none }
                 // 상위 소속을 바꾸면 아래 단계의 선택을 지운다.
                 state.selectedParent = parent
-                state.selectedGroup = nil
-                state.selectedAffiliation = nil
-                return .none
-                
-            case let .groupSelected(group):
-                guard state.groups.contains(group), state.selectedGroup != group else { return .none }
-                state.selectedGroup = group
                 state.selectedAffiliation = nil
                 return .none
                 
             case let .affiliationSelected(path):
-                // 지금 고른 상위 소속·그룹에 속한 항목만 받는다.
+                // 지금 고른 상위 소속에 속한 항목만 받는다.
                 guard state.affiliationChoices.contains(path) else { return .none }
                 state.selectedAffiliation = path
                 return .none
@@ -156,28 +178,35 @@ struct OnboardingFeature {
                 }
                 return .none
                 
+            case .finishButtonTapped where state.entry == .changeInterests:
+                guard state.canFinish, let current = state.userProfile else { return .none }
+                do {
+                    let updated = try current.updatingInterests(state.selectedPreferences)
+                    // 소속·학과는 그대로 두고 관심 분야만 바꾼다.
+                    state.$userProfile.withLock { $0 = updated }
+                    // 함께 쓰는 프로필을 바꾸면 홈의 '당신을 위한 추천' 등 이 값을 쓰는 모든 곳에 반영된다.
+                    return .send(.delegate(.completed))
+                } catch {
+                    state.errorMessage = error.localizedDescription
+                    return .none
+                }
+
             case .finishButtonTapped:
                 guard state.canFinish, let affiliation = state.selectedAffiliation else { return .none }
-                state.isSaving = true
-                let preferences = state.selectedPreferences
-                return .run { [userProfileClient] send in
-                    do {
-                        try await userProfileClient.save(affiliation.key, affiliation.name, preferences)
-                        // ✅ 소속 경로·최종 소속 이름(홈 제목용)·선호 분류 이름을 저장한다.
-                        await send(.saveSucceeded)
-                    } catch {
-                        await send(.saveFailed(error.localizedDescription))
-                    }
+                do {
+                    let profile = try UserProfile(
+                        affiliationKey: affiliation.key,
+                        departmentName: affiliation.name,
+                        interests: state.selectedPreferences
+                    )
+                    // 소속 경로·최종 소속 이름(홈 제목용)·선호 분류 이름으로 프로필을 만든다.
+                    state.$userProfile.withLock { $0 = profile }
+                    // 앱 전체가 함께 쓰는 프로필에 저장한다. 파일 저장은 자동으로 된다.
+                    return .send(.delegate(.completed))
+                } catch {
+                    state.errorMessage = error.localizedDescription
+                    return .none
                 }
-                
-            case .saveSucceeded:
-                state.isSaving = false
-                return .send(.delegate(.completed))
-                
-            case let .saveFailed(message):
-                state.isSaving = false
-                state.errorMessage = message
-                return .none
                 
             case .errorAlertDismissed:
                 state.errorMessage = nil

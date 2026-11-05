@@ -34,22 +34,19 @@ struct RecentlyFoundBookShelf: View {
         // Recommendation Glass Overlay_Large 높이
         let bookLeadingInset: CGFloat
         // 책 묶음 시작 x. 선반 시작 x는 두 화면 모두 RecommendationShelfView.leadingInset(16)
-        let fallbackWidths: ClosedRange<CGFloat>
-        // 책등 이미지가 없을 때 쓰는 막대 너비 범위
 
         static let card = Size(
             maxSpineHeight: 213.84, minSpineHeight: 171, shelfHeight: 97.81,
-            bookLeadingInset: 53, fallbackWidths: 18...34
+            bookLeadingInset: 53
         )
         // 피그마 09.마이페이지 (3478:26915)
 
         static let large = Size(
             maxSpineHeight: 378.38, minSpineHeight: 304.5, shelfHeight: 155.46,
-            bookLeadingInset: 84, fallbackWidths: 32...60
+            bookLeadingInset: 84
         )
         // 피그마 09.마이페이지_최근 찾은 목록 (3499:27619)
         // 피그마 프레임이 이미 넘긴 상태라 첫 책 시작 x는 카드 값(53)을 선반 배율(155.46 ÷ 97.81 ≈ 1.59)로 키운 값
-        // 막대 너비는 책 배율(378.38 ÷ 213.84 ≈ 1.77)로 키운 값
     }
 
     var body: some View {
@@ -106,10 +103,14 @@ struct RecentlyFoundBookShelf: View {
         // Yes24 책등 이미지가 모두 같은 높이로 오면 원본 비율만으로는 높이 차이가 생기지 않는다.
         return HStack(alignment: .bottom, spacing: 0) {
             ForEach(books) { book in
+                let frame = spineFrame(book, image: images[book.id], tallest: tallest, hasSameHeights: hasSameHeights)
                 selectable(book) {
-                    spine(book, image: images[book.id], tallest: tallest, hasSameHeights: hasSameHeights)
+                    spine(book, image: images[book.id], frame: frame)
                         .modifier(RecommendationShelfView.CoverBlur(height: size.shelfHeight))
+                        .frame(width: frame.width, height: frame.height)
                     // 홈 추천 표지처럼 선반 유리 뒤에 들어간 부분만 흐리게 보인다.
+                    // CoverBlur는 안쪽에서 GeometryReader를 쓰므로, 바깥에서 책 크기를 정해 주지 않으면
+                    // HStack이 모든 책에 같은 너비를 나눠 줘 두꺼운 책이 잘리고 옆 책과 겹친다. (홈 추천 표지도 바깥에서 크기를 준다)
                 }
             }
         }
@@ -131,64 +132,70 @@ struct RecentlyFoundBookShelf: View {
     private var loadedImages: [Book.ID: UIImage] {
         var images: [Book.ID: UIImage] = [:]
         for book in books {
-            if case let .loaded(data) = spines[book.id], let image = UIImage(data: data), image.size.height > 0 {
+            if case let .loaded(data) = spines[book.id], let image = UIImage(data: data),
+               image.size.height > 0, image.size.width / image.size.height < Self.maxSpineAspectRatio {
                 images[book.id] = image
             }
+            // Yes24는 책등이 없을 때 빈 값 대신 표지 모양의 "이미지 준비중" 그림을 준다.
+            // 진짜 책등은 세로로 길쭉하므로, 길쭉하지 않은 그림은 책등이 없는 책으로 보고 bookSpinePlaceHolder로 그린다.
         }
         return images
     }
 
+    /// 책 한 권이 차지할 크기
+    private func spineFrame(_ book: Book, image: UIImage?, tallest: CGFloat, hasSameHeights: Bool) -> CGSize {
+        let fallbackHeight = fallbackHeight(book)
+        guard let image else { return placeholderFrame(height: fallbackHeight) }
+        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우는 모두 대체 에셋 크기를 쓴다.
+        let heightRatio = hasSameHeights ? fallbackHeight / size.maxSpineHeight : image.size.height / tallest
+        let height = size.maxSpineHeight * heightRatio
+        return CGSize(width: height * image.size.width / image.size.height, height: height)
+        // 피그마 주석: 가장 큰 책이 최대 높이(카드 213.84, 큰 책장 378.38)가 되도록 모든 책을 같은 배율로 줄이고, 너비는 원본 비율을 지킨다.
+        // 원본 높이가 모두 같으면 책마다 정해 둔 높이(최소~최대 높이 사이)로 줄여 윗면이 일자가 되지 않게 한다.
+    }
+
     @ViewBuilder
-    private func spine(_ book: Book, image: UIImage?, tallest: CGFloat, hasSameHeights: Bool) -> some View {
-        let bar = fallbackSize(book)
-        switch spines[book.id] ?? .loading {
-        case .loaded:
-            if let image {
-                let heightRatio = hasSameHeights ? bar.height / size.maxSpineHeight : image.size.height / tallest
-                let height = size.maxSpineHeight * heightRatio
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(width: height * image.size.width / image.size.height, height: height)
-                    .accessibilityLabel(book.title)
-                // 피그마 주석: 가장 큰 책이 최대 높이(카드 213.84, 큰 책장 378.38)가 되도록 모든 책을 같은 배율로 줄이고, 너비는 원본 비율을 지킨다.
-                // 원본 높이가 모두 같으면 책마다 정해 둔 높이(최소~최대 높이 사이)로 줄여 윗면이 일자가 되지 않게 한다.
-            } else {
-                titleSpine(book, bar: bar)
-            }
-        case .loading:
-            Rectangle()
-                .fill(Color.gray.opacity(0.4))
-                .frame(width: bar.width, height: bar.height)
-                .accessibilityLabel("책등 불러오는 중")
-        case .unavailable:
-            titleSpine(book, bar: bar)
+    private func spine(_ book: Book, image: UIImage?, frame: CGSize) -> some View {
+        if let image {
+            Image(uiImage: image)
+                .resizable()
+                .frame(width: frame.width, height: frame.height)
+                .accessibilityLabel(book.title)
+        } else {
+            placeholderSpine(book, frame: frame)
         }
+        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우 모두 bookSpinePlaceHolder 에셋으로 그린다.
+        // image는 loadedImages에서 .loaded이고 책등 비율인 경우에만 들어온다.
     }
 
-    private func titleSpine(_ book: Book, bar: CGSize) -> some View {
-        Text(book.title)
-            .typography(.caption2)
-            .foregroundStyle(Color.backgroundDefault)
-            .lineLimit(1)
-            .frame(width: bar.height - 16)
-            .rotationEffect(.degrees(90))
-            .frame(width: bar.width, height: bar.height)
-            .background(Color.limeDark)
+    /// bookSpinePlaceHolder 에셋을 원본 비율 그대로 주어진 높이에 맞춘 크기
+    private func placeholderFrame(height: CGFloat) -> CGSize {
+        CGSize(width: height * Self.placeholderAspectRatio, height: height)
+        // 에셋에 "책표지 준비중" 글자가 있어 늘리면 글자가 찌그러지므로 너비는 비율로 정한다.
+        // 높이는 책마다 다르게 둬 책등이 없는 책이 여러 권이어도 윗면이 일자가 되지 않는다.
+    }
+
+    private static let maxSpineAspectRatio: CGFloat = 0.3
+    // 책등으로 인정하는 최대 가로÷세로 비율. 실제 책등은 대략 0.05~0.25이고, Yes24 "이미지 준비중" 그림은 표지처럼 세로로 조금 긴 모양(약 0.5~0.7)이다.
+
+    private static let placeholderAspectRatio: CGFloat = 188 / 1644
+    // bookSpinePlaceHolder.png 원본 크기(가로 188 × 세로 1644 px)
+
+    private func placeholderSpine(_ book: Book, frame: CGSize) -> some View {
+        Image(.bookSpinePlaceHolder)
+            .resizable()
+            .frame(width: frame.width, height: frame.height)
             .accessibilityLabel(book.title)
-        // 책등 이미지가 없으면 LimeDark 막대에 제목만 세로로 적는다.
+        // 책등 이미지가 없으면 bookSpinePlaceHolder 에셋으로 대신 그린다.
     }
 
-    /// 이미지가 없는 막대는 크기가 모두 같으면 직사각형으로 보이므로, 책마다 다른 크기를 준다.
+    /// 대체 에셋은 높이가 모두 같으면 윗면이 일자로 보이므로, 책마다 다른 높이를 준다.
     /// 피그마 주석: 너비가 같다면 책마다 줄이거나 키워 전체가 직사각형이 되지 않게 한다.
-    private func fallbackSize(_ book: Book) -> CGSize {
+    private func fallbackHeight(_ book: Book) -> CGFloat {
         let seed = book.id.unicodeScalars.reduce(UInt64(5381)) { ($0 &* 33) &+ UInt64($1.value) }
-        // String.hashValue는 실행마다 바뀌므로, 같은 책이 늘 같은 크기가 되도록 직접 계산한다.
-        let widthRatio = CGFloat(seed % 100) / 99
+        // String.hashValue는 실행마다 바뀌므로, 같은 책이 늘 같은 높이가 되도록 직접 계산한다.
         let heightRatio = CGFloat((seed / 100) % 100) / 99
-        let widths = size.fallbackWidths
-        return CGSize(
-            width: widths.lowerBound + (widths.upperBound - widths.lowerBound) * widthRatio,
-            height: size.minSpineHeight + (size.maxSpineHeight - size.minSpineHeight) * heightRatio
-        )
+        return size.minSpineHeight + (size.maxSpineHeight - size.minSpineHeight) * heightRatio
+        // 너비는 placeholderFrame이 에셋 비율로 정한다.
     }
 }
