@@ -11,6 +11,7 @@ import SwiftUI
 struct AppView: View {
     let store: StoreOf<AppFeature>
     @Environment(\.scenePhase) private var scenePhase
+    @State private var showsAnalyticsChoice = false
     #if DEBUG
     @State private var showsSimulationSettings = false
     #endif
@@ -19,6 +20,7 @@ struct AppView: View {
         Group {
             if let onboardingStore = store.scope(state: \.onboarding, action: \.onboarding) {
                 OnboardingView(store: onboardingStore)
+                    .analyticsScreen(.onboarding)
             } else if store.hasCheckedProfile {
                 tabs
             } else {
@@ -27,6 +29,31 @@ struct AppView: View {
         }
         // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
         .task { store.send(.profileCheckRequested) }
+        .sheet(isPresented: $showsAnalyticsChoice) {
+            AnalyticsSettingsView(isFirstChoice: true)
+        }
+        .task {
+            showsAnalyticsChoice = !AnalyticsRuntime.shared.consent.hasChosen
+            AnalyticsRuntime.shared.updateProfile(store.userProfile)
+        }
+        .task(id: scenePhase) {
+            AnalyticsRuntime.shared.setActive(scenePhase == .active)
+            guard scenePhase == .active else { return }
+            while !Task.isCancelled {
+                do { try await Task.sleep(for: .seconds(60)) } catch { return }
+                AnalyticsRuntime.shared.checkpoint()
+            }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            AnalyticsRuntime.shared.setActive(phase == .active)
+        }
+        .onChange(of: store.userProfile) { _, profile in
+            AnalyticsRuntime.shared.updateProfile(profile)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: AnalyticsRuntime.consentChanged)) { _ in
+            AnalyticsRuntime.shared.updateProfile(store.userProfile)
+            showsAnalyticsChoice = false
+        }
     }
 
     private var tabs: some View {
@@ -36,6 +63,7 @@ struct AppView: View {
         )) {
             Tab("홈", systemImage: "house", value: AppFeature.Tab.map) {
                 LibraryMapView(store: store)
+                    .analyticsScreen(.map)
             }
 
             Tab("추천", systemImage: "books.vertical", value: AppFeature.Tab.recommendations) {
@@ -43,6 +71,7 @@ struct AppView: View {
                     store: store.scope(state: \.home, action: \.home),
                     mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
                 )
+                .analyticsScreen(.recommendations)
             }
 
             Tab(value: AppFeature.Tab.search, role: .search) {
@@ -50,6 +79,7 @@ struct AppView: View {
                     store: store.scope(state: \.bookSearch, action: \.bookSearch),
                     mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
                 )
+                .analyticsScreen(.search)
             }
         }
         .tabViewSearchActivation(.searchTabSelection)

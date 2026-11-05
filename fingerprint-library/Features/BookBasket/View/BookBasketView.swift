@@ -40,6 +40,7 @@ struct BookBasketView: View {
         }
         .background { Color.basketBackground.ignoresSafeArea() }
         .navigationTitle("장바구니")
+        .analyticsScreen(.basket)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)

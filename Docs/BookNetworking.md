@@ -46,7 +46,17 @@ flowchart TD
 `HTTPClient`는 HTTP 오류 상태의 본문과 헤더도 반환한다. Yes24의 404 상품 없음과 소장 조회의 429·5xx 재시도를 API 계층에서 해석하기 위해서다.
 HTTP 전송이 실패했을 때도 현재 Task의 취소 여부를 확인한다. 취소된 Task의 오류는 `CancellationError`로 전달하고, 취소되지 않은 Task의 원래 전송 오류는 보존한다.
 공통 계층은 재시도를 추가하지 않는다. 소장 조회는 기존의 최대 3회, `Retry-After`와 대기 시간을 유지한다.
-`BookHoldingsClient`는 `AppConfiguration.relayConfiguration()`에서 선택한 환경별 중계 주소와 인증을 사용한다. Debug 직접 제공사 인증과 `PRIMO_PROXY_URL` 분기는 사용하지 않는다.
+`BookHoldingsClient`는 서버 경유 모드에서 `AppConfiguration.relayConfiguration()`의 환경별 주소와 인증을 사용한다. 직접 호출 모드에서는 중계 설정 없이 Primo 키를 사용하며 캐시도 서버 경유와 구분한다. `PRIMO_PROXY_URL` 분기는 사용하지 않는다.
+
+## FIN-77 개발·테스트용 API 경로 선택
+
+- 온보딩의 기존 데이터 수집 설정 시트에서 Primo·Yes24·정보나루의 `서버를 통한 API 활용`을 각각 선택한다. 초기값은 모두 켜짐이다.
+- 설정은 `UserDefaults`에 저장해 앱 재실행·업데이트 후에도 유지한다. 개인정보 수집 동의와 별도 값이며, `모두 거부`는 개인정보 동의만 거부하고 API 선택은 그대로 저장한다.
+- 홈·추천·검색의 마이페이지 버튼을 0.5초 이내 간격으로 5번 누르면 전체 설정 시트를 다시 연다. 일반 입력은 마지막 탭 후 0.5초 뒤 마이페이지를 연다. 기존 마이페이지의 데이터 수집 설정 행에서도 같은 시트를 연다.
+- 켜짐은 기존 배포 환경별 중계 주소와 Bearer 토큰을 사용한다. 꺼짐은 공식 제공사 주소로 직접 요청하며 Primo는 Authorization apikey, Yes24는 X-Api-Key, 정보나루는 authKey 쿼리를 사용한다.
+- 직접 호출 키는 로컬 `Secrets.xcconfig`의 `PRIMO_API_KEY`, `YES24_API_KEY`, `DATA4LIBRARY_API_KEY`에서 빌드한다. 파일은 Git에서 제외한다. 키가 없으면 오류를 반환하며 자동으로 다른 경로로 우회하지 않는다.
+- 이 선택 기능은 Debug에 한정하지 않는다. 직접 호출용 키는 앱에서 추출될 수 있으며 숨겨진 버튼은 인증 수단이 아니다. 제공사 정책에 따른 직접 호출 허용 여부와 배포 전 보안 검토가 별도로 필요하다.
+- 검색·추천·응답 해석과 이미지 원본 다운로드는 유지한다. 이미 진행 중인 요청은 취소하지 않고 이후 요청부터 저장된 선택을 사용한다. 기존 응답 캐시는 각 기능의 기존 정책을 유지한다.
 
 검색·추천의 후속 책임 분리와 담당 파일별 점검은 [BookDependencyReview.md](BookDependencyReview.md)에 정리했다.
 

@@ -50,6 +50,7 @@ extension IndoorMapSerialTests {
                 $0.requestID = 1
                 $0.previewSession = nil
                 $0.isLoadingRoute = true
+                $0.analyticsRequestIsTest = true
                 $0.startsNavigationWhenLoaded = true
             }
             await store.receive(.routeLoaded(requestID: 1, updated)) {

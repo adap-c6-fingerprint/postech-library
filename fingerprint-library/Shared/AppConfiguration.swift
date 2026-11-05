@@ -2,6 +2,11 @@ import Foundation
 import StoreKit
 
 nonisolated enum AppConfiguration {
+    static func providerAPIKey(for provider: BookAPIProvider) throws -> String {
+        guard let key = value(for: provider.credentialName) else { throw APIRelayError.missingProviderKey }
+        return key
+    }
+
     static func relayConfiguration() async throws -> APIRelayConfiguration {
         let channel = value(for: "POBOOK_BUILD_CHANNEL") ?? "automatic"
         guard ["automatic", "internal"].contains(channel) else { throw APIRelayError.invalidBuildChannel }

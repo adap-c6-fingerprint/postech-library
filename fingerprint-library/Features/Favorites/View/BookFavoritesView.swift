@@ -28,6 +28,7 @@ struct BookFavoritesView: View {
         }
         .background { Color.basketBackground.ignoresSafeArea() }
         .navigationTitle("내가 찜한 목록")
+        .analyticsScreen(.favorites)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)

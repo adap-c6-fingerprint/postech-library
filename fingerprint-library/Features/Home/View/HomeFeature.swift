@@ -107,6 +107,7 @@ struct HomeFeature {
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient // 대출가능여부
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.uuid) var uuid
+    @Dependency(\.analyticsClient) private var analytics
     @Dependency(\.date.now) var now
 
     private nonisolated enum CancelID: Hashable, Sendable {
@@ -150,6 +151,9 @@ struct HomeFeature {
             case let .recommendationsRestored(sessionID, cached):
                 guard state.recommendationSessionID == sessionID else { return .none }
                 if let cached {
+                    analytics.record(.init(.recommendationLoadCompleted, [
+                        .kind: .text("restored"), .bookCount: .integer(cached.displayBooks.count)
+                    ]))
                     state.recommendedBooks = cached.displayBooks
                     state.isLoadingRecommendations = false
                 }
@@ -157,6 +161,9 @@ struct HomeFeature {
 
             case let .recommendationsLoaded(sessionID, prepared):
                 guard state.recommendationSessionID == sessionID else { return .none }
+                analytics.record(.init(.recommendationLoadCompleted, [
+                    .kind: .text("prepared_for_next_visit"), .bookCount: .integer(prepared.displayBooks.count)
+                ]))
                 state.isLoadingRecommendations = false
                 state.isPreparingRecommendations = false
                 state.nextRecommendationsSavedAt = prepared.savedAt
@@ -169,6 +176,7 @@ struct HomeFeature {
 
             case let .recommendationsFailed(sessionID, message):
                 guard state.recommendationSessionID == sessionID else { return .none }
+                analytics.record(.init(.recommendationFailed, [.errorCode: .text("preparation_failed")]))
                 state.isLoadingRecommendations = false
                 state.isPreparingRecommendations = false
                 state.recommendationErrorMessage = message
@@ -247,6 +255,7 @@ struct HomeFeature {
                 
 
             case let .bookSelected(book):
+                analytics.record(.init(.recommendationSelected, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
                 state.detail = BookDetailFeature.State(
                     book: book, isFavorite: bookFavoritesClient.load().contains(book.recordKey)
                 )

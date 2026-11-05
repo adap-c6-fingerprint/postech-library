@@ -129,6 +129,7 @@ struct BookRoutePreviewView: View {
                     destinationStore?.send(.map(.disappeared))
                     
                     routeStore.send(.reset)
+                    routeStore.send(.analyticsTestModeChanged(true))
                     routeFloorID = nil
                     previewStart = currentStart
                     
@@ -193,7 +194,7 @@ struct BookRoutePreviewView: View {
         .fullScreenCover(item: $navigationFlow.session, onDismiss: {
             if navigationFlow.presentationDismissed() { dismiss() }
         }) { session in
-            BookNavigationView(session: session) { _ in
+            BookNavigationView(session: session, analyticsIsTest: destination.isTestMode) { _ in
                 navigationFlow.navigationEnded()
             }
         }
@@ -212,6 +213,7 @@ struct BookRoutePreviewView: View {
             }
         }
         .accessibilityIdentifier("book-route-preview")
+        .analyticsScreen(.routePreview)
         .onChange(of: currentStart, initial: true) { _, position in
             // 처음 위치·층을 받으면 계산한다. 완료·실패 후 위치 수신마다 재계산하지 않는다.
             if previewSession == nil, !isLoadingRoute,
