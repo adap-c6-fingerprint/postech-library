@@ -26,6 +26,8 @@ struct BookSearchFeature {
         var recentBookInfoGeneration = 0
         var favoriteBookKeys: Set<[String?]> = []
         var books: [Book] = []
+        // 원본 결과를 유지해 탭 전환 시 캐시 조회나 네트워크 요청 없이 필터링한다.
+        var visibleBooks: [Book] { books.filter(category.includes) }
         var isLoading: Bool = false
         var errorMessage: String? = nil
         var hasSearched: Bool = false
@@ -276,9 +278,7 @@ struct BookSearchFeature {
             case let .categoryChanged(category):
                 guard state.category != category else { return .none }
                 state.category = category
-                guard state.hasSearched else { return .none }
-                // 검색 중이어도 새 분류로 교체하고 이전 요청을 취소한다.
-                return search(state: &state, recordsHistory: false)
+                return .none
 
             case .searchCancelled:
                 recordCancellation(state)
@@ -427,7 +427,8 @@ struct BookSearchFeature {
         refreshing: Bool = false,
         recordsHistory: Bool = true
     ) -> Effect<Action> {
-        let request = BookSearchRequest(query: state.query, category: state.category)
+        // 자료 유형은 화면 필터다. 검색·새로고침·캐시는 항상 같은 전체 결과를 사용한다.
+        let request = BookSearchRequest(query: state.query, category: .all)
         recordCancellation(state)
         state.searchGeneration += 1
         let generation = state.searchGeneration

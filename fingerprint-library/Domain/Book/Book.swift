@@ -18,6 +18,7 @@ struct Book: Equatable, Identifiable, Sendable {
     let description: String? // 설명
     let imageURL: URL? // 책 표지 URL
     var subLocation: String? = nil // 검색 응답의 소장 위치명
+    var resourceTypes: [String] = [] // 검색 결과 필터용 Primo 자료 유형. 미제공이면 전체에만 표시한다.
     
     nonisolated var recordKey: [String?] {
         if let controlNumber {

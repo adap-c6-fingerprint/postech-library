@@ -27,7 +27,8 @@ struct HomeView: View {
         var spacing: CGFloat { self == .expanded ? 22 : 16 }
         var horizontalInset: CGFloat { self == .expanded ? 66 : 48 }
         var bottomInset: CGFloat { self == .expanded ? 22 : 14 }
-        var shelfHeight: CGFloat { self == .expanded ? 156 : 106 }
+        var shelfHeight: CGFloat { self == .expanded ? 156 : 110 }
+        var shelfWidth: CGFloat? { self == .standard ? 707 : nil }
         var carouselHeight: CGFloat { coverHeight + bottomInset }
     }
 
@@ -39,19 +40,28 @@ struct HomeView: View {
         // 프로필(소속·관심 분야)이 바뀌면 다시 실행해 바뀐 목록을 새로 불러온다. 마이페이지에서 돌아올 때 바로 반영된다.
         // 추천 홈에서 목록으로 이동해도 두 화면이 공유하는 소장 정보 조회를 이어간다.
         .task(id: LibraryInfoTaskID(bookIDs: store.booksForLibraryInfo.map(\.id), sessionID: store.recommendationSessionID)) {
-            await store.send(.loadLibraryInfo).finish()
+            // Effect의 수명은 reducer가 관리한다. 목록 ID 변경으로 기존 요청을 취소하지 않는다.
+            store.send(.loadLibraryInfo)
         }
         .onDisappear { store.send(.libraryInfoCancelled) }
     }
 
     private var homeContent: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 13.59) {
+            LibraryTabTopBar(
+                title: "추천",
+                onFavorites: { store.send(.favoritesButtonTapped) },
+                onBasket: { store.send(.basketButtonTapped) },
+                onProfile: { store.send(.profileButtonTapped) },
+                titleAlignment: .bottom,
+                contentHeight: nil
+            )
+            // 제목의 아래쪽과 첫 추천 문구 사이에 13.59pt를 확보한다.
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     recommendationSection
                     popularBooksSection
                 }
-                .padding(.top, 22)
                 .padding(.bottom, 24)
             }
             .scrollIndicators(.hidden)
@@ -63,16 +73,7 @@ struct HomeView: View {
             }
         }
         .background(Color(uiColor: .systemBackground))
-        .toolbar {
-            LibraryTopBar(
-                title: "추천",
-                onFavorites: { store.send(.favoritesButtonTapped) },
-                onBasket: { store.send(.basketButtonTapped) },
-                onProfile: { store.send(.profileButtonTapped) }
-            )
-        }
-        .toolbarBackground(.hidden, for: .navigationBar)
-        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar(.hidden, for: .navigationBar)
         .task(id: upcomingCoverURLs) {
             await store.send(.upcomingCoversChanged(upcomingCoverURLs)).finish()
         }
@@ -189,8 +190,12 @@ struct HomeView: View {
         .padding(.bottom, recommendationLayout.bottomInset)
         .frame(height: recommendationLayout.carouselHeight)
         .overlay(alignment: .bottomLeading) {
-            RecommendationShelfView(height: recommendationLayout.shelfHeight)
-                .padding(.leading, RecommendationShelfView.leadingInset)
+            RecommendationShelfView(
+                height: recommendationLayout.shelfHeight,
+                width: recommendationLayout.shelfWidth,
+                fillOpacity: 0.3
+            )
+            .padding(.leading, RecommendationShelfView.leadingInset)
         }
         .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
         .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
@@ -207,6 +212,7 @@ struct HomeView: View {
             height: recommendationLayout.coverHeight,
             cornerRadius: recommendationLayout.coverCornerRadius,
             shelfHeight: recommendationLayout.shelfHeight,
+            shelfWidth: recommendationLayout.shelfWidth,
             photoName: photoName
         )
 
@@ -281,10 +287,11 @@ private struct HomeBookCover: View {
     let height: CGFloat
     var cornerRadius: CGFloat = 4
     var shelfHeight: CGFloat? = nil
+    var shelfWidth: CGFloat? = nil
     var photoName: String? = nil
     
     var body: some View {
-        let style = CoverStyle(cornerRadius: cornerRadius, shelfHeight: shelfHeight)
+        let style = CoverStyle(cornerRadius: cornerRadius, shelfHeight: shelfHeight, shelfWidth: shelfWidth)
 
         Group {
             if let photoName {
@@ -315,13 +322,14 @@ private struct HomeBookCover: View {
     private struct CoverStyle: ViewModifier {
         let cornerRadius: CGFloat
         let shelfHeight: CGFloat?
+        let shelfWidth: CGFloat?
 
         func body(content: Content) -> some View {
             let cover = content
                 .background(Color.primary.opacity(0.04))
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             if let shelfHeight {
-                cover.modifier(RecommendationShelfView.CoverBlur(height: shelfHeight))
+                cover.modifier(RecommendationShelfView.CoverBlur(height: shelfHeight, width: shelfWidth))
             } else {
                 cover
             }

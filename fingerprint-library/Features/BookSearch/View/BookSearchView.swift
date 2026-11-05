@@ -60,10 +60,12 @@ struct BookSearchView: View {
                     title: "검색 실패",
                     message: "검색 중 문제가 발생했어요.\n다시 시도해주세요."
                 )
-            } else if store.books.isEmpty {
+            } else if store.visibleBooks.isEmpty {
                 searchStatus(
                     title: "검색 결과 없음",
-                    message: "결과가 없어요. 새로운 검색을 시도해보세요."
+                    message: store.category == .all
+                        ? "결과가 없어요. 새로운 검색을 시도해보세요."
+                        : "불러온 결과에 해당 자료 유형이 없어요.\n다른 유형을 선택하거나 새로 검색해보세요."
                 )
             } else {
                 searchResults
@@ -72,7 +74,7 @@ struct BookSearchView: View {
     }
 
     private var searchResults: some View {
-        let books = store.books
+        let books = store.visibleBooks
         let holdings = bookLocationCacheClient.loadRecent(Set(books.map(\.recordKey)))
 
         return ScrollView {

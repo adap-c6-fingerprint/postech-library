@@ -85,6 +85,10 @@ nonisolated enum PrimoBookMapper {
                 .first
 
             let identity = "primo:\(recordID)"
+            let facetTypes = document.pnx.facets?.rsrctype?.compactMap(nonEmpty) ?? []
+            let resourceTypes = facetTypes.isEmpty
+                ? document.pnx.display.type?.compactMap(nonEmpty) ?? []
+                : facetTypes
 
             return Book(
                 id: identity,
@@ -110,7 +114,8 @@ nonisolated enum PrimoBookMapper {
                 ),
                 description: nil,
                 imageURL: imageURL,
-                subLocation: document.delivery?.subLocation
+                subLocation: document.delivery?.subLocation,
+                resourceTypes: resourceTypes
             )
         }
 
@@ -159,6 +164,11 @@ nonisolated enum PrimoBookMapper {
         let control: PrimoControl
         let display: PrimoDisplay
         let addata: PrimoAddData?
+        let facets: PrimoFacets?
+    }
+
+    private nonisolated struct PrimoFacets: Decodable {
+        let rsrctype: [String]?
     }
 
     private nonisolated struct PrimoAddData: Decodable {
@@ -175,5 +185,6 @@ nonisolated enum PrimoBookMapper {
     private nonisolated struct PrimoDisplay: Decodable {
         let title: [String]
         let creator: [String]?
+        let type: [String]?
     }
 }

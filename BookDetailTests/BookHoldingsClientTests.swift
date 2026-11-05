@@ -109,6 +109,100 @@ struct BookHoldingsClientTests {
         }
     }
 
+    @Test("일시적 전송 오류는 같은 요청을 최대 3회 안에서 자동 복구한다", arguments: [
+        URLError.timedOut, .networkConnectionLost, .notConnectedToInternet,
+        .cannotConnectToHost, .cannotFindHost, .dnsLookupFailed
+    ])
+    func retriesTransientTransportErrors(_ code: URLError.Code) async throws {
+        let calls = Mutex(0)
+        let delays = Mutex<[Duration]>([])
+        let relay = BookAPIClient.test { request in
+            let attempt = calls.withLock { $0 += 1; return $0 }
+            if attempt < 3 { throw URLError(code) }
+            return response(request, #"{"docs":[]}"#)
+        }
+        let service = PrimoBookHoldingsService(relay: relay, sleep: { delay in
+            delays.withLock { $0.append(delay) }
+        })
+        #expect(try await service.fetch(recordID: recordID) == [])
+        #expect(calls.withLock { $0 } == 3)
+        #expect(delays.withLock { $0 } == [.milliseconds(500), .seconds(1)])
+    }
+
+    @Test("전송 오류와 HTTP 오류가 섞여도 총 요청은 3회를 넘지 않는다")
+    func sharesRetryBudgetAcrossErrorKinds() async throws {
+        let calls = Mutex(0)
+        let relay = BookAPIClient.test { request in
+            let attempt = calls.withLock { $0 += 1; return $0 }
+            if attempt == 1 { throw URLError(.timedOut) }
+            return response(request, #"{"docs":[]}"#, status: 503)
+        }
+        let service = PrimoBookHoldingsService(relay: relay, sleep: { _ in })
+        await #expect(throws: BookHoldingsError.self) { try await service.fetch(recordID: recordID) }
+        #expect(calls.withLock { $0 } == 3)
+    }
+
+    @Test("전송 오류가 계속되면 3회 후 중단한다")
+    func stopsAfterTransportRetryBudget() async {
+        let calls = Mutex(0)
+        let service = PrimoBookHoldingsService(relay: .test { _ in
+            calls.withLock { $0 += 1 }
+            throw URLError(.notConnectedToInternet)
+        }, sleep: { _ in })
+        await #expect(throws: URLError.self) { try await service.fetch(recordID: recordID) }
+        #expect(calls.withLock { $0 } == 3)
+    }
+
+    @Test("인증·입력·응답 오류는 자동 재시도하지 않는다", arguments: [400, 401, 403, 200])
+    func doesNotRetryPermanentHTTPFailures(_ status: Int) async {
+        let calls = Mutex(0)
+        let service = PrimoBookHoldingsService(relay: .test { request in
+            calls.withLock { $0 += 1 }
+            return response(request, #"{"error":"invalid"}"#, status: status)
+        }, sleep: { _ in Issue.record("영구 오류에는 재시도 대기가 없어야 합니다") })
+        await #expect(throws: BookHoldingsError.self) { try await service.fetch(recordID: recordID) }
+        #expect(calls.withLock { $0 } == 1)
+    }
+
+    @Test("취소와 영구 전송 오류는 자동 재시도하지 않는다", arguments: [
+        URLError.cancelled, .badURL, .unsupportedURL, .serverCertificateUntrusted
+    ])
+    func doesNotRetryPermanentTransportFailures(_ code: URLError.Code) async {
+        let calls = Mutex(0)
+        let service = PrimoBookHoldingsService(relay: .test { _ in
+            calls.withLock { $0 += 1 }
+            throw URLError(code)
+        }, sleep: { _ in Issue.record("이 오류에는 재시도 대기가 없어야 합니다") })
+        await #expect(throws: URLError.self) { try await service.fetch(recordID: recordID) }
+        #expect(calls.withLock { $0 } == 1)
+    }
+
+    @Test("재시도 대기 중 취소하면 추가 요청을 보내지 않는다")
+    func cancelsDuringRetryDelay() async {
+        let calls = Mutex(0)
+        let sleeping = AsyncStream<Void>.makeStream()
+        defer { sleeping.continuation.finish() }
+        let service = PrimoBookHoldingsService(relay: .test { _ in
+            calls.withLock { $0 += 1 }
+            throw URLError(.timedOut)
+        }, sleep: { _ in
+            sleeping.continuation.yield()
+            try await Task.sleep(for: .seconds(60))
+        })
+        let recordID = recordID
+        let task = Task { try await service.fetch(recordID: recordID) }
+        var iterator = sleeping.stream.makeAsyncIterator()
+        _ = await iterator.next()
+        task.cancel()
+        do {
+            _ = try await task.value
+            Issue.record("취소한 요청이 성공하면 안 됩니다")
+        } catch {
+            #expect(error is CancellationError)
+        }
+        #expect(calls.withLock { $0 } == 1)
+    }
+
     private func makeSession(
         _ handler: @escaping @Sendable (URLRequest) -> (Data, URLResponse)
     ) -> URLSession {

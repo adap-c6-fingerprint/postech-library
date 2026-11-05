@@ -53,7 +53,7 @@ struct LibraryMapView: View {
                 .overlay(alignment: .topLeading) { homeHeader }
                 .background(.black)
                 .safeAreaInset(edge: .top, spacing: 0) {
-                    LibraryMapTopBar(
+                    LibraryTabTopBar(
                         title: "홈",
                         onFavorites: { searchStore.send(.favoritesButtonTapped) },
                         onBasket: { searchStore.send(.basketButtonTapped) },

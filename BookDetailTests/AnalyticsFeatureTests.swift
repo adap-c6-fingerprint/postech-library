@@ -9,11 +9,15 @@ struct AnalyticsFeatureTests {
     @Test("캐시 검색도 시작·종료를 기록하되 원문은 보내지 않는다")
     func cachedSearchAndStaleReply() async {
         let events = Mutex<[AnalyticsEvent]>([])
-        let store = TestStore(initialState: BookSearchFeature.State(query: "원문은 수집 금지")) {
+        let requests = Mutex<[BookSearchRequest]>([])
+        let store = TestStore(initialState: BookSearchFeature.State(query: "원문은 수집 금지", category: .journal)) {
             BookSearchFeature()
         } withDependencies: {
             $0.analyticsClient.record = { event in events.withLock { $0.append(event) } }
-            $0.bookSearchClient.cached = { _ in [] }
+            $0.bookSearchClient.cached = { request in
+                requests.withLock { $0.append(request) }
+                return []
+            }
             $0.searchHistoryClient.save = { _ in }
         }
         await store.send(.searchButtonTapped) {
@@ -26,6 +30,11 @@ struct AnalyticsFeatureTests {
         #expect(captured[0].fields[.operationID] == captured[1].fields[.operationID])
         #expect(captured[1].fields[.cacheHit] == .flag(true))
         #expect(!String(describing: captured).contains("원문은 수집 금지"))
+        #expect(requests.withLock { $0.map(\.category) } == [.all])
+        await store.send(.categoryChanged(.monograph)) { $0.category = .monograph }
+        // dev의 로컬 필터 전환은 새 검색·취소 이벤트를 만들지 않는다.
+        #expect(events.withLock { $0.count } == 2)
+        #expect(requests.withLock { $0.count } == 1)
         await store.send(.searchFailed(generation: 0, message: "원문 포함 오류"))
         #expect(events.withLock { $0.count } == 2)
     }
