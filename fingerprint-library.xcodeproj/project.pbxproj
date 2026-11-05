@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C26800000000000000000001 /* Clarity in Frameworks */ = {isa = PBXBuildFile; productRef = C26800000000000000000011 /* Clarity */; };
 		1D9CC49A3080AFF7004505A9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 1D9CC4993080AFF7004505A9 /* ComposableArchitecture */; };
 		F26700000000000000000001 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = F26700000000000000000011 /* FirebaseCore */; };
 		F26700000000000000000002 /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = F26700000000000000000012 /* FirebaseAnalyticsCore */; };
@@ -91,6 +92,7 @@
 				F26700000000000000000001 /* FirebaseCore in Frameworks */,
 				F26700000000000000000002 /* FirebaseAnalyticsCore in Frameworks */,
 				F26700000000000000000003 /* FirebaseCrashlytics in Frameworks */,
+				C26800000000000000000001 /* Clarity in Frameworks */,
 			);
 		};
 		B40000000000000000000003 /* Frameworks */ = {
@@ -149,6 +151,7 @@
 				F26700000000000000000011 /* FirebaseCore */,
 				F26700000000000000000012 /* FirebaseAnalyticsCore */,
 				F26700000000000000000013 /* FirebaseCrashlytics */,
+				C26800000000000000000011 /* Clarity */,
 			);
 			productName = MyApp;
 			productReference = 000000000000000000000120 /* fingerprint-library.app */;
@@ -225,6 +228,7 @@
 			packageReferences = (
 				1D9CC4983080AFF7004505A9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				F26700000000000000000010 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				C26800000000000000000010 /* XCRemoteSwiftPackageReference "clarity-apps" */,
 			);
 			preferredProjectObjectVersion = 90;
 			productRefGroup = 000000000000000000000020 /* Products */;
@@ -671,6 +675,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		C26800000000000000000010 /* XCRemoteSwiftPackageReference "clarity-apps" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/clarity-apps";
+			requirement = {
+				kind = exactVersion;
+				version = 4.1.2;
+			};
+		};
 		1D9CC4983080AFF7004505A9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
@@ -690,6 +702,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		C26800000000000000000011 /* Clarity */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C26800000000000000000010 /* XCRemoteSwiftPackageReference "clarity-apps" */;
+			productName = Clarity;
+		};
 		1D9CC4993080AFF7004505A9 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1D9CC4983080AFF7004505A9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;

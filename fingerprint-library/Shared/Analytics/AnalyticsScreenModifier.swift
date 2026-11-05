@@ -1,4 +1,5 @@
 import SwiftUI
+import Clarity
 
 private struct AnalyticsScreenModifier: ViewModifier {
     let screen: AnalyticsScreen
@@ -6,6 +7,7 @@ private struct AnalyticsScreenModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
+            .clarityMask()
             .onAppear { AnalyticsRuntime.shared.showScreen(screen, token: token) }
             .onDisappear { AnalyticsRuntime.shared.hideScreen(token: token) }
     }
