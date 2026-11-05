@@ -117,6 +117,7 @@ struct OnboardingFeature {
     
     @Dependency(\.recommendationDatasetClient)
     var recommendationDatasetClient
+    @Dependency(\.analyticsClient) private var analytics
     
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -143,6 +144,9 @@ struct OnboardingFeature {
                 return .none
                 
             case .startButtonTapped:
+                if state.entry == .firstRun, state.step == .welcome {
+                    analytics.record(.init(.onboardingStarted))
+                }
                 state.step = .affiliation
                 return .none
                 
@@ -201,6 +205,9 @@ struct OnboardingFeature {
                     )
                     // 소속 경로·최종 소속 이름(홈 제목용)·선호 분류 이름으로 프로필을 만든다.
                     state.$userProfile.withLock { $0 = profile }
+                    analytics.record(.init(.onboardingCompleted, [
+                        .selectedCount: .integer(profile.interests.count)
+                    ]))
                     // 앱 전체가 함께 쓰는 프로필에 저장한다. 파일 저장은 자동으로 된다.
                     return .send(.delegate(.completed))
                 } catch {

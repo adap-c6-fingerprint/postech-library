@@ -12,8 +12,10 @@ struct BookNavigationView: View {
     @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
     private var isSheetExpanded: Bool { store.isSheetExpanded }
 
-    init(session: BookNavigationSession, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
-        self.init(store: Store(initialState: BookNavigationFeature.State(session: session)) {
+    init(session: BookNavigationSession, analyticsIsTest: Bool = false, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
+        var state = BookNavigationFeature.State(session: session)
+        state.analyticsIsTest = analyticsIsTest
+        self.init(store: Store(initialState: state) {
             BookNavigationFeature()
         }, onExit: onExit)
     }
@@ -112,6 +114,7 @@ struct BookNavigationView: View {
         .onDisappear { store.send(.disappeared) }
         .preferredColorScheme(.dark)
         .accessibilityIdentifier("book-navigation")
+        .analyticsScreen(.navigation)
     }
 
     private var pauseBinding: Binding<Bool> {

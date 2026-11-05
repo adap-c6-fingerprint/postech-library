@@ -12,6 +12,7 @@ import SwiftUI
 struct MyPageView: View {
     @Bindable var store: StoreOf<MyPageFeature>
     let mapStore: StoreOf<IndoorMapFeature>
+    @State private var showsAnalyticsSettings = false
     // 최근 찾은 책 화면에서 여는 책 상세에 넘긴다.
 
     var body: some View {
@@ -31,6 +32,7 @@ struct MyPageView: View {
                 SettingsSection(rows: [
                     .init(title: "소속 및 학과 정보 변경") { store.send(.editAffiliationRowTapped) },
                     .init(title: "관심 분야 변경하기") { store.send(.editInterestsRowTapped) },
+                    .init(title: "데이터 수집 설정") { showsAnalyticsSettings = true },
                     .init(title: "위치 권한 설정"),
                     .init(title: "이용 안내")
                 ])
@@ -52,6 +54,10 @@ struct MyPageView: View {
         .toolbar(.hidden, for: .tabBar)
         .toolbarBackground(.hidden, for: .navigationBar)
         .task { store.send(.shelf(.task)) }
+        .analyticsScreen(.myPage)
+        .sheet(isPresented: $showsAnalyticsSettings) {
+            AnalyticsSettingsView(isFirstChoice: false)
+        }
         .navigationDestination(
             item: $store.scope(state: \.recentlyFound, action: \.recentlyFound)
         ) { recentlyFoundStore in

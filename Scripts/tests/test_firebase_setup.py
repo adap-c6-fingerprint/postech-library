@@ -75,6 +75,50 @@ class FirebaseSetupTests(unittest.TestCase):
             with config.open("rb") as stream:
                 self.assertEqual(plistlib.load(stream)["BUNDLE_ID"], "com.youngmin.fingerprint-library")
 
+    def test_collection_has_one_consent_boundary_and_no_automatic_crash_upload(self):
+        runtime = (ROOT / "fingerprint-library/Clients/Analytics/AnalyticsRuntime.swift").read_text()
+        self.assertIn("storedConsent.permitsEvents(configured: configured, active: active)", runtime)
+        self.assertIn("storedConsent.permitsDiagnosticReport(previousRunEligible:", runtime)
+        self.assertIn("operations.reset()", runtime)
+        self.assertIn("profileRevision == revision", runtime)
+        self.assertNotIn("setCrashlyticsCollectionEnabled(true)", runtime)
+        self.assertEqual(runtime.count("sendUnsentReports()"), 1)
+        self.assertEqual(runtime.count("Analytics.logEvent("), 1)
+        self.assertIn("Analytics.resetAnalyticsData()", runtime)
+        self.assertIn(".adStorage: .denied", runtime)
+        self.assertIn(".adUserData: .denied", runtime)
+        self.assertIn(".adPersonalization: .denied", runtime)
+
+    def test_consent_is_available_at_first_launch_and_in_settings(self):
+        app = (ROOT / "fingerprint-library/App/AppView.swift").read_text()
+        settings = (ROOT / "fingerprint-library/Features/Analytics/AnalyticsSettingsView.swift").read_text()
+        my_page = (ROOT / "fingerprint-library/Features/MyPage/View/MyPageView.swift").read_text()
+        self.assertIn("!AnalyticsRuntime.shared.consent.hasChosen", app)
+        self.assertIn("AnalyticsSettingsView(isFirstChoice: true)", app)
+        self.assertIn("AnalyticsSettingsView(isFirstChoice: false)", my_page)
+        self.assertIn('Button("모두 거부")', settings)
+        self.assertIn(".interactiveDismissDisabled(isFirstChoice)", settings)
+
+    def test_profile_catalog_has_unique_stable_short_codes(self):
+        catalog = json.loads((ROOT / "fingerprint-library/Resources/RecommendationDataset.json").read_text())
+        affiliations = catalog["affiliations"]
+        self.assertEqual(len(affiliations), 301)
+        self.assertEqual(len({tuple(item["selectionKey"]) for item in affiliations}), len(affiliations))
+        self.assertEqual(len({item["id"] for item in affiliations}), len(affiliations))
+        self.assertTrue(all(len(item["id"]) <= 36 for item in affiliations))
+
+    def test_crash_symbols_are_last_and_archive_only(self):
+        phase = self.objects[self.app["buildPhases"][-1]]
+        self.assertEqual(phase["name"], "Crashlytics Symbols (Archive only)")
+        self.assertEqual(str(phase["runOnlyForDeploymentPostprocessing"]), "1")
+        self.assertEqual(len(phase["inputPaths"]), 5)
+        self.assertIn("GoogleService-Info.plist", " ".join(phase["inputPaths"]))
+        self.assertIn("SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run", phase["shellScript"])
+
+    def test_pure_consent_and_request_logic(self):
+        subprocess.run(["bash", "Scripts/verify-analytics.sh"], cwd=ROOT, check=True,
+                       capture_output=True, text=True)
+
 
 if __name__ == "__main__":
     unittest.main()

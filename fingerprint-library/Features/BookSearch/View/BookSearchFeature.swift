@@ -14,6 +14,8 @@ struct BookSearchFeature {
     // 화면과 검색 로직에 필요한 데이터
     @ObservableState
     struct State: Equatable {
+        let analyticsID = UUID()
+        var analyticsOperation: String { analyticsID.uuidString + ":" + String(searchGeneration) }
         var query: String = ""
         var category: BookSearchCategory = .all
         var searchGeneration: Int = 0
@@ -85,6 +87,7 @@ struct BookSearchFeature {
     // 검색에 사용할 BookClient 값
     @Dependency(\.bookSearchClient)
     var bookSearchClient: BookSearchClient
+    @Dependency(\.analyticsClient) private var analytics
 
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
@@ -150,6 +153,10 @@ struct BookSearchFeature {
                     // 찜 목록 화면에서 날짜별로 보여 주도록 책 정보와 찜한 시각을 남긴다.
                 }
                 bookFavoritesClient.save(state.favoriteBookKeys)
+                analytics.record(.init(.bookFavoriteChanged, [
+                    .bookRecordID: .text(AnalyticsEvent.bookID(book)),
+                    .action: .text(state.favoriteBookKeys.contains(key) ? "added" : "removed")
+                ]))
                 if let detailBook = state.detail?.book {
                     let isFavorite = state.favoriteBookKeys.contains(detailBook.recordKey)
                     state.detail?.isFavorite = isFavorite
@@ -157,6 +164,10 @@ struct BookSearchFeature {
                 return .none
 
             case let .bookSelected(book):
+                analytics.record(.init(.searchResultSelected, [
+                    .bookRecordID: .text(AnalyticsEvent.bookID(book)),
+                    .source: .text(state.hasSearched ? "results" : "recent")
+                ]))
                 recentSearchBooksClient.record(book)
                 state.recentBooks = recentSearchBooksClient.load()
                 state.favoriteBookKeys = bookFavoritesClient.load()
@@ -233,8 +244,12 @@ struct BookSearchFeature {
                 
             case let .addToBasket(book):
                 let result = bookBasketClient.add(book, at: now)
+                if result == .added {
+                    analytics.record(.init(.basketBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
+                }
                 state.basketBooks = bookBasketClient.load().map(\.book)
                 if result == .limitExceeded {
+                    analytics.record(.init(.basketLimitBlocked, [.kind: .text("capacity")]))
                     state.isBasketLimitAlertPresented = true
                 }
                 return .none
@@ -250,6 +265,7 @@ struct BookSearchFeature {
                       state.hasSearched || state.isLoading || !state.books.isEmpty
                         || state.errorMessage != nil else { return .none }
                 // 새 입력에는 이전 검색의 결과나 늦게 도착한 응답을 표시하지 않는다.
+                recordCancellation(state)
                 state.searchGeneration += 1
                 state.books = []
                 state.isLoading = false
@@ -265,6 +281,7 @@ struct BookSearchFeature {
                 return search(state: &state, recordsHistory: false)
 
             case .searchCancelled:
+                recordCancellation(state)
                 state.searchGeneration += 1
                 state.query = ""
                 state.books = []
@@ -286,6 +303,7 @@ struct BookSearchFeature {
                     return search(state: &state)
                 }
 
+                recordCancellation(state)
                 state.searchGeneration += 1
                 state.query = ""
                 state.books = []
@@ -315,6 +333,10 @@ struct BookSearchFeature {
                 
                 state.isLoading = false
                 state.books = books
+                analytics.record(.init(.searchCompleted, [
+                    .operationID: .text(state.analyticsOperation), .resultCount: .integer(books.count),
+                    .cacheHit: .flag(false)
+                ]))
                 return .none
                 
             case let .searchFailed(generation, message):
@@ -323,6 +345,9 @@ struct BookSearchFeature {
                 }
                 state.isLoading = false
                 state.errorMessage = message
+                analytics.record(.init(.searchFailed, [
+                    .operationID: .text(state.analyticsOperation), .errorCode: .text("request_failed")
+                ]))
                 return .none
                 
             case let .removeFromBasket(bookIDs):
@@ -332,9 +357,14 @@ struct BookSearchFeature {
                 state.basketBooks.removeAll { book in
                     bookIDs.contains(book.id)
                 }
-                bookBasketClient.save(
-                    bookBasketClient.load().filter { !removedKeys.contains($0.book.recordKey) }
-                )
+                let stored = bookBasketClient.load()
+                let remaining = stored.filter { !removedKeys.contains($0.book.recordKey) }
+                bookBasketClient.save(remaining)
+                if stored.count > remaining.count {
+                    analytics.record(.init(.basketBooksRemoved, [
+                        .removedCount: .integer(stored.count - remaining.count)
+                    ]))
+                }
 
                 return .none
             }
@@ -398,6 +428,7 @@ struct BookSearchFeature {
         recordsHistory: Bool = true
     ) -> Effect<Action> {
         let request = BookSearchRequest(query: state.query, category: state.category)
+        recordCancellation(state)
         state.searchGeneration += 1
         let generation = state.searchGeneration
         state.errorMessage = nil
@@ -410,6 +441,7 @@ struct BookSearchFeature {
         }
 
         state.hasSearched = true
+        analytics.record(.init(.searchSubmitted, [.operationID: .text(state.analyticsOperation)]))
         if recordsHistory {
             state.recentQueries.removeAll { $0 == request.query }
             state.recentQueries.insert(request.query, at: 0)
@@ -420,6 +452,10 @@ struct BookSearchFeature {
         if !refreshing, let books = bookSearchClient.cached(request) {
             state.books = books
             state.isLoading = false
+            analytics.record(.init(.searchCompleted, [
+                .operationID: .text(state.analyticsOperation), .resultCount: .integer(books.count),
+                .cacheHit: .flag(true)
+            ]))
             return .cancel(id: CancelID.search)
         }
 
@@ -446,4 +482,8 @@ struct BookSearchFeature {
         .cancellable(id: CancelID.search, cancelInFlight: true)
     }
 
+    private func recordCancellation(_ state: State) {
+        guard state.isLoading else { return }
+        analytics.record(.init(.searchCancelled, [.operationID: .text(state.analyticsOperation)]))
+    }
 }

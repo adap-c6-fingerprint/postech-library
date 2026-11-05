@@ -18,6 +18,7 @@ final class FirebaseAppDelegate: NSObject, UIApplicationDelegate {
             return true
         }
         FirebaseApp.configure(options: options)
+        AnalyticsRuntime.shared.start()
         return true
     }
 }

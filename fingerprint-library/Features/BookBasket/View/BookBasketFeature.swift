@@ -57,6 +57,7 @@ struct BookBasketFeature {
 
     @Dependency(\.bookBasketClient)
     var bookBasketClient: BookBasketClient
+    @Dependency(\.analyticsClient) private var analytics
 
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
@@ -92,6 +93,7 @@ struct BookBasketFeature {
                 } else if state.selectedIDs.count >= BookBasketItem.maxGuidanceCount {
                     // 네 번째 책은 선택하지 않고 기존 선택을 그대로 둔다.
                     state.isSelectionLimitAlertPresented = true
+                    analytics.record(.init(.basketLimitBlocked, [.kind: .text("guidance_selection")]))
                 } else {
                     state.selectedIDs.append(id)
                 }
@@ -123,9 +125,13 @@ struct BookBasketFeature {
             case .removeConfirmed:
                 state.isRemoveAlertPresented = false
                 let removedIDs = Set(state.selectedIDs)
+                let removedCount = state.items.filter { removedIDs.contains($0.id) }.count
                 state.items.removeAll { removedIDs.contains($0.id) }
                 state.selectedIDs = []
                 bookBasketClient.save(state.items)
+                if removedCount > 0 {
+                    analytics.record(.init(.basketBooksRemoved, [.removedCount: .integer(removedCount)]))
+                }
                 return .none
 
             case .removeAlertDismissed:

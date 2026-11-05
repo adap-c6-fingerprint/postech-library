@@ -1,4 +1,6 @@
-# Firebase 초기 연결 — PLI-267
+# Firebase 연결 — PLI-267
+
+현재 동의 UI·핵심 이벤트·학과 속성·진단 보고 정책과 실기기 체크리스트는 [AnalyticsInstrumentation.md](AnalyticsInstrumentation.md)에 정리했다.
 
 ## 이번 변경
 
@@ -12,7 +14,7 @@
 ## 로컬 설정 파일
 
 제공된 Firebase 프로젝트는 `pobook-6bbc4`, 앱 Bundle ID는 `com.youngmin.fingerprint-library`다.
-사용자가 개발·운영 공용 프로젝트 사용을 선택했다. 실제 수집을 활성화하기 전에 빌드 환경·테스트 트래픽 구분을 별도로 구현해야 한다.
+사용자가 개발·운영 공용 프로젝트 사용을 선택했다. 직접 기록하는 이벤트에는 build_environment를, 테스트 안내에는 is_test를 넣어 구분한다.
 
 1. Firebase 콘솔 → 프로젝트 설정 → 해당 iOS 앱의 `GoogleService-Info.plist`를 받는다.
 2. 파일명을 정확히 `GoogleService-Info.plist`로 두고 `fingerprint-library/GoogleService-Info.plist`에 넣는다.
@@ -20,21 +22,21 @@
 
 설정 파일은 로컬에 배치하고 Git에서는 제외한다. Firebase 클라이언트 설정의 식별자는 서버 관리자 비밀키가 아니지만, 저장소의 키 관리 원칙에 따라 이 변경에 포함하지 않는다. 다른 checkout/CI에서도 별도로 파일을 제공해야 한다. 파일을 GitHub에 push했다고 기대하면 안 된다.
 
-## 아직 하지 않은 것
+## 아직 확인하거나 구현하지 않은 것
 
-- 동의 UI·동의 저장·수집 활성화, 사용자 ID·학과/선호도 속성, 70개 행동 이벤트, 위치 서버 전송.
-- 개발/운영 Firebase 프로젝트 분리 또는 공용 프로젝트의 트래픽 분리.
-- 실제 Analytics/Crashlytics 콘솔 수신 확인·테스트 크래시·dSYM 자동 업로드 빌드 단계.
+- 전체 70개 행동 이벤트, 위치 서버 전송, 전체 선호도 원장.
+- 개발/운영 Firebase 프로젝트 분리. 현재는 환경 필드로 필터링해야 한다.
+- 실제 Analytics/Crashlytics 콘솔 수신 확인·테스트 크래시·Release Archive의 dSYM 업로드 결과.
 
-`FirebaseCrashlyticsCollectionEnabled=false`는 자동 **보고/전송**을 끄는 설정이며 SDK가 기기에 크래시 정보를 남기지 않는다는 뜻이 아니다. 향후 진단 동의 활성화 전에 미동의 기간의 대기 보고서를 폐기하는 정책도 구현해야 한다. Analytics/Crashlytics의 런타임 수집 override는 실행 간 유지될 수 있으므로 향후 동의 처리에서 매 실행의 저장된 선택을 일관되게 적용해야 한다.
+`FirebaseCrashlyticsCollectionEnabled=false`는 자동 **보고/전송**을 끄는 설정이며 SDK가 기기에 크래시 정보를 남기지 않는다는 뜻이 아니다. AnalyticsRuntime이 저장된 선택을 매 실행 적용하며, 진단은 실행 내내 동의가 유지된 보고서만 다음 실행에 수동 전송한다.
 
 ## 다음 검증 단계
 
 1. 팀 기준 Xcode에서 패키지를 resolve하고 앱을 빌드한다. Package.resolved에는 기존 dev의 버전을 유지하고 Firebase 및 전이 의존성만 추가했다. 다른 Swift toolchain이 선택하는 대체 manifest에 따라 기존 의존성 잠금이 변경될 수 있으므로 무관한 갱신을 함께 커밋하지 않는다.
 2. 실제 앱 번들에 정확한 이름의 GoogleService-Info.plist가 들어갔는지 확인한다.
 3. 앱 실행 시 FirebaseApp 초기화와 기존 탭/도서/길안내 회귀를 확인한다.
-4. 수집 동의를 구현한 다음 동의 전 전송 차단·철회·개발 트래픽 분리를 검증한다.
-5. Crashlytics 도입 완료 전 공식 안내에 따라 dSYM 생성·마지막 빌드 단계의 업로드 스크립트·sandbox 입력 파일을 구성하고 테스트 크래시를 검증한다. 현재 단계에서 크래시 보고가 완전히 준비됐다고 판단하지 않는다.
+4. 구현된 수집 동의의 거부·철회·개발 트래픽 분리를 검증한다.
+5. Archive 마지막 단계에 구성한 업로드 스크립트·입력 파일과 테스트 크래시를 검증한다. 콘솔 수신까지 확인하기 전 크래시 보고가 완전히 준비됐다고 판단하지 않는다.
 
 ## 정적 검증
 
@@ -45,7 +47,7 @@ plutil -lint fingerprint-library/Info.plist fingerprint-library.xcodeproj/projec
 
 이 검사는 설정 연결을 확인하는 검사다. iOS 컴파일·실기기 수신 확인을 대신하지 않는다.
 
-## 이번 실행의 검증 결과
+## 초기 SDK 연결 commit의 검증 결과
 
 - plist/project 문법 검사, MyApp.swift 구문 검사 통과.
 - Scripts/tests의 기존 검사 포함29개 통과.

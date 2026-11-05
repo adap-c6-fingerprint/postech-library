@@ -56,6 +56,7 @@ struct BookFavoritesFeature {
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.date.now) var now
+    @Dependency(\.analyticsClient) private var analytics
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case libraryInfo
@@ -93,9 +94,15 @@ struct BookFavoritesFeature {
                 let removedKeys = Set(state.selectedBooks.map(\.recordKey))
                 guard !removedKeys.isEmpty else { return .none }
                 var keys = bookFavoritesClient.load()
+                let removedCount = keys.intersection(removedKeys).count
                 // 다른 화면에서 바꾼 찜도 보존하도록 최신 저장 목록에서 뺀다.
                 keys.subtract(removedKeys)
                 bookFavoritesClient.save(keys)
+                if removedCount > 0 {
+                    analytics.record(.init(.bookFavoriteChanged, [
+                        .action: .text("removed"), .bookCount: .integer(removedCount)
+                    ]))
+                }
                 state.items = bookFavoritesClient.loadItems()
                 state.selectedIDs = []
                 return .send(.delegate(.favoritesChanged(keys)))
@@ -107,11 +114,14 @@ struct BookFavoritesFeature {
                 let newCount = books.filter { !storedKeys.contains($0.recordKey) }.count
                 guard storedKeys.count + newCount <= BookBasketItem.maxStoredCount else {
                     state.isBasketLimitAlertPresented = true
+                    analytics.record(.init(.basketLimitBlocked, [.kind: .text("capacity")]))
                     // 일부만 담기지 않도록 한도를 넘으면 한 권도 담지 않는다.
                     return .none
                 }
                 for book in books {
-                    bookBasketClient.add(book, at: now)
+                    if bookBasketClient.add(book, at: now) == .added {
+                        analytics.record(.init(.basketBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
+                    }
                 }
                 state.selectedIDs = []
                 // 찜 목록에는 그대로 두고 선택만 해제한다.

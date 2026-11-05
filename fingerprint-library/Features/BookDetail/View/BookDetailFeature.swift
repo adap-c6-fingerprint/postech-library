@@ -118,6 +118,7 @@ struct BookDetailFeature {
 
     @Dependency(\.bookDetailClient)
     var bookDetailClient
+    @Dependency(\.analyticsClient) private var analytics
 
     @Dependency(\.relatedBooksClient)
     var relatedBooksClient
@@ -158,6 +159,10 @@ struct BookDetailFeature {
                 }
                 state.isFavorite = keys.contains(key)
                 bookFavoritesClient.save(keys)
+                analytics.record(.init(.bookFavoriteChanged, [
+                    .bookRecordID: .text(AnalyticsEvent.bookID(state.book)),
+                    .action: .text(state.isFavorite ? "added" : "removed")
+                ]))
                 return .send(.delegate(.favoritesChanged(keys)))
 
             case .directionsButtonTapped:
@@ -256,10 +261,14 @@ struct BookDetailFeature {
                 switch bookBasketClient.add(state.book, at: now) {
                 case .added:
                     state.basketNotice = .added
+                    analytics.record(.init(.basketBookAdded, [
+                        .bookRecordID: .text(AnalyticsEvent.bookID(state.book))
+                    ]))
                 case .alreadyAdded:
                     state.basketNotice = .alreadyAdded
                 case .limitExceeded:
                     state.isBasketLimitAlertPresented = true
+                    analytics.record(.init(.basketLimitBlocked, [.kind: .text("capacity")]))
                 }
                 return .none
 

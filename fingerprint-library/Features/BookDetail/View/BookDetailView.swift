@@ -184,6 +184,12 @@ struct BookDetailView: View {
                 store.send(.basketLimitAlertDismissed)
             }
             .task { store.send(.loadFavorites) }
+            .analyticsScreen(.detail)
+            .onAppear {
+                AnalyticsRuntime.shared.record(.init(.bookDetailViewed, [
+                    .bookRecordID: .text(AnalyticsEvent.bookID(store.book))
+                ]))
+            }
             .task { store.send(.loadHoldings) }
             .task { store.send(.loadDescription) }
             .task { store.send(.loadRelatedBooks) }

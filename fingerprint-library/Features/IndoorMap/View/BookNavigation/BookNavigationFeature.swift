@@ -16,6 +16,7 @@ struct BookNavigationFeature {
     @ObservableState
     struct State: Equatable {
         let session: BookNavigationSession
+        var analyticsIsTest = false
         var plans: [RouteGuidancePlan?]
         let bookInfos: [BookNavigationBookInfo?]
         var turnArrowsByStop: [[RouteTurnArrow]]
@@ -178,6 +179,7 @@ struct BookNavigationFeature {
     @Dependency(\.continuousClock) var clock
     @Dependency(\.bookCoverClient) var bookCoverClient
     @Dependency(\.bookRoutePreviewClient) var routePreviewClient
+    @Dependency(\.analyticsClient) private var analytics
     private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute }
 
     var body: some Reducer<State, Action> {
@@ -425,6 +427,15 @@ struct BookNavigationFeature {
     }
 
     private func start(_ state: inout State) -> Effect<Action> {
+        if state.subscriptionID == 0 {
+            analytics.record(.init(.navigationStarted, [
+                .navigationID: .text(state.session.id.uuidString),
+                .bookCount: .integer(state.session.stops.count),
+                .distanceM: .decimal(state.session.route.distanceMeters),
+                .stepCount: .integer(state.session.guidance.stepCount),
+                .isTest: .flag(isAnalyticsTest(state))
+            ]))
+        }
         state.isActive = true
         state.subscriptionID += 1
         invalidate(&state, message: "현재 위치를 확인하고 있어요.")
@@ -443,6 +454,10 @@ struct BookNavigationFeature {
     }
 
     private func end(_ state: inout State, reason: ExitReason) -> Effect<Action> {
+        analytics.record(.init(reason == .completed ? .navigationCompleted : .navigationCancelled, [
+            .navigationID: .text(state.session.id.uuidString),
+            .stopIndex: .integer(state.currentStopIndex), .isTest: .flag(isAnalyticsTest(state))
+        ]))
         state.exitReason = reason
         state.isArrivalPresented = false
         state.isCancelConfirmationPresented = false
@@ -506,10 +521,23 @@ struct BookNavigationFeature {
             state.progress = try plan.progress(for: effective, at: now, previous: state.progress,
                 elapsed: previousTimestamp.map { effective.timestamp.timeIntervalSince($0) })
             state.statusMessage = nil
+            recordQuality(state, code: "on_route")
+            if let progress = state.progress {
+                // Runtime에서 같은 경유지·edge step의 연속 GPS 갱신을 한 번으로 줄인다.
+                analytics.record(.init(.navigationStepChanged, [
+                    .navigationID: .text(state.session.id.uuidString),
+                    .stepIndex: .integer(progress.stepIndex), .stopIndex: .integer(state.currentStopIndex),
+                    .isTest: .flag(isAnalyticsTest(state))
+                ]))
+            }
             if state.isActive, state.exitReason == nil,
                state.progress?.maneuver == .nearDestination,
                state.automaticallyArrivedStopIndices.insert(state.currentStopIndex).inserted {
                 state.isArrivalPresented = true
+                analytics.record(.init(.destinationArrivalDetected, [
+                    .navigationID: .text(state.session.id.uuidString),
+                    .stopIndex: .integer(state.currentStopIndex), .isTest: .flag(isAnalyticsTest(state))
+                ]))
             }
             updateCamera(&state)
         } catch {
@@ -523,7 +551,25 @@ struct BookNavigationFeature {
                 state.latestPosition = nil
                 state.statusMessage = "현재 위치로 안내할 수 없어요. 새로운 위치 정보를 기다리고 있어요."
             }
+            let code: String = switch error as? RouteGuidanceError {
+            case .unknownFloor: "unknown_floor"
+            case .ambiguousPosition: "ambiguous_position"
+            case .offRoute: "off_route"
+            default: "unusable_position"
+            }
+            recordQuality(state, code: code)
         }
+    }
+
+    private func isAnalyticsTest(_ state: State) -> Bool {
+        state.analyticsIsTest || state.session.start.source == .simulation || state.session.start.source == .replay
+    }
+
+    private func recordQuality(_ state: State, code: String) {
+        analytics.record(.init(.navigationQualityChanged, [
+            .navigationID: .text(state.session.id.uuidString), .qualityState: .text(code),
+            .isTest: .flag(isAnalyticsTest(state))
+        ]))
     }
 
     @discardableResult

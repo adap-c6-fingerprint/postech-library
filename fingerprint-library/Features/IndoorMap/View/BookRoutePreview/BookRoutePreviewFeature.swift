@@ -12,6 +12,9 @@ import Foundation
 struct BookRoutePreviewFeature {
     @ObservableState
     struct State: Equatable {
+        let analyticsID = UUID()
+        var analyticsOperation: String { analyticsID.uuidString + ":" + String(requestID) }
+        var analyticsIsTest = false
         var previewSession: BookNavigationSession?
         var isLoadingRoute = false
         var routeError: String?
@@ -21,6 +24,7 @@ struct BookRoutePreviewFeature {
     }
     
     enum Action: Equatable {
+        case analyticsTestModeChanged(Bool)
         case requestChanged(BookRoutePreviewRequest)
         case startRequested(BookRoutePreviewRequest)
         case navigationStarted
@@ -33,6 +37,7 @@ struct BookRoutePreviewFeature {
     @Dependency(\.bookRoutePreviewClient)
     private var routePreviewClient
     @Dependency(\.date.now) private var now
+    @Dependency(\.analyticsClient) private var analytics
     
     private nonisolated enum CancelID: Hashable, Sendable {
         case route
@@ -41,7 +46,11 @@ struct BookRoutePreviewFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case let .analyticsTestModeChanged(value):
+                state.analyticsIsTest = value
+                return .none
             case .requestChanged(let request), .startRequested(let request):
+                recordCancellation(state)
                 state.requestID += 1
                 state.previewSession = nil
                 state.isLoadingRoute = false
@@ -70,6 +79,14 @@ struct BookRoutePreviewFeature {
                         return .cancel(id: CancelID.route)
                     }
                     state.isLoadingRoute = true
+                    analytics.record(.init(.guidanceRequested, [
+                        .operationID: .text(state.analyticsOperation), .bookCount: .integer(stops.count),
+                        .isTest: .flag(state.analyticsIsTest || start.source == .simulation || start.source == .replay)
+                    ]))
+                    analytics.record(.init(.routeCalculationStarted, [
+                        .operationID: .text(state.analyticsOperation),
+                        .isTest: .flag(state.analyticsIsTest || start.source == .simulation || start.source == .replay)
+                    ]))
                     let requestID = state.requestID
                     
                     return .run { [routePreviewClient] send in
@@ -110,6 +127,12 @@ struct BookRoutePreviewFeature {
                 
                 state.isLoadingRoute = false
                 state.previewSession = session
+                analytics.record(.init(.routeCalculationCompleted, [
+                    .operationID: .text(state.analyticsOperation), .navigationID: .text(session.id.uuidString),
+                    .distanceM: .decimal(session.route.distanceMeters), .bookCount: .integer(session.stops.count),
+                    .stepCount: .integer(session.guidance.stepCount),
+                    .isTest: .flag(state.analyticsIsTest || session.start.source == .simulation || session.start.source == .replay)
+                ]))
                 if state.startsNavigationWhenLoaded {
                     state.startsNavigationWhenLoaded = false
                     guard session.start.isRecent(at: now) else {
@@ -129,6 +152,9 @@ struct BookRoutePreviewFeature {
                 
                 state.isLoadingRoute = false
                 state.routeError = message
+                analytics.record(.init(.routeCalculationFailed, [
+                    .operationID: .text(state.analyticsOperation), .errorCode: .text("calculation_failed")
+                ]))
                 state.startsNavigationWhenLoaded = false
                 return .none
 
@@ -137,6 +163,7 @@ struct BookRoutePreviewFeature {
                 return .none
                 
             case .reset:
+                recordCancellation(state)
                 state.requestID += 1
                 state.previewSession = nil
                 state.isLoadingRoute = false
@@ -146,6 +173,7 @@ struct BookRoutePreviewFeature {
                 return .cancel(id: CancelID.route)
                 
             case .disappeared:
+                recordCancellation(state)
                 state.requestID += 1
                 state.isLoadingRoute = false
                 state.startsNavigationWhenLoaded = false
@@ -153,5 +181,10 @@ struct BookRoutePreviewFeature {
                 return .cancel(id: CancelID.route)
             }
         }
+    }
+
+    private func recordCancellation(_ state: State) {
+        guard state.isLoadingRoute else { return }
+        analytics.record(.init(.routeCalculationCancelled, [.operationID: .text(state.analyticsOperation)]))
     }
 }
