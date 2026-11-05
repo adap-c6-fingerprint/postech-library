@@ -3,6 +3,7 @@ import SwiftUI
 struct AnalyticsSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var choice = AnalyticsRuntime.shared.consent
+    @State private var allowsSessionReplay = SessionReplayRuntime.shared.consent.enabled
     @State private var apiRouting = APIRoutingSettings.load()
     @State private var showsDiagnosticConfirmation = false
     let isFirstChoice: Bool
@@ -21,7 +22,12 @@ struct AnalyticsSettingsView: View {
                     Text("Firebase Crashlytics로 오류·크래시 기록과 기기·앱 정보, 오류 직전의 화면·행동 코드를 보냅니다. 처음 동의한 뒤 앱을 다시 실행하면 진단 대상 실행이 시작됩니다. 실행 내내 동의가 유지된 보고서만 다음 실행에서 전송합니다.")
                 }
                 Section {
-                    Text("현재 위치·층·서가 위치 전송은 이번 기능에 포함되지 않습니다.")
+                    Toggle("화면 이용 녹화 허용 (선택)", isOn: $allowsSessionReplay)
+                } footer: {
+                    Text("Microsoft Clarity로 화면 구성과 탭·스크롤 등 이용 과정을 기록해 UX 개선에 사용합니다. 검색·프로필·설정 화면은 녹화를 멈추고, 텍스트·이미지·지도 영역은 가립니다. GA 사용 분석과 별개로 선택할 수 있습니다.")
+                }
+                Section {
+                    Text("좌표·층·서가 위치를 별도 데이터로 전송하지 않으며, 녹화에서도 지도 영역을 가립니다.")
                     Text("모두 거부해도 도서 검색과 길안내를 이용할 수 있습니다. 마이페이지에서 선택을 바꿀 수 있습니다. 철회하면 이후 분석 수집을 중단하며 이미 서버에 전송된 정보는 자동 삭제되지 않습니다.")
                 }
                 Section("Primo API") {
@@ -40,8 +46,8 @@ struct AnalyticsSettingsView: View {
                         .font(.footnote)
                 }
                 Section {
-                    Button("선택 저장") { save(choice) }
-                    Button("모두 거부") { save(AnalyticsConsent()) }
+                    Button("선택 저장") { save(choice, sessionReplay: allowsSessionReplay) }
+                    Button("모두 거부") { save(AnalyticsConsent(), sessionReplay: false) }
                 }
                 #if DEBUG
                 Section("개발 검증") {
@@ -66,10 +72,12 @@ struct AnalyticsSettingsView: View {
         }
         .interactiveDismissDisabled(isFirstChoice)
         .analyticsScreen(.analyticsSettings)
+        .sessionReplayProtected()
     }
 
-    private func save(_ choice: AnalyticsConsent) {
+    private func save(_ choice: AnalyticsConsent, sessionReplay: Bool) {
         apiRouting.save()
+        SessionReplayRuntime.shared.saveConsent(enabled: sessionReplay)
         AnalyticsRuntime.shared.saveConsent(choice)
         dismiss()
     }

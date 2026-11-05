@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import SwiftUI
+import Clarity
 
 struct AppView: View {
     let store: StoreOf<AppFeature>
@@ -28,16 +29,19 @@ struct AppView: View {
             }
         }
         // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
+        .clarityMask()
         .task { store.send(.profileCheckRequested) }
         .sheet(isPresented: $showsAnalyticsChoice) {
             AnalyticsSettingsView(isFirstChoice: true)
         }
         .task {
             showsAnalyticsChoice = !AnalyticsRuntime.shared.consent.hasChosen
+                || !SessionReplayRuntime.shared.consent.hasChosen
             AnalyticsRuntime.shared.updateProfile(store.userProfile)
         }
         .task(id: scenePhase) {
             AnalyticsRuntime.shared.setActive(scenePhase == .active)
+            SessionReplayRuntime.shared.setActive(scenePhase == .active)
             guard scenePhase == .active else { return }
             while !Task.isCancelled {
                 do { try await Task.sleep(for: .seconds(60)) } catch { return }
@@ -46,6 +50,7 @@ struct AppView: View {
         }
         .onChange(of: scenePhase) { _, phase in
             AnalyticsRuntime.shared.setActive(phase == .active)
+            SessionReplayRuntime.shared.setActive(phase == .active)
         }
         .onChange(of: store.userProfile) { _, profile in
             AnalyticsRuntime.shared.updateProfile(profile)
@@ -105,6 +110,7 @@ struct AppView: View {
                 message: store.indoorMap.locationMessage,
                 onReconnect: { store.send(.indoorMap(.simulationConnectionChanged)) }
             )
+            .sessionReplayProtected()
         }
         #endif
         .tint(Color(red: 0.88, green: 0.95, blue: 0.19))
