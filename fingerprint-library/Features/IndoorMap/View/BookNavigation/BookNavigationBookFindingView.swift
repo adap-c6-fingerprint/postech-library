@@ -187,7 +187,8 @@ struct BookNavigationBookFindingView: View {
     private var shelf: some View {
         GeometryReader { geometry in
             let spineWidth = spineWidth
-            let ratio = spineWidth / Design.referenceSpineWidth
+            // 책등 위 번호표가 왼쪽 확대 번호표보다 커지지 않도록 배율을 제한한다.
+            let ratio = min(spineWidth / Design.referenceSpineWidth, 1 / Design.smallLabelScale)
             let spineRight = geometry.size.width - Design.spineTrailingInset
             let spineLeft = spineRight - spineWidth
             let smallLabelWidth = Design.smallLabelWidth * ratio
@@ -214,7 +215,7 @@ struct BookNavigationBookFindingView: View {
                                                   emphasizesFirstLine: false)
                         .offset(x: spineRight - smallLabelWidth, y: smallLabelTop)
                         .accessibilityHidden(true)
-                    // 피그마 주석: 번호표도 책 두께 비율에 맞게 줄어들거나 늘어난다.
+                    // 정상 책등의 두께를 따르되 확대 번호표 크기까지만 늘어난다.
                     lightBeam(smallLabel: CGRect(x: spineRight - smallLabelWidth, y: smallLabelTop,
                                                  width: smallLabelWidth, height: smallLabelHeight))
                     BookNavigationCallNumberLabel(callNumber: number, width: BookNavigationCallNumberLabel.Design.width,
