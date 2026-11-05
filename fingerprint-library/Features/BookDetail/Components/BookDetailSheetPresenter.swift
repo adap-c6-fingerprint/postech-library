@@ -130,6 +130,11 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             reportCompactFrame()
         }
 
+        // 높이 전환은 유지하고 아래로 당겨 상세를 닫는 동작만 막는다.
+        func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+            false
+        }
+
         private func dismissDetail() {
             guard !isInvalidated else { return }
             isInvalidated = true
