@@ -7,13 +7,18 @@ import Testing
 struct BookRecommendationClientTests {
     @Test("기록이 없으면 첫 추천을 쓰고 추천 순서·표지·도서 정보를 홈 모델로 연결한다")
     func coldStartPreservesRankingAndCovers() async throws {
+        @Shared(.userProfile) var userProfile: UserProfile?
+        $userProfile.withLock {
+            $0 = try? UserProfile(affiliationKey: ["POSTECH 학부", "학과 및 학부", "수학과"], departmentName: "수학과", interests: ["수학"])
+        }
         let first = Self.recommendation("1")
         let second = Self.recommendation("2")
         let books = try await withDependencies {
             $0.bookFavoritesClient.load = { [] }
             $0.searchHistoryClient.load = { [] }
             $0.coldStartRecommendationClient.fetch = { interests in
-                #expect(interests == ColdStartRecommendation.placeholderInterests)
+                #expect(interests == ["수학"])
+                // 임시값이 아니라 함께 쓰는 프로필의 관심 분야를 넘긴다.
                 return [first, second, first, Self.recommendation("3")]
             }
             $0.personalizedRecommendationClient.fetch = { _ in
@@ -38,6 +43,10 @@ struct BookRecommendationClientTests {
 
     @Test("찜·검색 기록을 맞춤 추천에 전달하고 첫 추천은 호출하지 않는다")
     func personalizedReceivesUserHistory() async throws {
+        @Shared(.userProfile) var userProfile: UserProfile?
+        $userProfile.withLock {
+            $0 = try? UserProfile(affiliationKey: ["POSTECH 학부", "학과 및 학부", "수학과"], departmentName: "수학과", interests: ["역사"])
+        }
         let recommendation = Self.recommendation("1")
         let books = try await withDependencies {
             $0.bookFavoritesClient.load = { [["control", "primo:alma9"]] }
@@ -45,7 +54,7 @@ struct BookRecommendationClientTests {
             $0.personalizedRecommendationClient.fetch = { input in
                 #expect(input.favoriteKeys == [["control", "primo:alma9"]])
                 #expect(input.recentQueries == ["반도체"])
-                #expect(input.interests == ColdStartRecommendation.placeholderInterests)
+                #expect(input.interests == ["역사"])
                 return [recommendation]
             }
             $0.coldStartRecommendationClient.fetch = { _ in

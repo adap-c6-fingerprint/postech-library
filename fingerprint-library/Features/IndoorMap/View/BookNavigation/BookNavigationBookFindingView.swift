@@ -10,16 +10,28 @@ struct BookNavigationBookFindingView: View {
     private let onTask: () -> Void
     private let onContinue: () -> Void
     private let onFinish: () -> Void
+    private var callNumberScreen: CallNumberScreen?
+    // 아래로 3초 이상 당기면 여는 기존 청구기호 화면(BookNavigationArrivalView)에 넘길 값. 미리보기에서는 nil
     @Environment(\.dismiss) private var dismiss
+    @State private var isCallNumberScreenPresented = false
+    @State private var pullHoldTask: Task<Void, Never>?
+
+    private struct CallNumberScreen {
+        let session: BookNavigationSession
+        let currentStopIndex: Int
+        let onCancel: () -> Void
+    }
 
     init(session: BookNavigationSession, currentStopIndex: Int,
          bookInformation: BookNavigationBookInfo? = nil,
          spine: BookNavigationFeature.SpinePhase? = nil,
          onTask: @escaping () -> Void = {},
-         onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {}) {
+         onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {},
+         onCancel: @escaping () -> Void = {}) {
         self.init(bookInformation: bookInformation ?? BookNavigationBookInfo(session: session, stopIndex: currentStopIndex),
                   isIntermediateStop: currentStopIndex < session.stops.count - 1,
                   spine: spine, onTask: onTask, onContinue: onContinue, onFinish: onFinish)
+        callNumberScreen = CallNumberScreen(session: session, currentStopIndex: currentStopIndex, onCancel: onCancel)
     }
 
     init(bookInformation: BookNavigationBookInfo?, isIntermediateStop: Bool,
@@ -60,10 +72,55 @@ struct BookNavigationBookFindingView: View {
             .padding(.horizontal, Design.horizontalPadding)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .contentShape(.rect)
+        .simultaneousGesture(pullDownToCallNumberScreen)
+        .navigationDestination(isPresented: $isCallNumberScreenPresented) {
+            if let screen = callNumberScreen {
+                BookNavigationArrivalView(
+                    session: screen.session, currentStopIndex: screen.currentStopIndex,
+                    bookInformation: bookInformation,
+                    onContinue: onContinue, onFinish: onFinish, onCancel: screen.onCancel
+                )
+            }
+        }
+        // 기존 화면의 뒤로가기는 이 책등 화면으로 돌아온다. 찾았어요·안내 취소는 기존과 같은 상위 동작을 쓴다.
+        .onDisappear { cancelPullHold() }
         .toolbar(.hidden, for: .navigationBar)
         .preferredColorScheme(.dark)
         .task { onTask() }
         .accessibilityIdentifier("book-navigation-arrival")
+    }
+
+    // MARK: - 아래로 당겨 기존 청구기호 화면 열기
+
+    private var pullDownToCallNumberScreen: some Gesture {
+        DragGesture(minimumDistance: 10)
+            .onChanged { value in
+                let isPullingDown = value.translation.height >= Design.pullDistance
+                    && value.translation.height > abs(value.translation.width)
+                if isPullingDown {
+                    startPullHold()
+                } else {
+                    cancelPullHold()
+                }
+            }
+            .onEnded { _ in cancelPullHold() }
+    }
+    // 15) 책찾기 화면 문서: 아래로 3초 이상 당기고 있으면 기존 청구기호 화면을 보여준다. 손을 떼거나 덜 당기면 취소한다.
+
+    private func startPullHold() {
+        guard callNumberScreen != nil, pullHoldTask == nil, !isCallNumberScreenPresented else { return }
+        pullHoldTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(Design.pullHoldSeconds))
+            guard !Task.isCancelled else { return }
+            pullHoldTask = nil
+            isCallNumberScreenPresented = true
+        }
+    }
+
+    private func cancelPullHold() {
+        pullHoldTask?.cancel()
+        pullHoldTask = nil
     }
 
     // MARK: - 상단
@@ -174,38 +231,24 @@ struct BookNavigationBookFindingView: View {
 
     @ViewBuilder
     private func spineView(width: CGFloat) -> some View {
-        switch spine {
-        case let .loaded(data):
-            if let image = UIImage(data: data) {
-                Image(uiImage: image)
-                    .resizable()
-                    .frame(width: width, height: Design.spineHeight)
-                    .accessibilityLabel("\(title) 책등")
-                    .accessibilityIdentifier("book-navigation-spine")
-            } else {
-                titleSpine(width: width)
-            }
-        case .unavailable:
-            titleSpine(width: width)
-        case .loading, nil:
-            Rectangle()
-                .fill(Color.gray.opacity(0.4))
+        if let image = spineImage {
+            Image(uiImage: image)
+                .resizable()
                 .frame(width: width, height: Design.spineHeight)
-                .accessibilityLabel("책등 불러오는 중")
+                .accessibilityLabel("\(title) 책등")
+                .accessibilityIdentifier("book-navigation-spine")
+        } else {
+            placeholderSpine(width: width)
         }
+        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우 모두 bookSpinePlaceHolder 에셋으로 그린다.
     }
 
-    private func titleSpine(width: CGFloat) -> some View {
-        Text(title)
-            .typography(.caption2)
-            .foregroundStyle(Color.backgroundDefault)
-            .lineLimit(1)
-            .frame(width: Design.spineHeight - 16)
-            .rotationEffect(.degrees(90))
+    private func placeholderSpine(width: CGFloat) -> some View {
+        Image(.bookSpinePlaceHolder)
+            .resizable()
             .frame(width: width, height: Design.spineHeight)
-            .background(Color.limeDark)
             .accessibilityLabel(title)
-        // 책등 이미지가 없으면 최근 찾은 책 책장과 같이 LimeDark 막대에 제목만 세로로 적는다.
+        // 책등 이미지가 없으면 최근 찾은 책 책장과 같이 bookSpinePlaceHolder 에셋으로 대신 그린다.
     }
 
     /// 확대 번호표에서 책등 위 작은 번호표로 이어지는 빛. 피그마 주석: 책 두께에 따라 꼭짓점을 조절한다.
@@ -252,13 +295,22 @@ struct BookNavigationBookFindingView: View {
 
     // MARK: - 값
 
-    private var spineWidth: CGFloat {
-        guard case let .loaded(data) = spine, let image = UIImage(data: data), image.size.height > 0 else {
-            return Design.referenceSpineWidth
-        }
-        return Design.spineHeight * image.size.width / image.size.height
+    private var spineImage: UIImage? {
+        guard case let .loaded(data) = spine, let image = UIImage(data: data), image.size.height > 0,
+              image.size.width / image.size.height < Design.maxSpineAspectRatio else { return nil }
+        return image
     }
-    // 피그마 주석: 높이는 고정하고, 너비는 책등 원본 비율을 따른다.
+    // Yes24는 책등이 없을 때 빈 값 대신 표지 모양의 "이미지 준비중" 그림을 준다.
+    // 진짜 책등은 세로로 길쭉하므로, 길쭉하지 않은 그림은 책등이 없는 책으로 보고 bookSpinePlaceHolder로 그린다.
+
+    private var spineWidth: CGFloat {
+        if let image = spineImage {
+            return Design.spineHeight * image.size.width / image.size.height
+            // 피그마 주석: 높이는 고정하고, 너비는 책등 원본 비율을 따른다.
+        }
+        return Design.spineHeight * Design.placeholderAspectRatio
+        // 대체 에셋은 "책표지 준비중" 글자가 찌그러지지 않게 원본 비율을 지킨다. (411 높이에서 약 47)
+    }
 
     private var title: String {
         guard let info = bookInformation else { return "" }
@@ -291,6 +343,10 @@ struct BookNavigationBookFindingView: View {
     private enum Design {
         static let spineHeight: CGFloat = 411
         static let referenceSpineWidth: CGFloat = 25
+        static let maxSpineAspectRatio: CGFloat = 0.3
+        // 책등으로 인정하는 최대 가로÷세로 비율. 실제 책등은 대략 0.05~0.25이고, Yes24 "이미지 준비중" 그림은 표지처럼 세로로 조금 긴 모양(약 0.5~0.7)이다.
+        static let placeholderAspectRatio: CGFloat = 188 / 1644
+        // bookSpinePlaceHolder.png 원본 크기(가로 188 × 세로 1644 px)
         // 피그마 기준도서(image 129) 크기 25 × 411
         static let spineTrailingInset: CGFloat = 78
         // 402pt 화면에서 기준도서 우측 세로선이 x = 324
@@ -312,6 +368,9 @@ struct BookNavigationBookFindingView: View {
         static let shelfToButton: CGFloat = 47
         static let buttonHorizontalPadding: CGFloat = 36
         static let buttonBottomPadding: CGFloat = 18
+        static let pullDistance: CGFloat = 60
+        // 이만큼 아래로 당긴 상태를 유지해야 3초를 센다. 살짝 스친 터치는 무시한다.
+        static let pullHoldSeconds: Double = 3
         static let headingCaption = DS.Typography(style: DS.FontStyle.Medium, size: DS.FontSize._20,
                                                   lineHeight: DS.LineHeight._20, letterSpacing: DS.LetterSpacing._20)
         // 피그마 "여기는": Pretendard Medium 20 / 28 / -0.4

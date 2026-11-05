@@ -56,13 +56,12 @@ nonisolated struct HomeRecommendationForYouClient: Sendable {
 extension HomeRecommendationForYouClient: DependencyKey {
     static let liveValue = Self.live(
         recommendation: .dataset(
-            dataset: .liveValue, profile: .liveValue,
-            recentlyViewed: .liveValue, related: .liveValue
+            dataset: .liveValue, recentlyViewed: .liveValue, related: .liveValue
         ),
         cache: .liveValue,
         initial: {
             await BookRecommendationClient.initialDatasetPicks(
-                dataset: .liveValue, profile: .liveValue, count: DatasetRecommendation.displayCount
+                dataset: .liveValue, count: DatasetRecommendation.displayCount
             )
         }
     )

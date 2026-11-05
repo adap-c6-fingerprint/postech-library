@@ -106,18 +106,18 @@ struct MyPageFeatureTests {
         #expect(recorded.value == [selected])
     }
 
-    @Test("소속 변경 화면은 저장된 소속을 미리 고르고, 바꾼 소속을 관심 분야와 함께 저장한다")
-    func editAffiliationSaves() async {
-        let saved = LockIsolated<([String], String, [String])?>(nil)
+    @Test("소속 변경 화면은 온보딩에서 저장한 소속을 미리 고르고, 바꾼 소속을 함께 쓰는 프로필에 저장한다")
+    func editAffiliationSaves() async throws {
         let dataset = Self.dataset
-        let profile = UserProfileSnapshot(
-            departmentName: "수학과", interests: ["수학"], affiliationKey: Self.undergraduateMath.key
+        @Shared(.userProfile) var userProfile: UserProfile?
+        let onboarded = try UserProfile(
+            affiliationKey: Self.undergraduateMath.key, departmentName: "수학과", interests: ["수학"]
         )
+        $userProfile.withLock { $0 = onboarded }
+        // 온보딩에서 저장한 프로필
         let store = TestStore(initialState: EditMyAffiliationFeature.State()) {
             EditMyAffiliationFeature()
         } withDependencies: {
-            $0.userProfileClient.load = { profile }
-            $0.userProfileClient.save = { key, name, interests in saved.setValue((key, name, interests)) }
             $0.recommendationDatasetClient.load = { dataset }
         }
         store.exhaustivity = .off
@@ -129,14 +129,76 @@ struct MyPageFeatureTests {
         // 저장된 소속 그대로면 변경하기 버튼이 꺼져 있다.
 
         await store.send(.parentSelected("POSTECH 대학원"))
-        await store.send(.groupSelected("독립 대학원 및 학부"))
         await store.send(.affiliationSelected(Self.graduateAI))
         #expect(store.state.canSave)
 
         await store.send(.changeButtonTapped)
-        await store.skipReceivedActions()
-        #expect(saved.value?.0 == Self.graduateAI.key)
-        #expect(saved.value?.1 == "인공지능대학원")
-        #expect(saved.value?.2 == ["수학"])
+        await store.receive(\.delegate.saved)
+        #expect(userProfile?.affiliationKey == Self.graduateAI.key)
+        #expect(userProfile?.departmentName == "인공지능대학원")
+        #expect(userProfile?.interests == ["수학"])
+        // 관심 분야는 그대로 남는다. 같은 키로 읽는 다른 화면도 바뀐 값을 본다.
+    }
+
+    @Test("관심 분야 변경하기는 온보딩 선호 분류 화면을 그대로 띄우고, 저장된 관심 분야를 미리 고른다")
+    func editInterestsOpensOnboardingInterests() async throws {
+        @Shared(.userProfile) var userProfile: UserProfile?
+        $userProfile.withLock {
+            $0 = try? UserProfile(affiliationKey: Self.undergraduateMath.key, departmentName: "수학과", interests: ["수학"])
+        }
+        let store = TestStore(initialState: MyPageFeature.State()) { MyPageFeature() }
+
+        await store.send(.editInterestsRowTapped) {
+            var expected = OnboardingFeature.State()
+            expected.entry = .changeInterests
+            expected.step = .interests
+            expected.selectedPreferences = ["수학"]
+            $0.editInterests = expected
+        }
+        await store.send(.editInterests(.presented(.delegate(.completed)))) { $0.editInterests = nil }
+        // 저장을 마치면 마이페이지로 돌아온다.
+    }
+
+    @Test("온보딩 화면에서 관심 분야를 바꾸면 소속·학과는 그대로 두고 관심 분야만 함께 쓰는 프로필에 저장한다")
+    func editInterestsSaves() async throws {
+        let dataset = RecommendationDataset(
+            books: [:],
+            affiliations: [(Self.undergraduateMath, [])],
+            preferences: [("수학", []), ("역사", []), ("여행", []), ("과학", [])]
+        )
+        @Shared(.userProfile) var userProfile: UserProfile?
+        let onboarded = try UserProfile(
+            affiliationKey: Self.undergraduateMath.key, departmentName: "수학과", interests: ["수학", "없는 분류"]
+        )
+        $userProfile.withLock { $0 = onboarded }
+        let store = TestStore(initialState: OnboardingFeature.State.changingInterests()) {
+            OnboardingFeature()
+        } withDependencies: {
+            $0.recommendationDatasetClient.load = { dataset }
+        }
+        #expect(store.state.selectedPreferences == ["수학", "없는 분류"])
+        #expect(store.state.canFinish == false)
+        // 저장된 관심 분야 그대로면 버튼이 꺼져 있다.
+
+        await store.send(.task)
+        await store.receive(\.optionsLoaded) {
+            $0.dataset = dataset
+            $0.selectedPreferences = ["수학"]
+            // 선택지에 없는 이름은 칩으로 해제할 수 없으므로 뺀다.
+        }
+        await store.send(.preferenceToggled("역사")) { $0.selectedPreferences = ["수학", "역사"] }
+        await store.send(.preferenceToggled("여행")) { $0.selectedPreferences = ["수학", "역사", "여행"] }
+        await store.send(.preferenceToggled("과학"))
+        // 최대 3개까지만 고를 수 있다.
+        await store.send(.preferenceToggled("수학")) { $0.selectedPreferences = ["역사", "여행"] }
+
+        await store.send(.finishButtonTapped) {
+            $0.$userProfile.withLock { $0 = try! onboarded.updatingInterests(["역사", "여행"]) }
+        }
+        await store.receive(\.delegate.completed)
+        #expect(userProfile?.interests == ["역사", "여행"])
+        #expect(userProfile?.affiliationKey == Self.undergraduateMath.key)
+        #expect(userProfile?.departmentName == "수학과")
+        // 소속·학과는 그대로 남는다.
     }
 }

@@ -108,6 +108,9 @@ struct IndoorMapFeature {
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(IndoorLocationEvent)
+        #if DEBUG
+        case simulationConnectionChanged
+        #endif
         case currentLocationTapped
         case floorSelected(UUID)
         case fitMapTapped
@@ -234,6 +237,17 @@ struct IndoorMapFeature {
                 }
                 return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.map),
                               .cancel(id: CancelID.navigation), .cancel(id: CancelID.shelfLabels), invalidateRoute(&state))
+
+            #if DEBUG
+            case .simulationConnectionChanged:
+                state.latestPosition = nil
+                state.manualPosition = nil
+                state.isPlacingOrigin = false
+                state.authorization = .notDetermined
+                state.locationMessage = "선택한 위치 공급자에 연결하고 있어요."
+                let cancellation = invalidateRoute(&state)
+                return state.isActive ? .merge(cancellation, locationEvents()) : cancellation
+            #endif
 
             case .locationEvent(.authorization(let authorization)):
                 state.authorization = authorization

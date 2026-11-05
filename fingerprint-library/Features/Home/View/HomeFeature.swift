@@ -8,7 +8,12 @@ struct HomeFeature {
         var recommendedBooks: [Book] = []
         var popularBooks: [Book] = []
         var departmentRecommendations: DepartmentRecommendationsState = .loading
-        var departmentName = ""
+        @Shared(.userProfile) var userProfile: UserProfile?
+        // 앱 전체가 함께 쓰는 프로필. 온보딩·마이페이지에서 바꾼 값이 그대로 보인다.
+        var displayedProfile: UserProfile?
+        // 지금 화면의 추천 목록들을 만들 때 쓴 프로필. userProfile과 다르면 목록을 새 프로필로 다시 불러온다.
+        var departmentName: String { userProfile?.departmentName ?? "" }
+        // "'수학과'에서 많이 빌린" 제목에 쓰는 소속 이름. 따로 복사해 두지 않고 프로필에서 바로 읽는다.
         var isRecommendationExpanded = true
         var showsKulumiCovers = false
         var isFirstVisitAfterOnboarding = false
@@ -27,7 +32,7 @@ struct HomeFeature {
         }
 
         var booksForLibraryInfo: [Book] {
-            guard case let .loaded(_, books) = departmentRecommendations else { return popularBooks }
+            guard case let .loaded(books) = departmentRecommendations else { return popularBooks }
             let previewIDs = Set(popularBooks.map(\.id))
             return popularBooks + books.filter { !previewIDs.contains($0.id) }
         }
@@ -49,7 +54,7 @@ struct HomeFeature {
 
     enum DepartmentRecommendationsState: Equatable {
         case loading
-        case loaded(departmentName: String, books: [Book])
+        case loaded([Book])
         case failed(String)
     }
 
@@ -61,13 +66,12 @@ struct HomeFeature {
         case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
         case departmentRecommendationsRequested
-        case departmentRecommendationsLoaded(String, [Book])
+        case departmentRecommendationsLoaded([Book])
         case departmentRecommendationsFailed(String)
         case loadLibraryInfo
         case libraryInfoLoaded(generation: Int, Book.ID, [BookHolding])
         case libraryInfoFailed(generation: Int, Book.ID)
         case libraryInfoCancelled
-        case departmentChanged(String)
         case upcomingCoversChanged( [URL] ) // 다음에 볼 표지 주소 목록이 바뀜
 
         case bookSelected(Book)
@@ -99,20 +103,22 @@ struct HomeFeature {
     @Dependency(\.bookFavoritesClient) var bookFavoritesClient
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient // 대출가능여부
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
-    @Dependency(\.userProfileClient) var userProfileClient
     @Dependency(\.uuid) var uuid
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case recommendationSession
         case departmentRecommendations
         case libraryInfo
+        case popularBooks
     }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .task:
-                var effects: [Effect<Action>] = []
+                let sync = syncWithProfile(state: &state)
+                // 프로필이 바뀌었으면 먼저 예전 목록을 비운다. 아래에서 빈 목록을 새 프로필로 다시 불러온다.
+                var effects = [sync.reload]
 
                 if state.recommendedBooks.isEmpty && state.recommendationSessionID == nil {
                     effects.append(.send(.recommendationSessionStarted))
@@ -120,22 +126,18 @@ struct HomeFeature {
 
                 if state.popularBooks.isEmpty {
                     state.popularBooksErrorMessage = nil
-                    effects.append(loadPopularBooks(isInitial: state.isFirstVisitAfterOnboarding))
+                    effects.append(loadPopularBooks(
+                        affiliationKey: state.userProfile?.affiliationKey ?? [],
+                        isInitial: state.isFirstVisitAfterOnboarding
+                    ))
                     // ✅ 최초 표시 여부를 함께 넘긴다.
                 }
 
-                return .merge(effects)
+                return .concatenate(sync.cancel, .merge(effects))
+                // 예전 조회를 취소한 뒤에 새 조회를 시작한다.
 
             case .recommendationSessionStarted:
-                let sessionID = uuid()
-                state.recommendationSessionID = sessionID
-                state.isLoadingRecommendations = true
-                state.isPreparingRecommendations = true
-                state.nextRecommendationsSavedAt = nil
-                state.recommendationErrorMessage = nil
-                let displayedCovers = state.recommendedBooks.compactMap(\.imageURL)
-                    + [state.detail?.book.imageURL].compactMap { $0 }
-                return loadRecommendations(sessionID: sessionID, retaining: displayedCovers)
+                return startRecommendationSession(state: &state, restoresCache: true)
 
             case .retryRecommendationsButtonTapped:
                 guard !state.isPreparingRecommendations else { return .none }
@@ -180,23 +182,27 @@ struct HomeFeature {
                 return .none
 
             case .departmentRecommendationsRequested:
-                if case .loaded = state.departmentRecommendations { return .none }
+                let sync = syncWithProfile(state: &state)
+                if case .loaded = state.departmentRecommendations {
+                    return .concatenate(sync.cancel, sync.reload)
+                }
                 state.departmentRecommendations = .loading
-                return .run { [userProfileClient, departmentPopularBooksClient] send in
+                let affiliationKey = state.userProfile?.affiliationKey ?? []
+                let load: Effect<Action> = .run { [departmentPopularBooksClient] send in
                     do {
-                        let profile = try await userProfileClient.load()
-                        let books = try await departmentPopularBooksClient.fetchAll(profile.affiliationKey)
+                        let books = try await departmentPopularBooksClient.fetchAll(affiliationKey)
                         try Task.checkCancellation()
-                        await send(.departmentRecommendationsLoaded(profile.departmentName, books))
+                        await send(.departmentRecommendationsLoaded(books))
                     } catch {
                         guard !Task.isCancelled else { return }
                         await send(.departmentRecommendationsFailed(error.localizedDescription))
                     }
                 }
                 .cancellable(id: CancelID.departmentRecommendations, cancelInFlight: true)
+                return .concatenate(sync.cancel, .merge(sync.reload, load))
 
-            case let .departmentRecommendationsLoaded(name, books):
-                state.departmentRecommendations = .loaded(departmentName: name, books: books)
+            case let .departmentRecommendationsLoaded(books):
+                state.departmentRecommendations = .loaded(books)
                 return .none
 
             case let .departmentRecommendationsFailed(message):
@@ -224,10 +230,6 @@ struct HomeFeature {
                 state.libraryInfoGeneration += 1
                 return .cancel(id: CancelID.libraryInfo)
 
-            case let .departmentChanged(name):
-                state.departmentName = name
-                return .none
-                
             case let .upcomingCoversChanged(urls):
                 return .run { [bookCoverClient] _ in
                     await bookCoverClient.prefetch(urls)
@@ -327,14 +329,62 @@ struct HomeFeature {
         .cancellable(id: CancelID.libraryInfo, cancelInFlight: true)
     }
 
-    private func loadRecommendations(sessionID: UUID, retaining covers: [URL]) -> Effect<Action> {
+    private func syncWithProfile(state: inout State) -> (cancel: Effect<Action>, reload: Effect<Action>) {
+    // 화면의 목록을 만들 때 쓴 프로필(displayedProfile)과 지금 프로필(userProfile)을 비교한다.
+    // 소속이 바뀌면 학과 추천을, 관심 분야가 바뀌면 '당신을 위한 추천'을 비우고 새 프로필로 다시 불러온다.
+    // cancel: 예전 프로필로 진행 중인 조회 취소. reload: 새 프로필로 바로 다시 받을 조회.
+        let current = state.userProfile
+        guard let previous = state.displayedProfile else {
+            state.displayedProfile = current
+            // 처음 불러오는 경우. 목록이 아직 비어 있으므로 비울 것이 없다.
+            return (.none, .none)
+        }
+        guard let current, current != previous else { return (.none, .none) }
+        state.displayedProfile = current
+        var cancels: [Effect<Action>] = []
+        var reload: Effect<Action> = .none
+
+        if current.affiliationKey != previous.affiliationKey {
+            state.popularBooks = []
+            state.popularBooksErrorMessage = nil
+            state.departmentRecommendations = .loading
+            cancels.append(.cancel(id: CancelID.popularBooks))
+            cancels.append(.cancel(id: CancelID.departmentRecommendations))
+            // 예전 소속으로 받던 조회가 늦게 도착해 새 목록을 덮지 않게 취소한다.
+            // 빈 목록은 각 화면의 조회(.task, departmentRecommendationsRequested)가 새 소속으로 다시 채운다.
+        }
+
+        if current.interests != previous.interests {
+            state.recommendedBooks = []
+            reload = startRecommendationSession(state: &state, restoresCache: false)
+            // 저장해 둔 추천은 예전 관심 분야로 만든 것이라 꺼내지 않고 새로 받는다.
+            // 진행 중이던 예전 세션은 같은 취소 ID(cancelInFlight)로 자동 취소된다.
+        }
+        return (.merge(cancels), reload)
+    }
+
+    private func startRecommendationSession(state: inout State, restoresCache: Bool) -> Effect<Action> {
+        let sessionID = uuid()
+        state.recommendationSessionID = sessionID
+        state.isLoadingRecommendations = true
+        state.isPreparingRecommendations = true
+        state.nextRecommendationsSavedAt = nil
+        state.recommendationErrorMessage = nil
+        let displayedCovers = state.recommendedBooks.compactMap(\.imageURL)
+            + [state.detail?.book.imageURL].compactMap { $0 }
+        return loadRecommendations(sessionID: sessionID, retaining: displayedCovers, restoresCache: restoresCache)
+    }
+
+    private func loadRecommendations(sessionID: UUID, retaining covers: [URL], restoresCache: Bool) -> Effect<Action> {
         .run { [homeRecommendationForYouClient] send in
             do {
-                let cached = await homeRecommendationForYouClient.restore(covers)
-                // ①② 보이는 표지 지키기 + 꺼내기.
-                try Task.checkCancellation()
-                await send(.recommendationsRestored(sessionID, cached))
-                // ③ 그대로.
+                if restoresCache {
+                    let cached = await homeRecommendationForYouClient.restore(covers)
+                    // ①② 보이는 표지 지키기 + 꺼내기.
+                    try Task.checkCancellation()
+                    await send(.recommendationsRestored(sessionID, cached))
+                    // ③ 그대로.
+                }
                 let prepared = try await homeRecommendationForYouClient.refresh(6)
                 // ④⑤⑥ 새로 받기 + 0권 검사 + 저장.
                 try Task.checkCancellation()
@@ -352,13 +402,11 @@ struct HomeFeature {
         .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
     }
 
-    private func loadPopularBooks(isInitial: Bool) -> Effect<Action> {
-        .run { [userProfileClient, departmentPopularBooksClient] send in
+    private func loadPopularBooks(affiliationKey: [String], isInitial: Bool) -> Effect<Action> {
+        .run { [departmentPopularBooksClient] send in
             do {
-                // 저장된 프로필의 소속 이름으로 제목을 채우고 같은 소속의 추천 도서를 고른다.
-                let profile = try await userProfileClient.load()
-                await send(.departmentChanged(profile.departmentName))
-                let books = try await departmentPopularBooksClient.fetch(profile.affiliationKey, 6, isInitial)
+                // 프로필의 소속 경로로 같은 소속의 추천 도서를 고른다. 제목은 State.departmentName이 프로필에서 바로 읽는다.
+                let books = try await departmentPopularBooksClient.fetch(affiliationKey, 6, isInitial)
                 // ✅ 학과 이름 대신 소속 경로로 조회한다. 같은 이름의 학부·대학원 학과가 각자의 목록을 받는다.
                 try Task.checkCancellation()
                 await send(.popularBooksLoaded(books))
@@ -369,5 +417,6 @@ struct HomeFeature {
                 await send(.popularBooksFailed(error.localizedDescription))
             }
         }
+        .cancellable(id: CancelID.popularBooks, cancelInFlight: true)
     }
 }

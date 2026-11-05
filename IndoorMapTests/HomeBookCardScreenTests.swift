@@ -18,7 +18,12 @@ extension IndoorMapSerialTests {
                      description: nil, imageURL: nil)
             }
             var initial = HomeFeature.State()
-            initial.departmentName = "반도체공학과"
+            initial.$userProfile.withLock {
+                $0 = try? UserProfile(
+                    affiliationKey: ["POSTECH 학부", "학과 및 학부", "반도체공학과"],
+                    departmentName: "반도체공학과", interests: ["수학"]
+                )
+            }
             initial.recommendedBooks = books
             let selectedBook = books[scenario]
             // 각 상태를 화면 안의 실제 카드 경로에서 확인한다.
