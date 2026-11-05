@@ -40,7 +40,8 @@ struct HomeView: View {
         // 프로필(소속·관심 분야)이 바뀌면 다시 실행해 바뀐 목록을 새로 불러온다. 마이페이지에서 돌아올 때 바로 반영된다.
         // 추천 홈에서 목록으로 이동해도 두 화면이 공유하는 소장 정보 조회를 이어간다.
         .task(id: LibraryInfoTaskID(bookIDs: store.booksForLibraryInfo.map(\.id), sessionID: store.recommendationSessionID)) {
-            await store.send(.loadLibraryInfo).finish()
+            // Effect의 수명은 reducer가 관리한다. 목록 ID 변경으로 기존 요청을 취소하지 않는다.
+            store.send(.loadLibraryInfo)
         }
         .onDisappear { store.send(.libraryInfoCancelled) }
     }

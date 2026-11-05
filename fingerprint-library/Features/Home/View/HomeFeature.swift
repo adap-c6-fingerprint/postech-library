@@ -20,6 +20,9 @@ struct HomeFeature {
         // ✅ 온보딩을 마치고 처음 홈을 여는 경우 true. 학과별 추천을 하드데이터 랜덤 6권으로만 보여준다. (Q4)
         var libraryInfo: [Book.ID: LibraryInfoState] = [:]
         var libraryInfoGeneration = 0
+        var libraryInfoPending: [Book.ID] = []
+        var libraryInfoInFlight: Set<Book.ID> = []
+        var libraryInfoUpdatedAt: [Book.ID: Date] = [:]
 
         @Presents var detail: BookDetailFeature.State?
         @Presents var basket: BookBasketFeature.State?
@@ -104,6 +107,7 @@ struct HomeFeature {
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient // 대출가능여부
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.uuid) var uuid
+    @Dependency(\.date.now) var now
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case recommendationSession
@@ -214,21 +218,26 @@ struct HomeFeature {
 
             case let .libraryInfoLoaded(generation, bookID, holdings):
                 guard state.libraryInfoGeneration == generation,
-                      let book = state.booksForLibraryInfo.first(where: { $0.id == bookID }) else { return .none }
-                state.libraryInfo[bookID] = .loaded(BookCardLibraryInfo(holdings: holdings))
-                bookLocationCacheClient.record(book, holdings)
-                return .none
+                      state.libraryInfoInFlight.remove(bookID) != nil else { return .none }
+                if let book = state.booksForLibraryInfo.first(where: { $0.id == bookID }) {
+                    state.libraryInfo[bookID] = .loaded(BookCardLibraryInfo(holdings: holdings))
+                    state.libraryInfoUpdatedAt[bookID] = now
+                    bookLocationCacheClient.record(book, holdings)
+                }
+                return startNextLibraryInfoRequests(state: &state)
 
             case let .libraryInfoFailed(generation, bookID):
                 guard state.libraryInfoGeneration == generation,
-                      state.booksForLibraryInfo.contains(where: { $0.id == bookID }) else { return .none }
-                // 조회 실패 후 예전 대출 상태를 현재 상태처럼 남겨 두지 않는다.
-                state.libraryInfo[bookID] = .failed
-                return .none
+                      state.libraryInfoInFlight.remove(bookID) != nil else { return .none }
+                if state.booksForLibraryInfo.contains(where: { $0.id == bookID }) {
+                    state.libraryInfo[bookID] = .failed
+                    state.libraryInfoUpdatedAt[bookID] = nil
+                }
+                // 서비스가 제한된 자동 재시도를 마친 실패다. 나머지 책의 조회는 계속한다.
+                return startNextLibraryInfoRequests(state: &state)
 
             case .libraryInfoCancelled:
-                state.libraryInfoGeneration += 1
-                return .cancel(id: CancelID.libraryInfo)
+                return cancelLibraryInfo(state: &state)
 
             case let .upcomingCoversChanged(urls):
                 return .run { [bookCoverClient] _ in
@@ -292,41 +301,63 @@ struct HomeFeature {
     }
 
     private func loadLibraryInfo(state: inout State) -> Effect<Action> {
-        state.libraryInfoGeneration += 1
-        let generation = state.libraryInfoGeneration
         let books = state.booksForLibraryInfo
         let visibleIDs = Set(books.map(\.id))
         state.libraryInfo = state.libraryInfo.filter { visibleIDs.contains($0.key) }
-        var requests: [(bookID: Book.ID, recordID: String)] = []
+        state.libraryInfoUpdatedAt = state.libraryInfoUpdatedAt.filter { visibleIDs.contains($0.key) }
+        state.libraryInfoPending.removeAll { !visibleIDs.contains($0) }
+
         for book in books {
-            guard let recordID = BookHoldingsClient.recordID(for: book) else {
+            guard !state.libraryInfoInFlight.contains(book.id) else { continue }
+            if case .loaded = state.libraryInfo[book.id],
+               let updatedAt = state.libraryInfoUpdatedAt[book.id],
+               now.timeIntervalSince(updatedAt) < 60 {
+                continue
+            }
+            guard BookHoldingsClient.recordID(for: book) != nil else {
                 state.libraryInfo[book.id] = .unavailable
                 continue
             }
             state.libraryInfo[book.id] = .loading
-            requests.append((book.id, recordID))
-        }
-        return .run { [bookHoldingsClient, requests] send in
-            // 표지와 서지정보 표시는 막지 않고 최대 3건씩 조회한다.
-            for start in stride(from: 0, to: requests.count, by: 3) {
-                guard !Task.isCancelled else { return }
-                await withTaskGroup(of: Void.self) { group in
-                    for request in requests[start..<min(start + 3, requests.count)] {
-                        group.addTask {
-                            do {
-                                let holdings = try await bookHoldingsClient.fetch(request.recordID)
-                                try Task.checkCancellation()
-                                await send(.libraryInfoLoaded(generation: generation, request.bookID, holdings))
-                            } catch {
-                                guard !Task.isCancelled else { return }
-                                await send(.libraryInfoFailed(generation: generation, request.bookID))
-                            }
-                        }
-                    }
-                }
+            if !state.libraryInfoPending.contains(book.id) {
+                state.libraryInfoPending.append(book.id)
             }
         }
-        .cancellable(id: CancelID.libraryInfo, cancelInFlight: true)
+        // 목록이 추가돼도 진행 중 요청의 세대와 성공 결과는 유지한다.
+        if state.libraryInfoInFlight.isEmpty && !state.libraryInfoPending.isEmpty {
+            state.libraryInfoGeneration += 1
+        }
+        return startNextLibraryInfoRequests(state: &state)
+    }
+
+    private func startNextLibraryInfoRequests(state: inout State) -> Effect<Action> {
+        var effects: [Effect<Action>] = []
+        while state.libraryInfoInFlight.count < 3 && !state.libraryInfoPending.isEmpty {
+            let bookID = state.libraryInfoPending.removeFirst()
+            guard let book = state.booksForLibraryInfo.first(where: { $0.id == bookID }),
+                  let recordID = BookHoldingsClient.recordID(for: book) else { continue }
+            state.libraryInfoInFlight.insert(bookID)
+            let generation = state.libraryInfoGeneration
+            effects.append(.run { [bookHoldingsClient] send in
+                do {
+                    let holdings = try await bookHoldingsClient.fetch(recordID)
+                    try Task.checkCancellation()
+                    await send(.libraryInfoLoaded(generation: generation, bookID, holdings))
+                } catch {
+                    guard !Task.isCancelled else { return }
+                    await send(.libraryInfoFailed(generation: generation, bookID))
+                }
+            }.cancellable(id: CancelID.libraryInfo))
+        }
+        // 한 권이 완료될 때마다 다음 요청을 넣어 느린 한 권이 뒤쪽 목록을 막지 않게 한다.
+        return .merge(effects)
+    }
+
+    private func cancelLibraryInfo(state: inout State) -> Effect<Action> {
+        state.libraryInfoGeneration += 1
+        state.libraryInfoPending = []
+        state.libraryInfoInFlight = []
+        return .cancel(id: CancelID.libraryInfo)
     }
 
     private func syncWithProfile(state: inout State) -> (cancel: Effect<Action>, reload: Effect<Action>) {
@@ -348,6 +379,11 @@ struct HomeFeature {
             state.popularBooks = []
             state.popularBooksErrorMessage = nil
             state.departmentRecommendations = .loading
+            if !state.libraryInfoInFlight.isEmpty || !state.libraryInfoPending.isEmpty {
+                cancels.append(cancelLibraryInfo(state: &state))
+            }
+            state.libraryInfo = [:]
+            state.libraryInfoUpdatedAt = [:]
             cancels.append(.cancel(id: CancelID.popularBooks))
             cancels.append(.cancel(id: CancelID.departmentRecommendations))
             // 예전 소속으로 받던 조회가 늦게 도착해 새 목록을 덮지 않게 취소한다.
