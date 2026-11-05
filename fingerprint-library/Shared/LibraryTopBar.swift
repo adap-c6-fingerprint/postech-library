@@ -29,7 +29,7 @@ struct LibraryTopBar: ToolbarContent {
         ToolbarSpacer(.fixed, placement: .topBarTrailing)
 
         ToolbarItem(placement: .topBarTrailing) {
-            LibraryTopBarButton(title: "마이페이지", symbol: "person.fill", identifier: "library-top-bar-profile", action: onProfile)
+            ProfileSettingsButton(action: onProfile)
         }
         .sharedBackgroundVisibility(.visible)
     }
@@ -56,7 +56,7 @@ struct LibraryTabTopBar: View {
                     .frame(width: 44, height: 44)
             }
             .glassEffect(.regular.interactive(), in: .capsule)
-            LibraryTopBarButton(title: "마이페이지", symbol: "person.fill", identifier: "library-top-bar-profile", action: onProfile, size: 44)
+            ProfileSettingsButton(action: onProfile, size: 44)
                 .frame(width: 44, height: 44)
                 .glassEffect(.regular, in: .circle)
         }
@@ -80,7 +80,7 @@ private struct LibraryTopBarTitle: View {
     }
 }
 
-private struct LibraryTopBarButton: View {
+struct LibraryTopBarButton: View {
     let title: String
     let symbol: String
     let identifier: String

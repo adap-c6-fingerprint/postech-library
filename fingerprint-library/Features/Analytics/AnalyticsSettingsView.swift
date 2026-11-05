@@ -3,6 +3,7 @@ import SwiftUI
 struct AnalyticsSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var choice = AnalyticsRuntime.shared.consent
+    @State private var apiRouting = APIRoutingSettings.load()
     @State private var showsDiagnosticConfirmation = false
     let isFirstChoice: Bool
 
@@ -22,6 +23,21 @@ struct AnalyticsSettingsView: View {
                 Section {
                     Text("현재 위치·층·서가 위치 전송은 이번 기능에 포함되지 않습니다.")
                     Text("모두 거부해도 도서 검색과 길안내를 이용할 수 있습니다. 마이페이지에서 선택을 바꿀 수 있습니다. 철회하면 이후 분석 수집을 중단하며 이미 서버에 전송된 정보는 자동 삭제되지 않습니다.")
+                }
+                Section("Primo API") {
+                    Toggle("서버를 통한 API 활용", isOn: $apiRouting.primo)
+                    Text("이 옵션을 끌 경우 클라이언트 사이드에서 API 호출을 합니다")
+                        .font(.footnote)
+                }
+                Section("Yes24 API") {
+                    Toggle("서버를 통한 API 활용", isOn: $apiRouting.yes24)
+                    Text("이 옵션을 끌 경우 클라이언트 사이드에서 API 호출을 합니다")
+                        .font(.footnote)
+                }
+                Section("정보나루 API") {
+                    Toggle("서버를 통한 API 활용", isOn: $apiRouting.data4Library)
+                    Text("이 옵션을 끌 경우 클라이언트 사이드에서 API 호출을 합니다")
+                        .font(.footnote)
                 }
                 Section {
                     Button("선택 저장") { save(choice) }
@@ -53,6 +69,7 @@ struct AnalyticsSettingsView: View {
     }
 
     private func save(_ choice: AnalyticsConsent) {
+        apiRouting.save()
         AnalyticsRuntime.shared.saveConsent(choice)
         dismiss()
     }

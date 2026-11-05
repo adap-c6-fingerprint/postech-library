@@ -18,9 +18,19 @@ extension BookHoldingsClient: DependencyKey {
 
     static let liveValue = Self(fetch: { recordID in
         @Dependency(\.httpClient) var httpClient
-        let configuration = try await AppConfiguration.relayConfiguration()
-        let service = PrimoBookHoldingsService(relay: .init(httpClient: httpClient, configuration: { configuration }))
-        let cacheKey = configuration.environment.baseURL.absoluteString + "|" + recordID
+        var relay = BookAPIClient(httpClient: httpClient)
+        let usesRelay = relay.usesRelay(.primoSearch)
+        relay.usesRelay = { _ in usesRelay }
+        let namespace: String
+        if usesRelay {
+            let configuration = try await AppConfiguration.relayConfiguration()
+            relay.configuration = { configuration }
+            namespace = configuration.environment.baseURL.absoluteString
+        } else {
+            namespace = "direct-primo"
+        }
+        let service = PrimoBookHoldingsService(relay: relay)
+        let cacheKey = namespace + "|" + recordID
         if let holdings = await cache.value(for: cacheKey) { return holdings }
         let holdings = try await service.fetch(recordID: recordID)
         try Task.checkCancellation()
