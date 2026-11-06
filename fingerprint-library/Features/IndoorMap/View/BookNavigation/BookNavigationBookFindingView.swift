@@ -144,11 +144,21 @@ struct BookNavigationBookFindingView: View {
 
     private func heading(_ info: BookNavigationBookInfo) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("여기는")
-                .typography(Design.headingCaption)
-            Text(shelfTitle(info))
-                .typography(.title1)
-                .accessibilityIdentifier("book-navigation-shelf")
+            if spineImage == nil, !title.isEmpty {
+                Text(shelfTitle(info))
+                    .typography(Design.headingCaption)
+                    .accessibilityIdentifier("book-navigation-shelf")
+                Text(title)
+                    .typography(.title1)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("book-navigation-title")
+            } else {
+                Text("여기는")
+                    .typography(Design.headingCaption)
+                Text(shelfTitle(info))
+                    .typography(.title1)
+                    .accessibilityIdentifier("book-navigation-shelf")
+            }
         }
         .foregroundStyle(Color.textPrimary)
     }
@@ -424,10 +434,10 @@ private func previewSpine(width: CGFloat) -> BookNavigationFeature.SpinePhase {
     }
 }
 
-#Preview("책등 없음") {
+#Preview("책등 없음 · 서가와 책 제목") {
     NavigationStack {
         BookNavigationBookFindingView(
-            bookInformation: .init(previewTitle: "결정 시간", callNumber: "QA76.73 .P98 2021"),
+            bookInformation: .init(previewTitle: "푸울에 풍덩", callNumber: "PR2993 .F2 .P45"),
             isIntermediateStop: true, spine: .unavailable)
     }
 }
