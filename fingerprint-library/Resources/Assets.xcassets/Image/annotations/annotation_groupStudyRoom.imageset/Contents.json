@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "group-study-room-1x.png",
+      "filename" : "Property 1=meeting room.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "group-study-room-2x.png",
+      "filename" : "Property 1=meeting room@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "group-study-room-3x.png",
+      "filename" : "Property 1=meeting room@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -6,12 +6,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=gaming room 1.png",
+      "filename" : "Property 1=gaming room@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=gaming room 2.png",
+      "filename" : "Property 1=gaming room@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
