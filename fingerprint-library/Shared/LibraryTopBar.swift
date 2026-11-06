@@ -1,51 +1,16 @@
 import SwiftUI
 import UIKit
 
-/// 화면 제목과 하트·카트·프로필을 함께 배치하는 공통 네이티브 툴바.
-struct LibraryTopBar: ToolbarContent {
-    let title: String
-    var onFavorites: (() -> Void)?
-    let onBasket: () -> Void
-    var onProfile: (() -> Void)?
-
-    struct Constants {
-      static let colorTextTitle: Color = Color(red: 0.98, green: 0.98, blue: 0.98)
-      static let FontSize32: CGFloat = 32
-      static let FontFamilyPretendard: String = "Pretendard"
-    }
-
-    var body: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            LibraryTopBarTitle(title: title)
-        }
-        .sharedBackgroundVisibility(.hidden)
-        ToolbarItemGroup(placement: .topBarTrailing) {
-            LibraryTopBarButton(title: "관심 도서", symbol: "heart.fill", identifier: "library-top-bar-favorites", action: onFavorites)
-            LibraryTopBarButton(title: "책바구니", symbol: "cart.fill", identifier: "library-top-bar-basket", action: onBasket)
-        }
-        // 하트와 카트는 하나의 시스템 Liquid Glass 배경을 공유한다.
-        .sharedBackgroundVisibility(.visible)
-
-        ToolbarSpacer(.fixed, placement: .topBarTrailing)
-
-        ToolbarItem(placement: .topBarTrailing) {
-            ProfileSettingsButton(action: onProfile)
-        }
-        .sharedBackgroundVisibility(.visible)
-    }
-}
-
-/// 홈과 추천 탭의 제목과 버튼을 같은 위치에 배치한다.
+/// 홈·추천·검색 탭의 제목과 버튼을 같은 위치에 배치한다.
 struct LibraryTabTopBar: View {
     let title: String
     let onFavorites: () -> Void
     let onBasket: () -> Void
     let onProfile: () -> Void
-    var titleAlignment: VerticalAlignment = .center
-    var contentHeight: CGFloat? = 54
 
     var body: some View {
-        HStack(alignment: titleAlignment, spacing: 12) {
+        HStack(alignment: .bottom, spacing: 12) {
+        // 추천 탭 기준: 제목 아래쪽을 버튼 아래쪽에 맞춘다. 홈도 같은 배치를 쓴다.
             LibraryTopBarTitle(title: title)
                 .padding(.leading, 4)
             Spacer(minLength: 12)
@@ -61,7 +26,6 @@ struct LibraryTabTopBar: View {
                 .glassEffect(.regular, in: .circle)
         }
         .font(.system(size: 24))
-        .frame(height: contentHeight, alignment: .top)
         .padding(.horizontal, 16)
         .padding(.top, 13)
         .environment(\.colorScheme, .dark)
@@ -71,10 +35,17 @@ struct LibraryTabTopBar: View {
 private struct LibraryTopBarTitle: View {
     let title: String
 
+    private enum Constants {
+        static let colorTextTitle: Color = Color(red: 0.98, green: 0.98, blue: 0.98)
+        static let FontSize32: CGFloat = 32
+        static let FontFamilyPretendard: String = "Pretendard"
+    }
+    // 툴바용 LibraryTopBar를 지우면서 제목 글꼴 상수를 제목 View 안으로 옮겼다.
+
     var body: some View {
         Text(title)
-            .font(.custom(LibraryTopBar.Constants.FontFamilyPretendard, size: LibraryTopBar.Constants.FontSize32).weight(.semibold))
-            .foregroundStyle(LibraryTopBar.Constants.colorTextTitle)
+            .font(.custom(Constants.FontFamilyPretendard, size: Constants.FontSize32).weight(.semibold))
+            .foregroundStyle(Constants.colorTextTitle)
             .fixedSize()
             .accessibilityIdentifier("library-top-bar-title")
     }
