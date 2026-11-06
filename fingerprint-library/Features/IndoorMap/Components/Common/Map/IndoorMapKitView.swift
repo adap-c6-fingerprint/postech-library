@@ -274,7 +274,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             guard renderedDetailShelfLabels != labels else { return }
             renderedDetailShelfLabels = labels
             view.removeAnnotations(view.annotations.filter { $0 is BookDetailShelfBadge })
-            view.addAnnotations(IndoorShelfLabelLayout(labels: labels).numbers.map(BookDetailShelfBadge.init))
+            view.addAnnotations(IndoorShelfLabelLayout(labels: labels).numbers.map { BookDetailShelfBadge($0) })
         }
 
         private func layoutShelfLabels(in view: MKMapView) {
@@ -702,7 +702,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.clusteringIdentifier = nil
                 view.isEnabled = false
                 view.isAccessibilityElement = true
-                view.accessibilityLabel = isStart ? "출발 위치" : "목적지: \(annotation.title ?? "도서")"
+                let destinationTitle = (annotation.title ?? nil) ?? "도서"
+                view.accessibilityLabel = isStart ? "출발 위치" : "목적지: \(destinationTitle)"
                 view.accessibilityIdentifier = isStart ? "book-navigation-start" : "book-navigation-destination"
                 return view
             }

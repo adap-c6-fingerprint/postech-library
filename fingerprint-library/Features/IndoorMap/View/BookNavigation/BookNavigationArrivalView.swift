@@ -196,8 +196,8 @@ struct BookNavigationArrivalView: View {
                 Text("두 서가를 확인해 주세요")
             }
             if let first = info.callNumbers.first, let number = BookNavigationArrivalCallNumber(first) {
-                (Text("책등에서 ") + Text(number.number).foregroundColor(BookNavigationPalette.accent)
-                    + Text("을 먼저 찾은 후\n뒤의 숫자들을 이어서 찾으세요"))
+                let numberText = Text(number.number).foregroundColor(BookNavigationPalette.accent)
+                Text("책등에서 \(numberText)을 먼저 찾은 후\n뒤의 숫자들을 이어서 찾으세요")
             } else {
                 Text("책등의 청구기호를 순서대로 확인해 주세요")
             }

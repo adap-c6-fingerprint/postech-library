@@ -1,7 +1,7 @@
 import Foundation
 
 /// 책등에서 먼저 찾을 분류 숫자를 분리한다. 나머지 기호는 생략·재해석하지 않는다.
-struct BookNavigationArrivalCallNumber: Equatable {
+nonisolated struct BookNavigationArrivalCallNumber: Equatable {
     let rawValue: String
     let classification: String
     let number: String

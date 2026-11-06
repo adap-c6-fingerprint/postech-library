@@ -11,7 +11,7 @@ import ComposableArchitecture
 import Foundation
 
 extension SharedKey where Self == FileStorageKey<UserProfile?>.Default {
-    static var userProfile: Self {
+    nonisolated static var userProfile: Self {
         Self[.fileStorage(.documentsDirectory.appending(component: "user-profile.json")), default: nil]
     }
     // nil이면 아직 온보딩을 마치지 않았다는 뜻이다.

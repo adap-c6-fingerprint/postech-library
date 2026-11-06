@@ -43,8 +43,9 @@ struct RecentlyFoundBookView: View {
     }
 
     private var guide: some View {
-        (Text("이전에 ") + Text("길찾기").foregroundStyle(Color.limeBase) + Text("한 책을\n")
-            + Text("좌우").foregroundStyle(Color.limeBase) + Text("로 넘겨보세요"))
+        let navigationText = Text("길찾기").foregroundStyle(Color.limeBase)
+        let swipeText = Text("좌우").foregroundStyle(Color.limeBase)
+        return Text("이전에 \(navigationText)한 책을\n\(swipeText)로 넘겨보세요")
             .typography(.title2)
             .foregroundStyle(Color.textPrimary)
             .multilineTextAlignment(.center)

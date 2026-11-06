@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Book: Equatable, Identifiable, Sendable {
+nonisolated struct Book: Equatable, Identifiable, Sendable {
     let id: String // 화면에서 각 도서를 구분하는 식별자
     let isbn: String? // 국제표준도서번호
     let controlNumber: String? // 도서관 자료 정보의 관리번호(제어번호)

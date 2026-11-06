@@ -280,15 +280,13 @@
 				"$(DWARF_DSYM_FOLDER_PATH)/$(DWARF_DSYM_FILE_NAME)/Contents/Info.plist",
 				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
 				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
-				"$(BUILD_DIR)/../../SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols",
+				"$(SRCROOT)/Scripts/upload-crashlytics-symbols.py",
+				"$(SDK_STAT_CACHE_DIR)",
 			);
 			name = "Crashlytics Symbols (Archive only)";
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = (
-				"\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols\" --build-phase",
-				"",
-			);
+			shellScript = "/usr/bin/python3 \"$SRCROOT/Scripts/upload-crashlytics-symbols.py\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

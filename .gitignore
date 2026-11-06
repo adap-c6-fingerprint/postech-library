@@ -18,7 +18,7 @@ __pycache__/
 Secrets.xcconfig
 
 # Firebase client configuration is supplied locally for each checkout.
-fingerprint-library/GoogleService-Info.plist
+GoogleService-Info.plist
 
 # Private career notes
 .career-log/

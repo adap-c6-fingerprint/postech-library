@@ -170,15 +170,15 @@ struct BookNavigationBookFindingView: View {
             .font(.custom("Pretendard-Bold", fixedSize: DS.FontSize._18))
             .foregroundColor(Color.textPrimary)
         let keyParticle: String = Self.objectParticle(after: key)
-        let prefix: Text = Text("책등에서 ") + keyText
+        let prefix = Text("책등에서 \(keyText)")
         guard !rest.isEmpty else {
             let tail: String = keyParticle + " 찾으세요."
-            return prefix + Text(tail)
+            return Text("\(prefix)\(Text(tail))")
         }
         let restParticle: String = Self.objectParticle(after: rest)
         let tail: String = keyParticle + " 먼저 찾고,\n이어서 " + rest + restParticle + " 확인하세요."
-        return prefix + Text(tail)
-        // Text 덧셈과 문자열 보간을 한 식에 섞으면 타입 검사가 느려져 나눠 계산한다.
+        return Text("\(prefix)\(Text(tail))")
+        // 강조한 Text를 보간해 스타일을 유지하고, 문장을 나눠 타입 검사 부담을 줄인다.
     }
     // 피그마: "책등에서 PR2993을 먼저 찾고, / 이어서 .F2.P45를 확인하세요." (PR2993만 굵은 흰 글씨)
 
@@ -319,7 +319,7 @@ struct BookNavigationBookFindingView: View {
     }
 
     private func callNumber(_ info: BookNavigationBookInfo) -> BookNavigationArrivalCallNumber? {
-        info.callNumbers.lazy.compactMap(BookNavigationArrivalCallNumber.init).first
+        info.callNumbers.lazy.compactMap { BookNavigationArrivalCallNumber($0) }.first
     }
 
     private func shelfTitle(_ info: BookNavigationBookInfo) -> String {

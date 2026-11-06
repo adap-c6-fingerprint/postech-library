@@ -114,12 +114,12 @@ class FirebaseSetupTests(unittest.TestCase):
         phase = self.objects[self.app["buildPhases"][-1]]
         self.assertEqual(phase["name"], "Crashlytics Symbols (Archive only)")
         self.assertEqual(str(phase["runOnlyForDeploymentPostprocessing"]), "1")
-        self.assertEqual(len(phase["inputPaths"]), 6)
+        self.assertEqual(len(phase["inputPaths"]), 7)
         self.assertIn("GoogleService-Info.plist", " ".join(phase["inputPaths"]))
-        self.assertIn("SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols", phase["shellScript"])
-        self.assertIn("--build-phase", phase["shellScript"])
+        self.assertIn("upload-crashlytics-symbols.py", phase["shellScript"])
         self.assertNotIn("&", phase["shellScript"])
-        self.assertTrue(any(path.endswith("/Crashlytics/upload-symbols") for path in phase["inputPaths"]))
+        self.assertIn("$(SRCROOT)/Scripts/upload-crashlytics-symbols.py", phase["inputPaths"])
+        self.assertIn("$(SDK_STAT_CACHE_DIR)", phase["inputPaths"])
 
     def test_pure_consent_and_request_logic(self):
         result = subprocess.run(["bash", "Scripts/verify-analytics.sh"], cwd=ROOT,
@@ -138,17 +138,58 @@ class FirebaseSetupTests(unittest.TestCase):
 
     def test_symbol_upload_failures_reach_the_build(self):
         phase = self.objects[self.app["buildPhases"][-1]]
+        with tempfile.TemporaryDirectory(prefix="pobook symbol upload ") as temporary:
+            root = Path(temporary)
+            cache = root / "DerivedData"
+            derived = cache / "fingerprint-library-current"
+            tool = derived / "SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols"
+            tool.parent.mkdir(parents=True)
+            tool.write_text('#!/bin/sh\n[ "$1" = "--build-phase" ] || exit 99\necho upload-failed >&2\nexit 37\n')
+            tool.chmod(0o700)
+            project = root / "App/fingerprint-library.xcodeproj"
+            (derived / "info.plist").write_bytes(plistlib.dumps({"WorkspacePath": str(project)}))
+            other = cache / "fingerprint-library-other"
+            other.mkdir()
+            (other / "info.plist").write_bytes(plistlib.dumps({"WorkspacePath": str(root / "Other.xcodeproj")}))
+            other_tool = other / tool.relative_to(derived)
+            other_tool.parent.mkdir(parents=True)
+            other_tool.write_text("#!/bin/sh\necho wrong-project >&2\nexit 99\n")
+            other_tool.chmod(0o700)
+            for build_dir in (
+                derived / "Build/Products",
+                derived / "Build/Intermediates.noindex/ArchiveIntermediates/App/BuildProductsPath",
+                root / "Custom Builds/ArchiveIntermediates/App/BuildProductsPath",
+            ):
+                with self.subTest(build_dir=build_dir):
+                    result = subprocess.run(["/bin/sh", "-c", phase["shellScript"]],
+                                            env={**os.environ, "SRCROOT": str(ROOT),
+                                                 "BUILD_DIR": str(build_dir), "SDK_STAT_CACHE_DIR": str(cache),
+                                                 "PROJECT_FILE_PATH": str(project),
+                                                 "WORKSPACE_PATH": str(project / "project.xcworkspace")},
+                                            capture_output=True, text=True)
+                    self.assertEqual(result.returncode, 37, result.stderr)
+                    self.assertIn("upload-failed", result.stderr)
+                    self.assertNotIn("wrong-project", result.stderr)
+
+    def test_symbol_upload_does_not_use_another_projects_checkout(self):
+        phase = self.objects[self.app["buildPhases"][-1]]
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            tool = root / "SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols"
+            derived = root / "DerivedData/other-project"
+            tool = derived / "SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/upload-symbols"
             tool.parent.mkdir(parents=True)
-            tool.write_text("#!/bin/sh\necho upload-failed >&2\nexit 37\n")
+            tool.write_text("#!/bin/sh\necho wrong-project >&2\nexit 99\n")
             tool.chmod(0o700)
+            (derived / "info.plist").write_bytes(plistlib.dumps({"WorkspacePath": str(root / "Other.xcodeproj")}))
             result = subprocess.run(["/bin/sh", "-c", phase["shellScript"]],
-                                    env={**os.environ, "BUILD_DIR": str(root / "Build/Products")},
+                                    env={**os.environ, "SRCROOT": str(ROOT), "BUILD_DIR": str(root / "Custom Builds"),
+                                         "SDK_STAT_CACHE_DIR": str(root / "DerivedData"),
+                                         "WORKSPACE_PATH": str(root / "App.xcodeproj"),
+                                         "PROJECT_FILE_PATH": str(root / "App.xcodeproj")},
                                     capture_output=True, text=True)
-            self.assertEqual(result.returncode, 37)
-            self.assertIn("upload-failed", result.stderr)
+            self.assertEqual(result.returncode, 1, result.stderr)
+            self.assertIn("Could not uniquely locate", result.stderr)
+            self.assertNotIn("wrong-project", result.stderr)
 
     def test_verification_respects_selected_xcode_and_cleans_temporary_files(self):
         with tempfile.TemporaryDirectory() as temporary:
