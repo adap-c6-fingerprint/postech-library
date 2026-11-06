@@ -15,11 +15,11 @@ import Foundation
 struct RecentlyFoundBookFeature {
     enum SpinePhase: Equatable {
         case loading
-        // 책등 이미지를 받는 중. 받기 전까지 bookSpinePlaceHolder 에셋으로 그린다.
+        // 책등 이미지를 받는 중. 받기 전까지 제목을 얹은 recentlyFoundBookPlaceHolder 에셋으로 그린다.
         case loaded(Data)
         // 받은 책등 PNG 데이터
         case unavailable
-        // ISBN이 없거나 책등 이미지를 받지 못한 책. bookSpinePlaceHolder 에셋으로 그린다.
+        // ISBN이 없거나 책등 이미지를 받지 못한 책. 제목을 얹은 recentlyFoundBookPlaceHolder 에셋으로 그린다.
     }
 
     @ObservableState
@@ -72,7 +72,7 @@ struct RecentlyFoundBookFeature {
 
             case let .spineLoaded(id, data):
                 state.spines[id] = data.map(SpinePhase.loaded) ?? .unavailable
-                // spinePngData는 "책등 없음"과 "실패"를 같은 에러로 던지므로 둘 다 bookSpinePlaceHolder 에셋으로 그린다.
+                // spinePngData는 "책등 없음"과 "실패"를 같은 에러로 던지므로 둘 다 플레이스홀더 에셋으로 그린다.
                 return .none
 
             case let .bookSelected(book):
