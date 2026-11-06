@@ -108,6 +108,7 @@ struct IndoorMapFeature {
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(IndoorLocationEvent)
+        case requestLocationPermission
         #if DEBUG
         case simulationConnectionChanged
         #endif
@@ -167,7 +168,7 @@ struct IndoorMapFeature {
                 state.loadError = nil
                 state.map = map
                 let reportedFloor = state.currentPosition?.floorOrdinal
-                let floor = map.floors.first { $0.ordinal == reportedFloor } ?? map.floors.first
+                let floor = map.initialDisplayFloor(reportedOrdinal: reportedFloor)
                 state.selectedFloorID = floor?.id
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
@@ -283,7 +284,7 @@ struct IndoorMapFeature {
                 if state.manualPosition == nil && !state.isPlacingOrigin {
                     state.locationMessage = nil
                     if position.source == .simulation, previousFloor != position.floorOrdinal,
-                       let floor = state.map?.floors.first(where: { $0.ordinal == position.floorOrdinal }),
+                       let floor = state.map?.selectableFloors.first(where: { $0.ordinal == position.floorOrdinal }),
                        floor.id != state.selectedFloorID {
                         state.selectedFloorID = floor.id
                         state.selectedShelfKey = nil
@@ -294,6 +295,9 @@ struct IndoorMapFeature {
                     return invalidateRoute(&state)
                 }
                 return .none
+
+            case .requestLocationPermission:
+                return .run { [locationClient] _ in await locationClient.requestPermission() }
 
             case .currentLocationTapped:
                 state.manualPosition = nil
@@ -321,7 +325,7 @@ struct IndoorMapFeature {
                 return .none
 
             case .floorSelected(let id):
-                guard state.map?.floors.contains(where: { $0.id == id }) == true else { return .none }
+                guard state.map?.selectableFloors.contains(where: { $0.id == id }) == true else { return .none }
                 state.selectedFloorID = id
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
@@ -357,7 +361,7 @@ struct IndoorMapFeature {
                 return .none
 
             case .manualFloorSelected(let id):
-                guard let floor = state.map?.floors.first(where: { $0.id == id }) else { return .none }
+                guard let floor = state.map?.selectableFloors.first(where: { $0.id == id }) else { return .none }
                 state.selectedFloorID = id
                 state.selectedFeatureID = nil
                 state.wantsRecenter = false
@@ -582,8 +586,14 @@ struct IndoorMapFeature {
 
     /// 호출부에서 수락한 현재 위치로 조회 층과 카메라를 이동하고 한 번의 포커싱 요청을 마친다.
     private func recenter(_ state: inout State, position: IndoorPosition) {
+        if let ordinal = position.floorOrdinal, let map = state.map,
+           !map.selectableFloors.contains(where: { $0.ordinal == ordinal }) {
+            state.wantsRecenter = false
+            state.locationMessage = "현재 위치의 층은 아직 지원하지 않아요. 3·4층 지도를 확인해 주세요."
+            return
+        }
         if let ordinal = position.floorOrdinal,
-           let floor = state.map?.floors.first(where: { $0.ordinal == ordinal }) {
+           let floor = state.map?.selectableFloors.first(where: { $0.ordinal == ordinal }) {
             if state.selectedFloorID != floor.id { state.selectedShelfKey = nil }
             state.selectedFloorID = floor.id
         }

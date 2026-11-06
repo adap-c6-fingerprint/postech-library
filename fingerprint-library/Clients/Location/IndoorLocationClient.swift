@@ -47,9 +47,8 @@ extension IndoorLocationClient: DependencyKey {
             return await LiveIndoorLocationProvider.shared.events()
         },
         requestPermission: {
-            #if DEBUG
-            guard !usesSimulation else { return }
-            #endif
+            // 위치 공급자와 별개로 홈 진입 시 시스템 권한을 요청한다.
+            // 실제 권한이 미결정일 때만 Provider가 팝업을 표시한다.
             await LiveIndoorLocationProvider.shared.requestPermission()
         }
     )

@@ -6,6 +6,7 @@ struct BookNavigationBookInfo: Equatable, Sendable {
     let shelf: IndoorShelfLabel
     let candidateShelves: [IndoorShelfLabel]
     let floorName: String?
+    let holdings: [BookHolding]
     let locationNames: [String]
     let callNumbers: [String]
 
@@ -16,7 +17,7 @@ struct BookNavigationBookInfo: Equatable, Sendable {
         shelf = stop.shelf
         candidateShelves = stop.candidateShelves
         floorName = session.map.floors.first { $0.id == stop.shelf.floorID }?.name
-        let holdings = BookHoldingShelfResolver().resolve(stop.holdings, on: session.map, labels: session.shelfLabels)
+        holdings = BookHoldingShelfResolver().resolve(stop.holdings, on: session.map, labels: session.shelfLabels)
             .filter { $0.shelves.contains { $0.id == stop.shelf.id } }
             .map(\.holding)
         locationNames = Self.unique(holdings.compactMap(\.locationName))

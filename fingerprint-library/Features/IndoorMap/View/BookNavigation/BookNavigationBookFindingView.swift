@@ -10,10 +10,12 @@ struct BookNavigationBookFindingView: View {
     private let onTask: () -> Void
     private let onContinue: () -> Void
     private let onFinish: () -> Void
+    private let onDefer: () -> Void
     private var callNumberScreen: CallNumberScreen?
     // 아래로 3초 이상 당기면 여는 기존 청구기호 화면(BookNavigationArrivalView)에 넘길 값. 미리보기에서는 nil
     @Environment(\.dismiss) private var dismiss
     @State private var isCallNumberScreenPresented = false
+    @State private var isBookHelpPresented = false
     @State private var pullHoldTask: Task<Void, Never>?
 
     private struct CallNumberScreen {
@@ -27,23 +29,26 @@ struct BookNavigationBookFindingView: View {
          spine: BookNavigationFeature.SpinePhase? = nil,
          onTask: @escaping () -> Void = {},
          onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {},
+         onDefer: @escaping () -> Void = {},
          onCancel: @escaping () -> Void = {}) {
         self.init(bookInformation: bookInformation ?? BookNavigationBookInfo(session: session, stopIndex: currentStopIndex),
                   isIntermediateStop: currentStopIndex < session.stops.count - 1,
-                  spine: spine, onTask: onTask, onContinue: onContinue, onFinish: onFinish)
+                  spine: spine, onTask: onTask, onContinue: onContinue, onFinish: onFinish, onDefer: onDefer)
         callNumberScreen = CallNumberScreen(session: session, currentStopIndex: currentStopIndex, onCancel: onCancel)
     }
 
     init(bookInformation: BookNavigationBookInfo?, isIntermediateStop: Bool,
          spine: BookNavigationFeature.SpinePhase?,
          onTask: @escaping () -> Void = {},
-         onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {}) {
+         onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {},
+         onDefer: @escaping () -> Void = {}) {
         self.bookInformation = bookInformation
         self.isIntermediateStop = isIntermediateStop
         self.spine = spine
         self.onTask = onTask
         self.onContinue = onContinue
         self.onFinish = onFinish
+        self.onDefer = onDefer
     }
 
     var body: some View {
@@ -54,7 +59,7 @@ struct BookNavigationBookFindingView: View {
                 shelf
                     .frame(height: Design.spineHeight)
                     .ignoresSafeArea(.container, edges: .horizontal)
-                findButton
+                findingActions
                     .padding(.top, Design.shelfToButton)
                     .padding(.horizontal, Design.buttonHorizontalPadding)
                     .padding(.bottom, Design.buttonBottomPadding)
@@ -80,6 +85,14 @@ struct BookNavigationBookFindingView: View {
                     session: screen.session, currentStopIndex: screen.currentStopIndex,
                     bookInformation: bookInformation,
                     onContinue: onContinue, onFinish: onFinish, onCancel: screen.onCancel
+                )
+            }
+        }
+        .navigationDestination(isPresented: $isBookHelpPresented) {
+            if let info = bookInformation {
+                BookNavigationBookHelpView(
+                    info: info, hasNextStop: isIntermediateStop,
+                    onContinue: onContinue, onDefer: onDefer
                 )
             }
         }
@@ -144,11 +157,21 @@ struct BookNavigationBookFindingView: View {
 
     private func heading(_ info: BookNavigationBookInfo) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("여기는")
-                .typography(Design.headingCaption)
-            Text(shelfTitle(info))
-                .typography(.title1)
-                .accessibilityIdentifier("book-navigation-shelf")
+            if spineImage == nil, !title.isEmpty {
+                Text(shelfTitle(info))
+                    .typography(Design.headingCaption)
+                    .accessibilityIdentifier("book-navigation-shelf")
+                Text(title)
+                    .typography(.title1)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("book-navigation-title")
+            } else {
+                Text("여기는")
+                    .typography(Design.headingCaption)
+                Text(shelfTitle(info))
+                    .typography(.title1)
+                    .accessibilityIdentifier("book-navigation-shelf")
+            }
         }
         .foregroundStyle(Color.textPrimary)
     }
@@ -279,6 +302,25 @@ struct BookNavigationBookFindingView: View {
 
     // MARK: - 하단
 
+    private var findingActions: some View {
+        VStack(spacing: Design.findingActionSpacing) {
+            findButton
+            Button {
+                cancelPullHold()
+                isBookHelpPresented = true
+            } label: {
+                Text("못 찾았어요.")
+                    .typography(.body2)
+                    .underline()
+                    .foregroundStyle(Color.textTertiary)
+                    .frame(minHeight: 28)
+            }
+            .buttonStyle(.plain)
+            .disabled(bookInformation == nil)
+            .accessibilityIdentifier("book-navigation-not-found")
+        }
+    }
+
     private var findButton: some View {
         Button(action: isIntermediateStop ? onContinue : onFinish) {
             Text("찾았어요!")
@@ -369,6 +411,7 @@ struct BookNavigationBookFindingView: View {
         static let shelfToButton: CGFloat = 47
         static let buttonHorizontalPadding: CGFloat = 36
         static let buttonBottomPadding: CGFloat = 18
+        static let findingActionSpacing: CGFloat = 12
         static let pullDistance: CGFloat = 60
         // 이만큼 아래로 당긴 상태를 유지해야 3초를 센다. 살짝 스친 터치는 무시한다.
         static let pullHoldSeconds: Double = 3
@@ -381,7 +424,7 @@ struct BookNavigationBookFindingView: View {
 #if DEBUG
 // MARK: - 미리보기 (서버 없이 화면만 확인한다)
 
-private extension BookNavigationBookInfo {
+extension BookNavigationBookInfo {
     init(previewTitle: String, callNumber: String) {
         let floorID = UUID()
         book = Book(id: "preview-book", isbn: nil, controlNumber: nil, title: previewTitle, author: "이승우",
@@ -392,6 +435,9 @@ private extension BookNavigationBookInfo {
                                  content: .callNumberRange(start: "PR1", end: "PR9999"))
         candidateShelves = [shelf]
         floorName = "4층"
+        holdings = [BookHolding(holdingID: nil, institutionCode: "82POSTECH_INST", libraryCode: "MAIN",
+                                locationCode: "c4b", locationName: "단행본 4층",
+                                callNumber: callNumber, availability: "available")]
         locationNames = []
         callNumbers = [callNumber]
     }
@@ -424,10 +470,10 @@ private func previewSpine(width: CGFloat) -> BookNavigationFeature.SpinePhase {
     }
 }
 
-#Preview("책등 없음") {
+#Preview("책등 없음 · 서가와 책 제목") {
     NavigationStack {
         BookNavigationBookFindingView(
-            bookInformation: .init(previewTitle: "결정 시간", callNumber: "QA76.73 .P98 2021"),
+            bookInformation: .init(previewTitle: "푸울에 풍덩", callNumber: "PR2993 .F2 .P45"),
             isIntermediateStop: true, spine: .unavailable)
     }
 }

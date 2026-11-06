@@ -93,6 +93,7 @@ struct BookNavigationView: View {
                     onTask: { store.send(.arrivalSpineTask(stopIndex: index)) },
                     onContinue: { store.send(.continueFromArrival(stopIndex: index)) },
                     onFinish: { store.send(.finishFromArrival(stopIndex: index)) },
+                    onDefer: { store.send(.deferFromArrival(stopIndex: index)) },
                     onCancel: { store.send(.cancelTapped) }
                 )
                 .id(index)
@@ -198,7 +199,7 @@ struct BookNavigationView: View {
 
     private var currentFloorMenu: some View {
         Menu {
-            ForEach(store.session.map.floors) { floor in
+            ForEach(store.session.map.selectableFloors) { floor in
                 Button(floor.name) { store.send(.currentFloorConfirmed(floor.ordinal)) }
             }
         } label: {

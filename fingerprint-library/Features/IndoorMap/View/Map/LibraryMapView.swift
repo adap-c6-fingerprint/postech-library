@@ -65,6 +65,7 @@ struct LibraryMapView: View {
 
     private var mapContent: some View {
         mapLayout
+            .task { await mapStore.send(.requestLocationPermission).finish() }
             .task {
                 searchStore.send(.task)
             }

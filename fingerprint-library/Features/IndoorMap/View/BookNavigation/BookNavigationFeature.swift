@@ -166,6 +166,7 @@ struct BookNavigationFeature {
         case arrivalSpineLoaded(stopIndex: Int, Data?)
         case continueFromArrival(stopIndex: Int)
         case finishFromArrival(stopIndex: Int)
+        case deferFromArrival(stopIndex: Int)
         case cancelTapped
         case cancelDismissed
         case cancelConfirmed
@@ -291,7 +292,7 @@ struct BookNavigationFeature {
 
             case let .currentFloorConfirmed(ordinal):
                 guard state.exitReason == nil, state.canConfirmCurrentFloor,
-                      state.session.map.floors.contains(where: { $0.ordinal == ordinal }) else { return .none }
+                      state.session.map.selectableFloors.contains(where: { $0.ordinal == ordinal }) else { return .none }
                 state.confirmedFloorOrdinal = ordinal
                 if let floor = state.session.map.floors.first(where: { $0.ordinal == ordinal }) {
                     state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .floor(floor.id))
@@ -407,6 +408,11 @@ struct BookNavigationFeature {
                       stopIndex == state.currentStopIndex, !state.hasNextStop,
                       state.currentStop != nil else { return .none }
                 return end(&state, reason: .completed)
+
+            case let .deferFromArrival(stopIndex):
+                guard state.exitReason == nil, state.isArrivalPresented,
+                      stopIndex == state.currentStopIndex, state.currentStop != nil else { return .none }
+                return end(&state, reason: .cancelled)
 
             case .cancelTapped:
                 guard state.exitReason == nil else { return .none }
