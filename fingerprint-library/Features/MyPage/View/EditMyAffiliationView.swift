@@ -43,7 +43,6 @@ struct EditMyAffiliationView: View {
             Text(store.errorMessage ?? "")
         }
         .task { store.send(.task) }
-        .sessionReplayProtected()
     }
 
     private var header: some View {

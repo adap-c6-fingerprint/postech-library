@@ -4,6 +4,7 @@ import Foundation
 @main
 enum SessionReplayProof {
     @MainActor static func main() throws {
+        try verifyConsentRenewal()
         verifyStartupWithoutCallback()
         for chosen in [false, true] {
             for enabled in [false, true] {
@@ -132,6 +133,35 @@ enum SessionReplayProof {
         assert(!ClaritySDK.isPaused()) // 콜백 등록 실패도 허용된 SDK 시작을 정지시키지 않음
         assert(ClaritySDK.calls.filter { $0 == "resume" }.count == resumeCount + 1)
         print("Clarity consent, protected views, deferred tags, retries, background, revocation and restore checks passed")
+    }
+
+    @MainActor private static func verifyConsentRenewal() throws {
+        for enabled in [false, true] {
+            ClaritySDK.reset()
+            let suite = "ClarityConsentRenewal." + UUID().uuidString
+            let defaults = UserDefaults(suiteName: suite)!
+            defer {
+                defaults.removePersistentDomain(forName: suite)
+                ClaritySDK.reset()
+            }
+            let oldConsent = try JSONEncoder().encode(SessionReplayConsent(enabled: enabled, hasChosen: true))
+            defaults.set(oldConsent, forKey: "pobook.clarity.consent.v1")
+            let analytics = try JSONEncoder().encode(AnalyticsConsent(analytics: true, diagnostics: true, hasChosen: true))
+            defaults.set(analytics, forKey: AnalyticsConsent.storageKey)
+            let runtime = SessionReplayRuntime(defaults: defaults)
+            assert(!runtime.consent.hasChosen && !runtime.consent.enabled)
+            runtime.setActive(true)
+            assert(ClaritySDK.calls.isEmpty) // 화면을 가리는 조건의 과거 동의로 시작하지 않음
+            let settings = UUID()
+            runtime.protect(settings)
+            runtime.saveConsent(enabled: enabled)
+            assert(ClaritySDK.calls.isEmpty) // 새 안내로 저장해도 설정을 닫을 때까지 중지
+            runtime.unprotect(settings)
+            assert(ClaritySDK.calls.contains { $0.hasPrefix("initialize:") } == enabled)
+            let restored = SessionReplayRuntime(defaults: defaults)
+            assert(restored.consent.hasChosen && restored.consent.enabled == enabled)
+            assert(defaults.data(forKey: AnalyticsConsent.storageKey) == analytics)
+        }
     }
 
     @MainActor private static func verifyStartupWithoutCallback() {

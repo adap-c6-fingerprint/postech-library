@@ -7,7 +7,7 @@ private struct AnalyticsScreenModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .clarityMask()
+            .clarityUnmask()
             .onAppear { AnalyticsRuntime.shared.showScreen(screen, token: token) }
             .onDisappear { AnalyticsRuntime.shared.hideScreen(token: token) }
     }

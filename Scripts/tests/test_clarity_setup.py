@@ -35,25 +35,32 @@ class ClaritySetupTests(unittest.TestCase):
         self.assertEqual(current["firebase-ios-sdk"]["state"]["version"], "13.1.1")
         self.assertEqual(current["swift-composable-architecture"]["state"]["version"], "1.26.2")
 
-    def test_sensitive_views_and_native_map_are_protected(self):
-        for path in (
-            "Features/Analytics/AnalyticsSettingsView.swift",
-            "Features/Onboarding/View/OnboardingView.swift",
-            "Features/MyPage/View/MyPageView.swift",
-            "Features/MyPage/View/EditMyAffiliationView.swift",
-            "Features/BookSearch/View/BookSearchTabView.swift",
-        ):
+    def test_normal_ui_is_unmasked_and_only_private_settings_pause_replay(self):
+        protected_paths = set()
+        for path in APP.rglob("*.swift"):
+            source = path.read_text()
             with self.subTest(path=path):
-                self.assertIn(".sessionReplayProtected()", (APP / path).read_text())
+                self.assertNotIn(".clarityMask(", source)
+                self.assertNotIn("ClaritySDK.maskView(", source)
+            if ".sessionReplayProtected()" in source:
+                protected_paths.add(path.relative_to(APP).as_posix())
+        self.assertEqual(protected_paths, {
+            "App/AppView.swift",  # 개발용 Mac 연결 설정만 중지
+            "Features/Analytics/AnalyticsSettingsView.swift",
+        })
         map_view = (APP / "Features/IndoorMap/Components/Common/Map/IndoorMapKitView.swift").read_text()
-        self.assertIn("ClaritySDK.maskView(view)", map_view)
+        self.assertIn("ClaritySDK.unmaskView(view)", map_view)
         root = (APP / "App/AppView.swift").read_text()
         self.assertIn("|| !SessionReplayRuntime.shared.consent.hasChosen", root)
         self.assertIn("SessionReplayRuntime.shared.setActive(phase == .active)", root)
-        self.assertIn(".clarityMask()", root)
+        self.assertIn(".clarityUnmask()", root)
+        screen = (APP / "Shared/Analytics/AnalyticsScreenModifier.swift").read_text()
+        self.assertIn(".clarityUnmask()", screen)
         settings = (APP / "Features/Analytics/AnalyticsSettingsView.swift").read_text()
         self.assertIn("save(AnalyticsConsent(), sessionReplay: false)", settings)
         self.assertIn("SessionReplayRuntime.shared.saveConsent(enabled: sessionReplay)", settings)
+        self.assertIn("지도에 표시되는 위치·층·경로도 녹화에 포함될 수 있습니다", settings)
+        self.assertNotIn("텍스트·이미지·지도 영역은 가립니다", settings)
         runtime = (APP / "Clients/Analytics/SessionReplayRuntime.swift").read_text()
         self.assertNotIn("setCustomUserId", runtime)
         self.assertNotIn("getCurrentSessionUrl", runtime)

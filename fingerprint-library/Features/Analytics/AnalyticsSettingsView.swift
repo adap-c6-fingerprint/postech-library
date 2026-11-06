@@ -24,10 +24,10 @@ struct AnalyticsSettingsView: View {
                 Section {
                     Toggle("화면 이용 녹화 허용 (선택)", isOn: $allowsSessionReplay)
                 } footer: {
-                    Text("Microsoft Clarity로 화면 구성과 탭·스크롤 등 이용 과정을 기록해 UX 개선에 사용합니다. 검색·프로필·설정 화면은 녹화를 멈추고, 텍스트·이미지·지도 영역은 가립니다. GA 사용 분석과 별개로 선택할 수 있습니다.")
+                    Text("Microsoft Clarity로 화면의 텍스트·이미지와 탭·스크롤 등 이용 과정을 기록해 UX 개선에 사용합니다. API로 불러온 도서 정보·표지, 검색 화면, 소속·관심 분야 선택, 지도에 표시되는 위치·층·경로도 녹화에 포함될 수 있습니다. 데이터 수집 설정과 개발용 Mac 연결 설정에서는 녹화를 멈춥니다. GA 사용 분석과 별개로 선택할 수 있습니다.")
                 }
                 Section {
-                    Text("좌표·층·서가 위치를 별도 데이터로 전송하지 않으며, 녹화에서도 지도 영역을 가립니다.")
+                    Text("좌표·층·서가 위치를 별도 분석 이벤트로 전송하지 않습니다. 다만 화면 이용 녹화를 허용하면 지도와 화면에 표시된 위치 정보가 Microsoft Clarity에 전송될 수 있습니다.")
                     Text("모두 거부해도 도서 검색과 길안내를 이용할 수 있습니다. 마이페이지에서 선택을 바꿀 수 있습니다. 철회하면 이후 분석 수집을 중단하며 이미 서버에 전송된 정보는 자동 삭제되지 않습니다.")
                 }
                 Section("Primo API") {
@@ -72,6 +72,7 @@ struct AnalyticsSettingsView: View {
         }
         .interactiveDismissDisabled(isFirstChoice)
         .analyticsScreen(.analyticsSettings)
+        // 동의 저장 시점부터 화면이 닫힐 때까지도 녹화를 중지한다.
         .sessionReplayProtected()
     }
 

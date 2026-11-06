@@ -29,7 +29,7 @@ struct AppView: View {
             }
         }
         // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
-        .clarityMask()
+        .clarityUnmask()
         .task { store.send(.profileCheckRequested) }
         .sheet(isPresented: $showsAnalyticsChoice) {
             AnalyticsSettingsView(isFirstChoice: true)
@@ -110,6 +110,7 @@ struct AppView: View {
                 message: store.indoorMap.locationMessage,
                 onReconnect: { store.send(.indoorMap(.simulationConnectionChanged)) }
             )
+            // 내부 Mac 주소가 표시되는 개발용 연결 설정은 녹화하지 않는다.
             .sessionReplayProtected()
         }
         #endif

@@ -1,4 +1,3 @@
-import Clarity
 import SwiftUI
 
 private struct SessionReplayProtectedModifier: ViewModifier {
@@ -6,7 +5,6 @@ private struct SessionReplayProtectedModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .clarityMask()
             .onAppear { SessionReplayRuntime.shared.protect(token) }
             .onDisappear { SessionReplayRuntime.shared.unprotect(token) }
     }
