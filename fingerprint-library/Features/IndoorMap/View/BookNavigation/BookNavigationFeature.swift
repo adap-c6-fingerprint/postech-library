@@ -498,8 +498,7 @@ struct BookNavigationFeature {
         guard let ordinal, state.session.map.floors.contains(where: { $0.ordinal == ordinal }) else {
             state.latestPosition = nil
             state.progress = nil
-            state.statusMessage = raw.source == .simulation
-                ? "시뮬레이터의 도면과 층을 확인해 주세요." : "현재 층을 선택해 주세요."
+            state.statusMessage = "현재 층을 선택해 주세요."
             state.cameraTracking = .init()
             return
         }
@@ -562,7 +561,7 @@ struct BookNavigationFeature {
     }
 
     private func isAnalyticsTest(_ state: State) -> Bool {
-        state.analyticsIsTest || state.session.start.source == .simulation || state.session.start.source == .replay
+        state.analyticsIsTest || state.session.start.source == .replay
     }
 
     private func recordQuality(_ state: State, code: String) {

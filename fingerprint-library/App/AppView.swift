@@ -13,9 +13,6 @@ struct AppView: View {
     let store: StoreOf<AppFeature>
     @Environment(\.scenePhase) private var scenePhase
     @State private var showsAnalyticsChoice = false
-    #if DEBUG
-    @State private var showsSimulationSettings = false
-    #endif
 
     var body: some View {
         Group {
@@ -88,31 +85,6 @@ struct AppView: View {
             }
         }
         .tabViewSearchActivation(.searchTabSelection)
-        #if DEBUG
-        .background {
-            HomeTabDebugTrigger(
-                isEnabled: scenePhase == .active && !showsSimulationSettings,
-                isHomeSelected: { store.selectedTab == .map }
-            ) {
-                guard store.selectedTab == .map, !showsSimulationSettings else { return }
-                showsSimulationSettings = true
-            }
-            .frame(width: 0, height: 0)
-            .allowsHitTesting(false)
-            .accessibilityHidden(true)
-        }
-        .sheet(isPresented: $showsSimulationSettings) {
-            SimulationConnectionSheet(
-                position: store.indoorMap.latestPosition,
-                floorName: store.indoorMap.map?.floors.first {
-                    $0.ordinal == store.indoorMap.latestPosition?.floorOrdinal
-                }?.name,
-                message: store.indoorMap.locationMessage,
-                onReconnect: { store.send(.indoorMap(.simulationConnectionChanged)) }
-            )
-            .sessionReplayProtected()
-        }
-        #endif
         .tint(Color(red: 0.88, green: 0.95, blue: 0.19))
         .environment(\.indoorRouteMapStore, store.scope(state: \.indoorMap, action: \.indoorMap))
         // 위치 스트림은 탭 전환이 아닌 앱 루트 수명에 맞춘다.
