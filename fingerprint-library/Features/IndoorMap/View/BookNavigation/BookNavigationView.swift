@@ -93,6 +93,7 @@ struct BookNavigationView: View {
                     onTask: { store.send(.arrivalSpineTask(stopIndex: index)) },
                     onContinue: { store.send(.continueFromArrival(stopIndex: index)) },
                     onFinish: { store.send(.finishFromArrival(stopIndex: index)) },
+                    onDefer: { store.send(.deferFromArrival(stopIndex: index)) },
                     onCancel: { store.send(.cancelTapped) }
                 )
                 .id(index)
