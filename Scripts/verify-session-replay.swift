@@ -38,6 +38,11 @@ enum SessionReplayProof {
         assert(ClaritySDK.calls.isEmpty) // 동의 화면 자체는 수집하지 않음
         runtime.unprotect(protectedView)
         assert(ClaritySDK.calls.first == "initialize:z8n14vbcvp")
+        #if DEBUG
+        assert(ClaritySDK.initializationLogLevel == .verbose)
+        #else
+        assert(ClaritySDK.initializationLogLevel == .none)
+        #endif
         assert(!ClaritySDK.calls.contains("resume")) // 비동기 준비 전 fail-closed
         runtime.protect(protectedView)
         ClaritySDK.fireSessionStarted()
@@ -108,6 +113,17 @@ enum SessionReplayProof {
             && retried[1].hasPrefix("tag:build_channel:") && retried[2] == "resume")
         assert(ClaritySDK.calls.filter { $0.hasPrefix("tag:") }.count == tags + 1)
         assert(SessionReplayConsent.storageKey != AnalyticsConsent.storageKey)
+        let resumeCount = ClaritySDK.calls.filter { $0 == "resume" }.count
+        ClaritySDK.acceptsInitialization = false
+        let rejected = SessionReplayRuntime(defaults: defaults)
+        rejected.setActive(true)
+        assert(ClaritySDK.calls.last == "initialize:z8n14vbcvp")
+        ClaritySDK.acceptsInitialization = true
+        ClaritySDK.acceptsCallbackRegistration = false
+        let awaitingSession = SessionReplayRuntime(defaults: defaults)
+        awaitingSession.setActive(true)
+        assert(ClaritySDK.calls.last == "pause")
+        assert(ClaritySDK.calls.filter { $0 == "resume" }.count == resumeCount)
         print("Clarity consent, protected views, deferred tags, retries, background, revocation and restore checks passed")
     }
 }

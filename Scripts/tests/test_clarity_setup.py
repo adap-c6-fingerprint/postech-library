@@ -64,23 +64,40 @@ class ClaritySetupTests(unittest.TestCase):
             module = temp / "libClarity.dylib"
             common = ["xcrun", "swiftc", "-swift-version", "6", "-default-isolation", "MainActor",
                       "-module-cache-path", str(temp / "modules")]
-            commands = [
-                common + ["-emit-library", "-emit-module", "-module-name", "Clarity",
-                          "-emit-module-path", str(temp / "Clarity.swiftmodule"),
-                          str(ROOT / "Scripts/tests/fixtures/ClarityStub.swift"), "-o", str(module)],
-                common + ["-parse-as-library", "-I", str(temp), "-L", str(temp), "-lClarity",
-                          "-Xlinker", "-rpath", "-Xlinker", str(temp),
-                          str(APP / "Domain/Book/Book.swift"),
-                          str(APP / "Domain/Analytics/AnalyticsEvent.swift"),
-                          str(APP / "Domain/Analytics/SessionReplayConsent.swift"),
-                          str(APP / "Clients/Analytics/SessionReplayRuntime.swift"),
-                          str(ROOT / "Scripts/verify-session-replay.swift"), "-o", str(temp / "proof")],
-                [str(temp / "proof")],
-            ]
-            for command in commands:
-                result = subprocess.run(command, cwd=ROOT, env=os.environ.copy(),
-                                        capture_output=True, text=True)
-                self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            for debug in (False, True):
+                with self.subTest(debug=debug):
+                    flags = ["-D", "DEBUG"] if debug else []
+                    commands = [
+                        common + ["-emit-library", "-emit-module", "-module-name", "Clarity",
+                                  "-emit-module-path", str(temp / "Clarity.swiftmodule"),
+                                  str(ROOT / "Scripts/tests/fixtures/ClarityStub.swift"), "-o", str(module)],
+                        common + flags + ["-parse-as-library", "-I", str(temp), "-L", str(temp), "-lClarity",
+                                          "-Xlinker", "-rpath", "-Xlinker", str(temp),
+                                          str(APP / "Domain/Book/Book.swift"),
+                                          str(APP / "Domain/Analytics/AnalyticsEvent.swift"),
+                                          str(APP / "Domain/Analytics/SessionReplayConsent.swift"),
+                                          str(APP / "Clients/Analytics/SessionReplayRuntime.swift"),
+                                          str(ROOT / "Scripts/verify-session-replay.swift"), "-o", str(temp / "proof")],
+                        [str(temp / "proof")],
+                    ]
+                    for command in commands:
+                        result = subprocess.run(command, cwd=ROOT, env=os.environ.copy(),
+                                                capture_output=True, text=True)
+                        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+                    self.assertEqual("[ClarityDebug]" in result.stdout, debug)
+                    if debug:
+                        for event in ("consent_loaded", "initialization_blocked_by_policy",
+                                      "initialize_requested", "session_started", "waiting_for_session",
+                                      "protected_view_added", "protected_view_removed",
+                                      "recording_allowed", "recording_blocked"):
+                            self.assertIn("event=" + event, result.stdout)
+                        for event in ("initialize_returned", "session_callback_registered",
+                                      "sdk_consent_returned", "build_channel_tag_returned"):
+                            self.assertIn("event=" + event + " result=false", result.stdout)
+                        self.assertIn("protected_views=1", result.stdout)
+                        self.assertIn("sdk_paused=false", result.stdout)
+                        self.assertNotIn("test-session", result.stdout)
+                        self.assertNotIn("https://", result.stdout)
 
 
 if __name__ == "__main__":

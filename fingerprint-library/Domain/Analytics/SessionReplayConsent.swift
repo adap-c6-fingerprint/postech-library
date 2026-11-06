@@ -12,6 +12,10 @@ nonisolated struct SessionReplayPolicy {
     var isActive = false
     private var protectedViews: Set<UUID> = []
 
+    #if DEBUG
+    var protectedViewCount: Int { protectedViews.count }
+    #endif
+
     var shouldRecord: Bool {
         consent.hasChosen && consent.enabled && isActive && protectedViews.isEmpty
     }
