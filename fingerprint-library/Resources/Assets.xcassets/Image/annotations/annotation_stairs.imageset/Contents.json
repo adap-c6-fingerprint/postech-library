@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=stairs.png",
+      "filename" : "Property 1=Variant18.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=stairs 1.png",
+      "filename" : "Property 1=Variant18@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=stairs 2.png",
+      "filename" : "Property 1=Variant18@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -1,24 +1,23 @@
 {
-  "images": [
+  "images" : [
     {
-      "filename": "MapLocationEnd.png",
-      "idiom": "universal",
-      "scale": "1x"
+      "filename" : "Type=End.png",
+      "idiom" : "universal",
+      "scale" : "1x"
     },
     {
-      "idiom": "universal",
-      "scale": "2x"
+      "filename" : "Type=End@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
     },
     {
-      "idiom": "universal",
-      "scale": "3x"
+      "filename" : "Type=End@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
-  "info": {
-    "author": "xcode",
-    "version": 1
-  },
-  "properties": {
-    "preserves-vector-representation": false
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
   }
 }

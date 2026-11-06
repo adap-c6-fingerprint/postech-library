@@ -6,12 +6,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=Walk 1.png",
+      "filename" : "Property 1=Walk@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=Walk 2.png",
+      "filename" : "Property 1=Walk@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
