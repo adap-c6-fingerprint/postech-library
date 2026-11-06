@@ -2,7 +2,7 @@ import Foundation
 
 /// 도서관 검색·추천·소장 조회가 공통으로 사용하는 Primo 요청 구성과 전송.
 nonisolated struct PrimoAPIClient: Sendable {
-    static let defaultBaseURL = APIRelayEnvironment.development.baseURL
+    static let defaultBaseURL = URL(string: "https://api-ap.hosted.exlibrisgroup.com")!
 
     var relay: BookAPIClient = .init()
 

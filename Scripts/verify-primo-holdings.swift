@@ -11,7 +11,9 @@ struct VerifyPrimoHoldings {
             target.percentEncodedQuery = URLComponents(url: original.url!, resolvingAgainstBaseURL: false)?.percentEncodedQuery
             request.url = target.url
             return try await URLSession.shared.data(for: request)
-        }), configuration: { .init(environment: .development, token: "local-proof-relay-token-with-at-least-32-characters") })
+        }), configuration: {
+            throw VerificationFailed(message: "Primo must not load relay configuration")
+        }, primoAPIKey: { "local-proof-primo-key" })
         let service = PrimoBookHoldingsService(relay: relay)
         let holdings = try await service.fetch(recordID: "alma991000958759703286")
         try check(holdings.count == 3, "real sample's three holdings")

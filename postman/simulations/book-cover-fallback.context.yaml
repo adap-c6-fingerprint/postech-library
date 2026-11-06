@@ -37,6 +37,13 @@ assumptions:
     verification: 실제 1984 다섯 판본의 디코딩 성공까지 확인했다. 카탈로그 전체의 대체 이미지 식별은 검증하지 않았다.
     source: https://developers.yes24.com/api-doc/goods-item-detail
     updated_at: '2026-10-29'
+  - id: appstore-relay-fallback-regression
+    status: supported
+    claim: 구성한 로컬 HTTP 사례에서 Yes24를 중계로 고정한 배포판의 기존 표지 대체 조회·판본 확인·오류·재시도가 유지된다.
+    reason: 실제 서비스·표지 모델·resolver와 기존 covers mock을 실행했다. 검증 스크립트의 오래된 coverURL 호출을 운영 코드의 url 메서드로 수정했다.
+    verification: 2026-11-06 Scripts/verify-book-cover-fallback.sh의 9개 사례와 ISBN별 캐시·재시도 횟수가 통과했다. covers 요청 이벤트 11건을 확인했다. 전송 어댑터가 중계 요청을 기존 제공사 mock으로 연결했으며 실제 제공사와 중계 서버는 호출하지 않았다.
+    source: Scripts/verify-book-cover-fallback.swift; Scripts/verify-book-cover-fallback.sh; postman/mocks/book-cover-providers/default.js
+    updated_at: '2026-11-06'
 fingerprints:
   - id: shared-http-20261030
     date: '2026-10-30'
@@ -50,3 +57,7 @@ fingerprints:
     date: '2026-10-29'
     commit: 3137119 최신 dev로 재배치한 #174 작업 트리; 도착 화면 ISBN 전달 포함
     cli: Postman CLI 1.73.0; iPhone 18 Pro iOS 27.0; Swift 6
+  - id: appstore-fixed-routing-20261106
+    date: '2026-11-06'
+    commit: 0ffe9c9 기반 fix/appstore-1106-api-routing의 커밋 전 작업 트리
+    cli: Postman CLI 1.73.0; Swift 6; 기존 book-cover-fallback.sim.yaml

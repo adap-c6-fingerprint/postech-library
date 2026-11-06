@@ -23,6 +23,13 @@ assumptions:
     verification: 2026-11-02 수정 전 Swift 6 재현 프로그램에서 필드 누락이 빈 위치 갱신으로 해석됨을 확인했고 수정 후 갱신 대상에서 제외됨을 확인했다. 캐시·지도 23개 및 기존 소장 파서 7개 검사가 통과했다. 누락·빈 객체·null의 기존 위치 보존과 명시적 빈 목록의 제거·복원을 확인했다. Postman 서버와 실서버는 이번에 호출하지 않았으며 실제 서버의 필드 생략 조건과 빈도는 여전히 확인되지 않았다.
     source: fingerprint-library/Clients/Book/Client/PrimoHoldingsMapper.swift; IndoorMapTests/BookLocationCacheClientTests.swift; BookDetailTests/PrimoHoldingsMapperTests.swift
     updated_at: '2026-11-02'
+  - id: appstore-direct-holdings-regression
+    status: supported
+    claim: 구성한 로컬 HTTP 사례에서 Primo를 직접 호출로 고정한 배포판 소장 서비스가 기존 응답 변환과 오류·재시도 동작을 유지한다.
+    reason: 중계 설정을 읽으면 실패하도록 구성한 실제 Swift 서비스가 기존 library mock의 응답과 호출 횟수 검사를 통과했다.
+    verification: 2026-11-06 소장처 3개·정확한 자료번호·불완전 문서·빈 결과·401 1회·잘못된 JSON 1회·503 3회·429 2회 회복을 검증했다. 새 직접 경로 검증 1건과 소장 검증 11건, 진단 1건의 library 요청 이벤트를 확인했다. 실제 제공사 네트워크는 호출하지 않았다.
+    source: Scripts/verify-primo-holdings.swift; Scripts/verify-appstore-api-routing.swift; postman/simulations/appstore-api-routing.sim.yaml
+    updated_at: '2026-11-06'
 fingerprints:
   - id: shared-http-20261030
     date: '2026-10-30'
@@ -32,3 +39,7 @@ fingerprints:
     date: '2026-11-02'
     commit: 3e2760cd5923b82fb8c51ab63bd6c30f40eb3f0b 기반 feat/#229-home-map-annotations의 CodeRabbit 수정 작업 트리
     cli: Swift 6; Xcode 시뮬레이터 검사; 이번 검증에서 Postman CLI와 서버는 실행하지 않음
+  - id: appstore-direct-primo-20261106
+    date: '2026-11-06'
+    commit: 0ffe9c9 기반 fix/appstore-1106-api-routing의 커밋 전 작업 트리
+    cli: Postman CLI 1.73.0; Swift 6; appstore-api-routing.sim.yaml의 기존 library 멤버 재사용

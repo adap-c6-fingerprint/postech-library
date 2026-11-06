@@ -2,8 +2,8 @@ import Foundation
 import StoreKit
 
 nonisolated enum AppConfiguration {
-    static func providerAPIKey(for provider: BookAPIProvider) throws -> String {
-        guard let key = value(for: provider.credentialName) else { throw APIRelayError.missingProviderKey }
+    static func primoAPIKey() throws -> String {
+        guard let key = value(for: "PRIMO_API_KEY") else { throw APIRelayError.missingPrimoAPIKey }
         return key
     }
 
