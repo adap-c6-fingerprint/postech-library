@@ -39,11 +39,6 @@ struct MyPageView: View {
                 // 위치 권한 설정·이용 안내는 아직 기능명세가 없어 행만 둔다.
                 .padding(.horizontal, 16)
                 .padding(.bottom, 80)
-                Text("킥킥..\n@GosanJohnKoriMewOwenSano")
-                    .typography(.caption2)
-                    .foregroundStyle(Color.textTertiary)
-                    .padding(.horizontal, 18)
-                    .padding(.bottom, 24)
             }
         }
         .scrollIndicators(.hidden)
