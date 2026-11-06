@@ -199,7 +199,7 @@ struct BookNavigationView: View {
 
     private var currentFloorMenu: some View {
         Menu {
-            ForEach(store.session.map.floors) { floor in
+            ForEach(store.session.map.selectableFloors) { floor in
                 Button(floor.name) { store.send(.currentFloorConfirmed(floor.ordinal)) }
             }
         } label: {
