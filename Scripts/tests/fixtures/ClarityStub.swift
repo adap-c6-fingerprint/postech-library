@@ -20,7 +20,17 @@ public enum ClaritySDK {
     public static var initializationLogLevel = ClarityLogLevel.none
     private static var paused = false
     private static var callback: ((String) -> Void)?
-    private static var ready = false
+
+    public static func reset() {
+        calls = []
+        acceptsInitialization = true
+        acceptsTags = true
+        acceptsConsent = true
+        acceptsCallbackRegistration = true
+        initializationLogLevel = .none
+        paused = false
+        callback = nil
+    }
 
     public static func initialize(config: ClarityConfig) -> Bool {
         calls.append("initialize:" + config.projectId)
@@ -38,7 +48,8 @@ public enum ClaritySDK {
     @discardableResult
     public static func consent(analyticsStorage: Bool) -> Bool {
         calls.append("consent:" + String(analyticsStorage))
-        return ready && acceptsConsent
+        // 실제 SDK처럼 세션 시작 전에도 동의 신호를 접수한다.
+        return acceptsConsent
     }
     @discardableResult
     public static func setOnSessionStartedCallback(_ value: @escaping (String) -> Void) -> Bool {
@@ -46,5 +57,5 @@ public enum ClaritySDK {
         callback = value
         return true
     }
-    public static func fireSessionStarted() { ready = true; callback?("test-session") }
+    public static func fireSessionStarted() { callback?("test-session") }
 }

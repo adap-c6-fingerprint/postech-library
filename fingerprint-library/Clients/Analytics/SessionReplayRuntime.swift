@@ -58,9 +58,32 @@ final class SessionReplayRuntime {
     }
 
     private func apply() {
+        let allowed = policy.consent.hasChosen && policy.consent.enabled
+        // SDK에 신호를 보낸 적이 없다면 기존 동의·활성·보호 화면 조건을 먼저 충족해야 한다.
+        guard initialized || policy.shouldRecord || appliedConsent != nil else {
+            debugLog("initialization_blocked_by_policy")
+            return
+        }
+        if !allowed { ClaritySDK.pause() }
+        // SDK는 준비 전 동의도 보관한다. 콜백을 기다리지 않고 철회·허용을 전달한다.
+        if !allowed || policy.shouldRecord,
+           appliedConsent != allowed {
+            let accepted = ClaritySDK.consent(analyticsStorage: allowed)
+            if accepted { appliedConsent = allowed }
+            debugLog("sdk_consent_returned", result: accepted)
+        }
         if !initialized {
             // 동의 전에는 SDK 자체를 초기화하지 않는다.
-            guard policy.shouldRecord else { debugLog("initialization_blocked_by_policy"); return }
+            guard policy.shouldRecord else {
+                ClaritySDK.pause()
+                debugLog("initialization_blocked_by_policy")
+                return
+            }
+            guard appliedConsent == true else {
+                ClaritySDK.pause()
+                debugLog("initialization_blocked_by_sdk_consent")
+                return
+            }
             let config = ClarityConfig(projectId: "z8n14vbcvp")
             #if DEBUG
             config.logLevel = .verbose
@@ -69,11 +92,11 @@ final class SessionReplayRuntime {
             initialized = ClaritySDK.initialize(config: config)
             debugLog("initialize_returned", result: initialized)
             guard initialized else {
+                ClaritySDK.pause()
                 Logger(subsystem: "com.youngmin.fingerprint-library", category: "Clarity")
                     .error("Clarity initialization was not accepted.")
                 return
             }
-            ClaritySDK.pause()
             let registered = ClaritySDK.setOnSessionStartedCallback { [weak self] _ in
                 guard let self else { return }
                 self.ready = true
@@ -83,23 +106,14 @@ final class SessionReplayRuntime {
             }
             debugLog("session_callback_registered", result: registered)
         }
-        guard ready else { ClaritySDK.pause(); debugLog("waiting_for_session"); return }
-        let allowed = policy.consent.hasChosen && policy.consent.enabled
-        if !allowed { ClaritySDK.pause() }
-        if !allowed || policy.shouldRecord,
-           appliedConsent != allowed {
-            let accepted = ClaritySDK.consent(analyticsStorage: allowed)
-            if accepted { appliedConsent = allowed }
-            debugLog("sdk_consent_returned", result: accepted)
-        }
         if policy.shouldRecord, appliedConsent == true {
-            if needsBuildChannelTag {
+            if ready, needsBuildChannelTag {
                 let tagged = ClaritySDK.setCustomTag(key: "build_channel", value: Self.buildChannel)
                 if tagged { needsBuildChannelTag = false }
                 debugLog("build_channel_tag_returned", result: tagged)
             }
             if ClaritySDK.isPaused() { ClaritySDK.resume() }
-            debugLog("recording_allowed")
+            debugLog(ready ? "recording_allowed" : "waiting_for_session")
         } else {
             ClaritySDK.pause()
             debugLog("recording_blocked")
@@ -109,7 +123,7 @@ final class SessionReplayRuntime {
     private func debugLog(_ event: String, result: Bool? = nil) {
         #if DEBUG
         // 상태·개수만 기록하고 화면 내용·보호 토큰·세션 식별자는 출력하지 않는다.
-        let paused = ready ? String(ClaritySDK.isPaused()) : "unknown"
+        let paused = initialized ? String(ClaritySDK.isPaused()) : "unknown"
         print("[ClarityDebug] event=\(event) result=\(result.map { String($0) } ?? "n/a") "
             + "has_chosen=\(policy.consent.hasChosen) consent_enabled=\(policy.consent.enabled) "
             + "active=\(policy.isActive) protected_views=\(policy.protectedViewCount) "

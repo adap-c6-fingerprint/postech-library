@@ -96,6 +96,10 @@ class ClaritySetupTests(unittest.TestCase):
                             self.assertIn("event=" + event + " result=false", result.stdout)
                         self.assertIn("protected_views=1", result.stdout)
                         self.assertIn("sdk_paused=false", result.stdout)
+                        self.assertTrue(any(
+                            "event=waiting_for_session" in line and "ready=false" in line
+                            and "sdk_consent=true" in line and "sdk_paused=false" in line
+                            for line in result.stdout.splitlines()))
                         self.assertNotIn("test-session", result.stdout)
                         self.assertNotIn("https://", result.stdout)
 
