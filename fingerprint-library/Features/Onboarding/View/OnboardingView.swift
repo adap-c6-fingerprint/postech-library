@@ -90,7 +90,7 @@ struct OnboardingView: View {
         .background(Color.basketBackground)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(!isBackButtonVisible(step))
-        // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 08-2(소속 선택 전)에는 숨기고, 08-3(소속 선택 후)부터 보인다.
+        // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 시작 화면에는 없고, 소속 화면부터 처음부터 보인다.
     }
 
     // MARK: - 단계별 화면
@@ -246,7 +246,8 @@ struct OnboardingView: View {
     private func isBackButtonVisible(_ step: OnboardingFeature.Step) -> Bool {
         switch step {
         case .welcome: false
-        case .affiliation: store.selectedParent != nil
+        case .affiliation: true
+        // ✅ 피그마 08-3 주석: 소속을 고르기 전에도 처음부터 뒤로가기를 보여준다.
         case .interests: true
         }
     }
