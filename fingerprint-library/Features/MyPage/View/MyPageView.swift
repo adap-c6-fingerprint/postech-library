@@ -55,6 +55,7 @@ struct MyPageView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .task { store.send(.shelf(.task)) }
         .analyticsScreen(.myPage)
+        .sessionReplayProtected()
         .sheet(isPresented: $showsAnalyticsSettings) {
             AnalyticsSettingsView(isFirstChoice: false)
         }

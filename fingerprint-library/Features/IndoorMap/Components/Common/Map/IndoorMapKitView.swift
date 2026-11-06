@@ -1,5 +1,6 @@
 import MapKit
 import SwiftUI
+import Clarity
 
 /// 순수 지도·위치·경로 값을 MapKit에 표시하는 SwiftUI와 UIKit 사이의 어댑터.
 ///
@@ -44,7 +45,10 @@ struct IndoorMapKitView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
     func makeUIView(context: Context) -> IndoorMapSurface {
-        context.coordinator.makeMapView()
+        let view = context.coordinator.makeMapView()
+        // SwiftUI 텍스트 마스킹과 별개로 현재 위치·경로를 그리는 네이티브 지도를 가린다.
+        ClaritySDK.maskView(view)
+        return view
     }
 
     func updateUIView(_ view: IndoorMapSurface, context: Context) {

@@ -67,6 +67,7 @@ struct BookSearchTabView: View {
             prompt: "책 제목이나 저자를 검색하세요"
         )
         .searchPresentationToolbarBehavior(.avoidHidingContent)
+        .sessionReplayProtected()
         .onSubmit(of: .search, submitSearch)
         .task {
             store.send(.task)
