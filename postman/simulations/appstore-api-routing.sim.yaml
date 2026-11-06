@@ -1,0 +1,9 @@
+simulation: appstore-api-routing
+routing: path
+mocks:
+  - name: POSTECH Primo Holdings Read
+    routeKey: library
+    path: ../mocks/primo-holdings/config.yaml
+  - name: book-api-relay
+    routeKey: relay
+    path: ../mocks/book-api-relay/config.yaml

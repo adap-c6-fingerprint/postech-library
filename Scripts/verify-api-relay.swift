@@ -1,6 +1,6 @@
 import Foundation
 
-/// Compile with HTTPClient, BookAPIClient, AppConfiguration, PrimoAPIClient and Data4LibraryAPIClient.
+/// Compile with HTTPClient, BookAPIClient, AppConfiguration and Data4LibraryAPIClient.
 /// Reads only the selected ignored local relay token. Never prints credentials or provider payloads.
 @main
 enum VerifyAPIRelay {
@@ -15,8 +15,6 @@ enum VerifyAPIRelay {
             return parts[1].trimmingCharacters(in: .whitespaces)
         }).first else { throw APIRelayError.missingAccessToken }
         let relay = BookAPIClient(configuration: { .init(environment: environment, token: token) })
-        let primo = try await PrimoAPIClient(relay: relay).search(query: "any,contains,991003794555103286", limit: 1)
-        try check(primo, key: "docs")
         let yes24 = try await relay.send(.yes24Detail, queryItems: [
             .init(name: "searchType", value: "ISBN13"), .init(name: "query", value: "9788937460777")
         ])
@@ -25,7 +23,7 @@ enum VerifyAPIRelay {
         for endpoint in [Data4LibraryAPIClient.Endpoint.bookDetail, .relatedBooks] {
             try check(try await data4Library.fetch(endpoint, isbn13: "9788937460777"), key: "response")
         }
-        print("PASS: application relay client → \(environment.rawValue) HTTPS → four provider routes, HTTP 200 and original JSON envelopes")
+        print("PASS: application relay client → \(environment.rawValue) HTTPS → three Yes24/Data4Library routes, HTTP 200 and original JSON envelopes")
     }
 
     private static func check(_ result: HTTPResponse, key: String) throws {

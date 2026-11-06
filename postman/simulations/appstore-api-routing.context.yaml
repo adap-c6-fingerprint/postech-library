@@ -1,0 +1,37 @@
+purpose:
+  stands_in_for: Primo 직접 호출 API와 Yes24·정보나루 중계 API
+  unblocks: 배포 브랜치에서 고정한 API 목적지·인증과 오류 시 우회 여부를 실제 Swift HTTP 전송으로 검증한다.
+assumptions:
+  - id: fixed-appstore-routing
+    status: supported
+    claim: 구성한 로컬 HTTP 사례에서 Primo 요청은 중계 설정 없이 제공사 URL을 만들고 Yes24·정보나루 요청은 세 배포 환경의 중계 URL을 만든다. 과거 저장 설정은 이 선택을 바꾸지 못한다.
+    reason: 운영 소스의 요청 목적지와 헤더를 로컬 전송 직전에 검사하고, 두 모의 서버의 응답과 호출 횟수를 대조했다.
+    verification: 2026-11-06 Scripts/verify-appstore-api-routing.sh가 통과했다. Primo 요청 1건과 개발·TestFlight·운영 환경별 Yes24·정보나루 3개 경로를 확인했다. URLSession 전송 대상은 localhost로 치환했으며 실제 공급처와 중계 서버의 DNS·TLS·가용성을 검증한 것은 아니다.
+    source: Scripts/verify-appstore-api-routing.swift; fingerprint-library/Clients/Network/BookAPIClient.swift; postman/mocks/primo-holdings/default.js; postman/mocks/book-api-relay/default.js
+    updated_at: '2026-11-06'
+  - id: credentials-and-fallback
+    status: supported
+    claim: 구성한 사례에서 Primo는 제공사 인증만, 다른 API는 중계 인증만 사용하며 중계 503·토큰 누락은 직접 호출로 우회하지 않는다.
+    reason: 서로 다른 인증을 요청하면 실패하도록 구성한 검증 프로그램과 모의 서버를 실행했다. 키를 URL로 전달하려는 요청과 비어 있는 인증은 HTTP 전송 전에 거부됐다.
+    verification: 2026-11-06 목적지·Authorization·Accept·제공사 키 미포함을 검사했다. 정상 요청 10건과 Yes24 503 요청 1건 이외의 호출이 없었고, 중계 진단 응답의 경로별 호출 수가 기대와 일치했다.
+    source: Scripts/verify-appstore-api-routing.swift; postman/mocks/book-api-relay/default.js
+    updated_at: '2026-11-06'
+  - id: live-provider-availability
+    status: unknown
+    claim: 현재 네트워크에서 Primo 직접 호출과 세 환경의 실제 중계 API가 모두 정상 응답한다.
+    reason: 사용자에게 전달받은 Primo 중계 IP 화이트리스트 문제를 배포판의 직접 호출 예외로 처리했다. 이번 검증은 로컬 모의 서버에 한정했다.
+    verification: 2026-11-06 실서버는 호출하지 않았다. 실제 설치 앱의 네트워크에서 검색·소장·상세·연관 도서 조회를 확인해야 실서버 가용성을 판단할 수 있다.
+    source: fingerprint-library/Clients/Network/BookAPIClient.swift; fingerprint-library/Shared/AppConfiguration.swift
+    updated_at: '2026-11-06'
+  - id: mock-contract-scope
+    status: unknown
+    claim: 모의 중계 서버가 실제 중계 API의 모든 응답을 재현한다.
+    reason: 기존 앱의 경로와 JSON envelope를 기준으로 필요한 읽기 요청만 모델링했다. 저장소에 Postman workspace 연결이 없어 소유 팀의 공개 mock 검색은 생략하고 기존 Primo mock을 재사용했다.
+    verification: 2026-11-06 사용한 CLI 1.73.0에는 postman status 명령이 없었다. 서버에 배포하거나 workspace에 게시하지 않았다. 모델링하지 않은 경로는 501을 반환한다.
+    source: postman/mocks/book-api-relay/default.js; postman/simulations/primo-holdings/primo-holdings.context.md
+    updated_at: '2026-11-06'
+fingerprints:
+  - id: appstore-api-routing-20261106
+    date: '2026-11-06'
+    commit: 0ffe9c9 기반 fix/appstore-1106-api-routing의 커밋 전 작업 트리; distribute/appstore-1106 대상 배포 전용 변경
+    cli: Postman CLI 1.73.0; Swift 6; 로컬 HTTP URLSession; Debug 및 실기기 대상 Release 빌드(서명 제외)

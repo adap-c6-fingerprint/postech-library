@@ -1,0 +1,10 @@
+version: 1
+name: book-api-relay
+slug: book-api-relay
+protocol: http
+interceptRequests: true
+port: 47587
+scenarios:
+  - name: default
+    path: ./default.js
+    default: true

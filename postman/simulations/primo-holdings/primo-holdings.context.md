@@ -44,6 +44,7 @@ No credentials, workspace binding or public deployment are needed.
 ## Observations
 
 <!-- begin:observations -->
+2026-11-06: 배포 브랜치의 Primo 직접 호출 고정 이후 실제 Swift 6 소장 서비스가 기존 응답·정확한 자료번호·불완전 문서·401·잘못된 JSON·503 3회 제한·429 회복 검증을 통과했다. 검증용 Primo 키를 주입했으며 중계 설정을 읽으면 실패하도록 구성했다. appstore-api-routing.sim.yaml에서 기존 library 멤버를 재사용했고 새 경로 검증 1건, 소장 검증 11건, 진단 1건의 요청 이벤트를 확인했다. 실제 제공사 네트워크는 호출하지 않았다.
 2026-10-30: 공통 `HTTPClient`와 `PrimoAPIClient`를 사용하는 실제 소장 서비스를 Swift 6으로 컴파일해 기존 시뮬레이션에서 실행했다. 기존 응답 변환·401·잘못된 JSON·503 최대 3회·429 두 번째 요청 회복이 통과했고, 요청 이벤트 12건을 확인했다. 실제 프록시나 실서버를 호출한 결과는 아니다. 구조화된 검증 기록은 `primo-holdings.context.yaml`에 추가했다.
 2026-10-28 (#88): `library` served the production Swift 6 HTTP service and
 recommendation-card conversion. Location, call number, availability from the

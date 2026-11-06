@@ -48,7 +48,7 @@ enum VerifyBookCoverFallback {
         }
         func check(_ label: String, url: URL?, isbn: String?, expected: String) async throws {
             let model = BookCoverModel(url: url, isbn: isbn, pipeline: loader,
-                fallback: { try await resolver.coverURL(for: $0) })
+                fallback: { try await resolver.url(for: $0) })
             await model.load(url, isbn: isbn)
             let state: String
             switch model.phase(for: url, isbn: isbn) {
