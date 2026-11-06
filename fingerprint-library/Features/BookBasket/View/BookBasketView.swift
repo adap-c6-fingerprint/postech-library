@@ -11,6 +11,8 @@ import SwiftUI
 struct BookBasketView: View {
     @Bindable var store: StoreOf<BookBasketFeature>
     var onClose: (() -> Void)? = nil
+    @Environment(\.indoorRouteMapStore) private var mapStore
+    @State private var detailStore: StoreOf<BookDetailFeature>?
 
     var body: some View {
         ScrollView {
@@ -77,6 +79,13 @@ struct BookBasketView: View {
             Button("취소", role: .cancel) {}
         } message: {
             Text("이 책은 장바구니에서만 삭제돼요.\n다시 검색하여 찾아 추가할 수 있어요.")
+        }
+        .navigationDestination(item: $detailStore) { detailStore in
+            if let mapStore {
+                BookDetailMapView(store: detailStore, mapStore: mapStore)
+            } else {
+                BookDetailView(store: detailStore, onDismiss: { self.detailStore = nil })
+            }
         }
         .task { store.send(.task) }
         .task(id: store.items.map(\.id)) { await store.send(.loadLibraryInfo).finish() }
@@ -147,7 +156,12 @@ struct BookBasketView: View {
             location: info?.location,
             availability: info?.availability,
             isSelected: store.selectedIDs.contains(item.id),
-            onToggle: { store.send(.selectionToggled(item.id)) }
+            onToggle: { store.send(.selectionToggled(item.id)) },
+            onShowDetail: {
+                detailStore = Store(initialState: BookDetailFeature.State(book: item.book)) {
+                    BookDetailFeature()
+                }
+            }
         )
     }
 
