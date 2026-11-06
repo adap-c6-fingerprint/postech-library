@@ -26,10 +26,15 @@ struct BookSearchView: View {
         .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
             store.send(.basketLimitAlertDismissed)
         }
-        .toolbar {
-            LibraryTopBar(title: "검색", onFavorites: onShowFavorites, onBasket: onShowBasket, onProfile: onShowProfile)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            LibraryTabTopBar(
+                title: "검색",
+                onFavorites: onShowFavorites,
+                onBasket: onShowBasket,
+                onProfile: onShowProfile
+            )
         }
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .toolbar(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
     }
 

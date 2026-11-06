@@ -35,12 +35,12 @@ struct LibraryTopBar: ToolbarContent {
     }
 }
 
-/// 홈과 추천 탭의 제목과 버튼을 같은 위치에 배치한다.
+/// 홈·추천·검색 탭의 제목과 버튼을 같은 위치에 배치한다.
 struct LibraryTabTopBar: View {
     let title: String
-    let onFavorites: () -> Void
+    var onFavorites: (() -> Void)?
     let onBasket: () -> Void
-    let onProfile: () -> Void
+    var onProfile: (() -> Void)?
     var titleAlignment: VerticalAlignment = .center
     var contentHeight: CGFloat? = 54
 
