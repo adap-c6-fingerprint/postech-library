@@ -98,7 +98,10 @@ struct BookBasketView: View {
             Spacer()
 
             NavigationLink {
-                BookRoutePreviewView(books: store.selectedBooks, entryMode: .direct)
+                BookRoutePreviewView(
+                    books: store.selectedBooks,
+                    entryMode: store.selectedCount > 1 ? .preview : .direct
+                )
             } label: {
                 Text(store.selectedCount == 0 ? "안내 시작하기" : "안내 시작하기 (\(store.selectedCount)권)")
                     .font(.body.weight(.medium))
