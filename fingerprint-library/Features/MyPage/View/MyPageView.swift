@@ -74,6 +74,11 @@ struct MyPageView: View {
         ) { editStore in
             OnboardingView(store: editStore)
         }
+        .navigationDestination(
+            item: $store.scope(state: \.setupProfile, action: \.setupProfile)
+        ) { setupStore in
+            OnboardingView(store: setupStore)
+        }
     }
 
     private var shelfHeader: some View {

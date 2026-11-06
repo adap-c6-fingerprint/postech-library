@@ -21,6 +21,9 @@ struct MyPageFeature {
         @Presents var editAffiliation: EditMyAffiliationFeature.State?
         @Presents var editInterests: OnboardingFeature.State?
         // 관심 분야 변경은 별도 화면 없이 온보딩의 선호 분류 화면을 그대로 쓴다.
+        @Presents var setupProfile: OnboardingFeature.State?
+        // 온보딩을 건너뛰어 프로필이 없을 때: 온보딩의 소속 → 선호 분류 화면으로 프로필을 새로 만든다.
+        @Shared(.userProfile) var userProfile: UserProfile?
     }
 
     enum Action {
@@ -32,6 +35,7 @@ struct MyPageFeature {
         case recentlyFound(PresentationAction<RecentlyFoundBookFeature.Action>)
         case editAffiliation(PresentationAction<EditMyAffiliationFeature.Action>)
         case editInterests(PresentationAction<OnboardingFeature.Action>)
+        case setupProfile(PresentationAction<OnboardingFeature.Action>)
     }
 
     var body: some Reducer<State, Action> {
@@ -44,6 +48,11 @@ struct MyPageFeature {
                 return .none
 
             case .editAffiliationRowTapped:
+                guard state.userProfile != nil else {
+                    state.setupProfile = .settingUpProfile()
+                    return .none
+                }
+                // 프로필이 없으면(온보딩을 건너뜀) 변경 화면 대신 처음 설정 화면으로 간다.
                 state.editAffiliation = EditMyAffiliationFeature.State()
                 return .none
 
@@ -53,6 +62,10 @@ struct MyPageFeature {
                 return .none
 
             case .editInterestsRowTapped:
+                guard state.userProfile != nil else {
+                    state.setupProfile = .settingUpProfile()
+                    return .none
+                }
                 state.editInterests = .changingInterests()
                 return .none
 
@@ -61,12 +74,18 @@ struct MyPageFeature {
                 // 관심 분야를 저장하면 마이페이지로 돌아온다.
                 return .none
 
-            case .shelf, .recentlyFound, .editAffiliation, .editInterests:
+            case .setupProfile(.presented(.delegate(.completed))):
+                state.setupProfile = nil
+                // 프로필을 만들면 마이페이지로 돌아온다.
+                return .none
+
+            case .shelf, .recentlyFound, .editAffiliation, .editInterests, .setupProfile:
                 return .none
             }
         }
         .ifLet(\.$recentlyFound, action: \.recentlyFound) { RecentlyFoundBookFeature() }
         .ifLet(\.$editAffiliation, action: \.editAffiliation) { EditMyAffiliationFeature() }
         .ifLet(\.$editInterests, action: \.editInterests) { OnboardingFeature() }
+        .ifLet(\.$setupProfile, action: \.setupProfile) { OnboardingFeature() }
     }
 }
