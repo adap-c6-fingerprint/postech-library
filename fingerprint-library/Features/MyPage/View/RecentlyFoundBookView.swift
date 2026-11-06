@@ -18,8 +18,9 @@ struct RecentlyFoundBookView: View {
     var body: some View {
         VStack(spacing: 0) {
             guide
-                .padding(.top, 40)
-                .padding(.bottom, 64)
+                .padding(.top, 76)
+                .padding(.bottom, 76)
+            // 피그마(3923:53854): 상단 바 아래(110) → 안내 문구(186) 76, 문구 아래(254) → 책장(330) 76
             RecentlyFoundBookShelf(
                 books: store.books, spines: store.spines, isScrollable: true,
                 onSelect: { book in store.send(.bookSelected(book)) },
@@ -43,12 +44,21 @@ struct RecentlyFoundBookView: View {
     }
 
     private var guide: some View {
-        let navigationText = Text("길찾기").foregroundStyle(Color.limeBase)
-        let swipeText = Text("좌우").foregroundStyle(Color.limeBase)
+        let navigationText = highlighted("길찾기")
+        let swipeText = highlighted("좌우")
         return Text("이전에 \(navigationText)한 책을\n\(swipeText)로 넘겨보세요")
             .typography(.title2)
             .foregroundStyle(Color.textPrimary)
             .multilineTextAlignment(.center)
         // 피그마 안내 문구. "길찾기"와 "좌우"만 라임색으로 강조한다.
+    }
+
+    private func highlighted(_ word: String) -> Text {
+        let title1 = DS.Typography.title1
+        return Text(word)
+            .font(.custom(title1.fontName, fixedSize: title1.size))
+            .tracking(title1.letterSpacing)
+            .foregroundStyle(Color.limeBase)
+        // 피그마: 강조 단어는 나머지(Title 2, 20pt)보다 큰 24pt(Title 1 크기)다.
     }
 }
