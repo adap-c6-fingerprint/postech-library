@@ -16,6 +16,8 @@ struct OnboardingView: View {
     // ✅ 칩 영역(ScrollView) 기준 좌표계 이름
     @State private var chipViewportHeight: CGFloat = .infinity
     // ✅ 칩 영역의 보이는 높이
+    private static let termsHeaderTopPadding: CGFloat = 32
+    // ✅ 약관 동의 화면 제목 위 여백. 피그마 제목 위치(163)에 맞춘 값 (소속 38 ↔ 168.59 기준)
     private static let affiliationHeaderTopPadding: CGFloat = 38
     private static let interestsHeaderTopPadding: CGFloat = 30
     // ✅ push된 화면 제목 위 여백. 내비게이션 바 아래에서 피그마 제목 위치(소속 168.59, 선호 분류 160.6)에 오도록 맞춘 값
@@ -75,15 +77,26 @@ struct OnboardingView: View {
         VStack(spacing: 0) {
             switch step {
             case .welcome: welcome
+            case .terms: terms
             case .affiliation: affiliation
             case .interests: interests
             }
 
-            pageIndicator(step)
-                .padding(.bottom, 20)
-            actionButton(step)
+            if step == .terms {
+                VStack(spacing: 12) {
+                    actionButton(step)
+                    declineButton
+                }
                 .padding(.horizontal, 36)
-                .padding(.bottom, 24)
+                .padding(.bottom, 12)
+                // ✅ 약관 동의 화면은 페이지 표시 없이 버튼 아래에 "동의 안하고 종료하기"를 둔다(간격 12).
+            } else {
+                pageIndicator(step)
+                    .padding(.bottom, 20)
+                actionButton(step)
+                    .padding(.horizontal, 36)
+                    .padding(.bottom, 24)
+            }
         }
         // ✅ 화면마다 내용 아래에 페이지 표시·버튼을 둔다(push 전환 시 화면과 함께 움직인다).
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -113,6 +126,46 @@ struct OnboardingView: View {
                 .frame(maxWidth: .infinity)
             Spacer()
         }
+    }
+
+    private var terms: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            header(
+                title: "서비스 가입을 위해\n아래 항목에 동의해주세요",
+                subtitle: "도서관 내 원하는 책까지 길을 안내해 드리기 위해\n서비스 이용에 필요한 동의를 진행해 주세요.",
+                subtitleTypography: .bookTitle,
+                spacing: 8,
+                topPadding: Self.termsHeaderTopPadding
+            )
+            // ✅ 부제는 Book Title(18pt)·Text Tertiary, 제목과 간격 8
+            .padding(.bottom, 48)
+
+            Link(destination: Self.privacyPolicyURL) {
+                Text("개인정보 수집 및 이용 동의")
+                    .typography(.bookTitle)
+                    .underline()
+                    .foregroundStyle(Color.onboardingTermsLink)
+            }
+            // ✅ 누르면 개인정보 처리방침 노션 페이지를 연다(피그마 프로토타입 URL 연결).
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+    }
+
+    private static let privacyPolicyURL = URL(string: "https://link.fpmaps.com/privacy-policy-pobook")!
+
+    private var declineButton: some View {
+        Button {
+            store.send(.termsDeclineButtonTapped)
+        } label: {
+            Text("동의 안하고 종료하기")
+                .typography(.body2)
+                .underline()
+                .foregroundStyle(Color.onboardingTermsDecline)
+                .frame(maxWidth: .infinity)
+                .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
     }
 
     private var affiliation: some View {
@@ -246,6 +299,7 @@ struct OnboardingView: View {
     private func isBackButtonVisible(_ step: OnboardingFeature.Step) -> Bool {
         switch step {
         case .welcome: false
+        case .terms: true
         case .affiliation: true
         // ✅ 피그마 08-3 주석: 소속을 고르기 전에도 처음부터 뒤로가기를 보여준다.
         case .interests: true
@@ -302,24 +356,28 @@ struct OnboardingView: View {
         .accessibilityHint(isBlocked ? "최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요" : "")
     }
 
+    private static let indicatorSteps = OnboardingFeature.Step.allCases.filter { $0 != .terms }
+    // ✅ 페이지 점은 시작·소속·선호 분류 3개. 약관 동의 화면은 점 개수에 넣지 않는다(피그마에 페이지 표시 없음).
+
     private func pageIndicator(_ page: OnboardingFeature.Step) -> some View {
         HStack(spacing: 9) {
-            ForEach(OnboardingFeature.Step.allCases, id: \.self) { step in
+            ForEach(Self.indicatorSteps, id: \.self) { step in
                 Circle()
                     .fill(Color.onboardingTextPrimary.opacity(step == page ? 1 : 0.3))
                     .frame(width: 7, height: 7)
             }
         }
         .accessibilityElement()
-        .accessibilityLabel("\(page.rawValue + 1) / \(OnboardingFeature.Step.allCases.count) 단계")
+        .accessibilityLabel("\((Self.indicatorSteps.firstIndex(of: page) ?? 0) + 1) / \(Self.indicatorSteps.count) 단계")
     }
 
     private func actionButton(_ step: OnboardingFeature.Step) -> some View {
-        let isPrimary = step == .interests && store.canFinish
+        let isPrimary = step == .terms || (step == .interests && store.canFinish)
         // 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다.
         return Button {
             switch step {
             case .welcome: store.send(.startButtonTapped)
+            case .terms: store.send(.termsAgreeButtonTapped)
             case .affiliation: store.send(.nextButtonTapped)
             case .interests: store.send(.finishButtonTapped)
             }
@@ -342,6 +400,7 @@ struct OnboardingView: View {
     private func actionTitle(_ step: OnboardingFeature.Step) -> String {
         switch step {
         case .welcome: "시작하기"
+        case .terms: "동의하고 계속하기"
         case .affiliation: store.isAffiliationComplete ? "다음으로" : "선택을 완료해주세요"
         case .interests: "시작하기"
         }
@@ -350,6 +409,7 @@ struct OnboardingView: View {
     private func isActionEnabled(_ step: OnboardingFeature.Step) -> Bool {
         switch step {
         case .welcome: true
+        case .terms: true
         case .affiliation: store.isAffiliationComplete
         case .interests: store.canFinish
         }
@@ -420,6 +480,9 @@ private extension Color {
     static let onboardingActionTint = Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)
     static let onboardingDisabledField = Color(red: 0x16 / 255, green: 0x16 / 255, blue: 0x16 / 255)
     static let onboardingDisabledText = Color(red: 0x99 / 255, green: 0x99 / 255, blue: 0x99 / 255)
+    static let onboardingTermsLink = Color(red: 0x55 / 255, green: 0x55 / 255, blue: 0x55 / 255)
+    static let onboardingTermsDecline = Color(red: 0xB6 / 255, green: 0xB6 / 255, blue: 0xB6 / 255)
+    // ✅ 약관 동의 화면의 약관 링크(#555555)·"동의 안하고 종료하기"(#B6B6B6) 색
     // ✅ 비활성 입력칸 색 (피그마 Black/Gray 1100, Gray 400)
 }
 
@@ -430,7 +493,17 @@ private extension Color {
     )
 }
 
-#Preview("08-2 소속") {
+#Preview("08-2 약관 동의") {
+    OnboardingView(
+        store: Store(initialState: {
+            var state = OnboardingFeature.State()
+            state.step = .terms
+            return state
+        }()) { OnboardingFeature() }
+    )
+}
+
+#Preview("08-3 소속") {
     OnboardingView(
         store: Store(initialState: {
             var state = OnboardingFeature.State()
