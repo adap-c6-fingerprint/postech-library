@@ -82,7 +82,7 @@ struct BookRoutePreviewView: View {
         }) { insets, cameraRevision in
             Group {
                 if let previewSession,
-                   let floor = previewSession.map.selectableFloors.first(where: { floor in
+                   let floor = previewSession.map.floors.first(where: { floor in
                        routeFloorID.map { $0 == floor.id }
                            ?? (floor.ordinal == previewSession.start.floorOrdinal)
                    }) {
@@ -226,7 +226,7 @@ struct BookRoutePreviewView: View {
         .overlay(alignment: .topTrailing) {
             if entryMode == .preview, destination.books.count <= 1, let previewSession {
                 Menu("층 보기", systemImage: "square.3.layers.3d") {
-                    ForEach(previewSession.map.selectableFloors) { floor in
+                    ForEach(previewSession.map.floors) { floor in
                         Button("\(floor.ordinal + 1)층") { routeFloorID = floor.id }
                     }
                 }
