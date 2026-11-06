@@ -166,6 +166,7 @@ struct BookNavigationFeature {
         case arrivalSpineLoaded(stopIndex: Int, Data?)
         case continueFromArrival(stopIndex: Int)
         case finishFromArrival(stopIndex: Int)
+        case deferFromArrival(stopIndex: Int)
         case cancelTapped
         case cancelDismissed
         case cancelConfirmed
@@ -407,6 +408,11 @@ struct BookNavigationFeature {
                       stopIndex == state.currentStopIndex, !state.hasNextStop,
                       state.currentStop != nil else { return .none }
                 return end(&state, reason: .completed)
+
+            case let .deferFromArrival(stopIndex):
+                guard state.exitReason == nil, state.isArrivalPresented,
+                      stopIndex == state.currentStopIndex, state.currentStop != nil else { return .none }
+                return end(&state, reason: .cancelled)
 
             case .cancelTapped:
                 guard state.exitReason == nil else { return .none }
