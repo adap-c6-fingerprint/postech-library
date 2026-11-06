@@ -108,6 +108,7 @@ struct IndoorMapFeature {
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(IndoorLocationEvent)
+        case requestLocationPermission
         #if DEBUG
         case simulationConnectionChanged
         #endif
@@ -294,6 +295,9 @@ struct IndoorMapFeature {
                     return invalidateRoute(&state)
                 }
                 return .none
+
+            case .requestLocationPermission:
+                return .run { [locationClient] _ in await locationClient.requestPermission() }
 
             case .currentLocationTapped:
                 state.manualPosition = nil
