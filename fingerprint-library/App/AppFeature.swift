@@ -29,6 +29,8 @@ struct AppFeature {
         var onboarding: OnboardingFeature.State?
         @Shared(.userProfile) var userProfile: UserProfile?
         // 앱 전체가 함께 쓰는 프로필 하나. nil이면 온보딩을 보여준다.
+        @Shared(.hasSkippedOnboarding) var hasSkippedOnboarding: Bool
+        // 온보딩을 건너뛰었으면 프로필이 없어도 온보딩을 다시 띄우지 않는다.
     }
 
     enum Action {
@@ -135,7 +137,7 @@ struct AppFeature {
 
             case .profileCheckRequested:
                 guard !state.hasCheckedProfile else { return .none }
-                if state.userProfile != nil {
+                if state.userProfile != nil || state.hasSkippedOnboarding {
                     state.hasCheckedProfile = true
                     return .none
                 }
@@ -156,6 +158,11 @@ struct AppFeature {
                 state.onboarding = nil
                 state.home.isFirstVisitAfterOnboarding = true
                 // ✅ 이번 실행의 첫 홈 표시는 하드데이터만으로 바로 보여준다. (Q4)
+                return .none
+            case .onboarding(.delegate(.skipped)):
+                state.onboarding = nil
+                state.home.isFirstVisitAfterOnboarding = true
+                // 안내 팝업("건너뛰었어요")에서 "확인했어요"를 누른 뒤에만 여기로 온다.
                 return .none
             case .onboarding:
                 return .none

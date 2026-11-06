@@ -7,7 +7,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct OnboardingView: View {
-    let store: StoreOf<OnboardingFeature>
+    @Bindable var store: StoreOf<OnboardingFeature>
     private static let chipTopBlurHeight: CGFloat = 30
     // 칩 영역 위쪽 블러 높이
     private static let chipBottomBlurHeight: CGFloat = 30
@@ -16,6 +16,8 @@ struct OnboardingView: View {
     // ✅ 칩 영역(ScrollView) 기준 좌표계 이름
     @State private var chipViewportHeight: CGFloat = .infinity
     // ✅ 칩 영역의 보이는 높이
+    private static let termsHeaderTopPadding: CGFloat = 32
+    // ✅ 약관 동의 화면 제목 위 여백. 피그마 제목 위치(163)에 맞춘 값 (소속 38 ↔ 168.59 기준)
     private static let affiliationHeaderTopPadding: CGFloat = 38
     private static let interestsHeaderTopPadding: CGFloat = 30
     // ✅ push된 화면 제목 위 여백. 내비게이션 바 아래에서 피그마 제목 위치(소속 168.59, 선호 분류 160.6)에 오도록 맞춘 값
@@ -37,6 +39,14 @@ struct OnboardingView: View {
                     .toolbar(.visible, for: .navigationBar)
                     .toolbar(.hidden, for: .tabBar)
                 // 마이페이지의 내비게이션에 선호 분류 화면을 그대로 push한다. 뒤로가기는 마이페이지로 돌아간다.
+            case .setupFromMyPage:
+                page(.affiliation)
+                    .toolbar(.visible, for: .navigationBar)
+                    .toolbar(.hidden, for: .tabBar)
+                    .navigationDestination(isPresented: setupInterestsPresented) {
+                        page(.interests)
+                    }
+                // 마이페이지의 내비게이션에 소속 화면을 push하고, "다음으로"를 누르면 선호 분류 화면을 이어서 push한다.
             }
         }
         .preferredColorScheme(.dark)
@@ -52,6 +62,14 @@ struct OnboardingView: View {
         } message: {
             Text(store.errorMessage ?? "")
         }
+        .alert($store.scope(state: \.alert, action: \.alert))
+        // "다음에 할래요" → 건너뛰기 확인 팝업
+        .overlay {
+            if store.isSkipNoticePresented {
+                skipNoticePopup
+            }
+        }
+        // "건너뛰기" 후 안내 팝업. 닫는 길은 "확인했어요" 하나뿐이고, 누르면 온보딩이 닫혀 홈으로 간다.
         .task { store.send(.task) }
         // ✅ 소속·선호 분류 선택지를 앱에 넣은 하드데이터에서 읽는다.
     }
@@ -71,26 +89,45 @@ struct OnboardingView: View {
     }
     // ✅ 지금 단계까지의 화면을 push 경로로 만든다. 뒤로가기·스와이프로 pop되면 그만큼 이전 단계로 돌아간다.
 
+    private var setupInterestsPresented: Binding<Bool> {
+        Binding(
+            get: { store.step == .interests },
+            set: { if !$0, store.step == .interests { store.send(.backButtonTapped) } }
+        )
+    }
+    // 마이페이지에서 처음 설정할 때 선호 분류 화면의 push 여부. 뒤로가기로 pop되면 소속 단계로 돌아간다.
+
     private func page(_ step: OnboardingFeature.Step) -> some View {
         VStack(spacing: 0) {
             switch step {
             case .welcome: welcome
+            case .terms: terms
             case .affiliation: affiliation
             case .interests: interests
             }
 
-            pageIndicator(step)
-                .padding(.bottom, 20)
-            actionButton(step)
-                .padding(.horizontal, 36)
-                .padding(.bottom, 24)
+            if step != .terms {
+                pageIndicator(step)
+                    .padding(.bottom, 20)
+            }
+            // ✅ 약관 동의 화면에는 페이지 표시가 없다.
+            let link = bottomLink(step)
+            VStack(spacing: 12) {
+                actionButton(step)
+                if let link {
+                    textLinkButton(link.title) { store.send(link.action) }
+                }
+            }
+            .padding(.horizontal, 36)
+            .padding(.bottom, link == nil ? 24 : 12)
+            // ✅ 버튼 아래 밑줄 문구가 있으면 간격 12로 두고, 그만큼 아래 여백을 줄인다(피그마 버튼 위치 738).
         }
         // ✅ 화면마다 내용 아래에 페이지 표시·버튼을 둔다(push 전환 시 화면과 함께 움직인다).
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.basketBackground)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(!isBackButtonVisible(step))
-        // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 08-2(소속 선택 전)에는 숨기고, 08-3(소속 선택 후)부터 보인다.
+        // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 시작 화면에는 없고, 소속 화면부터 처음부터 보인다.
     }
 
     // MARK: - 단계별 화면
@@ -113,6 +150,57 @@ struct OnboardingView: View {
                 .frame(maxWidth: .infinity)
             Spacer()
         }
+    }
+
+    private var terms: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            header(
+                title: "서비스 가입을 위해\n아래 항목에 동의해주세요",
+                subtitle: "도서관 내 원하는 책까지 길을 안내해 드리기 위해\n서비스 이용에 필요한 동의를 진행해 주세요.",
+                subtitleTypography: .bookTitle,
+                spacing: 8,
+                topPadding: Self.termsHeaderTopPadding
+            )
+            // ✅ 부제는 Book Title(18pt)·Text Tertiary, 제목과 간격 8
+            .padding(.bottom, 48)
+
+            Link(destination: Self.privacyPolicyURL) {
+                Text("개인정보 수집 및 이용 동의")
+                    .typography(.bookTitle)
+                    .underline()
+                    .foregroundStyle(Color.onboardingTermsLink)
+            }
+            // ✅ 누르면 개인정보 처리방침 노션 페이지를 연다(피그마 프로토타입 URL 연결).
+            Spacer()
+        }
+        .padding(.horizontal, 20)
+    }
+
+    private static let privacyPolicyURL = URL(string: "https://link.fpmaps.com/privacy-policy-pobook")!
+
+    private func bottomLink(_ step: OnboardingFeature.Step) -> (title: String, action: OnboardingFeature.Action)? {
+        switch step {
+        case .terms:
+            ("동의 안하고 종료하기", .termsDeclineButtonTapped)
+        case .affiliation where store.entry == .firstRun:
+            ("다음에 할래요", .skipButtonTapped)
+            // 마이페이지에서 처음 설정할 때는 건너뛰기를 보여주지 않는다.
+        default:
+            nil
+        }
+    }
+    // 하단 버튼 아래의 밑줄 문구와 누르면 보낼 액션
+
+    private func textLinkButton(_ title: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .typography(.body2)
+                .underline()
+                .foregroundStyle(Color.onboardingTextLink)
+                .frame(maxWidth: .infinity)
+                .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
     }
 
     private var affiliation: some View {
@@ -221,6 +309,49 @@ struct OnboardingView: View {
 
     // MARK: - 구성 요소
 
+    private var skipNoticePopup: some View {
+        ZStack {
+            Color.black.opacity(0.2)
+                .ignoresSafeArea()
+            // 시스템 알림창처럼 뒤 화면을 살짝 어둡게 하고, 뒤 화면을 누를 수 없게 막는다.
+            VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("맞춤 정보 설정을 건너뛰었어요.")
+                        .font(.system(size: 17, weight: .semibold))
+                    Text("마이페이지에서 언제든지\n다시 설정할 수 있어요.")
+                        .font(.system(size: 17))
+                }
+                .foregroundStyle(.black)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 8)
+                .padding(.top, 8)
+                .padding(.bottom, 24)
+                // ✅ 피그마: 제목 SF Pro Semibold 17, 내용 Regular 17, 검정, 왼쪽 정렬, 간격 10
+
+                Button {
+                    store.send(.skipNoticeConfirmed)
+                } label: {
+                    Text("확인했어요")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(.black)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 48)
+                        .background(Color.limeBase, in: .capsule)
+                        .contentShape(.capsule)
+                }
+                .buttonStyle(.plain)
+                // ✅ 피그마 버튼 색 primary-light(#DDF53C) = 디자인시스템 limeBase, 글자 검정
+            }
+            .padding(14)
+            .frame(width: 300)
+            .background(.white, in: .rect(cornerRadius: 34))
+            .shadow(color: .black.opacity(0.25), radius: 24, y: 8)
+            // ✅ 피그마 Alert: 너비 300, 안쪽 여백 14, 모서리 34, 그림자(흐림 48, 아래 8)
+            .accessibilityElement(children: .contain)
+            .accessibilityAddTraits(.isModal)
+        }
+    }
+
     private func header(
         title: String,
         subtitle: String,
@@ -246,7 +377,9 @@ struct OnboardingView: View {
     private func isBackButtonVisible(_ step: OnboardingFeature.Step) -> Bool {
         switch step {
         case .welcome: false
-        case .affiliation: store.selectedParent != nil
+        case .terms: true
+        case .affiliation: true
+        // ✅ 피그마 08-3 주석: 소속을 고르기 전에도 처음부터 뒤로가기를 보여준다.
         case .interests: true
         }
     }
@@ -301,24 +434,28 @@ struct OnboardingView: View {
         .accessibilityHint(isBlocked ? "최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요" : "")
     }
 
+    private static let indicatorSteps = OnboardingFeature.Step.allCases.filter { $0 != .terms }
+    // ✅ 페이지 점은 시작·소속·선호 분류 3개. 약관 동의 화면은 점 개수에 넣지 않는다(피그마에 페이지 표시 없음).
+
     private func pageIndicator(_ page: OnboardingFeature.Step) -> some View {
         HStack(spacing: 9) {
-            ForEach(OnboardingFeature.Step.allCases, id: \.self) { step in
+            ForEach(Self.indicatorSteps, id: \.self) { step in
                 Circle()
                     .fill(Color.onboardingTextPrimary.opacity(step == page ? 1 : 0.3))
                     .frame(width: 7, height: 7)
             }
         }
         .accessibilityElement()
-        .accessibilityLabel("\(page.rawValue + 1) / \(OnboardingFeature.Step.allCases.count) 단계")
+        .accessibilityLabel("\((Self.indicatorSteps.firstIndex(of: page) ?? 0) + 1) / \(Self.indicatorSteps.count) 단계")
     }
 
     private func actionButton(_ step: OnboardingFeature.Step) -> some View {
-        let isPrimary = step == .interests && store.canFinish
+        let isPrimary = step == .terms || (step == .interests && store.canFinish)
         // 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다.
         return Button {
             switch step {
             case .welcome: store.send(.startButtonTapped)
+            case .terms: store.send(.termsAgreeButtonTapped)
             case .affiliation: store.send(.nextButtonTapped)
             case .interests: store.send(.finishButtonTapped)
             }
@@ -341,6 +478,7 @@ struct OnboardingView: View {
     private func actionTitle(_ step: OnboardingFeature.Step) -> String {
         switch step {
         case .welcome: "시작하기"
+        case .terms: "동의하고 계속하기"
         case .affiliation: store.isAffiliationComplete ? "다음으로" : "선택을 완료해주세요"
         case .interests: "시작하기"
         }
@@ -349,6 +487,7 @@ struct OnboardingView: View {
     private func isActionEnabled(_ step: OnboardingFeature.Step) -> Bool {
         switch step {
         case .welcome: true
+        case .terms: true
         case .affiliation: store.isAffiliationComplete
         case .interests: store.canFinish
         }
@@ -419,6 +558,9 @@ private extension Color {
     static let onboardingActionTint = Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)
     static let onboardingDisabledField = Color(red: 0x16 / 255, green: 0x16 / 255, blue: 0x16 / 255)
     static let onboardingDisabledText = Color(red: 0x99 / 255, green: 0x99 / 255, blue: 0x99 / 255)
+    static let onboardingTermsLink = Color(red: 0x55 / 255, green: 0x55 / 255, blue: 0x55 / 255)
+    static let onboardingTextLink = Color(red: 0xB6 / 255, green: 0xB6 / 255, blue: 0xB6 / 255)
+    // ✅ 약관 링크(#555555), 버튼 아래 밑줄 문구 "동의 안하고 종료하기"·"다음에 할래요"(#B6B6B6) 색
     // ✅ 비활성 입력칸 색 (피그마 Black/Gray 1100, Gray 400)
 }
 
@@ -429,7 +571,17 @@ private extension Color {
     )
 }
 
-#Preview("08-2 소속") {
+#Preview("08-2 약관 동의") {
+    OnboardingView(
+        store: Store(initialState: {
+            var state = OnboardingFeature.State()
+            state.step = .terms
+            return state
+        }()) { OnboardingFeature() }
+    )
+}
+
+#Preview("08-3 소속") {
     OnboardingView(
         store: Store(initialState: {
             var state = OnboardingFeature.State()
