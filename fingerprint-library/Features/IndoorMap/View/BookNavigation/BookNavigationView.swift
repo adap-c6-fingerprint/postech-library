@@ -44,7 +44,7 @@ struct BookNavigationView: View {
                         if store.canConfirmCurrentFloor { currentFloorMenu }
                     }
                     .padding(.horizontal, 20).padding(.top, 20)
-                    VStack {
+                    VStack(spacing: 16) {
                         Spacer()
                         HStack {
                             Spacer()
@@ -54,6 +54,9 @@ struct BookNavigationView: View {
                             }
                             .accessibilityLabel("현재 위치로 지도 이동")
                             .accessibilityIdentifier("book-navigation-recenter")
+                        }
+                        if let transition = store.nextFloorTransition {
+                            floorTransitionButton(transition, stopIndex: store.currentStopIndex)
                         }
                     }
                     .padding(.horizontal, 20)
@@ -175,7 +178,7 @@ struct BookNavigationView: View {
                     .frame(minHeight: 28)
                     .accessibilityIdentifier("book-navigation-instruction")
                     BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
-                        progress: store.progress, floors: store.session.map.floors)
+                        progress: store.displayedProgress, floors: store.session.map.floors)
                 }
                 .padding(.horizontal, 16)
                 Rectangle().fill(.white.opacity(0.08)).frame(height: 1)
@@ -212,12 +215,30 @@ struct BookNavigationView: View {
         .accessibilityIdentifier("book-navigation-current-floor")
     }
 
+    private func floorTransitionButton(_ transition: BookNavigationFloorTransition, stopIndex: Int) -> some View {
+        Button {
+            store.send(.floorTransitionTapped(stopIndex: stopIndex, stepIndex: transition.id))
+        } label: {
+            Text(transition.buttonTitle)
+                .font(.system(size: 12, weight: .medium))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.white)
+                .padding(.horizontal, 16)
+                .frame(minHeight: 34)
+                .glassEffect(.regular.tint(.black.opacity(0.2)), in: .rect(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("book-navigation-floor-transition")
+        .accessibilityHint("\(store.session.map.floors.first { $0.id == transition.to.floorID }?.name ?? "다음 층") 경로를 표시합니다")
+    }
+
     private func navigationMap(stop: BookNavigationStop, route: IndoorRoute, floor: IndoorMapFloor) -> some View {
         IndoorMapKitView(
             map: store.session.map, floor: floor, selectedFeatureID: nil,
             position: store.latestPosition, showsUserLocation: false, isPlacingOrigin: false,
             cameraRequest: store.cameraRequest, onSelect: { _ in }, onPlaceOrigin: { _ in },
-            route: route, viewportInsets: .init(top: 140, left: 0, bottom: sheetHeight, right: 0),
+            route: route, viewportInsets: .init(top: 140, left: 0,
+                bottom: sheetHeight + (store.nextFloorTransition == nil ? 0 : 50), right: 0),
             shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),
             navigationAppearance: true, navigationBearingRadians: store.navigationBearing,
             navigationDestination: store.currentPlan.map { .init(book: stop.book, coordinate: $0.destination.coordinate, floorID: stop.shelf.floorID) },
