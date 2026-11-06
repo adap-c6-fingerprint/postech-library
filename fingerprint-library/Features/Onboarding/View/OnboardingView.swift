@@ -50,7 +50,6 @@ struct OnboardingView: View {
             }
         }
         .preferredColorScheme(.dark)
-        .sessionReplayProtected()
         .alert(
             "저장하지 못했어요",
             isPresented: Binding(

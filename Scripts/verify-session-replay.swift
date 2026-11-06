@@ -4,6 +4,8 @@ import Foundation
 @main
 enum SessionReplayProof {
     @MainActor static func main() throws {
+        try verifyConsentRenewal()
+        verifyStartupWithoutCallback()
         for chosen in [false, true] {
             for enabled in [false, true] {
                 for active in [false, true] {
@@ -37,12 +39,19 @@ enum SessionReplayProof {
         runtime.saveConsent(enabled: true)
         assert(ClaritySDK.calls.isEmpty) // 동의 화면 자체는 수집하지 않음
         runtime.unprotect(protectedView)
-        assert(ClaritySDK.calls.first == "initialize:z8n14vbcvp")
-        assert(!ClaritySDK.calls.contains("resume")) // 비동기 준비 전 fail-closed
+        assert(Array(ClaritySDK.calls.prefix(2)) == ["consent:true", "initialize:z8n14vbcvp"])
+        #if DEBUG
+        assert(ClaritySDK.initializationLogLevel == .verbose)
+        #else
+        assert(ClaritySDK.initializationLogLevel == .none)
+        #endif
+        assert(!ClaritySDK.isPaused()) // 허용된 초기화는 세션 콜백을 기다리며 중지하지 않음
         runtime.protect(protectedView)
+        assert(ClaritySDK.isPaused()) // 준비 중 보호 화면 진입은 즉시 중지
+        let consentCalls = ClaritySDK.calls.filter { $0.hasPrefix("consent:") }.count
         ClaritySDK.fireSessionStarted()
         assert(!ClaritySDK.calls.contains("resume")) // 준비 도중 보호 화면에 들어옴
-        assert(!ClaritySDK.calls.contains("consent:true"))
+        assert(ClaritySDK.calls.filter { $0.hasPrefix("consent:") }.count == consentCalls)
         assert(!ClaritySDK.calls.contains { $0.hasPrefix("tag:") })
         runtime.unprotect(protectedView)
         assert(ClaritySDK.calls.last == "resume")
@@ -108,6 +117,99 @@ enum SessionReplayProof {
             && retried[1].hasPrefix("tag:build_channel:") && retried[2] == "resume")
         assert(ClaritySDK.calls.filter { $0.hasPrefix("tag:") }.count == tags + 1)
         assert(SessionReplayConsent.storageKey != AnalyticsConsent.storageKey)
+        let resumeCount = ClaritySDK.calls.filter { $0 == "resume" }.count
+        ClaritySDK.acceptsInitialization = false
+        let rejected = SessionReplayRuntime(defaults: defaults)
+        rejected.setActive(true)
+        assert(Array(ClaritySDK.calls.suffix(2)) == ["initialize:z8n14vbcvp", "pause"])
+        let revokedCalls = ClaritySDK.calls.filter { $0 == "consent:false" }.count
+        rejected.saveConsent(enabled: false)
+        assert(ClaritySDK.calls.filter { $0 == "consent:false" }.count == revokedCalls + 1)
+        ClaritySDK.acceptsInitialization = true
+        ClaritySDK.acceptsCallbackRegistration = false
+        let awaitingSession = SessionReplayRuntime(defaults: defaults)
+        awaitingSession.setActive(true)
+        awaitingSession.saveConsent(enabled: true)
+        assert(!ClaritySDK.isPaused()) // 콜백 등록 실패도 허용된 SDK 시작을 정지시키지 않음
+        assert(ClaritySDK.calls.filter { $0 == "resume" }.count == resumeCount + 1)
         print("Clarity consent, protected views, deferred tags, retries, background, revocation and restore checks passed")
+    }
+
+    @MainActor private static func verifyConsentRenewal() throws {
+        for enabled in [false, true] {
+            ClaritySDK.reset()
+            let suite = "ClarityConsentRenewal." + UUID().uuidString
+            let defaults = UserDefaults(suiteName: suite)!
+            defer {
+                defaults.removePersistentDomain(forName: suite)
+                ClaritySDK.reset()
+            }
+            let oldConsent = try JSONEncoder().encode(SessionReplayConsent(enabled: enabled, hasChosen: true))
+            defaults.set(oldConsent, forKey: "pobook.clarity.consent.v1")
+            let analytics = try JSONEncoder().encode(AnalyticsConsent(analytics: true, diagnostics: true, hasChosen: true))
+            defaults.set(analytics, forKey: AnalyticsConsent.storageKey)
+            let runtime = SessionReplayRuntime(defaults: defaults)
+            assert(!runtime.consent.hasChosen && !runtime.consent.enabled)
+            runtime.setActive(true)
+            assert(ClaritySDK.calls.isEmpty) // 화면을 가리는 조건의 과거 동의로 시작하지 않음
+            let settings = UUID()
+            runtime.protect(settings)
+            runtime.saveConsent(enabled: enabled)
+            assert(ClaritySDK.calls.isEmpty) // 새 안내로 저장해도 설정을 닫을 때까지 중지
+            runtime.unprotect(settings)
+            assert(ClaritySDK.calls.contains { $0.hasPrefix("initialize:") } == enabled)
+            let restored = SessionReplayRuntime(defaults: defaults)
+            assert(restored.consent.hasChosen && restored.consent.enabled == enabled)
+            assert(defaults.data(forKey: AnalyticsConsent.storageKey) == analytics)
+        }
+    }
+
+    @MainActor private static func verifyStartupWithoutCallback() {
+        ClaritySDK.reset()
+        let suite = "ClarityStartup." + UUID().uuidString
+        let defaults = UserDefaults(suiteName: suite)!
+        defer {
+            defaults.removePersistentDomain(forName: suite)
+            ClaritySDK.reset()
+        }
+        let runtime = SessionReplayRuntime(defaults: defaults)
+        runtime.setActive(true)
+        assert(ClaritySDK.calls.isEmpty)
+        ClaritySDK.acceptsConsent = false
+        runtime.saveConsent(enabled: true)
+        assert(!ClaritySDK.calls.contains { $0.hasPrefix("initialize:") })
+        assert(ClaritySDK.isPaused())
+        ClaritySDK.acceptsConsent = true
+        let retryStart = ClaritySDK.calls.count
+        runtime.setActive(true)
+        assert(Array(ClaritySDK.calls.dropFirst(retryStart).prefix(2))
+            == ["consent:true", "initialize:z8n14vbcvp"])
+        assert(!ClaritySDK.isPaused())
+        assert(!ClaritySDK.calls.contains { $0.hasPrefix("tag:") })
+        // 콜백을 강제로 발생시키지 않아도 백그라운드 복귀 후 SDK가 정지 상태에 갇히지 않는다.
+        for _ in 0..<3 {
+            runtime.setActive(false)
+            assert(ClaritySDK.isPaused())
+            runtime.setActive(true)
+            assert(!ClaritySDK.isPaused())
+        }
+        assert(ClaritySDK.calls.filter { $0.hasPrefix("initialize:") }.count == 1)
+        let protectedView = UUID()
+        runtime.protect(protectedView)
+        assert(ClaritySDK.isPaused())
+        runtime.saveConsent(enabled: false)
+        assert(ClaritySDK.calls.contains("consent:false")) // 준비 완료 전 철회도 SDK에 전달
+        let resumes = ClaritySDK.calls.filter { $0 == "resume" }.count
+        ClaritySDK.fireSessionStarted()
+        assert(ClaritySDK.calls.filter { $0 == "resume" }.count == resumes)
+        assert(!ClaritySDK.calls.contains { $0.hasPrefix("tag:") })
+        let grants = ClaritySDK.calls.filter { $0 == "consent:true" }.count
+        runtime.saveConsent(enabled: true)
+        assert(ClaritySDK.calls.filter { $0 == "consent:true" }.count == grants)
+        assert(ClaritySDK.isPaused())
+        runtime.unprotect(protectedView)
+        assert(!ClaritySDK.isPaused())
+        assert(ClaritySDK.calls.filter { $0 == "consent:true" }.count == grants + 1)
+        assert(ClaritySDK.calls.filter { $0.hasPrefix("tag:") }.count == 1)
     }
 }

@@ -4,13 +4,18 @@ import Foundation
 nonisolated struct SessionReplayConsent: Codable, Equatable, Sendable {
     var enabled = false
     var hasChosen = false
-    static let storageKey = "pobook.clarity.consent.v1"
+    // v1은 화면 내용을 가리는 조건이었다. 수집 범위가 확대되어 새 동의를 받는다.
+    static let storageKey = "pobook.clarity.consent.v2"
 }
 
 nonisolated struct SessionReplayPolicy {
     var consent = SessionReplayConsent()
     var isActive = false
     private var protectedViews: Set<UUID> = []
+
+    #if DEBUG
+    var protectedViewCount: Int { protectedViews.count }
+    #endif
 
     var shouldRecord: Bool {
         consent.hasChosen && consent.enabled && isActive && protectedViews.isEmpty
