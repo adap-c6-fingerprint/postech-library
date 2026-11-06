@@ -208,22 +208,20 @@ struct IndoorMapView: View {
         return "현재위치 · \(floor.name)"
     }
 
-    /// 남은 높이에 세로 목록이 들어가지 않으면 선택 가능한 층을 가로로 표시한다.
+    /// 남은 높이에 세로 목록이 들어가지 않으면 가로로 펼쳐 스크롤 없이 모든 층을 표시한다.
     private func floorPicker(map: IndoorMap, floor: IndoorMapFloor) -> some View
     {
         let isHome = appearance == .home
-        let floors = map.selectableFloors
-        let floorCount = floors.count
-        let height = CGFloat(floorCount) * 34
+        let height = CGFloat(map.floors.count) * 34
         return ViewThatFits(in: .vertical) {
             VStack(alignment: .leading, spacing: 0) {
-                floorButtons(floors: floors, floor: floor)
+                floorButtons(map: map, floor: floor)
             }
             .padding(0)
             .frame(maxWidth: .infinity, minHeight: height, maxHeight: height, alignment: .topLeading)
             .frame(width: isHome ? 61 : 56)
             HStack(spacing: 0) {
-                floorButtons(floors: floors, floor: floor)
+                floorButtons(map: map, floor: floor)
             }
             .fixedSize()
         }
@@ -232,12 +230,12 @@ struct IndoorMapView: View {
         .glassEffect(isHome ? .regular : .identity, in: .rect(cornerRadius: 12))
         .overlay {
             GeometryReader { geometry in
-                if floorCount > 1 {
+                if map.floors.count > 1 {
                     Path { path in
                         let size = geometry.size
                         let horizontal = size.width > size.height
-                        for index in 1..<floorCount {
-                            let fraction = CGFloat(index) / CGFloat(floorCount)
+                        for index in 1..<map.floors.count {
+                            let fraction = CGFloat(index) / CGFloat(map.floors.count)
                             if horizontal {
                                 let x = size.width * fraction
                                 path.move(to: CGPoint(x: x, y: 0))
@@ -261,9 +259,9 @@ struct IndoorMapView: View {
     }
 
     /// 세로·가로 배치 모두 34pt 높이와 같은 글자 여백을 사용한다.
-    private func floorButtons(floors: [IndoorMapFloor], floor: IndoorMapFloor) -> some View {
+    private func floorButtons(map: IndoorMap, floor: IndoorMapFloor) -> some View {
         let isHome = appearance == .home
-        return ForEach(floors.reversed()) { item in
+        return ForEach(map.floors.reversed()) { item in
             Button {
                 store.send(.floorSelected(item.id))
             } label: {
