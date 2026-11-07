@@ -66,14 +66,11 @@ struct BookRouteBooksPreviewView: View {
 
                 VStack(spacing: 12) {
                     if let floor = selectedFloor {
-                        Text("\(floor.ordinal + 1)F")
-                            .typography(.caption2)
-                            .padding(.horizontal, 16)
-                            .frame(minWidth: 61, minHeight: 34)
-                            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+                        IndoorMapFloorBadge(floor: floor)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .accessibilityLabel("책 위치 \(floor.name)")
                             .accessibilityIdentifier("multiBookPreview.floor")
+                            .padding(.bottom, 4)
                     }
                     bookPages
                         .frame(height: min(360, max(160, geometry.size.height * 0.46)))
@@ -102,14 +99,7 @@ struct BookRouteBooksPreviewView: View {
 
     private var bookTabs: some View {
         HStack(spacing: 12) {
-            Button(action: onBack) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 22))
-                    .frame(width: 44, height: 44)
-                    .glassEffect(.regular.interactive(), in: .circle)
-            }
-            .accessibilityLabel("뒤로가기")
-            .accessibilityIdentifier("multiBookPreview.back")
+            LibraryBackButton(identifier: "multiBookPreview.back", action: onBack)
 
             ScrollViewReader { proxy in
                 ScrollView(.horizontal) {

@@ -66,7 +66,11 @@ struct BookNavigationBookFindingView: View {
             }
             // 책장은 하단 버튼 위에 붙고, 화면이 작으면 위쪽 안내 문구 뒤로 겹친다. (피그마 주석: 높이 고정)
             VStack(alignment: .leading, spacing: 0) {
-                topBar
+                BookNavigationTopBar(
+                    backLabel: "길안내로 돌아가기",
+                    backIdentifier: "book-navigation-arrival-back",
+                    onBack: { dismiss() }
+                )
                 if let info = bookInformation {
                     heading(info)
                         .padding(.top, Design.topBarToHeading)
@@ -137,23 +141,6 @@ struct BookNavigationBookFindingView: View {
     }
 
     // MARK: - 상단
-
-    private var topBar: some View {
-        HStack {
-            Button { dismiss() } label: {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 22, weight: .regular))
-                    .foregroundStyle(Color.textPrimary)
-                    .frame(width: 44, height: 44)
-                    .glassEffect(.regular.interactive(), in: Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("길안내로 돌아가기")
-            .accessibilityIdentifier("book-navigation-arrival-back")
-            Spacer()
-        }
-        .frame(height: Design.topBarHeight)
-    }
 
     private func heading(_ info: BookNavigationBookInfo) -> some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -405,7 +392,6 @@ struct BookNavigationBookFindingView: View {
         static let beamStart = Color(red: 0xD9 / 255, green: 0xD9 / 255, blue: 0xD9 / 255).opacity(0.2)
         static let beamEnd = Color(red: 0x73 / 255, green: 0x73 / 255, blue: 0x73 / 255).opacity(0.2)
         static let horizontalPadding: CGFloat = 16
-        static let topBarHeight: CGFloat = 48
         static let topBarToHeading: CGFloat = 27.4
         static let headingToInstruction: CGFloat = 20
         static let shelfToButton: CGFloat = 47

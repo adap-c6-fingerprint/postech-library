@@ -15,10 +15,10 @@ struct BookNavigationProgressBar: View {
                         ForEach(timeline.segments) { segment in
                             let length = width * timeline.fraction(for: segment)
                             let x = timeline.totalMeters > 0 ? width * segment.startMeters / timeline.totalMeters : 0
-                            Capsule().fill(.white.opacity(0.16))
-                                .frame(width: max(0, length - 2), height: 14)
+                            Rectangle().fill(.white.opacity(0.16))
+                                .frame(width: max(0, length - 2), height: 20)
                                 .overlay(alignment: .leading) {
-                                    Capsule().fill(BookNavigationPalette.accent)
+                                    Rectangle().fill(BookNavigationPalette.accent)
                                         .frame(width: max(0, length - 2) * timeline.completion(of: segment, stopIndex: stopIndex, progress: progress))
                                 }
                                 .overlay {
@@ -38,7 +38,7 @@ struct BookNavigationProgressBar: View {
                         }
                         ForEach(timeline.markers) { marker in
                             markerView(marker.kind)
-                                .frame(width: 24, height: 24)
+                                .frame(width: 22.7, height: 22.7)
                                 .offset(x: width * marker.fraction)
                         }
                     }
