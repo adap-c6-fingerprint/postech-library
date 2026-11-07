@@ -6,8 +6,7 @@ import ComposableArchitecture
 enum BookCoverPipeline {
     private static let logger = Logger(subsystem: "Fingerprint", category: "BookCover")
     
-    //책표지 폴백 (Primo에 없을 경우 Yes24로)
-    static let fallback = Yes24BookCoverResolver { isbn13 in
+    static let yes24Cover = Yes24BookCoverResolver { isbn13 in
         @Dependency(\.httpClient) var httpClient
         return try await Yes24BookDetailService(relay: .init(httpClient: httpClient))
             .fetchCoverURL(isbn13: isbn13)

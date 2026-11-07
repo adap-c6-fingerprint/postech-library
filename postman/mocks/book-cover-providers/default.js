@@ -10,14 +10,15 @@ http.createServer((req, res) => {
     res.end(JSON.stringify(body));
   };
   if (url.pathname === '/_stats') return json(200, calls);
+  if (url.pathname === '/goods/404/L') return json(404, { error: 'Cover unavailable' });
+  if (url.pathname === '/library/200' || url.pathname.startsWith('/goods/')) {
+    res.writeHead(200, { 'Content-Type': 'image/png' });
+    return res.end(png);
+  }
   if (url.pathname.startsWith('/library/')) {
     const status = Number(url.pathname.split('/').pop());
     res.writeHead(status, { 'Content-Type': 'text/html' });
     return res.end('Library cover unavailable');
-  }
-  if (url.pathname.startsWith('/goods/')) {
-    res.writeHead(200, { 'Content-Type': 'image/png' });
-    return res.end(png);
   }
   if (url.pathname !== '/v1/goods/itemDetail') return json(501, { error: 'Endpoint not modeled' });
   if (req.headers['x-api-key'] !== 'proof-key') return json(401, { success: false, errorCode: 'AUTH_001' });
@@ -27,8 +28,9 @@ http.createServer((req, res) => {
   if (isbn === '9791185042022') return json(404, { success: false, errorCode: 'GOODS_002' });
   if (isbn === '9788931022728' && calls[isbn] === 1) return json(503, { success: false, errorCode: 'UPSTREAM_UNAVAILABLE' });
   const returnedISBN = isbn === '9780131103627' ? '9788966260959' : isbn;
+  const coverID = isbn === '9780141036144' ? '404' : '372300';
   return json(200, { success: true, errorCode: null, data: { items: [{
     isbn13: returnedISBN,
-    cover: isbn === '9788998244545' ? null : 'https://image.yes24.com/goods/372300/L'
+    cover: isbn === '9788998244545' ? null : `https://image.yes24.com/goods/${coverID}/L`
   }] } });
 }).listen(process.env.PORT || 4174);

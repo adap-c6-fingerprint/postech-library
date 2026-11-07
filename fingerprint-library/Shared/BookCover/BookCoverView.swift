@@ -23,7 +23,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         self.allowsRetry = allowsRetry
         self.coverModifier = coverModifier
         _model = State(initialValue: BookCoverModel(url: url, isbn: isbn, pipeline: BookCoverPipeline.shared,
-            fallback: { try await BookCoverPipeline.fallback.url(for: $0) }))
+            lookupYes24: { try await BookCoverPipeline.yes24Cover.url(for: $0) }))
     }
 
     var body: some View {

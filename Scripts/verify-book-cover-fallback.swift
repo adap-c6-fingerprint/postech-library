@@ -19,7 +19,9 @@ enum VerifyBookCoverFallback {
             }.first, "로컬 개발 중계 토큰이 필요합니다")
         } else { token = "local-proof-relay-token-with-at-least-32-characters" }
 
+        let trace = RequestTrace()
         let load: @Sendable (URLRequest) async throws -> (Data, URLResponse) = { original in
+            if let path = original.url?.path { await trace.record(path) }
             var request = original
             if !live, let url = original.url, url.host != "127.0.0.1" {
                 var routed = URLComponents(url: base, resolvingAgainstBaseURL: false)!
@@ -46,9 +48,11 @@ enum VerifyBookCoverFallback {
             guard NSBitmapImageRep(data: data) != nil else { throw BookCoverFailure.invalidImage }
             return data
         }
-        func check(_ label: String, url: URL?, isbn: String?, expected: String) async throws {
+        func check(
+            _ label: String, url: URL?, isbn: String?, expected: String, expectedRequests: [String]? = nil
+        ) async throws {
             let model = BookCoverModel(url: url, isbn: isbn, pipeline: loader,
-                fallback: { try await resolver.coverURL(for: $0) })
+                lookupYes24: { try await resolver.url(for: $0) })
             await model.load(url, isbn: isbn)
             let state: String
             switch model.phase(for: url, isbn: isbn) {
@@ -58,6 +62,10 @@ enum VerifyBookCoverFallback {
             case .loading: state = "loading"
             }
             guard state == expected else { throw ProofError.failed("\(label): expected \(expected), got \(state)") }
+            let paths = await trace.takePaths()
+            if let expectedRequests, paths != expectedRequests {
+                throw ProofError.failed("\(label): expected requests \(expectedRequests), got \(paths)")
+            }
             print("PASS \(label): \(state)")
         }
 
@@ -69,9 +77,29 @@ enum VerifyBookCoverFallback {
             }
             try await check("ISBN 누락", url: nil, isbn: nil, expected: "unavailable")
         } else {
+            let yes24Detail = "/yes24/v1/goods/itemDetail"
+            let libraryCover = base.appendingPathComponent("library/200")
+            try await check(
+                "기존 YES24 주소 바로 사용", url: URL(string: "https://image.yes24.com/goods/123456/L"),
+                isbn: "9788966260959", expected: "loaded", expectedRequests: ["/goods/123456/L"]
+            )
+            try await check(
+                "YES24 우선 / ISBN10 정규화", url: base.appendingPathComponent("library/403"),
+                isbn: "8937460777", expected: "loaded", expectedRequests: [yes24Detail, "/goods/372300/L"]
+            )
+            try await check(
+                "ISBN 및 이미지 캐시 재사용", url: base.appendingPathComponent("library/404"),
+                isbn: "9788937460777", expected: "loaded", expectedRequests: []
+            )
+            try await check(
+                "YES24 미등록 시 도서관 표지", url: libraryCover,
+                isbn: "9791185042022", expected: "loaded", expectedRequests: [yes24Detail, libraryCover.path]
+            )
+            try await check(
+                "YES24 이미지 404 시 도서관 표지", url: libraryCover,
+                isbn: "9780141036144", expected: "loaded", expectedRequests: [yes24Detail, "/goods/404/L"]
+            )
             try await check("URL 누락", url: nil, isbn: "9788966260959", expected: "loaded")
-            try await check("도서관 403 / ISBN10 정규화", url: base.appendingPathComponent("library/403"), isbn: "8937460777", expected: "loaded")
-            try await check("도서관 404 / 캐시 재사용", url: base.appendingPathComponent("library/404"), isbn: "9788937460777", expected: "loaded")
             try await check("다른 판본 거부", url: nil, isbn: "9780131103627", expected: "unavailable")
             try await check("Yes24 미등록", url: nil, isbn: "9791185042022", expected: "unavailable")
             try await check("Yes24 표지 null", url: nil, isbn: "9788998244545", expected: "unavailable")
@@ -80,7 +108,7 @@ enum VerifyBookCoverFallback {
             try await check("ISBN 누락", url: nil, isbn: nil, expected: "unavailable")
             let (data, _) = try await URLSession.shared.data(from: base.appendingPathComponent("_stats"))
             let calls = try JSONDecoder().decode([String: Int].self, from: data)
-            guard calls["9788937460777"] == 1, calls["9788931022728"] == 2, calls.count == 6 else {
+            guard calls["9788937460777"] == 1, calls["9788931022728"] == 2, calls.count == 7 else {
                 throw ProofError.failed("캐시·재시도 호출 횟수가 다릅니다")
             }
             print("PASS HTTP 요청 기록: ISBN별 중복 방지 및 실패 후 재시도 확인")
@@ -91,5 +119,18 @@ enum VerifyBookCoverFallback {
         guard let value else { throw ProofError.failed(message) }
         return value
     }
+
+    private actor RequestTrace {
+        private var paths: [String] = []
+
+        func record(_ path: String) { paths.append(path) }
+
+        func takePaths() -> [String] {
+            let result = paths
+            paths.removeAll()
+            return result
+        }
+    }
+
     private enum ProofError: Error { case failed(String) }
 }
