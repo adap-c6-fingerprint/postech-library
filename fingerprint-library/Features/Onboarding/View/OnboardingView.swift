@@ -181,9 +181,10 @@ struct OnboardingView: View {
         switch step {
         case .terms:
             ("동의 안하고 종료하기", .termsDeclineButtonTapped)
-        case .affiliation where store.entry == .firstRun:
-            ("다음에 할래요", .skipButtonTapped)
-            // 마이페이지에서 처음 설정할 때는 건너뛰기를 보여주지 않는다.
+        // case .affiliation where store.entry == .firstRun:
+        //     ("다음에 할래요", .skipButtonTapped)
+        //     // 마이페이지에서 처음 설정할 때는 건너뛰기를 보여주지 않는다.
+        // 배포판(distribute/appstore-1106)에서는 온보딩의 "다음에 할래요"를 보여주지 않는다. 다시 쓰려면 위 세 줄의 주석을 푼다.
         default:
             nil
         }

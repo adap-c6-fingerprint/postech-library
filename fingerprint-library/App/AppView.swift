@@ -12,7 +12,6 @@ import Clarity
 struct AppView: View {
     let store: StoreOf<AppFeature>
     @Environment(\.scenePhase) private var scenePhase
-    @State private var showsAnalyticsChoice = false
 
     var body: some View {
         Group {
@@ -28,14 +27,11 @@ struct AppView: View {
         // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
         .clarityUnmask()
         .task { store.send(.profileCheckRequested) }
-        .sheet(isPresented: $showsAnalyticsChoice) {
-            AnalyticsSettingsView(isFirstChoice: true)
-        }
         .task {
-            showsAnalyticsChoice = !AnalyticsRuntime.shared.consent.hasChosen
-                || !SessionReplayRuntime.shared.consent.hasChosen
             AnalyticsRuntime.shared.updateProfile(store.userProfile)
         }
+        // 데이터 수집 설정은 앱 실행 직후 자동으로 띄우지 않는다. 마이페이지의 "데이터 수집 설정" 행에서만 연다.
+        // 아직 고르지 않은 동안(hasChosen == false)은 분석·진단·화면 녹화를 수집하지 않는다.
         .task(id: scenePhase) {
             AnalyticsRuntime.shared.setActive(scenePhase == .active)
             SessionReplayRuntime.shared.setActive(scenePhase == .active)
@@ -54,7 +50,6 @@ struct AppView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: AnalyticsRuntime.consentChanged)) { _ in
             AnalyticsRuntime.shared.updateProfile(store.userProfile)
-            showsAnalyticsChoice = false
         }
     }
 
