@@ -36,10 +36,14 @@ struct BookNavigationView: View {
                         ContentUnavailableView("안내 정보를 확인해 주세요", systemImage: "map")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    LinearGradient(colors: [.black.opacity(0.8), .clear], startPoint: .top, endPoint: .bottom)
-                        .frame(height: 250).ignoresSafeArea(.container, edges: .top)
-                        .allowsHitTesting(false)
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(spacing: 0) {
+                        LibraryTopBarBackground()
+                        Spacer(minLength: 0)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .ignoresSafeArea(.container, edges: [.top, .horizontal])
+                    .allowsHitTesting(false)
+                    VStack(alignment: .leading, spacing: 38) {
                         header
                         currentFloorIndicator
                     }
