@@ -93,12 +93,7 @@ struct BookDetailMapView: View {
 
     private var mapButtons: some View {
         HStack {
-            Button(action: { dismiss() }) {
-                Image(systemName: "chevron.left").frame(width: 44, height: 44)
-                    .glassEffect(.regular.interactive(), in: Circle())
-            }
-            .accessibilityLabel("뒤로가기")
-            .accessibilityIdentifier("bookDetail.back")
+            LibraryBackButton(identifier: "bookDetail.back", action: { dismiss() })
             Spacer()
             Button { store.send(.favoriteButtonTapped) } label: {
                 Image(systemName: store.isFavorite ? "heart.fill" : "heart")

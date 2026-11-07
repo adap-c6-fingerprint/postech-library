@@ -8,18 +8,22 @@ struct BookNavigationTopBar: View {
 
     var body: some View {
         HStack {
-            Button(action: onBack) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 22, weight: .regular))
-                    .foregroundStyle(Color.textPrimary)
-                    .frame(width: 44, height: 44)
-                    .glassEffect(.regular.interactive(), in: .circle)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(backLabel)
-            .accessibilityIdentifier(backIdentifier)
+            LibraryBackButton(title: backLabel, identifier: backIdentifier, action: onBack)
             Spacer()
         }
         .frame(height: 48)
     }
 }
+
+#if DEBUG
+#Preview("책 찾기 상단바") {
+    BookNavigationTopBar(
+        backLabel: "길안내로 돌아가기",
+        backIdentifier: "preview.navigation.back",
+        onBack: {}
+    )
+    .padding(.horizontal, 16)
+    .background(Color.backgroundDefault)
+    .preferredColorScheme(.dark)
+}
+#endif
