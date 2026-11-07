@@ -82,17 +82,6 @@ struct IndoorMapView: View {
                     }
                 }
 
-                if let message = store.locationMessage {
-                    Text(message)
-                        .font(.caption)
-                        .padding(10)
-                        .background(
-                            Color(uiColor: .systemBackground),
-                            in: RoundedRectangle(cornerRadius: 12)
-                        )
-                        .accessibilityIdentifier("map-location-status")
-                }
-
                 if let message = store.shelfLabelError {
                     HStack {
                         Text(message)
