@@ -66,12 +66,7 @@ struct BookRouteBooksPreviewView: View {
 
                 VStack(spacing: 12) {
                     if let floor = selectedFloor {
-                        Text("\(floor.ordinal + 1)F")
-                            .typography(.caption2)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 10)
-                            .frame(minWidth: 61, minHeight: 34)
-                            .glassEffect(.regular, in: .rect(cornerRadius: 12))
+                        IndoorMapFloorBadge(floor: floor)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .accessibilityLabel("책 위치 \(floor.name)")
                             .accessibilityIdentifier("multiBookPreview.floor")

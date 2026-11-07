@@ -41,7 +41,7 @@ struct BookNavigationView: View {
                         .allowsHitTesting(false)
                     VStack(alignment: .leading, spacing: 16) {
                         header
-                        if store.canConfirmCurrentFloor { currentFloorMenu }
+                        currentFloorIndicator
                     }
                     .padding(.horizontal, 20).padding(.top, 20)
                     VStack(spacing: 16) {
@@ -200,18 +200,32 @@ struct BookNavigationView: View {
         .tint(BookNavigationPalette.accent)
     }
 
+    @ViewBuilder
+    private var currentFloorIndicator: some View {
+        if store.canConfirmCurrentFloor {
+            currentFloorMenu
+        } else if let floor = store.currentFloor {
+            IndoorMapFloorBadge(floor: floor, isCurrent: true)
+                .accessibilityIdentifier("book-navigation-current-floor")
+        }
+    }
+
     private var currentFloorMenu: some View {
         Menu {
             ForEach(store.session.map.floors) { floor in
                 Button(floor.name) { store.send(.currentFloorConfirmed(floor.ordinal)) }
             }
         } label: {
-            Label(store.effectiveFloorOrdinal.flatMap { ordinal in store.session.map.floors.first { $0.ordinal == ordinal }?.name }
-                  ?? "현재 층 선택", systemImage: "square.3.layers.3d")
-                .font(.caption.weight(.semibold)).padding(.horizontal, 10).padding(.vertical, 6)
-                .background(.black.opacity(0.5), in: Capsule())
+            if let floor = store.currentFloor {
+                IndoorMapFloorBadge(floor: floor, isCurrent: true)
+            } else {
+                Label("현재 층 선택", systemImage: "square.3.layers.3d")
+                    .font(.caption.weight(.semibold)).padding(.horizontal, 10).padding(.vertical, 6)
+                    .background(.black.opacity(0.5), in: Capsule())
+            }
         }
-        .accessibilityLabel("현재 층 확인")
+        .buttonStyle(.plain)
+        .accessibilityLabel(store.currentFloor.map { "현재 \($0.name), 층 선택" } ?? "현재 층 선택")
         .accessibilityIdentifier("book-navigation-current-floor")
     }
 
