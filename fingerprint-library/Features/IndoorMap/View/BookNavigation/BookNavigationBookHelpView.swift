@@ -62,10 +62,10 @@ struct BookNavigationBookHelpView: View {
             ZStack {
                 Circle().fill(Color.limeBase)
                 Image(systemName: "info")
-                    .font(.system(size: 46, weight: .bold))
+                    .font(.system(size: 35, weight: .bold))
                     .foregroundStyle(Color.backgroundDefault)
             }
-            .frame(width: 70, height: 70)
+            .frame(width: 69, height: 69)
             .accessibilityHidden(true)
             Text("도서관 직원에게\n도움을 청해보세요")
                 .typography(.title1)
@@ -78,13 +78,13 @@ struct BookNavigationBookHelpView: View {
                 .foregroundStyle(Color.textTertiary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, 12)
+                .padding(.top, 8)
         }
     }
 
     private var bookCard: some View {
         let layout = dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16)) // 이거 사실상 HStackLayout만 보여줌
             : AnyLayout(HStackLayout(alignment: .top, spacing: 20))
         return layout {
             BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
@@ -92,7 +92,7 @@ struct BookNavigationBookHelpView: View {
                 .background(.quaternary, in: .rect(cornerRadius: 8))
                 .clipShape(.rect(cornerRadius: 8))
                 .accessibilityIdentifier("book-navigation-book-help-cover")
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(BookText.plainText(info.book.title))
                     .typography(.bookTitle)
                     .fixedSize(horizontal: false, vertical: true)
@@ -109,7 +109,7 @@ struct BookNavigationBookHelpView: View {
                 Text(holding?.availabilityText ?? "대출 상태 확인 필요")
                     .typography(.caption1)
                     .foregroundStyle(holding?.availability == "available" ? Color.green : Color.textTertiary)
-                    .padding(.top, 14)
+                    .padding(.top, 17)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -134,8 +134,8 @@ struct BookNavigationBookHelpView: View {
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .foregroundStyle(Color.backgroundDefault)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 14)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
                     .frame(maxWidth: .infinity, minHeight: 52)
                     .contentShape(.capsule)
             }
