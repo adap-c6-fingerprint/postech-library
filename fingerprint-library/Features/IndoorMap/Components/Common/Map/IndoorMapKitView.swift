@@ -56,6 +56,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     }
 
     static func dismantleUIView(_ view: IndoorMapSurface, coordinator: Coordinator) {
+        view.hidesSystemTopEdgeEffect = false
         view.showsUserLocation = false
         view.onLayout = nil
         view.delegate = nil
@@ -116,6 +117,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// - Returns: SwiftUI 배치가 끝난 시점을 알려줄 수 있는 ``IndoorMapSurface``.
         func makeMapView() -> IndoorMapSurface {
             let view = IndoorMapSurface()
+            view.hidesSystemTopEdgeEffect = parent.appearance == .bookDetail
             view.delegate = self
             view.overrideUserInterfaceStyle = .dark
             let configuration = MKStandardMapConfiguration(elevationStyle: .flat)
@@ -149,6 +151,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 카메라는 새 요청일 때만 배치 이후 적용하도록 보류한다.
         func update(parent: IndoorMapKitView, in view: MKMapView) {
             self.parent = parent
+            (view as? IndoorMapSurface)?.hidesSystemTopEdgeEffect = parent.appearance == .bookDetail
             if renderedMap != parent.map || renderedFloorID != parent.floor.id
                 || renderedNavigationAppearance != parent.navigationAppearance
                 || renderedAppearance != parent.appearance {
@@ -922,12 +925,37 @@ struct IndoorMapKitView: UIViewRepresentable {
 
 /// SwiftUI의 배치가 끝나 실제 화면 크기를 사용할 수 있을 때 보류한 카메라 요청을 적용한다.
 final class IndoorMapSurface: MKMapView {
+    var hidesSystemTopEdgeEffect = false {
+        didSet {
+            guard hidesSystemTopEdgeEffect != oldValue else { return }
+            updateSystemTopEdgeEffect()
+            setNeedsLayout()
+        }
+    }
+    private var suppressedTopEdgeInteraction: (any UIInteraction)?
+
     /// 유효한 window·크기 여부를 Coordinator가 판단할 수 있도록 배치 이후 호출한다.
     var onLayout: ((IndoorMapSurface) -> Void)?
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        updateSystemTopEdgeEffect()
         onLayout?(self)
+    }
+
+    private func updateSystemTopEdgeEffect() {
+        if hidesSystemTopEdgeEffect {
+            // MapKit의 자체 상단 효과는 SwiftUI의 scrollEdgeEffectHidden 설정을 따르지 않는다.
+            // 내부 interaction 이름에 의존하는 우회 처리이므로 OS 업데이트 시 재확인이 필요하다.
+            guard let interaction = interactions.first(where: {
+                String(describing: type(of: $0)) == "_UIScrollEdgeEffectViewInteraction"
+            }) else { return }
+            removeInteraction(interaction)
+            suppressedTopEdgeInteraction = interaction
+        } else if let interaction = suppressedTopEdgeInteraction {
+            suppressedTopEdgeInteraction = nil
+            addInteraction(interaction)
+        }
     }
 
     override func didMoveToWindow() {
