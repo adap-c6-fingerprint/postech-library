@@ -7,8 +7,8 @@ struct BookNavigationView: View {
     private let onExit: ((BookNavigationFeature.ExitReason) -> Void)?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
-    @State private var sheetHeight: CGFloat = 113
-    @State private var sheetSummaryHeight: CGFloat = 89
+    @State private var sheetHeight: CGFloat = 92
+    @State private var sheetSummaryHeight: CGFloat = 68
     @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
     private var isSheetExpanded: Bool { store.isSheetExpanded }
 
@@ -164,36 +164,36 @@ struct BookNavigationView: View {
 
     private var guidanceSheet: some View {
         VStack(alignment: .leading, spacing: 0) {
-            VStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack(spacing: 8) {
-                        Image(systemName: store.instructionSymbol)
-                            .font(.system(size: 14, weight: .semibold))
-                            .frame(width: 24, height: 24)
-                            .background(.black, in: Circle())
-                        Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
-                            .font(.body.weight(.medium)).lineLimit(2)
-                        Spacer(minLength: 0)
-                    }
-                    .frame(minHeight: 28)
-                    .accessibilityIdentifier("book-navigation-instruction")
-                    BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
-                        progress: store.displayedProgress, floors: store.session.map.floors)
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
+                    Image(systemName: store.instructionSymbol)
+                        .font(.system(size: 14, weight: .semibold))
+                        .frame(width: 24, height: 24)
+                        .background(.black, in: Circle())
+                    Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
+                        .font(.body.weight(.medium)).lineLimit(2)
+                    Spacer(minLength: 0)
                 }
-                .padding(.horizontal, 16)
+                .frame(minHeight: 28)
+                .accessibilityIdentifier("book-navigation-instruction")
+                BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
+                    progress: store.displayedProgress, floors: store.session.map.floors)
+            }
+            .padding(.horizontal, 16)
+            .fixedSize(horizontal: false, vertical: true)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
+                // 접힌 높이에는 안내 문구와 프로그레스바만 포함한다.
+                if abs(height - sheetSummaryHeight) > 0.5 { sheetSummaryHeight = height }
+            }
+            if isSheetExpanded {
                 Rectangle().fill(.white.opacity(0.08)).frame(height: 1)
                     .padding(.horizontal, 14).padding(.top, 20)
                     .accessibilityHidden(true)
-            }
-            .fixedSize(horizontal: false, vertical: true)
-            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
-                // 접힌 높이는 디바이더 위치로 정한다. 안내가 두 줄이 되어도 잘리지 않는다.
-                if abs(height - sheetSummaryHeight) > 0.5 { sheetSummaryHeight = height }
-            }
-            if isSheetExpanded, let info = store.currentBookInfo, let route = store.currentRoute {
-                BookNavigationCurrentBookCard(info: info, route: route)
-                    .padding(.horizontal, 16).padding(.top, 24)
-                    .id(store.currentStopIndex)
+                if let info = store.currentBookInfo, let route = store.currentRoute {
+                    BookNavigationCurrentBookCard(info: info, route: route)
+                        .padding(.horizontal, 16).padding(.top, 24)
+                        .id(store.currentStopIndex)
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
