@@ -18,7 +18,7 @@ struct BookNavigationProgressBar: View {
                             Rectangle().fill(.white.opacity(0.16))
                                 .frame(width: max(0, length - 2), height: 20)
                                 .overlay(alignment: .leading) {
-                                    Capsule().fill(BookNavigationPalette.accent)
+                                    Rectangle().fill(BookNavigationPalette.accent)
                                         .frame(width: max(0, length - 2) * timeline.completion(of: segment, stopIndex: stopIndex, progress: progress))
                                 }
                                 .overlay {

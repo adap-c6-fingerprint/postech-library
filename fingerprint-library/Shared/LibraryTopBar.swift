@@ -80,7 +80,7 @@ private struct LibraryTopBarSymbolStyle: ButtonStyle {
     }
 }
 
-/// 기본 UIKit 블러를 옅게 적용한다. 카메라 이동 시 지도를 캡처하거나 이미지를 교체하지 않는다.
+/// Material 블러를 상단에 표시하고 아래쪽 경계에서 서서히 사라지게 한다.
 struct LibraryTopBarBackground: View {
     private let height: CGFloat = 361
     private let shade = Color(red: 18.0 / 255, green: 18.0 / 255, blue: 18.0 / 255)
@@ -88,8 +88,17 @@ struct LibraryTopBarBackground: View {
     var body: some View {
         ZStack {
             LibraryTopBarBlur()
-            LinearGradient(colors: [shade, shade.opacity(0)], startPoint: .top, endPoint: .bottom)
-                .opacity(0.3)
+
+            LinearGradient(
+                stops: [
+                    .init(color: shade, location: 0),
+                    .init(color: shade, location: 0.65),
+                    .init(color: .clear, location: 1)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .opacity(0.3)
         }
         .frame(height: height)
         .environment(\.colorScheme, .dark)
@@ -98,47 +107,21 @@ struct LibraryTopBarBackground: View {
     }
 }
 
-/// 고정된 기본 블러를 직접 마스크로 옅게 합성한다. 전환 중 보간 상태를 유지하지 않는다.
-private struct LibraryTopBarBlur: UIViewRepresentable {
-    func makeUIView(context: Context) -> BlurView { BlurView() }
-
-    func updateUIView(_ uiView: BlurView, context: Context) {}
-
-    final class BlurView: UIVisualEffectView {
-        private let fade = FadeMaskView()
-
-        init() {
-            super.init(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
-            isUserInteractionEnabled = false
-            accessibilityIdentifier = "library-top-bar-blur"
-            accessibilityElementsHidden = true
-        }
-
-        required init?(coder: NSCoder) { return nil }
-
-        override func layoutSubviews() {
-            super.layoutSubviews()
-            if fade.frame != bounds {
-                mask = nil
-                fade.frame = bounds
-                mask = fade
+private struct LibraryTopBarBlur: View {
+    var body: some View {
+        Rectangle()
+            .fill(.ultraThinMaterial)
+            .mask {
+                LinearGradient(
+                    stops: [
+                        .init(color: .white, location: 0),
+                        .init(color: .white, location: 0.15),
+                        .init(color: .white, location: 0.25),
+                        .init(color: .clear, location: 1)
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
             }
-        }
-    }
-
-    final class FadeMaskView: UIView {
-        override class var layerClass: AnyClass { CAGradientLayer.self }
-
-        init() {
-            super.init(frame: .zero)
-            let gradient = layer as! CAGradientLayer
-            let subtle = UIColor.white.withAlphaComponent(0.15).cgColor
-            gradient.colors = [subtle, subtle, UIColor.clear.cgColor]
-            gradient.locations = [0, 0.85, 1]
-            gradient.startPoint = CGPoint(x: 0.5, y: 0)
-            gradient.endPoint = CGPoint(x: 0.5, y: 1)
-        }
-
-        required init?(coder: NSCoder) { return nil }
     }
 }
