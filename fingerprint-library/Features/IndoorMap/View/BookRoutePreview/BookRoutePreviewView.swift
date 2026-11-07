@@ -5,7 +5,7 @@ import SwiftUI
 struct BookRoutePreviewView: View {
     enum EntryMode { case preview, direct }
 
-    // 미리보기 복원 시 진입 지점에서 .preview를 전달한다.
+    // 한 권은 바로 안내하고, 여러 권은 책별 서가를 확인한 뒤 안내한다.
     private let entryMode: EntryMode
     @State private var routeStore: StoreOf<BookRoutePreviewFeature>
     
@@ -187,6 +187,28 @@ struct BookRoutePreviewView: View {
         Group {
             if entryMode == .direct {
                 directContent
+            } else if destination.books.count > 1, let destinationStore {
+                BookRouteBooksPreviewView(
+                    books: orderedBooks,
+                    shelfStore: destinationStore,
+                    session: readySession,
+                    isLoadingRoute: isLoadingRoute,
+                    routeError: routeError,
+                    canStart: readySession != nil && currentStart != nil && !isLoadingRoute && routeError == nil,
+                    onBack: { dismiss() },
+                    onStart: {
+                        routeStore.send(.startRequested(.init(state: destinationStore.state, start: currentStart)))
+                    },
+                    onRetry: {
+                        if currentStart == nil { mapStore?.send(.currentLocationTapped) }
+                        let request = BookRoutePreviewRequest(state: destinationStore.state, start: currentStart)
+                        if request == routeRequest {
+                            routeStore.send(.requestChanged(request))
+                        } else {
+                            previewStart = currentStart
+                        }
+                    }
+                )
             } else {
                 previewContent
             }
@@ -202,7 +224,7 @@ struct BookRoutePreviewView: View {
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .overlay(alignment: .topTrailing) {
-            if entryMode == .preview, let previewSession {
+            if entryMode == .preview, destination.books.count <= 1, let previewSession {
                 Menu("층 보기", systemImage: "square.3.layers.3d") {
                     ForEach(previewSession.map.floors) { floor in
                         Button("\(floor.ordinal + 1)층") { routeFloorID = floor.id }

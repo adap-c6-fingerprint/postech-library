@@ -20,6 +20,26 @@ enum BookCoverPipeline {
             .fetchSpineURL(isbn13: isbn13)
     }
     
+    private static var spineURLs: [String: URL] = [:]
+    // ISBN13 → 책등 이미지 주소. 표지(BookCoverModel)처럼 화면이 뜰 때 메모리 캐시를 바로 찾으려고 MainActor에 둔다.
+
+    /// 책등 이미지를 표지와 같은 메모리 캐시(shared)로 받는다.
+    static func spineImage(isbn: String) async throws -> UIImage {
+        guard let isbn13 = BookISBN.isbn13(from: isbn),
+              let url = try await bookSpineCover.url(for: isbn13) else {
+            throw RecommendationCacheStore.CacheError.invalidImage
+        }
+        spineURLs[isbn13] = url
+        return try await shared.image(for: url)
+    }
+
+    /// 이미 받아 둔 책등 이미지를 기다리지 않고 바로 꺼낸다. 없으면 nil
+    static func cachedSpineImage(isbn: String) -> UIImage? {
+        guard let isbn13 = BookISBN.isbn13(from: isbn), let url = spineURLs[isbn13] else { return nil }
+        return shared.cachedImage(for: url)
+        // 메모리 캐시에서 밀려났으면 nil이 되어 다시 받는다.
+    }
+
     /// 추천·검색·상세가 같은 메모리 캐시와 진행 중 요청을 사용한다.
     static let shared = SharedImageLoader<UIImage>(
         readLocalImage: { url in

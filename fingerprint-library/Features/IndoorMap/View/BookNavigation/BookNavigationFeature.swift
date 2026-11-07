@@ -27,6 +27,7 @@ struct BookNavigationFeature {
         var nextBookRouteError: String?
         var currentStopIndex = 0
         var progress: RouteGuidanceProgress?
+        var manuallyCompletedFloorTransition: BookNavigationFloorTransition?
         var rawPosition: IndoorPosition?
         var latestPosition: IndoorPosition?
         var lastReceivedTimestamp: Date?
@@ -70,15 +71,24 @@ struct BookNavigationFeature {
         var currentBookInfo: BookNavigationBookInfo? {
             bookInfos.indices.contains(currentStopIndex) ? bookInfos[currentStopIndex] : nil
         }
+        var displayedProgress: RouteGuidanceProgress? {
+            guard let manuallyCompletedFloorTransition, let plan = currentPlan else { return progress }
+            return manuallyCompletedFloorTransition.displayedProgress(in: plan, liveProgress: progress)
+        }
+        var nextFloorTransition: BookNavigationFloorTransition? {
+            guard exitReason == nil, !isArrivalPresented, !isReroutingToNextBook,
+                  let plan = currentPlan else { return nil }
+            return .next(in: plan, after: displayedProgress)
+        }
         var currentTurnArrows: [RouteTurnArrow] {
             guard exitReason == nil else { return [] }
             guard turnArrowsByStop.indices.contains(currentStopIndex) else { return [] }
             let arrows = turnArrowsByStop[currentStopIndex]
-            guard let progress else { return arrows }
+            guard let progress = displayedProgress else { return arrows }
             return arrows.filter { Double($0.stepIndex) >= Double(progress.stepIndex) + progress.fraction - 0.000_001 }
         }
         var remainingMetrics: BookNavigationMetrics? { remainingMeters.flatMap(BookNavigationMetrics.init) }
-        var navigationBearing: Double? { progress.flatMap { currentPlan?.bearing(at: $0) } }
+        var navigationBearing: Double? { displayedProgress.flatMap { currentPlan?.bearing(at: $0) } }
         var isApproachingShelf: Bool {
             guard let progress, let meters = progress.remainingMeters, meters <= 8,
                   let floor = latestPosition?.floorOrdinal else { return false }
@@ -100,6 +110,9 @@ struct BookNavigationFeature {
             return rawPosition.source == .sensor && !session.map.floors.contains { $0.ordinal == rawPosition.floorOrdinal }
         }
         var currentFloor: IndoorMapFloor? {
+            if let transition = manuallyCompletedFloorTransition, !transition.isReached(by: progress) {
+                return session.map.floors.first { $0.id == transition.to.floorID }
+            }
             if let ordinal = latestPosition?.floorOrdinal ?? confirmedFloorOrdinal {
                 return session.map.floors.first { $0.ordinal == ordinal }
             }
@@ -109,9 +122,9 @@ struct BookNavigationFeature {
             isActive && authorization.isAuthorized && latestPosition?.source == .sensor
                 && latestPosition?.floorOrdinal == currentFloor?.ordinal
         }
-        var remainingMeters: Double? { progress?.remainingMeters }
+        var remainingMeters: Double? { displayedProgress?.remainingMeters }
         var instructionText: String? {
-            guard let progress else { return nil }
+            guard let progress = displayedProgress else { return nextFloorTransition?.instructionText }
             let prefix = progress.distanceToManeuver.flatMap { meters in
                 meters > 1 ? "약 \(meters.formatted(.number.precision(.fractionLength(0))))m 앞에서 " : nil
             } ?? ""
@@ -135,14 +148,14 @@ struct BookNavigationFeature {
             }
         }
         var instructionSymbol: String {
-            switch progress?.maneuver {
+            switch displayedProgress?.maneuver {
             case .left: "arrow.turn.up.left"
             case .right: "arrow.turn.up.right"
             case .turnAround: "arrow.uturn.backward"
             case .changeFloor: "arrow.up.arrow.down"
             case .nearDestination: "books.vertical"
             case .straight: "arrow.up"
-            case nil: "location.slash"
+            case nil: nextFloorTransition == nil ? "location.slash" : "arrow.up"
             }
         }
     }
@@ -155,6 +168,7 @@ struct BookNavigationFeature {
         case locationStreamEnded(subscriptionID: Int)
         case locationExpired(subscriptionID: Int, timestamp: Date)
         case currentFloorConfirmed(Int)
+        case floorTransitionTapped(stopIndex: Int, stepIndex: Int)
         case requestLocationPermission
         case recenterTapped
         case mapInteractionBegan
@@ -166,6 +180,7 @@ struct BookNavigationFeature {
         case arrivalSpineLoaded(stopIndex: Int, Data?)
         case continueFromArrival(stopIndex: Int)
         case finishFromArrival(stopIndex: Int)
+        case deferFromArrival(stopIndex: Int)
         case cancelTapped
         case cancelDismissed
         case cancelConfirmed
@@ -200,7 +215,8 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil else { return .none }
                 state.followsNavigationCamera = true
                 if updateCamera(&state, force: true) { return .none }
-                if let position = state.latestPosition {
+                if let position = state.latestPosition,
+                   state.manuallyCompletedFloorTransition == nil || position.floorOrdinal == state.currentFloor?.ordinal {
                     state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .position(position.coordinate))
                     return .none
                 }
@@ -293,11 +309,25 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil, state.canConfirmCurrentFloor,
                       state.session.map.floors.contains(where: { $0.ordinal == ordinal }) else { return .none }
                 state.confirmedFloorOrdinal = ordinal
+                state.manuallyCompletedFloorTransition = nil
                 if let floor = state.session.map.floors.first(where: { $0.ordinal == ordinal }) {
                     state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .floor(floor.id))
                 }
                 state.progress = nil
                 if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
+                return .none
+
+            case let .floorTransitionTapped(stopIndex, stepIndex):
+                guard state.exitReason == nil, !state.isCancelConfirmationPresented,
+                      state.currentStopIndex == stopIndex, let transition = state.nextFloorTransition,
+                      transition.id == stepIndex,
+                      state.session.map.floors.contains(where: { $0.id == transition.to.floorID }) else { return .none }
+                state.manuallyCompletedFloorTransition = transition
+                state.confirmedFloorOrdinal = transition.to.level
+                // 실제 좌표는 그대로 두고 다음 층의 경로만 표시한다.
+                state.progress = nil
+                state.followsNavigationCamera = true
+                fitCurrentRoute(&state)
                 return .none
 
             case .arrivalTestTapped:
@@ -333,6 +363,7 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil, state.isArrivalPresented,
                       stopIndex == state.currentStopIndex, state.currentStop != nil, state.hasNextStop else { return .none }
                 state.currentStopIndex += 1
+                state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
                 fitCurrentRoute(&state)
                 state.isArrivalPresented = false
@@ -388,6 +419,7 @@ struct BookNavigationFeature {
                 state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
                 state.timeline = .init(plans: state.plans, bookCount: state.session.stops.count)
                 state.currentStopIndex = stopIndex
+                state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
                 state.isArrivalPresented = false
                 state.progress = nil
@@ -407,6 +439,11 @@ struct BookNavigationFeature {
                       stopIndex == state.currentStopIndex, !state.hasNextStop,
                       state.currentStop != nil else { return .none }
                 return end(&state, reason: .completed)
+
+            case let .deferFromArrival(stopIndex):
+                guard state.exitReason == nil, state.isArrivalPresented,
+                      stopIndex == state.currentStopIndex, state.currentStop != nil else { return .none }
+                return end(&state, reason: .cancelled)
 
             case .cancelTapped:
                 guard state.exitReason == nil else { return .none }
@@ -519,6 +556,9 @@ struct BookNavigationFeature {
         do {
             state.progress = try plan.progress(for: effective, at: now, previous: state.progress,
                 elapsed: previousTimestamp.map { effective.timestamp.timeIntervalSince($0) })
+            if state.manuallyCompletedFloorTransition != nil, previousFloor != state.currentFloor?.id {
+                fitCurrentRoute(&state)
+            }
             state.statusMessage = nil
             recordQuality(state, code: "on_route")
             if let progress = state.progress {

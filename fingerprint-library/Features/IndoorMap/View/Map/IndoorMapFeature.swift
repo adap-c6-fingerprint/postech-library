@@ -108,6 +108,7 @@ struct IndoorMapFeature {
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(IndoorLocationEvent)
+        case requestLocationPermission
         case currentLocationTapped
         case floorSelected(UUID)
         case fitMapTapped
@@ -264,6 +265,9 @@ struct IndoorMapFeature {
                     return invalidateRoute(&state)
                 }
                 return .none
+
+            case .requestLocationPermission:
+                return .run { [locationClient] _ in await locationClient.requestPermission() }
 
             case .currentLocationTapped:
                 state.manualPosition = nil

@@ -14,6 +14,7 @@ struct MyPageView: View {
     let mapStore: StoreOf<IndoorMapFeature>
     @State private var showsAnalyticsSettings = false
     // 최근 찾은 책 화면에서 여는 책 상세에 넘긴다.
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         ScrollView {
@@ -33,10 +34,9 @@ struct MyPageView: View {
                     .init(title: "소속 및 학과 정보 변경") { store.send(.editAffiliationRowTapped) },
                     .init(title: "관심 분야 변경하기") { store.send(.editInterestsRowTapped) },
                     .init(title: "데이터 수집 설정") { showsAnalyticsSettings = true },
-                    .init(title: "위치 권한 설정"),
-                    .init(title: "이용 안내")
+                    .init(title: "위치 권한 설정") { openAppSettings() }
                 ])
-                // 위치 권한 설정·이용 안내는 아직 기능명세가 없어 행만 둔다.
+                // 이용 안내 행은 대응 화면이 없어 눌러도 반응이 없으므로 뺐다. (앱스토어 리젝 사유가 될 수 있음)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 80)
             }
@@ -50,7 +50,6 @@ struct MyPageView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .task { store.send(.shelf(.task)) }
         .analyticsScreen(.myPage)
-        .sessionReplayProtected()
         .sheet(isPresented: $showsAnalyticsSettings) {
             AnalyticsSettingsView(isFirstChoice: false)
         }
@@ -69,7 +68,19 @@ struct MyPageView: View {
         ) { editStore in
             OnboardingView(store: editStore)
         }
+        .navigationDestination(
+            item: $store.scope(state: \.setupProfile, action: \.setupProfile)
+        ) { setupStore in
+            OnboardingView(store: setupStore)
+        }
     }
+
+    private func openAppSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        openURL(url)
+    }
+    // 설정 앱의 Po:Book 페이지를 연다. 이 페이지의 "위치" 항목에서 위치 권한을 바꾼다.
+    // iOS는 위치 권한 화면으로 바로 가는 공개 주소를 주지 않아서 앱 설정 페이지까지만 연다.
 
     private var shelfHeader: some View {
         HStack {

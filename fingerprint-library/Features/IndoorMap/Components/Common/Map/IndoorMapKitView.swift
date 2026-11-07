@@ -46,8 +46,8 @@ struct IndoorMapKitView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> IndoorMapSurface {
         let view = context.coordinator.makeMapView()
-        // SwiftUI 텍스트 마스킹과 별개로 현재 위치·경로를 그리는 네이티브 지도를 가린다.
-        ClaritySDK.maskView(view)
+        // SwiftUI와 별도로 렌더링되는 지도도 녹화 동의 범위에 포함한다.
+        ClaritySDK.unmaskView(view)
         return view
     }
 

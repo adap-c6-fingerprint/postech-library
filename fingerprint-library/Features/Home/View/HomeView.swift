@@ -52,9 +52,7 @@ struct HomeView: View {
                 title: "추천",
                 onFavorites: { store.send(.favoritesButtonTapped) },
                 onBasket: { store.send(.basketButtonTapped) },
-                onProfile: { store.send(.profileButtonTapped) },
-                titleAlignment: .bottom,
-                contentHeight: nil
+                onProfile: { store.send(.profileButtonTapped) }
             )
             // 제목의 아래쪽과 첫 추천 문구 사이에 13.59pt를 확보한다.
             ScrollView {

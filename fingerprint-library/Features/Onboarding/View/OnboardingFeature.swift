@@ -11,17 +11,20 @@ struct OnboardingFeature {
     static let maxPreferenceCount = 3
     enum Step: Int, CaseIterable, Equatable {
         case welcome
+        case terms
         case affiliation
         case interests
     }
-    // 시작 → 소속 → 선호 분류 순서로 진행한다.
+    // 시작 → 약관 동의 → 소속 → 선호 분류 순서로 진행한다.
     
 
     enum Entry: Equatable {
         case firstRun
-        // 앱을 처음 켰을 때: 시작 → 소속 → 선호 분류를 모두 거친다.
+        // 앱을 처음 켰을 때: 시작 → 약관 동의 → 소속 → 선호 분류를 모두 거친다.
         case changeInterests
         // 마이페이지 "관심 분야 변경하기": 선호 분류 화면만 그대로 띄우고, 관심 분야만 바꿔 저장한다.
+        case setupFromMyPage
+        // 온보딩을 건너뛰어 프로필이 없을 때 마이페이지에서 들어온 경우: 소속 → 선호 분류를 거쳐 프로필을 새로 만든다.
     }
 
     typealias AffiliationPath = RecommendationDataset.AffiliationPath
@@ -43,6 +46,11 @@ struct OnboardingFeature {
         var errorMessage: String?
         @Shared(.userProfile) var userProfile: UserProfile?
         // 앱 전체가 함께 쓰는 프로필. 온보딩을 마치면 여기에 저장한다.
+        @Shared(.hasSkippedOnboarding) var hasSkippedOnboarding: Bool
+        @Presents var alert: AlertState<Action.Alert>?
+        // "다음에 할래요"를 눌렀을 때 뜨는 건너뛰기 확인 팝업
+        var isSkipNoticePresented = false
+        // 건너뛴 뒤 "맞춤 정보 설정을 건너뛰었어요." 팝업. 시스템 알림창은 버튼 색을 바꿀 수 없어 화면에 직접 그린 팝업으로 띄운다.
         
         var parents: [String] { dataset.parents }
         
@@ -74,7 +82,7 @@ struct OnboardingFeature {
         
         var canFinish: Bool {
             switch entry {
-            case .firstRun:
+            case .firstRun, .setupFromMyPage:
                 isAffiliationComplete && !selectedPreferences.isEmpty
             case .changeInterests:
                 !selectedPreferences.isEmpty && selectedPreferences != userProfile?.interests
@@ -91,6 +99,14 @@ struct OnboardingFeature {
             // 온보딩에서 저장한 관심 분야를 미리 골라 둔다.
             return state
         }
+
+        static func settingUpProfile() -> Self {
+        // 마이페이지에서 프로필을 처음 만들 때의 상태. 소속 화면부터 시작한다.
+            var state = Self()
+            state.entry = .setupFromMyPage
+            state.step = .affiliation
+            return state
+        }
     }
     
     enum Action {
@@ -99,6 +115,15 @@ struct OnboardingFeature {
         case optionsLoaded(RecommendationDataset)
         case optionsFailed(String)
         case startButtonTapped
+        case termsAgreeButtonTapped
+        // 약관 동의 화면의 "동의하고 계속하기"
+        case termsDeclineButtonTapped
+        // 약관 동의 화면의 "동의 안하고 종료하기"
+        case skipButtonTapped
+        // 소속 화면의 "다음에 할래요"
+        case alert(PresentationAction<Alert>)
+        case skipNoticeConfirmed
+        // "맞춤 정보 설정을 건너뛰었어요." 팝업의 "확인했어요"
         case parentSelected(String)
         case affiliationSelected(AffiliationPath)
         case nextButtonTapped
@@ -112,6 +137,14 @@ struct OnboardingFeature {
         @CasePathable
         enum Delegate: Equatable {
             case completed
+            case skipped
+            // 맞춤 정보 설정을 건너뛰었다. 앱은 온보딩을 닫고 홈으로 간다.
+        }
+
+        @CasePathable
+        enum Alert: Equatable {
+            case skipConfirmed
+            // 건너뛰기 확인 팝업의 "건너뛰기"
         }
     }
     
@@ -147,9 +180,48 @@ struct OnboardingFeature {
                 if state.entry == .firstRun, state.step == .welcome {
                     analytics.record(.init(.onboardingStarted))
                 }
+                state.step = .terms
+                return .none
+
+            case .termsAgreeButtonTapped:
+                guard state.step == .terms else { return .none }
                 state.step = .affiliation
                 return .none
+
+            case .termsDeclineButtonTapped:
+                // 피그마 주석 "앱 종료": 약관에 동의하지 않으면 앱을 종료한다. (사용자님 결정, 2026-11-06)
+                return .run { _ in exit(0) }
                 
+            case .skipButtonTapped:
+                state.alert = AlertState {
+                    TextState("맞춤 정보 설정을 건너뛰시겠어요?")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("설정하기")
+                    }
+                    ButtonState(role: .destructive, action: .skipConfirmed) {
+                        TextState("건너뛰기")
+                    }
+                } message: {
+                    TextState("소속과 학과, 책 취향을 알려주시면\n나에게 어울리는 책을\n추천받을 수 있어요.")
+                }
+                // 피그마 "다음에 할래요 눌렀을 때 팝업". "설정하기"는 팝업만 닫고 소속 화면에 머문다.
+                return .none
+
+            case .alert(.presented(.skipConfirmed)):
+                // 홈(지도)으로 넘어가면 위치 권한 팝업이 바로 뜨므로, 안내 팝업은 온보딩 화면에서 먼저 띄운다.
+                // "확인했어요"를 누르기 전에는 홈으로 넘어가지 않는다.
+                state.isSkipNoticePresented = true
+                return .none
+
+            case .skipNoticeConfirmed:
+                state.$hasSkippedOnboarding.withLock { $0 = true }
+                // 건너뛴 기록을 남겨 다음 실행 때 온보딩을 다시 띄우지 않는다.
+                return .send(.delegate(.skipped))
+
+            case .alert:
+                return .none
+
             case let .parentSelected(parent):
                 guard state.selectedParent != parent else { return .none }
                 // 상위 소속을 바꾸면 아래 단계의 선택을 지운다.
@@ -205,9 +277,12 @@ struct OnboardingFeature {
                     )
                     // 소속 경로·최종 소속 이름(홈 제목용)·선호 분류 이름으로 프로필을 만든다.
                     state.$userProfile.withLock { $0 = profile }
-                    analytics.record(.init(.onboardingCompleted, [
-                        .selectedCount: .integer(profile.interests.count)
-                    ]))
+                    if state.entry == .firstRun {
+                        analytics.record(.init(.onboardingCompleted, [
+                            .selectedCount: .integer(profile.interests.count)
+                        ]))
+                    }
+                    // 완료 이벤트는 처음 실행 온보딩에서만 기록한다. 마이페이지에서 처음 설정한 경우는 넣지 않는다.
                     // 앱 전체가 함께 쓰는 프로필에 저장한다. 파일 저장은 자동으로 된다.
                     return .send(.delegate(.completed))
                 } catch {
@@ -223,5 +298,6 @@ struct OnboardingFeature {
                 return .none
             }
         }
+        .ifLet(\.$alert, action: \.alert)
     }
 }

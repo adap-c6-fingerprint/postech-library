@@ -128,16 +128,16 @@ struct RecentlyFoundBookShelf: View {
         }
     }
 
-    /// 받은 책등 PNG를 UIImage로 바꾼다. 높이를 서로 비교해야 하므로 한 번에 모아 둔다.
+    /// 책등 사진으로 그릴 이미지만 모은다. 높이를 서로 비교해야 하므로 한 번에 모아 둔다.
     private var loadedImages: [Book.ID: UIImage] {
         var images: [Book.ID: UIImage] = [:]
         for book in books {
-            if case let .loaded(data) = spines[book.id], let image = UIImage(data: data),
+            if case let .loaded(image) = spines[book.id],
                image.size.height > 0, image.size.width / image.size.height < Self.maxSpineAspectRatio {
                 images[book.id] = image
             }
             // Yes24는 책등이 없을 때 빈 값 대신 표지 모양의 "이미지 준비중" 그림을 준다.
-            // 진짜 책등은 세로로 길쭉하므로, 길쭉하지 않은 그림은 책등이 없는 책으로 보고 bookSpinePlaceHolder로 그린다.
+            // 진짜 책등은 세로로 길쭉하므로, 길쭉하지 않은 그림은 책등이 없는 책으로 보고 플레이스홀더로 그린다.
         }
         return images
     }
@@ -164,14 +164,14 @@ struct RecentlyFoundBookShelf: View {
         } else {
             placeholderSpine(book, frame: frame)
         }
-        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우 모두 bookSpinePlaceHolder 에셋으로 그린다.
+        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우 모두 recentlyFoundBookPlaceHolder 에셋 위에 제목을 얹어 그린다.
         // image는 loadedImages에서 .loaded이고 책등 비율인 경우에만 들어온다.
     }
 
-    /// bookSpinePlaceHolder 에셋을 원본 비율 그대로 주어진 높이에 맞춘 크기
+    /// recentlyFoundBookPlaceHolder 에셋을 원본 비율 그대로 주어진 높이에 맞춘 크기
     private func placeholderFrame(height: CGFloat) -> CGSize {
         CGSize(width: height * Self.placeholderAspectRatio, height: height)
-        // 에셋에 "책표지 준비중" 글자가 있어 늘리면 글자가 찌그러지므로 너비는 비율로 정한다.
+        // 에셋 아래쪽 로고가 찌그러지지 않도록 너비는 비율로 정한다.
         // 높이는 책마다 다르게 둬 책등이 없는 책이 여러 권이어도 윗면이 일자가 되지 않는다.
     }
 
@@ -179,14 +179,61 @@ struct RecentlyFoundBookShelf: View {
     // 책등으로 인정하는 최대 가로÷세로 비율. 실제 책등은 대략 0.05~0.25이고, Yes24 "이미지 준비중" 그림은 표지처럼 세로로 조금 긴 모양(약 0.5~0.7)이다.
 
     private static let placeholderAspectRatio: CGFloat = 188 / 1644
-    // bookSpinePlaceHolder.png 원본 크기(가로 188 × 세로 1644 px)
+    // recentlyFoundBookPlaceHolder.png 원본 크기(가로 188 × 세로 1644 px)
 
     private func placeholderSpine(_ book: Book, frame: CGSize) -> some View {
-        Image(.bookSpinePlaceHolder)
+        Image(.recentlyFoundBookPlaceHolder)
             .resizable()
             .frame(width: frame.width, height: frame.height)
+            .overlay(alignment: .top) {
+                placeholderTitle(book.title, frame: frame)
+                    .padding(.top, frame.height * Self.titleTopInsetRatio)
+            }
+            .accessibilityElement(children: .ignore)
             .accessibilityLabel(book.title)
-        // 책등 이미지가 없으면 bookSpinePlaceHolder 에셋으로 대신 그린다.
+        // 책등 이미지가 없으면 글자 없는 recentlyFoundBookPlaceHolder 에셋 위에 제목을 얹어 그린다.
+        // 마이페이지(이 책장) 전용이다. 책찾기 화면 등 다른 곳은 그대로 bookSpinePlaceHolder로 폴백한다.
+    }
+
+    /// 플레이스홀더 책등을 따라 세로로 흐르는 검은 제목. 다른 서지정보는 넣지 않는다.
+    private func placeholderTitle(_ title: String, frame: CGSize) -> some View {
+        let length = frame.height * Self.titleLengthRatio
+        let thickness = frame.width * Self.titleThicknessRatio
+        return Text(Self.spineTitle(title))
+            .font(.custom(DS.Typography.bookTitle.fontName, size: thickness * 0.8))
+            .foregroundStyle(.black)
+            .lineLimit(1)
+            .minimumScaleFactor(0.3)
+            // 긴 제목은 한 줄에 들어가도록 글씨를 줄인다.
+            .frame(width: length, height: thickness, alignment: .leading)
+            .rotationEffect(.degrees(90))
+            // 가로로 쓴 제목을 시계 방향으로 90도 돌려 책등 위에서 아래로 읽히게 한다. 줄의 시작이 책등 위쪽에 온다.
+            .frame(width: frame.width, height: length)
+            // rotationEffect는 레이아웃 크기를 바꾸지 않으므로, 돌린 뒤의 모양(책등 너비 × 제목 길이)으로 다시 감싼다.
+    }
+
+    private static let titleTopInsetRatio: CGFloat = 0.05
+    // 책등 맨 위에서 제목 시작까지 (높이 대비)
+    private static let titleLengthRatio: CGFloat = 0.78
+    // 제목이 차지할 수 있는 길이 (높이 대비). 에셋 아래쪽 약 15%(1400~1560px)에 있는 로고를 덮지 않는다.
+    private static let titleThicknessRatio: CGFloat = 0.7
+    // 제목 글씨 줄의 굵기 (책등 너비 대비)
+
+    private static let maxTitleBytes = 50
+
+    /// 제목이 50바이트(UTF-8, 한글 1자 = 3바이트)를 넘으면 50바이트 안에 드는 글자까지만 남기고 "..."을 붙인다.
+    static func spineTitle(_ title: String) -> String {
+        guard title.utf8.count > maxTitleBytes else { return title }
+        var kept = ""
+        var bytes = 0
+        for character in title {
+            let size = String(character).utf8.count
+            guard bytes + size <= maxTitleBytes else { break }
+            kept.append(character)
+            bytes += size
+        }
+        // 글자(Character) 단위로 자르므로 한글·이모지가 반쪽으로 깨지지 않는다.
+        return kept.trimmingCharacters(in: .whitespaces) + "..."
     }
 
     /// 대체 에셋은 높이가 모두 같으면 윗면이 일자로 보이므로, 책마다 다른 높이를 준다.

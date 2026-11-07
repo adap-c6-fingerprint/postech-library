@@ -17,6 +17,10 @@ nonisolated struct BookCoverClient: Sendable {
     var spinePngData: @Sendable (String) async throws -> Data
     // 책등 표지를 내려받아 PNG 데이터로 돌려준다
     // 책등은 URL기반이 아니라 ISBN 13자리 기반이라서 String임
+    var spineImage: @Sendable (String) async throws -> UIImage
+    // 책등 이미지를 표지와 같은 메모리 캐시로 받는다. PNG로 바꾸지 않는다.
+    var cachedSpineImage: @MainActor @Sendable (String) -> UIImage?
+    // 이미 받아 둔 책등 이미지를 기다리지 않고 바로 꺼낸다. 화면이 뜰 때 플레이스홀더를 거치지 않게 한다.
 }
 
 extension BookCoverClient: DependencyKey {
@@ -35,20 +39,25 @@ extension BookCoverClient: DependencyKey {
             return data
         },
         spinePngData: { isbn in
-            guard let url = try await BookCoverPipeline.bookSpineCover.url(for: isbn) else {
-                throw RecommendationCacheStore.CacheError.invalidImage
-            }
-            let image = try await BookCoverPipeline.shared.image(for: url)
+            let image = try await BookCoverPipeline.spineImage(isbn: isbn)
             guard let data = await MainActor.run(body: { image.pngData() }) else {
                 throw RecommendationCacheStore.CacheError.invalidImage
             }
             return data
+        },
+        spineImage: { isbn in
+            try await BookCoverPipeline.spineImage(isbn: isbn)
+        },
+        cachedSpineImage: { isbn in
+            BookCoverPipeline.cachedSpineImage(isbn: isbn)
         }
     )
     static let testValue = Self(
         prefetch: { _ in },
         pngData: { _ in throw RecommendationCacheStore.CacheError.invalidImage },
-        spinePngData: { _ in throw RecommendationCacheStore.CacheError.invalidImage }
+        spinePngData: { _ in throw RecommendationCacheStore.CacheError.invalidImage },
+        spineImage: { _ in throw RecommendationCacheStore.CacheError.invalidImage },
+        cachedSpineImage: { _ in nil }
     )
 }
 
