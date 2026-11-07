@@ -21,7 +21,8 @@ struct LibraryTabTopBar: View {
                     .frame(width: 44, height: 44)
             }
             .glassEffect(.regular.interactive(), in: .capsule)
-            ProfileSettingsButton(action: onProfile, size: 44)
+            LibraryTopBarButton(title: "마이페이지", symbol: "person.fill", identifier: "library-top-bar-profile", action: onProfile, size: 44)
+            // 찜·책바구니 버튼처럼 누르는 즉시 이동한다. 데이터 수집 설정은 마이페이지 설정 목록의 행으로 연다.
                 .frame(width: 44, height: 44)
                 .glassEffect(.regular, in: .circle)
         }

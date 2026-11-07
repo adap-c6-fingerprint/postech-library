@@ -128,11 +128,11 @@ struct RecentlyFoundBookShelf: View {
         }
     }
 
-    /// 받은 책등 PNG를 UIImage로 바꾼다. 높이를 서로 비교해야 하므로 한 번에 모아 둔다.
+    /// 책등 사진으로 그릴 이미지만 모은다. 높이를 서로 비교해야 하므로 한 번에 모아 둔다.
     private var loadedImages: [Book.ID: UIImage] {
         var images: [Book.ID: UIImage] = [:]
         for book in books {
-            if case let .loaded(data) = spines[book.id], let image = UIImage(data: data),
+            if case let .loaded(image) = spines[book.id],
                image.size.height > 0, image.size.width / image.size.height < Self.maxSpineAspectRatio {
                 images[book.id] = image
             }
