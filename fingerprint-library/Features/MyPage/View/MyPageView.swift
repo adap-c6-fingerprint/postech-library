@@ -33,10 +33,10 @@ struct MyPageView: View {
                     .init(title: "소속 및 학과 정보 변경") { store.send(.editAffiliationRowTapped) },
                     .init(title: "관심 분야 변경하기") { store.send(.editInterestsRowTapped) },
                     .init(title: "데이터 수집 설정") { showsAnalyticsSettings = true },
-                    .init(title: "위치 권한 설정"),
-                    .init(title: "이용 안내")
+                    .init(title: "위치 권한 설정")
                 ])
-                // 위치 권한 설정·이용 안내는 아직 기능명세가 없어 행만 둔다.
+                // 위치 권한 설정은 아직 기능명세가 없어 행만 둔다.
+                // 이용 안내 행은 대응 화면이 없어 눌러도 반응이 없으므로 뺐다. (앱스토어 리젝 사유가 될 수 있음)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 80)
             }
