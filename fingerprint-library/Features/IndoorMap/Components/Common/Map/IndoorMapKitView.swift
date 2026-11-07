@@ -664,7 +664,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
         }
 
-        /// 층 이동·시뮬레이션 위치·서가·일반 시설을 서로 다른 마커로 표시한다.
+        /// 층 이동·현재 위치·서가·일반 시설을 서로 다른 마커로 표시한다.
         /// 기본 사용자 위치는 nil을 반환해 MapKit의 표시를 사용한다.
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation { return nil }
@@ -686,8 +686,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.annotation = annotation
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = parent.navigationAppearance ? "경로 진행 방향" : nil
-                view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position"
-                    : (annotation.position.source == .simulation ? "simulation-position" : "user-position")
+                view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position" : "user-position"
                 configurePositionBearing(view, position: annotation.position, in: mapView)
                 return view
             }
@@ -765,30 +764,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = annotation.subtitle
                 view.accessibilityIdentifier = "route-transition-\(annotation.category.rawValue)"
-                return view
-            }
-            if let annotation = annotation as? PositionAnnotation, annotation.position.source == .simulation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "simulation-dot")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "simulation-dot")
-                view.annotation = annotation
-                view.frame.size = CGSize(width: 30, height: 30)
-                view.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.18)
-                view.layer.cornerRadius = 15
-                if view.subviews.isEmpty {
-                    let dot = UIView(frame: CGRect(x: 7, y: 7, width: 16, height: 16))
-                    dot.backgroundColor = .systemBlue
-                    dot.layer.cornerRadius = 8
-                    dot.layer.borderWidth = 2
-                    dot.layer.borderColor = UIColor.white.cgColor
-                    view.addSubview(dot)
-                }
-                view.displayPriority = .required
-                view.zPriority = MapAnnotationPriority.user
-                view.selectedZPriority = MapAnnotationPriority.user
-                view.isEnabled = false
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = "시뮬레이션 위치"
-                view.accessibilityIdentifier = "simulation-position"
                 return view
             }
             if let annotation = annotation as? IndoorShelfAnnotation {
@@ -954,7 +929,6 @@ private final class PositionAnnotation: NSObject, MKAnnotation {
     var title: String? {
         switch position.source {
         case .sensor: "현재 위치"
-        case .simulation: "시뮬레이션 위치"
         case .replay: "테스트 재생 위치"
         default: "수동 출발점"
         }

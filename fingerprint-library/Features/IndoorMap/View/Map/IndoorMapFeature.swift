@@ -108,9 +108,6 @@ struct IndoorMapFeature {
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(IndoorLocationEvent)
-        #if DEBUG
-        case simulationConnectionChanged
-        #endif
         case currentLocationTapped
         case floorSelected(UUID)
         case fitMapTapped
@@ -171,11 +168,6 @@ struct IndoorMapFeature {
                 state.selectedFloorID = floor?.id
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
-                if let position = state.latestPosition, position.source == .simulation,
-                   !acceptsSimulation(position, on: map) {
-                    state.latestPosition = nil
-                    state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
-                }
                 if let floor { state.requestCamera(.initialFloor(floor.id)) }
                 state.navigation = nil
                 state.isLoadingNavigation = false
@@ -238,17 +230,6 @@ struct IndoorMapFeature {
                 return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.map),
                               .cancel(id: CancelID.navigation), .cancel(id: CancelID.shelfLabels), invalidateRoute(&state))
 
-            #if DEBUG
-            case .simulationConnectionChanged:
-                state.latestPosition = nil
-                state.manualPosition = nil
-                state.isPlacingOrigin = false
-                state.authorization = .notDetermined
-                state.locationMessage = "선택한 위치 공급자에 연결하고 있어요."
-                let cancellation = invalidateRoute(&state)
-                return state.isActive ? .merge(cancellation, locationEvents()) : cancellation
-            #endif
-
             case .locationEvent(.authorization(let authorization)):
                 state.authorization = authorization
                 if !authorization.isAuthorized {
@@ -273,21 +254,10 @@ struct IndoorMapFeature {
             case .locationEvent(.position(let position)):
                 guard position.isRecent(at: now), position.source != .manual else { return .none }
                 if let latest = state.latestPosition, position.timestamp < latest.timestamp { return .none }
-                if position.source == .simulation, let map = state.map, !acceptsSimulation(position, on: map) {
-                    state.latestPosition = nil
-                    state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
-                    return invalidateRoute(&state)
-                }
                 let previousFloor = state.latestPosition?.floorOrdinal
                 state.latestPosition = position
                 if state.manualPosition == nil && !state.isPlacingOrigin {
                     state.locationMessage = nil
-                    if position.source == .simulation, previousFloor != position.floorOrdinal,
-                       let floor = state.map?.floors.first(where: { $0.ordinal == position.floorOrdinal }),
-                       floor.id != state.selectedFloorID {
-                        state.selectedFloorID = floor.id
-                        state.selectedShelfKey = nil
-                    }
                     if state.wantsRecenter { recenter(&state, position: position) }
                 }
                 if previousFloor != position.floorOrdinal && (state.isRouting || state.requiresStairConfirmation) {
@@ -502,13 +472,6 @@ struct IndoorMapFeature {
             catch is CancellationError { }
             catch { await send(.routeFailed(requestID: requestID, error.localizedDescription)) }
         }.cancellable(id: CancelID.route, cancelInFlight: true)
-    }
-
-    /// 합성 위치가 알려진 층과 그 층의 도면 경계 안에 있는지 확인한다.
-    /// 도면 개정의 동일성, 벽 통과 여부, 실제 측위 정확도를 인증하는 검사는 아니다.
-    private func acceptsSimulation(_ position: IndoorPosition, on map: IndoorMap) -> Bool {
-        guard let floor = map.floors.first(where: { $0.ordinal == position.floorOrdinal }) else { return false }
-        return floor.geometry.contains(position.coordinate)
     }
 
     /// 지도가 없거나 이전 로딩이 실패한 경우 도면 로딩을 시작하고 성공·실패 Action으로 전달한다.
