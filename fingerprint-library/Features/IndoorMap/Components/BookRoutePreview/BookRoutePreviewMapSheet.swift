@@ -18,22 +18,13 @@ struct BookRoutePreviewMapSheet<MapContent: View, Details: View>: View {
                 // MapKit은 자체 safe area를 더하므로 중복 여백을 제외한다.
                 map(.init(top: 60, left: 0, bottom: max(0, sheetHeight - geometry.safeAreaInsets.bottom), right: 0), cameraRevision)
                     .ignoresSafeArea()
-                Button {
+                LibraryBackButton(identifier: "book-route-preview-back") {
                     if isPresented {
                         isLeaving = true
                         isPresented = false
                     } else { onBack() }
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.headline)
-                        .frame(width: 44, height: 44)
-                        .background(.regularMaterial, in: Circle())
                 }
-                .buttonStyle(.plain)
-                .tint(.white)
                 .padding(16)
-                .accessibilityLabel("뒤로가기")
-                .accessibilityIdentifier("book-route-preview-back")
             }
             .sheet(isPresented: $isPresented, onDismiss: { if isLeaving { onBack() } }) {
                 details()

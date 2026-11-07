@@ -7,8 +7,8 @@ struct BookNavigationView: View {
     private let onExit: ((BookNavigationFeature.ExitReason) -> Void)?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
-    @State private var sheetHeight: CGFloat = 113
-    @State private var sheetSummaryHeight: CGFloat = 89
+    @State private var sheetHeight: CGFloat = 92
+    @State private var sheetSummaryHeight: CGFloat = 68
     @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
     private var isSheetExpanded: Bool { store.isSheetExpanded }
 
@@ -36,12 +36,16 @@ struct BookNavigationView: View {
                         ContentUnavailableView("안내 정보를 확인해 주세요", systemImage: "map")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
-                    LinearGradient(colors: [.black.opacity(0.8), .clear], startPoint: .top, endPoint: .bottom)
-                        .frame(height: 250).ignoresSafeArea(.container, edges: .top)
-                        .allowsHitTesting(false)
-                    VStack(alignment: .leading, spacing: 16) {
+                    VStack(spacing: 0) {
+                        LibraryTopBarBackground()
+                        Spacer(minLength: 0)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .ignoresSafeArea(.container, edges: [.top, .horizontal])
+                    .allowsHitTesting(false)
+                    VStack(alignment: .leading, spacing: 38) {
                         header
-                        if store.canConfirmCurrentFloor { currentFloorMenu }
+                        currentFloorIndicator
                     }
                     .padding(.horizontal, 20).padding(.top, 20)
                     VStack(spacing: 16) {
@@ -164,40 +168,50 @@ struct BookNavigationView: View {
 
     private var guidanceSheet: some View {
         VStack(alignment: .leading, spacing: 0) {
-            VStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack(spacing: 8) {
-                        Image(systemName: store.instructionSymbol)
-                            .font(.system(size: 14, weight: .semibold))
-                            .frame(width: 24, height: 24)
-                            .background(.black, in: Circle())
-                        Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
-                            .font(.body.weight(.medium)).lineLimit(2)
-                        Spacer(minLength: 0)
-                    }
-                    .frame(minHeight: 28)
-                    .accessibilityIdentifier("book-navigation-instruction")
-                    BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
-                        progress: store.displayedProgress, floors: store.session.map.floors)
+            VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
+                    Image(systemName: store.instructionSymbol)
+                        .font(.system(size: 14, weight: .semibold))
+                        .frame(width: 24, height: 24)
+                        .background(.black, in: Circle())
+                    Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
+                        .font(.body.weight(.medium)).lineLimit(2)
+                    Spacer(minLength: 0)
                 }
-                .padding(.horizontal, 16)
+                .frame(minHeight: 28)
+                .accessibilityIdentifier("book-navigation-instruction")
+                BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
+                    progress: store.displayedProgress, floors: store.session.map.floors)
+            }
+            .padding(.horizontal, 16)
+            .fixedSize(horizontal: false, vertical: true)
+            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
+                // 접힌 높이에는 안내 문구와 프로그레스바만 포함한다.
+                if abs(height - sheetSummaryHeight) > 0.5 { sheetSummaryHeight = height }
+            }
+            if isSheetExpanded {
                 Rectangle().fill(.white.opacity(0.08)).frame(height: 1)
                     .padding(.horizontal, 14).padding(.top, 20)
                     .accessibilityHidden(true)
-            }
-            .fixedSize(horizontal: false, vertical: true)
-            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
-                // 접힌 높이는 디바이더 위치로 정한다. 안내가 두 줄이 되어도 잘리지 않는다.
-                if abs(height - sheetSummaryHeight) > 0.5 { sheetSummaryHeight = height }
-            }
-            if isSheetExpanded, let info = store.currentBookInfo, let route = store.currentRoute {
-                BookNavigationCurrentBookCard(info: info, route: route)
-                    .padding(.horizontal, 16).padding(.top, 24)
-                    .id(store.currentStopIndex)
+                if let info = store.currentBookInfo, let route = store.currentRoute {
+                    BookNavigationCurrentBookCard(info: info, route: route)
+                        .padding(.horizontal, 16).padding(.top, 24)
+                        .id(store.currentStopIndex)
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .tint(BookNavigationPalette.accent)
+    }
+
+    @ViewBuilder
+    private var currentFloorIndicator: some View {
+        if store.canConfirmCurrentFloor {
+            currentFloorMenu
+        } else if let floor = store.currentFloor {
+            IndoorMapFloorBadge(floor: floor, isCurrent: true)
+                .accessibilityIdentifier("book-navigation-current-floor")
+        }
     }
 
     private var currentFloorMenu: some View {
@@ -206,12 +220,16 @@ struct BookNavigationView: View {
                 Button(floor.name) { store.send(.currentFloorConfirmed(floor.ordinal)) }
             }
         } label: {
-            Label(store.effectiveFloorOrdinal.flatMap { ordinal in store.session.map.floors.first { $0.ordinal == ordinal }?.name }
-                  ?? "현재 층 선택", systemImage: "square.3.layers.3d")
-                .font(.caption.weight(.semibold)).padding(.horizontal, 10).padding(.vertical, 6)
-                .background(.black.opacity(0.5), in: Capsule())
+            if let floor = store.currentFloor {
+                IndoorMapFloorBadge(floor: floor, isCurrent: true)
+            } else {
+                Label("현재 층 선택", systemImage: "square.3.layers.3d")
+                    .font(.caption.weight(.semibold)).padding(.horizontal, 10).padding(.vertical, 6)
+                    .background(.black.opacity(0.5), in: Capsule())
+            }
         }
-        .accessibilityLabel("현재 층 확인")
+        .buttonStyle(.plain)
+        .accessibilityLabel(store.currentFloor.map { "현재 \($0.name), 층 선택" } ?? "현재 층 선택")
         .accessibilityIdentifier("book-navigation-current-floor")
     }
 
