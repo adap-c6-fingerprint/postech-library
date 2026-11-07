@@ -14,7 +14,13 @@ struct BookNavigationBookHelpView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            topBar
+            BookNavigationTopBar(
+                backLabel: "책 찾기 화면으로 돌아가기",
+                backIdentifier: "book-navigation-book-help-back",
+                onBack: { dismiss() }
+            )
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
             GeometryReader { geometry in
                 ScrollView {
                     VStack(spacing: 0) {
@@ -37,24 +43,6 @@ struct BookNavigationBookHelpView: View {
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .preferredColorScheme(.dark)
         .accessibilityIdentifier("book-navigation-book-help")
-    }
-
-    private var topBar: some View {
-        HStack {
-            Button { dismiss() } label: {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 22))
-                    .frame(width: 44, height: 44)
-                    .glassEffect(.regular.interactive(), in: .circle)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("책 찾기 화면으로 돌아가기")
-            .accessibilityIdentifier("book-navigation-book-help-back")
-            Spacer()
-        }
-        .frame(height: 48)
-        .padding(.horizontal, 16)
-        .padding(.top, 8)
     }
 
     private var message: some View {
