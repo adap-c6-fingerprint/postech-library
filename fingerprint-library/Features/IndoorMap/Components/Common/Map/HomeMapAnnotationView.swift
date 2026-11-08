@@ -2,7 +2,7 @@ import MapKit
 import SwiftUI
 import UIKit
 
-/// 시설은 지도 좌표에, 찜 마커는 서가 번호 옆에 표시한다.
+/// 아이콘 중심을 지도 좌표에 고정하고 시설 이름과 찜한 책 수를 표시한다.
 @MainActor
 final class HomeMapAnnotationView: MKAnnotationView {
     static let reuseID = "home-map-icon"
@@ -10,8 +10,6 @@ final class HomeMapAnnotationView: MKAnnotationView {
     private let nameLabel = UILabel()
     private let countBadge = UILabel()
     private static let maximumNameWidth: CGFloat = 120
-    /// 확대·회전과 관계없이 고정 크기 서가 번호(최대 4자) 오른쪽에 아이콘과 권수 배지를 둔다.
-    private static let favoriteCenterOffset = CGPoint(x: 40, y: 0)
 
     override init(annotation: (any MKAnnotation)?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -59,14 +57,11 @@ final class HomeMapAnnotationView: MKAnnotationView {
         nameLabel.isHidden = true
         countBadge.text = nil
         countBadge.isHidden = true
-        centerOffset = .zero
     }
 
     func configure(_ annotation: HomeMapPointAnnotation) {
         self.annotation = annotation
         let marker = annotation.marker
-        // 소장 위치 좌표는 유지하고 화면에서 보이는 아이콘만 옮긴다.
-        centerOffset = marker.kind == .favorite ? Self.favoriteCenterOffset : .zero
         iconView.image = marker.kind.assetName.flatMap(MapAnnotationImage.asset(named:))
             ?? MapAnnotationImage.symbol(named: "mappin.circle.fill", tintColor: .systemCyan)
         // 지도 위 번호와 같이, 아이콘 아래 시설명은 고정 크기로 그린다.
