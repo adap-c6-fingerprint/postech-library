@@ -111,7 +111,7 @@ struct BookRoutePreviewView: View {
                 } else {
                     ContentUnavailableView(
                         destination.books.isEmpty ? "목적지 도서를 기다리고 있어요" : "목적지 정보를 확인해 주세요",
-                        systemImage: "books.vertical",
+                        systemImage: "book",
                         description: Text(destination.books.isEmpty
                             ? "도서 목록을 전달하거나 아래 테스트 버튼을 눌러 주세요."
                             : "서가 조회는 ID가 서로 다른 1~\(BookRouteSelection.maximumBookCount)권을 지원해요.")

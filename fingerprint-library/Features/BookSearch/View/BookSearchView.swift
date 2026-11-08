@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct BookSearchView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-    let onShowBasket: () -> Void
+    let onShowCart: () -> Void
     var onShowFavorites: (() -> Void)? = nil
     var onShowProfile: (() -> Void)? = nil
     @Dependency(\.bookLocationCacheClient) private var bookLocationCacheClient
@@ -26,7 +26,7 @@ struct BookSearchView: View {
             LibraryTabTopBar(
                 title: "검색",
                 onFavorites: { onShowFavorites?() },
-                onBasket: onShowBasket,
+                onCart: onShowCart,
                 onProfile: { onShowProfile?() }
             )
             .padding(.bottom, 16)
@@ -34,8 +34,8 @@ struct BookSearchView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         // 검색창은 탭바(role: .search)에 있으므로 내비게이션 바를 숨겨도 된다. 홈 지도 화면과 같은 방식이다.
-        .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
-            store.send(.basketLimitAlertDismissed)
+        .cartLimitAlert(isPresented: store.isCartLimitAlertPresented) {
+            store.send(.cartLimitAlertDismissed)
         }
     }
 
@@ -146,7 +146,7 @@ struct BookSearchView: View {
         if store.recentBooks.isEmpty {
             ContentUnavailableView(
                 "최근 항목이 없어요",
-                systemImage: "books.vertical",
+                systemImage: "book",
                 description: Text("검색 결과에서 선택한 책이 여기에 표시돼요.")
             )
         } else {
@@ -209,7 +209,7 @@ private struct BookSearchStatusPreview: View {
                 )) {
                     BookSearchFeature()
                 },
-                onShowBasket: {}
+                onShowCart: {}
             )
         }
         .searchable(text: .constant("검색어"), prompt: "책 제목이나 저자를 검색하세요")

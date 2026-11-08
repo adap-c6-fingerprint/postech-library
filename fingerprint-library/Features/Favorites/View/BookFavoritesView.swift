@@ -14,7 +14,7 @@ struct BookFavoritesView: View {
             VStack(alignment: .trailing, spacing: 4) {
                 Text("총 \(store.items.count)권")
                     .typography(.body2)
-                    .foregroundStyle(Color.basketTextSecondary)
+                    .foregroundStyle(Color.cartTextSecondary)
 
                 LazyVStack(alignment: .leading, spacing: 28) {
                     ForEach(store.sections) { section in
@@ -26,7 +26,7 @@ struct BookFavoritesView: View {
             .padding(.top, 24)
             .padding(.bottom, 24)
         }
-        .background { Color.basketBackground.ignoresSafeArea() }
+        .background { Color.cartBackground.ignoresSafeArea() }
         .navigationTitle("내가 찜한 목록")
         .analyticsScreen(.favorites)
         .navigationBarTitleDisplayMode(.inline)
@@ -37,24 +37,24 @@ struct BookFavoritesView: View {
         .alert(
             "선택한 책을 장바구니에 담았어요.",
             isPresented: Binding(
-                get: { store.isAddedToBasketAlertPresented },
-                set: { if !$0 { store.send(.addedToBasketAlertDismissed) } }
+                get: { store.isAddedToCartAlertPresented },
+                set: { if !$0 { store.send(.addedToCartAlertDismissed) } }
             )
         ) {
             Button("지금 안함", role: .cancel) {}
             Button("장바구니 가기") {
-                store.send(.goToBasketButtonTapped)
+                store.send(.goToCartButtonTapped)
             }
         } message: {
             Text("장바구니로 이동해 길 안내를 시작할까요?")
         }
-        .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
-            store.send(.basketLimitAlertDismissed)
+        .cartLimitAlert(isPresented: store.isCartLimitAlertPresented) {
+            store.send(.cartLimitAlertDismissed)
         }
         .navigationDestination(
-            item: $store.scope(state: \.basket, action: \.basket)
-        ) { basketStore in
-            BookBasketView(store: basketStore)
+            item: $store.scope(state: \.cart, action: \.cart)
+        ) { cartStore in
+            BookCartView(store: cartStore)
                 .toolbar(.visible, for: .navigationBar)
         }
         .task { store.send(.task) }
@@ -78,30 +78,30 @@ struct BookFavoritesView: View {
             Spacer()
 
             Button {
-                store.send(.addToBasketButtonTapped)
+                store.send(.addToCartButtonTapped)
             } label: {
                 Text("장바구니에 담기")
                     .font(.body.weight(.medium))
                     .foregroundStyle(store.selectedIDs.isEmpty ? Color.white : Color.black)
                     .padding(.horizontal, 14)
                     .frame(minHeight: 48)
-                    .background(Color.basketPrimary, in: .capsule)
+                    .background(Color.cartPrimary, in: .capsule)
             }
             .buttonStyle(.plain)
-            .accessibilityIdentifier("favorites-add-to-basket")
+            .accessibilityIdentifier("favorites-add-to-cart")
         }
         .disabled(store.selectedIDs.isEmpty)
         // 선택 항목이 없으면 삭제·담기 버튼을 모두 비활성화한다.
         .padding(.horizontal, 28)
         .padding(.vertical, 12)
-        .background(Color.basketBackground)
+        .background(Color.cartBackground)
     }
 
     private func sectionView(_ section: BookFavoriteSection) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(section.day, format: Self.dayFormat)
                 .typography(.title2)
-                .foregroundStyle(Color.basketTextTertiary)
+                .foregroundStyle(Color.cartTextTertiary)
                 .accessibilityAddTraits(.isHeader)
 
             VStack(spacing: 0) {
@@ -110,12 +110,12 @@ struct BookFavoritesView: View {
 
                     if item.id != section.items.last?.id {
                         Divider()
-                            .overlay(Color.basketTextTertiary.opacity(0.3))
+                            .overlay(Color.cartTextTertiary.opacity(0.3))
                             .padding(.horizontal, 16)
                     }
                 }
             }
-            .background(Color.basketCard, in: .rect(cornerRadius: 20))
+            .background(Color.cartCard, in: .rect(cornerRadius: 20))
         }
     }
 

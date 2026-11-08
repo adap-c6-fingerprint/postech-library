@@ -31,9 +31,9 @@ nonisolated struct AnalyticsEvent: Equatable, Sendable {
         case searchResultSelected = "search_result_selected"
         case bookDetailViewed = "book_detail_viewed"
         case bookFavoriteChanged = "book_favorite_changed"
-        case basketBookAdded = "basket_book_added"
-        case basketBooksRemoved = "basket_books_removed"
-        case basketLimitBlocked = "basket_limit_blocked"
+        case cartBookAdded = "cart_book_added"
+        case cartBooksRemoved = "cart_books_removed"
+        case cartLimitBlocked = "cart_limit_blocked"
         case recommendationLoadCompleted = "recommendation_load_completed"
         case recommendationFailed = "recommendation_failed"
         case recommendationSelected = "recommendation_selected"
@@ -53,7 +53,7 @@ nonisolated struct AnalyticsEvent: Equatable, Sendable {
         case operationID = "operation_id", navigationID = "navigation_id"
         case bookRecordID = "book_record_id", bookCount = "book_count"
         case resultCount = "result_count", removedCount = "removed_count"
-        case basketCount = "basket_count", selectedCount = "selected_count"
+        case cartCount = "cart_count", selectedCount = "selected_count"
         case cacheHit = "cache_hit", durationMS = "duration_ms"
         case kind, source, action
         case errorCode = "error_code"
@@ -82,7 +82,7 @@ nonisolated struct AnalyticsEvent: Equatable, Sendable {
 }
 
 nonisolated enum AnalyticsScreen: String, Sendable {
-    case map, recommendations, search, onboarding, detail, basket, favorites, myPage = "my_page"
+    case map, recommendations, search, onboarding, detail, cart, favorites, myPage = "my_page"
     case routePreview = "route_preview", navigation, analyticsSettings = "analytics_settings"
 }
 

@@ -25,7 +25,7 @@ struct HomeFeature {
         var libraryInfoUpdatedAt: [Book.ID: Date] = [:]
 
         @Presents var detail: BookDetailFeature.State?
-        @Presents var basket: BookBasketFeature.State?
+        @Presents var cart: BookCartFeature.State?
         @Presents var favorites: BookFavoritesFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
         @Presents var myPage: MyPageFeature.State?
@@ -79,11 +79,11 @@ struct HomeFeature {
         case upcomingCoversChanged( [URL] ) // 다음에 볼 표지 주소 목록이 바뀜
 
         case bookSelected(Book)
-        case basketButtonTapped
+        case cartButtonTapped
         case favoritesButtonTapped
         case profileButtonTapped
         case detail(PresentationAction<BookDetailFeature.Action>)
-        case basket(PresentationAction<BookBasketFeature.Action>)
+        case cart(PresentationAction<BookCartFeature.Action>)
         case favorites(PresentationAction<BookFavoritesFeature.Action>)
         case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         case myPage(PresentationAction<MyPageFeature.Action>)
@@ -265,8 +265,8 @@ struct HomeFeature {
                 )
                 return .none
 
-            case .basketButtonTapped:
-                state.basket = BookBasketFeature.State()
+            case .cartButtonTapped:
+                state.cart = BookCartFeature.State()
                 return .none
 
             case .favoritesButtonTapped:
@@ -276,7 +276,7 @@ struct HomeFeature {
             case let .favorites(.presented(.delegate(.favoritesChanged(keys)))):
                 return .send(.delegate(.favoritesChanged(keys)))
 
-            case let .basket(.presented(.delegate(.startGuidance(books)))):
+            case let .cart(.presented(.delegate(.startGuidance(books)))):
                 state.shelfMap = BookShelfMapFeature.State(books: books)
                 return .none
 
@@ -292,15 +292,15 @@ struct HomeFeature {
             case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
                 return .send(.delegate(.favoritesChanged(keys)))
 
-            case .detail, .basket, .favorites, .shelfMap, .myPage, .delegate:
+            case .detail, .cart, .favorites, .shelfMap, .myPage, .delegate:
                 return .none
             }
         }
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
         }
-        .ifLet(\.$basket, action: \.basket) {
-            BookBasketFeature()
+        .ifLet(\.$cart, action: \.cart) {
+            BookCartFeature()
         }
         .ifLet(\.$favorites, action: \.favorites) {
             BookFavoritesFeature()

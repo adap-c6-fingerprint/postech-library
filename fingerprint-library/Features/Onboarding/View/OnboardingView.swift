@@ -124,7 +124,7 @@ struct OnboardingView: View {
         }
         // ✅ 화면마다 내용 아래에 페이지 표시·버튼을 둔다(push 전환 시 화면과 함께 움직인다).
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.basketBackground)
+        .background(Color.cartBackground)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(!isBackButtonVisible(step))
         // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 시작 화면에는 없고, 소속 화면부터 처음부터 보인다.
@@ -431,11 +431,11 @@ struct OnboardingView: View {
             Text(name)
                 .typography(.body2)
                 // ✅ Body 2 타이포그래피
-                .foregroundStyle(isSelected ? Color.basketBackground : Color.onboardingTextPrimary)
+                .foregroundStyle(isSelected ? Color.cartBackground : Color.onboardingTextPrimary)
                 .padding(.horizontal, 25)
                 .frame(minHeight: 52)
                 .contentShape(.capsule)
-                .background(isSelected ? Color.basketPrimary : Color.onboardingField, in: .capsule)
+                .background(isSelected ? Color.cartPrimary : Color.onboardingField, in: .capsule)
         }
         .buttonStyle(.plain)
         .opacity(isBlocked ? 0.4 : 1)
@@ -460,8 +460,10 @@ struct OnboardingView: View {
     }
 
     private func actionButton(_ step: OnboardingFeature.Step) -> some View {
-        let isPrimary = step == .terms || (step == .interests && store.canFinish)
-        // 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다.
+        let isPrimary = step == .terms
+            || (step == .affiliation && store.isAffiliationComplete)
+            || (step == .interests && store.canFinish)
+        // 소속·학과를 모두 고르거나 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다. (피그마 08.-5온보딩_학과 선택 후)
         return Button {
             switch step {
             case .welcome: store.send(.startButtonTapped)
@@ -471,20 +473,18 @@ struct OnboardingView: View {
             }
         } label: {
             Text(actionTitle(step))
-                .typography(.button)
-                .multilineTextAlignment(.center)
-                .foregroundStyle(isPrimary ? Color.basketBackground : Color.onboardingTextPrimary)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 12)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(isPrimary ? Color.cartBackground : Color.onboardingTextPrimary)
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 52)
                 .contentShape(.capsule)
         }
         .buttonStyle(.plain)
         .glassEffect(
-            .regular.tint(isPrimary ? Color.basketPrimary : Color.onboardingActionTint).interactive(),
+            .regular.tint(isPrimary ? Color.cartPrimary : Color.onboardingActionTint).interactive(),
             in: .capsule
         )
+        // 피그마 button/primary-background·primary-text, button/neutral-background·neutral-text 토큰
         .disabled(!isActionEnabled(step))
     }
 

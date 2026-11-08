@@ -1,12 +1,12 @@
 //
-//  BookBasketItem.swift
+//  BookCartItem.swift
 //  fingerprint-library
 //
 
 import Foundation
 
 // 장바구니에 보관한 책과 보관한 시각
-struct BookBasketItem: Equatable, Identifiable, Sendable {
+struct BookCartItem: Equatable, Identifiable, Sendable {
     let book: Book
     let addedAt: Date
 
@@ -20,14 +20,14 @@ struct BookBasketItem: Equatable, Identifiable, Sendable {
 }
 
 // 같은 날 보관한 책 묶음
-struct BookBasketSection: Equatable, Identifiable, Sendable {
+struct BookCartSection: Equatable, Identifiable, Sendable {
     let day: Date
-    let items: [BookBasketItem]
+    let items: [BookCartItem]
 
     var id: Date { day }
 
     // 최근에 보관한 날짜와 책이 먼저 오도록 묶는다.
-    static func grouped(_ items: [BookBasketItem], calendar: Calendar) -> [Self] {
+    static func grouped(_ items: [BookCartItem], calendar: Calendar) -> [Self] {
         let sorted = items.sorted { $0.addedAt > $1.addedAt }
         var sections: [Self] = []
         for item in sorted {
