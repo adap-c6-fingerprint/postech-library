@@ -134,8 +134,8 @@ struct BookRouteBooksPreviewView: View {
                 .lineLimit(1)
                 .padding(.horizontal, 16)
                 .frame(maxWidth: 114)
-                .frame(height: 32)
-                .foregroundStyle(isSelected ? Color.black : Color.textPrimary)
+                .frame(minHeight: 32)
+                .foregroundStyle(isSelected ? DS.ColorToken.neutralDark : DS.ColorToken.neutralPrimary)
                 .background(isSelected ? Color.limeBase : .clear, in: .capsule)
                 .glassEffect(.regular.interactive(), in: .capsule)
         }
@@ -179,7 +179,7 @@ struct BookRouteBooksPreviewView: View {
                 HStack(spacing: 8) {
                     if isLoadingRoute { ProgressView().tint(Color.textPrimary) }
                     Text(isLoadingRoute ? "경로 확인 중" : "바로 안내 시작")
-                        .typography(.bookTitle)
+                        .typography(.button)
                 }
                 .frame(maxWidth: .infinity, minHeight: 50)
             }

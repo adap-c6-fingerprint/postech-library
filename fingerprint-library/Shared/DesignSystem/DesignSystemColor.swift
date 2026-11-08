@@ -1,12 +1,11 @@
 //
-//  DS+Color.swift
+//  DesignSystemColor.swift
 //  fingerprint-library
 //
 //  Created by 이시온 on 11/7/26.
 //
 
 import SwiftUI
-import UIKit
 
 /// 사용법 예시
 /// Text("도서 제목")
@@ -61,10 +60,9 @@ extension DS {
         static let primaryLight = Primary._500
         static let primaryDark = Primary._600
         static let glassBackground = Gray._400.opacity(0.17)
-        static let textAvailable = SwiftUI.Color(uiColor: .systemGreen)
-        // Figma: Apple iOS UI Kit 「Accents/Green」 (라이트/다크 자동 전환)
-        static let textUnavailable = SwiftUI.Color(uiColor: .systemRed)
-        // Figma: Apple iOS UI Kit 「Accents/Red」 (라이트/다크 자동 전환)
+        // 외부 Color Scheme 참조는 전달받은 Default 모드의 색상 값으로 반영한다.
+        static let textAvailable = SwiftUI.Color(hex: 0x34C759)
+        static let textUnavailable = SwiftUI.Color(hex: 0xFF383C)
 
         enum Tabbar {
             static let pressedBackground = ColorToken.neutralDark

@@ -81,8 +81,8 @@ struct BookDetailMapView: View {
 
     private func destinationFloorBadge(_ floor: IndoorMapFloor) -> some View {
         Text("\(floor.ordinal + 1)F")
-            .bookDetailTypography(.caption2)
-            .foregroundStyle(Color.textPrimary)
+            .typography(.caption2)
+            .foregroundStyle(DS.ColorToken.neutralPrimary)
             .padding(.horizontal, 12)
             .frame(minWidth: 61, minHeight: 34)
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
@@ -264,7 +264,7 @@ struct BookDetailView: View {
                         .padding(.bottom, 32)
                         .accessibilityIdentifier("bookDetail.expandedCover")
                     VStack(alignment: .leading, spacing: 8) {
-                        holdingStatus.bookDetailTypography(.caption2)
+                        holdingStatus.typography(.caption2)
                         bookTitle
                             .lineLimit(dynamicTypeSize.isAccessibilitySize || isVoiceOverEnabled ? nil : 2)
                             .truncationMode(.tail)
@@ -329,11 +329,11 @@ struct BookDetailView: View {
     private var bibliography: some View {
         VStack(alignment: .leading, spacing: 8) {
             holdingStatus
-                .bookDetailTypography(.caption2)
+                .typography(.caption2)
             bookTitle
             holdingLocation
             routeSummary
-                .bookDetailTypography(.caption1)
+                .typography(.caption1)
                 .foregroundStyle(Color.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -342,7 +342,7 @@ struct BookDetailView: View {
 
     private var bookTitle: some View {
         Text(BookText.plainText(store.book.title))
-            .bookDetailTypography(.bookTitle)
+            .typography(.bookTitle)
             .fixedSize(horizontal: false, vertical: true)
             .accessibilityAddTraits(.isHeader)
             .accessibilityAction(named: Text(store.isFavorite ? "찜 해제" : "찜하기")) {
@@ -359,7 +359,7 @@ struct BookDetailView: View {
                 Text(store.displayedHolding?.callNumber ?? "청구기호 정보 없음")
                     .textSelection(.enabled)
             }
-            .bookDetailTypography(.body2)
+            .typography(.body2)
         }
     }
 
@@ -408,7 +408,7 @@ struct BookDetailView: View {
                 routeSummary
             }
         }
-        .bookDetailTypography(.caption1)
+        .typography(.caption1)
         .foregroundStyle(Color.textSecondary)
         .padding(.top, 2)
     }
@@ -426,10 +426,10 @@ struct BookDetailView: View {
         VStack(alignment: .leading, spacing: 4) {
             let author = BookText.plainText(store.book.author).trimmingCharacters(in: .whitespacesAndNewlines)
             if !author.isEmpty {
-                Text("\(author) 저자").bookDetailTypography(.body2)
+                Text("\(author) 저자").typography(.body2)
             }
             descriptionContent
-                .bookDetailTypography(.caption1)
+                .typography(.caption1)
                 .foregroundStyle(Color.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -463,7 +463,7 @@ struct BookDetailView: View {
                 store.send(.guidanceStarted)
                 isRoutePreviewPresented = true
             } label: {
-                Text("바로 안내 시작").bookDetailTypography(.bookTitle).frame(maxWidth: .infinity)
+                Text("바로 안내 시작").typography(.button).frame(maxWidth: .infinity)
             }
             .buttonBorderShape(.capsule)
             .buttonSizing(.flexible)
@@ -513,17 +513,5 @@ private struct BookDetailCoverBackground: View {
         .ignoresSafeArea()
         .allowsHitTesting(false)
         .accessibilityHidden(true)
-    }
-}
-
-/// 디자인 시스템의 글꼴·간격을 사용하면서 접근성 글자 크기에 대응한다.
-private extension View {
-    func bookDetailTypography(_ style: DS.Typography) -> some View {
-        let fontLineHeight = UIFont(name: style.fontName, size: style.size)?.lineHeight ?? style.lineHeight
-        let extraSpacing = max(0, style.lineHeight - fontLineHeight)
-        return font(.custom(style.fontName, size: style.size, relativeTo: .body))
-            .tracking(style.letterSpacing)
-            .lineSpacing(extraSpacing)
-            .padding(.vertical, extraSpacing / 2)
     }
 }

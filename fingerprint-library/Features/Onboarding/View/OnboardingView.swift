@@ -8,6 +8,7 @@ import ComposableArchitecture
 
 struct OnboardingView: View {
     @Bindable var store: StoreOf<OnboardingFeature>
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private static let chipTopBlurHeight: CGFloat = 30
     // 칩 영역 위쪽 블러 높이
     private static let chipBottomBlurHeight: CGFloat = 30
@@ -98,11 +99,11 @@ struct OnboardingView: View {
 
     private func page(_ step: OnboardingFeature.Step) -> some View {
         VStack(spacing: 0) {
-            switch step {
-            case .welcome: welcome
-            case .terms: terms
-            case .affiliation: affiliation
-            case .interests: interests
+            if dynamicTypeSize.isAccessibilitySize, step != .interests {
+                ScrollView { pageContent(step) }
+                    .scrollBounceBehavior(.basedOnSize)
+            } else {
+                pageContent(step)
             }
 
             if step != .terms {
@@ -127,6 +128,16 @@ struct OnboardingView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(!isBackButtonVisible(step))
         // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 시작 화면에는 없고, 소속 화면부터 처음부터 보인다.
+    }
+
+    @ViewBuilder
+    private func pageContent(_ step: OnboardingFeature.Step) -> some View {
+        switch step {
+        case .welcome: welcome
+        case .terms: terms
+        case .affiliation: affiliation
+        case .interests: interests
+        }
     }
 
     // MARK: - 단계별 화면
@@ -406,7 +417,7 @@ struct OnboardingView: View {
         }
         .padding(.leading, 20)
         .padding(.trailing, 23)
-        .frame(height: 52)
+        .frame(minHeight: 52)
         .background(isEnabled ? Color.onboardingField : Color.onboardingDisabledField, in: .rect(cornerRadius: 20))
         // ✅ 비활성 입력칸은 불투명도 대신 시안의 색(배경 Gray 1100 #161616, 글자 Gray 400 #999)으로 표시한다.
     }
@@ -422,7 +433,7 @@ struct OnboardingView: View {
                 // ✅ Body 2 타이포그래피
                 .foregroundStyle(isSelected ? Color.basketBackground : Color.onboardingTextPrimary)
                 .padding(.horizontal, 25)
-                .frame(height: 52)
+                .frame(minHeight: 52)
                 .contentShape(.capsule)
                 .background(isSelected ? Color.basketPrimary : Color.onboardingField, in: .capsule)
         }
@@ -460,10 +471,13 @@ struct OnboardingView: View {
             }
         } label: {
             Text(actionTitle(step))
-                .font(.system(size: 17, weight: .semibold))
+                .typography(.button)
+                .multilineTextAlignment(.center)
                 .foregroundStyle(isPrimary ? Color.basketBackground : Color.onboardingTextPrimary)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
                 .frame(maxWidth: .infinity)
-                .frame(height: 52)
+                .frame(minHeight: 52)
                 .contentShape(.capsule)
         }
         .buttonStyle(.plain)
