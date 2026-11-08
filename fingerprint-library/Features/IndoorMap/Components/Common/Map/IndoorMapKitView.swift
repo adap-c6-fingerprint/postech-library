@@ -719,7 +719,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-group-transition")
                     ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-group-transition")
                 view.annotation = annotation
-                let size = CGSize(width: 24, height: 24)
+                let size = MapAnnotationImage.size
                 view.image = UIGraphicsImageRenderer(size: size).image { _ in
                     let circle = UIBezierPath(ovalIn: CGRect(origin: .zero, size: size).insetBy(dx: 2, dy: 2))
                     UIColor.white.setFill()

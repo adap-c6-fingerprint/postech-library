@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=liked.png",
+      "filename" : "Map_sticker_Muted_Softer.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=liked@2x.png",
+      "filename" : "Map_sticker_Muted_Softer@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=liked@3x.png",
+      "filename" : "Map_sticker_Muted_Softer@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
