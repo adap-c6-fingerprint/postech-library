@@ -13,6 +13,7 @@ struct BookShelfMapFeature {
     @ObservableState
     struct State: Equatable {
         let books: [Book]
+        var sourceFavoriteMarkerID: String?
         var map = IndoorMapFeature.State()
         var holdings: [Book.ID: HoldingsState] = [:]
         var holdingRequestIDs: [Book.ID: Int] = [:]
@@ -21,8 +22,13 @@ struct BookShelfMapFeature {
         init(book: Book) { books = [book] }
 
         init?(books: [Book]) {
-            guard BookRouteSelection.allows(bookCount: books.count),
-                  Set(books.map(\.id)).count == books.count else { return nil }
+            guard BookRouteSelection.allows(bookCount: books.count) else { return nil }
+            self.init(previewing: books)
+        }
+
+        /// 서가의 찜 목록 조회는 길안내의 최대 3권 제한과 별개다.
+        init?(previewing books: [Book]) {
+            guard !books.isEmpty, Set(books.map(\.id)).count == books.count else { return nil }
             self.books = books
         }
 

@@ -10,6 +10,8 @@ nonisolated struct IndoorShelfLabel: Identifiable, Equatable, Sendable {
     }
 
     var id: String { fixtureNumber }
+    /// A/B 면을 합친 실제 서가 식별자. 층이 다른 동일 번호는 구분한다.
+    var physicalShelfID: String { "\(floorID)-\(fixtureNumber.dropLast(2))" }
     let fixtureNumber: String
     let realNumber: String
     let side: Side

@@ -17,27 +17,10 @@ final class HomeMapAnnotationController {
     }
 
     static func view(for annotation: HomeMapPointAnnotation, in map: MKMapView) -> MKAnnotationView {
-        let reuseID = "home-map-icon"
-        let view = map.dequeueReusableAnnotationView(withIdentifier: reuseID)
-            ?? MKAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
-        view.annotation = annotation
-        if let name = annotation.marker.kind.assetName {
-            view.image = MapAnnotationImage.asset(named: name)
-        } else {
-            view.image = MapAnnotationImage.symbol(named: "mappin.circle.fill", tintColor: .systemCyan)
-        }
-        view.bounds = CGRect(origin: .zero, size: MapAnnotationImage.size)
-        view.centerOffset = .zero
-        view.canShowCallout = true
-        view.displayPriority = .required
-        view.zPriority = MapAnnotationPriority.marker
-        view.selectedZPriority = MapAnnotationPriority.marker
-        view.collisionMode = .circle
-        view.clusteringIdentifier = nil
-        view.isAccessibilityElement = true
-        view.accessibilityLabel = annotation.title
-        view.accessibilityValue = annotation.subtitle
-        view.accessibilityIdentifier = "home-marker-\(annotation.marker.kind.rawValue)"
+        let view = map.dequeueReusableAnnotationView(withIdentifier: HomeMapAnnotationView.reuseID)
+            as? HomeMapAnnotationView
+            ?? HomeMapAnnotationView(annotation: annotation, reuseIdentifier: HomeMapAnnotationView.reuseID)
+        view.configure(annotation)
         return view
     }
 

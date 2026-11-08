@@ -37,6 +37,7 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     let coordinate: IndoorMapCoordinate
     let title: String
     var subtitle: String? = nil
+    var bookKeys: Set<[String?]> = []
 }
 
 nonisolated enum HomeMapMarkerBuilder {
@@ -66,27 +67,37 @@ nonisolated enum HomeMapMarkerBuilder {
     static func favorites(holdings: [[String?]: [BookHolding]], on map: IndoorMap,
                           labels: [IndoorShelfLabel]) -> [HomeMapMarker] {
         struct Group {
-            let shelf: IndoorShelfLabel
+            var shelves: [String: IndoorShelfLabel] = [:]
             var keys: Set<[String?]> = []
             var isCandidate = false
         }
-        var groups: [IndoorMapElement.ID: Group] = [:]
+        var groups: [String: Group] = [:]
         for (key, copies) in holdings {
             for resolution in BookHoldingShelfResolver().resolve(copies, on: map, labels: labels) {
                 for shelf in resolution.shelves {
-                    var group = groups[shelf.mapElementID] ?? Group(shelf: shelf)
+                    // 같은 서가의 A/B 면과 복본은 하나의 찜 마커로 표시한다.
+                    let shelfID = shelf.physicalShelfID
+                    var group = groups[shelfID] ?? Group()
+                    group.shelves[shelf.id] = shelf
                     group.keys.insert(key)
                     group.isCandidate = group.isCandidate || resolution.shelves.count > 1
-                    groups[shelf.mapElementID] = group
+                    groups[shelfID] = group
                 }
             }
         }
-        return groups.values.compactMap { group in
-            guard let coordinate = anchor(for: group.shelf.geometry) else { return nil }
-            return HomeMapMarker(id: "favorite-\(group.shelf.mapElementID.sourceID)", kind: .favorite,
-                floorID: group.shelf.floorID, coordinate: coordinate,
+        return groups.compactMap { shelfID, group in
+            let shelves = group.shelves.values.sorted { $0.id < $1.id }
+            let anchors = shelves.compactMap { anchor(for: $0.geometry) }
+            guard let shelf = shelves.first, !anchors.isEmpty else { return nil }
+            let coordinate = IndoorMapCoordinate(
+                latitude: anchors.map(\.latitude).reduce(0, +) / Double(anchors.count),
+                longitude: anchors.map(\.longitude).reduce(0, +) / Double(anchors.count)
+            )
+            return HomeMapMarker(id: "favorite-\(shelfID)", kind: .favorite,
+                floorID: shelf.floorID, coordinate: coordinate,
                 title: "찜한 도서 \(group.keys.count)권",
-                subtitle: "\(group.shelf.realNumber) 서가\(group.isCandidate ? " · 위치 후보" : "")")
+                subtitle: "\(shelf.realNumber) 서가\(group.isCandidate ? " · 위치 후보" : "")",
+                bookKeys: group.keys)
         }.sorted { $0.id < $1.id }
     }
 
@@ -148,7 +159,8 @@ final class HomeMapMarkerCache {
     private var favoriteMarkers: [HomeMapMarker] = []
 
     func markers(on map: IndoorMap, labels: [IndoorShelfLabel], holdings: [[String?]: [BookHolding]],
-                 showsAmenities: Bool) -> [HomeMapMarker] {
+                 showsAmenities: Bool, hidingFavoritesFor shelves: [IndoorShelfLabel] = [],
+                 hiddenFavoriteMarkerIDs: Set<String> = []) -> [HomeMapMarker] {
         let mapChanged = self.map != map
         if mapChanged { amenityMarkers = nil }
         if mapChanged || self.labels != labels || self.holdings != holdings {
@@ -158,6 +170,8 @@ final class HomeMapMarkerCache {
         }
         self.map = map
         if amenityMarkers == nil { amenityMarkers = HomeMapMarkerBuilder.amenities(on: map) }
-        return favoriteMarkers + (amenityMarkers ?? []).filter { showsAmenities || $0.kind.isAlwaysVisible }
+        let hiddenIDs = Set(shelves.map { "favorite-\($0.physicalShelfID)" }).union(hiddenFavoriteMarkerIDs)
+        let favorites = favoriteMarkers.filter { !hiddenIDs.contains($0.id) }
+        return favorites + (amenityMarkers ?? []).filter { showsAmenities || $0.kind.isAlwaysVisible }
     }
 }

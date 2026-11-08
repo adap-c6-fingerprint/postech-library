@@ -20,13 +20,11 @@ final class IndoorShelfLabelAnnotation: NSObject, MKAnnotation {
     }
     lazy var labelSize = IndoorShelfLabelView.size(for: self)
     var layoutAngle: CGFloat = 0
-    var layoutOffset: CGPoint = .zero
 
     init(_ presentation: IndoorShelfLabelPresentation) { self.presentation = presentation }
-    convenience init(_ label: IndoorShelfLabel) { self.init(.side(label)) }
 }
 
-/// 카드·청구기호 없이 번호만 그린다. 번호·면 레이블은 서가 방향을 따르되 거꾸로 뒤집지 않는다.
+/// 카드·청구기호 없이 번호만 그린다. 번호는 서가 방향을 따르되 거꾸로 뒤집지 않는다.
 final class IndoorShelfLabelView: MKAnnotationView {
     static let reuseID = "indoor-shelf-label"
     private let textLabel = UILabel()
@@ -90,7 +88,7 @@ final class IndoorShelfLabelView: MKAnnotationView {
         let width = abs(cos(angle)) * size.width + abs(sin(angle)) * size.height
         let height = abs(sin(angle)) * size.width + abs(cos(angle)) * size.height
         bounds = CGRect(x: 0, y: 0, width: width, height: height)
-        centerOffset = annotation.layoutOffset
+        centerOffset = .zero
         textLabel.transform = .identity
         textLabel.bounds = CGRect(origin: .zero, size: size)
         textLabel.center = CGPoint(x: bounds.midX, y: bounds.midY)

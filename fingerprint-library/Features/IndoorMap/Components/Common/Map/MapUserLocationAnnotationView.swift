@@ -10,7 +10,7 @@ final class MapUserLocationAnnotationView: MKAnnotationView {
     private let haloView = UIView()
 
     // 테두리를 포함한 원본 에셋의 표시 크기다.
-    private static let dotArtworkDiameter: CGFloat = 17
+    private static let dotArtworkDiameter: CGFloat = 15
     private static let headingSize = CGSize(width: 15.89314, height: 12.36133)
     private static let headingGap: CGFloat = 2
 

@@ -15,11 +15,15 @@ nonisolated struct BookDetailDestinationPresentation: Equatable, Sendable {
     let shelves: [IndoorShelfLabel]
 
     static func resolve(holdings: [BookHolding], context: BookDetailMapContext?) -> Self? {
+        resolve(holdings: holdings, map: context?.map, labels: context?.labels ?? [])
+    }
+
+    static func resolve(holdings: [BookHolding], map: IndoorMap?, labels: [IndoorShelfLabel]) -> Self? {
         guard let holding = BookHoldingPresentation.preferred(in: holdings) else { return nil }
-        guard let context, let map = context.map else {
+        guard let map else {
             return Self(holding: holding, floorText: nil, shelves: [])
         }
-        let shelves = BookHoldingShelfResolver().resolve([holding], on: map, labels: context.labels)
+        let shelves = BookHoldingShelfResolver().resolve([holding], on: map, labels: labels)
             .flatMap(\.shelves).sorted { $0.id < $1.id }
         let floor = shelves.first.flatMap { shelf in map.floors.first { $0.id == shelf.floorID } }
         return Self(holding: holding, floorText: floor.map { "\($0.ordinal + 1)층" }, shelves: shelves)

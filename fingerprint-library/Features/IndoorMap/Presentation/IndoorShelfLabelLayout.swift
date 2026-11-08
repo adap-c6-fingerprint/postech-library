@@ -2,13 +2,11 @@ import MapKit
 
 /// 서가 원본은 유지하고 지도에 보이는 상세도만 바꾼다.
 enum IndoorShelfLabelLevel: String, CaseIterable {
-    case group, number, side
+    case group, number
 
     static func resolve(metersPerPoint: Double, previous: Self?) -> Self {
         let groupBoundary = previous == .group ? 0.09 : (previous == nil ? 0.10 : 0.11)
-        let sideBoundary = previous == .side ? 0.06 : (previous == nil ? 0.055 : 0.05)
-        if metersPerPoint > groupBoundary { return .group }
-        return metersPerPoint < sideBoundary ? .side : .number
+        return metersPerPoint > groupBoundary ? .group : .number
     }
 }
 
@@ -19,7 +17,6 @@ struct IndoorShelfLabelPresentation {
     let text: String
     let point: MKMapPoint
     let axis: (MKMapPoint, MKMapPoint)?
-    let sidePlacement: IndoorShelfSidePlacement?
 
     var coordinate: CLLocationCoordinate2D { point.coordinate }
     var floorID: UUID { members[0].floorID }
@@ -27,20 +24,7 @@ struct IndoorShelfLabelPresentation {
         members.contains { ids.contains($0.mapElementID) }
     }
 
-    static func side(_ label: IndoorShelfLabel, axis sharedAxis: (MKMapPoint, MKMapPoint)? = nil,
-                     shelfCenter: MKMapPoint? = nil) -> Self {
-        let rect = MapKitGeometry.mapRect(for: label.geometry)
-        let center = MKMapPoint(x: rect.midX, y: rect.midY)
-        let axis = sharedAxis ?? shelfAxis(label.geometry)
-        let placement = axis.flatMap { axis in
-            shelfCenter.flatMap { IndoorShelfSidePlacement(label: label, axis: axis, shelfCenter: $0) }
-        }
-        return .init(id: "side-\(label.id)", level: .side, members: [label],
-                     text: "\(label.realNumber)-\(label.side.rawValue)", point: center,
-                     axis: axis, sidePlacement: placement)
-    }
-
-    /// 여러 조각으로 구성된 도형도 전체 길이의 주축을 구하고 A/B가 같은 방향을 사용한다.
+    /// 여러 조각으로 구성된 도형도 전체 길이의 주축에 맞춰 서가 번호를 표시한다.
     static func shelfAxis(_ geometry: IndoorMapGeometry) -> (MKMapPoint, MKMapPoint)? {
         var points: [MKMapPoint] = []
         for coordinate in geometry.coordinates {
@@ -68,20 +52,18 @@ struct IndoorShelfLabelPresentation {
 /// 같은 fixture의 A/B만 합치고, 가까운 실제 서가 중심을 연결해 층별 군집을 만든다.
 struct IndoorShelfLabelLayout {
     let numbers: [IndoorShelfLabelPresentation]
-    let sides: [IndoorShelfLabelPresentation]
     let groups: [IndoorShelfLabelPresentation]
 
     init(labels: [IndoorShelfLabel]) {
-        let paired = Dictionary(grouping: labels) { "\($0.floorID)-\($0.fixtureNumber.dropLast(2))" }
+        let paired = Dictionary(grouping: labels, by: \.physicalShelfID)
         let numberModels: [IndoorShelfLabelPresentation] = paired.sorted { $0.key < $1.key }.map { id, members in
             let sorted = members.sorted { $0.side.rawValue < $1.side.rawValue }
             let rect = sorted.reduce(MKMapRect.null) { $0.union(MapKitGeometry.mapRect(for: $1.geometry)) }
             return .init(id: "number-\(id)", level: .number, members: sorted, text: sorted[0].realNumber,
                          point: .init(x: rect.midX, y: rect.midY),
-                         axis: IndoorShelfLabelPresentation.shelfAxis(sorted[0].geometry), sidePlacement: nil)
+                         axis: IndoorShelfLabelPresentation.shelfAxis(sorted[0].geometry))
         }
         numbers = numberModels
-        sides = numberModels.flatMap { number in number.members.map { .side($0, axis: number.axis, shelfCenter: number.point) } }
         var remaining = Set(numberModels.indices)
         var clustered: [IndoorShelfLabelPresentation] = []
         while let seed = remaining.min() {
@@ -109,7 +91,7 @@ struct IndoorShelfLabelLayout {
                 return sorted.first == sorted.last ? sorted[0] : "\(sorted[0])~\(sorted[sorted.count - 1])"
             }.joined(separator: "\n")
             clustered.append(.init(id: "group-\(shelves[0].id)", level: .group, members: members,
-                                   text: text, point: .init(x: x, y: y), axis: nil, sidePlacement: nil))
+                                   text: text, point: .init(x: x, y: y), axis: nil))
         }
         groups = clustered
     }
@@ -118,7 +100,6 @@ struct IndoorShelfLabelLayout {
         switch level {
         case .group: groups
         case .number: numbers
-        case .side: sides
         }
     }
 }

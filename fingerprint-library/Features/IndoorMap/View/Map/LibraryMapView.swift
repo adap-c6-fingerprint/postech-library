@@ -33,7 +33,8 @@ struct LibraryMapView: View {
     // 수식어가 한 줄로 길게 이어지면 컴파일러가 타입 검사를 제시간에 끝내지 못해 지도 화면과 이동 목적지를 나눈다.
 
     private var mapLayout: some View {
-            IndoorMapView(store: mapStore, topContentInset: headerHeight, appearance: .home)
+            IndoorMapView(store: mapStore, topContentInset: headerHeight, appearance: .home,
+                onSelectFavoriteMarker: { searchStore.send(.favoriteMarkerTapped($0)) })
                 .ignoresSafeArea(.container, edges: .top)
                 .overlay(alignment: .topLeading) {
                     // 전체 높이의 컨테이너가 상단 안전 영역까지 확장되어 배경은 기기 맨 위에서 시작한다.
@@ -97,6 +98,11 @@ struct LibraryMapView: View {
 
     private func moreDestinations(_ content: some View) -> some View {
         content
+            .navigationDestination(
+                item: $searchStore.scope(state: \.favoriteShelf, action: \.favoriteShelf)
+            ) { shelfStore in
+                FavoriteShelfBooksView(store: shelfStore, mapStore: mapStore)
+            }
             .navigationDestination(
                 item: $searchStore.scope(state: \.shelfMap, action: \.shelfMap)
             ) { shelfMapStore in

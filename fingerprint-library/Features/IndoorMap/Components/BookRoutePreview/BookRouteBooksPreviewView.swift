@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 책 선택은 미리보기만 바꾼다. 안내 시작에는 부모가 보관한 전체 경로를 전달한다.
+/// 탭과 카드가 책 선택을 공유한다. 부모는 선택한 책 또는 전체 경로로 안내를 시작한다.
 struct BookRouteBooksPreviewView: View {
     let books: [Book]
     let shelfStore: StoreOf<BookShelfMapFeature>
@@ -10,19 +10,13 @@ struct BookRouteBooksPreviewView: View {
     let routeError: String?
     let canStart: Bool
     let onBack: () -> Void
-    let onStart: () -> Void
+    let onStart: (Book) -> Void
     let onRetry: () -> Void
+    var guidesSelectedBook = false
+    var homeAnnotations: HomeMapAnnotationsFeature.State?
 
     @State private var bookSelection = BookRoutePreviewSelection()
     @State private var panelHeight: CGFloat = 0
-    @State private var camera: IndoorMapCameraRequest?
-
-    private struct ShelfFocus: Equatable {
-        let bookID: Book.ID?
-        let featureIDs: [IndoorMapElement.ID]
-        let mapSize: CGSize
-        let bottomInset: CGFloat
-    }
 
     private var selection: Binding<Book.ID?> {
         Binding(
@@ -33,8 +27,11 @@ struct BookRouteBooksPreviewView: View {
 
     private var selectedShelves: [IndoorShelfLabel] {
         guard let bookID = selection.wrappedValue else { return [] }
-        return session?.stops.first { $0.book.id == bookID }?.candidateShelves
-            ?? shelfStore.state.shelves(for: bookID)
+        if let stop = session?.stops.first(where: { $0.book.id == bookID }) { return stop.candidateShelves }
+        guard case let .loaded(holdings) = shelfStore.holdings[bookID] else { return [] }
+        return BookDetailDestinationPresentation.resolve(
+            holdings: holdings, map: shelfStore.map.map, labels: shelfStore.map.shelfLabels
+        )?.shelves ?? []
     }
 
     private var selectedFloor: IndoorMapFloor? {
@@ -47,21 +44,14 @@ struct BookRouteBooksPreviewView: View {
         GeometryReader { geometry in
             let visibleShelves = selectedShelves.filter { $0.floorID == selectedFloor?.id }
             let bottomInset = panelHeight + geometry.safeAreaInsets.bottom
-            let focus = ShelfFocus(
-                bookID: selection.wrappedValue,
-                featureIDs: visibleShelves.map(\.mapElementID),
-                mapSize: geometry.size,
-                bottomInset: bottomInset
-            )
             ZStack(alignment: .bottom) {
-                IndoorMapView(
+                BookDetailShelfMapView(
                     store: shelfStore.scope(state: \.map, action: \.map),
-                    showsDestinationCard: false, showsRoute: false,
-                    bottomContentInset: bottomInset, topContentInset: 16,
-                    showsCurrentLocationButton: false, showsFloorPicker: false,
-                    bookDetail: .init(floor: selectedFloor, shelves: visibleShelves, cameraRequest: camera)
+                    floor: selectedFloor, shelves: visibleShelves,
+                    mapSize: geometry.size, bottomContentInset: bottomInset,
+                    isReadyToFocus: panelHeight > 0, homeAnnotations: homeAnnotations,
+                    hiddenFavoriteMarkerIDs: Set([shelfStore.sourceFavoriteMarkerID].compactMap { $0 })
                 )
-                .ignoresSafeArea(.container)
                 .accessibilityIdentifier("multiBookPreview.map")
 
                 VStack(spacing: 12) {
@@ -82,13 +72,6 @@ struct BookRouteBooksPreviewView: View {
                 .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { panelHeight = $0 }
             }
             .overlay(alignment: .top) { bookTabs }
-            .onChange(of: focus, initial: true) { _, focus in
-                guard !focus.featureIDs.isEmpty else {
-                    camera = nil
-                    return
-                }
-                camera = .init(id: (camera?.id ?? 0) + 1, target: .features(focus.featureIDs))
-            }
         }
         .foregroundStyle(Color.textPrimary)
         .onChange(of: books.map(\.id)) { _, _ in
@@ -175,7 +158,10 @@ struct BookRouteBooksPreviewView: View {
                 .background(.regularMaterial, in: .rect(cornerRadius: 12))
                 .accessibilityIdentifier("multiBookPreview.error")
             }
-            Button(action: onStart) {
+            Button {
+                guard let book = books.first(where: { $0.id == selection.wrappedValue }) else { return }
+                onStart(book)
+            } label: {
                 HStack(spacing: 8) {
                     if isLoadingRoute { ProgressView().tint(Color.textPrimary) }
                     Text(isLoadingRoute ? "경로 확인 중" : "바로 안내 시작")
@@ -185,8 +171,10 @@ struct BookRouteBooksPreviewView: View {
             }
             .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
             .buttonBorderShape(.capsule)
-            .disabled(!canStart)
-            .accessibilityHint("선택한 전체 \(books.count)권을 최적 경로 순서로 안내해요")
+            .disabled(!canStart || selection.wrappedValue == nil)
+            .accessibilityHint(guidesSelectedBook
+                ? "현재 보고 있는 책의 서가로 안내해요"
+                : "선택한 전체 \(books.count)권을 최적 경로 순서로 안내해요")
             .accessibilityIdentifier("multiBookPreview.start")
         }
     }

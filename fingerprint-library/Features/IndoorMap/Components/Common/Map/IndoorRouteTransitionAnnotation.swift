@@ -58,7 +58,8 @@ final class IndoorRouteTransitionAnnotation: NSObject, MKAnnotation {
             let configuration = UIImage.SymbolConfiguration(pointSize: 19, weight: .semibold)
             guard let symbol = UIImage(systemName: symbolName, withConfiguration: configuration)?
                 .withTintColor(.white, renderingMode: .alwaysOriginal) else { return }
-            let scale = min(22 / symbol.size.width, 22 / symbol.size.height)
+            let glyphBounds = CGRect(origin: .zero, size: size).insetBy(dx: 4, dy: 4)
+            let scale = min(glyphBounds.width / symbol.size.width, glyphBounds.height / symbol.size.height)
             let glyphSize = CGSize(width: symbol.size.width * scale, height: symbol.size.height * scale)
             symbol.draw(in: CGRect(
                 x: (size.width - glyphSize.width) / 2, y: (size.height - glyphSize.height) / 2,

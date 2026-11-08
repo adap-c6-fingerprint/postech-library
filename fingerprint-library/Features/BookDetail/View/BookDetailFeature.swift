@@ -43,6 +43,7 @@ struct BookDetailFeature {
         let book: Book
         var cachedCoverURL: URL?
         var isFavorite = false
+        var sourceFavoriteMarkerID: String?
         @Presents var shelfMap: BookShelfMapFeature.State?
 
         // 책 소개

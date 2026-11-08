@@ -8,14 +8,7 @@ struct BookDetailMapView: View {
     let mapStore: StoreOf<IndoorMapFeature>
     @Environment(\.dismiss) private var dismiss
     @State private var compactSheetFrame: CGRect?
-    @State private var detailCamera: IndoorMapCameraRequest?
     @State private var sheetPresentation = BookDetailSheetPresentation()
-
-    private struct ShelfFocus: Equatable {
-        let featureIDs: [IndoorMapElement.ID]
-        let mapSize: CGSize
-        let bottomInset: CGFloat
-    }
 
     private var context: BookDetailMapContext {
         .init(map: mapStore.map, navigation: mapStore.navigation, labels: mapStore.shelfLabels,
@@ -35,19 +28,13 @@ struct BookDetailMapView: View {
             let shelves = floor == nil ? [] : store.destinationPresentation?.shelves ?? []
             let coveredHeight = compactSheetFrame.map { max(0, geometry.size.height - max(0, $0.minY)) } ?? 0
             let bottomInset = compactSheetFrame == nil ? 0 : coveredHeight + geometry.safeAreaInsets.bottom
-            let focus = compactSheetFrame != nil && !shelves.isEmpty
-                ? ShelfFocus(featureIDs: shelves.map(\.mapElementID), mapSize: geometry.size, bottomInset: bottomInset)
-                : nil
-            let target = focus.map { IndoorMapCameraRequest.Target.features($0.featureIDs) }
             ZStack(alignment: .bottomTrailing) {
-                IndoorMapView(
-                    store: mapStore, showsDestinationCard: false, showsRoute: false,
-                    bottomContentInset: bottomInset,
-                    showsCurrentLocationButton: false, showsFloorPicker: false,
-                    bookDetail: .init(floor: floor, shelves: shelves,
-                                      cameraRequest: detailCamera?.target == target ? detailCamera : nil)
+                BookDetailShelfMapView(
+                    store: mapStore, floor: floor, shelves: shelves,
+                    mapSize: geometry.size, bottomContentInset: bottomInset,
+                    isReadyToFocus: compactSheetFrame != nil,
+                    hiddenFavoriteMarkerIDs: Set([store.sourceFavoriteMarkerID].compactMap { $0 })
                 )
-                .ignoresSafeArea(.container, edges: .top)
 
                 if !sheetPresentation.isExpanded, compactSheetFrame != nil, let floor {
                     destinationFloorBadge(floor)
@@ -56,10 +43,6 @@ struct BookDetailMapView: View {
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
-            .onChange(of: focus, initial: true) { _, focus in
-                guard let focus else { return }
-                detailCamera = .init(id: (detailCamera?.id ?? 0) + 1, target: .features(focus.featureIDs))
-            }
         }
         .overlay {
             if sheetPresentation.isExpanded {

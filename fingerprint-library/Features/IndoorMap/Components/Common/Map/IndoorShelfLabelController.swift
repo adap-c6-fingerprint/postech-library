@@ -39,15 +39,13 @@ final class IndoorShelfLabelController {
         defer { isLayingOut = false }
         guard let nextLevel = resolveLevel(in: map) else { return }
         // 레벨을 만들 때 정한 순서를 유지한다. 겹침을 숨기지 않으므로 프레임별 우선순위 정렬은 필요 없다.
-        let candidates = (levels[nextLevel] ?? []).compactMap { annotation -> (IndoorShelfLabelAnnotation, CGPoint, CGPoint)? in
-            let anchor = map.convert(annotation.coordinate, toPointTo: map)
-            let position = annotation.presentation.sidePlacement?.center(in: map, labelSize: annotation.labelSize) ?? anchor
-            guard map.bounds.insetBy(dx: -100, dy: -100).contains(position) else { return nil }
-            let offset = CGPoint(x: position.x - anchor.x, y: position.y - anchor.y)
-            return (annotation, anchor, offset)
+        let candidates = (levels[nextLevel] ?? []).compactMap { annotation -> (IndoorShelfLabelAnnotation, CGPoint)? in
+            let point = map.convert(annotation.coordinate, toPointTo: map)
+            guard map.bounds.insetBy(dx: -100, dy: -100).contains(point) else { return nil }
+            return (annotation, point)
         }
         var chosen: [IndoorShelfLabelAnnotation] = []
-        for (annotation, point, offset) in candidates {
+        for (annotation, point) in candidates {
             var angle: CGFloat = 0
             if let (a, b) = annotation.presentation.axis {
                 let p = map.convert(a.coordinate, toPointTo: map), q = map.convert(b.coordinate, toPointTo: map)
@@ -58,12 +56,11 @@ final class IndoorShelfLabelController {
             let size = annotation.labelSize
             let width = abs(cos(angle)) * size.width + abs(sin(angle)) * size.height
             let height = abs(sin(angle)) * size.width + abs(cos(angle)) * size.height
-            let frame = CGRect(x: point.x + offset.x - width / 2, y: point.y + offset.y - height / 2,
+            let frame = CGRect(x: point.x - width / 2, y: point.y - height / 2,
                                width: width, height: height)
             // 화면에 걸친 부분만 그린다. 겹침이나 화면 경계 때문에 자리를 옮기지 않는다.
             guard map.bounds.intersects(frame) else { continue }
             annotation.layoutAngle = angle
-            annotation.layoutOffset = offset
             chosen.append(annotation)
         }
 

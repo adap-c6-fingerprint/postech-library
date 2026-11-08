@@ -35,6 +35,7 @@ struct BookSearchFeature {
         var cartBooks: [Book] = []
         var isCartLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
+        @Presents var favoriteShelf: BookShelfMapFeature.State?
         @Presents var cart: BookCartFeature.State?
         @Presents var favorites: BookFavoritesFeature.State?
         @Presents var shelfMap: BookShelfMapFeature.State?
@@ -74,6 +75,8 @@ struct BookSearchFeature {
         case cartLimitAlertDismissed
         case removeFromCart(Set<Book.ID>)
         case bookSelected(Book)
+        case favoriteMarkerTapped(HomeMapMarker)
+        case favoriteShelf(PresentationAction<BookShelfMapFeature.Action>)
         case detail(PresentationAction<BookDetailFeature.Action>)
         case directionsButtonTapped(Book)
         case cartDirectionsButtonTapped(Set<Book.ID>)
@@ -163,6 +166,26 @@ struct BookSearchFeature {
                     let isFavorite = state.favoriteBookKeys.contains(detailBook.recordKey)
                     state.detail?.isFavorite = isFavorite
                 }
+                return .none
+
+            case let .favoriteMarkerTapped(marker):
+                // 마커가 만들어진 뒤 찜이 바뀌었을 수 있으므로 현재 저장 목록으로 다시 확인한다.
+                let activeKeys = bookFavoritesClient.load().intersection(marker.bookKeys)
+                let items = bookFavoritesClient.loadItems().sorted { $0.favoritedAt > $1.favoritedAt }
+                var seen = Set<[String?]>()
+                let books = (items.map(\.book) + state.books + state.recentBooks)
+                    .filter { activeKeys.contains($0.recordKey) && seen.insert($0.recordKey).inserted }
+                guard let book = books.first else { return .none }
+                if books.count == 1 {
+                    state.detail = BookDetailFeature.State(book: book, isFavorite: true)
+                    state.detail?.sourceFavoriteMarkerID = marker.id
+                } else {
+                    state.favoriteShelf = BookShelfMapFeature.State(previewing: books)
+                    state.favoriteShelf?.sourceFavoriteMarkerID = marker.id
+                }
+                return .none
+
+            case .favoriteShelf:
                 return .none
 
             case let .bookSelected(book):
@@ -371,6 +394,9 @@ struct BookSearchFeature {
         }
         .ifLet(\.$detail, action: \.detail) {
             BookDetailFeature()
+        }
+        .ifLet(\.$favoriteShelf, action: \.favoriteShelf) {
+            BookShelfMapFeature()
         }
         .ifLet(\.$cart, action: \.cart) {
             BookCartFeature()
