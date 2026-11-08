@@ -146,7 +146,7 @@ struct BookSearchView: View {
         if store.recentBooks.isEmpty {
             ContentUnavailableView(
                 "최근 항목이 없어요",
-                systemImage: "books.vertical",
+                systemImage: "book",
                 description: Text("검색 결과에서 선택한 책이 여기에 표시돼요.")
             )
         } else {

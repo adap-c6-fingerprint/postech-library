@@ -49,6 +49,16 @@ enum BookCoverPipeline {
         // 메모리 캐시에서 밀려났으면 nil이 되어 다시 받는다.
     }
 
+    /// 길안내를 시작할 때 책등 이미지를 미리 받아 표지와 같은 메모리 캐시(shared)에 넣어 둔다.
+    static func prefetchSpines(isbns: [String]) {
+        let targets = Set(isbns.compactMap { BookISBN.isbn13(from: $0) })
+        for isbn13 in targets where cachedSpineImage(isbn: isbn13) == nil {
+            Task { _ = try? await spineImage(isbn: isbn13) }
+        }
+        // 화면 작업(Effect)과 떼어 두어, 상세·장바구니 화면이 닫혀도 끝까지 받는다.
+        // 같은 ISBN을 이미 받는 중이면 Yes24BookCoverResolver와 shared가 진행 중 요청을 함께 쓴다.
+    }
+
     /// 추천·검색·상세가 같은 메모리 캐시와 진행 중 요청을 사용한다.
     static let shared = SharedImageLoader<UIImage>(
         readLocalImage: { url in

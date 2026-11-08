@@ -10,7 +10,7 @@ struct IndoorRouteControls: View {
         if let destination = store.routeDestination {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
-                    Label(destination.name, systemImage: "books.vertical.fill")
+                    Label(destination.name, systemImage: "book.fill")
                         .font(.subheadline.bold())
                     Spacer()
                     Button {

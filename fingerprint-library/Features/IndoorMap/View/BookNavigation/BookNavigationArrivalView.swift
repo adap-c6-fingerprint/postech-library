@@ -56,7 +56,7 @@ struct BookNavigationArrivalView: View {
                             .padding(.horizontal, 28)
                             .frame(maxWidth: .infinity)
                         } else {
-                            ContentUnavailableView("도착 정보를 확인해 주세요", systemImage: "books.vertical")
+                            ContentUnavailableView("도착 정보를 확인해 주세요", systemImage: "book")
                                 .padding(.top, 60)
                         }
                     }

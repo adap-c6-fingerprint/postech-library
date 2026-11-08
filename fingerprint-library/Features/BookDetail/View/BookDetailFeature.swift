@@ -135,6 +135,7 @@ struct BookDetailFeature {
     @Dependency(\.bookBasketClient) var bookBasketClient
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
     @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
+    @Dependency(\.bookCoverClient) var bookCoverClient
     // ✅ 상세 화면에 들어간 책을 '조회한 책'으로 기록한다. (Q5)
     @Dependency(\.date.now) var now
 
@@ -299,6 +300,8 @@ struct BookDetailFeature {
             case .guidanceStarted:
                 recentlyFoundBooksClient.record([state.book])
                 // 장바구니를 거치지 않은 1권도 최근 찾은 책 책장 맨 왼쪽에 꽂힌다.
+                bookCoverClient.prefetchSpines([state.book.isbn].compactMap { $0 })
+                // 책장에 꽂히는 순간 책등을 미리 받아 둔다. 책찾기 화면과 마이페이지 책장이 로딩 없이 바로 그린다.
                 return .none
 
             case .delegate:
