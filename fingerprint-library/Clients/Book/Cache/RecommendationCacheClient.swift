@@ -17,10 +17,7 @@ extension RecommendationCacheClient: DependencyKey {
     static let testValue = Self(
         restore: { nil },
         prepare: { books in
-            CachedRecommendations(
-                books: books, savedAt: .distantPast,
-                coverFiles: Dictionary(uniqueKeysWithValues: Set(books.compactMap(\.imageURL)).map { ($0, $0) })
-            )
+            CachedRecommendations(books: books, savedAt: .distantPast, coverFiles: [:])
         }
     )
 

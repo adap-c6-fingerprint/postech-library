@@ -2,7 +2,7 @@ import Foundation
 
 /// 추천 알고리즘과 독립적으로 결과의 표지를 준비한다. 네트워크 동시 작업은 최대 두 개다.
 nonisolated struct RecommendationCachePreparer: Sendable {
-    private typealias Cover = (url: URL, data: Data)
+    private typealias Cover = RecommendationCacheStore.PreparedCover
 
     let store: RecommendationCacheStore
     var loadCover: @Sendable (URL) async throws -> Data
@@ -32,21 +32,22 @@ nonisolated struct RecommendationCachePreparer: Sendable {
         }
 
         try Task.checkCancellation()
-        var covers: [URL: Data] = [:]
-        let books = candidates.enumerated().map { index, book in
-            guard let cover = prepared[index] else { return book }
-            covers[cover.url] = cover.data
-            return Book(
-                id: book.id, isbn: book.isbn, controlNumber: book.controlNumber,
-                title: book.title, author: book.author, publisher: book.publisher,
-                publicationYear: book.publicationYear, description: book.description,
-                imageURL: cover.url, subLocation: book.subLocation, resourceTypes: book.resourceTypes
-            )
+        var covers: [Book.ID: Cover] = [:]
+        var books = candidates
+        for (index, cover) in prepared {
+            let book = candidates[index]
+            covers[book.id] = cover
+            if book.imageURL == nil {
+                books[index] = Book(
+                    id: book.id, isbn: book.isbn, controlNumber: book.controlNumber,
+                    title: book.title, author: book.author, publisher: book.publisher,
+                    publicationYear: book.publicationYear, description: book.description,
+                    imageURL: cover.sourceURL, subLocation: book.subLocation, resourceTypes: book.resourceTypes
+                )
+            }
         }
-        let unavailable = Set(books.compactMap(\.imageURL)).subtracting(covers.keys)
         return try await store.save(
-            books: books, covers: covers, savedAt: now(),
-            unavailableCovers: unavailable, preparationID: preparationID
+            books: books, covers: covers, savedAt: now(), preparationID: preparationID
         )
     }
 
@@ -55,11 +56,11 @@ nonisolated struct RecommendationCachePreparer: Sendable {
             return try await BookCoverSource.load(
                 url: book.imageURL, isbn13: BookISBN.isbn13(from: book.isbn), lookupYes24: lookupYes24
             ) { url in
-                if let data = try await store.coverData(for: url) { return (url, data) }
+                if let data = try await store.coverData(for: url) { return Cover(sourceURL: url, data: data) }
                 let data = try await loadCover(url)
                 try Task.checkCancellation()
                 try RecommendationCacheStore.validateImage(data)
-                return (url, data)
+                return Cover(sourceURL: url, data: data)
             }
         } catch {
             try Task.checkCancellation()

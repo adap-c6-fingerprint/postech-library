@@ -8,6 +8,7 @@ nonisolated struct BookFavoritesClient: Sendable {
     // 찜 목록 화면에 보여 줄 책 정보와 찜한 시각. 현재 찜 키에 있는 책만 돌려준다.
     var record: @Sendable (Book, Date) -> Void = { _, _ in }
     // 새로 찜한 책의 정보와 시각을 recordKey 기준으로 기록한다.
+    var repairLegacyCover: @Sendable (Book.ID, URL, URL) -> Void = { _, _, _ in }
 
     private static let storageKey = "favoriteBookRecordKeys"
     private static let itemsStorageKey = "favoriteBookItems"
@@ -48,6 +49,14 @@ nonisolated struct BookFavoritesClient: Sendable {
                 items.removeAll { $0.key == book.recordKey }
                 items.append(StoredItem(book: book, favoritedAt: date))
                 saveStoredItems(items)
+            },
+            repairLegacyCover: { id, oldURL, newURL in
+                guard oldURL.isFileURL, !newURL.isFileURL else { return }
+                var items = loadStoredItems()
+                guard let index = items.firstIndex(where: { $0.id == id && $0.imageURL == oldURL }),
+                      loadKeys().contains(items[index].key) else { return }
+                items[index].imageURL = newURL
+                saveStoredItems(items)
             }
         )
     }
@@ -62,7 +71,7 @@ nonisolated struct BookFavoritesClient: Sendable {
         let publisher: String?
         let publicationYear: String?
         let description: String?
-        let imageURL: URL?
+        var imageURL: URL?
         let favoritedAt: Date
 
         init(book: Book, favoritedAt: Date) {

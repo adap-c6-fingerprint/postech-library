@@ -126,7 +126,8 @@ struct BookFavoritesView: View {
             location: info?.location,
             availability: info?.availability,
             isSelected: store.selectedIDs.contains(item.id),
-            onToggle: { store.send(.selectionToggled(item.id)) }
+            onToggle: { store.send(.selectionToggled(item.id)) },
+            onCoverRecovered: { oldURL, newURL in store.send(.coverRecovered(item.id, oldURL, newURL)) }
         )
     }
 

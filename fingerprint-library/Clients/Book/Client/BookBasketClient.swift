@@ -4,22 +4,32 @@ import ComposableArchitecture
 nonisolated struct BookBasketClient: Sendable {
     var load: @Sendable () -> [BookBasketItem]
     var save: @Sendable ([BookBasketItem]) -> Void
+    var repairLegacyCover: @Sendable (Book.ID, URL, URL) -> Void = { _, _, _ in }
 
     private static let storageKey = "bookBasketItems"
 
     // 테스트에서는 별도 suite를 사용해 앱의 실제 장바구니와 분리한다.
     static func userDefaults(suiteName: String? = nil) -> Self {
-        Self(
-            load: {
-                let defaults = suiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
-                guard let data = defaults.data(forKey: storageKey) else { return [] }
-                let records = (try? JSONDecoder().decode([StoredItem].self, from: data)) ?? []
-                return records.map(\.item)
-            },
-            save: { items in
-                guard let data = try? JSONEncoder().encode(items.map(StoredItem.init)) else { return }
-                let defaults = suiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
-                defaults.set(data, forKey: storageKey)
+        let defaults: @Sendable () -> UserDefaults = {
+            suiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
+        }
+        let loadStoredItems: @Sendable () -> [StoredItem] = {
+            guard let data = defaults().data(forKey: storageKey) else { return [] }
+            return (try? JSONDecoder().decode([StoredItem].self, from: data)) ?? []
+        }
+        let saveStoredItems: @Sendable ([StoredItem]) -> Void = { items in
+            guard let data = try? JSONEncoder().encode(items) else { return }
+            defaults().set(data, forKey: storageKey)
+        }
+        return Self(
+            load: { loadStoredItems().map(\.item) },
+            save: { saveStoredItems($0.map(StoredItem.init)) },
+            repairLegacyCover: { id, oldURL, newURL in
+                guard oldURL.isFileURL, !newURL.isFileURL else { return }
+                var items = loadStoredItems()
+                guard let index = items.firstIndex(where: { $0.id == id && $0.imageURL == oldURL }) else { return }
+                items[index].imageURL = newURL
+                saveStoredItems(items)
             }
         )
     }
@@ -34,7 +44,7 @@ nonisolated struct BookBasketClient: Sendable {
         let publisher: String?
         let publicationYear: String?
         let description: String?
-        let imageURL: URL?
+        var imageURL: URL?
         let addedAt: Date
 
         init(_ item: BookBasketItem) {

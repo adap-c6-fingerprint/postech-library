@@ -41,6 +41,7 @@ struct HomeFeature {
         }
 
         var recommendationErrorMessage: String? = nil
+        var recommendationCoverFiles: [Book.ID: URL] = [:]
         var popularBooksErrorMessage: String? = nil
         var recommendationSessionID: UUID?
         var isLoadingRecommendations = false
@@ -152,9 +153,10 @@ struct HomeFeature {
                 guard state.recommendationSessionID == sessionID else { return .none }
                 if let cached {
                     analytics.record(.init(.recommendationLoadCompleted, [
-                        .kind: .text("restored"), .bookCount: .integer(cached.displayBooks.count)
+                        .kind: .text("restored"), .bookCount: .integer(cached.books.count)
                     ]))
-                    state.recommendedBooks = cached.displayBooks
+                    state.recommendedBooks = cached.books
+                    state.recommendationCoverFiles = cached.coverFiles
                     state.isLoadingRecommendations = false
                 }
                 return .none
@@ -162,14 +164,15 @@ struct HomeFeature {
             case let .recommendationsLoaded(sessionID, prepared):
                 guard state.recommendationSessionID == sessionID else { return .none }
                 analytics.record(.init(.recommendationLoadCompleted, [
-                    .kind: .text("prepared_for_next_visit"), .bookCount: .integer(prepared.displayBooks.count)
+                    .kind: .text("prepared_for_next_visit"), .bookCount: .integer(prepared.books.count)
                 ]))
                 state.isLoadingRecommendations = false
                 state.isPreparingRecommendations = false
                 state.nextRecommendationsSavedAt = prepared.savedAt
                 // 이번 접속의 목록 A는 유지한다. 완성된 B는 다음 접속에서 복원한다.
                 if state.recommendedBooks.isEmpty {
-                    state.recommendedBooks = prepared.displayBooks
+                    state.recommendedBooks = prepared.books
+                    state.recommendationCoverFiles = prepared.coverFiles
                 }
                 state.recommendationErrorMessage = nil
                 return .none
@@ -257,7 +260,8 @@ struct HomeFeature {
             case let .bookSelected(book):
                 analytics.record(.init(.recommendationSelected, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
                 state.detail = BookDetailFeature.State(
-                    book: book, isFavorite: bookFavoritesClient.load().contains(book.recordKey)
+                    book: book, cachedCoverURL: state.recommendationCoverFiles[book.id],
+                    isFavorite: bookFavoritesClient.load().contains(book.recordKey)
                 )
                 return .none
 
@@ -401,6 +405,7 @@ struct HomeFeature {
 
         if current.interests != previous.interests {
             state.recommendedBooks = []
+            state.recommendationCoverFiles = [:]
             reload = startRecommendationSession(state: &state, restoresCache: false)
             // 저장해 둔 추천은 예전 관심 분야로 만든 것이라 꺼내지 않고 새로 받는다.
             // 진행 중이던 예전 세션은 같은 취소 ID(cancelInFlight)로 자동 취소된다.
@@ -415,8 +420,8 @@ struct HomeFeature {
         state.isPreparingRecommendations = true
         state.nextRecommendationsSavedAt = nil
         state.recommendationErrorMessage = nil
-        let displayedCovers = state.recommendedBooks.compactMap(\.imageURL)
-            + [state.detail?.book.imageURL].compactMap { $0 }
+        let displayedCovers = Array(state.recommendationCoverFiles.values)
+            + [state.detail?.cachedCoverURL].compactMap { $0 }
         return loadRecommendations(sessionID: sessionID, retaining: displayedCovers, restoresCache: restoresCache)
     }
 

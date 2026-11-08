@@ -38,6 +38,7 @@ struct BookBasketFeature {
         case task
         case loadLibraryInfo
         case libraryInfoLoaded(Book.ID, [BookHolding])
+        case coverRecovered(Book.ID, URL, URL)
         case selectionToggled(Book.ID)
         case selectionLimitAlertDismissed
         case startGuidanceButtonTapped
@@ -86,6 +87,11 @@ struct BookBasketFeature {
                 bookLocationCacheClient.record(book, holdings)
                 return .none
 
+            case let .coverRecovered(id, oldURL, newURL):
+                bookBasketClient.repairLegacyCover(id, oldURL, newURL)
+                state.items = bookBasketClient.load()
+                return .none
+
             case let .selectionToggled(id):
                 guard state.items.contains(where: { $0.id == id }) else { return .none }
                 if let index = state.selectedIDs.firstIndex(of: id) {
@@ -125,8 +131,9 @@ struct BookBasketFeature {
             case .removeConfirmed:
                 state.isRemoveAlertPresented = false
                 let removedIDs = Set(state.selectedIDs)
-                let removedCount = state.items.filter { removedIDs.contains($0.id) }.count
-                state.items.removeAll { removedIDs.contains($0.id) }
+                let storedItems = bookBasketClient.load()
+                state.items = storedItems.filter { !removedIDs.contains($0.id) }
+                let removedCount = storedItems.count - state.items.count
                 state.selectedIDs = []
                 bookBasketClient.save(state.items)
                 if removedCount > 0 {

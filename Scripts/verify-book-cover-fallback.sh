@@ -9,6 +9,9 @@ xcrun swiftc -swift-version 6 -parse-as-library \
   fingerprint-library/Shared/AppConfiguration.swift \
   fingerprint-library/Clients/Book/Client/Yes24BookDetailService.swift \
   fingerprint-library/Clients/Book/Cache/Yes24BookCoverResolver.swift \
+  fingerprint-library/Clients/Book/Cache/RecommendationCachePreparer.swift \
+  fingerprint-library/Clients/Book/Cache/RecommendationCacheStore.swift \
+  fingerprint-library/Domain/Book/Book.swift \
   fingerprint-library/Domain/Book/BookISBN.swift \
   fingerprint-library/Domain/Book/BookDescription.swift \
   fingerprint-library/Shared/BookText.swift \

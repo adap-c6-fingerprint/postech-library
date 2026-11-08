@@ -41,6 +41,7 @@ struct BookDetailFeature {
     @ObservableState
     struct State: Equatable {
         let book: Book
+        var cachedCoverURL: URL?
         var isFavorite = false
         @Presents var shelfMap: BookShelfMapFeature.State?
 

@@ -7,6 +7,10 @@ enum VerifyBookCoverFallback {
     @MainActor
     static func main() async throws {
         let arguments = CommandLine.arguments
+        if arguments.contains("--cache-only") {
+            try await checkRecommendationCoverRecovery()
+            return
+        }
         let live = arguments.contains("--live")
         let base = URL(string: "http://127.0.0.1:4174/covers")!
         let token: String
@@ -113,6 +117,69 @@ enum VerifyBookCoverFallback {
             }
             print("PASS HTTP 요청 기록: ISBN별 중복 방지 및 실패 후 재시도 확인")
         }
+    }
+
+    @MainActor
+    private static func checkRecommendationCoverRecovery() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let cache = RecommendationCacheStore(directory: directory)
+        let original = URL(string: "https://library.example/cover.png")!
+        let preferred = URL(string: "https://image.yes24.com/goods/1/L")!
+        let png = Data(base64Encoded: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aCw0AAAAASUVORK5CYII=")!
+        let book = Book(
+            id: "primo:alma1234567890", isbn: "9780140328721", controlNumber: "primo:alma1234567890",
+            title: "Fixture", author: "Fixture", publisher: nil, publicationYear: nil,
+            description: nil, imageURL: original
+        )
+        let preparer = RecommendationCachePreparer(
+            store: cache, loadCover: { _ in png }, lookupYes24: { _ in preferred }
+        )
+        let saved = try await preparer.prepare([book])
+        let file = try require(saved.coverFiles[book.id], "추천 로컬 표지가 없습니다")
+        let restored = try require(try await cache.restore(), "추천 목록을 복원하지 못했습니다")
+        guard saved.books.first?.imageURL == original, restored.books.first?.imageURL == original,
+              restored.coverFiles[book.id] == file,
+              try Data(contentsOf: file) == png else { throw ProofError.failed("원격 주소와 로컬 파일을 따로 보존해야 합니다") }
+
+        let manifestURL = directory.appendingPathComponent("recommendations.json")
+        let currentManifest = try Data(contentsOf: manifestURL)
+        var legacyManifest = try require(
+            try JSONSerialization.jsonObject(with: currentManifest) as? [String: Any], "추천 저장본 형식이 올바르지 않습니다"
+        )
+        var legacyBooks = try require(legacyManifest["books"] as? [[String: Any]], "추천 저장본에 도서가 없습니다")
+        let legacySourceURL = legacyBooks[0].removeValue(forKey: "coverSourceURL")
+        legacyBooks[0]["imageURL"] = legacySourceURL
+        legacyManifest["version"] = 2
+        legacyManifest["books"] = legacyBooks
+        try JSONSerialization.data(withJSONObject: legacyManifest).write(to: manifestURL)
+        let previous = try await cache.restore()
+        guard previous?.books.first?.imageURL == preferred, previous?.coverFiles[book.id] == file else {
+            throw ProofError.failed("이전 추천 저장본도 원격 주소와 로컬 파일을 복원해야 합니다")
+        }
+        try currentManifest.write(to: manifestURL)
+
+        let loader = SharedImageLoader<Data>(cost: { $0.count }) { url in
+            guard url == original else { throw BookCoverFailure.unreadableLocalFile }
+            return png
+        }
+        try FileManager.default.removeItem(at: file)
+        let fallback = try require(try await cache.restore(), "표지 파일 없이도 추천 목록이 남아야 합니다")
+        guard fallback.coverFiles.isEmpty, fallback.books.first?.imageURL == original else {
+            throw ProofError.failed("삭제한 파일 대신 원격 주소가 남아야 합니다")
+        }
+        let fresh = BookCoverModel(url: original, isbn: book.isbn, cachedURL: file, pipeline: loader)
+        await fresh.load(original, isbn: book.isbn, cachedURL: file)
+        guard case .loaded = fresh.phase(for: original, isbn: book.isbn, cachedURL: file) else {
+            throw ProofError.failed("YES24 주소를 얻지 못해도 기존 원격 주소에서 표지를 불러와야 합니다")
+        }
+        let legacy = BookCoverModel(url: file, isbn: book.isbn, pipeline: loader)
+        var repairedURL: URL?
+        await legacy.load(file, isbn: book.isbn, lookupLegacyOriginal: { original }) { repairedURL = $0 }
+        guard case .loaded = legacy.phase(for: file, isbn: book.isbn), repairedURL == original else {
+            throw ProofError.failed("파일 경로만 있는 항목은 원격 표지를 읽은 뒤 주소를 갱신해야 합니다")
+        }
+        print("PASS 추천 원격 주소 보존, 로컬 표지 유실 폴백, 기존 파일 경로 복구")
     }
 
     private static func require<T>(_ value: T?, _ message: String) throws -> T {
