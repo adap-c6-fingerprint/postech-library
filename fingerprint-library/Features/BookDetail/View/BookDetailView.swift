@@ -156,7 +156,9 @@ struct BookDetailView: View {
             }
             .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
             .background {
-                if isExpanded { BookDetailCoverBackground(book: store.book) }
+                if isExpanded {
+                    BookDetailCoverBackground(book: store.book, cachedURL: store.cachedCoverURL)
+                }
             }
             .foregroundStyle(Color.textPrimary)
             .navigationTitle("")
