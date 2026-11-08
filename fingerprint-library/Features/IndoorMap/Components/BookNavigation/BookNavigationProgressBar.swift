@@ -28,7 +28,7 @@ struct BookNavigationProgressBar: View {
                                             Text(shortTitle(for: segment)).fixedSize()
                                             Color.clear
                                         }
-                                        .font(.system(size: 8, weight: .medium))
+                                        .typography(.caption1.weight(.semibold))
                                         .foregroundStyle(timeline.completion(of: segment, stopIndex: stopIndex, progress: progress) > 0.5
                                             ? Color.black : Color.white.opacity(0.85))
                                         .padding(.leading, 16).padding(.trailing, 8)
@@ -67,12 +67,12 @@ struct BookNavigationProgressBar: View {
     @ViewBuilder private func markerView(_ kind: BookNavigationTimeline.MarkerKind) -> some View {
         switch kind {
         case let .waypoint(number):
-            Text(String(number)).font(.caption2.bold()).foregroundStyle(.black)
-                .frame(width: 20, height: 20).background(BookNavigationPalette.accent, in: Circle())
+            Text(String(number)).typography(.caption2.weight(.bold)).foregroundStyle(.black)
+                .frame(width: 22.7, height: 22.7).background(BookNavigationPalette.accent, in: Circle())
         case let .waypoints(numbers):
             Text(numbers.map(String.init).joined(separator: "·"))
-                .font(.caption2.bold()).foregroundStyle(.black).fixedSize()
-                .padding(.horizontal, 4).frame(height: 20)
+                .typography(.caption2.weight(.bold)).foregroundStyle(.black).fixedSize()
+                .padding(.horizontal, 4).frame(height: 22.7)
                 .background(BookNavigationPalette.accent, in: Capsule())
         default:
             Image(asset(for: kind)).resizable().scaledToFit()

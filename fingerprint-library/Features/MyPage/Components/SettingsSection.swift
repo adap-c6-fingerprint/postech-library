@@ -50,7 +50,7 @@ struct SettingsSection: View {
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(Color.textPrimary)
             }
-            .frame(height: 52)
+            .frame(minHeight: 52)
             .contentShape(.rect)
         }
         .buttonStyle(.plain)

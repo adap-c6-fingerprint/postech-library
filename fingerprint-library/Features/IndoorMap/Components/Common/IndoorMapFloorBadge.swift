@@ -8,7 +8,7 @@ struct IndoorMapFloorBadge: View {
     var body: some View {
         Text(isCurrent ? "현재 \(floor.ordinal + 1)F" : "\(floor.ordinal + 1)F")
             .typography(.caption2)
-            .foregroundStyle(Color.textPrimary)
+            .foregroundStyle(DS.ColorToken.neutralPrimary)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .frame(minWidth: 61, minHeight: 34)

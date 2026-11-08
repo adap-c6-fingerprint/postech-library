@@ -8,6 +8,7 @@ import ComposableArchitecture
 
 struct OnboardingView: View {
     @Bindable var store: StoreOf<OnboardingFeature>
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private static let chipTopBlurHeight: CGFloat = 30
     // 칩 영역 위쪽 블러 높이
     private static let chipBottomBlurHeight: CGFloat = 30
@@ -98,11 +99,11 @@ struct OnboardingView: View {
 
     private func page(_ step: OnboardingFeature.Step) -> some View {
         VStack(spacing: 0) {
-            switch step {
-            case .welcome: welcome
-            case .terms: terms
-            case .affiliation: affiliation
-            case .interests: interests
+            if dynamicTypeSize.isAccessibilitySize, step != .interests {
+                ScrollView { pageContent(step) }
+                    .scrollBounceBehavior(.basedOnSize)
+            } else {
+                pageContent(step)
             }
 
             if step != .terms {
@@ -127,6 +128,16 @@ struct OnboardingView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(!isBackButtonVisible(step))
         // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 시작 화면에는 없고, 소속 화면부터 처음부터 보인다.
+    }
+
+    @ViewBuilder
+    private func pageContent(_ step: OnboardingFeature.Step) -> some View {
+        switch step {
+        case .welcome: welcome
+        case .terms: terms
+        case .affiliation: affiliation
+        case .interests: interests
+        }
     }
 
     // MARK: - 단계별 화면
@@ -406,7 +417,7 @@ struct OnboardingView: View {
         }
         .padding(.leading, 20)
         .padding(.trailing, 23)
-        .frame(height: 52)
+        .frame(minHeight: 52)
         .background(isEnabled ? Color.onboardingField : Color.onboardingDisabledField, in: .rect(cornerRadius: 20))
         // ✅ 비활성 입력칸은 불투명도 대신 시안의 색(배경 Gray 1100 #161616, 글자 Gray 400 #999)으로 표시한다.
     }
@@ -422,7 +433,7 @@ struct OnboardingView: View {
                 // ✅ Body 2 타이포그래피
                 .foregroundStyle(isSelected ? Color.cartBackground : Color.onboardingTextPrimary)
                 .padding(.horizontal, 25)
-                .frame(height: 52)
+                .frame(minHeight: 52)
                 .contentShape(.capsule)
                 .background(isSelected ? Color.cartPrimary : Color.onboardingField, in: .capsule)
         }
@@ -449,8 +460,10 @@ struct OnboardingView: View {
     }
 
     private func actionButton(_ step: OnboardingFeature.Step) -> some View {
-        let isPrimary = step == .terms || (step == .interests && store.canFinish)
-        // 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다.
+        let isPrimary = step == .terms
+            || (step == .affiliation && store.isAffiliationComplete)
+            || (step == .interests && store.canFinish)
+        // 소속·학과를 모두 고르거나 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다. (피그마 08.-5온보딩_학과 선택 후)
         return Button {
             switch step {
             case .welcome: store.send(.startButtonTapped)
@@ -463,7 +476,7 @@ struct OnboardingView: View {
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(isPrimary ? Color.cartBackground : Color.onboardingTextPrimary)
                 .frame(maxWidth: .infinity)
-                .frame(height: 52)
+                .frame(minHeight: 52)
                 .contentShape(.capsule)
         }
         .buttonStyle(.plain)
@@ -471,6 +484,7 @@ struct OnboardingView: View {
             .regular.tint(isPrimary ? Color.cartPrimary : Color.onboardingActionTint).interactive(),
             in: .capsule
         )
+        // 피그마 button/primary-background·primary-text, button/neutral-background·neutral-text 토큰
         .disabled(!isActionEnabled(step))
     }
 

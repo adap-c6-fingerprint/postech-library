@@ -14,6 +14,7 @@ struct BookNavigationBookFindingView: View {
     private var callNumberScreen: CallNumberScreen?
     // 아래로 3초 이상 당기면 여는 기존 청구기호 화면(BookNavigationArrivalView)에 넘길 값. 미리보기에서는 nil
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var isCallNumberScreenPresented = false
     @State private var isBookHelpPresented = false
     @State private var pullHoldTask: Task<Void, Never>?
@@ -54,32 +55,34 @@ struct BookNavigationBookFindingView: View {
     var body: some View {
         ZStack(alignment: .top) {
             Color.backgroundDefault.ignoresSafeArea()
-            VStack(spacing: 0) {
-                Spacer(minLength: 0)
-                shelf
-                    .frame(height: Design.spineHeight)
-                    .ignoresSafeArea(.container, edges: .horizontal)
-                findingActions
-                    .padding(.top, Design.shelfToButton)
-                    .padding(.horizontal, Design.buttonHorizontalPadding)
-                    .padding(.bottom, Design.buttonBottomPadding)
-            }
-            // 책장은 하단 버튼 위에 붙고, 화면이 작으면 위쪽 안내 문구 뒤로 겹친다. (피그마 주석: 높이 고정)
-            VStack(alignment: .leading, spacing: 0) {
-                BookNavigationTopBar(
-                    backLabel: "길안내로 돌아가기",
-                    backIdentifier: "book-navigation-arrival-back",
-                    onBack: { dismiss() }
-                )
-                if let info = bookInformation {
-                    heading(info)
-                        .padding(.top, Design.topBarToHeading)
-                    instruction(info)
-                        .padding(.top, Design.headingToInstruction)
+            if dynamicTypeSize.isAccessibilitySize {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        findingHeader
+                        shelf
+                            .frame(height: Design.spineHeight)
+                            .padding(.top, Design.headingToInstruction)
+                        findingActions
+                            .padding(.top, Design.shelfToButton)
+                            .padding(.horizontal, Design.buttonHorizontalPadding)
+                            .padding(.bottom, Design.buttonBottomPadding)
+                    }
                 }
+                .scrollBounceBehavior(.basedOnSize)
+            } else {
+                VStack(spacing: 0) {
+                    Spacer(minLength: 0)
+                    shelf
+                        .frame(height: Design.spineHeight)
+                        .ignoresSafeArea(.container, edges: .horizontal)
+                    findingActions
+                        .padding(.top, Design.shelfToButton)
+                        .padding(.horizontal, Design.buttonHorizontalPadding)
+                        .padding(.bottom, Design.buttonBottomPadding)
+                }
+                // 기본 크기에서는 책장을 하단 버튼 위에 붙이는 기존 디자인을 유지한다.
+                findingHeader
             }
-            .padding(.horizontal, Design.horizontalPadding)
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .contentShape(.rect)
         .simultaneousGesture(pullDownToCallNumberScreen)
@@ -106,6 +109,24 @@ struct BookNavigationBookFindingView: View {
         .preferredColorScheme(.dark)
         .task { onTask() }
         .accessibilityIdentifier("book-navigation-arrival")
+    }
+
+    private var findingHeader: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            BookNavigationTopBar(
+                backLabel: "길안내로 돌아가기",
+                backIdentifier: "book-navigation-arrival-back",
+                onBack: { dismiss() }
+            )
+            if let info = bookInformation {
+                heading(info)
+                    .padding(.top, Design.topBarToHeading)
+                instruction(info)
+                    .padding(.top, Design.headingToInstruction)
+            }
+        }
+        .padding(.horizontal, Design.horizontalPadding)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - 아래로 당겨 기존 청구기호 화면 열기
@@ -146,7 +167,7 @@ struct BookNavigationBookFindingView: View {
         VStack(alignment: .leading, spacing: 0) {
             if spineImage == nil, !title.isEmpty {
                 Text(shelfTitle(info))
-                    .typography(Design.headingCaption)
+                    .typography(.shelfHeading)
                     .accessibilityIdentifier("book-navigation-shelf")
                 Text(title)
                     .typography(.title1)
@@ -154,13 +175,13 @@ struct BookNavigationBookFindingView: View {
                     .accessibilityIdentifier("book-navigation-title")
             } else {
                 Text("여기는")
-                    .typography(Design.headingCaption)
+                    .typography(.shelfHeading)
                 Text(shelfTitle(info))
                     .typography(.title1)
                     .accessibilityIdentifier("book-navigation-shelf")
             }
         }
-        .foregroundStyle(Color.textPrimary)
+        .foregroundStyle(DS.ColorToken.neutralPrimary)
     }
 
     private func instruction(_ info: BookNavigationBookInfo) -> some View {
@@ -177,7 +198,7 @@ struct BookNavigationBookFindingView: View {
         let key = number.classification + number.number
         let rest = number.suffix.filter { !$0.isWhitespace }
         let keyText = Text(key)
-            .font(.custom("Pretendard-Bold", fixedSize: DS.FontSize._18))
+            .font(DS.Typography.body1.weight(.bold).font(for: dynamicTypeSize))
             .foregroundColor(Color.textPrimary)
         let keyParticle: String = Self.objectParticle(after: key)
         let prefix = Text("책등에서 \(keyText)")
@@ -292,17 +313,10 @@ struct BookNavigationBookFindingView: View {
     private var findingActions: some View {
         VStack(spacing: Design.findingActionSpacing) {
             findButton
-            Button {
+            LibraryUnderlinedButton(title: "못 찾았어요.") {
                 cancelPullHold()
                 isBookHelpPresented = true
-            } label: {
-                Text("못 찾았어요.")
-                    .typography(.body2)
-                    .underline()
-                    .foregroundStyle(Color.textTertiary)
-                    .frame(minHeight: 28)
             }
-            .buttonStyle(.plain)
             .disabled(bookInformation == nil)
             .accessibilityIdentifier("book-navigation-not-found")
         }
@@ -311,10 +325,12 @@ struct BookNavigationBookFindingView: View {
     private var findButton: some View {
         Button(action: isIntermediateStop ? onContinue : onFinish) {
             Text("찾았어요!")
-                .font(.system(size: 17, weight: .semibold))
+                .typography(.button)
                 .foregroundStyle(Color.backgroundDefault)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
                 .frame(maxWidth: .infinity)
-                .frame(height: 52)
+                .frame(minHeight: 52)
                 .contentShape(.capsule)
         }
         .buttonStyle(.plain)
@@ -326,7 +342,7 @@ struct BookNavigationBookFindingView: View {
     // MARK: - 값
 
     private var spineImage: UIImage? {
-        guard case let .loaded(data) = spine, let image = UIImage(data: data), image.size.height > 0,
+        guard case let .loaded(image) = spine, image.size.height > 0,
               image.size.width / image.size.height < Design.maxSpineAspectRatio else { return nil }
         return image
     }
@@ -401,9 +417,6 @@ struct BookNavigationBookFindingView: View {
         static let pullDistance: CGFloat = 60
         // 이만큼 아래로 당긴 상태를 유지해야 3초를 센다. 살짝 스친 터치는 무시한다.
         static let pullHoldSeconds: Double = 3
-        static let headingCaption = DS.Typography(style: DS.FontStyle.Medium, size: DS.FontSize._20,
-                                                  lineHeight: DS.LineHeight._20, letterSpacing: DS.LetterSpacing._20)
-        // 피그마 "여기는": Pretendard Medium 20 / 28 / -0.4
     }
 }
 
@@ -436,7 +449,7 @@ private func previewSpine(width: CGFloat) -> BookNavigationFeature.SpinePhase {
         UIColor(red: 0.42, green: 0.27, blue: 0.78, alpha: 1).setFill()
         context.fill(CGRect(origin: .zero, size: size))
     }
-    return image.pngData().map(BookNavigationFeature.SpinePhase.loaded) ?? .unavailable
+    return .loaded(image)
 }
 // 책등 API 대신 단색 이미지를 쓴다. 너비를 바꿔 책 두께에 따른 배치(피그마 주석)를 확인한다.
 

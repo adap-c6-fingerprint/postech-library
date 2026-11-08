@@ -798,7 +798,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: "virtual-shelf") as? MKMarkerAnnotationView
                     ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "virtual-shelf")
                 view.annotation = annotation
-                view.glyphImage = UIImage(systemName: "books.vertical.fill")
+                view.glyphImage = UIImage(systemName: "book.fill")
                 view.markerTintColor = annotation.destination.key == parent.selectedShelfKey ? .systemOrange : .systemIndigo
                 view.canShowCallout = true
                 view.titleVisibility = .visible
