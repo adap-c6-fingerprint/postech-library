@@ -26,6 +26,10 @@ struct IndoorMapView: View {
     /// 하단 안내 카드가 있는 화면에서는 지도·카메라 영역을 카드 위로 제한한다.
     var extendsUnderBottomSafeArea = true
     var bookDetail: BookDetailPresentation?
+    var onSelectFavoriteMarker: (HomeMapMarker) -> Void = { _ in }
+    /// 별도 지도 Store를 쓰는 미리보기에도 홈과 같은 마커 목록·시설 표시 설정을 전달한다.
+    var homeAnnotations: HomeMapAnnotationsFeature.State?
+    var hiddenFavoriteMarkerIDs: Set<String> = []
 
     var body: some View {
         Group {
@@ -70,6 +74,7 @@ struct IndoorMapView: View {
                 highlightedFeatureIDs: bookDetail.map { Set($0.shelves.map(\.mapElementID)) } ?? highlightedFeatureIDs,
                 appearance: bookDetail == nil ? appearance : .bookDetail,
                 homeMarkers: homeMarkers(on: map),
+                onSelectFavoriteMarker: onSelectFavoriteMarker,
                 detailShelfLabels: bookDetail?.shelves ?? []
             )
             .ignoresSafeArea(.container, edges: extendsUnderBottomSafeArea ? .bottom : [])
@@ -165,8 +170,10 @@ struct IndoorMapView: View {
 
     private func homeMarkers(on map: IndoorMap) -> [HomeMapMarker] {
         guard appearance == .home || bookDetail != nil else { return [] }
+        let annotations = homeAnnotations ?? store.homeAnnotations
         return homeMarkerCache.markers(on: map, labels: store.shelfLabels,
-            holdings: store.homeAnnotations.holdings, showsAmenities: store.homeAnnotations.showsAmenities)
+            holdings: annotations.holdings, showsAmenities: annotations.showsAmenities,
+            hidingFavoritesFor: bookDetail?.shelves ?? [], hiddenFavoriteMarkerIDs: hiddenFavoriteMarkerIDs)
     }
 
     private var currentLocationButton: some View {

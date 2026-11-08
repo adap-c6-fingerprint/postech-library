@@ -14,6 +14,8 @@ struct IndoorMapKitView: UIViewRepresentable {
     /// 최초 도면의 확대 배율. 1은 층 전체 맞춤이며, 3은 그보다 3배 크게 표시한다.
     /// 층 전환·현재 위치 포커스에는 다시 적용하지 않는다.
     static let initialZoomScale = 3.0
+    /// 단권·여러 권 상세 모두 시트 위에 보이는 영역에서 서가 주변을 같은 배율 기준으로 맞춘다.
+    static let bookDetailMinimumSpanMeters = 20.0
 
     let map: IndoorMap
     let floor: IndoorMapFloor
@@ -40,6 +42,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var onUserCameraInteraction: () -> Void = {}
     var appearance: Appearance = .standard
     var homeMarkers: [HomeMapMarker] = []
+    var onSelectFavoriteMarker: (HomeMapMarker) -> Void = { _ in }
     var detailShelfLabels: [IndoorShelfLabel] = []
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
@@ -489,7 +492,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                     camera.pitch = 0
                     view.setCamera(camera, animated: false)
                 }
-                guard let camera = BookNavigationCameraFitter.camera(for: focus, in: view, padding: padding) else { return false }
+                guard let camera = IndoorMapCameraFitter.camera(fitting: focus.coordinates,
+                    minimumSpanMeters: focus.minimumSpanMeters, in: view, padding: padding) else { return false }
                 view.setCamera(camera, animated: animated && !UIAccessibility.isReduceMotionEnabled)
             case .initialFloor(let id), .floor(let id):
                 let padding = UIEdgeInsets(
@@ -557,6 +561,14 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let camera = view.camera.copy() as! MKMapCamera
                 camera.pitch = 0
                 view.setCamera(camera, animated: false)
+                if parent.appearance == .bookDetail {
+                    // MapKit의 사각형 맞춤 대신 실제 표시 영역의 축척으로 맞춰 큰 시트에서도 과도하게 축소하지 않는다.
+                    guard let camera = IndoorMapCameraFitter.camera(fitting: features.flatMap { $0.geometry.coordinates },
+                        minimumSpanMeters: IndoorMapKitView.bookDetailMinimumSpanMeters,
+                        in: view, padding: padding) else { return false }
+                    view.setCamera(camera, animated: false)
+                    return true
+                }
                 view.setVisibleMapRect(rect.insetBy(dx: -margin, dy: -margin), edgePadding: padding, animated: false)
             }
             return true
@@ -836,6 +848,11 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, didSelect annotation: any MKAnnotation) {
+            if let annotation = annotation as? HomeMapPointAnnotation, annotation.marker.kind == .favorite {
+                mapView.deselectAnnotation(annotation, animated: false)
+                parent.onSelectFavoriteMarker(annotation.marker)
+                return
+            }
             if let annotation = annotation as? IndoorShelfAnnotation {
                 parent.onSelectShelf(annotation.destination.key)
                 return

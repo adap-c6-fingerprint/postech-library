@@ -41,7 +41,9 @@ struct BookRoutePreviewBookCard: View {
     }
 
     private var shelves: [IndoorShelfLabel] {
-        stop?.candidateShelves ?? resolutions.flatMap(\.shelves)
+        if let stop { return stop.candidateShelves }
+        // 지도와 같은 대표 소장본의 위치만 카드에 표시한다.
+        return resolutions.first { $0.holding == holding }?.shelves ?? []
     }
 
     private var location: String? {

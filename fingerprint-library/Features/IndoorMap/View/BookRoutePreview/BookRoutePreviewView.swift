@@ -196,7 +196,7 @@ struct BookRoutePreviewView: View {
                     routeError: routeError,
                     canStart: readySession != nil && currentStart != nil && !isLoadingRoute && routeError == nil,
                     onBack: { dismiss() },
-                    onStart: {
+                    onStart: { _ in
                         routeStore.send(.startRequested(.init(state: destinationStore.state, start: currentStart)))
                     },
                     onRetry: {
@@ -207,7 +207,8 @@ struct BookRoutePreviewView: View {
                         } else {
                             previewStart = currentStart
                         }
-                    }
+                    },
+                    homeAnnotations: mapStore?.homeAnnotations
                 )
             } else {
                 previewContent

@@ -55,7 +55,7 @@ struct IndoorShelfLabelLayout {
     let groups: [IndoorShelfLabelPresentation]
 
     init(labels: [IndoorShelfLabel]) {
-        let paired = Dictionary(grouping: labels) { "\($0.floorID)-\($0.fixtureNumber.dropLast(2))" }
+        let paired = Dictionary(grouping: labels, by: \.physicalShelfID)
         let numberModels: [IndoorShelfLabelPresentation] = paired.sorted { $0.key < $1.key }.map { id, members in
             let sorted = members.sorted { $0.side.rawValue < $1.side.rawValue }
             let rect = sorted.reduce(MKMapRect.null) { $0.union(MapKitGeometry.mapRect(for: $1.geometry)) }
