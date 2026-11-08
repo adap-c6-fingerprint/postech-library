@@ -141,9 +141,9 @@ struct IndoorMapView: View {
         Button { store.send(.homeAnnotations(.amenitiesTapped)) } label: {
             HStack(alignment: .center, spacing: 10) {
                 Text("편의시설")
-                    .font(.caption.weight(.semibold))
+                    .typography(.caption2)
                     .foregroundStyle(store.homeAnnotations.showsAmenities
-                        ? Color(red: 0.88, green: 0.95, blue: 0.19) : .white)
+                                     ? DS.ColorToken.primaryLight : DS.ColorToken.neutralPrimary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.25)
             }
@@ -226,8 +226,8 @@ struct IndoorMapView: View {
             .fixedSize()
         }
         .background(isHome ? .clear : Color(uiColor: .systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .glassEffect(isHome ? .regular : .identity, in: .rect(cornerRadius: 12))
+        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.floorAmenitiesToggle))
+        .glassEffect(isHome ? .regular : .identity, in: .rect(cornerRadius: DS.Radius.floorAmenitiesToggle))
         .overlay {
             GeometryReader { geometry in
                 if map.floors.count > 1 {
@@ -253,40 +253,53 @@ struct IndoorMapView: View {
             .allowsHitTesting(false)
         }
         .overlay(
-            RoundedRectangle(cornerRadius: 12).strokeBorder(Color(uiColor: .separator).opacity(0.6))
+            RoundedRectangle(cornerRadius: DS.Radius.floorAmenitiesToggle)
+                .strokeBorder(Color(uiColor: .separator).opacity(0.6))
         )
         .shadow(color: .black.opacity(0.1), radius: 2.5, x: 1, y: 1)
     }
 
     /// 세로·가로 배치 모두 34pt 높이와 같은 글자 여백을 사용한다.
     private func floorButtons(map: IndoorMap, floor: IndoorMapFloor) -> some View {
-        let isHome = appearance == .home
+        let buttonWidth: CGFloat
+        let selectedBackground: Color
+        let selectedText: Color
+        let unselectedText: Color
+
+        // 홈 지도에는 F 표기와 디자인 토큰을, 일반 지도에는 층 이름과 시스템 테마를 사용한다.
+        switch appearance {
+        case .home:
+            buttonWidth = 61
+            selectedBackground = DS.ColorToken.primaryLight
+            selectedText = DS.ColorToken.neutralDark
+            unselectedText = DS.ColorToken.neutralPrimary
+        case .standard, .bookDetail:
+            buttonWidth = 56
+            selectedBackground = Color(uiColor: .label)
+            selectedText = Color(uiColor: .systemBackground)
+            unselectedText = .primary
+        }
+
         return ForEach(map.floors.reversed()) { item in
+            let isSelected = item.id == floor.id
             Button {
                 store.send(.floorSelected(item.id))
             } label: {
-                Text(isHome ? "\(item.ordinal + 1)F" : item.name)
-                    .font(.subheadline.weight(item.id == floor.id ? .bold : .regular))
+                Text(appearance == .home ? "\(item.ordinal + 1)F" : item.name)
+                    .typography(isSelected ? .caption1.weight(.semibold) : .caption1)
+                    .multilineTextAlignment(.center)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.vertical, 10)
-                    .padding(.horizontal, 16)
-                    .frame(width: isHome ? 61 : 56, height: 34)
-                    .background(
-                        item.id == floor.id
-                            ? (isHome ? Color(red: 0.88, green: 0.95, blue: 0.19) : Color(uiColor: .label))
-                            : Color.clear
-                    )
-                    .foregroundStyle(
-                        item.id == floor.id
-                            ? (isHome ? .black : Color(uiColor: .systemBackground))
-                            : (isHome ? .white : .primary)
-                    )
+                    .padding(.horizontal, DS.Spacing._16)
+                    .frame(width: buttonWidth, height: 34)
+                    .background(isSelected ? selectedBackground : .clear)
+                    .foregroundStyle(isSelected ? selectedText : unselectedText)
             }
             .buttonStyle(.plain)
             .accessibilityLabel("\(item.name) 지도 보기")
-            .accessibilityAddTraits(item.id == floor.id ? [.isSelected] : [])
+            .accessibilityAddTraits(isSelected ? [.isSelected] : [])
             .accessibilityIdentifier("floor-\(item.ordinal)")
         }
     }

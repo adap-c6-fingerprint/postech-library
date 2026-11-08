@@ -1,5 +1,5 @@
 //
-//  DS+Spacing.swift
+//  DesignSystemSpacing.swift
 //  fingerprint-library
 //
 //  Created by 이시온 on 11/2/26.
@@ -10,6 +10,7 @@ import CoreGraphics
 enum DS {}
 
 extension DS {
+    /// Figma 「Spacing」 컬렉션
     enum Spacing {
         static let _4: CGFloat = 4
         static let _8: CGFloat = 8

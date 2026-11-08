@@ -14,11 +14,6 @@ struct LibraryMapView: View {
     @Bindable private var searchStore: StoreOf<BookSearchFeature>
     @ScaledMetric(relativeTo: .title) private var headerHeight: CGFloat = 160
 
-    struct Constants {
-      static let colorTextTitle: Color = Color(red: 0.98, green: 0.98, blue: 0.98)
-      static let FontSize24: CGFloat = 24
-      static let FontFamilyPretendard: String = "Pretendard"
-    }
 
     init(store: StoreOf<AppFeature>, searchStore: StoreOf<BookSearchFeature>? = nil) {
         self.store = store
@@ -52,7 +47,7 @@ struct LibraryMapView: View {
                 }
                 .overlay(alignment: .topLeading) { homeHeader }
                 .background(.black)
-                .safeAreaInset(edge: .top, spacing: 0) {
+                .safeAreaInset(edge: .top, spacing: LibraryTabIntroText.topBarSpacing) {
                     LibraryTabTopBar(
                         title: "홈",
                         onFavorites: { searchStore.send(.favoritesButtonTapped) },
@@ -124,12 +119,7 @@ struct LibraryMapView: View {
     }
     
     private var homeHeader: some View {
-        Text("오늘은 어떤 책을\n읽어볼까요?")
-            .font(Font.custom(Constants.FontFamilyPretendard, size: Constants.FontSize24)
-                .weight(.semibold))
-            .lineSpacing(6)
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
+        LibraryTabIntroText(title: "오늘은 어떤 책을\n읽어볼까요?")
             .frame(maxWidth: .infinity, minHeight: headerHeight, alignment: .topLeading)
             .allowsHitTesting(false)
             .accessibilityIdentifier("library-home-greeting")

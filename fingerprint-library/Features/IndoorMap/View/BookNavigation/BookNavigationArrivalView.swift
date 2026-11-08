@@ -202,7 +202,8 @@ struct BookNavigationArrivalView: View {
                 Text("책등의 청구기호를 순서대로 확인해 주세요")
             }
         }
-        .font(.subheadline)
+        .typography(.body1.weight(.medium))
+        .foregroundStyle(DS.ColorToken.neutralTertiary)
         .lineSpacing(4)
         .multilineTextAlignment(.center)
         .fixedSize(horizontal: false, vertical: true)

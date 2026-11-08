@@ -47,7 +47,21 @@ struct HomeView: View {
     }
 
     private var homeContent: some View {
-        VStack(spacing: 13.59) {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                recommendationSection
+                popularBooksSection
+            }
+            .padding(.bottom, 24)
+        }
+        .scrollIndicators(.hidden)
+        .scrollPosition($homeScrollPosition)
+        .onChange(of: store.showsKulumiCovers) { _, isActive in
+            guard isActive else { return }
+            homeScrollPosition.scrollTo(edge: .top)
+            recommendationPosition = 0
+        }
+        .safeAreaInset(edge: .top, spacing: LibraryTabIntroText.topBarSpacing) {
             LibraryTabTopBar(
                 title: "추천",
                 onFavorites: { store.send(.favoritesButtonTapped) },
@@ -55,20 +69,6 @@ struct HomeView: View {
                 onProfile: { store.send(.profileButtonTapped) }
             )
             // 제목의 아래쪽과 첫 추천 문구 사이에 13.59pt를 확보한다.
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    recommendationSection
-                    popularBooksSection
-                }
-                .padding(.bottom, 24)
-            }
-            .scrollIndicators(.hidden)
-            .scrollPosition($homeScrollPosition)
-            .onChange(of: store.showsKulumiCovers) { _, isActive in
-                guard isActive else { return }
-                homeScrollPosition.scrollTo(edge: .top)
-                recommendationPosition = 0
-            }
         }
         .background(Color(uiColor: .systemBackground))
         .toolbar(.hidden, for: .navigationBar)
@@ -128,11 +128,7 @@ struct HomeView: View {
         let count = store.showsKulumiCovers ? Self.kulumiCoverNames.count : store.recommendationCount
 
         return VStack(alignment: .leading, spacing: 20) {
-            Text("\(recipient)\n추천하는 책 \(count)선.")
-                .font(.system(size: 22, weight: .semibold))
-                .lineSpacing(4)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.horizontal, 16)
+            LibraryTabIntroText(title: "\(recipient)\n추천하는 책 \(count)선.")
             
             if store.showsKulumiCovers || !store.recommendedBooks.isEmpty {
                 recommendationCarousel

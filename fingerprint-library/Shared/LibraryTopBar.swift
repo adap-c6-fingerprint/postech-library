@@ -36,17 +36,10 @@ struct LibraryTabTopBar: View {
 private struct LibraryTopBarTitle: View {
     let title: String
 
-    private enum Constants {
-        static let colorTextTitle: Color = Color(red: 0.98, green: 0.98, blue: 0.98)
-        static let FontSize32: CGFloat = 32
-        static let FontFamilyPretendard: String = "Pretendard"
-    }
-    // 툴바용 LibraryTopBar를 지우면서 제목 글꼴 상수를 제목 View 안으로 옮겼다.
-
     var body: some View {
         Text(title)
-            .font(.custom(Constants.FontFamilyPretendard, size: Constants.FontSize32).weight(.semibold))
-            .foregroundStyle(Constants.colorTextTitle)
+            .typography(.largeTitle)
+            .foregroundStyle(DS.ColorToken.neutralPrimary)
             .fixedSize()
             .accessibilityIdentifier("library-top-bar-title")
     }

@@ -147,11 +147,13 @@ struct BookNavigationView: View {
         HStack(alignment: .top, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(store.currentBookInfo.map { BookText.plainText($0.book.title) } ?? "도서 길안내")
-                    .font(.title3.bold()).lineLimit(2)
+                    .typography(.largeTitle)
+                    .lineLimit(2)
                     .accessibilityIdentifier("book-navigation-book-title")
                 if let info = store.currentBookInfo {
                     Text("\(info.floorName ?? "") \(info.shelf.realNumber)번 서가")
-                        .font(.subheadline).foregroundStyle(.white.opacity(0.8))
+                        .typography(.title1)
+                        .foregroundStyle(DS.ColorToken.neutralTertiary)
                         .accessibilityIdentifier("book-navigation-shelf")
                 }
             }
@@ -172,10 +174,11 @@ struct BookNavigationView: View {
                 HStack(spacing: 8) {
                     Image(systemName: store.instructionSymbol)
                         .font(.system(size: 14, weight: .semibold))
-                        .frame(width: 24, height: 24)
+                        .frame(width: 23, height: 23)
                         .background(.black, in: Circle())
                     Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
-                        .font(.body.weight(.medium)).lineLimit(2)
+                        .typography(.body1).lineLimit(2)
+                        .foregroundStyle(DS.ColorToken.neutralPrimary)
                     Spacer(minLength: 0)
                 }
                 .frame(minHeight: 28)
@@ -238,9 +241,9 @@ struct BookNavigationView: View {
             store.send(.floorTransitionTapped(stopIndex: stopIndex, stepIndex: transition.id))
         } label: {
             Text(transition.buttonTitle)
-                .font(.system(size: 12, weight: .medium))
+                .typography(.caption2.weight(.medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(.white)
+                .foregroundStyle(DS.ColorToken.neutralPrimary)
                 .padding(.horizontal, 16)
                 .frame(minHeight: 34)
                 .glassEffect(.regular.tint(.black.opacity(0.2)), in: .rect(cornerRadius: 12))

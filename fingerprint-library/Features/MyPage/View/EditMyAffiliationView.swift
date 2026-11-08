@@ -13,13 +13,16 @@ import SwiftUI
 
 struct EditMyAffiliationView: View {
     let store: StoreOf<EditMyAffiliationFeature>
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            header
-                .padding(.top, 38)
-                .padding(.bottom, 32)
-            fields
+            if dynamicTypeSize.isAccessibilitySize {
+                ScrollView { formContent }
+                    .scrollBounceBehavior(.basedOnSize)
+            } else {
+                formContent
+            }
             Spacer()
             changeButton
                 .padding(.horizontal, 20)
@@ -43,6 +46,15 @@ struct EditMyAffiliationView: View {
             Text(store.errorMessage ?? "")
         }
         .task { store.send(.task) }
+    }
+
+    private var formContent: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            header
+                .padding(.top, 38)
+                .padding(.bottom, 32)
+            fields
+        }
     }
 
     private var header: some View {
@@ -124,7 +136,7 @@ struct EditMyAffiliationView: View {
         }
         .padding(.leading, 20)
         .padding(.trailing, 23)
-        .frame(height: 52)
+        .frame(minHeight: 52)
         .background(
             isEnabled ? Color.editAffiliationField : Color.editAffiliationDisabledField,
             in: .rect(cornerRadius: 20)
@@ -136,10 +148,13 @@ struct EditMyAffiliationView: View {
             store.send(.changeButtonTapped)
         } label: {
             Text("변경하기")
-                .font(.system(size: 17, weight: .semibold))
+                .typography(.button)
+                .multilineTextAlignment(.center)
                 .foregroundStyle(store.canSave ? Color.backgroundDefault : Color.textPrimary)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
                 .frame(maxWidth: .infinity)
-                .frame(height: 52)
+                .frame(minHeight: 52)
                 .contentShape(.capsule)
         }
         .buttonStyle(.plain)
