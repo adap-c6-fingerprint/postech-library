@@ -1,50 +1,34 @@
 import SwiftUI
+import UIKit
 
 struct BookNavigationProgressBar: View {
     let timeline: BookNavigationTimeline
     let stopIndex: Int
     let progress: RouteGuidanceProgress?
     var floors: [IndoorMapFloor] = []
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @ScaledMetric(relativeTo: .caption) private var markerDiameter = 22.7
+    @ScaledMetric(relativeTo: .caption) private var trackHeight = 20
+    @ScaledMetric(relativeTo: .caption) private var rowHeight = 28
+
+    private let typography = DS.Typography.caption2.weight(.semibold)
 
     var body: some View {
         Group {
             if timeline.hasCompleteDistances {
                 GeometryReader { geometry in
-                    let width = max(0, geometry.size.width - 24)
-                    ZStack(alignment: .leading) {
-                        ForEach(timeline.segments) { segment in
-                            let length = width * timeline.fraction(for: segment)
-                            let x = timeline.totalMeters > 0 ? width * segment.startMeters / timeline.totalMeters : 0
-                            Rectangle().fill(.white.opacity(0.16))
-                                .frame(width: max(0, length - 2), height: 20)
-                                .overlay(alignment: .leading) {
-                                    Rectangle().fill(BookNavigationPalette.accent)
-                                        .frame(width: max(0, length - 2) * timeline.completion(of: segment, stopIndex: stopIndex, progress: progress))
-                                }
-                                .overlay {
-                                    if length >= 48 {
-                                        ViewThatFits(in: .horizontal) {
-                                            Text(timeline.description(for: segment, floors: floors)).fixedSize()
-                                            Text(shortTitle(for: segment)).fixedSize()
-                                            Color.clear
-                                        }
-                                        .typography(.caption1.weight(.semibold))
-                                        .foregroundStyle(timeline.completion(of: segment, stopIndex: stopIndex, progress: progress) > 0.5
-                                            ? Color.black : Color.white.opacity(0.85))
-                                        .padding(.leading, 16).padding(.trailing, 8)
-                                    }
-                                }
-                                .offset(x: x + 12)
+                    let layout = makeLayout(width: geometry.size.width)
+                    if layout.width > geometry.size.width + 0.5 {
+                        // 큰 글자·좁은 화면에서도 필수 문구를 자르거나 숨기지 않는다.
+                        ScrollView(.horizontal) {
+                            track(layout)
                         }
-                        ForEach(timeline.markers) { marker in
-                            markerView(marker.kind)
-                                .frame(width: 22.7, height: 22.7)
-                                .offset(x: width * marker.fraction)
-                        }
+                        .scrollIndicators(.hidden)
+                    } else {
+                        track(layout)
                     }
-                    .frame(height: geometry.size.height)
                 }
-                .frame(height: 28)
+                .frame(height: rowHeight)
             } else {
                 Label("구간별 거리 확인 필요", systemImage: "point.topleft.down.to.point.bottomright.curvepath")
                     .font(.caption).foregroundStyle(.secondary)
@@ -56,26 +40,107 @@ struct BookNavigationProgressBar: View {
         .accessibilityIdentifier("book-navigation-progress")
     }
 
-    private func shortTitle(for segment: BookNavigationTimeline.Segment) -> String {
-        switch segment.kind {
-        case .walk: "도보 이동"
-        case .elevator: "엘리베이터"
-        case .stairs: "계단"
+    private func makeLayout(width: CGFloat) -> BookNavigationProgressLayout {
+        let metrics = typography.metrics(for: dynamicTypeSize)
+        return .init(timeline: timeline, floors: floors, availableWidth: width, markerDiameter: markerDiameter) { text in
+            ceil((text as NSString).size(withAttributes: [.font: metrics.font, .kern: metrics.letterSpacing]).width) + 1
         }
     }
 
-    @ViewBuilder private func markerView(_ kind: BookNavigationTimeline.MarkerKind) -> some View {
+    private func track(_ layout: BookNavigationProgressLayout) -> some View {
+        ZStack(alignment: .leading) {
+            // 1. 경로 전체 배경
+            Rectangle().fill(.white.opacity(0.16))
+                .frame(width: layout.trackWidth, height: trackHeight)
+                .offset(x: layout.trackStart)
+
+            // 2. 마일스톤 아래까지 끊김 없이 이어지는 진행 막대와 구간 문구
+            ZStack(alignment: .leading) {
+                Rectangle().fill(BookNavigationPalette.accent)
+                    .frame(width: layout.completedWidth(timeline: timeline, stopIndex: stopIndex, progress: progress),
+                           height: trackHeight)
+                    .offset(x: layout.trackStart)
+                ForEach(layout.items) { item in
+                    segmentLabel(item)
+                        .frame(width: item.width, height: rowHeight)
+                        .offset(x: item.x)
+                }
+            }
+            .frame(width: layout.width, height: rowHeight, alignment: .leading)
+
+            // 3. 진행 막대를 가리는 마일스톤·층 이동 마커
+            ZStack(alignment: .leading) {
+                ForEach(layout.items) { item in
+                    markerItem(item, layout: layout)
+                        .frame(width: item.width, height: rowHeight)
+                        .offset(x: item.x)
+                }
+            }
+            .frame(width: layout.width, height: rowHeight, alignment: .leading)
+        }
+        .frame(width: layout.width, height: rowHeight, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private func segmentLabel(_ item: BookNavigationProgressLayout.Item) -> some View {
+        switch item.content {
+        case .walk(let segment):
+            let completion = timeline.completion(of: segment, stopIndex: stopIndex, progress: progress)
+            if let text = item.text {
+                Text(text).typography(typography).fixedSize()
+                    .foregroundStyle(completion > 0.5 ? Color.black : .white.opacity(0.85))
+                    .accessibilityIdentifier("navigation-progress.walk.\(segment.id)")
+            }
+        case .approach(let kind):
+            let completion = timeline.segments.first { $0.kind == kind }.map {
+                timeline.completion(of: $0, stopIndex: stopIndex, progress: progress)
+            } ?? 0
+            Text(item.text ?? "").typography(typography).fixedSize()
+                .foregroundStyle(completion > 0.5 ? Color.black : .white.opacity(0.85))
+                .accessibilityIdentifier("navigation-progress.approach.\(item.id)")
+        default:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    private func markerItem(_ item: BookNavigationProgressLayout.Item, layout: BookNavigationProgressLayout) -> some View {
+        switch item.content {
+        case .marker(let kind):
+            markerView(kind, width: item.width)
+        case .transition(let segment):
+            HStack(spacing: layout.iconSpacing) {
+                Image(segment.kind == .stairs ? "annotation_stairs" : "annotation_elevator")
+                    .resizable().scaledToFit().frame(width: markerDiameter, height: markerDiameter)
+                Text(item.text ?? "").typography(typography).fixedSize()
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(.trailing, layout.textPadding * 2)
+            .frame(width: item.width, height: markerDiameter)
+            .foregroundStyle(.black)
+            .background {
+                Capsule().fill(BookNavigationPalette.floorTransition)
+                    .frame(height: trackHeight)
+            }
+            .accessibilityIdentifier("navigation-progress.transition.\(segment.id)")
+        default:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder private func markerView(_ kind: BookNavigationTimeline.MarkerKind, width: CGFloat) -> some View {
         switch kind {
         case let .waypoint(number):
             Text(String(number)).typography(.caption2.weight(.bold)).foregroundStyle(.black)
-                .frame(width: 22.7, height: 22.7).background(BookNavigationPalette.accent, in: Circle())
+                .frame(width: width, height: markerDiameter).background(BookNavigationPalette.accent, in: Circle())
         case let .waypoints(numbers):
             Text(numbers.map(String.init).joined(separator: "·"))
                 .typography(.caption2.weight(.bold)).foregroundStyle(.black).fixedSize()
-                .padding(.horizontal, 4).frame(height: 22.7)
+                .frame(width: width, height: markerDiameter)
                 .background(BookNavigationPalette.accent, in: Capsule())
         default:
             Image(asset(for: kind)).resizable().scaledToFit()
+                .frame(width: markerDiameter, height: markerDiameter)
         }
     }
 
