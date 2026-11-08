@@ -169,20 +169,20 @@ struct BookDetailView: View {
             .fullScreenCover(isPresented: $isRoutePreviewPresented) {
                 BookRoutePreviewView(books: [store.book], entryMode: .direct)
             }
-            .fullScreenCover(item: $store.scope(state: \.basket, action: \.basket)) { basketStore in
+            .fullScreenCover(item: $store.scope(state: \.cart, action: \.cart)) { cartStore in
                 NavigationStack {
-                    BookBasketView(store: basketStore, onClose: { store.send(.basket(.dismiss)) })
+                    BookCartView(store: cartStore, onClose: { store.send(.cart(.dismiss)) })
                 }
             }
-            .alert(basketNoticeTitle, item: basketNotice) { _ in
+            .alert(cartNoticeTitle, item: cartNotice) { _ in
                 Button("취소", role: .cancel) {}
-                Button("바로가기") { store.send(.basketShortcutTapped) }
+                Button("바로가기") { store.send(.cartShortcutTapped) }
                     .keyboardShortcut(.defaultAction)
             } message: { _ in
                 Text("장바구니로 이동하여 책의 경로를 확인하시겠습니까?")
             }
-            .basketLimitAlert(isPresented: store.isBasketLimitAlertPresented) {
-                store.send(.basketLimitAlertDismissed)
+            .cartLimitAlert(isPresented: store.isCartLimitAlertPresented) {
+                store.send(.cartLimitAlertDismissed)
             }
             .task { store.send(.loadFavorites) }
             .analyticsScreen(.detail)
@@ -196,16 +196,16 @@ struct BookDetailView: View {
             .task { store.send(.loadRelatedBooks) }
     }
 
-    private var basketNoticeTitle: String {
-        store.basketNotice == .alreadyAdded ? "이미 장바구니에 담긴 책이에요." : "책이 장바구니에 담겼어요."
+    private var cartNoticeTitle: String {
+        store.cartNotice == .alreadyAdded ? "이미 장바구니에 담긴 책이에요." : "책이 장바구니에 담겼어요."
     }
 
-    private var basketNotice: Binding<BookDetailFeature.BasketNotice?> {
+    private var cartNotice: Binding<BookDetailFeature.CartNotice?> {
         Binding(
-            get: { store.basketNotice },
+            get: { store.cartNotice },
             set: { notice in
-                if notice == nil, store.basketNotice != nil {
-                    store.send(.basketNoticeDismissed)
+                if notice == nil, store.cartNotice != nil {
+                    store.send(.cartNoticeDismissed)
                 }
             }
         )
@@ -475,13 +475,13 @@ struct BookDetailView: View {
             .frame(maxWidth: .infinity, minHeight: 50)
             .accessibilityIdentifier("bookDetail.startGuidance")
             Button {
-                store.send(.addToBasketButtonTapped)
+                store.send(.addToCartButtonTapped)
             } label: { Image(systemName: "cart.fill").font(.system(size: 23, weight: .semibold)) }
             .buttonBorderShape(.circle)
             .controlSize(.large)
             .frame(width: 50, height: 50)
             .accessibilityLabel("장바구니에 담기")
-            .accessibilityIdentifier("bookDetail.addToBasket")
+            .accessibilityIdentifier("bookDetail.addToCart")
         }
         .buttonStyle(.glass(.regular.tint(Color(white: 32.0 / 255).opacity(0.45))))
         .foregroundStyle(Color.textPrimary)

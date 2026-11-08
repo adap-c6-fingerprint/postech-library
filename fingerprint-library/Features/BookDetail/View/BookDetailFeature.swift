@@ -32,7 +32,7 @@ struct BookDetailFeature {
         case unavailable
     }
 
-    enum BasketNotice: Equatable {
+    enum CartNotice: Equatable {
         case added
         case alreadyAdded
     }
@@ -66,9 +66,9 @@ struct BookDetailFeature {
         }
 
         // 장바구니
-        var basketNotice: BasketNotice?
-        @Presents var basket: BookBasketFeature.State?
-        var isBasketLimitAlertPresented = false
+        var cartNotice: CartNotice?
+        @Presents var cart: BookCartFeature.State?
+        var isCartLimitAlertPresented = false
 
         var isbn13: String? {
             BookISBN.isbn13(from: book.isbn)
@@ -100,11 +100,11 @@ struct BookDetailFeature {
         case destinationRouteFailed(requestID: Int)
         case loadFavorites
         case favoriteButtonTapped
-        case addToBasketButtonTapped
-        case basketNoticeDismissed
-        case basketShortcutTapped
-        case basket(PresentationAction<BookBasketFeature.Action>)
-        case basketLimitAlertDismissed
+        case addToCartButtonTapped
+        case cartNoticeDismissed
+        case cartShortcutTapped
+        case cart(PresentationAction<BookCartFeature.Action>)
+        case cartLimitAlertDismissed
         case startGuidanceButtonTapped
         case guidanceStarted
         // "바로 안내 시작"으로 경로 미리보기를 열 때. 마이페이지 최근 찾은 책에 기록한다.
@@ -132,7 +132,7 @@ struct BookDetailFeature {
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
 
     @Dependency(\.indoorRouteClient) var indoorRouteClient
-    @Dependency(\.bookBasketClient) var bookBasketClient
+    @Dependency(\.bookCartClient) var bookCartClient
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
     @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
     @Dependency(\.bookCoverClient) var bookCoverClient
@@ -259,37 +259,37 @@ struct BookDetailFeature {
 
                 return .none
 
-            case .addToBasketButtonTapped:
-                switch bookBasketClient.add(state.book, at: now) {
+            case .addToCartButtonTapped:
+                switch bookCartClient.add(state.book, at: now) {
                 case .added:
-                    state.basketNotice = .added
-                    analytics.record(.init(.basketBookAdded, [
+                    state.cartNotice = .added
+                    analytics.record(.init(.cartBookAdded, [
                         .bookRecordID: .text(AnalyticsEvent.bookID(state.book))
                     ]))
                 case .alreadyAdded:
-                    state.basketNotice = .alreadyAdded
+                    state.cartNotice = .alreadyAdded
                 case .limitExceeded:
-                    state.isBasketLimitAlertPresented = true
-                    analytics.record(.init(.basketLimitBlocked, [.kind: .text("capacity")]))
+                    state.isCartLimitAlertPresented = true
+                    analytics.record(.init(.cartLimitBlocked, [.kind: .text("capacity")]))
                 }
                 return .none
 
-            case .basketNoticeDismissed:
-                state.basketNotice = nil
+            case .cartNoticeDismissed:
+                state.cartNotice = nil
                 return .none
 
-            case .basketShortcutTapped:
+            case .cartShortcutTapped:
                 // 시스템 얼럿이 버튼 액션보다 먼저 표시 상태를 초기화할 수 있다.
-                guard state.basket == nil else { return .none }
-                state.basketNotice = nil
-                state.basket = BookBasketFeature.State()
+                guard state.cart == nil else { return .none }
+                state.cartNotice = nil
+                state.cart = BookCartFeature.State()
                 return .none
 
-            case .basket:
+            case .cart:
                 return .none
 
-            case .basketLimitAlertDismissed:
-                state.isBasketLimitAlertPresented = false
+            case .cartLimitAlertDismissed:
+                state.isCartLimitAlertPresented = false
 
                 return .none
 
@@ -309,7 +309,7 @@ struct BookDetailFeature {
             }
         }
         .ifLet(\.$shelfMap, action: \.shelfMap) { BookShelfMapFeature() }
-        .ifLet(\.$basket, action: \.basket) { BookBasketFeature() }
+        .ifLet(\.$cart, action: \.cart) { BookCartFeature() }
     }
 
     private nonisolated enum CancelID: Hashable, Sendable {

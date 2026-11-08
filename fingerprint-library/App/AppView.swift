@@ -26,7 +26,7 @@ struct AppView: View {
             } else if store.hasCheckedProfile {
                 tabs
             } else {
-                Color.basketBackground.ignoresSafeArea()
+                Color.cartBackground.ignoresSafeArea()
             }
         }
 

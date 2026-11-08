@@ -1,12 +1,12 @@
 import Foundation
 import ComposableArchitecture
 
-nonisolated struct BookBasketClient: Sendable {
-    var load: @Sendable () -> [BookBasketItem]
-    var save: @Sendable ([BookBasketItem]) -> Void
+nonisolated struct BookCartClient: Sendable {
+    var load: @Sendable () -> [BookCartItem]
+    var save: @Sendable ([BookCartItem]) -> Void
     var repairLegacyCover: @Sendable (Book.ID, URL, URL) -> Void = { _, _, _ in }
 
-    private static let storageKey = "bookBasketItems"
+    private static let storageKey = "bookCartItems"
 
     // 테스트에서는 별도 suite를 사용해 앱의 실제 장바구니와 분리한다.
     static func userDefaults(suiteName: String? = nil) -> Self {
@@ -47,7 +47,7 @@ nonisolated struct BookBasketClient: Sendable {
         var imageURL: URL?
         let addedAt: Date
 
-        init(_ item: BookBasketItem) {
+        init(_ item: BookCartItem) {
             let book = item.book
             id = book.id; isbn = book.isbn; controlNumber = book.controlNumber
             title = book.title; author = book.author; publisher = book.publisher
@@ -55,8 +55,8 @@ nonisolated struct BookBasketClient: Sendable {
             imageURL = book.imageURL; addedAt = item.addedAt
         }
 
-        var item: BookBasketItem {
-            BookBasketItem(
+        var item: BookCartItem {
+            BookCartItem(
                 book: Book(
                     id: id, isbn: isbn, controlNumber: controlNumber, title: title,
                     author: author, publisher: publisher, publicationYear: publicationYear,
@@ -78,21 +78,21 @@ nonisolated struct BookBasketClient: Sendable {
     func add(_ book: Book, at date: Date) -> AddResult {
         var items = load()
         guard !items.contains(where: { $0.book.recordKey == book.recordKey }) else { return .alreadyAdded }
-        guard items.count < BookBasketItem.maxStoredCount else { return .limitExceeded }
-        items.append(BookBasketItem(book: book, addedAt: date))
+        guard items.count < BookCartItem.maxStoredCount else { return .limitExceeded }
+        items.append(BookCartItem(book: book, addedAt: date))
         save(items)
         return .added
     }
 }
 
-extension BookBasketClient: DependencyKey {
+extension BookCartClient: DependencyKey {
     static let liveValue = Self.userDefaults()
     static let testValue = Self(load: { [] }, save: { _ in })
 }
 
 extension DependencyValues {
-    var bookBasketClient: BookBasketClient {
-        get { self[BookBasketClient.self] }
-        set { self[BookBasketClient.self] = newValue }
+    var bookCartClient: BookCartClient {
+        get { self[BookCartClient.self] }
+        set { self[BookCartClient.self] = newValue }
     }
 }

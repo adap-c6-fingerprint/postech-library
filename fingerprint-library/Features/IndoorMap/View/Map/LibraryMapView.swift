@@ -51,7 +51,7 @@ struct LibraryMapView: View {
                     LibraryTabTopBar(
                         title: "홈",
                         onFavorites: { searchStore.send(.favoritesButtonTapped) },
-                        onBasket: { searchStore.send(.basketButtonTapped) },
+                        onCart: { searchStore.send(.cartButtonTapped) },
                         onProfile: { searchStore.send(.profileButtonTapped) }
                     )
                 }
@@ -74,9 +74,9 @@ struct LibraryMapView: View {
     private func destinations(_ content: some View) -> some View {
         content
             .navigationDestination(
-                item: $searchStore.scope(state: \.basket, action: \.basket)
-            ) { basketStore in
-                BookBasketView(store: basketStore)
+                item: $searchStore.scope(state: \.cart, action: \.cart)
+            ) { cartStore in
+                BookCartView(store: cartStore)
                     .toolbar(.visible, for: .navigationBar)
             }
             .navigationDestination(
