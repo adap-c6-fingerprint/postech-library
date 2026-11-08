@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import Foundation
+import UIKit
 
 /// 확정된 경로를 유지하며 위치 스트림·진행 계산·안내 표시를 연결한다.
 @Reducer
@@ -8,8 +9,8 @@ struct BookNavigationFeature {
     enum SpinePhase: Equatable {
         case loading
         // 책등 이미지를 받는 중
-        case loaded(Data)
-        // 받은 책등 PNG 데이터
+        case loaded(UIImage)
+        // 받은 책등 이미지. 표지와 같은 메모리 캐시(BookCoverPipeline.shared)에 있는 이미지 그대로다.
         case unavailable
         // ISBN이 없거나 책등 이미지를 받지 못한 책
     }
@@ -177,7 +178,7 @@ struct BookNavigationFeature {
         case arrivalTestTapped
         case arrivalPresentationChanged(Bool)
         case arrivalSpineTask(stopIndex: Int)
-        case arrivalSpineLoaded(stopIndex: Int, Data?)
+        case arrivalSpineLoaded(stopIndex: Int, UIImage?)
         case continueFromArrival(stopIndex: Int)
         case finishFromArrival(stopIndex: Int)
         case deferFromArrival(stopIndex: Int)
@@ -202,7 +203,10 @@ struct BookNavigationFeature {
             switch action {
             case .task:
                 guard state.exitReason == nil, !state.isActive else { return .none }
-                return start(&state)
+                let stopIndices = state.session.stops.indices
+                let spines = loadArrivalSpines(&state, stopIndices: stopIndices)
+                // 길안내를 시작하는 순간 모든 목적지의 책등을 준비해, 책찾기 화면이 로딩 없이 바로 그린다.
+                return .merge(spines, start(&state))
 
             case let .sceneActiveChanged(active):
                 guard state.exitReason == nil, active != state.isActive else { return .none }
@@ -341,22 +345,13 @@ struct BookNavigationFeature {
                 return .none
 
             case let .arrivalSpineTask(stopIndex):
-                guard state.arrivalSpines[stopIndex] == nil,
-                      state.session.stops.indices.contains(stopIndex) else { return .none }
-                guard let isbn = state.session.stops[stopIndex].book.isbn else {
-                    state.arrivalSpines[stopIndex] = .unavailable
-                    return .none
-                }
-                state.arrivalSpines[stopIndex] = .loading
-                return .run { [bookCoverClient] send in
-                    let data = try? await bookCoverClient.spinePngData(isbn)
-                    await send(.arrivalSpineLoaded(stopIndex: stopIndex, data))
-                }
-                // 책찾기 화면이 나타날 때 한 번만 요청한다. 같은 책을 다시 열면 받아 둔 책등을 쓴다.
+                guard state.session.stops.indices.contains(stopIndex) else { return .none }
+                return loadArrivalSpines(&state, stopIndices: [stopIndex])
+                // 길안내 시작 때 이미 준비했으면 아무것도 하지 않는다. 시작 때 상태가 없던 경우에만 받는다.
 
-            case let .arrivalSpineLoaded(stopIndex, data):
-                state.arrivalSpines[stopIndex] = data.map(SpinePhase.loaded) ?? .unavailable
-                // spinePngData는 "책등 없음"과 "실패"를 같은 에러로 던지므로 둘 다 준비 중 이미지로 그린다.
+            case let .arrivalSpineLoaded(stopIndex, image):
+                state.arrivalSpines[stopIndex] = image.map(SpinePhase.loaded) ?? .unavailable
+                // spineImage는 "책등 없음"과 "실패"를 같은 에러로 던지므로 둘 다 준비 중 이미지로 그린다.
                 return .none
 
             case let .continueFromArrival(stopIndex):
@@ -461,6 +456,34 @@ struct BookNavigationFeature {
                 return end(&state, reason: .cancelled)
             }
         }
+    }
+
+    /// 아직 상태가 없는 목적지의 책등을 표지와 같은 메모리 캐시에서 꺼내거나 받는다.
+    private func loadArrivalSpines(_ state: inout State, stopIndices: some Sequence<Int>) -> Effect<Action> {
+        var requests: [(stopIndex: Int, isbn: String)] = []
+        for stopIndex in stopIndices where state.arrivalSpines[stopIndex] == nil {
+            if let isbn = state.session.stops[stopIndex].book.isbn, let image = bookCoverClient.cachedSpineImage(isbn) {
+                state.arrivalSpines[stopIndex] = .loaded(image)
+                // 상세·장바구니에서 안내를 시작할 때 미리 받아 둔 책등은 기다리지 않고 바로 쓴다.
+            } else if let isbn = state.session.stops[stopIndex].book.isbn {
+                state.arrivalSpines[stopIndex] = .loading
+                requests.append((stopIndex, isbn))
+            } else {
+                state.arrivalSpines[stopIndex] = .unavailable
+            }
+        }
+        guard !requests.isEmpty else { return .none }
+        return .run { [bookCoverClient, requests] send in
+            await withTaskGroup(of: Void.self) { group in
+                for request in requests {
+                    group.addTask {
+                        let image = try? await bookCoverClient.spineImage(request.isbn)
+                        await send(.arrivalSpineLoaded(stopIndex: request.stopIndex, image))
+                    }
+                }
+            }
+        }
+        // 마이페이지 책장(RecentlyFoundBookFeature)과 같은 방식이다. 미리 받는 중인 책등은 진행 중 요청을 함께 쓴다.
     }
 
     private func start(_ state: inout State) -> Effect<Action> {
