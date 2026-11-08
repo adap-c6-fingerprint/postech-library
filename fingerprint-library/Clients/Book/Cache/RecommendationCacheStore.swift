@@ -6,25 +6,18 @@ import ImageIO
 nonisolated struct CachedRecommendations: Sendable {
     let books: [Book]
     let savedAt: Date
-    let coverFiles: [URL: URL]
-
-    var displayBooks: [Book] {
-        books.map { book in
-            Book(
-                id: book.id, isbn: book.isbn, controlNumber: book.controlNumber,
-                title: book.title, author: book.author, publisher: book.publisher,
-                publicationYear: book.publicationYear, description: book.description,
-                imageURL: book.imageURL.flatMap { coverFiles[$0] }
-            )
-        }
-    }
+    let coverFiles: [Book.ID: URL]
 }
 
 /// 마지막 정상 목록과 해당 표지를 함께 보존한다. 모든 디스크 작업은 이 actor에서 수행한다.
 actor RecommendationCacheStore {
+    nonisolated struct PreparedCover: Sendable {
+        let sourceURL: URL
+        let data: Data
+    }
+
     enum CacheError: Error {
         case invalidSnapshot
-        case missingCover
         case invalidImage
     }
 
@@ -52,30 +45,34 @@ actor RecommendationCacheStore {
         }.map(\.lastPathComponent))
     }
 
-    /// 전체 묶음을 확인한 뒤 반환한다. 중간에 유실된 표지가 있으면 정상 저장본으로 취급하지 않는다.
+    /// 목록은 복원하고 읽을 수 있는 표지 파일만 표시용으로 넘긴다.
     func restore() throws -> CachedRecommendations? {
         guard FileManager.default.fileExists(atPath: manifestURL.path) else { return nil }
         let manifest = try JSONDecoder().decode(Manifest.self, from: Data(contentsOf: manifestURL))
-        guard [1, 2].contains(manifest.version), !manifest.books.isEmpty,
+        guard [1, 2, 3].contains(manifest.version), !manifest.books.isEmpty,
               manifest.books.count <= 6,
               Set(manifest.books.map(\.id)).count == manifest.books.count else {
             throw CacheError.invalidSnapshot
         }
-        var files: [URL: URL] = [:]
+        var files: [Book.ID: URL] = [:]
         for book in manifest.books {
-            guard let remoteURL = book.imageURL else {
-                guard book.coverFile == nil, book.coverUnavailable != true else { throw CacheError.invalidSnapshot }
+            let sourceURL = manifest.version == 3 ? book.coverSourceURL : book.imageURL
+            guard let fileName = book.coverFile else {
+                if manifest.version == 3 {
+                    guard sourceURL == nil else { throw CacheError.invalidSnapshot }
+                } else {
+                    guard sourceURL == nil || (manifest.version == 2 && book.coverUnavailable == true) else {
+                        throw CacheError.invalidSnapshot
+                    }
+                }
                 continue
             }
-            let name = try coverName(for: remoteURL)
-            if book.coverUnavailable == true {
-                guard manifest.version == 2, book.coverFile == nil else { throw CacheError.invalidSnapshot }
-                continue
-            }
-            guard book.coverFile == name else { throw CacheError.invalidSnapshot }
-            let file = imagesDirectory.appendingPathComponent(name)
-            try Self.validateImage(Data(contentsOf: file))
-            files[remoteURL] = file
+            guard let sourceURL, fileName == (try coverName(for: sourceURL)),
+                  book.coverUnavailable != true else { throw CacheError.invalidSnapshot }
+            let file = imagesDirectory.appendingPathComponent(fileName)
+            guard let data = try? Data(contentsOf: file),
+                  (try? Self.validateImage(data)) != nil else { continue }
+            files[book.id] = file
         }
         displayedFiles = Set(files.values.map(\.lastPathComponent)).union(retainedDisplayFiles)
         return CachedRecommendations(
@@ -93,35 +90,27 @@ actor RecommendationCacheStore {
 
     /// 파일 준비 → 마지막에 목록을 atomic 교체한다. 실패하면 이전 목록과 표지는 유지한다.
     func save(
-        books: [Book], covers: [URL: Data], savedAt: Date,
-        unavailableCovers: Set<URL> = [],
+        books: [Book], covers: [Book.ID: PreparedCover], savedAt: Date,
         preparationID expectedID: UUID? = nil
     ) throws -> CachedRecommendations {
         try Task.checkCancellation()
         if let expectedID, preparationID != expectedID { throw CancellationError() }
         guard !books.isEmpty, books.count <= 6,
               Set(books.map(\.id)).count == books.count else { throw CacheError.invalidSnapshot }
-        guard unavailableCovers.isSubset(of: Set(books.compactMap(\.imageURL))),
-              unavailableCovers.isDisjoint(with: Set(covers.keys)) else { throw CacheError.invalidSnapshot }
-
         var records: [StoredBook] = []
-        var files: [URL: URL] = [:]
-        // 쓰기 전에 전체 묶음을 검증하여 일부 표지만 있는 목록이 저장되지 않게 한다.
+        var files: [Book.ID: URL] = [:]
+        var imagesToWrite: [URL: Data] = [:]
         for book in books {
-            var name: String?
-            if let url = book.imageURL {
-                let expectedName = try coverName(for: url)
-                if !unavailableCovers.contains(url) {
-                    guard let data = covers[url] else { throw CacheError.missingCover }
-                    try Self.validateImage(data)
-                    name = expectedName
-                    files[url] = imagesDirectory.appendingPathComponent(expectedName)
-                }
+            guard let cover = covers[book.id] else {
+                records.append(StoredBook(book))
+                continue
             }
-            records.append(StoredBook(
-                book, coverFile: name,
-                coverUnavailable: book.imageURL.map(unavailableCovers.contains) == true ? true : nil
-            ))
+            let name = try coverName(for: cover.sourceURL)
+            try Self.validateImage(cover.data)
+            let file = imagesDirectory.appendingPathComponent(name)
+            files[book.id] = file
+            imagesToWrite[file] = cover.data
+            records.append(StoredBook(book, coverFile: name, coverSourceURL: cover.sourceURL))
         }
 
         try FileManager.default.createDirectory(at: imagesDirectory, withIntermediateDirectories: true)
@@ -129,15 +118,14 @@ actor RecommendationCacheStore {
         var values = URLResourceValues()
         values.isExcludedFromBackup = true
         try root.setResourceValues(values)
-        for (url, file) in files {
+        for (file, data) in imagesToWrite {
             try Task.checkCancellation()
-            let data = covers[url]!
             if (try? Data(contentsOf: file)) != data {
                 try data.write(to: file, options: .atomic)
             }
         }
         try Task.checkCancellation()
-        let manifest = Manifest(version: 2, savedAt: savedAt, books: records)
+        let manifest = Manifest(version: 3, savedAt: savedAt, books: records)
         let data = try JSONEncoder().encode(manifest)
         try data.write(to: manifestURL, options: .atomic)
 
@@ -184,14 +172,16 @@ actor RecommendationCacheStore {
         let description: String?
         let imageURL: URL?
         let coverFile: String?
+        let coverSourceURL: URL?
         let coverUnavailable: Bool?
 
-        init(_ book: Book, coverFile: String?, coverUnavailable: Bool? = nil) {
+        init(_ book: Book, coverFile: String? = nil, coverSourceURL: URL? = nil) {
             id = book.id; isbn = book.isbn; controlNumber = book.controlNumber
             title = book.title; author = book.author; publisher = book.publisher
             publicationYear = book.publicationYear; description = book.description
             imageURL = book.imageURL; self.coverFile = coverFile
-            self.coverUnavailable = coverUnavailable
+            self.coverSourceURL = coverSourceURL
+            coverUnavailable = nil
         }
 
         var book: Book {

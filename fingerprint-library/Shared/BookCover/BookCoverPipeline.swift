@@ -6,11 +6,20 @@ import ComposableArchitecture
 enum BookCoverPipeline {
     private static let logger = Logger(subsystem: "Fingerprint", category: "BookCover")
     
-    //책표지 폴백 (Primo에 없을 경우 Yes24로)
-    static let fallback = Yes24BookCoverResolver { isbn13 in
+    static let yes24Cover = Yes24BookCoverResolver { isbn13 in
         @Dependency(\.httpClient) var httpClient
         return try await Yes24BookDetailService(relay: .init(httpClient: httpClient))
             .fetchCoverURL(isbn13: isbn13)
+    }
+
+    /// 이전에 파일 경로만 저장한 책은 도서관 응답에서 같은 서지의 표지를 다시 찾는다.
+    static func originalCoverURL(for book: Book) async throws -> URL? {
+        guard let recordID = BookHoldingsClient.recordID(for: book) else { return nil }
+        @Dependency(\.httpClient) var httpClient
+        let response = try await PrimoAPIClient(relay: .init(httpClient: httpClient)).search(recordID: recordID)
+        guard response.isSuccessful else { throw PrimoAPIError.invalidResponse }
+        return try PrimoBookMapper.books(from: response.data)
+            .first { $0.id == "primo:\(recordID)" }?.imageURL
     }
     
     //책등 (폴백과는 관련 없음)

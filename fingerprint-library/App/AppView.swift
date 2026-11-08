@@ -12,6 +12,7 @@ import Clarity
 struct AppView: View {
     let store: StoreOf<AppFeature>
     @Environment(\.scenePhase) private var scenePhase
+    @FocusState private var isBookSearchFocused: Bool
     @State private var showsAnalyticsChoice = false
     #if DEBUG
     @State private var showsSimulationSettings = false
@@ -87,7 +88,20 @@ struct AppView: View {
                 .analyticsScreen(.search)
             }
         }
+        .searchable(
+            text: Binding(
+                get: { store.bookSearch.query },
+                set: { store.send(.bookSearch(.queryChanged($0))) }
+            ),
+            prompt: "책 제목이나 저자를 검색하세요"
+        )
+        .searchFocused($isBookSearchFocused)
+        .searchPresentationToolbarBehavior(.avoidHidingContent)
         .tabViewSearchActivation(.searchTabSelection)
+        .onSubmit(of: .search, submitBookSearch)
+        .onChange(of: store.bookSearch.detail != nil) { _, showsDetail in
+            if showsDetail { isBookSearchFocused = false }
+        }
         #if DEBUG
         .background {
             HomeTabDebugTrigger(
@@ -127,5 +141,12 @@ struct AppView: View {
             if phase == .background { store.send(.appEnteredBackground) }
             if phase == .active { store.send(.appBecameActive) }
         }
+    }
+
+    private func submitBookSearch() {
+        guard store.selectedTab == .search,
+              !store.bookSearch.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else { return }
+        store.send(.bookSearch(.searchButtonTapped))
     }
 }

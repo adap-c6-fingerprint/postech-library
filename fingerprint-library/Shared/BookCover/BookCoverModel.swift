@@ -13,72 +13,69 @@ final class BookCoverModel<Image: Sendable> {
     }
 
     private var url: URL?
+    private var cachedURL: URL?
     private var isbn13: String?
     private var currentPhase: Phase
     private var requestID: UUID?
     private let pipeline: SharedImageLoader<Image>
-    private let fallback: @Sendable (String) async throws -> URL?
+    private let lookupYes24: @Sendable (String) async throws -> URL?
 
-    init(url: URL?, isbn: String? = nil, pipeline: SharedImageLoader<Image>,
-         fallback: @escaping @Sendable (String) async throws -> URL? = { _ in nil }) {
+    init(url: URL?, isbn: String? = nil, cachedURL: URL? = nil, pipeline: SharedImageLoader<Image>,
+         lookupYes24: @escaping @Sendable (String) async throws -> URL? = { _ in nil }) {
         let isbn13 = BookISBN.isbn13(from: isbn)
         self.url = url
+        self.cachedURL = cachedURL
         self.isbn13 = isbn13
         self.pipeline = pipeline
-        self.fallback = fallback
-        currentPhase = url.map { url in
-            pipeline.cachedImage(for: url).map(Phase.loaded) ?? .loading
-        } ?? (isbn13 == nil ? .unavailable : .loading)
+        self.lookupYes24 = lookupYes24
+        currentPhase = Self.initialPhase(url: url, isbn13: isbn13, cachedURL: cachedURL, pipeline: pipeline)
     }
 
-    func phase(for url: URL?, isbn: String? = nil) -> Phase {
+    func phase(for url: URL?, isbn: String? = nil, cachedURL: URL? = nil) -> Phase {
         let isbn13 = BookISBN.isbn13(from: isbn)
-        guard self.url == url, self.isbn13 == isbn13 else {
-            return url.flatMap(pipeline.cachedImage).map(Phase.loaded)
-                ?? (url == nil && isbn13 == nil ? .unavailable : .loading)
+        guard self.url == url, self.isbn13 == isbn13, self.cachedURL == cachedURL else {
+            return Self.initialPhase(url: url, isbn13: isbn13, cachedURL: cachedURL, pipeline: pipeline)
         }
         return currentPhase
     }
 
-    func load(_ url: URL?, isbn: String? = nil) async {
+    func load(
+        _ url: URL?, isbn: String? = nil, cachedURL: URL? = nil,
+        lookupLegacyOriginal: (() async throws -> URL?)? = nil,
+        onCoverRecovered: ((URL) -> Void)? = nil
+    ) async {
         let id = UUID()
         requestID = id
         self.url = url
+        self.cachedURL = cachedURL
         let isbn13 = BookISBN.isbn13(from: isbn)
         self.isbn13 = isbn13
-        guard url != nil || isbn13 != nil else {
-            currentPhase = .unavailable
-            return
-        }
-        if let image = url.flatMap(pipeline.cachedImage) {
-            currentPhase = .loaded(image)
-            return
-        }
-        currentPhase = .loading
+        currentPhase = Self.initialPhase(url: url, isbn13: isbn13, cachedURL: cachedURL, pipeline: pipeline)
+        guard case .loading = currentPhase else { return }
         do {
-            let image = try await image(primaryURL: url, isbn13: isbn13)
+            let result = try await BookCoverSource.load(
+                url: url, isbn13: isbn13, cachedURL: cachedURL, lookupYes24: lookupYes24,
+                lookupLegacyOriginal: lookupLegacyOriginal
+            ) { candidate in
+                (try await pipeline.image(for: candidate), candidate)
+            }
             try Task.checkCancellation()
             guard requestID == id else { return }
-            currentPhase = .loaded(image)
+            currentPhase = .loaded(result.0)
+            if url?.isFileURL == true, !result.1.isFileURL { onCoverRecovered?(result.1) }
         } catch {
             guard !Task.isCancelled, requestID == id else { return }
             currentPhase = BookCoverFailure.isUnavailable(error) ? .unavailable : .failed
         }
     }
 
-    private func image(primaryURL: URL?, isbn13: String?) async throws -> Image {
-        if let primaryURL {
-            do { return try await pipeline.image(for: primaryURL) }
-            catch {
-                try Task.checkCancellation()
-                guard isbn13 != nil else { throw error }
-            }
-        }
-        try Task.checkCancellation()
-        guard let isbn13, let fallbackURL = try await fallback(isbn13) else {
-            throw BookCoverFailure.unavailable(statusCode: 0)
-        }
-        try Task.checkCancellation()
-        return try await pipeline.image(for: fallbackURL)
+    private static func initialPhase(
+        url: URL?, isbn13: String?, cachedURL: URL?, pipeline: SharedImageLoader<Image>
+    ) -> Phase {
+        if let cachedURL, let image = pipeline.cachedImage(for: cachedURL) { return .loaded(image) }
+        guard let url else { return isbn13 == nil && cachedURL == nil ? .unavailable : .loading }
+        guard BookCoverSource.usesProvidedURLFirst(url, isbn13: isbn13),
+              let image = pipeline.cachedImage(for: url) else { return .loading }
+        return .loaded(image)
     }
 }

@@ -21,3 +21,4 @@ extension DependencyValues {
         set { self[IndoorMapClient.self] = newValue }
     }
 }
+

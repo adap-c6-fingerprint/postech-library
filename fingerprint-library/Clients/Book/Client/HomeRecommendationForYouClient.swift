@@ -36,10 +36,7 @@ nonisolated struct HomeRecommendationForYouClient: Sendable {
             guard let initial else { return nil }
             let books = await initial()
             guard !books.isEmpty else { return nil }
-            return CachedRecommendations(
-                books: books, savedAt: .distantPast,
-                coverFiles: Dictionary(Set(books.compactMap(\.imageURL)).map { ($0, $0) }) { first, _ in first }
-            )
+            return CachedRecommendations(books: books, savedAt: .distantPast, coverFiles: [:])
         },
         refresh: { count in
             let books = try await recommendation.fetch(count)
