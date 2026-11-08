@@ -326,7 +326,7 @@ struct BookNavigationBookFindingView: View {
     // MARK: - 값
 
     private var spineImage: UIImage? {
-        guard case let .loaded(data) = spine, let image = UIImage(data: data), image.size.height > 0,
+        guard case let .loaded(image) = spine, image.size.height > 0,
               image.size.width / image.size.height < Design.maxSpineAspectRatio else { return nil }
         return image
     }
@@ -436,7 +436,7 @@ private func previewSpine(width: CGFloat) -> BookNavigationFeature.SpinePhase {
         UIColor(red: 0.42, green: 0.27, blue: 0.78, alpha: 1).setFill()
         context.fill(CGRect(origin: .zero, size: size))
     }
-    return image.pngData().map(BookNavigationFeature.SpinePhase.loaded) ?? .unavailable
+    return .loaded(image)
 }
 // 책등 API 대신 단색 이미지를 쓴다. 너비를 바꿔 책 두께에 따른 배치(피그마 주석)를 확인한다.
 

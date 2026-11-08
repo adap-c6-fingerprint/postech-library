@@ -29,6 +29,7 @@ struct AppView: View {
                 Color.basketBackground.ignoresSafeArea()
             }
         }
+
         // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
         .clarityUnmask()
         .task { store.send(.profileCheckRequested) }

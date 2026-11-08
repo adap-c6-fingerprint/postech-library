@@ -65,6 +65,7 @@ struct BookBasketFeature {
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
+    @Dependency(\.bookCoverClient) var bookCoverClient
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case libraryInfo
@@ -111,6 +112,8 @@ struct BookBasketFeature {
                 guard state.canStartGuidance else { return .none }
                 recentlyFoundBooksClient.record(state.selectedBooks)
                 // 고른 순서대로 책장 왼쪽부터 꽂힌다.
+                bookCoverClient.prefetchSpines(state.selectedBooks.compactMap(\.isbn))
+                // 책장에 꽂히는 순간 책등을 미리 받아 둔다. 책찾기 화면과 마이페이지 책장이 로딩 없이 바로 그린다.
                 return .none
 
             case .removeButtonTapped:
