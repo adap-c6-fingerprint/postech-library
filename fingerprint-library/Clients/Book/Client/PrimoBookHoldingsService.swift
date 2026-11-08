@@ -16,8 +16,7 @@ nonisolated struct PrimoBookHoldingsService: Sendable {
             try Task.checkCancellation()
             let result: HTTPResponse
             do {
-                // POSTECH에서는 rid,exact가 결과를 반환하지 않는다. MMS 검색 후 recordid를 검증한다.
-                result = try await api.search(query: "any,contains,\(recordID.dropFirst(4))", timeout: 15)
+                result = try await api.search(recordID: recordID)
             } catch {
                 try Task.checkCancellation()
                 guard Self.isTransientTransportError(error), attempt < 2 else {

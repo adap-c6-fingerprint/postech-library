@@ -11,7 +11,6 @@ import SwiftUI
 struct BookSearchTabView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
     let mapStore: StoreOf<IndoorMapFeature>
-    @State private var isSearchPresented = false
 
     var body: some View {
         NavigationStack {
@@ -58,27 +57,8 @@ struct BookSearchTabView: View {
                 MyPageView(store: myPageStore, mapStore: mapStore)
             }
         }
-        .searchable(
-            text: Binding(
-                get: { store.query },
-                set: { store.send(.queryChanged($0)) }
-            ),
-            isPresented: $isSearchPresented,
-            prompt: "책 제목이나 저자를 검색하세요"
-        )
-        .searchPresentationToolbarBehavior(.avoidHidingContent)
-        .onSubmit(of: .search, submitSearch)
         .task {
             store.send(.task)
-        }
-    }
-
-    private func submitSearch() {
-        guard !store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        else { return }
-        store.send(.searchButtonTapped)
-        if store.query.isEmpty {
-            isSearchPresented = false
         }
     }
 }

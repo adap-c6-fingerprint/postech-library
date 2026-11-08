@@ -4,31 +4,40 @@ import UIKit
 struct BookCoverView<CoverModifier: ViewModifier>: View {
     let url: URL?
     let isbn: String?
+    let cachedURL: URL?
     let onOpen: (() -> Void)?
     let allowsRetry: Bool
     private let coverModifier: CoverModifier
+    private let lookupLegacyOriginal: (() async throws -> URL?)?
+    private let onCoverRecovered: ((URL) -> Void)?
     @State private var retryID = 0
     @State private var model: BookCoverModel<UIImage>
 
     init(
         url: URL?,
         isbn: String? = nil,
+        cachedURL: URL? = nil,
         onOpen: (() -> Void)? = nil,
         allowsRetry: Bool = true,
+        lookupLegacyOriginal: (() async throws -> URL?)? = nil,
+        onCoverRecovered: ((URL) -> Void)? = nil,
         coverModifier: CoverModifier
     ) {
         self.url = url
         self.isbn = isbn
+        self.cachedURL = cachedURL
         self.onOpen = onOpen
         self.allowsRetry = allowsRetry
         self.coverModifier = coverModifier
-        _model = State(initialValue: BookCoverModel(url: url, isbn: isbn, pipeline: BookCoverPipeline.shared,
-            fallback: { try await BookCoverPipeline.fallback.url(for: $0) }))
+        self.lookupLegacyOriginal = lookupLegacyOriginal
+        self.onCoverRecovered = onCoverRecovered
+        _model = State(initialValue: BookCoverModel(url: url, isbn: isbn, cachedURL: cachedURL, pipeline: BookCoverPipeline.shared,
+            lookupYes24: { try await BookCoverPipeline.yes24Cover.url(for: $0) }))
     }
 
     var body: some View {
         Group {
-            if case .failed = model.phase(for: url, isbn: isbn), allowsRetry {
+            if case .failed = model.phase(for: url, isbn: isbn, cachedURL: cachedURL), allowsRetry {
                 Button { retryID += 1 } label: {
                     placeholder("arrow.clockwise", text: "다시 시도")
                 }
@@ -43,12 +52,17 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         .buttonStyle(.plain)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .modifier(coverModifier)
-        .task(id: LoadID(url: url, isbn13: BookISBN.isbn13(from: isbn), retry: retryID)) { await model.load(url, isbn: isbn) }
+        .task(id: LoadID(url: url, isbn13: BookISBN.isbn13(from: isbn), cachedURL: cachedURL, retry: retryID)) {
+            await model.load(
+                url, isbn: isbn, cachedURL: cachedURL,
+                lookupLegacyOriginal: lookupLegacyOriginal, onCoverRecovered: onCoverRecovered
+            )
+        }
     }
 
     @ViewBuilder
     private var coverContent: some View {
-        switch model.phase(for: url, isbn: isbn) {
+        switch model.phase(for: url, isbn: isbn, cachedURL: cachedURL) {
         case let .loaded(image):
             Image(uiImage: image).resizable().scaledToFit()
         case .loading:
@@ -73,12 +87,20 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
     private struct LoadID: Equatable {
         let url: URL?
         let isbn13: String?
+        let cachedURL: URL?
         let retry: Int
     }
 }
 
 extension BookCoverView where CoverModifier == EmptyModifier {
-    init(url: URL?, isbn: String? = nil, onOpen: (() -> Void)? = nil, allowsRetry: Bool = true) {
-        self.init(url: url, isbn: isbn, onOpen: onOpen, allowsRetry: allowsRetry, coverModifier: EmptyModifier())
+    init(
+        url: URL?, isbn: String? = nil, cachedURL: URL? = nil, onOpen: (() -> Void)? = nil,
+        allowsRetry: Bool = true, lookupLegacyOriginal: (() async throws -> URL?)? = nil,
+        onCoverRecovered: ((URL) -> Void)? = nil
+    ) {
+        self.init(
+            url: url, isbn: isbn, cachedURL: cachedURL, onOpen: onOpen, allowsRetry: allowsRetry,
+            lookupLegacyOriginal: lookupLegacyOriginal, onCoverRecovered: onCoverRecovered, coverModifier: EmptyModifier()
+        )
     }
 }

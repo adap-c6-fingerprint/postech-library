@@ -65,6 +65,11 @@ nonisolated struct PrimoAPIClient: Sendable {
         let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
         return try await relay.send(.primoSearch, queryItems: items, timeout: timeout)
     }
+
+    /// POSTECH에서는 rid,exact 대신 MMS 번호로 검색한 뒤 호출자가 recordid를 대조한다.
+    func search(recordID: String) async throws -> HTTPResponse {
+        try await search(query: "any,contains,\(recordID.dropFirst(4))", timeout: 15)
+    }
 }
 
 nonisolated enum PrimoAPIError: Error { case invalidResponse }

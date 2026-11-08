@@ -62,7 +62,9 @@ struct BookDetailMapView: View {
             }
         }
         .overlay {
-            if sheetPresentation.isExpanded { BookDetailCoverBackground(book: store.book) }
+            if sheetPresentation.isExpanded {
+                BookDetailCoverBackground(book: store.book, cachedURL: store.cachedCoverURL)
+            }
         }
         .overlay(alignment: .top) {
             if !sheetPresentation.isExpanded { mapButtons }
@@ -154,7 +156,9 @@ struct BookDetailView: View {
             }
             .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
             .background {
-                if isExpanded { BookDetailCoverBackground(book: store.book) }
+                if isExpanded {
+                    BookDetailCoverBackground(book: store.book, cachedURL: store.cachedCoverURL)
+                }
             }
             .foregroundStyle(Color.textPrimary)
             .navigationTitle("")
@@ -254,7 +258,7 @@ struct BookDetailView: View {
         GeometryReader { geometry in
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    BookCoverView(url: store.book.imageURL, isbn: store.book.isbn)
+                    BookCoverView(url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL)
                         .frame(width: min(218, geometry.size.width * 0.55), height: 310)
                         .background(.quaternary)
                         .clipShape(RoundedRectangle(cornerRadius: 3))
@@ -318,7 +322,7 @@ struct BookDetailView: View {
     }
 
     private var cover: some View {
-        BookCoverView(url: store.book.imageURL, isbn: store.book.isbn)
+        BookCoverView(url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL)
             .frame(width: BookDetailCompactLayout.coverSize.width,
                    height: BookDetailCompactLayout.coverSize.height)
             .background(.quaternary)
@@ -492,12 +496,13 @@ struct BookDetailView: View {
 
 private struct BookDetailCoverBackground: View {
     let book: Book
+    let cachedURL: URL?
 
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .top) {
                 Color(white: 0.06)
-                BookCoverView(url: book.imageURL, isbn: book.isbn, allowsRetry: false)
+                BookCoverView(url: book.imageURL, isbn: book.isbn, cachedURL: cachedURL, allowsRetry: false)
                     .frame(width: geometry.size.width, height: geometry.size.height * 0.7)
                     .scaleEffect(1.8)
                     .blur(radius: 60)

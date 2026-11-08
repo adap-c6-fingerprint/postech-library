@@ -54,17 +54,6 @@ struct BookBasketView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
         .alert(
-            "길안내는 최대 \(BookBasketItem.maxGuidanceCount)권까지 가능해요",
-            isPresented: Binding(
-                get: { store.isSelectionLimitAlertPresented },
-                set: { if !$0 { store.send(.selectionLimitAlertDismissed) } }
-            )
-        ) {
-            Button("확인했어요") {}
-        } message: {
-            Text("다른 책을 선택하려면 추가한 책을 해제하고 다시 시도해보세요.")
-        }
-        .alert(
             "선택한 책 \(store.selectedCount)권을 삭제할까요?",
             isPresented: Binding(
                 get: { store.isRemoveAlertPresented },
@@ -105,15 +94,16 @@ struct BookBasketView: View {
             } label: {
                 Text(store.selectedCount == 0 ? "안내 시작하기" : "안내 시작하기 (\(store.selectedCount)권)")
                     .font(.body.weight(.medium))
-                    .foregroundStyle(store.selectedCount == 0 ? Color.white : Color.black)
+                    .foregroundStyle(store.canStartGuidance ? Color.black : Color.basketTextSecondary)
                     .padding(.horizontal, 14)
                     .frame(minHeight: 48)
-                    .background(Color.basketPrimary, in: .capsule)
+                    .background(store.canStartGuidance ? Color.basketPrimary : Color.basketCard, in: .capsule)
             }
             .buttonStyle(.plain)
             .simultaneousGesture(TapGesture().onEnded { store.send(.guidanceLinkTapped) })
             // NavigationLink는 화면 이동만 하므로, 같은 탭에서 최근 찾은 책 기록을 남긴다.
             .accessibilityIdentifier("basket-directions")
+            .disabled(!store.canStartGuidance)
         }
         .disabled(store.selectedCount == 0)
         .padding(.horizontal, 28)
@@ -150,7 +140,8 @@ struct BookBasketView: View {
             location: info?.location,
             availability: info?.availability,
             isSelected: store.selectedIDs.contains(item.id),
-            onToggle: { store.send(.selectionToggled(item.id)) }
+            onToggle: { store.send(.selectionToggled(item.id)) },
+            onCoverRecovered: { oldURL, newURL in store.send(.coverRecovered(item.id, oldURL, newURL)) }
         )
     }
 

@@ -118,7 +118,9 @@ struct HomeView: View {
     private var upcomingCoverURLs: [URL] {
         guard !store.showsKulumiCovers else { return [] }
         let nextIndex = max(0, (recommendationPosition ?? 0) + 1)
-        return store.recommendedBooks.dropFirst(nextIndex).prefix(2).compactMap(\.imageURL)
+        return store.recommendedBooks.dropFirst(nextIndex).prefix(2).compactMap {
+            store.recommendationCoverFiles[$0.id] ?? $0.imageURL
+        }
     }
     
     private var recommendationSection: some View {
@@ -202,6 +204,7 @@ struct HomeView: View {
     private func recommendationCard(_ book: Book?, photoName: String? = nil) -> some View {
         let cover = HomeBookCover(
             book: book,
+            cachedURL: book.flatMap { store.recommendationCoverFiles[$0.id] },
             width: recommendationLayout.coverWidth,
             height: recommendationLayout.coverHeight,
             cornerRadius: recommendationLayout.coverCornerRadius,
@@ -277,6 +280,7 @@ struct HomeView: View {
 
 private struct HomeBookCover: View {
     let book: Book?
+    var cachedURL: URL? = nil
     let width: CGFloat
     let height: CGFloat
     var cornerRadius: CGFloat = 4
@@ -305,6 +309,7 @@ private struct HomeBookCover: View {
                 BookCoverView(
                     url: book?.imageURL,
                     isbn: book?.isbn,
+                    cachedURL: cachedURL,
                     allowsRetry: false,
                     coverModifier: style
                 )

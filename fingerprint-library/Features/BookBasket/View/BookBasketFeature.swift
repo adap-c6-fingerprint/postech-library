@@ -12,9 +12,8 @@ struct BookBasketFeature {
     struct State: Equatable {
         var items: [BookBasketItem] = []
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
-        // 길안내할 책을 고른 순서대로 보관한다.
+        // 길안내하거나 삭제할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
-        var isSelectionLimitAlertPresented = false
         var isRemoveAlertPresented = false
 
         var sections: [BookBasketSection] {
@@ -22,6 +21,10 @@ struct BookBasketFeature {
         }
 
         var selectedCount: Int { selectedBooks.count }
+
+        var canStartGuidance: Bool {
+            (1...BookBasketItem.maxGuidanceCount).contains(selectedCount)
+        }
 
         // 아직 장바구니에 남아 있는 선택 책만 고른 순서대로 돌려준다.
         var selectedBooks: [Book] {
@@ -38,11 +41,11 @@ struct BookBasketFeature {
         case task
         case loadLibraryInfo
         case libraryInfoLoaded(Book.ID, [BookHolding])
+        case coverRecovered(Book.ID, URL, URL)
         case selectionToggled(Book.ID)
-        case selectionLimitAlertDismissed
         case startGuidanceButtonTapped
-        case guidanceLinkTapped
         // "안내 시작하기"를 눌러 경로 미리보기로 넘어갈 때. 마이페이지 최근 찾은 책에 기록한다.
+        case guidanceLinkTapped
         case removeButtonTapped
         case removeConfirmed
         case removeAlertDismissed
@@ -86,34 +89,27 @@ struct BookBasketFeature {
                 bookLocationCacheClient.record(book, holdings)
                 return .none
 
+            case let .coverRecovered(id, oldURL, newURL):
+                bookBasketClient.repairLegacyCover(id, oldURL, newURL)
+                state.items = bookBasketClient.load()
+                return .none
+
             case let .selectionToggled(id):
                 guard state.items.contains(where: { $0.id == id }) else { return .none }
                 if let index = state.selectedIDs.firstIndex(of: id) {
                     state.selectedIDs.remove(at: index)
-                } else if state.selectedIDs.count >= BookBasketItem.maxGuidanceCount {
-                    // 네 번째 책은 선택하지 않고 기존 선택을 그대로 둔다.
-                    state.isSelectionLimitAlertPresented = true
-                    analytics.record(.init(.basketLimitBlocked, [.kind: .text("guidance_selection")]))
                 } else {
                     state.selectedIDs.append(id)
                 }
                 return .none
 
-            case .selectionLimitAlertDismissed:
-                state.isSelectionLimitAlertPresented = false
-                return .none
-
             case .startGuidanceButtonTapped:
-                let books = state.selectedBooks
-                guard (1...BookBasketItem.maxGuidanceCount).contains(books.count) else {
-                    return .none
-                }
-                return .send(.delegate(.startGuidance(books)))
+                guard state.canStartGuidance else { return .none }
+                return .send(.delegate(.startGuidance(state.selectedBooks)))
 
             case .guidanceLinkTapped:
-                let books = state.selectedBooks
-                guard !books.isEmpty else { return .none }
-                recentlyFoundBooksClient.record(books)
+                guard state.canStartGuidance else { return .none }
+                recentlyFoundBooksClient.record(state.selectedBooks)
                 // 고른 순서대로 책장 왼쪽부터 꽂힌다.
                 return .none
 
@@ -125,8 +121,9 @@ struct BookBasketFeature {
             case .removeConfirmed:
                 state.isRemoveAlertPresented = false
                 let removedIDs = Set(state.selectedIDs)
-                let removedCount = state.items.filter { removedIDs.contains($0.id) }.count
-                state.items.removeAll { removedIDs.contains($0.id) }
+                let storedItems = bookBasketClient.load()
+                state.items = storedItems.filter { !removedIDs.contains($0.id) }
+                let removedCount = storedItems.count - state.items.count
                 state.selectedIDs = []
                 bookBasketClient.save(state.items)
                 if removedCount > 0 {

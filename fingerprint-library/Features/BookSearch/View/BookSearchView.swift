@@ -13,7 +13,6 @@ struct BookSearchView: View {
     let onShowBasket: () -> Void
     var onShowFavorites: (() -> Void)? = nil
     var onShowProfile: (() -> Void)? = nil
-    @Environment(\.dismissSearch) private var dismissSearch
     @Dependency(\.bookLocationCacheClient) private var bookLocationCacheClient
     
     var body: some View {
@@ -163,7 +162,6 @@ struct BookSearchView: View {
                                 book: book,
                                 libraryInfo: store.recentBookInfo[book.id],
                                 onSelect: {
-                                    dismissSearch()
                                     store.send(.bookSelected(book))
                                 }
                             )

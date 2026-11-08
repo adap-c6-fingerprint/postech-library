@@ -12,6 +12,7 @@ struct BookSelectionRow: View {
     let availability: BookCardLibraryInfo.Availability?
     let isSelected: Bool
     let onToggle: () -> Void
+    var onCoverRecovered: ((URL, URL) -> Void)? = nil
 
     var body: some View {
         Button(action: onToggle) {
@@ -19,7 +20,13 @@ struct BookSelectionRow: View {
                 selectionMark
 
                 HStack(alignment: .top, spacing: 20) {
-                    BookCoverView(url: book.imageURL, isbn: book.isbn, allowsRetry: false)
+                    BookCoverView(
+                        url: book.imageURL, isbn: book.isbn, allowsRetry: false,
+                        lookupLegacyOriginal: { try await BookCoverPipeline.originalCoverURL(for: book) },
+                        onCoverRecovered: { remoteURL in
+                            if let oldURL = book.imageURL { onCoverRecovered?(oldURL, remoteURL) }
+                        }
+                    )
                         .frame(width: 78, height: 111)
                         .background(.white.opacity(0.06))
                         .clipShape(.rect(cornerRadius: 8))

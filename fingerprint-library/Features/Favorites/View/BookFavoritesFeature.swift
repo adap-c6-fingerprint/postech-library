@@ -33,6 +33,7 @@ struct BookFavoritesFeature {
         case task
         case loadLibraryInfo
         case libraryInfoLoaded(Book.ID, [BookHolding])
+        case coverRecovered(Book.ID, URL, URL)
         case selectionToggled(Book.ID)
         case removeButtonTapped
         case addToBasketButtonTapped
@@ -79,6 +80,11 @@ struct BookFavoritesFeature {
                 let info = BookCardLibraryInfo(holdings: holdings)
                 state.libraryInfo[id] = .init(location: info.location, availability: info.availability)
                 bookLocationCacheClient.record(book, holdings)
+                return .none
+
+            case let .coverRecovered(id, oldURL, newURL):
+                bookFavoritesClient.repairLegacyCover(id, oldURL, newURL)
+                state.items = bookFavoritesClient.loadItems()
                 return .none
 
             case let .selectionToggled(id):
