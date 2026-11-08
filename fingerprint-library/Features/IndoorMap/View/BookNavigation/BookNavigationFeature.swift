@@ -154,7 +154,7 @@ struct BookNavigationFeature {
             case .right: "arrow.turn.up.right"
             case .turnAround: "arrow.uturn.backward"
             case .changeFloor: "arrow.up.arrow.down"
-            case .nearDestination: "books.vertical"
+            case .nearDestination: "book"
             case .straight: "arrow.up"
             case nil: nextFloorTransition == nil ? "location.slash" : "arrow.up"
             }

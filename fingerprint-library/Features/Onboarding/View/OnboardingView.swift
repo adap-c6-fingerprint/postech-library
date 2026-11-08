@@ -449,8 +449,10 @@ struct OnboardingView: View {
     }
 
     private func actionButton(_ step: OnboardingFeature.Step) -> some View {
-        let isPrimary = step == .terms || (step == .interests && store.canFinish)
-        // 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다.
+        let isPrimary = step == .terms
+            || (step == .affiliation && store.isAffiliationComplete)
+            || (step == .interests && store.canFinish)
+        // 소속·학과를 모두 고르거나 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다. (피그마 08.-5온보딩_학과 선택 후)
         return Button {
             switch step {
             case .welcome: store.send(.startButtonTapped)
@@ -461,16 +463,18 @@ struct OnboardingView: View {
         } label: {
             Text(actionTitle(step))
                 .font(.system(size: 17, weight: .semibold))
-                .foregroundStyle(isPrimary ? Color.basketBackground : Color.onboardingTextPrimary)
+                .foregroundStyle(isPrimary ? DS.ColorToken.Button.primaryText : DS.ColorToken.Button.neutralText)
                 .frame(maxWidth: .infinity)
                 .frame(height: 52)
                 .contentShape(.capsule)
         }
         .buttonStyle(.plain)
         .glassEffect(
-            .regular.tint(isPrimary ? Color.basketPrimary : Color.onboardingActionTint).interactive(),
+            .regular.tint(isPrimary ? DS.ColorToken.Button.primaryBackground : DS.ColorToken.Button.neutralBackground)
+                .interactive(),
             in: .capsule
         )
+        // 피그마 button/primary-background·primary-text, button/neutral-background·neutral-text 토큰
         .disabled(!isActionEnabled(step))
     }
 

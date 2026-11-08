@@ -73,7 +73,8 @@ struct AppView: View {
                     .analyticsScreen(.map)
             }
 
-            Tab("추천", systemImage: "books.vertical", value: AppFeature.Tab.recommendations) {
+            Tab("추천", systemImage: "book", value: AppFeature.Tab.recommendations) {
+            // 피그마 탭바 시안(00.전역_홈)의 펼친 책 심볼. 홈 탭의 "house"처럼 탭바가 채운 모양(book.fill)으로 그린다.
                 HomeView(
                     store: store.scope(state: \.home, action: \.home),
                     mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
