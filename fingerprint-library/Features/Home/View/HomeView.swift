@@ -51,7 +51,7 @@ struct HomeView: View {
             LibraryTabTopBar(
                 title: "추천",
                 onFavorites: { store.send(.favoritesButtonTapped) },
-                onBasket: { store.send(.basketButtonTapped) },
+                onCart: { store.send(.cartButtonTapped) },
                 onProfile: { store.send(.profileButtonTapped) }
             )
             // 제목의 아래쪽과 첫 추천 문구 사이에 13.59pt를 확보한다.
@@ -87,9 +87,9 @@ struct HomeView: View {
             )
         }
         .navigationDestination(
-            item: $store.scope(state: \.basket, action: \.basket)
-        ) { basketStore in
-            BookBasketView(store: basketStore)
+            item: $store.scope(state: \.cart, action: \.cart)
+        ) { cartStore in
+            BookCartView(store: cartStore)
                 .toolbar(.visible, for: .navigationBar)
         }
         .navigationDestination(

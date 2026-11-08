@@ -5,7 +5,7 @@ import UIKit
 struct LibraryTabTopBar: View {
     let title: String
     let onFavorites: () -> Void
-    let onBasket: () -> Void
+    let onCart: () -> Void
     let onProfile: () -> Void
 
     var body: some View {
@@ -17,7 +17,7 @@ struct LibraryTabTopBar: View {
             HStack(spacing: 8) {
                 LibraryTopBarButton(title: "관심 도서", symbol: "heart.fill", identifier: "library-top-bar-favorites", action: onFavorites, size: 44)
                     .frame(width: 44, height: 44)
-                LibraryTopBarButton(title: "책바구니", symbol: "cart.fill", identifier: "library-top-bar-basket", action: onBasket, size: 44)
+                LibraryTopBarButton(title: "책바구니", symbol: "cart.fill", identifier: "library-top-bar-cart", action: onCart, size: 44)
                     .frame(width: 44, height: 44)
             }
             .glassEffect(.regular.interactive(), in: .capsule)

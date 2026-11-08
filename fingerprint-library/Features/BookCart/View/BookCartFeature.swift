@@ -1,5 +1,5 @@
 //
-//  BookBasketFeature.swift
+//  BookCartFeature.swift
 //  fingerprint-library
 //
 
@@ -7,23 +7,23 @@ import Foundation
 import ComposableArchitecture
 
 @Reducer
-struct BookBasketFeature {
+struct BookCartFeature {
     @ObservableState
     struct State: Equatable {
-        var items: [BookBasketItem] = []
+        var items: [BookCartItem] = []
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
         // 길안내하거나 삭제할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
         var isRemoveAlertPresented = false
 
-        var sections: [BookBasketSection] {
-            BookBasketSection.grouped(items, calendar: .current)
+        var sections: [BookCartSection] {
+            BookCartSection.grouped(items, calendar: .current)
         }
 
         var selectedCount: Int { selectedBooks.count }
 
         var canStartGuidance: Bool {
-            (1...BookBasketItem.maxGuidanceCount).contains(selectedCount)
+            (1...BookCartItem.maxGuidanceCount).contains(selectedCount)
         }
 
         // 아직 장바구니에 남아 있는 선택 책만 고른 순서대로 돌려준다.
@@ -58,8 +58,8 @@ struct BookBasketFeature {
         }
     }
 
-    @Dependency(\.bookBasketClient)
-    var bookBasketClient: BookBasketClient
+    @Dependency(\.bookCartClient)
+    var bookCartClient: BookCartClient
     @Dependency(\.analyticsClient) private var analytics
 
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
@@ -74,7 +74,7 @@ struct BookBasketFeature {
         Reduce { state, action in
             switch action {
             case .task:
-                state.items = bookBasketClient.load()
+                state.items = bookCartClient.load()
                 let itemIDs = Set(state.items.map(\.id))
                 state.selectedIDs.removeAll { !itemIDs.contains($0) }
                 return .none
@@ -90,8 +90,8 @@ struct BookBasketFeature {
                 return .none
 
             case let .coverRecovered(id, oldURL, newURL):
-                bookBasketClient.repairLegacyCover(id, oldURL, newURL)
-                state.items = bookBasketClient.load()
+                bookCartClient.repairLegacyCover(id, oldURL, newURL)
+                state.items = bookCartClient.load()
                 return .none
 
             case let .selectionToggled(id):
@@ -121,13 +121,13 @@ struct BookBasketFeature {
             case .removeConfirmed:
                 state.isRemoveAlertPresented = false
                 let removedIDs = Set(state.selectedIDs)
-                let storedItems = bookBasketClient.load()
+                let storedItems = bookCartClient.load()
                 state.items = storedItems.filter { !removedIDs.contains($0.id) }
                 let removedCount = storedItems.count - state.items.count
                 state.selectedIDs = []
-                bookBasketClient.save(state.items)
+                bookCartClient.save(state.items)
                 if removedCount > 0 {
-                    analytics.record(.init(.basketBooksRemoved, [.removedCount: .integer(removedCount)]))
+                    analytics.record(.init(.cartBooksRemoved, [.removedCount: .integer(removedCount)]))
                 }
                 return .none
 

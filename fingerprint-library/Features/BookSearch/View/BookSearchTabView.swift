@@ -16,8 +16,8 @@ struct BookSearchTabView: View {
         NavigationStack {
             BookSearchView(
                 store: store,
-                onShowBasket: {
-                    store.send(.basketButtonTapped)
+                onShowCart: {
+                    store.send(.cartButtonTapped)
                 },
                 onShowFavorites: {
                     store.send(.favoritesButtonTapped)
@@ -32,9 +32,9 @@ struct BookSearchTabView: View {
                 BookFavoritesView(store: favoritesStore)
             }
             .navigationDestination(
-                item: $store.scope(state: \.basket, action: \.basket)
-            ) { basketStore in
-                BookBasketView(store: basketStore)
+                item: $store.scope(state: \.cart, action: \.cart)
+            ) { cartStore in
+                BookCartView(store: cartStore)
                     .toolbar(.visible, for: .navigationBar)
             }
             .navigationDestination(

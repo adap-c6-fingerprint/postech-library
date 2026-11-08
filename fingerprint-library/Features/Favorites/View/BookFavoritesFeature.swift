@@ -11,13 +11,13 @@ struct BookFavoritesFeature {
     @ObservableState
     struct State: Equatable {
         var items: [BookFavoriteItem] = []
-        var libraryInfo: [Book.ID: BookBasketFeature.LibraryInfo] = [:]
+        var libraryInfo: [Book.ID: BookCartFeature.LibraryInfo] = [:]
         var selectedIDs: [Book.ID] = []
         // 장바구니에 담거나 삭제할 책을 고른 순서대로 보관한다.
-        var isAddedToBasketAlertPresented = false
-        var isBasketLimitAlertPresented = false
+        var isAddedToCartAlertPresented = false
+        var isCartLimitAlertPresented = false
 
-        @Presents var basket: BookBasketFeature.State?
+        @Presents var cart: BookCartFeature.State?
 
         var sections: [BookFavoriteSection] {
             BookFavoriteSection.grouped(items, calendar: .current)
@@ -36,24 +36,24 @@ struct BookFavoritesFeature {
         case coverRecovered(Book.ID, URL, URL)
         case selectionToggled(Book.ID)
         case removeButtonTapped
-        case addToBasketButtonTapped
-        case addedToBasketAlertDismissed
-        case goToBasketButtonTapped
-        case basketLimitAlertDismissed
-        case basket(PresentationAction<BookBasketFeature.Action>)
+        case addToCartButtonTapped
+        case addedToCartAlertDismissed
+        case goToCartButtonTapped
+        case cartLimitAlertDismissed
+        case cart(PresentationAction<BookCartFeature.Action>)
         case delegate(Delegate)
 
         @CasePathable
         enum Delegate: Equatable {
             case favoritesChanged(Set<[String?]>)
             // 다른 화면의 하트 상태와 지도 표시를 맞추도록 바뀐 찜 키를 알린다.
-            case basketChanged
+            case cartChanged
             // 다른 화면의 장바구니 권수를 맞추도록 알린다.
         }
     }
 
     @Dependency(\.bookFavoritesClient) var bookFavoritesClient
-    @Dependency(\.bookBasketClient) var bookBasketClient
+    @Dependency(\.bookCartClient) var bookCartClient
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.date.now) var now
@@ -113,46 +113,46 @@ struct BookFavoritesFeature {
                 state.selectedIDs = []
                 return .send(.delegate(.favoritesChanged(keys)))
 
-            case .addToBasketButtonTapped:
+            case .addToCartButtonTapped:
                 let books = state.selectedBooks
                 guard !books.isEmpty else { return .none }
-                let storedKeys = Set(bookBasketClient.load().map(\.book.recordKey))
+                let storedKeys = Set(bookCartClient.load().map(\.book.recordKey))
                 let newCount = books.filter { !storedKeys.contains($0.recordKey) }.count
-                guard storedKeys.count + newCount <= BookBasketItem.maxStoredCount else {
-                    state.isBasketLimitAlertPresented = true
-                    analytics.record(.init(.basketLimitBlocked, [.kind: .text("capacity")]))
+                guard storedKeys.count + newCount <= BookCartItem.maxStoredCount else {
+                    state.isCartLimitAlertPresented = true
+                    analytics.record(.init(.cartLimitBlocked, [.kind: .text("capacity")]))
                     // 일부만 담기지 않도록 한도를 넘으면 한 권도 담지 않는다.
                     return .none
                 }
                 for book in books {
-                    if bookBasketClient.add(book, at: now) == .added {
-                        analytics.record(.init(.basketBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
+                    if bookCartClient.add(book, at: now) == .added {
+                        analytics.record(.init(.cartBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
                     }
                 }
                 state.selectedIDs = []
                 // 찜 목록에는 그대로 두고 선택만 해제한다.
-                state.isAddedToBasketAlertPresented = true
-                return .send(.delegate(.basketChanged))
+                state.isAddedToCartAlertPresented = true
+                return .send(.delegate(.cartChanged))
 
-            case .addedToBasketAlertDismissed:
-                state.isAddedToBasketAlertPresented = false
+            case .addedToCartAlertDismissed:
+                state.isAddedToCartAlertPresented = false
                 return .none
 
-            case .goToBasketButtonTapped:
-                state.isAddedToBasketAlertPresented = false
-                state.basket = BookBasketFeature.State()
+            case .goToCartButtonTapped:
+                state.isAddedToCartAlertPresented = false
+                state.cart = BookCartFeature.State()
                 return .none
 
-            case .basketLimitAlertDismissed:
-                state.isBasketLimitAlertPresented = false
+            case .cartLimitAlertDismissed:
+                state.isCartLimitAlertPresented = false
                 return .none
 
-            case .basket, .delegate:
+            case .cart, .delegate:
                 return .none
             }
         }
-        .ifLet(\.$basket, action: \.basket) {
-            BookBasketFeature()
+        .ifLet(\.$cart, action: \.cart) {
+            BookCartFeature()
         }
     }
 

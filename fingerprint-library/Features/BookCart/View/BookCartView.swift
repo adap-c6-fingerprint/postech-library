@@ -1,5 +1,5 @@
 //
-//  BookBasketView.swift
+//  BookCartView.swift
 //  fingerprint-library
 //
 //  Created by Youngmin Cho on 10/21/26.
@@ -8,8 +8,8 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct BookBasketView: View {
-    @Bindable var store: StoreOf<BookBasketFeature>
+struct BookCartView: View {
+    @Bindable var store: StoreOf<BookCartFeature>
     var onClose: (() -> Void)? = nil
 
     var body: some View {
@@ -17,7 +17,7 @@ struct BookBasketView: View {
             VStack(alignment: .trailing, spacing: 4) {
                 Text("총 \(store.items.count)권")
                     .typography(.body2)
-                    .foregroundStyle(Color.basketTextSecondary)
+                    .foregroundStyle(Color.cartTextSecondary)
 
                 LazyVStack(alignment: .leading, spacing: 28) {
                     ForEach(store.sections) { section in
@@ -38,9 +38,9 @@ struct BookBasketView: View {
                 )
             }
         }
-        .background { Color.basketBackground.ignoresSafeArea() }
+        .background { Color.cartBackground.ignoresSafeArea() }
         .navigationTitle("장바구니")
-        .analyticsScreen(.basket)
+        .analyticsScreen(.cart)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
@@ -94,28 +94,28 @@ struct BookBasketView: View {
             } label: {
                 Text(store.selectedCount == 0 ? "안내 시작하기" : "안내 시작하기 (\(store.selectedCount)권)")
                     .font(.body.weight(.medium))
-                    .foregroundStyle(store.canStartGuidance ? Color.black : Color.basketTextSecondary)
+                    .foregroundStyle(store.canStartGuidance ? Color.black : Color.cartTextSecondary)
                     .padding(.horizontal, 14)
                     .frame(minHeight: 48)
-                    .background(store.canStartGuidance ? Color.basketPrimary : Color.basketCard, in: .capsule)
+                    .background(store.canStartGuidance ? Color.cartPrimary : Color.cartCard, in: .capsule)
             }
             .buttonStyle(.plain)
             .simultaneousGesture(TapGesture().onEnded { store.send(.guidanceLinkTapped) })
             // NavigationLink는 화면 이동만 하므로, 같은 탭에서 최근 찾은 책 기록을 남긴다.
-            .accessibilityIdentifier("basket-directions")
+            .accessibilityIdentifier("cart-directions")
             .disabled(!store.canStartGuidance)
         }
         .disabled(store.selectedCount == 0)
         .padding(.horizontal, 28)
         .padding(.vertical, 12)
-        .background(Color.basketBackground)
+        .background(Color.cartBackground)
     }
 
-    private func sectionView(_ section: BookBasketSection) -> some View {
+    private func sectionView(_ section: BookCartSection) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(section.day, format: Self.dayFormat)
                 .typography(.title2)
-                .foregroundStyle(Color.basketTextSecondary)
+                .foregroundStyle(Color.cartTextSecondary)
                 .accessibilityAddTraits(.isHeader)
 
             VStack(spacing: 0) {
@@ -124,16 +124,16 @@ struct BookBasketView: View {
 
                     if item.id != section.items.last?.id {
                         Divider()
-                            .overlay(Color.basketTextTertiary.opacity(0.3))
+                            .overlay(Color.cartTextTertiary.opacity(0.3))
                             .padding(.horizontal, 16)
                     }
                 }
             }
-            .background(Color.basketCard, in: .rect(cornerRadius: 20))
+            .background(Color.cartCard, in: .rect(cornerRadius: 20))
         }
     }
 
-    private func row(_ item: BookBasketItem) -> some View {
+    private func row(_ item: BookCartItem) -> some View {
         let info = store.libraryInfo[item.id]
         return BookSelectionRow(
             book: item.book,
@@ -150,7 +150,7 @@ struct BookBasketView: View {
 }
 extension View {
     // 장바구니 보관 한도를 넘겨 새 책을 담지 못했을 때 띄우는 팝업
-    func basketLimitAlert(isPresented: Bool, onDismiss: @escaping () -> Void) -> some View {
+    func cartLimitAlert(isPresented: Bool, onDismiss: @escaping () -> Void) -> some View {
         alert(
             "장바구니 최대 권수를 초과했어요",
             isPresented: Binding(
@@ -160,16 +160,16 @@ extension View {
         ) {
             Button("확인했어요") {}
         } message: {
-            Text("박태준학술정보관 장바구니에는 최대 \(BookBasketItem.maxStoredCount)권까지 담을 수 있어요. 새 책을 담으시려면 기존에 담은 책 중 일부를 삭제해 주세요.")
+            Text("박태준학술정보관 장바구니에는 최대 \(BookCartItem.maxStoredCount)권까지 담을 수 있어요. 새 책을 담으시려면 기존에 담은 책 중 일부를 삭제해 주세요.")
         }
     }
 }
 
 // 피그마 장바구니 시안의 색상 토큰
 extension Color {
-    static let basketCard = Color(red: 0x2B / 255, green: 0x2B / 255, blue: 0x2B / 255)
-    static let basketBackground = Color.backgroundDefault
-    static let basketTextSecondary = Color.textSecondary
-    static let basketTextTertiary = Color.textTertiary
-    static let basketPrimary = Color.limeBase
+    static let cartCard = Color(red: 0x2B / 255, green: 0x2B / 255, blue: 0x2B / 255)
+    static let cartBackground = Color.backgroundDefault
+    static let cartTextSecondary = Color.textSecondary
+    static let cartTextTertiary = Color.textTertiary
+    static let cartPrimary = Color.limeBase
 }

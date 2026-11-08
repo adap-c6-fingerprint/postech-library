@@ -45,7 +45,7 @@ struct BookSelectionRow: View {
 
                         Text(BookText.plainText(book.author))
                             .typography(.caption2)
-                            .foregroundStyle(Color.basketTextTertiary)
+                            .foregroundStyle(Color.cartTextTertiary)
                             .lineLimit(1)
 
                         Spacer(minLength: 8)
@@ -65,12 +65,12 @@ struct BookSelectionRow: View {
     private var selectionMark: some View {
         ZStack {
             if isSelected {
-                Circle().fill(Color.basketPrimary)
+                Circle().fill(Color.cartPrimary)
                 Image(systemName: "checkmark")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(.black)
             } else {
-                Circle().strokeBorder(Color.basketTextTertiary, lineWidth: 2)
+                Circle().strokeBorder(Color.cartTextTertiary, lineWidth: 2)
             }
         }
         .frame(width: 24, height: 24)
@@ -85,7 +85,7 @@ struct BookSelectionRow: View {
         case .unavailable:
             Text("이용 불가").foregroundStyle(.red)
         case .unknown, .none:
-            Text("대출 상태 확인 필요").foregroundStyle(Color.basketTextTertiary)
+            Text("대출 상태 확인 필요").foregroundStyle(Color.cartTextTertiary)
         }
     }
 }
