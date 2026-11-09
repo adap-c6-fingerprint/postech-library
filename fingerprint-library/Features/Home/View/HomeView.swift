@@ -237,53 +237,96 @@ struct HomeView: View {
     
     private var popularBooksSection: some View {
         VStack(alignment: .leading, spacing: 16) {
-            NavigationLink(value: Destination.departmentRecommendations) {
-                HStack(spacing: 12) {
-                    Text(store.departmentName.isEmpty ? "많이 빌린 도서" : "'\(store.departmentName)'에서 많이 빌린")
-                        .typography(.title2)
-                        .multilineTextAlignment(.leading)
-                        .accessibilityAddTraits(.isHeader)
-
-                    Spacer(minLength: 0)
-
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 16, weight: .medium))
-                        .padding(.trailing, 8)
-                        .accessibilityHidden(true)
+            if store.isProfileComplete {
+                NavigationLink(value: Destination.departmentRecommendations) {
+                    popularBooksHeader(store.departmentName.isEmpty ? "많이 빌린 도서" : "'\(store.departmentName)'에서 많이 빌린")
                 }
-                .foregroundStyle(.textPrimary)
-                .frame(minHeight: 28)
-                .contentShape(Rectangle())
+                .buttonStyle(.plain)
+                .padding(.horizontal, 16)
+
+                popularBooksRow
+            } else {
+                Button { store.send(.profileButtonTapped) } label: {
+                    popularBooksHeader("맞춤 정보를 설정해 주세요.")
+                }
+                // 쉐브론(제목 줄)을 누르면 마이페이지로 이동한다.
+                .buttonStyle(.plain)
+                .padding(.horizontal, 16)
+
+                popularBooksRow
+                    .blur(radius: 5)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+                    .overlay { Color.backgroundDefault.opacity(0.5) }
+                    .overlay(alignment: .top) { profileSetupPrompt.padding(.top, 56) }
+                // 피그마 '2.추천_온보딩 미완료시'(4100:27254): 책 목록을 흐리게 가리고 그 위에 설정 안내를 띄운다.
+            }
+        }
+    }
+
+    private func popularBooksHeader(_ title: String) -> some View {
+        HStack(spacing: 12) {
+            Text(title)
+                .typography(.title2)
+                .multilineTextAlignment(.leading)
+                .accessibilityAddTraits(.isHeader)
+
+            Spacer(minLength: 0)
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 16, weight: .medium))
+                .padding(.trailing, 8)
+                .accessibilityHidden(true)
+        }
+        .foregroundStyle(.textPrimary)
+        .frame(minHeight: 28)
+        .contentShape(Rectangle())
+    }
+
+    private var profileSetupPrompt: some View {
+        VStack(spacing: 0) {
+            Text("소속과 관심사 정보를 알려주시면\n나에게 어울리는 책을 추천해 드려요.")
+                .typography(.caption1.weight(.bold))
+
+            Button { store.send(.profileButtonTapped) } label: {
+                Text("설정하러 가기 >")
+                    .typography(.caption1)
+                    .underline()
             }
             .buttonStyle(.plain)
-            .padding(.horizontal, 16)
+        }
+        .multilineTextAlignment(.center)
+        .foregroundStyle(.textSecondary)
+        .padding(.horizontal, 16)
+    }
+    // 블러 위 안내 문구와 '설정하러 가기' 버튼. 버튼도 마이페이지로 이동한다.
 
-            ScrollView(.horizontal) {
-                LazyHStack(alignment: .top, spacing: 12) {
-                    if store.popularBooks.isEmpty {
-                        ForEach(0..<4, id: \.self) { _ in
-                            HomePopularBookCard(book: nil, libraryInfo: nil)
-                                .accessibilityLabel("인기 도서 자리")
+    private var popularBooksRow: some View {
+        ScrollView(.horizontal) {
+            LazyHStack(alignment: .top, spacing: 12) {
+                if store.popularBooks.isEmpty {
+                    ForEach(0..<4, id: \.self) { _ in
+                        HomePopularBookCard(book: nil, libraryInfo: nil)
+                            .accessibilityLabel("인기 도서 자리")
+                    }
+                } else {
+                    ForEach(store.popularBooks) { book in
+                        Button {
+                            store.send(.bookSelected(book))
+                        } label: {
+                            HomePopularBookCard(
+                                book: book,
+                                libraryInfo: store.libraryInfo[book.id]
+                            )
                         }
-                    } else {
-                        ForEach(store.popularBooks) { book in
-                            Button {
-                                store.send(.bookSelected(book))
-                            } label: {
-                                HomePopularBookCard(
-                                    book: book,
-                                    libraryInfo: store.libraryInfo[book.id]
-                                )
-                            }
-                            .buttonStyle(.plain)
-                            .accessibilityHint("책 소개 보기")
-                        }
+                        .buttonStyle(.plain)
+                        .accessibilityHint("책 소개 보기")
                     }
                 }
             }
-            .contentMargins(.horizontal, 16, for: .scrollContent)
-            .scrollIndicators(.hidden)
         }
+        .contentMargins(.horizontal, 16, for: .scrollContent)
+        .scrollIndicators(.hidden)
     }
 }
 

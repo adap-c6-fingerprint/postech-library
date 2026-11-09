@@ -14,6 +14,12 @@ struct HomeFeature {
         // 지금 화면의 추천 목록들을 만들 때 쓴 프로필. userProfile과 다르면 목록을 새 프로필로 다시 불러온다.
         var hasSyncedProfile = false
         // displayedProfile을 한 번이라도 기록했는지. 온보딩을 건너뛰면 기록한 프로필도 nil이라 nil만으로는 '아직 안 불러옴'과 구분되지 않는다.
+        var isProfileComplete: Bool {
+            guard let userProfile else { return false }
+            return RecommendationDataset.AffiliationPath(key: userProfile.affiliationKey) != nil
+                && !userProfile.interests.isEmpty
+        }
+        // 소속과 관심 분야를 모두 설정했는지. 아니면 학과 추천 섹션을 '맞춤 정보를 설정해 주세요' 안내로 가린다. (이슈 #396)
         var departmentName: String { userProfile?.departmentName ?? "" }
         // "'수학과'에서 많이 빌린" 제목에 쓰는 소속 이름. 따로 복사해 두지 않고 프로필에서 바로 읽는다.
         var isRecommendationExpanded = true
