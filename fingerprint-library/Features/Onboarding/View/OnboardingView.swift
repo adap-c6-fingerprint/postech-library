@@ -195,6 +195,9 @@ struct OnboardingView: View {
 
     private func bottomLink(_ step: OnboardingFeature.Step) -> (title: String, action: OnboardingFeature.Action)? {
         switch step {
+        // case .welcome:
+        //     ("다음에 할래요", .welcomeLaterButtonTapped)
+        // 시작 화면의 "다음에 할래요"(누르면 앱 종료)는 지금 보여주지 않는다. 되살릴 수 있게 주석으로 남긴다.
         case .terms:
             ("동의 안하고 종료하기", .termsDeclineButtonTapped)
         case .affiliation where store.entry == .firstRun:
