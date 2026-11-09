@@ -40,6 +40,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         var onDismiss: () -> Void
         var onCompactFrameChange: (CGRect) -> Void
         private var hosting: UIHostingController<BookDetailSheet>?
+        private var compactFrameReportTask: Task<Void, Never>?
         private var hasPresented = false
         private var didFinishPresentation = false
         private var isInvalidated = false
@@ -74,7 +75,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             let content = BookDetailSheet(store: store, mapStore: mapStore, presentation: presentation, onDismiss: { [weak self] in
                 self?.dismissDetail()
             }) { [weak self] in
-                self?.reportCompactFrame()
+                self?.scheduleCompactFrameReport()
             }
             let hosting = UIHostingController(rootView: content)
             hosting.modalPresentationStyle = .pageSheet
@@ -108,6 +109,17 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             }
         }
 
+        private func scheduleCompactFrameReport() {
+            compactFrameReportTask?.cancel()
+            guard !isInvalidated, didFinishPresentation, !presentation.isExpanded else { return }
+            // 드래그 중 바뀌는 모든 프레임에 지도 카메라를 다시 맞추지 않는다.
+            compactFrameReportTask = Task { [weak self] in
+                try? await Task.sleep(for: .milliseconds(120))
+                guard !Task.isCancelled else { return }
+                self?.reportCompactFrame()
+            }
+        }
+
         /// compact·medium의 실제 위치를 지도에 전달하고 large에서는 마지막 위치를 유지한다.
         private func reportCompactFrame() {
             guard !isInvalidated, didFinishPresentation, let hosting, hosting.view.window != nil,
@@ -120,14 +132,14 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
 
         func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
             guard !isInvalidated else { return }
-            withAnimation(.easeInOut(duration: 0.25)) {
+            withAnimation(UIAccessibility.isReduceMotionEnabled ? nil : .smooth(duration: 0.35)) {
                 switch sheetPresentationController.selectedDetentIdentifier {
                 case Self.compactID: presentation.detent = .compact
                 case .large: presentation.detent = .large
                 default: presentation.detent = .medium
                 }
             }
-            reportCompactFrame()
+            scheduleCompactFrameReport()
         }
 
         // 높이 전환은 유지하고 아래로 당겨 상세를 닫는 동작만 막는다.
