@@ -92,10 +92,12 @@ struct OnboardingView: View {
     private var setupInterestsPresented: Binding<Bool> {
         Binding(
             get: { store.step == .interests },
-            set: { if !$0, store.step == .interests { store.send(.backButtonTapped) } }
+            set: { if !$0, store.step == .interests, !store.isCompleted { store.send(.backButtonTapped) } }
         )
     }
     // 마이페이지에서 처음 설정할 때 선호 분류 화면의 push 여부. 뒤로가기로 pop되면 소속 단계로 돌아간다.
+    // 설정을 마친 뒤에는 마이페이지가 상태를 지우면서 화면이 함께 닫히므로 액션을 보내지 않는다.
+    // (보내면 상태가 없는 ifLet에 액션이 도착해 TCA 경고가 뜬다.)
 
     private func page(_ step: OnboardingFeature.Step) -> some View {
         VStack(spacing: 0) {
