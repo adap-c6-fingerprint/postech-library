@@ -48,11 +48,14 @@ extension BookRecommendationClient {
     }
 
     /// 프로필에 저장한 선호 분류 목록을 합친 하드데이터. (Q3: recordID로 중복 제거)
+    /// 관심 분야가 없으면(온보딩 건너뛰기) 하드데이터 전체.
     private nonisolated static func personalPool(dataset: RecommendationDatasetClient) async throws -> [Book] {
         let data = try await dataset.load()
         @Shared(.userProfile) var userProfile: UserProfile?
         // 앱 전체가 함께 쓰는 프로필에서 관심 분야를 읽는다. 마이페이지에서 바꾼 값이 다음 추천부터 바로 쓰인다.
         let preferences = userProfile?.interests ?? []
+        guard !preferences.isEmpty else { return data.allBooks }
+        // 온보딩을 건너뛰어 관심 분야가 없으면 하드데이터 전체를 후보로 쓴다. (이슈 #396)
         return data.books(forPreferences: preferences)
     }
 }

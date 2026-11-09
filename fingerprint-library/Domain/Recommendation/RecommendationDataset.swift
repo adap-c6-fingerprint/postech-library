@@ -60,6 +60,12 @@ nonisolated struct RecommendationDataset: Equatable, Sendable {
         booksByRecordID[recordID]
     }
 
+    /// 하드데이터에 든 모든 도서. recordID 순서로 돌려준다.
+    var allBooks: [Book] {
+        booksByRecordID.keys.sorted().compactMap { booksByRecordID[$0] }
+    }
+    // 딕셔너리는 순서가 매번 달라질 수 있어 recordID로 정렬해 같은 순서를 지킨다.
+
     /// 소속 목록의 도서. 표시 순서일 뿐 인기순이 아니다.
     func books(forAffiliation path: AffiliationPath) -> [Book] {
         (affiliationRecordIDs[path] ?? []).compactMap { booksByRecordID[$0] }
