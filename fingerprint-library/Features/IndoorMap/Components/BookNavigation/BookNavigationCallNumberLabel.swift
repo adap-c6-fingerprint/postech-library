@@ -1,67 +1,78 @@
 import SwiftUI
+import UIKit
 
-/// 책등 아래쪽에 붙은 청구기호 번호표. 확대 표시와 책등 위 작은 표시가 같은 모양을 배율만 달리해 쓴다.
+/// 책등과 확대 번호표가 같은 세 줄 데이터를 사용하되 각자의 표시 크기에 맞춰 글자를 배치한다.
 struct BookNavigationCallNumberLabel: View {
     let callNumber: BookNavigationArrivalCallNumber
-    let width: CGFloat
-    let scale: CGFloat
-    // 피그마 확대 번호표(105 × 212) 기준 배율
+    let layout: BookNavigationCallNumberLabelLayout
     var emphasizesFirstLine = true
     // 확대 번호표만 첫 줄(분류+숫자)을 굵게 표시한다
 
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 0) {
-                ForEach(Array(lines.enumerated()), id: \.offset) { index, line in
+                ForEach(Array(layout.lines.enumerated()), id: \.offset) { index, line in
                     Text(line)
-                        .font(.custom(index == 0 && emphasizesFirstLine ? "Pretendard-Bold" : "Pretendard-Medium",
-                                      fixedSize: Design.fontSize * scale))
-                        .tracking(Design.tracking * scale)
+                        .font(Font(Self.font(size: layout.fontSize, emphasized: index == 0 && emphasizesFirstLine)))
+                        .tracking(layout.tracking)
                         .foregroundStyle(index == 0 && emphasizesFirstLine ? Color.black : Design.textColor)
-                        .frame(height: Design.fontSize * Design.lineHeight * scale, alignment: .leading)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.5)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: layout.lineHeight, alignment: .leading)
                 }
             }
-            .padding(.vertical, Design.textVerticalPadding * scale)
-            .frame(width: width, height: Design.upperHeight * scale)
+            .padding(.horizontal, layout.horizontalPadding)
+            .padding(.vertical, layout.verticalPadding)
+            .frame(width: layout.size.width, height: layout.upperHeight)
             .background(Design.upperColor)
-            .clipShape(UnevenRoundedRectangle(topLeadingRadius: Design.cornerRadius * scale,
-                                              topTrailingRadius: Design.cornerRadius * scale))
+            .clipShape(UnevenRoundedRectangle(topLeadingRadius: Design.cornerRadius * layout.scale,
+                                              topTrailingRadius: Design.cornerRadius * layout.scale))
 
             Text(classMark)
-                .font(.custom("Pretendard-SemiBold", fixedSize: Design.markFontSize * scale))
+                .font(.custom("Pretendard-SemiBold", fixedSize: layout.markFontSize))
                 .foregroundStyle(.white)
-                .frame(width: width, height: Design.lowerHeight * scale)
+                .lineLimit(1)
+                .minimumScaleFactor(0.01)
+                .frame(width: layout.size.width, height: layout.lowerHeight)
                 .background(Design.lowerColor)
-                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: Design.cornerRadius * scale,
-                                                  bottomTrailingRadius: Design.cornerRadius * scale))
+                .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: Design.cornerRadius * layout.scale,
+                                                  bottomTrailingRadius: Design.cornerRadius * layout.scale))
         }
+        .frame(width: layout.size.width, height: layout.size.height)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("청구기호 \(callNumber.rawValue)")
     }
 
-    private var lines: [String] {
-        let first: String = callNumber.classification + callNumber.number
-        let rest: [String] = callNumber.suffix.split(whereSeparator: { $0.isWhitespace }).map(String.init)
-        return [first] + rest
+    static func enlargedLayout(for number: BookNavigationArrivalCallNumber, maximumWidth: CGFloat) -> BookNavigationCallNumberLabelLayout {
+        .init(callNumber: number, maximumWidth: maximumWidth) { text, size, first in
+            textWidth(text, fontSize: size, emphasized: first)
+        }
     }
-    // 예: "PR2993 .F2 .P45" → PR2993 / .F2 / .P45
+
+    static func spineLayout(from layout: BookNavigationCallNumberLabelLayout, size: CGSize) -> BookNavigationCallNumberLabelLayout {
+        layout.fitted(to: size) { text, fontSize, _ in
+            textWidth(text, fontSize: fontSize, emphasized: false)
+        }
+    }
+
+    private static func font(size: CGFloat, emphasized: Bool) -> UIFont {
+        UIFont(name: emphasized ? "Pretendard-Bold" : "Pretendard-Medium", size: size)
+            ?? .systemFont(ofSize: size, weight: emphasized ? .bold : .medium)
+    }
+
+    private static func textWidth(_ text: String, fontSize: CGFloat, emphasized: Bool) -> CGFloat {
+        (text as NSString).size(withAttributes: [
+            .font: font(size: fontSize, emphasized: emphasized),
+            .kern: BookNavigationCallNumberLabelLayout.tracking(for: fontSize)
+        ]).width + min(0.5, fontSize / 40)
+    }
 
     private var classMark: String { String(callNumber.classification.prefix(1)).uppercased() }
     // 파란 칸에는 분류기호의 첫 글자를 적는다 (PR → P)
 
     enum Design {
-        static let width: CGFloat = 105
-        static let upperHeight: CGFloat = 149.977
-        static let lowerHeight: CGFloat = 61.755
-        static var height: CGFloat { upperHeight + lowerHeight }
         static let cornerRadius: CGFloat = 4.679
-        static let textVerticalPadding: CGFloat = 33.163
-        static let fontSize: CGFloat = 20.977
-        static let lineHeight: CGFloat = 1.3
-        static let tracking: CGFloat = -0.7188
-        static let markFontSize: CGFloat = 50.308
         static let upperColor = Color(red: 0xD9 / 255, green: 0xD9 / 255, blue: 0xD9 / 255)
         static let textColor = Color(red: 0x40 / 255, green: 0x40 / 255, blue: 0x40 / 255)
         static let lowerColor = Color(red: 0x4D / 255, green: 0x71 / 255, blue: 0xFF / 255)

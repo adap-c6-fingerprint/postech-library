@@ -147,7 +147,7 @@ struct BookNavigationView: View {
         HStack(alignment: .top, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(store.currentBookInfo.map { BookText.plainText($0.book.title) } ?? "도서 길안내")
-                    .typography(.largeTitle)
+                    .typography(.title1)
                     .lineLimit(2)
                     .accessibilityIdentifier("book-navigation-book-title")
                 if let info = store.currentBookInfo {

@@ -218,14 +218,23 @@ struct BookNavigationBookFindingView: View {
     private var shelf: some View {
         GeometryReader { geometry in
             let spineWidth = spineWidth
-            // 책등 위 번호표가 왼쪽 확대 번호표보다 커지지 않도록 배율을 제한한다.
-            let ratio = min(spineWidth / Design.referenceSpineWidth, 1 / Design.smallLabelScale)
             let spineRight = geometry.size.width - Design.spineTrailingInset
             let spineLeft = spineRight - spineWidth
-            let smallLabelWidth = Design.smallLabelWidth * ratio
-            let smallLabelHeight = Design.smallLabelHeight * ratio
-            let smallLabelBottom = Design.spineHeight - Design.smallLabelBottomInset * ratio
-            let smallLabelTop = smallLabelBottom - smallLabelHeight
+            // 이미지의 원본 비율로 책등을 먼저 정하고, 작은 번호표는 그 안에 맞춘다.
+            let smallLabel = CGRect(x: spineLeft,
+                y: Design.spineHeight - Design.smallLabelBottomInset - Design.smallLabelHeight,
+                width: spineWidth, height: Design.smallLabelHeight)
+            let number = bookInformation.flatMap { callNumber($0) }
+            let largeLayout = number.map {
+                BookNavigationCallNumberLabel.enlargedLayout(for: $0,
+                    maximumWidth: max(BookNavigationCallNumberLabelLayout.Metrics.minimumWidth,
+                                      spineLeft - Design.horizontalPadding * 2))
+            }
+            let largeLabel = largeLayout.map { layout in
+                CGRect(x: min(Design.largeLabelOrigin.x,
+                              max(Design.horizontalPadding, spineLeft - Design.horizontalPadding - layout.size.width)),
+                       y: Design.largeLabelOrigin.y, width: layout.size.width, height: layout.size.height)
+            }
             ZStack(alignment: .topLeading) {
                 Image(.extraBooksLeft)
                     .resizable()
@@ -240,19 +249,16 @@ struct BookNavigationBookFindingView: View {
                 // 피그마 주석: 기준선은 기준도서 우측 세로선. 우측 보조도서는 고정한다.
                 spineView(width: spineWidth)
                     .offset(x: spineLeft)
-                if let info = bookInformation, let number = callNumber(info) {
-                    BookNavigationCallNumberLabel(callNumber: number, width: smallLabelWidth,
-                                                  scale: Design.smallLabelScale * ratio,
-                                                  emphasizesFirstLine: false)
-                        .offset(x: spineRight - smallLabelWidth, y: smallLabelTop)
+                if let number, let largeLayout, let largeLabel {
+                    BookNavigationCallNumberLabel(callNumber: number,
+                        layout: BookNavigationCallNumberLabel.spineLayout(from: largeLayout, size: smallLabel.size),
+                        emphasizesFirstLine: false)
+                        .offset(x: smallLabel.minX, y: smallLabel.minY)
                         .accessibilityHidden(true)
-                    // 정상 책등의 두께를 따르되 확대 번호표 크기까지만 늘어난다.
-                    lightBeam(smallLabel: CGRect(x: spineRight - smallLabelWidth, y: smallLabelTop,
-                                                 width: smallLabelWidth, height: smallLabelHeight))
-                    BookNavigationCallNumberLabel(callNumber: number, width: BookNavigationCallNumberLabel.Design.width,
-                                                  scale: 1)
+                    lightBeam(smallLabel: smallLabel, largeLabel: largeLabel)
+                    BookNavigationCallNumberLabel(callNumber: number, layout: largeLayout)
                         .shadow(color: .black.opacity(0.25), radius: 7.5, x: 2, y: 2)
-                        .offset(x: Design.largeLabelOrigin.x, y: Design.largeLabelOrigin.y)
+                        .offset(x: largeLabel.minX, y: largeLabel.minY)
                         .accessibilityIdentifier("book-navigation-call-number")
                 }
             }
@@ -284,15 +290,12 @@ struct BookNavigationBookFindingView: View {
     }
 
     /// 확대 번호표에서 책등 위 작은 번호표로 이어지는 빛. 피그마 주석: 책 두께에 따라 꼭짓점을 조절한다.
-    private func lightBeam(smallLabel: CGRect) -> some View {
+    private func lightBeam(smallLabel: CGRect, largeLabel: CGRect) -> some View {
         Canvas { context, _ in
-            let large = CGRect(origin: Design.largeLabelOrigin,
-                               size: CGSize(width: BookNavigationCallNumberLabel.Design.width,
-                                            height: BookNavigationCallNumberLabel.Design.height))
             var path = Path()
             path.move(to: CGPoint(x: smallLabel.maxX, y: smallLabel.minY + 1))
-            path.addLine(to: CGPoint(x: large.maxX - 2, y: large.minY + 1))
-            path.addLine(to: CGPoint(x: large.maxX - 7, y: large.maxY - 0.5))
+            path.addLine(to: CGPoint(x: largeLabel.maxX - 2, y: largeLabel.minY + 1))
+            path.addLine(to: CGPoint(x: largeLabel.maxX - 7, y: largeLabel.maxY - 0.5))
             path.addLine(to: CGPoint(x: smallLabel.minX - 16, y: smallLabel.maxY - 0.5))
             path.addLine(to: CGPoint(x: smallLabel.maxX, y: smallLabel.maxY - 0.5))
             path.closeSubpath()
@@ -388,7 +391,6 @@ struct BookNavigationBookFindingView: View {
 
     private enum Design {
         static let spineHeight: CGFloat = 411
-        static let referenceSpineWidth: CGFloat = 25
         static let maxSpineAspectRatio: CGFloat = 0.3
         // 책등으로 인정하는 최대 가로÷세로 비율. 실제 책등은 대략 0.05~0.25이고, Yes24 "이미지 준비중" 그림은 표지처럼 세로로 조금 긴 모양(약 0.5~0.7)이다.
         static let placeholderAspectRatio: CGFloat = 188 / 1644
@@ -399,10 +401,8 @@ struct BookNavigationBookFindingView: View {
         static let extraBooksLeftSize = CGSize(width: 298.75, height: 382.75)
         static let extraBooksRightSize = CGSize(width: 79, height: 382.75)
         // 피그마 주석: 4X로 내보낸 에셋(1195 × 1531, 316 × 1531)을 화면 비율에 맞춘다.
-        static let smallLabelWidth: CGFloat = 26.427
         static let smallLabelHeight: CGFloat = 59
         static let smallLabelBottomInset: CGFloat = 5
-        static let smallLabelScale: CGFloat = 59 / BookNavigationCallNumberLabel.Design.height
         static let largeLabelOrigin = CGPoint(x: 68, y: 166)
         // 책장 영역(기준도서 윗면 = 0) 기준 확대 번호표 위치
         static let beamStart = Color(red: 0xD9 / 255, green: 0xD9 / 255, blue: 0xD9 / 255).opacity(0.2)
