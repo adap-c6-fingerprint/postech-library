@@ -28,8 +28,7 @@ struct MyPageView: View {
                     onTap: { store.send(.addButtonTapped) }
                 )
                 // 피그마 주석: + 버튼, 책, 선반 중 어느 곳을 눌러도 최근 찾은 책 화면으로 간다.
-                .padding(.bottom, 38)
-                // 피그마: 선반 아래 끝(408.8)과 "설정 및 안내"(447) 사이 간격
+                .padding(.bottom, 20)
                 SettingsSection(rows: [
                     .init(title: "소속 및 학과 정보 변경") { store.send(.editAffiliationRowTapped) },
                     .init(title: "관심 분야 변경하기") { store.send(.editInterestsRowTapped) },

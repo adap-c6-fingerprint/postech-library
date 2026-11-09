@@ -205,7 +205,7 @@ struct OnboardingView: View {
         .padding(.horizontal, 20)
     }
 
-    static let privacyPolicyURL =URL(string: "https://link.fpmaps.com/privacy-policy-pobook")!
+    static let privacyPolicyURL = URL(string: "https://link.fpmaps.com/privacy-policy-pobook")!
 
     private func bottomLink(_ step: OnboardingFeature.Step) -> (title: String, action: OnboardingFeature.Action)? {
         switch step {
