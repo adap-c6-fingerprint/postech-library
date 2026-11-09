@@ -25,6 +25,12 @@ nonisolated struct BookShelfRangeMatcher {
 
     /// 분류 번호는 수치, 저자 기호의 숫자는 소수로 비교한다. 연도·권차는 범위 판정에 사용하지 않는다.
     private struct CallNumber {
+        // 영문·한글 저자 기호를 보존하고 공백으로 구분된 연도·권차 앞에서 멈춘다.
+        // PL2489.논.독92처럼 숫자 없는 한글 분류 구분도 보존한다.
+        private static let cutterRegex = try! NSRegularExpression(
+            pattern: #"^\s*\.?\s*([\p{L}]+[0-9]+|[가-힣]+(?=\s*\.))"#
+        )
+
         let classification: String
         let number: Decimal
         let cutters: [String]
@@ -40,13 +46,9 @@ nonisolated struct BookShelfRangeMatcher {
                                        locale: Locale(identifier: "en_US_POSIX")) else { return nil }
             self.number = number
             let tail = String(text[match.upperBound...])
-            // 영문·한글 저자 기호를 보존하고 공백으로 구분된 연도·권차 앞에서 멈춘다.
-            // PL2489.논.독92처럼 숫자 없는 한글 분류 구분도 보존한다.
-            let pattern = #"^\s*\.?\s*([\p{L}]+[0-9]+|[가-힣]+(?=\s*\.))"#
-            let regex = try! NSRegularExpression(pattern: pattern)
             var rest = tail
             var cutters: [String] = []
-            while let match = regex.firstMatch(in: rest, range: NSRange(rest.startIndex..., in: rest)),
+            while let match = Self.cutterRegex.firstMatch(in: rest, range: NSRange(rest.startIndex..., in: rest)),
                   let token = Range(match.range(at: 1), in: rest),
                   let consumed = Range(match.range, in: rest) {
                 cutters.append(String(rest[token]))
