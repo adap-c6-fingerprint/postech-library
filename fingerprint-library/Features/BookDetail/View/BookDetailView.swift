@@ -135,12 +135,13 @@ struct BookDetailView: View {
     var body: some View {
         detailContent
             .safeAreaInset(edge: .top, spacing: 0) {
-                if isExpanded { expandedTopBar }
+                if isExpanded { expandedTopBar.transition(.opacity) }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
             .background {
                 if isExpanded {
                     BookDetailCoverBackground(book: store.book, cachedURL: store.cachedCoverURL)
+                        .transition(.opacity)
                 }
             }
             .foregroundStyle(Color.textPrimary)
@@ -194,76 +195,60 @@ struct BookDetailView: View {
         )
     }
 
-    @ViewBuilder
     private var detailContent: some View {
-        if isExpanded {
-            expandedContent
-        } else if detent == .compact {
-            compactContent
-        } else if !dynamicTypeSize.isAccessibilitySize && !isVoiceOverEnabled {
-            VStack(alignment: .leading, spacing: 36) {
-                header
-                    .padding(.horizontal, 16)
-                    .padding(.top, 20)
-                ScrollView {
-                    descriptionSection.padding(.horizontal, 16).padding(.bottom, 20)
-                }
-            }
-        } else {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 36) { header; descriptionSection }
-                    .padding(.horizontal, 16).padding(.top, 20).padding(.bottom, 20)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var compactContent: some View {
-        if usesAccessibleLayout {
-            ScrollView {
-                header.padding(.horizontal, BookDetailCompactLayout.horizontalPadding)
-                    .padding(.top, 20).padding(.bottom, 20)
-            }
-            .accessibilityIdentifier("bookDetail.compactContent")
-        } else {
-            HStack(alignment: .top, spacing: 14) {
-                cover
-                bibliography.padding(.top, 16)
-            }
-            .padding(.horizontal, BookDetailCompactLayout.horizontalPadding)
-            .padding(.top, BookDetailCompactLayout.topPadding)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .accessibilityIdentifier("bookDetail.compactContent")
-        }
-    }
-
-    private var expandedContent: some View {
         GeometryReader { geometry in
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    BookCoverView(url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL)
-                        .frame(width: min(218, geometry.size.width * 0.55), height: 310)
-                        .background(.quaternary)
-                        .clipShape(RoundedRectangle(cornerRadius: 3))
-                        .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 30)
-                        .padding(.bottom, 32)
-                        .accessibilityIdentifier("bookDetail.expandedCover")
-                    VStack(alignment: .leading, spacing: 8) {
-                        holdingStatus.typography(.caption2)
-                        bookTitle
-                            .lineLimit(dynamicTypeSize.isAccessibilitySize || isVoiceOverEnabled ? nil : 2)
-                            .truncationMode(.tail)
-                        holdingLocation
-                        expandedRouteSummary
-                    }
-                    descriptionSection.padding(.top, 24)
+            VStack(alignment: .leading, spacing: 0) {
+                if !isExpanded && !usesAccessibleLayout {
+                    header
+                        .padding(.horizontal, BookDetailCompactLayout.horizontalPadding)
+                        .padding(.top, detent == .compact ? BookDetailCompactLayout.topPadding : 20)
+                        .padding(.bottom, detent == .compact ? 0 : 36)
+                        .transition(.opacity)
                 }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 20)
+                // 높이 단계가 바뀌어도 같은 스크롤 뷰가 제스처를 이어받는다.
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        if isExpanded {
+                            expandedHeader(width: geometry.size.width)
+                                .transition(.opacity)
+                        } else if usesAccessibleLayout {
+                            header.padding(.top, 20)
+                                .transition(.opacity)
+                        }
+                        if detent != .compact {
+                            descriptionSection
+                                .padding(.top, isExpanded ? 24 : (usesAccessibleLayout ? 36 : 0))
+                                .transition(.opacity)
+                        }
+                    }
+                    .padding(.horizontal, BookDetailCompactLayout.horizontalPadding)
+                    .padding(.bottom, 20)
+                }
+                .accessibilityIdentifier("bookDetail.expandedContent", isEnabled: isExpanded)
             }
-            .accessibilityIdentifier("bookDetail.expandedContent")
+            .accessibilityIdentifier("bookDetail.compactContent", isEnabled: detent == .compact)
+        }
+    }
+
+    private func expandedHeader(width: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            BookCoverView(url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL)
+                .frame(width: min(218, width * 0.55), height: 310)
+                .background(.quaternary)
+                .clipShape(RoundedRectangle(cornerRadius: 3))
+                .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
+                .frame(maxWidth: .infinity)
+                .padding(.top, 30)
+                .padding(.bottom, 32)
+                .accessibilityIdentifier("bookDetail.expandedCover")
+            VStack(alignment: .leading, spacing: 8) {
+                holdingStatus.typography(.caption2)
+                bookTitle
+                    .lineLimit(usesAccessibleLayout ? nil : 2)
+                    .truncationMode(.tail)
+                holdingLocation
+                expandedRouteSummary
+            }
         }
     }
 
@@ -300,6 +285,7 @@ struct BookDetailView: View {
             HStack(alignment: .top, spacing: 14) {
                 cover
                 bibliography
+                    .padding(.top, detent == .compact && !usesAccessibleLayout ? 16 : 0)
             }
         }
     }

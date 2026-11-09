@@ -197,9 +197,13 @@ struct BookDetailFeature {
                 return state.mapContext == nil ? .none : refreshDestination(state: &state)
 
             case let .mapContextChanged(context):
-                guard state.mapContext != context else { return .none }
+                let previousContext = state.mapContext
+                guard previousContext != context else { return .none }
                 state.mapContext = context
-                return refreshDestination(state: &state)
+                if previousContext?.map != context.map || previousContext?.labels != context.labels {
+                    return refreshDestination(state: &state)
+                }
+                return refreshDestinationRoute(state: &state)
 
             case let .destinationRouteLoaded(requestID, summary):
                 guard requestID == state.destinationRouteRequestID else { return .none }
@@ -321,17 +325,24 @@ struct BookDetailFeature {
     }
 
     private func refreshDestination(state: inout State) -> Effect<Action> {
+        if case let .loaded(holdings) = state.holdingsState {
+            state.destinationPresentation = BookDetailDestinationPresentation.resolve(
+                holdings: holdings, context: state.mapContext
+            )
+        } else {
+            state.destinationPresentation = nil
+        }
+        return refreshDestinationRoute(state: &state)
+    }
+
+    private func refreshDestinationRoute(state: inout State) -> Effect<Action> {
         state.destinationRouteRequestID += 1
         let requestID = state.destinationRouteRequestID
         let cancel: Effect<Action> = .cancel(id: CancelID.destinationRoute)
-        guard case let .loaded(holdings) = state.holdingsState else {
-            state.destinationPresentation = nil
+        guard case .loaded = state.holdingsState else {
             state.destinationRouteState = state.holdingsState == .failed ? .unavailable : .idle
             return cancel
         }
-        state.destinationPresentation = BookDetailDestinationPresentation.resolve(
-            holdings: holdings, context: state.mapContext
-        )
         guard let destination = state.destinationPresentation,
               ShelfOverlapPolicy().allows(destination.shelves),
               let context = state.mapContext, let navigation = context.navigation,
