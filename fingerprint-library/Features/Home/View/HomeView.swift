@@ -6,6 +6,7 @@ struct HomeView: View {
     let mapStore: StoreOf<IndoorMapFeature>
     @State private var recommendationPosition: Int? = 0
     @State private var homeScrollPosition = ScrollPosition(edge: .top)
+    @State private var isHomeAtTop = true
 
     private static let kulumiCoverNames = (1...6).map { "KulumiCover\($0)" }
 
@@ -54,6 +55,11 @@ struct HomeView: View {
             }
             .padding(.bottom, 24)
         }
+        .onScrollGeometryChange(for: Bool.self) { geometry in
+            geometry.contentOffset.y + geometry.contentInsets.top <= 1
+        } action: { _, isAtTop in
+            isHomeAtTop = isAtTop
+        }
         .scrollIndicators(.hidden)
         .scrollPosition($homeScrollPosition)
         .onChange(of: store.showsKulumiCovers) { _, isActive in
@@ -61,15 +67,18 @@ struct HomeView: View {
             homeScrollPosition.scrollTo(edge: .top)
             recommendationPosition = 0
         }
-        .safeAreaInset(edge: .top, spacing: LibraryTabIntroText.topBarSpacing) {
+        .safeAreaBar(edge: .top, spacing: 0) {
             LibraryTabTopBar(
                 title: "추천",
                 onFavorites: { store.send(.favoritesButtonTapped) },
                 onCart: { store.send(.cartButtonTapped) },
                 onProfile: { store.send(.profileButtonTapped) }
             )
-            // 제목의 아래쪽과 첫 추천 문구 사이에 13.59pt를 확보한다.
+            // 버튼 아래 여백까지 블러가 적용되는 상단바 영역에 포함한다.
+            .padding(.bottom, LibraryTabIntroText.topBarSpacing)
         }
+        .scrollEdgeEffectStyle(.hard, for: .top)
+        .scrollEdgeEffectHidden(isHomeAtTop, for: .top)
         .background(Color(uiColor: .systemBackground))
         .toolbar(.hidden, for: .navigationBar)
         .task(id: upcomingCoverURLs) {

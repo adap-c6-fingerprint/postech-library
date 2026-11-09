@@ -71,6 +71,7 @@ struct AppView: View {
             Tab("홈", systemImage: "house", value: AppFeature.Tab.map) {
                 LibraryMapView(store: store)
                     .analyticsScreen(.map)
+                    .tint(Color?.none)
             }
 
             Tab("추천", systemImage: "book", value: AppFeature.Tab.recommendations) {
@@ -80,6 +81,7 @@ struct AppView: View {
                     mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
                 )
                 .analyticsScreen(.recommendations)
+                .tint(Color?.none)
             }
 
             Tab(value: AppFeature.Tab.search, role: .search) {
@@ -88,8 +90,11 @@ struct AppView: View {
                     mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
                 )
                 .analyticsScreen(.search)
+                .tint(Color?.none)
             }
         }
+        // 탭바만 강조색을 사용하고, 각 탭의 화면은 위에서 기본 색으로 되돌린다.
+        .tint(Color(red: 0.88, green: 0.95, blue: 0.19))
         .searchable(
             text: Binding(
                 get: { store.bookSearch.query },
@@ -130,7 +135,6 @@ struct AppView: View {
             .sessionReplayProtected()
         }
         #endif
-        .tint(Color(red: 0.88, green: 0.95, blue: 0.19))
         .environment(\.indoorRouteMapStore, store.scope(state: \.indoorMap, action: \.indoorMap))
         // 위치 스트림은 탭 전환이 아닌 앱 루트 수명에 맞춘다.
         .task {
