@@ -16,11 +16,12 @@ struct BookFavoritesView: View {
                     .typography(.body2)
                     .foregroundStyle(Color.cartTextSecondary)
 
-                LazyVStack(alignment: .leading, spacing: 28) {
+                LazyVStack(alignment: .leading, spacing: 24) {
                     ForEach(store.sections) { section in
                         sectionView(section)
                     }
                 }
+                // 피그마 10. 찜하기_기본 주석 "날짜 사이 간격 28 -> 24": 날짜 묶음 사이 간격
             }
             .padding(.horizontal, 16)
             .padding(.top, 24)
