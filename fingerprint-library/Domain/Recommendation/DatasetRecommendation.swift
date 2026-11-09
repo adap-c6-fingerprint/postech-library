@@ -12,6 +12,8 @@ nonisolated enum DatasetRecommendation {
     static let displayCount = 6
     /// 개인별 추천에서 최근 조회 도서를 원본으로 쓰는 최대 권수.
     static let maxHistorySources = 3
+    /// 소속이 없을 때(온보딩 건너뛰기) 하드데이터 전체에서 뽑는 학과별 추천 목록 권수. 소속 목록 한 개와 같은 20권이다.
+    static let fallbackListCount = 20
 
     /// 최초 접속: 20권 중 랜덤 count권.
     static func randomPicks<G: RandomNumberGenerator>(

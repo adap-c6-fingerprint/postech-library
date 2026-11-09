@@ -44,6 +44,8 @@ struct OnboardingFeature {
         var selectedPreferences: [String] = []
         // 고른 순서대로 보관하는 선호 분류 이름. 예: ["수학", "역사"]
         var errorMessage: String?
+        var isCompleted = false
+        // 프로필을 저장해 흐름을 마쳤는지. 마친 뒤 화면이 한꺼번에 닫힐 때 생기는 pop을 뒤로가기로 오해하지 않게 한다.
         @Shared(.userProfile) var userProfile: UserProfile?
         // 앱 전체가 함께 쓰는 프로필. 온보딩을 마치면 여기에 저장한다.
         @Shared(.hasSkippedOnboarding) var hasSkippedOnboarding: Bool
@@ -277,6 +279,8 @@ struct OnboardingFeature {
                     )
                     // 소속 경로·최종 소속 이름(홈 제목용)·선호 분류 이름으로 프로필을 만든다.
                     state.$userProfile.withLock { $0 = profile }
+                    state.isCompleted = true
+                    // 마이페이지에서 처음 설정한 경우, 곧 부모가 이 상태를 지우며 소속·선호 분류 화면을 함께 닫는다.
                     if state.entry == .firstRun {
                         analytics.record(.init(.onboardingCompleted, [
                             .selectedCount: .integer(profile.interests.count)

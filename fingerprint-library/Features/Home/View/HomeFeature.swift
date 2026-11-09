@@ -12,6 +12,14 @@ struct HomeFeature {
         // 앱 전체가 함께 쓰는 프로필. 온보딩·마이페이지에서 바꾼 값이 그대로 보인다.
         var displayedProfile: UserProfile?
         // 지금 화면의 추천 목록들을 만들 때 쓴 프로필. userProfile과 다르면 목록을 새 프로필로 다시 불러온다.
+        var hasSyncedProfile = false
+        // displayedProfile을 한 번이라도 기록했는지. 온보딩을 건너뛰면 기록한 프로필도 nil이라 nil만으로는 '아직 안 불러옴'과 구분되지 않는다.
+        var isProfileComplete: Bool {
+            guard let userProfile else { return false }
+            return RecommendationDataset.AffiliationPath(key: userProfile.affiliationKey) != nil
+                && !userProfile.interests.isEmpty
+        }
+        // 소속과 관심 분야를 모두 설정했는지. 아니면 학과 추천 섹션을 '맞춤 정보를 설정해 주세요' 안내로 가린다. (이슈 #396)
         var departmentName: String { userProfile?.departmentName ?? "" }
         // "'수학과'에서 많이 빌린" 제목에 쓰는 소속 이름. 따로 복사해 두지 않고 프로필에서 바로 읽는다.
         var isRecommendationExpanded = true
@@ -378,17 +386,20 @@ struct HomeFeature {
     // 소속이 바뀌면 학과 추천을, 관심 분야가 바뀌면 '당신을 위한 추천'을 비우고 새 프로필로 다시 불러온다.
     // cancel: 예전 프로필로 진행 중인 조회 취소. reload: 새 프로필로 바로 다시 받을 조회.
         let current = state.userProfile
-        guard let previous = state.displayedProfile else {
+        guard state.hasSyncedProfile else {
+            state.hasSyncedProfile = true
             state.displayedProfile = current
             // 처음 불러오는 경우. 목록이 아직 비어 있으므로 비울 것이 없다.
             return (.none, .none)
         }
+        let previous = state.displayedProfile
+        // 온보딩을 건너뛴 상태였다면 nil이다.
         guard let current, current != previous else { return (.none, .none) }
         state.displayedProfile = current
         var cancels: [Effect<Action>] = []
         var reload: Effect<Action> = .none
 
-        if current.affiliationKey != previous.affiliationKey {
+        if current.affiliationKey != previous?.affiliationKey {
             state.popularBooks = []
             state.popularBooksErrorMessage = nil
             state.departmentRecommendations = .loading
@@ -403,7 +414,8 @@ struct HomeFeature {
             // 빈 목록은 각 화면의 조회(.task, departmentRecommendationsRequested)가 새 소속으로 다시 채운다.
         }
 
-        if current.interests != previous.interests {
+        if current.interests != previous?.interests {
+        // 건너뛴 뒤 마이페이지에서 프로필을 처음 만든 경우(nil → 프로필)도 여기로 와서, 하드데이터 전체로 고른 추천을 새 관심 분야로 다시 받는다.
             state.recommendedBooks = []
             state.recommendationCoverFiles = [:]
             reload = startRecommendationSession(state: &state, restoresCache: false)

@@ -48,11 +48,14 @@ extension BookRecommendationClient {
     }
 
     /// 프로필에 저장한 선호 분류 목록을 합친 하드데이터. (Q3: recordID로 중복 제거)
+    /// 관심 분야가 없으면(온보딩 건너뛰기) 하드데이터 전체.
     private nonisolated static func personalPool(dataset: RecommendationDatasetClient) async throws -> [Book] {
         let data = try await dataset.load()
         @Shared(.userProfile) var userProfile: UserProfile?
         // 앱 전체가 함께 쓰는 프로필에서 관심 분야를 읽는다. 마이페이지에서 바꾼 값이 다음 추천부터 바로 쓰인다.
         let preferences = userProfile?.interests ?? []
+        guard !preferences.isEmpty else { return data.allBooks }
+        // 온보딩을 건너뛰어 관심 분야가 없으면 하드데이터 전체를 후보로 쓴다. (이슈 #396)
         return data.books(forPreferences: preferences)
     }
 }
@@ -61,14 +64,21 @@ extension DepartmentPopularBooksClient {
     /// 소속별 전체 목록과 홈 미리보기를 제공한다. 아래 규칙은 홈 미리보기에 적용된다.
     /// - 최초 접속(온보딩 직후 첫 표시): 소속 목록 20권에서 랜덤 6권 (Q4)
     /// - 이후 접속: 소속 목록에서 랜덤 6권 → 원본마다 연관도서 1권
+    /// - 소속이 없으면(온보딩 건너뛰기) 소속 목록 대신 하드데이터 전체에서 랜덤 20권을 쓴다.
     nonisolated static func dataset(
         dataset: RecommendationDatasetClient, related: HeldRelatedBooksClient
     ) -> Self {
         let fetchAll: @Sendable ([String]) async throws -> [Book] = { affiliationKey in
+            let data = try await dataset.load()
             guard let path = RecommendationDataset.AffiliationPath(key: affiliationKey) else {
-                throw DepartmentPopularBooksError.missingAffiliation
+                var generator = SystemRandomNumberGenerator()
+                return DatasetRecommendation.randomPicks(
+                    from: data.allBooks, count: DatasetRecommendation.fallbackListCount, using: &generator
+                )
             }
-            return try await dataset.load().books(forAffiliation: path)
+            // 온보딩을 건너뛰어 소속이 없으면 하드데이터 전체에서 랜덤 20권을 쓴다. (이슈 #396)
+            // 전체 812권을 그대로 쓰면 목록 화면에서 812권의 소장 정보를 모두 서버에 조회하게 된다.
+            return data.books(forAffiliation: path)
         }
         return Self(fetch: { affiliationKey, count, isInitial in
             guard count > 0 else { return [] }
@@ -84,12 +94,13 @@ extension DepartmentPopularBooksClient {
     }
 }
 
-nonisolated enum DepartmentPopularBooksError: LocalizedError, Equatable {
-    case missingAffiliation
-
-    var errorDescription: String? {
-        switch self {
-        case .missingAffiliation: "소속 정보가 없어요. 온보딩에서 소속을 다시 골라주세요."
-        }
-    }
-}
+// nonisolated enum DepartmentPopularBooksError: LocalizedError, Equatable {
+//     case missingAffiliation
+//
+//     var errorDescription: String? {
+//         switch self {
+//         case .missingAffiliation: "소속 정보가 없어요. 온보딩에서 소속을 다시 골라주세요."
+//         }
+//     }
+// }
+// ↑ 소속이 없어도 하드데이터 전체에서 랜덤 20권을 쓰게 되어 더 이상 던지지 않는다. 주석으로 남겨 둔다. (이슈 #396)
