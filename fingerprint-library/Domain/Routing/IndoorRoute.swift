@@ -67,14 +67,15 @@ nonisolated enum IndoorRoutingError: Error, Equatable, Sendable, LocalizedError 
 
     var errorDescription: String? {
         switch self {
-        case .invalidGraph: "길찾기 데이터가 올바르지 않아요. 도면과 노드 데이터를 확인해주세요."
-        case .invalidDestination: "이 서가의 도착 지점을 찾을 수 없어요."
-        case .unknownFloor: "현재 위치의 층을 확인할 수 없어요."
-        case .noRoutingDataForFloor: "이 층에는 길찾기 데이터가 없어요."
-        case .invalidPosition: "현재 위치를 확인한 뒤 다시 시도해주세요."
-        case .farFromGraph: "현재 위치가 등록된 통로에서 너무 멀어요. 통로로 이동한 뒤 다시 시도해주세요."
-        case .missingTransitionDistances: "층간 이동거리 자료가 필요해요."
-        case .noRoute: "선택한 서가까지 연결된 경로가 없어요."
+        case .invalidGraph: "길찾기 데이터가 올바르지 않아요. 도면과 노드 데이터를 확인해주세요." // x
+        case .invalidDestination: "이 서가의 도착 지점을 찾을 수 없어요." // x
+        case .unknownFloor: "현재 위치의 층을 확인할 수 없어요." // x
+        case .noRoutingDataForFloor: "이 층에는 길찾기 데이터가 없어요." // x
+        case .invalidPosition: "현재 위치를 확인한 뒤 다시 시도해주세요." // o
+        case .farFromGraph: "현재 위치가 등록된 통로에서 너무 멀어요. 통로로 이동한 뒤 다시 시도해주세요." // o
+        case .missingTransitionDistances: "층간 이동거리 자료가 필요해요." // x
+        case .noRoute: "선택한 서가까지 연결된 경로가 없어요." // x
+            // 도서관 안에서 다시 시도하라 안내.
         }
     }
 }
