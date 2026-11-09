@@ -14,6 +14,8 @@ struct BookCartFeature {
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
         // 길안내하거나 삭제할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
+        @Shared(.appStorage("hasShownCartGuidanceLimitAlert")) var hasShownGuidanceLimitAlert = false
+        var isGuidanceLimitAlertPresented = false
         var isRemoveAlertPresented = false
 
         var sections: [BookCartSection] {
@@ -44,6 +46,7 @@ struct BookCartFeature {
         case coverRecovered(Book.ID, URL, URL)
         case selectionToggled(Book.ID)
         case startGuidanceButtonTapped
+        case guidanceLimitAlertDismissed
         // "안내 시작하기"를 눌러 경로 미리보기로 넘어갈 때. 마이페이지 최근 찾은 책에 기록한다.
         case guidanceLinkTapped
         case removeButtonTapped
@@ -101,12 +104,21 @@ struct BookCartFeature {
                     state.selectedIDs.remove(at: index)
                 } else {
                     state.selectedIDs.append(id)
+                    if state.selectedCount == BookCartItem.maxGuidanceCount + 1,
+                       !state.hasShownGuidanceLimitAlert {
+                        state.$hasShownGuidanceLimitAlert.withLock { $0 = true }
+                        state.isGuidanceLimitAlertPresented = true
+                    }
                 }
                 return .none
 
             case .startGuidanceButtonTapped:
                 guard state.canStartGuidance else { return .none }
                 return .send(.delegate(.startGuidance(state.selectedBooks)))
+
+            case .guidanceLimitAlertDismissed:
+                state.isGuidanceLimitAlertPresented = false
+                return .none
 
             case .guidanceLinkTapped:
                 guard state.canStartGuidance else { return .none }

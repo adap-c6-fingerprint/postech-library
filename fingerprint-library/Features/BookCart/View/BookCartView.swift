@@ -54,6 +54,17 @@ struct BookCartView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
         .alert(
+            "길안내는 최대 \(BookCartItem.maxGuidanceCount)권까지 가능해요",
+            isPresented: Binding(
+                get: { store.isGuidanceLimitAlertPresented },
+                set: { if !$0 { store.send(.guidanceLimitAlertDismissed) } }
+            )
+        ) {
+            Button("확인했어요") {}
+        } message: {
+            Text("다른 책을 선택하려면 추가한 책을 해제하고 다시 시도해보세요.")
+        }
+        .alert(
             "선택한 책 \(store.selectedCount)권을 삭제할까요?",
             isPresented: Binding(
                 get: { store.isRemoveAlertPresented },
@@ -97,18 +108,23 @@ struct BookCartView: View {
                     .foregroundStyle(store.canStartGuidance ? Color.black : Color.cartTextSecondary)
                     .padding(.horizontal, 14)
                     .frame(minHeight: 48)
-                    .background(store.canStartGuidance ? Color.cartPrimary : Color.cartCard, in: .capsule)
+                    .contentShape(.capsule)
             }
             .buttonStyle(.plain)
-            .simultaneousGesture(TapGesture().onEnded { store.send(.guidanceLinkTapped) })
+            .glassEffect(
+                .regular
+                    .tint(store.canStartGuidance ? Color.cartPrimary.opacity(0.7) : nil)
+                    .interactive(store.canStartGuidance),
+                in: .capsule
+            )
             // NavigationLink는 화면 이동만 하므로, 같은 탭에서 최근 찾은 책 기록을 남긴다.
+            .simultaneousGesture(TapGesture().onEnded { store.send(.guidanceLinkTapped) })
             .accessibilityIdentifier("cart-directions")
             .disabled(!store.canStartGuidance)
         }
         .disabled(store.selectedCount == 0)
         .padding(.horizontal, 28)
         .padding(.vertical, 12)
-        .background(Color.cartBackground)
     }
 
     private func sectionView(_ section: BookCartSection) -> some View {
