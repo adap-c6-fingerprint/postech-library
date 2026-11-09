@@ -132,12 +132,11 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
 
         func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
             guard !isInvalidated else { return }
-            withAnimation(UIAccessibility.isReduceMotionEnabled ? nil : .smooth(duration: 0.35)) {
-                switch sheetPresentationController.selectedDetentIdentifier {
-                case Self.compactID: presentation.detent = .compact
-                case .large: presentation.detent = .large
-                default: presentation.detent = .medium
-                }
+            // 높이 전환 애니메이션은 시스템 시트가 처리한다.
+            switch sheetPresentationController.selectedDetentIdentifier {
+            case Self.compactID: presentation.detent = .compact
+            case .large: presentation.detent = .large
+            default: presentation.detent = .medium
             }
             scheduleCompactFrameReport()
         }
