@@ -76,6 +76,7 @@ struct BookRouteBooksPreviewView: View {
                         bottom: geometry.safeAreaInsets.bottom, leading: geometry.safeAreaInsets.leading,
                         trailing: geometry.safeAreaInsets.trailing),
                     safeAreaInsets: geometry.safeAreaInsets, topBarHeight: bookTabsHeight,
+                    expandedBottomPadding: BookExpandedDetailLayout.carouselActionsBottomPadding,
                     identifierPrefix: "multiBookPreview", onCoveredHeightChange: { panelHeight = $0 }
                 ) {
                     // ✅ 펼침 여부에 따라 접힌 카드 페이지와 펼친 상세 화면을 분기한다.
@@ -122,9 +123,8 @@ struct BookRouteBooksPreviewView: View {
     private var expandedDetail: some View {
         ScrollView {
             BookExpandedDetailView(
-                books: books, selectedBookID: selection,
-                // ✅ 시트가 상단 바 아래 16pt에서 시작하므로 단권 상세와 표지 위치를 맞추도록 그만큼 뺀다.
-                coverTopPadding: BookExpandedDetailLayout.coverTopPadding - 16,
+                style: .carousel, books: books, selectedBookID: selection,
+                coverTopPadding: BookExpandedDetailLayout.carouselCoverTopPadding,
                 identifierPrefix: "multiBookPreview"
             ) { book in
                 BookRoutePreviewExpandedDetails(
@@ -162,8 +162,8 @@ struct BookRouteBooksPreviewView: View {
                 favoriteButton(detailStores.store(for: book))
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 8)
+        .padding(.horizontal, 16) // ✅ 시안: 버튼은 안전 영역 바로 아래에 붙는다.
+        .frame(height: 44)
     }
 
     private func favoriteButton(_ store: StoreOf<BookDetailFeature>) -> some View {

@@ -4,6 +4,13 @@ import SwiftUI
 // ✅ 단권은 표지 한 장, 여러 권은 좌우로 넘기는 표지 캐러셀과 페이지 표시를 보여 준다.
 // ✅ 스크롤 뷰·상단 버튼·하단 버튼은 각 화면이 소유하고, 표지 아래 정보는 `details`로 받는다.
 struct BookExpandedDetailView<Details: View>: View {
+    // ✅ 권수가 아니라 화면 종류로 분기한다. 여러 권 미리보기는 1권이어도 캐러셀 디자인을 사용한다.
+    enum Style {
+        case single
+        case carousel
+    }
+
+    let style: Style
     let books: [Book]
     @Binding var selectedBookID: Book.ID?
     var coverTopPadding: CGFloat = BookExpandedDetailLayout.coverTopPadding
@@ -15,7 +22,7 @@ struct BookExpandedDetailView<Details: View>: View {
     @State private var containerWidth: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private var isMultiple: Bool { books.count > 1 }
+    private var isMultiple: Bool { style == .carousel }
 
     private var selectedIndex: Int {
         books.firstIndex { $0.id == selectedBookID } ?? 0
@@ -183,7 +190,11 @@ nonisolated enum BookExpandedDetailLayout {
     /// 옆 표지는 바닥을 맞춘 채 이 비율만큼 줄어든다.
     static let sideCoverScale: CGFloat = 0.82
     static let indicatorTopPadding: CGFloat = 16
-    static let indicatorHorizontalPadding: CGFloat = 24
+    static let indicatorHorizontalPadding: CGFloat = 16 // ✅ 시안: 마지막 점이 화면 오른쪽에서 16pt
+    /// ✅ 시안: 여러 권 표지 윗변이 화면 위에서 127pt. 상단 바(안전 영역 + 44) 아래 16pt에서 시트가 시작하므로 5pt를 더한다.
+    static let carouselCoverTopPadding: CGFloat = 5
+    /// ✅ 시안: 여러 권 펼친 화면의 하단 버튼은 홈 인디케이터 안전 영역 바로 위(1pt)에 붙는다.
+    static let carouselActionsBottomPadding: CGFloat = 1
 
     /// 화면 가운데에서 표지 한 칸만큼 멀어질수록 옆 표지 크기로 줄인다.
     static func carouselScale(midX: CGFloat, viewportWidth: CGFloat) -> CGFloat {

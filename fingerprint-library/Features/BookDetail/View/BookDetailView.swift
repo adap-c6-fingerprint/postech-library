@@ -180,7 +180,7 @@ struct BookDetailView: View {
                         if isExpanded {
                             // ✅ 여러 권 미리보기와 같은 펼친 상세 화면을 단권 분기로 사용한다.
                             BookExpandedDetailView(
-                                books: [store.book], selectedBookID: .constant(store.book.id),
+                                style: .single, books: [store.book], selectedBookID: .constant(store.book.id),
                                 identifierPrefix: "bookDetail", cachedCoverURL: store.cachedCoverURL
                             ) { _ in expandedDetails }
                         } else if usesAccessibleLayout {
