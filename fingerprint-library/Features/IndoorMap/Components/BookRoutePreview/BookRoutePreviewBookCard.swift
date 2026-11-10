@@ -52,10 +52,11 @@ struct BookRoutePreviewBookCard: View {
                     ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
                     : AnyLayout(HStackLayout(alignment: .top, spacing: 14))
                 layout {
-                    BookCoverView(url: book.imageURL, isbn: book.isbn)
+                    // ✅ 접힌 카드에서도 표지 뒤 배경 없이 이미지 모서리만 둥글게 한다.
+                    BookCoverView(
+                        url: book.imageURL, isbn: book.isbn,
+                        imageCornerRadius: BookExpandedDetailLayout.carouselCoverCornerRadius)
                         .frame(width: 140, height: 186)
-                        .background(.quaternary, in: .rect(cornerRadius: 6))
-                        .clipShape(.rect(cornerRadius: 6))
                     bibliography
                 }
                 description

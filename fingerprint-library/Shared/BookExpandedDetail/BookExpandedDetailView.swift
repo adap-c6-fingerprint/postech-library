@@ -53,7 +53,9 @@ struct BookExpandedDetailView<Details: View>: View {
 
     @ViewBuilder
     private func cover(_ book: Book) -> some View {
-        let cover = BookCoverView(url: book.imageURL, isbn: book.isbn, cachedURL: isMultiple ? nil : cachedCoverURL)
+        let cover = BookCoverView(
+            url: book.imageURL, isbn: book.isbn, cachedURL: isMultiple ? nil : cachedCoverURL,
+            imageCornerRadius: isMultiple ? BookExpandedDetailLayout.carouselCoverCornerRadius : 0) // ✅
             .frame(width: BookExpandedDetailLayout.coverSize.width,
                    height: BookExpandedDetailLayout.coverSize.height)
         if isMultiple {
@@ -201,6 +203,8 @@ nonisolated enum BookExpandedDetailLayout {
     static let indicatorHorizontalPadding: CGFloat = 16 // ✅ 시안: 마지막 점이 화면 오른쪽에서 16pt
     /// ✅ 시안: 여러 권 표지 윗변이 화면 위에서 127pt. 스크롤 상단 바(안전 영역 62 + 버튼 44) 아래로 21pt를 둔다.
     static let carouselCoverTopPadding: CGFloat = 21
+    /// ✅ 여러 권 화면의 표지 이미지 모서리.
+    static let carouselCoverCornerRadius: CGFloat = 8
     /// ✅ 시안: 여러 권 펼친 화면의 하단 버튼은 홈 인디케이터 안전 영역 바로 위(1pt)에 붙는다.
     static let carouselActionsBottomPadding: CGFloat = 1
 
