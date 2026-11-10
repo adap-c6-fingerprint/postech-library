@@ -12,6 +12,8 @@ struct BookRouteBooksPreviewView: View {
     let onBack: () -> Void
     let onStart: (Book) -> Void
     let onRetry: () -> Void
+    /// 위치가 부정확하거나 맞지 않을 때 출발 위치를 직접 지정하게 한다.
+    var onSetOriginManually: (() -> Void)?
     var guidesSelectedBook = false
     var homeAnnotations: HomeMapAnnotationsFeature.State?
 
@@ -299,6 +301,11 @@ struct BookRouteBooksPreviewView: View {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(routeError).font(.caption)
                     Button("다시 시도", action: onRetry).font(.caption.bold())
+                    if let onSetOriginManually {
+                        Button("출발 위치 직접 설정", action: onSetOriginManually)
+                            .font(.caption.bold())
+                            .accessibilityIdentifier("multiBookPreview.setOrigin")
+                    }
                 }
                 .padding(10)
                 .background(.regularMaterial, in: .rect(cornerRadius: 12))

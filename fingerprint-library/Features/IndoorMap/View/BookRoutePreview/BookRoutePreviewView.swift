@@ -14,6 +14,9 @@ struct BookRoutePreviewView: View {
     @State private var navigationFlow = BookRoutePreviewNavigationState()
     @State private var routeFloorID: UUID?
     @State private var previewStart: IndoorPosition?
+    /// 사용자가 직접 지정한 출발 위치. 권한이 없거나 실제 위치가 맞지 않을 때 센서 위치 대신 사용한다.
+    @State private var manualStart: IndoorPosition?
+    @State private var isOriginPickerPresented = false
     @Environment(\.indoorRouteMapStore) private var mapStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -32,6 +35,8 @@ struct BookRoutePreviewView: View {
     
     private let accent = Color(red: 0.88, green: 0.95, blue: 0.19)
     private var currentStart: IndoorPosition? {
+        // 직접 지정한 출발 위치는 권한·정확도와 무관하게 우선한다.
+        if let manualStart { return manualStart }
         guard let mapStore, let position = mapStore.currentPosition,
               position.source == .manual || mapStore.authorization.isAuthorized,
               position.isRecent(at: Date()) else { return nil }
@@ -162,6 +167,9 @@ struct BookRoutePreviewView: View {
                 Button("다시 시도") { retryDirectNavigation() }
                     .buttonStyle(.borderedProminent)
                     .disabled(isLoadingRoute)
+                Button("출발 위치 직접 설정") { isOriginPickerPresented = true }
+                    .buttonStyle(.bordered)
+                    .accessibilityIdentifier("book-navigation-set-origin")
             } else {
                 ProgressView("길안내를 준비하고 있어요")
             }
@@ -208,6 +216,7 @@ struct BookRoutePreviewView: View {
                             previewStart = currentStart
                         }
                     },
+                    onSetOriginManually: { isOriginPickerPresented = true },
                     homeAnnotations: mapStore?.homeAnnotations
                 )
             } else {
@@ -220,6 +229,9 @@ struct BookRoutePreviewView: View {
             BookNavigationView(session: session, analyticsIsTest: destination.isTestMode) { _ in
                 navigationFlow.navigationEnded()
             }
+        }
+        .fullScreenCover(isPresented: $isOriginPickerPresented) {
+            originPicker
         }
         .background(Color(uiColor: .systemBackground))
         .preferredColorScheme(.dark)
@@ -237,6 +249,9 @@ struct BookRoutePreviewView: View {
         }
         .accessibilityIdentifier("book-route-preview")
         .analyticsScreen(.routePreview)
+        .onChange(of: mapStore?.authorization, initial: true) { _, _ in
+            resolveStartAuthorization()
+        }
         .onChange(of: currentStart, initial: true) { _, position in
             // 처음 위치·층을 받으면 계산한다. 완료·실패 후 위치 수신마다 재계산하지 않는다.
             if previewSession == nil, !isLoadingRoute,
@@ -275,6 +290,75 @@ struct BookRoutePreviewView: View {
             routeStore.send(.disappeared)
             destinationStore?.send(.map(.disappeared))
         }
+    }
+
+    /// 권한이 아직 정해지지 않았으면 한 번 더 요청하고, 거부·제한 상태면 출발 위치를 직접 지정하게 한다.
+    ///
+    /// iOS는 한 번 거부한 뒤에는 같은 요청에 시스템 창을 다시 띄우지 않는다.
+    /// 그래서 거부 상태에서 들어온 경우에는 요청 없이 바로 직접 설정 화면을 연다.
+    private func resolveStartAuthorization() {
+        guard let mapStore, manualStart == nil, !isOriginPickerPresented,
+              navigationFlow.session == nil else { return }
+        switch mapStore.authorization {
+        case .notDetermined:
+            mapStore.send(.requestLocationPermission)
+        case .denied, .restricted, .servicesDisabled:
+            isOriginPickerPresented = true
+        case .authorized:
+            break
+        }
+    }
+
+    @ViewBuilder
+    private var originPicker: some View {
+        if let map = mapStore?.map {
+            BookRouteOriginPickerView(
+                map: map, title: originPickerTitle, subtitle: originPickerSubtitle,
+                initialFloorID: originPickerFloorID,
+                onCancel: {
+                    isOriginPickerPresented = false
+                    dismiss()
+                },
+                onConfirm: { position in
+                    manualStart = position
+                    isOriginPickerPresented = false
+                    // routeRequest가 바뀌어 지정한 출발 위치로 경로를 다시 계산한다.
+                    previewStart = position
+                })
+        } else {
+            VStack(spacing: 20) {
+                ContentUnavailableView("지도를 불러오지 못했어요", systemImage: "map",
+                    description: Text("실내지도를 불러온 뒤에 출발 위치를 지정할 수 있어요."))
+                Button("돌아가기") {
+                    isOriginPickerPresented = false
+                    dismiss()
+                }
+                .buttonStyle(.bordered)
+            }
+            .padding(24)
+            .preferredColorScheme(.dark)
+        }
+    }
+
+    private var originPickerTitle: String {
+        orderedBooks.first.map { BookText.plainText($0.title) } ?? "도서 길안내"
+    }
+
+    /// 시안의 "4층 337번 서가"처럼 목적지 서가를 알려 준다. 서가를 아직 모르면 줄을 숨긴다.
+    private var originPickerSubtitle: String? {
+        guard let book = orderedBooks.first,
+              let shelf = destinationStore?.state.shelves(for: book.id).first else { return nil }
+        let floorName = mapStore?.map?.floors.first { $0.id == shelf.floorID }?.name
+        return [floorName, "\(shelf.realNumber)번 서가"].compactMap { $0 }.joined(separator: " ")
+    }
+
+    /// 목적지 서가와 같은 층에서 시작해 사용자가 층을 덜 바꾸게 한다.
+    private var originPickerFloorID: UUID? {
+        guard let book = orderedBooks.first,
+              let shelf = destinationStore?.state.shelves(for: book.id).first else {
+            return mapStore?.selectedFloorID
+        }
+        return shelf.floorID
     }
 
     private var routeMetrics: some View {
@@ -345,6 +429,8 @@ struct BookRoutePreviewView: View {
                     .font(.caption)
                 Button("현재 위치 확인") { mapStore?.send(.currentLocationTapped) }
                     .disabled(mapStore == nil)
+                Button("출발 위치 직접 설정") { isOriginPickerPresented = true }
+                    .accessibilityIdentifier("preview-set-origin")
             }
         }
     }
