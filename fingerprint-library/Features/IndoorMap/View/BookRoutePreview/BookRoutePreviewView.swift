@@ -182,7 +182,11 @@ struct BookRoutePreviewView: View {
     /// 출발 위치를 정하는 동안에는 경로 오류를 띄우지 않는다. 위치가 없어서 나는 오류라 사용자가 할 일이 아니다.
     private var hidesRouteErrorWhileResolvingOrigin: Bool {
         if isPermissionAlertPresented || isOriginPickerPresented || isPreparingManualOrigin { return true }
-        return !(mapStore?.authorization.isAuthorized ?? false)
+        // 직접 지정한 출발점으로 계산하다 난 오류는 사용자가 고칠 수 있으므로 보여 준다.
+        if manualStart != nil { return false }
+        // 지도 Store를 못 받은 경우에는 권한을 알 수 없다. 숨기면 빠져나갈 수 없으므로 오류를 그대로 보여 준다.
+        guard let mapStore else { return false }
+        return !mapStore.authorization.isAuthorized
     }
 
     private var showsRouteFailure: Bool {
@@ -312,7 +316,9 @@ struct BookRoutePreviewView: View {
                 navigationFlow.navigationEnded()
             }
         }
-        .fullScreenCover(isPresented: $isOriginPickerPresented) {
+        .fullScreenCover(isPresented: $isOriginPickerPresented, onDismiss: {
+            isPreparingManualOrigin = false
+        }) {
             originPicker
         }
         .overlay {
@@ -332,12 +338,12 @@ struct BookRoutePreviewView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: isPermissionAlertPresented)
-        .onChange(of: isPreparingManualOrigin ? mapStore?.map != nil : false) { _, isMapReady in
+        .onChange(of: isPreparingManualOrigin ? routeMap != nil : false) { _, isMapReady in
             // 지도가 준비된 뒤에 출발지 설정 화면을 연다. 그동안은 수동 안내 준비 문구를 보여 준다.
             if isMapReady { presentOriginPicker() }
         }
         .onChange(of: isPreparingManualOrigin) { _, isPreparing in
-            if isPreparing, mapStore?.map != nil { presentOriginPicker() }
+            if isPreparing, routeMap != nil { presentOriginPicker() }
         }
         .background(Color(uiColor: .systemBackground))
         .preferredColorScheme(.dark)
@@ -356,6 +362,11 @@ struct BookRoutePreviewView: View {
         .accessibilityIdentifier("book-route-preview")
         .analyticsScreen(.routePreview)
         .onChange(of: mapStore?.authorization, initial: true) { _, _ in
+            resolveStartAuthorization()
+        }
+        .onAppear { resolveStartAuthorization() }
+        .onChange(of: routeError) { _, _ in
+            // 위치가 없어 경로가 실패했는데 아무것도 안내하지 않으면 준비 문구만 남는다. 그 상태를 만들지 않는다.
             resolveStartAuthorization()
         }
         .onChange(of: currentStart, initial: true) { _, position in
@@ -420,9 +431,14 @@ struct BookRoutePreviewView: View {
         UIApplication.shared.open(url)
     }
 
+    /// 출발지 설정과 안내 준비가 쓰는 지도. 공용 지도 Store가 없거나 비어 있으면 이 화면이 불러온 지도를 쓴다.
+    private var routeMap: IndoorMap? {
+        mapStore?.map ?? destinationStore?.state.map.map
+    }
+
     @ViewBuilder
     private var originPicker: some View {
-        if let map = mapStore?.map {
+        if let map = routeMap {
             BookRouteOriginPickerView(
                 map: map, title: originPickerTitle, subtitle: originPickerSubtitle,
                 initialFloorID: originPickerFloorID,
@@ -459,7 +475,7 @@ struct BookRoutePreviewView: View {
     private var originPickerSubtitle: String? {
         guard let book = orderedBooks.first,
               let shelf = destinationStore?.state.shelves(for: book.id).first else { return nil }
-        let floorName = mapStore?.map?.floors.first { $0.id == shelf.floorID }?.name
+        let floorName = routeMap?.floors.first { $0.id == shelf.floorID }?.name
         return [floorName, "\(shelf.realNumber)번 서가"].compactMap { $0 }.joined(separator: " ")
     }
 
