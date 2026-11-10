@@ -152,21 +152,7 @@ struct BookDetailView: View {
             .fullScreenCover(isPresented: $isRoutePreviewPresented) {
                 BookRoutePreviewView(books: [store.book], entryMode: .direct)
             }
-            .fullScreenCover(item: $store.scope(state: \.cart, action: \.cart)) { cartStore in
-                NavigationStack {
-                    BookCartView(store: cartStore, onClose: { store.send(.cart(.dismiss)) })
-                }
-            }
-            .alert(cartNoticeTitle, item: cartNotice) { _ in
-                Button("나중에", role: .cancel) {}
-                Button("바로가기") { store.send(.cartShortcutTapped) }
-                    .keyboardShortcut(.defaultAction)
-            } message: { _ in
-                Text("장바구니로 이동하여 책의 경로를 확인하시겠습니까?")
-            }
-            .cartLimitAlert(isPresented: store.isCartLimitAlertPresented) {
-                store.send(.cartLimitAlertDismissed)
-            }
+            .bookDetailCartPresentation(store: store) // ✅ 여러 권 펼친 화면과 같은 장바구니 알림을 사용한다.
             .task { store.send(.loadFavorites) }
             .analyticsScreen(.detail)
             .onAppear {
@@ -179,23 +165,8 @@ struct BookDetailView: View {
             .task { store.send(.loadRelatedBooks) }
     }
 
-    private var cartNoticeTitle: String {
-        store.cartNotice == .alreadyAdded ? "이미 장바구니에 담긴 책이에요." : "책이 장바구니에 담겼어요."
-    }
-
-    private var cartNotice: Binding<BookDetailFeature.CartNotice?> {
-        Binding(
-            get: { store.cartNotice },
-            set: { notice in
-                if notice == nil, store.cartNotice != nil {
-                    store.send(.cartNoticeDismissed)
-                }
-            }
-        )
-    }
-
     private var detailContent: some View {
-        GeometryReader { geometry in
+        GeometryReader { _ in // ✅ 펼친 표지 크기는 공용 상세 화면이 정하므로 너비를 넘기지 않는다.
             VStack(alignment: .leading, spacing: 0) {
                 if !isExpanded && !usesAccessibleLayout {
                     header
@@ -207,7 +178,11 @@ struct BookDetailView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         if isExpanded {
-                            expandedHeader(width: geometry.size.width)
+                            // ✅ 여러 권 미리보기와 같은 펼친 상세 화면을 단권 분기로 사용한다.
+                            BookExpandedDetailView(
+                                books: [store.book], selectedBookID: .constant(store.book.id),
+                                identifierPrefix: "bookDetail", cachedCoverURL: store.cachedCoverURL
+                            ) { _ in expandedDetails }
                         } else if usesAccessibleLayout {
                             header.padding(.top, 20)
                         }
@@ -225,25 +200,15 @@ struct BookDetailView: View {
         }
     }
 
-    private func expandedHeader(width: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: 0) {
-            BookCoverView(url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL)
-                .frame(width: min(218, width * 0.55), height: 310)
-                .background(.quaternary)
-                .clipShape(RoundedRectangle(cornerRadius: 3))
-                .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 30)
-                .padding(.bottom, 24)
-                .accessibilityIdentifier("bookDetail.expandedCover")
-            VStack(alignment: .leading, spacing: 8) {
-                holdingStatus.typography(.caption2)
-                bookTitle
-                    .lineLimit(usesAccessibleLayout ? nil : 2)
-                    .truncationMode(.tail)
-                holdingLocation
-                expandedRouteSummary
-            }
+    // ✅ 표지 아래의 소장 상태·제목·위치·경로 요약. 시안에 맞춰 위치와 청구기호는 body1로 표시한다.
+    private var expandedDetails: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            holdingStatus.typography(.caption2)
+            bookTitle
+                .lineLimit(usesAccessibleLayout ? nil : 2)
+                .truncationMode(.tail)
+            holdingLocation(typography: .body1)
+            expandedRouteSummary
         }
     }
 
@@ -300,7 +265,7 @@ struct BookDetailView: View {
                 .typography(.caption2)
             bookTitle
             VStack(alignment: .leading, spacing: detent == .medium ? 4 : 8) {
-                holdingLocation
+                holdingLocation()
                 routeSummary
                     .typography(.caption1)
                     .foregroundStyle(Color.textTertiary)
@@ -321,7 +286,7 @@ struct BookDetailView: View {
     }
 
     @ViewBuilder
-    private var holdingLocation: some View {
+    private func holdingLocation(typography: DS.Typography = .body2) -> some View { // ✅ 펼친 화면은 body1을 사용한다.
         if case .loaded = store.holdingsState {
             VStack(alignment: .leading, spacing: 2) {
                 Text(store.destinationPresentation?.locationText
@@ -329,7 +294,7 @@ struct BookDetailView: View {
                 Text(store.displayedHolding?.callNumber ?? "청구기호 정보 없음")
                     .textSelection(.enabled)
             }
-            .typography(.body2)
+            .typography(typography)
         }
     }
 
@@ -360,36 +325,24 @@ struct BookDetailView: View {
         }
     }
 
+    // ✅ 거리·층 이동 표시는 여러 권 화면과 같은 공용 컴포넌트를 사용한다.
+    @ViewBuilder
     private var expandedRouteSummary: some View {
-        HStack(spacing: 16) {
-            Spacer(minLength: 0)
-            if case let .loaded(summary) = store.destinationRouteState {
-                HStack(spacing: 6) {
-                    routeIcon("figure.walk", color: Color(white: 0.45))
-                    Text("\(summary.isEstimated ? "약 " : "")\(summary.distanceMeters)m")
-                }
-                HStack(spacing: 6) {
-                    routeIcon("figure.stairs", color: .green)
-                    Text("\(summary.floorChangeCount)회")
-                }
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel("층 이동 \(summary.floorChangeCount)회")
-            } else {
+        if case let .loaded(summary) = store.destinationRouteState {
+            BookExpandedRouteSummary(
+                distanceText: "\(summary.isEstimated ? "약 " : "")\(summary.distanceMeters)m",
+                floorChangeCount: summary.floorChangeCount
+            )
+            .padding(.top, 2)
+        } else {
+            HStack(spacing: 16) {
+                Spacer(minLength: 0)
                 routeSummary
             }
+            .typography(.caption1)
+            .foregroundStyle(Color.textSecondary)
+            .padding(.top, 2)
         }
-        .typography(.caption1)
-        .foregroundStyle(Color.textSecondary)
-        .padding(.top, 2)
-    }
-
-    private func routeIcon(_ name: String, color: Color) -> some View {
-        Image(systemName: name)
-            .font(.system(size: 18, weight: .medium))
-            .foregroundStyle(.white)
-            .frame(width: 28, height: 28)
-            .background(color, in: Circle())
-            .accessibilityHidden(true)
     }
 
     private var descriptionSection: some View {
