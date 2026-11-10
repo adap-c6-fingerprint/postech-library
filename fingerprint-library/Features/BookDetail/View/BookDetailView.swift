@@ -234,7 +234,7 @@ struct BookDetailView: View {
                 .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
                 .frame(maxWidth: .infinity)
                 .padding(.top, 30)
-                .padding(.bottom, 32)
+                .padding(.bottom, 24)
                 .accessibilityIdentifier("bookDetail.expandedCover")
             VStack(alignment: .leading, spacing: 8) {
                 holdingStatus.typography(.caption2)
@@ -299,10 +299,12 @@ struct BookDetailView: View {
             holdingStatus
                 .typography(.caption2)
             bookTitle
-            holdingLocation
-            routeSummary
-                .typography(.caption1)
-                .foregroundStyle(Color.textTertiary)
+            VStack(alignment: .leading, spacing: detent == .medium ? 4 : 8) {
+                holdingLocation
+                routeSummary
+                    .typography(.caption1)
+                    .foregroundStyle(Color.textTertiary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .lineLimit(detent == .compact && !usesAccessibleLayout ? 1 : nil)
