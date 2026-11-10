@@ -203,7 +203,7 @@ struct BookRouteOriginPickerView: View {
             .foregroundStyle(DS.ColorToken.neutralPrimary)
             .padding(.vertical, 10)
             .padding(.horizontal, 16)
-            .frame(width: 307, height: )
+            .frame(width: 307, height: 65)
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
             .accessibilityIdentifier("route-origin-picker-hint")
     }
@@ -222,6 +222,9 @@ struct BookRouteOriginPickerView: View {
         }
         .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
         .buttonBorderShape(.capsule)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
+        .frame(width: 330, height: 52)
         .foregroundStyle(DS.ColorToken.neutralPrimary)
         .accessibilityHint("선택한 위치를 출발지로 삼아 길안내를 시작해요")
         .accessibilityIdentifier("route-origin-picker-confirm")
