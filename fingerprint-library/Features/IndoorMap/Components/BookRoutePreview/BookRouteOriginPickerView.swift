@@ -40,6 +40,7 @@ struct BookRouteOriginPickerView: View {
             topBarBackground
             header
             originMarker
+            floorPicker
             bottomControls
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -164,22 +165,26 @@ struct BookRouteOriginPickerView: View {
         .animation(.easeInOut(duration: 0.15), value: isMapSettled)
     }
 
-    /// 층 선택 버튼과 안내 문구·확정 버튼을 안전 영역 아래쪽에 붙인다.
+    /// 시안 치수: 오른쪽에서 17, 안전 영역 아래쪽에서 121 떨어뜨린다.
+    @ViewBuilder
+    private var floorPicker: some View {
+        if let floor = selectedFloor {
+            IndoorMapFloorPicker(
+                floors: map.floors, selectedFloorID: floor.id, appearance: .home,
+                marksSelectionAsCurrent: true,
+                onSelect: { id in
+                    guard id != selectedFloorID else { return }
+                    selectedFloorID = id
+                })
+                .padding(.trailing, 17)
+                .padding(.bottom, 121)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+        }
+    }
+
+    /// 안내 문구와 확정 버튼을 안전 영역 아래쪽에 붙인다.
     private var bottomControls: some View {
-        VStack(spacing: 16) {
-            Spacer(minLength: 0)
-            HStack {
-                Spacer(minLength: 0)
-                if let floor = selectedFloor {
-                    IndoorMapFloorPicker(
-                        floors: map.floors, selectedFloorID: floor.id, appearance: .home,
-                        marksSelectionAsCurrent: true,
-                        onSelect: { id in
-                            guard id != selectedFloorID else { return }
-                            selectedFloorID = id
-                        })
-                }
-            }
+        Group {
             if canConfirm {
                 confirmButton
             } else {
