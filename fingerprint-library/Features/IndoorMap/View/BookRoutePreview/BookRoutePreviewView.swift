@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
+import UIKit
 
 /// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
 struct BookRoutePreviewView: View {
@@ -17,6 +18,10 @@ struct BookRoutePreviewView: View {
     /// 사용자가 직접 지정한 출발 위치. 권한이 없거나 실제 위치가 맞지 않을 때 센서 위치 대신 사용한다.
     @State private var manualStart: IndoorPosition?
     @State private var isOriginPickerPresented = false
+    /// 이미 거부된 상태로 들어왔을 때 보여 주는 앱 알림. iOS 시스템 창을 대신해 다시 권한을 요청한다.
+    @State private var isPermissionAlertPresented = false
+    /// 이 화면에서 시스템 권한 창을 띄웠는지. 창에서 바로 거부한 경우에는 알림 없이 직접 설정으로 넘긴다.
+    @State private var hasRequestedSystemPermission = false
     @Environment(\.indoorRouteMapStore) private var mapStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -233,6 +238,12 @@ struct BookRoutePreviewView: View {
         .fullScreenCover(isPresented: $isOriginPickerPresented) {
             originPicker
         }
+        .alert("위치 권한이 필요해요", isPresented: $isPermissionAlertPresented) {
+            Button("설정에서 허용") { openLocationSettings() }
+            Button("출발 위치 직접 설정", role: .cancel) { isOriginPickerPresented = true }
+        } message: {
+            Text("현재 위치를 확인할 수 없어 길안내를 시작할 수 없어요. 설정에서 위치 접근을 허용하거나, 출발 위치를 지도에서 직접 설정할 수 있어요.")
+        }
         .background(Color(uiColor: .systemBackground))
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
@@ -298,15 +309,26 @@ struct BookRoutePreviewView: View {
     /// 그래서 거부 상태에서 들어온 경우에는 요청 없이 바로 직접 설정 화면을 연다.
     private func resolveStartAuthorization() {
         guard let mapStore, manualStart == nil, !isOriginPickerPresented,
-              navigationFlow.session == nil else { return }
+              !isPermissionAlertPresented, navigationFlow.session == nil else { return }
         switch mapStore.authorization {
         case .notDetermined:
+            hasRequestedSystemPermission = true
             mapStore.send(.requestLocationPermission)
         case .denied, .restricted, .servicesDisabled:
-            isOriginPickerPresented = true
+            if hasRequestedSystemPermission {
+                // 방금 시스템 창에서 거부했다. 같은 내용을 한 번 더 묻지 않고 직접 설정으로 넘어간다.
+                isOriginPickerPresented = true
+            } else {
+                isPermissionAlertPresented = true
+            }
         case .authorized:
             break
         }
+    }
+
+    private func openLocationSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
 
     @ViewBuilder
