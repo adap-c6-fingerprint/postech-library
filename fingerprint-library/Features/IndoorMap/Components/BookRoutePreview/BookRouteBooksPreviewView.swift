@@ -17,6 +17,8 @@ struct BookRouteBooksPreviewView: View {
 
     @State private var bookSelection = BookRoutePreviewSelection()
     @State private var panelHeight: CGFloat = 0
+    @State private var panelPresentation = BookRoutePreviewPanelState()
+    @State private var bookTabsHeight: CGFloat = 52
 
     private var selection: Binding<Book.ID?> {
         Binding(
@@ -53,25 +55,37 @@ struct BookRouteBooksPreviewView: View {
                     hiddenFavoriteMarkerIDs: Set([shelfStore.sourceFavoriteMarkerID].compactMap { $0 })
                 )
                 .accessibilityIdentifier("multiBookPreview.map")
-
-                VStack(spacing: 12) {
-                    if let floor = selectedFloor {
-                        IndoorMapFloorBadge(floor: floor)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .accessibilityLabel("책 위치 \(floor.name)")
-                            .accessibilityIdentifier("multiBookPreview.floor")
-                            .padding(.bottom, 4)
-                    }
-                    bookPages
-                        .frame(height: min(360, max(160, geometry.size.height * 0.46)))
-                        .glassEffect(.regular, in: .rect(cornerRadius: 28))
-                    startControls
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { panelHeight = $0 }
+                .allowsHitTesting(!panelPresentation.isExpanded)
             }
-            .overlay(alignment: .top) { bookTabs }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .overlay(alignment: .bottom) {
+                BookPreviewSheet(
+                    presentation: $panelPresentation, floor: selectedFloor,
+                    availableSize: BookPreviewSheetLayout.fullSize(
+                        contentSize: geometry.size, top: geometry.safeAreaInsets.top,
+                        bottom: geometry.safeAreaInsets.bottom, leading: geometry.safeAreaInsets.leading,
+                        trailing: geometry.safeAreaInsets.trailing),
+                    safeAreaInsets: geometry.safeAreaInsets, topBarHeight: bookTabsHeight,
+                    identifierPrefix: "multiBookPreview", onCoveredHeightChange: { panelHeight = $0 }
+                ) {
+                    bookPages
+                } actions: {
+                    startControls
+                } expandedBackground: {
+                    if let book = books.first(where: { $0.id == selection.wrappedValue }) {
+                        BookPreviewCoverBackground(book: book)
+                    } else {
+                        Color(white: 0.06)
+                    }
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottom)
+                .offset(x: (geometry.safeAreaInsets.trailing - geometry.safeAreaInsets.leading) / 2,
+                        y: geometry.safeAreaInsets.bottom)
+            }
+            .overlay(alignment: .top) {
+                bookTabs
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { bookTabsHeight = $0 }
+            }
         }
         .foregroundStyle(Color.textPrimary)
         .onChange(of: books.map(\.id)) { _, _ in
@@ -137,13 +151,19 @@ struct BookRouteBooksPreviewView: View {
                     resolutions: shelfStore.resolutions[book.id] ?? [],
                     map: shelfStore.map.map,
                     session: session,
+                    showsFullDescription: panelPresentation.showsFullDescription,
+                    isSheetMoving: panelPresentation.isMoving,
+                    isSelected: selection.wrappedValue == book.id,
+                    onContentAtTopChange: { isAtTop in
+                        guard selection.wrappedValue == book.id else { return }
+                        panelPresentation.isContentAtTop = isAtTop
+                    },
                     onRetryHoldings: { shelfStore.send(.retryHoldingsTapped(book.id)) }
                 )
                 .tag(Optional(book.id))
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .clipShape(.rect(cornerRadius: 28))
         .accessibilityIdentifier("multiBookPreview.pages")
     }
 
