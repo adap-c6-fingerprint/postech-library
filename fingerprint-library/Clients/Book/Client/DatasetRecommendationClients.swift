@@ -15,27 +15,42 @@ extension BookRecommendationClient {
     /// 개인별 추천.
     /// - 조회 이력 없음: 하드데이터 20권에서 랜덤 6권
     /// - 조회 이력 있음: 최근 조회 최대 3권 + 하드데이터 랜덤으로 원본 6권 → 원본마다 연관도서 1권
-    nonisolated static func dataset(
+    nonisolated static func fetchFromDataset(
+        count: Int,
+        replacing displayedBooks: [Book],
         dataset: RecommendationDatasetClient,
         recentlyViewed: RecentlyViewedBooksClient,
         related: HeldRelatedBooksClient
-    ) -> Self {
-        Self(fetch: { count in
-            guard count > 0 else { return [] }
-            let pool = try await personalPool(dataset: dataset)
-            var generator = SystemRandomNumberGenerator()
-            let recent = recentlyViewed.load()
-            guard !recent.isEmpty else {
-                return DatasetRecommendation.randomPicks(from: pool, count: count, using: &generator)
-            }
-            let sources = DatasetRecommendation.personalSources(
-                recent: recent, pool: pool, count: count, using: &generator
+    ) async throws -> [Book] {
+        guard count > 0 else { return [] }
+        let isCarouselRefresh = !displayedBooks.isEmpty
+        let recent = recentlyViewed.load()
+        let anchors = recent + Array(displayedBooks.reversed())
+        let pool = try await personalPool(dataset: dataset, matching: isCarouselRefresh ? anchors : nil)
+        let excludedKeys = Set(displayedBooks.flatMap { DatasetRecommendation.identityKeys(of: $0) })
+        var generator = SystemRandomNumberGenerator()
+        let fallback = pool.shuffled(using: &generator)
+        let history = isCarouselRefresh
+            ? recent + displayedBooks.reversed().filter { book in !recent.contains { $0.id == book.id } }
+            : recent
+        if isCarouselRefresh {
+            // 관심 분야에서 바로 6권을 고를 수 있으면 연관도서 조회를 기다리지 않는다.
+            let matching = DatasetRecommendation.assemble(
+                candidatesPerSource: [], fallback: fallback, count: count, excluding: excludedKeys
             )
-            let fallback = pool.shuffled(using: &generator)
-            return await RelatedRecommendationAssembler.assemble(
-                sources: sources.history + sources.pool, fallback: fallback, count: count, related: related
-            )
-        })
+            if matching.count == count { return matching }
+        } else if history.isEmpty {
+            return Array(fallback.prefix(count))
+        }
+
+        let sources = DatasetRecommendation.personalSources(
+            recent: history, pool: pool, count: count, using: &generator
+        )
+        return await RelatedRecommendationAssembler.assemble(
+            sources: sources.history + sources.pool, fallback: fallback,
+            count: count, related: related, excluding: excludedKeys,
+            includesRemainingRelatedBooks: isCarouselRefresh
+        )
     }
 
     /// 온보딩 직후처럼 저장된 추천이 없을 때 네트워크 없이 바로 보여줄 랜덤 6권.
@@ -48,15 +63,17 @@ extension BookRecommendationClient {
     }
 
     /// 프로필에 저장한 선호 분류 목록을 합친 하드데이터. (Q3: recordID로 중복 제거)
-    /// 관심 분야가 없으면(온보딩 건너뛰기) 하드데이터 전체.
-    private nonisolated static func personalPool(dataset: RecommendationDatasetClient) async throws -> [Book] {
-        let data = try await dataset.load()
+    /// 관심 분야 미설정 시 첫 추천은 전체에서, 스크롤 새로고침은 기준 도서와 같은 분류에서 고른다.
+    private nonisolated static func personalPool(
+        dataset: RecommendationDatasetClient, matching anchors: [Book]? = nil
+    ) async throws -> [Book] {
         @Shared(.userProfile) var userProfile: UserProfile?
         // 앱 전체가 함께 쓰는 프로필에서 관심 분야를 읽는다. 마이페이지에서 바꾼 값이 다음 추천부터 바로 쓰인다.
         let preferences = userProfile?.interests ?? []
-        guard !preferences.isEmpty else { return data.allBooks }
-        // 온보딩을 건너뛰어 관심 분야가 없으면 하드데이터 전체를 후보로 쓴다. (이슈 #396)
-        return data.books(forPreferences: preferences)
+        let data = try await dataset.load()
+        if !preferences.isEmpty { return data.books(forPreferences: preferences) }
+        if let anchors { return data.books(inSamePreferencesAs: anchors) }
+        return data.allBooks
     }
 }
 

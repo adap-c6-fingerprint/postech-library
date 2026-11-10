@@ -80,6 +80,20 @@ nonisolated struct RecommendationDataset: Equatable, Sendable {
             .compactMap { booksByRecordID[$0] }
     }
 
+    /// 순서상 처음으로 분류를 찾을 수 있는 책의 관심 분야에서 후보를 가져온다.
+    func books(inSamePreferencesAs anchors: [Book]) -> [Book] {
+        for anchor in anchors {
+            let keys = DatasetRecommendation.identityKeys(of: anchor)
+            let matchingPreferences = preferenceNames.filter { name in
+                books(forPreferences: [name]).contains { book in
+                    !keys.isDisjoint(with: DatasetRecommendation.identityKeys(of: book))
+                }
+            }
+            if !matchingPreferences.isEmpty { return books(forPreferences: matchingPreferences) }
+        }
+        return []
+    }
+
     func recordIDs(forAffiliation path: AffiliationPath) -> [String] {
         affiliationRecordIDs[path] ?? []
     }

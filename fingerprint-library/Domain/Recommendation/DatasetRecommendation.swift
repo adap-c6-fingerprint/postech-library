@@ -42,10 +42,11 @@ nonisolated enum DatasetRecommendation {
     /// 앞 원본이 고른 책과 겹치면 같은 원본의 다음 후보로 넘어간다. (Q2)
     /// 채우지 못한 자리는 fallback(하드데이터에서 아직 안 쓴 책)으로 채워 count권을 맞춘다. (Q6)
     static func assemble(
-        candidatesPerSource: [[Book]], fallback: [Book], count: Int = displayCount
+        candidatesPerSource: [[Book]], fallback: [Book], count: Int = displayCount,
+        excluding excludedKeys: Set<String> = []
     ) -> [Book] {
         var result: [Book] = []
-        var usedKeys = Set<String>()
+        var usedKeys = excludedKeys
 
         func insert(_ book: Book) -> Bool {
             let keys = identityKeys(of: book)
