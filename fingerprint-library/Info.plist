@@ -24,12 +24,6 @@
 	</array>
 	<key>POBOOK_BUILD_CHANNEL</key>
 	<string>$(POBOOK_BUILD_CHANNEL)</string>
-	<key>PRIMO_API_KEY</key>
-	<string>$(PRIMO_API_KEY)</string>
-	<key>YES24_API_KEY</key>
-	<string>$(YES24_API_KEY)</string>
-	<key>DATA4LIBRARY_API_KEY</key>
-	<string>$(DATA4LIBRARY_API_KEY)</string>
 	<key>POBOOK_RELAY_TOKEN_DEVELOPMENT</key>
 	<string>$(POBOOK_RELAY_TOKEN_DEVELOPMENT)</string>
 	<key>POBOOK_RELAY_TOKEN_TESTFLIGHT</key>
