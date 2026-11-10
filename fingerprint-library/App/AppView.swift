@@ -13,7 +13,6 @@ struct AppView: View {
     let store: StoreOf<AppFeature>
     @Environment(\.scenePhase) private var scenePhase
     @FocusState private var isBookSearchFocused: Bool
-    @State private var showsAnalyticsChoice = false
     #if DEBUG
     @State private var showsSimulationSettings = false
     #endif
@@ -33,14 +32,6 @@ struct AppView: View {
         // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
         .clarityUnmask()
         .task { store.send(.profileCheckRequested) }
-        .sheet(isPresented: $showsAnalyticsChoice) {
-            AnalyticsSettingsView(isFirstChoice: true)
-        }
-        .task {
-            showsAnalyticsChoice = !AnalyticsRuntime.shared.consent.hasChosen
-                || !SessionReplayRuntime.shared.consent.hasChosen
-            AnalyticsRuntime.shared.updateProfile(store.userProfile)
-        }
         .task(id: scenePhase) {
             AnalyticsRuntime.shared.setActive(scenePhase == .active)
             SessionReplayRuntime.shared.setActive(scenePhase == .active)
@@ -59,7 +50,6 @@ struct AppView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: AnalyticsRuntime.consentChanged)) { _ in
             AnalyticsRuntime.shared.updateProfile(store.userProfile)
-            showsAnalyticsChoice = false
         }
     }
 
