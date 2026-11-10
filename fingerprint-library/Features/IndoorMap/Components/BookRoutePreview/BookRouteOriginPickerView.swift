@@ -130,8 +130,18 @@ struct BookRouteOriginPickerView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
-    /// 화면 중앙에 고정한 출발 표식. 지도가 아래에서 움직이고 표식은 제자리를 지킨다.
+    /// 화면 정중앙에 고정한 출발 표식. 지도가 아래에서 움직이고 표식은 제자리를 지킨다.
+    ///
+    /// 지도도 안전 영역을 무시하고 화면 전체를 채우므로, 표식의 화면 정중앙이 곧 지도의 중심 좌표다.
     private var originMarker: some View {
+        markerContent
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
+    private var markerContent: some View {
         ZStack {
             BookRouteOriginCrosshair()
                 .frame(width: 26, height: 26)
@@ -152,10 +162,9 @@ struct BookRouteOriginPickerView: View {
                 .offset(y: -45 / 2)
         }
         .animation(.easeInOut(duration: 0.15), value: isMapSettled)
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
     }
 
+    /// 층 선택 버튼과 안내 문구·확정 버튼을 안전 영역 아래쪽에 붙인다.
     private var bottomControls: some View {
         VStack(spacing: 16) {
             Spacer(minLength: 0)
@@ -178,7 +187,7 @@ struct BookRouteOriginPickerView: View {
             }
         }
         .padding(.horizontal, 20)
-        .padding(.bottom, 20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
 
     private var guidanceMessage: some View {
