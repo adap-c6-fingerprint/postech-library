@@ -153,7 +153,6 @@ struct OnboardingView: View {
     private func pageContent(_ step: OnboardingFeature.Step) -> some View {
         switch step {
         case .welcome: welcome
-        case .terms: terms
         case .affiliation: affiliation
         case .interests: interests
         }
@@ -181,39 +180,12 @@ struct OnboardingView: View {
         }
     }
 
-    private var terms: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            header(
-                title: "서비스 가입을 위해\n아래 항목에 동의해주세요",
-                subtitle: "도서관 내 원하는 책까지 길을 안내해 드리기 위해\n서비스 이용에 필요한 동의를 진행해 주세요.",
-                subtitleTypography: .bookTitle,
-                spacing: 8,
-                topPadding: Self.termsHeaderTopPadding
-            )
-            // ✅ 부제는 Book Title(18pt)·Text Tertiary, 제목과 간격 8
-            .padding(.bottom, 48)
-
-            Link(destination: Self.privacyPolicyURL) {
-                Text("개인정보 수집 및 이용 동의")
-                    .typography(.bookTitle)
-                    .underline()
-                    .foregroundStyle(Color.onboardingTermsLink)
-            }
-            // ✅ 누르면 개인정보 처리방침 노션 페이지를 연다(피그마 프로토타입 URL 연결).
-            Spacer()
-        }
-        .padding(.horizontal, 20)
-    }
-
-    static let privacyPolicyURL = URL(string: "https://link.fpmaps.com/privacy-policy-pobook")!
 
     private func bottomLink(_ step: OnboardingFeature.Step) -> (title: String, action: OnboardingFeature.Action)? {
         switch step {
         // case .welcome:
         //     ("다음에 할래요", .welcomeLaterButtonTapped)
         // 시작 화면의 "다음에 할래요"(누르면 앱 종료)는 지금 보여주지 않는다. 되살릴 수 있게 주석으로 남긴다.
-        case .terms:
-            ("동의 안하고 종료하기", .termsDeclineButtonTapped)
         case .affiliation where store.entry == .firstRun:
             ("다음에 할래요", .skipButtonTapped)
             // 마이페이지에서 처음 설정할 때는 건너뛰기를 보여주지 않는다.
@@ -409,7 +381,6 @@ struct OnboardingView: View {
     private func isBackButtonVisible(_ step: OnboardingFeature.Step) -> Bool {
         switch step {
         case .welcome: false
-        case .terms: true
         case .affiliation: true
         // ✅ 피그마 08-3 주석: 소속을 고르기 전에도 처음부터 뒤로가기를 보여준다.
         case .interests: true
@@ -482,14 +453,12 @@ struct OnboardingView: View {
     }
 
     private func actionButton(_ step: OnboardingFeature.Step) -> some View {
-        let isPrimary = step == .terms
-            || (step == .affiliation && store.isAffiliationComplete)
+        let isPrimary = (step == .affiliation && store.isAffiliationComplete)
             || (step == .interests && store.canFinish)
         // 소속·학과를 모두 고르거나 관심사를 하나 이상 고르면 버튼을 강조색으로 바꾼다. (피그마 08.-5온보딩_학과 선택 후)
         return Button {
             switch step {
             case .welcome: store.send(.startButtonTapped)
-            case .terms: store.send(.termsAgreeButtonTapped)
             case .affiliation: store.send(.nextButtonTapped)
             case .interests: store.send(.finishButtonTapped)
             }
@@ -513,7 +482,6 @@ struct OnboardingView: View {
     private func actionTitle(_ step: OnboardingFeature.Step) -> String {
         switch step {
         case .welcome: "시작하기"
-        case .terms: "동의하고 계속하기"
         case .affiliation: store.isAffiliationComplete ? "다음으로" : "선택을 완료해주세요"
         case .interests: "시작하기"
         }
@@ -522,7 +490,6 @@ struct OnboardingView: View {
     private func isActionEnabled(_ step: OnboardingFeature.Step) -> Bool {
         switch step {
         case .welcome: true
-        case .terms: true
         case .affiliation: store.isAffiliationComplete
         case .interests: store.canFinish
         }
@@ -610,7 +577,6 @@ private extension Color {
     OnboardingView(
         store: Store(initialState: {
             var state = OnboardingFeature.State()
-            state.step = .terms
             return state
         }()) { OnboardingFeature() }
     )
