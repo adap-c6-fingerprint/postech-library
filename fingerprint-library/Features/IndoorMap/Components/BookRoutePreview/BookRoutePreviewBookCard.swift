@@ -8,19 +8,31 @@ struct BookRoutePreviewBookCard: View {
     let resolutions: [BookHoldingShelfResolution]
     let map: IndoorMap?
     let session: BookNavigationSession?
+    let showsFullDescription: Bool
+    let isSheetMoving: Bool
+    let isSelected: Bool
+    let onContentAtTopChange: (Bool) -> Void
     let onRetryHoldings: () -> Void
 
     @State private var detailStore: StoreOf<BookDetailFeature>
+    @State private var isContentAtTop = true
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     init(book: Book, holdings: BookShelfMapFeature.HoldingsState?,
          resolutions: [BookHoldingShelfResolution], map: IndoorMap?,
-         session: BookNavigationSession?, onRetryHoldings: @escaping () -> Void) {
+         session: BookNavigationSession?, showsFullDescription: Bool = false,
+         isSheetMoving: Bool = false, isSelected: Bool = true,
+         onContentAtTopChange: @escaping (Bool) -> Void = { _ in },
+         onRetryHoldings: @escaping () -> Void) {
         self.book = book
         self.holdings = holdings
         self.resolutions = resolutions
         self.map = map
         self.session = session
+        self.showsFullDescription = showsFullDescription
+        self.isSheetMoving = isSheetMoving
+        self.isSelected = isSelected
+        self.onContentAtTopChange = onContentAtTopChange
         self.onRetryHoldings = onRetryHoldings
         _detailStore = State(initialValue: Store(initialState: BookDetailFeature.State(book: book)) {
             BookDetailFeature()
@@ -83,6 +95,16 @@ struct BookRoutePreviewBookCard: View {
         }
         .scrollIndicators(.hidden)
         .scrollBounceBehavior(.basedOnSize)
+        .scrollDisabled(isSheetMoving)
+        .onScrollGeometryChange(for: Bool.self) {
+            $0.contentOffset.y + $0.contentInsets.top <= 1
+        } action: { _, isAtTop in
+            isContentAtTop = isAtTop
+            if isSelected { onContentAtTopChange(isAtTop) }
+        }
+        .onChange(of: isSelected, initial: true) { _, selected in
+            if selected { onContentAtTopChange(isContentAtTop) }
+        }
         .accessibilityIdentifier("multiBookPreview.card.\(book.id)")
         .task {
             // Store가 조회를 소유하므로 페이지를 넘겨도 완료된 소개를 재요청하지 않는다.
@@ -132,24 +154,42 @@ struct BookRoutePreviewBookCard: View {
             if !author.isEmpty { Text("\(author) 저자").typography(.body2) }
             Group {
                 if let summary = book.description, !summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    Text(BookText.plainText(summary))
+                    descriptionText(BookText.plainText(summary))
                 } else if detailStore.isLoading || !detailStore.hasLoaded {
                     ProgressView("책 소개를 불러오고 있어요")
+                        .typography(.caption2)
                 } else if let message = detailStore.errorMessage {
                     Text(message)
+                        .typography(.caption2)
                     if detailStore.isbn13 != nil {
                         Button("다시 시도") { detailStore.send(.retryButtonTapped) }
+                            .typography(.caption2)
                     }
                 } else if let description = detailStore.description {
-                    Text(description.text)
-                    Link("책 소개 제공: Yes24 · 원문 보기", destination: description.sourceURL)
+                    descriptionText(description.text)
                 } else {
                     Text("이 책의 소개가 아직 제공되지 않아요.")
+                        .typography(.caption2)
                 }
             }
-            .typography(.caption1)
             .foregroundStyle(Color.textTertiary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func descriptionText(_ text: String) -> some View {
+        Text(text)
+            .lineLimit(showsFullDescription ? nil : collapsedDescriptionLineCount)
+            .truncationMode(.tail)
+            .typography(.caption2)
+            .frame(width: 322, height: showsFullDescription ? nil : 100.8, alignment: .topLeading)
+            .fixedSize(horizontal: false, vertical: showsFullDescription)
+            .accessibilityIdentifier("multiBookPreview.description.\(book.id)")
+    }
+
+    private var collapsedDescriptionLineCount: Int {
+        let metrics = DS.Typography.caption2.metrics(for: dynamicTypeSize)
+        let lineHeight = max(metrics.lineHeight, metrics.font.lineHeight)
+        return max(1, Int(((100.8 + 0.01) / lineHeight).rounded(.down)))
     }
 }
