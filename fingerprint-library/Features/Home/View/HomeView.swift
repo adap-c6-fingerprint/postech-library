@@ -6,27 +6,16 @@ struct HomeView: View {
     let mapStore: StoreOf<IndoorMapFeature>
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var recommendationPosition = ScrollPosition(idType: Int.self)
-    @State private var recommendationScroll = RecommendationScrollSample(stage: .browsing, pullDistance: 0, trailingGap: 0)
+    @State private var popularBooksPosition = ScrollPosition(idType: Int.self)
+    @State private var isAtRecommendationEnd = false
+    @State private var isAtPopularBooksEnd = false
     @State private var homeScrollPosition = ScrollPosition(edge: .top)
     @State private var isHomeAtTop = true
 
     private static let kulumiCoverNames = (1...6).map { "KulumiCover\($0)" }
-    private static let recommendationRefreshDistance: CGFloat = 24
 
     private enum Destination: Hashable {
         case departmentRecommendations
-    }
-
-    private enum RecommendationScrollStage {
-        case browsing
-        case nearEnd
-        case end
-    }
-
-    private struct RecommendationScrollSample: Equatable {
-        let stage: RecommendationScrollStage
-        let pullDistance: CGFloat
-        let trailingGap: CGFloat
     }
 
     private var recommendationLayout: RecommendationLayout {
@@ -180,18 +169,9 @@ struct HomeView: View {
                 }
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 16)
-            } else if !store.showsKulumiCovers, recommendationScroll.stage == .end,
+            } else if !store.showsKulumiCovers, isAtRecommendationEnd,
                       let message = store.recommendationErrorMessage {
-                HStack(spacing: 12) {
-                    Text(message)
-                        .foregroundStyle(.secondary)
-                    Button("다시 시도") { store.send(.retryRecommendationsButtonTapped) }
-                        .fontWeight(.semibold)
-                        .buttonStyle(.borderless)
-                }
-                .font(.footnote)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .padding(.horizontal, 16)
+                refreshError(message) { store.send(.retryRecommendationsButtonTapped) }
             }
         }
     }
@@ -228,36 +208,18 @@ struct HomeView: View {
         }
         .contentMargins(.horizontal, recommendationLayout.horizontalInset, for: .scrollContent)
         .scrollIndicators(.hidden)
-        .scrollBounceBehavior(.always, axes: .horizontal)
         .scrollTargetBehavior(.viewAligned)
         .scrollPosition($recommendationPosition, anchor: .leading)
-        .onScrollGeometryChange(for: RecommendationScrollSample.self) { geometry in
-            RecommendationScrollSample(
-                stage: Self.scrollStage(geometry, cardStride: cardStride),
-                pullDistance: Self.recommendationPullDistance(geometry),
-                trailingGap: max(0, geometry.visibleRect.maxX - geometry.contentSize.width)
-            )
-        } action: { oldSample, newSample in
-            recommendationScroll = newSample
-            if oldSample.stage == .browsing, newSample.stage != .browsing {
-                store.send(.recommendationNearEnd)
-            }
-        }
-        .onScrollPhaseChange { oldPhase, newPhase, context in
-            guard oldPhase == .interacting, newPhase == .decelerating || newPhase == .idle else { return }
-            // 손을 놓는 순간 관성 스크롤이 시작되기 전에 실제로 당긴 거리를 확인한다.
-            let releaseDistance = Self.recommendationPullDistance(context.geometry)
-            let distance = releaseDistance > 0 ? releaseDistance : recommendationScroll.pullDistance
-            guard distance >= Self.recommendationRefreshDistance else { return }
-            store.send(.recommendationEndReached)
-        }
-        .sensoryFeedback(.impact(weight: .light), trigger: refreshID) { _, newID in
-            newID != nil
-        }
-        .overlay(alignment: .trailing) {
-            carouselRefreshIndicator
-                .padding(.bottom, recommendationLayout.bottomInset)
-        }
+        .modifier(HorizontalBookPullToRefresh(
+            isEnabled: !store.showsKulumiCovers && !books.isEmpty,
+            cardStride: cardStride,
+            coverHeight: recommendationLayout.coverHeight,
+            refreshID: refreshID,
+            isRefreshing: store.isRefreshingRecommendations,
+            isAtEnd: $isAtRecommendationEnd,
+            onNearEnd: { store.send(.recommendationNearEnd) },
+            onRefresh: { store.send(.recommendationEndReached) }
+        ))
         .frame(height: recommendationLayout.carouselHeight)
         .overlay(alignment: .bottomLeading) {
             RecommendationShelfView(
@@ -278,51 +240,17 @@ struct HomeView: View {
         }
     }
 
-    private static func scrollStage(_ geometry: ScrollGeometry, cardStride: CGFloat) -> RecommendationScrollStage {
-        let visibleRect = geometry.visibleRect
-        guard visibleRect.width > 0, geometry.contentSize.width > 0 else { return .browsing }
-        // 좌우 여백이 적용된 실제 가시 영역을 기준으로 마지막 표지까지의 거리를 계산한다.
-        let remaining = geometry.contentSize.width - visibleRect.maxX
-        if remaining <= 12 { return .end }
-        if remaining <= cardStride + 12 { return .nearEnd }
-        return .browsing
-    }
-
-    private static func recommendationPullDistance(_ geometry: ScrollGeometry) -> CGFloat {
-        let visibleRect = geometry.visibleRect
-        let restingEnd = max(
-            geometry.contentSize.width + geometry.contentInsets.trailing,
-            visibleRect.width - geometry.contentInsets.leading
-        )
-        return max(0, visibleRect.maxX - restingEnd)
-    }
-
-    @ViewBuilder
-    private var carouselRefreshIndicator: some View {
-        if !store.showsKulumiCovers, recommendationScroll.trailingGap >= 22 {
-            Group {
-                if store.isRefreshingRecommendations {
-                    ProgressView()
-                        .controlSize(.regular)
-                        .tint(.secondary)
-                        .accessibilityLabel("새 추천 도서 불러오는 중")
-                } else if recommendationScroll.pullDistance > 0 {
-                    let progress = min(1, recommendationScroll.pullDistance / Self.recommendationRefreshDistance)
-                    Image(systemName: "progress.indicator")
-                        .font(.system(size: 19))
-                        .foregroundStyle(.secondary)
-                        .mask {
-                            AngularGradient(
-                                stops: [.init(color: .black, location: progress), .init(color: .clear, location: progress)],
-                                center: .center, startAngle: .degrees(-90), endAngle: .degrees(270)
-                            )
-                        }
-                        .accessibilityHidden(true)
-                }
-            }
-            .frame(width: recommendationScroll.trailingGap)
-            .allowsHitTesting(false)
+    private func refreshError(_ message: String, retry: @escaping () -> Void) -> some View {
+        HStack(spacing: 12) {
+            Text(message)
+                .foregroundStyle(.secondary)
+            Button("다시 시도", action: retry)
+                .fontWeight(.semibold)
+                .buttonStyle(.borderless)
         }
+        .font(.footnote)
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.horizontal, 16)
     }
 
     @ViewBuilder
@@ -361,6 +289,10 @@ struct HomeView: View {
                 .padding(.horizontal, 16)
 
                 popularBooksRow
+                if isAtPopularBooksEnd, store.popularBooksRefreshID != nil,
+                   let message = store.popularBooksErrorMessage {
+                    refreshError(message) { store.send(.popularBooksRefreshRequested) }
+                }
             } else {
                 Button { store.send(.profileButtonTapped) } label: {
                     popularBooksHeader("맞춤 정보를 설정해 주세요.")
@@ -418,31 +350,58 @@ struct HomeView: View {
     // 블러 위 안내 문구와 '설정하러 가기' 버튼. 버튼도 마이페이지로 이동한다.
 
     private var popularBooksRow: some View {
-        ScrollView(.horizontal) {
-            LazyHStack(alignment: .top, spacing: 12) {
-                if store.popularBooks.isEmpty {
+        let books = store.popularBooks
+        let spacing: CGFloat = 12
+
+        return ScrollView(.horizontal) {
+            LazyHStack(alignment: .top, spacing: spacing) {
+                if books.isEmpty {
                     ForEach(0..<4, id: \.self) { _ in
                         HomePopularBookCard(book: nil, libraryInfo: nil)
                             .accessibilityLabel("인기 도서 자리")
                     }
                 } else {
-                    ForEach(store.popularBooks) { book in
-                        Button {
-                            store.send(.bookSelected(book))
-                        } label: {
-                            HomePopularBookCard(
-                                book: book,
-                                libraryInfo: store.libraryInfo[book.id]
-                            )
+                    ForEach(books.indices, id: \.self) { index in
+                        let book = books[index]
+                        ZStack {
+                            Button {
+                                store.send(.bookSelected(book))
+                            } label: {
+                                HomePopularBookCard(book: book, libraryInfo: store.libraryInfo[book.id])
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityHint("책 소개 보기")
+                            .id(book.id)
+                            .transition(.opacity)
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityHint("책 소개 보기")
+                        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: book.id)
+                        .id(index)
                     }
                 }
             }
+            .scrollTargetLayout()
         }
-        .contentMargins(.horizontal, 16, for: .scrollContent)
+        .contentMargins(
+            .horizontal, EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: store.canRefreshPopularBooks ? 32 : 16),
+            for: .scrollContent
+        )
         .scrollIndicators(.hidden)
+        .scrollPosition($popularBooksPosition, anchor: .leading)
+        .modifier(HorizontalBookPullToRefresh(
+            isEnabled: store.canRefreshPopularBooks,
+            cardStride: HomePopularBookCard.coverWidth + spacing,
+            coverHeight: HomePopularBookCard.coverHeight,
+            refreshID: store.popularBooksRefreshID,
+            isRefreshing: store.isRefreshingPopularBooks,
+            isAtEnd: $isAtPopularBooksEnd,
+            onNearEnd: { store.send(.popularBooksNearEnd) },
+            onRefresh: { store.send(.popularBooksRefreshRequested) }
+        ))
+        .onChange(of: books.map(\.id)) { _, _ in
+            var transaction = Transaction(animation: nil)
+            transaction.disablesAnimations = true
+            withTransaction(transaction) { popularBooksPosition.scrollTo(edge: .leading) }
+        }
     }
 }
 
@@ -514,11 +473,12 @@ private struct HomePopularBookCard: View {
     let book: Book?
     let libraryInfo: HomeFeature.LibraryInfoState?
 
-    private let coverWidth: CGFloat = 97
+    static let coverWidth: CGFloat = 97
+    static let coverHeight: CGFloat = 141.94
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HomeBookCover(book: book, width: coverWidth, height: 141.94)
+            HomeBookCover(book: book, width: Self.coverWidth, height: Self.coverHeight)
                 .accessibilityHidden(true)
                 .padding(.bottom, 8)
             
@@ -539,7 +499,7 @@ private struct HomePopularBookCard: View {
             
             libraryInformation
         }
-        .frame(width: coverWidth, alignment: .leading)
+        .frame(width: Self.coverWidth, alignment: .leading)
         .accessibilityElement(children: .combine)
     }
 

@@ -52,6 +52,12 @@ struct HomeFeature {
         var recommendationErrorMessage: String? = nil
         var recommendationCoverFiles: [Book.ID: URL] = [:]
         var popularBooksErrorMessage: String? = nil
+        var popularBooksPreparation: CarouselPreparation = .idle
+        var popularBooksRefreshID: UUID?
+        var isRefreshingPopularBooks = false
+        var canRefreshPopularBooks: Bool {
+            isProfileComplete && !popularBooks.isEmpty && userProfile?.affiliationKey == displayedProfile?.affiliationKey
+        }
         var recommendationSessionID: UUID?
         var isLoadingRecommendations = false
         var isPreparingRecommendations = false
@@ -110,6 +116,9 @@ struct HomeFeature {
         case recommendationsRestored(UUID, CachedRecommendations?)
         case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
+        case popularBooksNearEnd
+        case popularBooksRefreshRequested
+        case popularBooksPreparationFinished(UUID, Result<[Book], CarouselFailure>)
         case departmentRecommendationsRequested
         case departmentRecommendationsLoaded([Book])
         case departmentRecommendationsFailed(String)
@@ -158,6 +167,7 @@ struct HomeFeature {
         case departmentRecommendations
         case libraryInfo
         case popularBooks
+        case popularBooksPreparation
     }
 
     var body: some Reducer<State, Action> {
@@ -271,6 +281,36 @@ struct HomeFeature {
 
             case let .popularBooksFailed(message):
                 state.popularBooksErrorMessage = message
+                return .none
+
+            case .popularBooksNearEnd:
+                guard state.canRefreshPopularBooks, state.popularBooksPreparation == .idle else { return .none }
+                return preparePopularBooksReplacement(state: &state)
+
+            case .popularBooksRefreshRequested:
+                guard state.canRefreshPopularBooks, !state.isRefreshingPopularBooks else { return .none }
+                state.popularBooksRefreshID = uuid()
+                state.popularBooksErrorMessage = nil
+                if case let .finished(result) = state.popularBooksPreparation {
+                    applyPopularBooksReplacement(result, state: &state)
+                    return .none
+                }
+                state.isRefreshingPopularBooks = true
+                return state.popularBooksPreparation == .idle ? preparePopularBooksReplacement(state: &state) : .none
+
+            case let .popularBooksPreparationFinished(id, result):
+                guard state.popularBooksPreparation == .loading(id) else { return .none }
+                guard state.userProfile?.affiliationKey == state.displayedProfile?.affiliationKey else {
+                    state.popularBooksPreparation = .idle
+                    state.popularBooksRefreshID = nil
+                    state.isRefreshingPopularBooks = false
+                    return .none
+                }
+                if state.isRefreshingPopularBooks {
+                    applyPopularBooksReplacement(result, state: &state)
+                } else {
+                    state.popularBooksPreparation = .finished(result)
+                }
                 return .none
 
             case .departmentRecommendationsRequested:
@@ -471,6 +511,9 @@ struct HomeFeature {
         if current.affiliationKey != previous?.affiliationKey {
             state.popularBooks = []
             state.popularBooksErrorMessage = nil
+            state.popularBooksPreparation = .idle
+            state.popularBooksRefreshID = nil
+            state.isRefreshingPopularBooks = false
             state.departmentRecommendations = .loading
             if !state.libraryInfoInFlight.isEmpty || !state.libraryInfoPending.isEmpty {
                 cancels.append(cancelLibraryInfo(state: &state))
@@ -478,6 +521,7 @@ struct HomeFeature {
             state.libraryInfo = [:]
             state.libraryInfoUpdatedAt = [:]
             cancels.append(.cancel(id: CancelID.popularBooks))
+            cancels.append(.cancel(id: CancelID.popularBooksPreparation))
             cancels.append(.cancel(id: CancelID.departmentRecommendations))
             // 예전 소속으로 받던 조회가 늦게 도착해 새 목록을 덮지 않게 취소한다.
             // 빈 목록은 각 화면의 조회(.task, departmentRecommendationsRequested)가 새 소속으로 다시 채운다.
@@ -608,5 +652,40 @@ struct HomeFeature {
             }
         }
         .cancellable(id: CancelID.popularBooks, cancelInFlight: true)
+    }
+
+    private func preparePopularBooksReplacement(state: inout State) -> Effect<Action> {
+        let id = uuid()
+        let affiliationKey = state.displayedProfile?.affiliationKey ?? []
+        let excludedKeys = Set(state.popularBooks.flatMap { DatasetRecommendation.identityKeys(of: $0) })
+        state.popularBooksPreparation = .loading(id)
+        return .run { [departmentPopularBooksClient, bookCoverClient] send in
+            do {
+                let pool = try await departmentPopularBooksClient.fetchAll(affiliationKey)
+                let books = DatasetRecommendation.assemble(
+                    candidatesPerSource: [], fallback: pool.shuffled(), excluding: excludedKeys
+                )
+                try Task.checkCancellation()
+                guard books.count == DatasetRecommendation.displayCount else {
+                    await send(.popularBooksPreparationFinished(id, .failure(.insufficientBooks)))
+                    return
+                }
+                await send(.popularBooksPreparationFinished(id, .success(books)))
+                await bookCoverClient.prefetch(books.prefix(2).compactMap(\.imageURL))
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.popularBooksPreparationFinished(id, .failure(.preparationFailed)))
+            }
+        }
+        .cancellable(id: CancelID.popularBooksPreparation, cancelInFlight: true)
+    }
+
+    private func applyPopularBooksReplacement(_ result: Result<[Book], CarouselFailure>, state: inout State) {
+        state.popularBooksPreparation = .idle
+        state.isRefreshingPopularBooks = false
+        switch result {
+        case let .success(books): state.popularBooks = books
+        case let .failure(error): state.popularBooksErrorMessage = error.message
+        }
     }
 }
