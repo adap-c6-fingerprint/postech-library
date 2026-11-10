@@ -20,6 +20,8 @@ struct BookRoutePreviewView: View {
     @State private var isOriginPickerPresented = false
     /// 위치 권한이 없을 때 보여 주는 알림. 설정 앱의 이 앱 권한 화면으로 보내거나 직접 설정으로 넘긴다.
     @State private var isPermissionAlertPresented = false
+    /// 직접 설정으로 넘어가는 중. 지도가 준비되면 출발지 설정 화면을 연다.
+    @State private var isPreparingManualOrigin = false
     @Environment(\.indoorRouteMapStore) private var mapStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -166,29 +168,25 @@ struct BookRoutePreviewView: View {
     private var directContent: some View {
         ZStack {
             directMapBackdrop
-            VStack(spacing: 20) {
-                if let routeError {
-                    ContentUnavailableView("길안내를 시작할 수 없어요", systemImage: "location.slash",
-                        description: Text(routeError))
-                    Button("다시 시도") { retryDirectNavigation() }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(isLoadingRoute)
-                    Button("출발 위치 직접 설정") { isOriginPickerPresented = true }
-                        .buttonStyle(.bordered)
-                        .accessibilityIdentifier("book-navigation-set-origin")
-                } else {
-                    ProgressView("길안내를 준비하고 있어요")
-                }
-                Button("돌아가기") { dismiss() }
-                    .buttonStyle(.bordered)
+            directHeader
+            if showsRouteFailure {
+                directFailure
+            } else {
+                directStatus
             }
-            .padding(24)
-            .frame(maxWidth: 360)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-            .padding(24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityIdentifier("book-navigation-preparing")
+    }
+
+    /// 출발 위치를 정하는 동안에는 경로 오류를 띄우지 않는다. 위치가 없어서 나는 오류라 사용자가 할 일이 아니다.
+    private var hidesRouteErrorWhileResolvingOrigin: Bool {
+        if isPermissionAlertPresented || isOriginPickerPresented || isPreparingManualOrigin { return true }
+        return !(mapStore?.authorization.isAuthorized ?? false)
+    }
+
+    private var showsRouteFailure: Bool {
+        routeError != nil && !hidesRouteErrorWhileResolvingOrigin
     }
 
     @ViewBuilder
@@ -206,6 +204,63 @@ struct BookRoutePreviewView: View {
             .accessibilityHidden(true)
             .accessibilityIdentifier("book-navigation-preparing-map")
         }
+    }
+
+    /// 출발지 설정 화면과 같은 제목을 유지해 어떤 책을 찾는 중인지 놓치지 않게 한다.
+    private var directHeader: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(originPickerTitle)
+                .typography(.title1)
+                .lineLimit(2)
+            if let subtitle = originPickerSubtitle {
+                Text(subtitle)
+                    .typography(.title1)
+                    .foregroundStyle(DS.ColorToken.neutralTertiary)
+            }
+            Spacer(minLength: 0)
+        }
+        .foregroundStyle(DS.ColorToken.neutralPrimary)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
+        .background(alignment: .top) {
+            LibraryTopBarBackground()
+                .ignoresSafeArea(.container, edges: [.top, .horizontal])
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+    }
+
+    private var directStatus: some View {
+        VStack(spacing: 10) {
+            Text(isPreparingManualOrigin ? "서가까지\n수동안내를 시작합니다" : "서가까지\n길안내를 준비합니다")
+                .typography(.body1)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(DS.ColorToken.neutralPrimary)
+            ProgressView()
+                .tint(DS.ColorToken.neutralPrimary)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("book-navigation-preparing-status")
+    }
+
+    private var directFailure: some View {
+        VStack(spacing: 20) {
+            ContentUnavailableView("길안내를 시작할 수 없어요", systemImage: "location.slash",
+                description: Text(routeError ?? ""))
+            Button("다시 시도") { retryDirectNavigation() }
+                .buttonStyle(.borderedProminent)
+                .disabled(isLoadingRoute)
+            Button("출발 위치 직접 설정") { presentOriginPicker() }
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("book-navigation-set-origin")
+            Button("돌아가기") { dismiss() }
+                .buttonStyle(.bordered)
+        }
+        .padding(24)
+        .frame(maxWidth: 360)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .padding(24)
     }
 
     private func retryDirectNavigation() {
@@ -228,7 +283,7 @@ struct BookRoutePreviewView: View {
                     shelfStore: destinationStore,
                     session: readySession,
                     isLoadingRoute: isLoadingRoute,
-                    routeError: routeError,
+                    routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError,
                     canStart: readySession != nil && currentStart != nil && !isLoadingRoute && routeError == nil,
                     onBack: { dismiss() },
                     onStart: { _ in
@@ -243,7 +298,7 @@ struct BookRoutePreviewView: View {
                             previewStart = currentStart
                         }
                     },
-                    onSetOriginManually: { isOriginPickerPresented = true },
+                    onSetOriginManually: { presentOriginPicker() },
                     homeAnnotations: mapStore?.homeAnnotations
                 )
             } else {
@@ -260,11 +315,29 @@ struct BookRoutePreviewView: View {
         .fullScreenCover(isPresented: $isOriginPickerPresented) {
             originPicker
         }
-        .alert("위치 권한이 필요해요", isPresented: $isPermissionAlertPresented) {
-            Button("설정에서 권한 변경") { openLocationSettings() }
-            Button("출발 위치 직접 설정", role: .cancel) { isOriginPickerPresented = true }
-        } message: {
-            Text("현재 위치를 확인할 수 없어 길안내를 시작할 수 없어요. 설정에서 위치 접근을 허용하거나, 출발 위치를 지도에서 직접 설정할 수 있어요.")
+        .overlay {
+            if isPermissionAlertPresented {
+                LibraryPermissionAlert(
+                    title: "필수 권한에 동의해주세요.",
+                    message: "위치 권한을 허용해주세요. 위치를 통해 정확한 책의 위치를 안내합니다.",
+                    onCancel: {
+                        isPermissionAlertPresented = false
+                        isPreparingManualOrigin = true
+                    },
+                    onConfirm: {
+                        isPermissionAlertPresented = false
+                        openLocationSettings()
+                    })
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: isPermissionAlertPresented)
+        .onChange(of: isPreparingManualOrigin ? mapStore?.map != nil : false) { _, isMapReady in
+            // 지도가 준비된 뒤에 출발지 설정 화면을 연다. 그동안은 수동 안내 준비 문구를 보여 준다.
+            if isMapReady { presentOriginPicker() }
+        }
+        .onChange(of: isPreparingManualOrigin) { _, isPreparing in
+            if isPreparing, mapStore?.map != nil { presentOriginPicker() }
         }
         .background(Color(uiColor: .systemBackground))
         .preferredColorScheme(.dark)
@@ -334,6 +407,11 @@ struct BookRoutePreviewView: View {
               !isPermissionAlertPresented, navigationFlow.session == nil else { return }
         guard !mapStore.authorization.isAuthorized else { return }
         isPermissionAlertPresented = true
+    }
+
+    private func presentOriginPicker() {
+        isPreparingManualOrigin = false
+        isOriginPickerPresented = true
     }
 
     /// 설정 앱에서 이 앱의 권한 화면을 연다. 위치 접근을 여기서 바꿀 수 있다.
@@ -462,7 +540,7 @@ struct BookRoutePreviewView: View {
                     .font(.caption)
                 Button("현재 위치 확인") { mapStore?.send(.currentLocationTapped) }
                     .disabled(mapStore == nil)
-                Button("출발 위치 직접 설정") { isOriginPickerPresented = true }
+                Button("출발 위치 직접 설정") { presentOriginPicker() }
                     .accessibilityIdentifier("preview-set-origin")
             }
         }
