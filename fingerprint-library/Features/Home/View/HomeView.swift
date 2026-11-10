@@ -137,7 +137,7 @@ struct HomeView: View {
         let count = store.showsKulumiCovers ? Self.kulumiCoverNames.count : store.recommendationCount
 
         return VStack(alignment: .leading, spacing: 20) {
-            LibraryTabIntroText(title: "\(recipient)\n추천하는 책 \(count)선.")
+            LibraryTabIntroText(title: recipient, subtitle: "추천하는 책 \(count)선.")
             
             if store.showsKulumiCovers || !store.recommendedBooks.isEmpty {
                 recommendationCarousel
