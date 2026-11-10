@@ -162,26 +162,50 @@ struct BookRoutePreviewView: View {
         }
     }
 
+    /// 준비 중에도 목적지 지도를 깔아 둔다. 권한 알림·출발지 직접 설정·길안내로 이어질 때 화면이 끊기지 않는다.
     private var directContent: some View {
-        VStack(spacing: 20) {
-            if let routeError {
-                ContentUnavailableView("길안내를 시작할 수 없어요", systemImage: "location.slash",
-                    description: Text(routeError))
-                Button("다시 시도") { retryDirectNavigation() }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(isLoadingRoute)
-                Button("출발 위치 직접 설정") { isOriginPickerPresented = true }
+        ZStack {
+            directMapBackdrop
+            VStack(spacing: 20) {
+                if let routeError {
+                    ContentUnavailableView("길안내를 시작할 수 없어요", systemImage: "location.slash",
+                        description: Text(routeError))
+                    Button("다시 시도") { retryDirectNavigation() }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(isLoadingRoute)
+                    Button("출발 위치 직접 설정") { isOriginPickerPresented = true }
+                        .buttonStyle(.bordered)
+                        .accessibilityIdentifier("book-navigation-set-origin")
+                } else {
+                    ProgressView("길안내를 준비하고 있어요")
+                }
+                Button("돌아가기") { dismiss() }
                     .buttonStyle(.bordered)
-                    .accessibilityIdentifier("book-navigation-set-origin")
-            } else {
-                ProgressView("길안내를 준비하고 있어요")
             }
-            Button("돌아가기") { dismiss() }
-                .buttonStyle(.bordered)
+            .padding(24)
+            .frame(maxWidth: 360)
+            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+            .padding(24)
         }
-        .padding(24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityIdentifier("book-navigation-preparing")
+    }
+
+    @ViewBuilder
+    private var directMapBackdrop: some View {
+        if let destinationStore {
+            IndoorMapView(
+                store: destinationStore.scope(state: \.map, action: \.map),
+                showsDestinationCard: false,
+                highlightedFeatureIDs: destinationStore.highlightedFeatureIDs,
+                showsCurrentLocationButton: false,
+                showsFloorPicker: false,
+                extendsUnderBottomSafeArea: true
+            )
+            .ignoresSafeArea()
+            .accessibilityHidden(true)
+            .accessibilityIdentifier("book-navigation-preparing-map")
+        }
     }
 
     private func retryDirectNavigation() {
