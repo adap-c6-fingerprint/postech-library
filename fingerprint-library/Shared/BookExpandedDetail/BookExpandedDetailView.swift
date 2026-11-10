@@ -121,11 +121,11 @@ struct BookExpandedDetailView<Details: View>: View {
         return HStack(spacing: 10) {
             Text("\(index + 1)/\(books.count)")
                 .typography(.caption2)
-                .foregroundStyle(Color.limeBase)
+                .foregroundStyle(DS.ColorToken.primaryLight)
             HStack(spacing: 8) {
                 ForEach(books.indices, id: \.self) { offset in
                     Capsule()
-                        .fill(offset == index ? Color.limeBase : Color.white.opacity(0.45))
+                        .fill(offset == index ? DS.ColorToken.primaryLight : Color.white.opacity(0.45))
                         .frame(width: offset == index ? 20 : 8, height: 8)
                 }
             }
@@ -165,12 +165,14 @@ struct BookExpandedRouteSummary: View {
             HStack(spacing: 6) {
                 icon("figure.walk", size: 18, color: Color(white: 0.45))
                 Text(distanceText)
+                    .typography(.caption1)
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("이동 거리 \(distanceText)")
             HStack(spacing: 6) {
                 icon("arrow.up.arrow.down.square", size: 16, color: .green)
                 Text("\(floorChangeCount)회")
+                    .typography(.caption1)
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("층 이동 \(floorChangeCount)회")
