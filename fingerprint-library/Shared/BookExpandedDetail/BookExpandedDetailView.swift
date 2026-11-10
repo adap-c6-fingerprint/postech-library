@@ -51,13 +51,21 @@ struct BookExpandedDetailView<Details: View>: View {
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { containerWidth = $0 }
     }
 
+    @ViewBuilder
     private func cover(_ book: Book) -> some View {
-        BookCoverView(url: book.imageURL, isbn: book.isbn, cachedURL: isMultiple ? nil : cachedCoverURL)
+        let cover = BookCoverView(url: book.imageURL, isbn: book.isbn, cachedURL: isMultiple ? nil : cachedCoverURL)
             .frame(width: BookExpandedDetailLayout.coverSize.width,
                    height: BookExpandedDetailLayout.coverSize.height)
-            .background(.quaternary)
-            .clipShape(RoundedRectangle(cornerRadius: 3))
-            .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
+        if isMultiple {
+            // ✅ 표지 비율이 칸과 달라도 남는 영역에 회색 배경이 보이지 않게 한다.
+            // ✅ 배경이 없으므로 그림자도 실제 표지 이미지 모양에만 생긴다.
+            cover.shadow(color: .black.opacity(0.3), radius: 18, y: 8)
+        } else {
+            cover
+                .background(.quaternary)
+                .clipShape(RoundedRectangle(cornerRadius: 3))
+                .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
+        }
     }
 
     // MARK: - 여러 권
@@ -191,8 +199,8 @@ nonisolated enum BookExpandedDetailLayout {
     static let sideCoverScale: CGFloat = 0.82
     static let indicatorTopPadding: CGFloat = 16
     static let indicatorHorizontalPadding: CGFloat = 16 // ✅ 시안: 마지막 점이 화면 오른쪽에서 16pt
-    /// ✅ 시안: 여러 권 표지 윗변이 화면 위에서 127pt. 상단 바(안전 영역 + 44) 아래 16pt에서 시트가 시작하므로 5pt를 더한다.
-    static let carouselCoverTopPadding: CGFloat = 5
+    /// ✅ 시안: 여러 권 표지 윗변이 화면 위에서 127pt. 스크롤 상단 바(안전 영역 62 + 버튼 44) 아래로 21pt를 둔다.
+    static let carouselCoverTopPadding: CGFloat = 21
     /// ✅ 시안: 여러 권 펼친 화면의 하단 버튼은 홈 인디케이터 안전 영역 바로 위(1pt)에 붙는다.
     static let carouselActionsBottomPadding: CGFloat = 1
 

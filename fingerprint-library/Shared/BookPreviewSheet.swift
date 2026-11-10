@@ -9,6 +9,8 @@ struct BookPreviewSheet<Content: View, Actions: View, ExpandedBackground: View>:
     let topBarHeight: CGFloat
     /// ✅ 끝까지 펼쳤을 때 하단 버튼과 안전 영역 사이 여백. 접힌 상태(16pt)에서 진행률에 맞춰 바뀐다.
     var expandedBottomPadding: CGFloat = 16
+    /// ✅ 끝까지 펼친 시트의 윗변 위치. 지정하지 않으면 상단 바 아래 16pt에서 시작한다.
+    var expandedTopInsetOverride: CGFloat?
     let identifierPrefix: String
     let onCoveredHeightChange: (CGFloat) -> Void
     @ViewBuilder let content: () -> Content
@@ -19,7 +21,9 @@ struct BookPreviewSheet<Content: View, Actions: View, ExpandedBackground: View>:
     @State private var renderedHeight: CGFloat = 0
 
     private var progress: CGFloat { presentation.expansionProgress }
-    private var expandedTopInset: CGFloat { safeAreaInsets.top + topBarHeight + 16 }
+    private var expandedTopInset: CGFloat {
+        expandedTopInsetOverride ?? safeAreaInsets.top + topBarHeight + 16
+    }
     private var maximumPanelHeight: CGFloat {
         max(1, availableSize.height - expandedTopInset - actionsHeight - 12 - expandedBottomPadding
             - safeAreaInsets.bottom) // ✅ 버튼 위 간격 12 + 펼친 하단 여백

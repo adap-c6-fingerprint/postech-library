@@ -77,6 +77,8 @@ struct BookRouteBooksPreviewView: View {
                         trailing: geometry.safeAreaInsets.trailing),
                     safeAreaInsets: geometry.safeAreaInsets, topBarHeight: bookTabsHeight,
                     expandedBottomPadding: BookExpandedDetailLayout.carouselActionsBottomPadding,
+                    // ✅ 펼친 상세는 상태바 바로 아래부터 그려 표지가 상단 버튼 뒤로 자연스럽게 스크롤되게 한다.
+                    expandedTopInsetOverride: geometry.safeAreaInsets.top,
                     identifierPrefix: "multiBookPreview", onCoveredHeightChange: { panelHeight = $0 }
                 ) {
                     // ✅ 펼침 여부에 따라 접힌 카드 페이지와 펼친 상세 화면을 분기한다.
@@ -102,11 +104,11 @@ struct BookRouteBooksPreviewView: View {
                         y: geometry.safeAreaInsets.bottom)
             }
             .overlay(alignment: .top) {
-                // ✅ 펼친 상세에서는 책 이름 탭 대신 단권 상세와 같은 뒤로가기·찜 버튼을 보여 준다.
-                Group {
-                    if isShowingExpandedDetail { expandedTopBar } else { bookTabs }
+                // ✅ 펼친 상세의 뒤로가기·찜 버튼은 스크롤 뷰의 상단 바로 옮겨 시스템 스크롤 가장자리 효과를 받는다.
+                if !isShowingExpandedDetail {
+                    bookTabs
+                        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { bookTabsHeight = $0 }
                 }
-                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { bookTabsHeight = $0 }
             }
         }
         .foregroundStyle(Color.textPrimary)
@@ -144,6 +146,9 @@ struct BookRouteBooksPreviewView: View {
         .scrollIndicators(.hidden)
         .scrollBounceBehavior(.basedOnSize)
         .scrollDisabled(panelPresentation.isMoving)
+        // ✅ 위로 스크롤한 표지가 버튼 아래에서 잘려 보이지 않고 부드럽게 흐려지도록 한다.
+        .safeAreaBar(edge: .top, spacing: 0) { expandedTopBar }
+        .scrollEdgeEffectStyle(.soft, for: .top)
         .onScrollGeometryChange(for: Bool.self) {
             $0.contentOffset.y + $0.contentInsets.top <= 1
         } action: { _, isAtTop in
