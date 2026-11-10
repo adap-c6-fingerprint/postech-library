@@ -117,6 +117,8 @@ struct OnboardingFeature {
         case optionsLoaded(RecommendationDataset)
         case optionsFailed(String)
         case startButtonTapped
+        case welcomeLaterButtonTapped
+        // 시작 화면의 "다음에 할래요"
         case termsAgreeButtonTapped
         // 약관 동의 화면의 "동의하고 계속하기"
         case termsDeclineButtonTapped
@@ -184,6 +186,9 @@ struct OnboardingFeature {
                 }
                 state.step = .terms
                 return .none
+
+            case .welcomeLaterButtonTapped:
+                return .run { _ in exit(0) }
 
             case .termsAgreeButtonTapped:
                 guard state.step == .terms else { return .none }

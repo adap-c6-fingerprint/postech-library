@@ -108,11 +108,11 @@ struct OnboardingView: View {
                 pageContent(step)
             }
 
-            if step != .terms {
+            if Self.indicatorSteps.contains(step) {
                 pageIndicator(step)
                     .padding(.bottom, 20)
             }
-            // ✅ 약관 동의 화면에는 페이지 표시가 없다.
+            // ✅ 페이지 표시 점은 소속·선호 분류 화면에만 2개로 보여준다(피그마 08.-3온보딩_소속 선택 전). 시작·약관 화면에는 없다.
             let link = bottomLink(step)
             VStack(spacing: 12) {
                 actionButton(step)
@@ -127,10 +127,27 @@ struct OnboardingView: View {
         // ✅ 화면마다 내용 아래에 페이지 표시·버튼을 둔다(push 전환 시 화면과 함께 움직인다).
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.cartBackground)
+        .contentShape(.rect)
+        .simultaneousGesture(step == .affiliation ? nextSwipeGesture : nil)
+        // ✅ 소속 화면에서 소속·학과를 다 고르면 왼쪽으로 밀어도 "다음으로"처럼 선호 분류 화면으로 넘어간다.
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(!isBackButtonVisible(step))
         // ✅ 시스템 뒤로가기 버튼(44pt 원형 글래스)을 쓴다. 시작 화면에는 없고, 소속 화면부터 처음부터 보인다.
     }
+
+    private var nextSwipeGesture: some Gesture {
+        DragGesture(minimumDistance: 30)
+            .onEnded { value in
+                let dx = value.translation.width
+                let dy = value.translation.height
+                guard dx < -60, abs(dx) > abs(dy) * 1.5 else { return }
+                // 왼쪽으로 60pt 넘게, 세로보다 가로로 확실히 민 경우만 넘긴다.
+                guard store.isAffiliationComplete else { return }
+                // "다음으로" 버튼이 활성화됐을 때(소속·학과 선택 완료)만 넘긴다.
+                store.send(.nextButtonTapped)
+            }
+    }
+    // 오른쪽으로 미는 시스템 뒤로가기 스와이프와 방향이 반대라 서로 겹치지 않는다.
 
     @ViewBuilder
     private func pageContent(_ step: OnboardingFeature.Step) -> some View {
@@ -188,10 +205,13 @@ struct OnboardingView: View {
         .padding(.horizontal, 20)
     }
 
-    private static let privacyPolicyURL = URL(string: "https://link.fpmaps.com/privacy-policy-pobook")!
+    static let privacyPolicyURL = URL(string: "https://link.fpmaps.com/privacy-policy-pobook")!
 
     private func bottomLink(_ step: OnboardingFeature.Step) -> (title: String, action: OnboardingFeature.Action)? {
         switch step {
+        // case .welcome:
+        //     ("다음에 할래요", .welcomeLaterButtonTapped)
+        // 시작 화면의 "다음에 할래요"(누르면 앱 종료)는 지금 보여주지 않는다. 되살릴 수 있게 주석으로 남긴다.
         case .terms:
             ("동의 안하고 종료하기", .termsDeclineButtonTapped)
         case .affiliation where store.entry == .firstRun:
@@ -446,8 +466,8 @@ struct OnboardingView: View {
         .accessibilityHint(isBlocked ? "최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요" : "")
     }
 
-    private static let indicatorSteps = OnboardingFeature.Step.allCases.filter { $0 != .terms }
-    // ✅ 페이지 점은 시작·소속·선호 분류 3개. 약관 동의 화면은 점 개수에 넣지 않는다(피그마에 페이지 표시 없음).
+    private static let indicatorSteps: [OnboardingFeature.Step] = [.affiliation, .interests]
+    // ✅ 페이지 점은 소속·선호 분류 2개. 시작·약관 동의 화면은 점 개수에 넣지 않는다(피그마 시안 변경).
 
     private func pageIndicator(_ page: OnboardingFeature.Step) -> some View {
         HStack(spacing: 9) {
