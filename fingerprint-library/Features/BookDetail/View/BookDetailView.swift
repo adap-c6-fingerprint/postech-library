@@ -135,13 +135,12 @@ struct BookDetailView: View {
     var body: some View {
         detailContent
             .safeAreaInset(edge: .top, spacing: 0) {
-                if isExpanded { expandedTopBar.transition(.opacity) }
+                if isExpanded { expandedTopBar }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
             .background {
                 if isExpanded {
                     BookDetailCoverBackground(book: store.book, cachedURL: store.cachedCoverURL)
-                        .transition(.opacity)
                 }
             }
             .foregroundStyle(Color.textPrimary)
@@ -203,22 +202,18 @@ struct BookDetailView: View {
                         .padding(.horizontal, BookDetailCompactLayout.horizontalPadding)
                         .padding(.top, detent == .compact ? BookDetailCompactLayout.topPadding : 20)
                         .padding(.bottom, detent == .compact ? 0 : 36)
-                        .transition(.opacity)
                 }
                 // 높이 단계가 바뀌어도 같은 스크롤 뷰가 제스처를 이어받는다.
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         if isExpanded {
                             expandedHeader(width: geometry.size.width)
-                                .transition(.opacity)
                         } else if usesAccessibleLayout {
                             header.padding(.top, 20)
-                                .transition(.opacity)
                         }
                         if detent != .compact {
                             descriptionSection
                                 .padding(.top, isExpanded ? 24 : (usesAccessibleLayout ? 36 : 0))
-                                .transition(.opacity)
                         }
                     }
                     .padding(.horizontal, BookDetailCompactLayout.horizontalPadding)
@@ -239,7 +234,7 @@ struct BookDetailView: View {
                 .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
                 .frame(maxWidth: .infinity)
                 .padding(.top, 30)
-                .padding(.bottom, 32)
+                .padding(.bottom, 24)
                 .accessibilityIdentifier("bookDetail.expandedCover")
             VStack(alignment: .leading, spacing: 8) {
                 holdingStatus.typography(.caption2)
@@ -304,10 +299,12 @@ struct BookDetailView: View {
             holdingStatus
                 .typography(.caption2)
             bookTitle
-            holdingLocation
-            routeSummary
-                .typography(.caption1)
-                .foregroundStyle(Color.textTertiary)
+            VStack(alignment: .leading, spacing: detent == .medium ? 4 : 8) {
+                holdingLocation
+                routeSummary
+                    .typography(.caption1)
+                    .foregroundStyle(Color.textTertiary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .lineLimit(detent == .compact && !usesAccessibleLayout ? 1 : nil)
