@@ -89,14 +89,7 @@ struct IndoorMapFloorPicker: View {
             Button {
                 onSelect(item.id)
             } label: {
-                Text(title(for: item, isSelected: isSelected))
-                    .typography(isSelected ? .caption1.weight(.semibold) : .caption1)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, DS.Spacing._16)
+                label(title(for: item, isSelected: isSelected), isSelected: isSelected)
                     .frame(width: buttonWidth, height: 34)
                     .background(isSelected ? selectedBackground : .clear)
                     .foregroundStyle(isSelected ? selectedText : unselectedText)
@@ -105,6 +98,25 @@ struct IndoorMapFloorPicker: View {
             .accessibilityLabel(accessibilityLabel(for: item, isSelected: isSelected))
             .accessibilityAddTraits(isSelected ? [.isSelected] : [])
             .accessibilityIdentifier("floor-\(item.ordinal)")
+        }
+    }
+
+    /// "현재 4F"는 기존 층 이름보다 길다. 좌우 16 여백을 쓰면 글자가 잘리므로 시안의 44×20 글자 영역을 쓴다.
+    @ViewBuilder
+    private func label(_ text: String, isSelected: Bool) -> some View {
+        let base = Text(text)
+            .typography(isSelected ? .caption1.weight(.semibold) : .caption1)
+            .multilineTextAlignment(.center)
+            .lineLimit(1)
+            .minimumScaleFactor(0.75)
+            .allowsTightening(true)
+        if marksSelectionAsCurrent {
+            base.frame(width: 44, height: 20)
+        } else {
+            base
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.vertical, 10)
+                .padding(.horizontal, DS.Spacing._16)
         }
     }
 
