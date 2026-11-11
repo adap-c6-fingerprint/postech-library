@@ -556,10 +556,11 @@ struct IndoorMapKitView: UIViewRepresentable {
                 guard viewport.width > 0, viewport.height > 0 else { return false }
                 // 평면으로 돌린 뒤, 시트에 가리지 않는 화면 중심으로 좌표를 이동한다.
                 // 북쪽 정렬은 좌표 계산 전에 적용해야 이동 거리가 돌린 방향 기준으로 계산된다.
-                let flatCamera = view.camera.copy() as! MKMapCamera
-                flatCamera.pitch = 0
-                if resetsHeading { flatCamera.heading = 0 }
-                view.setCamera(flatCamera, animated: false)
+                let startCamera = view.camera.copy() as! MKMapCamera
+                let targetCamera = startCamera.copy() as! MKMapCamera
+                targetCamera.pitch = 0
+                if resetsHeading { targetCamera.heading = 0 }
+                view.setCamera(targetCamera, animated: false)
                 let point = view.convert(coordinate.clCoordinate, toPointTo: view)
                 // MKMapView의 카메라 중심은 safe area에 따라 bounds의 중심과 다를 수 있다.
                 let cameraCenter = view.convert(view.centerCoordinate, toPointTo: view)
@@ -567,7 +568,16 @@ struct IndoorMapKitView: UIViewRepresentable {
                     x: point.x + cameraCenter.x - viewport.midX,
                     y: point.y + cameraCenter.y - viewport.midY
                 )
-                view.setCenter(view.convert(center, toCoordinateFrom: view), animated: animated)
+                let destination = view.convert(center, toCoordinateFrom: view)
+                guard CLLocationCoordinate2DIsValid(destination) else { return true }
+                if animated, !UIAccessibility.isReduceMotionEnabled {
+                    // 계산하려고 미리 돌려 둔 카메라를 되돌리고, 방향과 위치를 한 번에 움직인다.
+                    view.setCamera(startCamera, animated: false)
+                    targetCamera.centerCoordinate = destination
+                    view.setCamera(targetCamera, animated: true)
+                } else {
+                    view.setCenter(destination, animated: false)
+                }
             case .route(let route, let ids):
                 var rect = parent.map.features.filter { ids.contains($0.id) && $0.floorID == parent.floor.id }
                     .reduce(MKMapRect.null) { $0.union(MapKitGeometry.mapRect(for: $1.geometry)) }
