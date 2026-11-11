@@ -195,16 +195,15 @@ struct BookRouteOriginPickerView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
 
+    /// 확정 전에는 상황과 관계없이 같은 문구를 유지한다.
     private var guidanceMessage: some View {
-        Text(isCenterOnFloor || center == nil
-             ? "층을 선택한 후,\n지도를 움직여 출발 위치를 직접 설정해주세요"
-             : "선택한 층의 도면 안에서\n출발 위치를 설정해주세요")
+        Text("층을 선택한 후,\n지도를 움직여 출발 위치를 직접 설정해주세요")
             .typography(.caption1)
             .multilineTextAlignment(.center)
             .foregroundStyle(DS.ColorToken.neutralPrimary)
             .padding(.vertical, 10)
             .padding(.horizontal, 16)
-            .frame(width: 307)
+            .frame(width: 307, height: 65)
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
             .accessibilityIdentifier("route-origin-picker-hint")
     }
@@ -223,6 +222,9 @@ struct BookRouteOriginPickerView: View {
         }
         .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
         .buttonBorderShape(.capsule)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 20)
+        .frame(width: 330, height: 52)
         .foregroundStyle(DS.ColorToken.neutralPrimary)
         .accessibilityHint("선택한 위치를 출발지로 삼아 길안내를 시작해요")
         .accessibilityIdentifier("route-origin-picker-confirm")

@@ -7,6 +7,9 @@ import Foundation
 /// 지도와 navigation 로딩 상태를 분리해 노드 자료가 준비되지 않아도 지도를 표시한다.
 @Reducer
 struct IndoorMapFeature {
+    /// 위치를 모를 때 처음 보여 줄 층. ordinal 2는 화면 표기로 3F다.
+    static let defaultFloorOrdinal = 2
+
     /// 지도 화면에 필요한 값 상태. 표시 중인 층과 실제 위치의 층은 서로 다를 수 있다.
     @ObservableState
     struct State: Equatable {
@@ -29,6 +32,8 @@ struct IndoorMapFeature {
         var shelfLabelRequestID = 0
         /// 사용자가 조회하는 층의 원본 ID. 위치의 floorOrdinal을 덮어쓰는 값이 아니다.
         var selectedFloorID: UUID?
+        /// 실제 위치의 층을 아직 한 번도 반영하지 않았는지. 기본 층에서 한 번만 자동으로 옮기기 위해 쓴다.
+        var awaitsPositionFloor = true
         var selectedFeatureID: IndoorMapElement.ID?
         var selectedShelfKey: ShelfKey?
         var manualPosition: IndoorPosition?
@@ -168,8 +173,13 @@ struct IndoorMapFeature {
                 state.loadError = nil
                 state.map = map
                 let reportedFloor = state.currentPosition?.floorOrdinal
-                let floor = map.floors.first { $0.ordinal == reportedFloor } ?? map.floors.first
+                // 위치를 알면 그 층을, 모르면 3F를 먼저 보여 준다.
+                let positionFloor = map.floors.first { $0.ordinal == reportedFloor }
+                let floor = positionFloor
+                    ?? map.floors.first { $0.ordinal == Self.defaultFloorOrdinal }
+                    ?? map.floors.first
                 state.selectedFloorID = floor?.id
+                state.awaitsPositionFloor = positionFloor == nil
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
                 if let position = state.latestPosition, position.source == .simulation,
@@ -245,6 +255,8 @@ struct IndoorMapFeature {
                 state.manualPosition = nil
                 state.isPlacingOrigin = false
                 state.authorization = .notDetermined
+                // 새 공급자의 첫 위치에 맞춰 다시 층을 따라가게 한다.
+                state.awaitsPositionFloor = true
                 state.locationMessage = "선택한 위치 공급자에 연결하고 있어요."
                 let cancellation = invalidateRoute(&state)
                 return state.isActive ? .merge(cancellation, locationEvents()) : cancellation
@@ -283,11 +295,16 @@ struct IndoorMapFeature {
                 state.latestPosition = position
                 if state.manualPosition == nil && !state.isPlacingOrigin {
                     state.locationMessage = nil
-                    if position.source == .simulation, previousFloor != position.floorOrdinal,
-                       let floor = state.map?.floors.first(where: { $0.ordinal == position.floorOrdinal }),
-                       floor.id != state.selectedFloorID {
-                        state.selectedFloorID = floor.id
-                        state.selectedShelfKey = nil
+                    let tracksSimulationFloor = position.source == .simulation
+                        && previousFloor != position.floorOrdinal
+                    // 기본 층으로 보고 있었다면 위치를 처음 확인한 시점에 그 층으로 옮긴다. 이후에는 사용자의 조회 층을 지킨다.
+                    if tracksSimulationFloor || state.awaitsPositionFloor,
+                       let floor = state.map?.floors.first(where: { $0.ordinal == position.floorOrdinal }) {
+                        state.awaitsPositionFloor = false
+                        if floor.id != state.selectedFloorID {
+                            state.selectedFloorID = floor.id
+                            state.selectedShelfKey = nil
+                        }
                     }
                     if state.wantsRecenter { recenter(&state, position: position) }
                 }
@@ -326,6 +343,8 @@ struct IndoorMapFeature {
 
             case .floorSelected(let id):
                 guard state.map?.floors.contains(where: { $0.id == id }) == true else { return .none }
+                // 직접 고른 층을 위치 수신이 덮어쓰지 않게 한다.
+                state.awaitsPositionFloor = false
                 state.selectedFloorID = id
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
@@ -590,6 +609,7 @@ struct IndoorMapFeature {
            let floor = state.map?.floors.first(where: { $0.ordinal == ordinal }) {
             if state.selectedFloorID != floor.id { state.selectedShelfKey = nil }
             state.selectedFloorID = floor.id
+            state.awaitsPositionFloor = false
         }
         state.requestCamera(.position(position.coordinate))
         state.wantsRecenter = false
