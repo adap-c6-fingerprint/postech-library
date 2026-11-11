@@ -19,9 +19,10 @@ struct OnboardingView: View {
     // ✅ 칩 영역의 보이는 높이
     private static let termsHeaderTopPadding: CGFloat = 32
     // ✅ 약관 동의 화면 제목 위 여백. 피그마 제목 위치(163)에 맞춘 값 (소속 38 ↔ 168.59 기준)
-    private static let affiliationHeaderTopPadding: CGFloat = 38
+    private static let affiliationHeaderTopPadding: CGFloat = 46
     private static let interestsHeaderTopPadding: CGFloat = 30
-    // ✅ push된 화면 제목 위 여백. 내비게이션 바 아래에서 피그마 제목 위치(소속 168.59, 선호 분류 160.6)에 오도록 맞춘 값
+    // ✅ push된 화면 제목 위 여백. 내비게이션 바 아래에서 피그마 제목 위치(소속 176.59, 선호 분류 160.6)에 오도록 맞춘 값
+    // 소속은 피그마 08.-5(4100:24291)에서 제목이 168.59 → 176.59로 8 내려가 38 → 46
 
     var body: some View {
         Group {
@@ -110,8 +111,9 @@ struct OnboardingView: View {
 
             if Self.indicatorSteps.contains(step) {
                 pageIndicator(step)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 30)
             }
+            // ✅ 피그마 08.-5·08.-6: 점 아래 끝(754.6)과 버튼 위(784.59) 사이 30
             // ✅ 페이지 표시 점은 소속·선호 분류 화면에만 2개로 보여준다(피그마 08.-3온보딩_소속 선택 전). 시작·약관 화면에는 없다.
             let link = bottomLink(step)
             VStack(spacing: 12) {
@@ -121,8 +123,9 @@ struct OnboardingView: View {
                 }
             }
             .padding(.horizontal, 36)
-            .padding(.bottom, link == nil ? 24 : 12)
-            // ✅ 버튼 아래 밑줄 문구가 있으면 간격 12로 두고, 그만큼 아래 여백을 줄인다(피그마 버튼 위치 738).
+            .padding(.bottom, link != nil ? 12 : (Self.indicatorSteps.contains(step) ? 3.41 : 24))
+            // ✅ 버튼 아래 밑줄 문구가 있으면 간격 12로 두고, 그만큼 아래 여백을 줄인다.
+            // 소속·선호 분류는 피그마 08.-5·08.-6 버튼 위치(784.59, 아래 끝 836.59)에 맞춰 하단 안전 영역(34) 위 3.41만 띄운다.
         }
         // ✅ 화면마다 내용 아래에 페이지 표시·버튼을 둔다(push 전환 시 화면과 함께 움직인다).
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -210,11 +213,12 @@ struct OnboardingView: View {
     private var affiliation: some View {
         VStack(alignment: .leading, spacing: 0) {
             header(
-                title: "소속과 학과를 알려주세요",
-                subtitle: "학과를 알려주면 관련 분야의 책을\n더 잘 추천할 수 있어요.",
+                title: "입력한 정보를 바탕으로\n내게 더 잘 맞는 책을 보여드릴게요.",
+                subtitle: "소속과 학과를 알려주세요",
+                spacing: 8,
                 topPadding: Self.affiliationHeaderTopPadding
             )
-            // ✅ 시안 문구로 변경
+            // ✅ 피그마 08.-5(4100:24291) 문구. 제목과 부제 간격 8
             .padding(.bottom, 32)
 
             // 상위 소속 → 학과 2단계로 고른다. 학과 메뉴는 그룹(예: "학과 및 학부")별로 묶어 보여준다.
@@ -261,7 +265,7 @@ struct OnboardingView: View {
                         .foregroundStyle(.red)
                 }
 
-                Text("* 소속과 학과는 나중에 변경 가능해요.")
+                Text("*소속과 학과는 나중에 변경 가능해요.")
                     .typography(.caption2)
                     .foregroundStyle(Color.onboardingCaption)
                 // ✅ 시안 문구·Caption 2. 학과 입력칸과의 간격 16
@@ -483,7 +487,8 @@ struct OnboardingView: View {
         switch step {
         case .welcome: "시작하기"
         case .affiliation: store.isAffiliationComplete ? "다음으로" : "선택을 완료해주세요"
-        case .interests: "시작하기"
+        case .interests: store.canFinish ? "시작하기" : "선택을 완료해주세요"
+        // ✅ 피그마 08.-6(4100:24386): 분류를 고르기 전에는 "선택을 완료해주세요"
         }
     }
 
