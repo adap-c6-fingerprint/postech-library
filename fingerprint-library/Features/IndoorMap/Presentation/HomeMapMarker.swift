@@ -34,15 +34,16 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     let id: String
     let kind: Kind
     let floorID: UUID
-    let coordinate: IndoorMapCoordinate
-    let title: String
+    /// 겹친 핀을 합칠 때 무게중심으로 옮긴다.
+    var coordinate: IndoorMapCoordinate
+    var title: String
     var subtitle: String? = nil
     var bookKeys: Set<[String?]> = []
 }
 
 nonisolated enum HomeMapMarkerBuilder {
     static func amenities(on map: IndoorMap) -> [HomeMapMarker] {
-        map.features.compactMap { feature in
+        let markers: [HomeMapMarker] = map.features.compactMap { feature in
             guard let floor = feature.floorID, let kind = amenityKind(feature),
                   let coordinate = anchor(for: feature.geometry) else { return nil }
             let fallback: String = switch kind {
@@ -61,6 +62,46 @@ nonisolated enum HomeMapMarkerBuilder {
             }
             return HomeMapMarker(id: "amenity-\(feature.kind.rawValue)-\(feature.sourceID)", kind: kind,
                 floorID: floor, coordinate: coordinate, title: feature.name ?? fallback)
+        }.sorted { $0.id < $1.id }
+        return merging(markers)
+    }
+
+    /// 화면에서 겹쳐 보이는 거리. 핀 하나의 폭보다 좁아 두 개를 그려도 구분되지 않는다.
+    private static let overlapMeters = 6.0
+
+    /// 괄호로 덧붙인 설명이 없고 짧은 이름을 앞에 둔다.
+    private static func isPlainer(_ lhs: String, _ rhs: String) -> Bool {
+        let leftHasNote = lhs.contains("(")
+        let rightHasNote = rhs.contains("(")
+        if leftHasNote != rightHasNote { return rightHasNote }
+        if lhs.count != rhs.count { return lhs.count < rhs.count }
+        return lhs < rhs
+    }
+
+    /// 같은 층·같은 종류의 핀이 겹칠 만큼 가까우면 하나로 합친다.
+    ///
+    /// 한 계단실에 "계단"과 "계단 (아래)"가 따로 있거나 엘리베이터 두 대가 나란히 있는 경우처럼
+    /// 원본이 지점을 나눠 둔 곳에서 핀이 여러 개로 보였다.
+    private static func merging(_ markers: [HomeMapMarker]) -> [HomeMapMarker] {
+        var clusters: [[HomeMapMarker]] = []
+        for marker in markers {
+            let index = clusters.firstIndex { cluster in
+                guard let first = cluster.first, first.kind == marker.kind, first.floorID == marker.floorID,
+                      first.bookKeys.isEmpty, marker.bookKeys.isEmpty else { return false }
+                return cluster.contains {
+                    RoutingGeometry.distanceMeters(from: $0.coordinate, to: marker.coordinate) <= overlapMeters
+                }
+            }
+            if let index { clusters[index].append(marker) } else { clusters.append([marker]) }
+        }
+        return clusters.map { cluster in
+            guard cluster.count > 1, var representative = cluster.first else { return cluster[0] }
+            // "계단 (아래)"처럼 덧붙은 설명이 없는 이름을 대표로 둔다.
+            representative.title = cluster.map(\.title).min(by: isPlainer) ?? representative.title
+            representative.coordinate = IndoorMapCoordinate(
+                latitude: cluster.map(\.coordinate.latitude).reduce(0, +) / Double(cluster.count),
+                longitude: cluster.map(\.coordinate.longitude).reduce(0, +) / Double(cluster.count))
+            return representative
         }.sorted { $0.id < $1.id }
     }
 
