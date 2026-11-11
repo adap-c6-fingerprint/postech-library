@@ -61,7 +61,7 @@ nonisolated enum IndoorRouteSearchOutcome: Equatable, Sendable {
     case requiresStairConfirmation
 }
 
-nonisolated enum IndoorRoutingError: Error, Equatable, Sendable, LocalizedError {
+nonisolated enum IndoorRoutingError: Error, Equatable, Sendable, LocalizedError, CaseIterable {
     case invalidGraph, invalidDestination, unknownFloor, noRoutingDataForFloor, invalidPosition, farFromGraph
     case missingTransitionDistances, noRoute
 

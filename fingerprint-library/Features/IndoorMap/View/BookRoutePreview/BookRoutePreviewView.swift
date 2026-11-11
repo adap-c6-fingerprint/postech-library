@@ -23,6 +23,14 @@ struct BookRoutePreviewView: View {
     /// 직접 설정으로 넘어가는 중. 지도가 준비되면 출발지 설정 화면을 연다.
     @State private var isPreparingManualOrigin = false
     @Environment(\.indoorRouteMapStore) private var mapStore
+    @Environment(\.libraryGoHome) private var goHome
+    @Environment(\.openURL) private var openURL
+    @Dependency(\.bookCartClient) private var bookCartClient
+    @State private var isProblemReportPresented = false
+    /// 메일 작성기도 메일 앱도 없을 때 주소를 안내하는 시트.
+    @State private var isProblemReportFallbackPresented = false
+    /// 준비가 끝나지 않은 채 오래 머문 경우. 사용자가 빠져나갈 수 있게 실패 화면으로 바꾼다.
+    @State private var preparingTimedOut = false
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -167,11 +175,12 @@ struct BookRoutePreviewView: View {
     /// 준비 중에도 목적지 지도를 깔아 둔다. 권한 알림·출발지 직접 설정·길안내로 이어질 때 화면이 끊기지 않는다.
     private var directContent: some View {
         ZStack {
-            directMapBackdrop
-            directHeader
             if showsRouteFailure {
+                // 실패 화면은 지도 대신 전체를 쓴다.
                 directFailure
             } else {
+                directMapBackdrop
+                directHeader
                 directStatus
             }
         }
@@ -190,7 +199,7 @@ struct BookRoutePreviewView: View {
     }
 
     private var showsRouteFailure: Bool {
-        routeError != nil && !hidesRouteErrorWhileResolvingOrigin
+        (routeError != nil || preparingTimedOut) && !hidesRouteErrorWhileResolvingOrigin
     }
 
     @ViewBuilder
@@ -249,22 +258,59 @@ struct BookRoutePreviewView: View {
     }
 
     private var directFailure: some View {
-        VStack(spacing: 20) {
-            ContentUnavailableView("길안내를 시작할 수 없어요", systemImage: "location.slash",
-                description: Text(routeError ?? ""))
-            Button("다시 시도") { retryDirectNavigation() }
-                .buttonStyle(.borderedProminent)
-                .disabled(isLoadingRoute)
-            Button("출발 위치 직접 설정") { presentOriginPicker() }
-                .buttonStyle(.bordered)
-                .accessibilityIdentifier("book-navigation-set-origin")
-            Button("돌아가기") { dismiss() }
-                .buttonStyle(.bordered)
+        BookRouteFailureView(
+            kind: .init(message: routeError),
+            isRetrying: isLoadingRoute,
+            onBack: { dismiss() },
+            onRetry: { retryDirectNavigation() },
+            onGoHome: { returnHome() },
+            onAddToCart: destination.books.isEmpty ? nil : { addBooksToCart() },
+            onReportProblem: { presentProblemReport() })
+    }
+
+    /// 상세·장바구니 화면까지 닫고 홈 지도 탭으로 돌아간다.
+    private func returnHome() {
+        dismiss()
+        goHome?()
+    }
+
+    /// 지금은 안내할 수 없으니 책을 담아 두고 화면을 닫는다.
+    private func addBooksToCart() {
+        for book in destination.books { _ = bookCartClient.add(book, at: Date()) }
+        dismiss()
+    }
+
+    /// 메일 작성기를 띄운다. 계정이 없으면 메일 앱으로, 그것도 못 열면 주소 안내 시트로 넘긴다.
+    private func presentProblemReport() {
+        guard !ProblemReportMailSheet.canSendMail else {
+            isProblemReportPresented = true
+            return
         }
-        .padding(24)
-        .frame(maxWidth: 360)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
-        .padding(24)
+        guard let url = ProblemReportMailSheet.mailtoURL(
+            subject: problemReportSubject, body: problemReportBody) else {
+            isProblemReportFallbackPresented = true
+            return
+        }
+        openURL(url) { accepted in
+            if !accepted { isProblemReportFallbackPresented = true }
+        }
+    }
+
+    private var problemReportSubject: String { "[포북] 길안내 문제 신고" }
+
+    private var problemReportBody: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "-"
+        let book = orderedBooks.first.map { BookText.plainText($0.title) } ?? "-"
+        return """
+        겪으신 상황을 아래에 적어 주세요.
+
+
+        ---
+        증상: \(routeError ?? "길안내를 준비하지 못함")
+        책: \(book)
+        앱 버전: \(version) (\(build))
+        """
     }
 
     private func retryDirectNavigation() {
@@ -315,6 +361,17 @@ struct BookRoutePreviewView: View {
             BookNavigationView(session: session, analyticsIsTest: destination.isTestMode) { _ in
                 navigationFlow.navigationEnded()
             }
+        }
+        .sheet(isPresented: $isProblemReportFallbackPresented) {
+            ProblemReportFallbackSheet(messageBody: problemReportBody) {
+                isProblemReportFallbackPresented = false
+            }
+        }
+        .sheet(isPresented: $isProblemReportPresented) {
+            ProblemReportMailSheet(subject: problemReportSubject, body: problemReportBody) {
+                isProblemReportPresented = false
+            }
+            .ignoresSafeArea()
         }
         .fullScreenCover(isPresented: $isOriginPickerPresented, onDismiss: {
             isPreparingManualOrigin = false
@@ -389,6 +446,14 @@ struct BookRoutePreviewView: View {
             // Store 교체 시 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
             guard let destinationStore else { return }
             await destinationStore.send(.task).finish()
+        }
+        .task(id: routeStore.requestID) {
+            // 오류도 경로도 없이 준비 문구만 남는 상태를 끝낸다. 요청이 바뀌면 다시 센다.
+            preparingTimedOut = false
+            guard entryMode == .direct else { return }
+            try? await Task.sleep(for: .seconds(20))
+            guard !Task.isCancelled else { return }
+            preparingTimedOut = true
         }
         .task(id: routeRequest) {
             // 소장·지도 로딩이 끝난 시점의 블루닷에서 안내를 시작한다.

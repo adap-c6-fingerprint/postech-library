@@ -59,7 +59,11 @@ struct BookShelfMapFeature {
 
     @Dependency(\.bookHoldingsClient) var holdingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
-    private nonisolated enum CancelID: Hashable, Sendable { case holdings(Book.ID) }
+    /// 같은 책을 보는 다른 화면의 조회를 취소하지 않도록 Store마다 구분한다.
+    private nonisolated struct CancelID: Hashable, Sendable {
+        let instance: UUID
+        let bookID: Book.ID
+    }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -168,7 +172,7 @@ struct BookShelfMapFeature {
                 guard !Task.isCancelled else { return }
                 await send(.holdingsFailed(bookID, requestID: requestID, error.localizedDescription))
             }
-        }.cancellable(id: CancelID.holdings(bookID), cancelInFlight: true)
+        }.cancellable(id: CancelID(instance: state.map.instanceID, bookID: bookID), cancelInFlight: true)
     }
 
     private func focus(_ shelves: [IndoorShelfLabel], state: inout State) {
