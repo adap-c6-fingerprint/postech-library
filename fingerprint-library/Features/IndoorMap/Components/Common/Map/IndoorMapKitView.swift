@@ -550,13 +550,15 @@ struct IndoorMapKitView: UIViewRepresentable {
                 camera.pitch = 0
                 view.setCamera(camera, animated: false)
                 view.setVisibleMapRect(rect, edgePadding: padding, animated: false)
-            case .position(let coordinate):
+            case .position(let coordinate, let resetsHeading):
                 guard coordinate.isValid else { return false }
                 let viewport = view.bounds.inset(by: parent.viewportInsets)
                 guard viewport.width > 0, viewport.height > 0 else { return false }
                 // 평면으로 돌린 뒤, 시트에 가리지 않는 화면 중심으로 좌표를 이동한다.
+                // 북쪽 정렬은 좌표 계산 전에 적용해야 이동 거리가 돌린 방향 기준으로 계산된다.
                 let flatCamera = view.camera.copy() as! MKMapCamera
                 flatCamera.pitch = 0
+                if resetsHeading { flatCamera.heading = 0 }
                 view.setCamera(flatCamera, animated: false)
                 let point = view.convert(coordinate.clCoordinate, toPointTo: view)
                 // MKMapView의 카메라 중심은 safe area에 따라 bounds의 중심과 다를 수 있다.

@@ -391,7 +391,7 @@ struct IndoorMapFeature {
                 state.wantsRecenter = false
                 state.selectedFeatureID = nil
                 state.locationMessage = nil
-                state.requestCamera(.position(coordinate))
+                state.requestCamera(.position(coordinate, resetsHeading: false))
                 return .none
 
             case .manualFloorSelected(let id):
@@ -626,7 +626,8 @@ struct IndoorMapFeature {
             state.selectedFloorID = floor.id
             state.awaitsPositionFloor = false
         }
-        state.requestCamera(.position(position.coordinate))
+        // 현재 위치 버튼은 위치와 함께 방향도 정방향으로 되돌린다.
+        state.requestCamera(.position(position.coordinate, resetsHeading: true))
         state.wantsRecenter = false
         state.locationMessage = nil
     }
@@ -641,7 +642,8 @@ nonisolated struct IndoorMapCameraRequest: Equatable, Sendable {
         /// 지정 층의 도형 전체를 표시 영역에 맞춘다.
         case floor(UUID)
         /// 현재 줌을 유지한 채 해당 좌표를 가려지지 않는 영역의 중심으로 이동한다.
-        case position(IndoorMapCoordinate)
+        /// `resetsHeading`이면 지도를 북쪽이 위로 오도록 함께 되돌린다.
+        case position(IndoorMapCoordinate, resetsHeading: Bool)
         /// 같은 층의 서가 후보들을 함께 볼 수 있도록 도형 전체에 맞춘다.
         case features([IndoorMapElement.ID])
         /// 표시 층의 경로 전체와 출발·도착 서가 도형을 함께 맞춘다.
