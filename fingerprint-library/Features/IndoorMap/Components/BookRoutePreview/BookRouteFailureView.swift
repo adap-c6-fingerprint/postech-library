@@ -61,19 +61,21 @@ struct BookRouteFailureView: View {
     }
 
     private var content: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 32) {
             Image(systemName: "exclamationmark.circle.fill")
-                .font(.system(size: 64))
+                .font(.system(size: 69))
+                .frame(width: 69, height: 69)
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(DS.ColorToken.neutralDark, DS.ColorToken.primaryLight)
                 .accessibilityHidden(true)
-            VStack(spacing: 12) {
+            VStack(spacing: 16) {
                 Text(title)
                     .typography(.title1)
+                    .foregroundStyle(DS.ColorToken.neutralPrimary)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("route-failure-title")
                 Text(message)
-                    .typography(.caption1)
+                    .typography(.body2)
                     .foregroundStyle(DS.ColorToken.neutralTertiary)
                     .accessibilityIdentifier("route-failure-message")
             }
@@ -92,7 +94,7 @@ struct BookRouteFailureView: View {
                     if isRetrying { ProgressView().tint(DS.ColorToken.neutralDark) }
                     Text("다시 시도하기").typography(.button)
                 }
-                .frame(maxWidth: .infinity, minHeight: 56)
+                .frame(maxWidth: .infinity, minHeight: 52)
                 .foregroundStyle(DS.ColorToken.neutralDark)
                 .background(DS.ColorToken.primaryLight, in: Capsule())
             }
@@ -103,7 +105,7 @@ struct BookRouteFailureView: View {
             Button(action: onGoHome) {
                 Text("홈으로 돌아가기")
                     .typography(.button)
-                    .frame(maxWidth: .infinity, minHeight: 56)
+                    .frame(maxWidth: .infinity, minHeight: 52)
                     .foregroundStyle(DS.ColorToken.neutralPrimary)
                     .background(Color(white: 0.16), in: Capsule())
             }
@@ -123,7 +125,7 @@ struct BookRouteFailureView: View {
         if kind == .outsideLibrary, let onAddToCart {
             Button(action: onAddToCart) {
                 Text("책카트에 담고 닫기")
-                    .typography(.caption1)
+                    .typography(.body2)
                     .underline()
                     .foregroundStyle(DS.ColorToken.neutralPrimary)
             }
@@ -132,7 +134,7 @@ struct BookRouteFailureView: View {
         } else {
             Button(action: onReportProblem) {
                 Text("문제 신고하기")
-                    .typography(.caption1)
+                    .typography(.body2)
                     .underline()
                     .foregroundStyle(DS.ColorToken.neutralPrimary)
             }
