@@ -1,10 +1,11 @@
 import Foundation
 
 nonisolated struct AnalyticsConsent: Codable, Equatable, Sendable {
-    var analytics = false
-    var diagnostics = false
-    var hasChosen = false
-    static let storageKey = "pobook.analytics.consent.v1"
+    var analytics = true
+    var diagnostics = true
+    var hasChosen = true
+    static let storageKey = "pobook.analytics.consent.v2"
+    // 동의 화면이 없어졌으므로 시작하자마자 기본으로 수집한다. 키를 v2로 올려 예전 빌드에 저장된 선택(거부 포함)은 읽지 않는다.
 
     func permitsEvents(configured: Bool, active: Bool) -> Bool {
         hasChosen && analytics && configured && active
