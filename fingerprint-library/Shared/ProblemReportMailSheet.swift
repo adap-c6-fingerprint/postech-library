@@ -4,7 +4,7 @@ import UIKit
 
 /// 문제 신고용 메일 작성 화면. 기기의 기본 메일 작성기를 그대로 띄운다.
 struct ProblemReportMailSheet: UIViewControllerRepresentable {
-    static let recipient = "its.johnbaek@gmail.com"
+    static let recipient = "hellomaps@fpmaps.com"
 
     let subject: String
     let body: String
