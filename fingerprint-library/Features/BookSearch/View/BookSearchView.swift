@@ -30,7 +30,6 @@ struct BookSearchView: View {
                 onProfile: { onShowProfile?() }
             )
             .padding(.bottom, 16)
-            // 홈·추천 탭과 같은 상단 바를 같은 위치에 놓고, 아래 자료 유형 선택과 16pt 띄운다.
         }
         .toolbar(.hidden, for: .navigationBar)
         // 검색창은 탭바(role: .search)에 있으므로 내비게이션 바를 숨겨도 된다. 홈 지도 화면과 같은 방식이다.
