@@ -28,7 +28,7 @@ struct BookFavoritesView: View {
             .padding(.bottom, 24)
         }
         .background { Color.cartBackground.ignoresSafeArea() }
-        .navigationTitle("내가 찜한 목록")
+        .navigationTitle("내가 읽고 싶은 책")
         .analyticsScreen(.favorites)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
