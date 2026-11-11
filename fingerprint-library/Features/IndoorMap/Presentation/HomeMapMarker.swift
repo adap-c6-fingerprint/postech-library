@@ -101,14 +101,22 @@ nonisolated enum HomeMapMarkerBuilder {
         }.sorted { $0.id < $1.id }
     }
 
+    /// IMDF amenity가 표시를 맡은 분류. unit·fixture에 같은 분류가 있어도 핀을 만들지 않는다.
+    private static let amenityOwnedCategories = ["stairs", "stairway", "elevator", "restroom", "toilets"]
+
     private static func amenityKind(_ feature: IndoorMapElement) -> HomeMapMarker.Kind? {
         guard feature.kind == .unit || feature.kind == .amenity || feature.kind == .fixture else { return nil }
         let category = feature.category?.lowercased() ?? ""
         let name = feature.name?.lowercased() ?? ""
         let compactName = name.filter { !$0.isWhitespace }
-        if category == "stairs" || category == "stairway" { return .stairs }
-        if category == "elevator" { return .elevator }
-        if category.hasPrefix("restroom") || category == "toilets" { return .toilet }
+        // 같은 장소가 unit 도형과 amenity 포인트에 모두 있어 핀이 두 번 찍혔다.
+        // IMDF가 표시용으로 정리한 amenity를 쓰고, unit 쪽은 직원용이 섞여 있어 제외한다.
+        if Self.amenityOwnedCategories.contains(where: { category == $0 || category.hasPrefix($0) }) {
+            guard feature.kind == .amenity else { return nil }
+            if category == "stairs" || category == "stairway" { return .stairs }
+            if category == "elevator" { return .elevator }
+            return .toilet
+        }
         if name.contains("편의점") || name.contains("convenience") || name.contains("gs25") { return .shop }
         if name.contains("프린터") || name.contains("복사기") || name.contains("printer") || name.contains("copier") {
             return .printer

@@ -11,7 +11,13 @@ nonisolated struct IndoorShelfLabel: Identifiable, Equatable, Sendable {
 
     var id: String { fixtureNumber }
     /// A/B 면을 합친 실제 서가 식별자. 층이 다른 동일 번호는 구분한다.
-    var physicalShelfID: String { "\(floorID)-\(fixtureNumber.dropLast(2))" }
+    ///
+    /// 3·4층 fixture는 "...-A"/"...-B"로 면을 나누고, 2층처럼 면 표기가 없는 서가는 이름 전체가 하나다.
+    var physicalShelfID: String {
+        let base = fixtureNumber.hasSuffix("-\(Side.a.rawValue)") || fixtureNumber.hasSuffix("-\(Side.b.rawValue)")
+            ? String(fixtureNumber.dropLast(2)) : fixtureNumber
+        return "\(floorID)-\(base)"
+    }
     let fixtureNumber: String
     let realNumber: String
     let side: Side
