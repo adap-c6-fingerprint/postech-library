@@ -13,6 +13,11 @@ struct IndoorMapFeature {
     /// 지도 화면에 필요한 값 상태. 표시 중인 층과 실제 위치의 층은 서로 다를 수 있다.
     @ObservableState
     struct State: Equatable {
+        /// 이 Store의 진행 중 작업을 다른 Store와 구분하는 값.
+        ///
+        /// 홈 지도와 경로 미리보기가 같은 Feature로 서로 다른 Store를 만든다. 취소 ID가 같으면
+        /// 한쪽 화면이 닫히거나 새로 뜰 때 다른 쪽의 지도·서가·위치 작업까지 취소된다.
+        let instanceID = UUID()
         var homeAnnotations = HomeMapAnnotationsFeature.State()
         /// 검증을 마친 도면. navigation의 성공 여부와 독립적으로 유지한다.
         var map: IndoorMap?
@@ -149,7 +154,16 @@ struct IndoorMapFeature {
     @Dependency(\.date.now) var now
     @Dependency(\.indoorRouteClient) var routeClient
 
-    nonisolated private enum CancelID: Hashable, Sendable { case map, navigation, shelfLabels, location, route }
+    nonisolated private struct CancelID: Hashable, Sendable {
+        enum Kind: Hashable, Sendable { case map, navigation, shelfLabels, location, route }
+        let instance: UUID
+        let kind: Kind
+
+        init(_ instance: UUID, _ kind: Kind) {
+            self.instance = instance
+            self.kind = kind
+        }
+    }
 
     var body: some Reducer<State, Action> {
         Scope(state: \.homeAnnotations, action: \.homeAnnotations) { HomeMapAnnotationsFeature() }
@@ -162,7 +176,7 @@ struct IndoorMapFeature {
                 let loading = state.map == nil || state.loadError != nil ? loadMap(&state) : loadNavigation(&state)
                 let labels = state.map != nil && state.shelfLabels.isEmpty && !state.isLoadingShelfLabels
                     ? loadShelfLabels(&state) : .none
-                return .merge(loading, labels, locationEvents())
+                return .merge(loading, labels, locationEvents(state))
 
             case .retryTapped:
                 return loadMap(&state)
@@ -234,7 +248,7 @@ struct IndoorMapFeature {
             case .sceneActiveChanged(let active):
                 guard state.isActive != active else { return .none }
                 state.isActive = active
-                return active ? locationEvents() : .merge(.cancel(id: CancelID.location), cancelRouteSearch(&state))
+                return active ? locationEvents(state) : .merge(.cancel(id: CancelID(state.instanceID, .location)), cancelRouteSearch(&state))
 
             case .disappeared:
                 state.isActive = false
@@ -246,8 +260,9 @@ struct IndoorMapFeature {
                     state.isLoadingNavigation = false
                     state.navigationRequestID += 1
                 }
-                return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.map),
-                              .cancel(id: CancelID.navigation), .cancel(id: CancelID.shelfLabels), invalidateRoute(&state))
+                return .merge(.cancel(id: CancelID(state.instanceID, .location)), .cancel(id: CancelID(state.instanceID, .map)),
+                              .cancel(id: CancelID(state.instanceID, .navigation)),
+                              .cancel(id: CancelID(state.instanceID, .shelfLabels)), invalidateRoute(&state))
 
             #if DEBUG
             case .simulationConnectionChanged:
@@ -259,7 +274,7 @@ struct IndoorMapFeature {
                 state.awaitsPositionFloor = true
                 state.locationMessage = "선택한 위치 공급자에 연결하고 있어요."
                 let cancellation = invalidateRoute(&state)
-                return state.isActive ? .merge(cancellation, locationEvents()) : cancellation
+                return state.isActive ? .merge(cancellation, locationEvents(state)) : cancellation
             #endif
 
             case .locationEvent(.authorization(let authorization)):
@@ -376,7 +391,7 @@ struct IndoorMapFeature {
                 state.wantsRecenter = false
                 state.selectedFeatureID = nil
                 state.locationMessage = nil
-                state.requestCamera(.position(coordinate))
+                state.requestCamera(.position(coordinate, restoresInitialView: false))
                 return .none
 
             case .manualFloorSelected(let id):
@@ -477,7 +492,7 @@ struct IndoorMapFeature {
         state.routeRequestID += 1
         state.isRouting = false
         state.requiresStairConfirmation = false
-        return .cancel(id: CancelID.route)
+        return .cancel(id: CancelID(state.instanceID, .route))
     }
 
     /// 이전 탐색 결과를 무효화하고 진행 중 작업·완료 경로·오류·계단 확인 상태를 정리한다.
@@ -494,7 +509,7 @@ struct IndoorMapFeature {
         state.routeError = nil
         state.requiresStairConfirmation = false
         if clearDestination { state.routeDestinationKey = nil }
-        return .cancel(id: CancelID.route)
+        return .cancel(id: CancelID(state.instanceID, .route))
     }
 
     /// 활성 화면의 최근 위치와 선택한 서가로 경로 요청을 만들고 이전 요청을 취소한다.
@@ -515,7 +530,7 @@ struct IndoorMapFeature {
         guard state.isActive, let position = state.currentPosition, position.isRecent(at: now) else {
             state.isRouting = false
             state.routeError = IndoorRoutingError.invalidPosition.localizedDescription
-            return .cancel(id: CancelID.route)
+            return .cancel(id: CancelID(state.instanceID, .route))
         }
         state.isRouting = true
         let request = IndoorRouteRequest(navigation: data, start: position, destination: key,
@@ -524,7 +539,7 @@ struct IndoorMapFeature {
             do { await send(.routeLoaded(requestID: requestID, try await routeClient.search(request))) }
             catch is CancellationError { }
             catch { await send(.routeFailed(requestID: requestID, error.localizedDescription)) }
-        }.cancellable(id: CancelID.route, cancelInFlight: true)
+        }.cancellable(id: CancelID(state.instanceID, .route), cancelInFlight: true)
     }
 
     /// 합성 위치가 알려진 층과 그 층의 도면 경계 안에 있는지 확인한다.
@@ -543,7 +558,7 @@ struct IndoorMapFeature {
             do { await send(.mapLoaded(try await mapClient.load())) }
             catch is CancellationError { }
             catch { await send(.mapFailed(error.localizedDescription)) }
-        }.cancellable(id: CancelID.map, cancelInFlight: true)
+        }.cancellable(id: CancelID(state.instanceID, .map), cancelInFlight: true)
     }
 
     /// 서가 표시 자료만 갱신한다. 실패해도 지도·층 선택·길찾기 로딩을 유지한다.
@@ -552,7 +567,7 @@ struct IndoorMapFeature {
         state.shelfLabelError = nil
         guard let map = state.map, shelfLabelClient.supports(map) else {
             state.isLoadingShelfLabels = false
-            return .cancel(id: CancelID.shelfLabels)
+            return .cancel(id: CancelID(state.instanceID, .shelfLabels))
         }
         state.isLoadingShelfLabels = true
         state.shelfLabelRequestID += 1
@@ -567,17 +582,17 @@ struct IndoorMapFeature {
                 guard !Task.isCancelled else { return }
                 await send(.shelfLabelsFailed(requestID: requestID, error.localizedDescription))
             }
-        }.cancellable(id: CancelID.shelfLabels, cancelInFlight: true)
+        }.cancellable(id: CancelID(state.instanceID, .shelfLabels), cancelInFlight: true)
     }
 
     /// 화면 수명에 맞춰 위치 스트림을 구독하고 재구독 시 이전 구독을 취소한다.
-    private func locationEvents() -> Effect<Action> {
+    private func locationEvents(_ state: State) -> Effect<Action> {
         .run { send in
             for await event in await locationClient.events() {
                 guard !Task.isCancelled else { return }
                 await send(.locationEvent(event))
             }
-        }.cancellable(id: CancelID.location, cancelInFlight: true)
+        }.cancellable(id: CancelID(state.instanceID, .location), cancelInFlight: true)
     }
 
     /// 지도 로딩 이후 그 지도에 맞는 길찾기 자료를 읽는다.
@@ -600,7 +615,7 @@ struct IndoorMapFeature {
                 guard !Task.isCancelled else { return }
                 await send(.navigationFailed(requestID: requestID, error.localizedDescription))
             }
-        }.cancellable(id: CancelID.navigation, cancelInFlight: true)
+        }.cancellable(id: CancelID(state.instanceID, .navigation), cancelInFlight: true)
     }
 
     /// 호출부에서 수락한 현재 위치로 조회 층과 카메라를 이동하고 한 번의 포커싱 요청을 마친다.
@@ -611,7 +626,8 @@ struct IndoorMapFeature {
             state.selectedFloorID = floor.id
             state.awaitsPositionFloor = false
         }
-        state.requestCamera(.position(position.coordinate))
+        // 현재 위치 버튼은 위치와 함께 방향·줌도 최초 표시 상태로 되돌린다.
+        state.requestCamera(.position(position.coordinate, restoresInitialView: true))
         state.wantsRecenter = false
         state.locationMessage = nil
     }
@@ -626,7 +642,8 @@ nonisolated struct IndoorMapCameraRequest: Equatable, Sendable {
         /// 지정 층의 도형 전체를 표시 영역에 맞춘다.
         case floor(UUID)
         /// 현재 줌을 유지한 채 해당 좌표를 가려지지 않는 영역의 중심으로 이동한다.
-        case position(IndoorMapCoordinate)
+        /// `restoresInitialView`면 북쪽이 위로 오게 하고 줌도 최초 표시 배율로 되돌린다.
+        case position(IndoorMapCoordinate, restoresInitialView: Bool)
         /// 같은 층의 서가 후보들을 함께 볼 수 있도록 도형 전체에 맞춘다.
         case features([IndoorMapElement.ID])
         /// 표시 층의 경로 전체와 출발·도착 서가 도형을 함께 맞춘다.

@@ -2,10 +2,10 @@ import Foundation
 
 /// GA 동의와 별도로 저장해 기존 분석 동의를 화면 녹화 동의로 해석하지 않는다.
 nonisolated struct SessionReplayConsent: Codable, Equatable, Sendable {
-    var enabled = false
-    var hasChosen = false
-    // v1은 화면 내용을 가리는 조건이었다. 수집 범위가 확대되어 새 동의를 받는다.
-    static let storageKey = "pobook.clarity.consent.v2"
+    var enabled = true
+    var hasChosen = true
+    static let storageKey = "pobook.clarity.consent.v3"
+    // 동의 화면이 없어 앱 시작부터 녹화한다. 키를 v3로 올려 예전 빌드에 저장된 선택(거부 포함)은 읽지 않는다.
 }
 
 nonisolated struct SessionReplayPolicy {

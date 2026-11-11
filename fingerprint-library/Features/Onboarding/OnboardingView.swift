@@ -562,7 +562,6 @@ private extension Color {
     static let onboardingDisabledText = Color(red: 0x99 / 255, green: 0x99 / 255, blue: 0x99 / 255)
     static let onboardingTermsLink = Color(red: 0x55 / 255, green: 0x55 / 255, blue: 0x55 / 255)
     static let onboardingTextLink = Color(red: 0xB6 / 255, green: 0xB6 / 255, blue: 0xB6 / 255)
-    // ✅ 약관 링크(#555555), 버튼 아래 밑줄 문구 "동의 안하고 종료하기"·"다음에 할래요"(#B6B6B6) 색
     // ✅ 비활성 입력칸 색 (피그마 Black/Gray 1100, Gray 400)
 }
 
@@ -570,15 +569,6 @@ private extension Color {
 #Preview("08-1 시작") {
     OnboardingView(
         store: Store(initialState: OnboardingFeature.State()) { OnboardingFeature() }
-    )
-}
-
-#Preview("08-2 약관 동의") {
-    OnboardingView(
-        store: Store(initialState: {
-            var state = OnboardingFeature.State()
-            return state
-        }()) { OnboardingFeature() }
     )
 }
 

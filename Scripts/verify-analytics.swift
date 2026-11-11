@@ -24,7 +24,7 @@ enum AnalyticsProof {
                 }
             }
         }
-        assert(!AnalyticsConsent().analytics && !AnalyticsConsent().diagnostics)
+        assert(AnalyticsConsent().analytics && AnalyticsConsent().diagnostics && AnalyticsConsent().hasChosen)
         var operations = AnalyticsOperations()
         let instant = ContinuousClock.now
         operations.start("old", at: instant)
