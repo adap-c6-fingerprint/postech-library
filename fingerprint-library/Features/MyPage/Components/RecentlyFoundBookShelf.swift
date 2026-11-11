@@ -6,7 +6,7 @@
 //
 //  최근 찾은 책의 책등을 왼쪽부터 꽂아 보여주는 책장
 //  마이페이지 카드는 스크롤하지 않고, 최근 찾은 책 화면은 좌우로 넘길 수 있다.
-//  선반은 홈 추천 캐러셀과 같은 RecommendationShelfView(RecommendationGlass·Bolt 에셋)를 쓴다.
+//  선반은 홈 추천 캐러셀과 같은 얇은 선반(RecommendationShelfView.thin)을 쓴다.
 //
 
 import SwiftUI
@@ -30,19 +30,17 @@ struct RecentlyFoundBookShelf: View {
         let maxSpineHeight: CGFloat
         // 피그마 주석: 각 책의 최대 높이
         let minSpineHeight: CGFloat
-        let shelfHeight: CGFloat
-        // Recommendation Glass Overlay_Large 높이
         let bookLeadingInset: CGFloat
         // 책 묶음 시작 x. 선반 시작 x는 두 화면 모두 RecommendationShelfView.leadingInset(16)
 
         static let card = Size(
-            maxSpineHeight: 213.84, minSpineHeight: 171, shelfHeight: 97.81,
+            maxSpineHeight: 213.84, minSpineHeight: 171,
             bookLeadingInset: 53
         )
         // 피그마 09.마이페이지 (3478:26915)
 
         static let large = Size(
-            maxSpineHeight: 378.38, minSpineHeight: 304.5, shelfHeight: 155.46,
+            maxSpineHeight: 378.38, minSpineHeight: 304.5,
             bookLeadingInset: 84
         )
         // 피그마 09.마이페이지_최근 찾은 목록 (3499:27619)
@@ -53,7 +51,7 @@ struct RecentlyFoundBookShelf: View {
         shelf
             .frame(height: size.maxSpineHeight)
             .overlay(alignment: .bottomLeading) {
-                RecommendationShelfView(height: size.shelfHeight)
+                RecommendationShelfView.thin()
                     .padding(.leading, RecommendationShelfView.leadingInset)
             }
             .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
@@ -106,7 +104,10 @@ struct RecentlyFoundBookShelf: View {
                 let frame = spineFrame(book, image: images[book.id], tallest: tallest, hasSameHeights: hasSameHeights)
                 selectable(book) {
                     spine(book, image: images[book.id], frame: frame)
-                        .modifier(RecommendationShelfView.CoverBlur(height: size.shelfHeight))
+                        .modifier(RecommendationShelfView.CoverBlur(
+                            height: RecommendationShelfView.thinHeight,
+                            cornerRadius: RecommendationShelfView.recommendationCornerRadius
+                        ))
                         .frame(width: frame.width, height: frame.height)
                     // 홈 추천 표지처럼 선반 유리 뒤에 들어간 부분만 흐리게 보인다.
                     // CoverBlur는 안쪽에서 GeometryReader를 쓰므로, 바깥에서 책 크기를 정해 주지 않으면
