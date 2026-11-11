@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Property 1=book.png",
+      "filename" : "Group 208.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Property 1=Variant18.png",
+      "filename" : "Group 208@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Property 1=Variant18 1.png",
+      "filename" : "Group 208@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

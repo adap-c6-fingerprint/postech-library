@@ -3,7 +3,9 @@ import Foundation
 nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     enum Kind: String, CaseIterable, Sendable {
         case favorite, stairs, elevator, toilet, shop, printer, studio
-        case cafe, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone, other
+        case cafe, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone
+        case waterDispenser, entranceDesk, circulationDesk, computer, nursingRoom
+        case other
 
         var isAlwaysVisible: Bool {
             switch self {
@@ -26,6 +28,11 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
             case .gamingRoom: "annotation_gamingRoom"
             case .groupStudyRoom: "annotation_groupStudyRoom"
             case .relaxZone: "annotation_relaxZone"
+            case .waterDispenser: "annotation_waterDispenser"
+            case .entranceDesk: "annotation_entranceDesk"
+            case .circulationDesk: "annotation_circulationDesk"
+            case .computer: "annotation_computer"
+            case .nursingRoom: "annotation_nursingRoom"
             case .other: nil
             }
         }
@@ -58,6 +65,11 @@ nonisolated enum HomeMapMarkerBuilder {
             case .gamingRoom: "게임룸"
             case .groupStudyRoom: feature.category?.lowercased() == "classroom" ? "강의실" : "그룹 스터디룸"
             case .relaxZone: feature.category?.lowercased() == "lounge" ? "휴게실" : "릴렉스존"
+            case .waterDispenser: "정수기"
+            case .entranceDesk: "출입구 데스크"
+            case .circulationDesk: "대출 데스크"
+            case .computer: "PC 존"
+            case .nursingRoom: "수유실"
             default: "기타 시설"
             }
             return HomeMapMarker(id: "amenity-\(feature.kind.rawValue)-\(feature.sourceID)", kind: kind,
@@ -143,7 +155,16 @@ nonisolated enum HomeMapMarkerBuilder {
     }
 
     /// IMDF amenity가 표시를 맡은 분류. unit·fixture에 같은 분류가 있어도 핀을 만들지 않는다.
-    private static let amenityOwnedCategories = ["stairs", "stairway", "elevator", "restroom", "toilets"]
+    private static func ownedKind(forCategory category: String) -> HomeMapMarker.Kind? {
+        if category == "stairs" || category == "stairway" { return .stairs }
+        if category == "elevator" { return .elevator }
+        if category.hasPrefix("restroom") || category == "toilets" { return .toilet }
+        if category == "drinkingfountain" { return .waterDispenser }
+        if category == "mothersroom" { return .nursingRoom }
+        if category == "information" { return .entranceDesk }
+        if category == "reception.desk" { return .circulationDesk }
+        return nil
+    }
 
     private static func amenityKind(_ feature: IndoorMapElement) -> HomeMapMarker.Kind? {
         guard feature.kind == .unit || feature.kind == .amenity || feature.kind == .fixture else { return nil }
@@ -152,12 +173,10 @@ nonisolated enum HomeMapMarkerBuilder {
         let compactName = name.filter { !$0.isWhitespace }
         // 같은 장소가 unit 도형과 amenity 포인트에 모두 있어 핀이 두 번 찍혔다.
         // IMDF가 표시용으로 정리한 amenity를 쓰고, unit 쪽은 직원용이 섞여 있어 제외한다.
-        if Self.amenityOwnedCategories.contains(where: { category == $0 || category.hasPrefix($0) }) {
-            guard feature.kind == .amenity else { return nil }
-            if category == "stairs" || category == "stairway" { return .stairs }
-            if category == "elevator" { return .elevator }
-            return .toilet
+        if let owned = Self.ownedKind(forCategory: category) {
+            return feature.kind == .amenity ? owned : nil
         }
+        if compactName.contains("pc존") || compactName.contains("pczone") { return .computer }
         if name.contains("편의점") || name.contains("convenience") || name.contains("gs25") { return .shop }
         if name.contains("프린터") || name.contains("복사기") || name.contains("printer") || name.contains("copier") {
             return .printer
