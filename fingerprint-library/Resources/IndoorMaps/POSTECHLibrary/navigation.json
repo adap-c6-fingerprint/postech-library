@@ -58,7 +58,7 @@
     }
   ],
   "feature_links_file" : "navigation-feature-links.json",
-  "feature_links_sha256" : "08d5efd2f56855e53bdcc2f428742e833f9833b9daf796604ad1eabe9f423a27",
+  "feature_links_sha256" : "4769503803445a17e1d1222d028743f5d4f39dcbb16a8508fa4687430cadad37",
   "kind" : "navigation-only",
   "layout_version" : "layout-1",
   "levels" : [
@@ -136,6 +136,6 @@
     }
   ],
   "routing_file" : "routing-graph.geojson",
-  "routing_sha256" : "4a8fe4d36e49a03da13abf60278367e32e5d6bbe5ba6739ede99f67f04396db7",
+  "routing_sha256" : "1b0da9e6afa49bb1ca47cda773f07ec95304edfad5cf39852fb76de28ff29db4",
   "schema_version" : 1
 }
