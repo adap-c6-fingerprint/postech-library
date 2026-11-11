@@ -58,7 +58,7 @@
     }
   ],
   "feature_links_file" : "navigation-feature-links.json",
-  "feature_links_sha256" : "fcbe16865196186adf3867ebef90dcc12b4e42ea5e206768f33b4a2bcf51774f",
+  "feature_links_sha256" : "08d5efd2f56855e53bdcc2f428742e833f9833b9daf796604ad1eabe9f423a27",
   "kind" : "navigation-only",
   "layout_version" : "layout-1",
   "levels" : [
@@ -93,7 +93,49 @@
       "short_name" : ""
     }
   ],
+  "node_groups" : [
+    {
+      "id" : "216b3cc8-3262-4ee5-98e7-f56335df3657",
+      "name" : "5-4층 연결계단"
+    },
+    {
+      "id" : "49ddec19-3e15-47cc-9dc2-e02f4b7be4e2",
+      "name" : "중앙 엘베 남측"
+    },
+    {
+      "id" : "4c467a2f-6388-40e7-9ba8-16bd26957736",
+      "name" : "2-1층 연결계단"
+    },
+    {
+      "id" : "4e02b010-7d4c-4402-a06a-2061b6d156c7",
+      "name" : "4-3층 연결계단"
+    },
+    {
+      "id" : "6031dc33-97f1-455f-87f5-db845d1ed6bd",
+      "name" : "5-4층 여"
+    },
+    {
+      "id" : "8e4e4372-c956-4956-bbe3-8c0151bd2ff8",
+      "name" : "우측 끝 비상계단"
+    },
+    {
+      "id" : "9dbc2512-2a4e-4e63-a8ad-acd2588d0514",
+      "name" : "3-2층 연결계단"
+    },
+    {
+      "id" : "bbe0cdef-5364-4f9e-b044-7d70339369de",
+      "name" : "좌측 원형 계단"
+    },
+    {
+      "id" : "f2ef4fca-5884-490d-9b59-4f86ed5d655a",
+      "name" : "중앙 엘베 북측"
+    },
+    {
+      "id" : "f5f1ae74-8c47-44a0-a924-78507071fc1b",
+      "name" : "기존 시설 · F5F1AE74"
+    }
+  ],
   "routing_file" : "routing-graph.geojson",
-  "routing_sha256" : "8c810fdda5fe462f6a4361d1b5d9db6f9112f8c43149a743ef522eb5ceea21f7",
+  "routing_sha256" : "4a8fe4d36e49a03da13abf60278367e32e5d6bbe5ba6739ede99f67f04396db7",
   "schema_version" : 1
 }

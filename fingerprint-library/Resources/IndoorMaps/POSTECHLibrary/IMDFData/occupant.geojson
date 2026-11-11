@@ -1,0 +1,47 @@
+{
+  "features" : [
+    {
+      "feature_type" : "occupant",
+      "geometry" : null,
+      "id" : "15db998f-dfe0-4eae-bd03-4687853b8021",
+      "properties" : {
+        "anchor_id" : "9b186821-9589-4b77-8760-8c8ad2d8cd45",
+        "category" : "conveniencestore",
+        "correlation_id" : null,
+        "hours" : "Mo-Su 00:00-24:00",
+        "level_id" : null,
+        "name" : {
+          "en" : "GS25 Convenience Store",
+          "ko" : "GS25 편의점"
+        },
+        "phone" : "+8216445425",
+        "unit_id" : "b849be08-2092-494b-8d07-511dec7b6f8b",
+        "validity" : null,
+        "website" : "https://www.gsretail.com/brand/gs25"
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "occupant",
+      "geometry" : null,
+      "id" : "696f1005-dc14-4b48-a5a1-a10d7d303629",
+      "properties" : {
+        "anchor_id" : "6e2b03c0-9083-4429-a3ba-63509c4d398b",
+        "category" : "cafe",
+        "correlation_id" : null,
+        "hours" : "Mo-Fr 08:00-22:00; Sa-Su 10:00-17:00",
+        "level_id" : null,
+        "name" : {
+          "en" : "Coffee Nearme Library",
+          "ko" : "커미 도서관점 (카페)"
+        },
+        "phone" : "+820542792662",
+        "unit_id" : "8a8c2c71-4834-4f19-af37-351c97b99c25",
+        "validity" : null,
+        "website" : "https://naver.me/5MVkgEnF"
+      },
+      "type" : "Feature"
+    }
+  ],
+  "type" : "FeatureCollection"
+}
