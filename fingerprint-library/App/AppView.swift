@@ -126,6 +126,7 @@ struct AppView: View {
         }
         #endif
         .environment(\.indoorRouteMapStore, store.scope(state: \.indoorMap, action: \.indoorMap))
+        .environment(\.libraryGoHome) { store.send(.goHomeRequested) }
         // 위치 스트림은 탭 전환이 아닌 앱 루트 수명에 맞춘다.
         .task {
             store.send(.appStarted)

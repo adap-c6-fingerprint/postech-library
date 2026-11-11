@@ -35,6 +35,8 @@ struct AppFeature {
 
     enum Action {
         case tabSelected(Tab)
+        /// 깊은 화면에서 홈 지도 탭으로 돌아간다. 띄워 둔 상세·장바구니 화면을 함께 닫는다.
+        case goHomeRequested
         case home(HomeFeature.Action)
         case bookSearch(BookSearchFeature.Action)
         case indoorMap(IndoorMapFeature.Action)
@@ -59,6 +61,17 @@ struct AppFeature {
             switch action {
             case let .tabSelected(tab):
                 state.selectedTab = tab
+                return .none
+
+            case .goHomeRequested:
+                state.home.detail = nil
+                state.home.cart = nil
+                state.home.shelfMap = nil
+                state.bookSearch.detail = nil
+                state.bookSearch.cart = nil
+                state.bookSearch.shelfMap = nil
+                state.isRouteSettingsPresented = false
+                state.selectedTab = .map
                 return .none
 
             case let .bookSearch(.delegate(.recommendationLayoutRequested(isExpanded))):
