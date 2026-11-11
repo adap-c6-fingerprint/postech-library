@@ -4,7 +4,11 @@ import ComposableArchitecture
 struct HomeView: View {
     @Bindable var store: StoreOf<HomeFeature>
     let mapStore: StoreOf<IndoorMapFeature>
-    @State private var recommendationPosition: Int? = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var recommendationPosition = ScrollPosition(idType: Int.self)
+    @State private var popularBooksPosition = ScrollPosition(idType: Int.self)
+    @State private var isAtRecommendationEnd = false
+    @State private var isAtPopularBooksEnd = false
     @State private var homeScrollPosition = ScrollPosition(edge: .top)
     @State private var isHomeAtTop = true
 
@@ -28,7 +32,7 @@ struct HomeView: View {
         var spacing: CGFloat { self == .expanded ? 22 : 16 }
         var horizontalInset: CGFloat { self == .expanded ? 66 : 48 }
         var bottomInset: CGFloat { self == .expanded ? 22 : 14 }
-        var shelfHeight: CGFloat { self == .expanded ? 156 : 110 }
+        static let shelfHeight: CGFloat = 54
         var shelfWidth: CGFloat? { self == .standard ? 707 : nil }
         var carouselHeight: CGFloat { coverHeight + bottomInset }
     }
@@ -49,7 +53,7 @@ struct HomeView: View {
 
     private var homeContent: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 28) {
                 recommendationSection
                 popularBooksSection
             }
@@ -65,7 +69,7 @@ struct HomeView: View {
         .onChange(of: store.showsKulumiCovers) { _, isActive in
             guard isActive else { return }
             homeScrollPosition.scrollTo(edge: .top)
-            recommendationPosition = 0
+            recommendationPosition.scrollTo(edge: .leading)
         }
         .safeAreaBar(edge: .top, spacing: 0) {
             LibraryTabTopBar(
@@ -126,7 +130,7 @@ struct HomeView: View {
     
     private var upcomingCoverURLs: [URL] {
         guard !store.showsKulumiCovers else { return [] }
-        let nextIndex = max(0, (recommendationPosition ?? 0) + 1)
+        let nextIndex = max(0, (recommendationPosition.viewID(type: Int.self) ?? 0) + 1)
         return store.recommendedBooks.dropFirst(nextIndex).prefix(2).compactMap {
             store.recommendationCoverFiles[$0.id] ?? $0.imageURL
         }
@@ -136,11 +140,12 @@ struct HomeView: View {
         let recipient = store.showsKulumiCovers ? "쿠루미에게" : "당신에게"
         let count = store.showsKulumiCovers ? Self.kulumiCoverNames.count : store.recommendationCount
 
-        return VStack(alignment: .leading, spacing: 20) {
+        return VStack(alignment: .leading, spacing: DS.Spacing._20) {
             LibraryTabIntroText(title: "\(recipient)\n추천하는 책 \(count)선.")
             
             if store.showsKulumiCovers || !store.recommendedBooks.isEmpty {
                 recommendationCarousel
+                    .padding(.top, DS.Spacing._24 - DS.Spacing._20)
             } else if store.isLoadingRecommendations || store.recommendationSessionID == nil {
                 VStack(spacing: 8) {
                     ProgressView("추천 도서를 준비하고 있어요")
@@ -151,7 +156,7 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity, minHeight: recommendationLayout.carouselHeight)
             }
 
-            if let message = store.recommendationErrorMessage {
+            if let message = store.recommendationErrorMessage, store.recommendationLoadMode != .carouselRefresh {
                 VStack(alignment: .leading, spacing: 10) {
                     Label(message, systemImage: "exclamationmark.circle")
                     if !store.recommendedBooks.isEmpty {
@@ -164,12 +169,17 @@ struct HomeView: View {
                 }
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 16)
+            } else if !store.showsKulumiCovers, isAtRecommendationEnd,
+                      let message = store.recommendationErrorMessage {
+                refreshError(message) { store.send(.retryRecommendationsButtonTapped) }
             }
         }
     }
 
     private var recommendationCarousel: some View {
-        let books = store.recommendedBooks
+        let books = store.recommendedBooks.prefix(DatasetRecommendation.displayCount)
+        let refreshID = store.recommendationLoadMode == .carouselRefresh ? store.recommendationSessionID : nil
+        let cardStride = recommendationLayout.coverWidth + recommendationLayout.spacing
 
         return ScrollView(.horizontal) {
             LazyHStack(alignment: .bottom, spacing: recommendationLayout.spacing) {
@@ -180,33 +190,67 @@ struct HomeView: View {
                             .id(index)
                     }
                 } else {
-                    ForEach(Array(books.prefix(6).enumerated()), id: \.element.id) { index, book in
-                        recommendationCard(book)
-                            .id(index)
+                    ForEach(books.indices, id: \.self) { index in
+                        let book = books[index]
+                        ZStack {
+                            recommendationCard(book)
+                                .id(book.id)
+                                .transition(.opacity)
+                        }
+                        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: book.id)
+                        .id(index)
                     }
                 }
             }
             .scrollTargetLayout()
+            // 선반 뒤로 번지는 표지 블러가 스크롤 영역 아래에서 잘리지 않게 한다.
+            .padding(.bottom, recommendationLayout.bottomInset)
         }
         .contentMargins(.horizontal, recommendationLayout.horizontalInset, for: .scrollContent)
         .scrollIndicators(.hidden)
         .scrollTargetBehavior(.viewAligned)
-        .scrollPosition(id: $recommendationPosition, anchor: .leading)
-        .padding(.bottom, recommendationLayout.bottomInset)
+        .scrollPosition($recommendationPosition, anchor: .leading)
+        .modifier(HorizontalBookPullToRefresh(
+            isEnabled: !store.showsKulumiCovers && !books.isEmpty,
+            cardStride: cardStride,
+            coverHeight: recommendationLayout.coverHeight,
+            refreshID: refreshID,
+            isRefreshing: store.isRefreshingRecommendations,
+            isAtEnd: $isAtRecommendationEnd,
+            onNearEnd: { store.send(.recommendationNearEnd) },
+            onRefresh: { store.send(.recommendationEndReached) }
+        ))
         .frame(height: recommendationLayout.carouselHeight)
         .overlay(alignment: .bottomLeading) {
             RecommendationShelfView(
-                height: recommendationLayout.shelfHeight,
+                height: RecommendationLayout.shelfHeight,
                 width: recommendationLayout.shelfWidth,
-                fillOpacity: 0.3
+                fillOpacity: 0.5,
+                fixedBoltSize: 17.08,
+                cornerRadius: RecommendationShelfView.recommendationCornerRadius
             )
             .padding(.leading, RecommendationShelfView.leadingInset)
         }
         .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
         .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
             guard !store.showsKulumiCovers else { return }
-            recommendationPosition = 0
+            var transaction = Transaction(animation: nil)
+            transaction.disablesAnimations = true
+            withTransaction(transaction) { recommendationPosition.scrollTo(edge: .leading) }
         }
+    }
+
+    private func refreshError(_ message: String, retry: @escaping () -> Void) -> some View {
+        HStack(spacing: 12) {
+            Text(message)
+                .foregroundStyle(.secondary)
+            Button("다시 시도", action: retry)
+                .fontWeight(.semibold)
+                .buttonStyle(.borderless)
+        }
+        .font(.footnote)
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.horizontal, 16)
     }
 
     @ViewBuilder
@@ -217,7 +261,7 @@ struct HomeView: View {
             width: recommendationLayout.coverWidth,
             height: recommendationLayout.coverHeight,
             cornerRadius: recommendationLayout.coverCornerRadius,
-            shelfHeight: recommendationLayout.shelfHeight,
+            shelfHeight: RecommendationLayout.shelfHeight,
             shelfWidth: recommendationLayout.shelfWidth,
             photoName: photoName
         )
@@ -245,6 +289,10 @@ struct HomeView: View {
                 .padding(.horizontal, 16)
 
                 popularBooksRow
+                if isAtPopularBooksEnd, store.popularBooksRefreshID != nil,
+                   let message = store.popularBooksErrorMessage {
+                    refreshError(message) { store.send(.popularBooksRefreshRequested) }
+                }
             } else {
                 Button { store.send(.profileButtonTapped) } label: {
                     popularBooksHeader("맞춤 정보를 설정해 주세요.")
@@ -302,31 +350,58 @@ struct HomeView: View {
     // 블러 위 안내 문구와 '설정하러 가기' 버튼. 버튼도 마이페이지로 이동한다.
 
     private var popularBooksRow: some View {
-        ScrollView(.horizontal) {
-            LazyHStack(alignment: .top, spacing: 12) {
-                if store.popularBooks.isEmpty {
+        let books = store.popularBooks
+        let spacing: CGFloat = 12
+
+        return ScrollView(.horizontal) {
+            LazyHStack(alignment: .top, spacing: spacing) {
+                if books.isEmpty {
                     ForEach(0..<4, id: \.self) { _ in
                         HomePopularBookCard(book: nil, libraryInfo: nil)
                             .accessibilityLabel("인기 도서 자리")
                     }
                 } else {
-                    ForEach(store.popularBooks) { book in
-                        Button {
-                            store.send(.bookSelected(book))
-                        } label: {
-                            HomePopularBookCard(
-                                book: book,
-                                libraryInfo: store.libraryInfo[book.id]
-                            )
+                    ForEach(books.indices, id: \.self) { index in
+                        let book = books[index]
+                        ZStack {
+                            Button {
+                                store.send(.bookSelected(book))
+                            } label: {
+                                HomePopularBookCard(book: book, libraryInfo: store.libraryInfo[book.id])
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityHint("책 소개 보기")
+                            .id(book.id)
+                            .transition(.opacity)
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityHint("책 소개 보기")
+                        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: book.id)
+                        .id(index)
                     }
                 }
             }
+            .scrollTargetLayout()
         }
-        .contentMargins(.horizontal, 16, for: .scrollContent)
+        .contentMargins(
+            .horizontal, EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: store.canRefreshPopularBooks ? 32 : 16),
+            for: .scrollContent
+        )
         .scrollIndicators(.hidden)
+        .scrollPosition($popularBooksPosition, anchor: .leading)
+        .modifier(HorizontalBookPullToRefresh(
+            isEnabled: store.canRefreshPopularBooks,
+            cardStride: HomePopularBookCard.coverWidth + spacing,
+            coverHeight: HomePopularBookCard.coverHeight,
+            refreshID: store.popularBooksRefreshID,
+            isRefreshing: store.isRefreshingPopularBooks,
+            isAtEnd: $isAtPopularBooksEnd,
+            onNearEnd: { store.send(.popularBooksNearEnd) },
+            onRefresh: { store.send(.popularBooksRefreshRequested) }
+        ))
+        .onChange(of: books.map(\.id)) { _, _ in
+            var transaction = Transaction(animation: nil)
+            transaction.disablesAnimations = true
+            withTransaction(transaction) { popularBooksPosition.scrollTo(edge: .leading) }
+        }
     }
 }
 
@@ -380,7 +455,13 @@ private struct HomeBookCover: View {
                 .background(Color.primary.opacity(0.04))
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             if let shelfHeight {
-                cover.modifier(RecommendationShelfView.CoverBlur(height: shelfHeight, width: shelfWidth))
+                cover.modifier(
+                    RecommendationShelfView.CoverBlur(
+                        height: shelfHeight,
+                        width: shelfWidth,
+                        cornerRadius: RecommendationShelfView.recommendationCornerRadius
+                    )
+                )
             } else {
                 cover
             }
@@ -392,11 +473,12 @@ private struct HomePopularBookCard: View {
     let book: Book?
     let libraryInfo: HomeFeature.LibraryInfoState?
 
-    private let coverWidth: CGFloat = 97
+    static let coverWidth: CGFloat = 97
+    static let coverHeight: CGFloat = 141.94
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HomeBookCover(book: book, width: coverWidth, height: 141.94)
+            HomeBookCover(book: book, width: Self.coverWidth, height: Self.coverHeight)
                 .accessibilityHidden(true)
                 .padding(.bottom, 8)
             
@@ -417,7 +499,7 @@ private struct HomePopularBookCard: View {
             
             libraryInformation
         }
-        .frame(width: coverWidth, alignment: .leading)
+        .frame(width: Self.coverWidth, alignment: .leading)
         .accessibilityElement(children: .combine)
     }
 

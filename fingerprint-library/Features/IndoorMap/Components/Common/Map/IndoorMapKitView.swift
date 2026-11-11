@@ -16,6 +16,10 @@ struct IndoorMapKitView: UIViewRepresentable {
     static let initialZoomScale = 3.0
     /// 단권·여러 권 상세 모두 시트 위에 보이는 영역에서 서가 주변을 같은 배율 기준으로 맞춘다.
     static let bookDetailMinimumSpanMeters = 20.0
+    /// 카메라 중심이 건물 외곽에서 벗어날 수 있는 거리. 시트를 피해 중심을 옮기는 포커스가 경계에 걸리지 않게 둔다.
+    static let cameraBoundaryMarginMeters = 30.0
+    /// 최대 축소 거리를 건물 긴 변의 몇 배로 둘지. 큰 시트가 열린 상태의 층 전체 맞춤도 들어오도록 여유를 둔다.
+    static let maxZoomOutBuildingRatio = 4.0
 
     let map: IndoorMap
     let floor: IndoorMapFloor
@@ -115,7 +119,8 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         /// 기본 지도·줌 허용 범위·제스처와 배치 콜백을 설정한다.
         ///
-        /// 카메라 거리의 최소·최대값은 아래 `setCameraZoomRange`에서 미터 단위로 설정한다.
+        /// 아래 `setCameraZoomRange`는 도면이 오기 전의 기본값이며,
+        /// 도면을 그릴 때 `applyCameraLimits(in:)`가 건물 크기에 맞춘 이동 경계·최대 축소 거리로 바꾼다.
         /// 이 값은 확대·축소의 제한이며,
         /// 최초 줌은 `initialZoomScale`과 `moveCamera(_:in:animated:)`의 도면 맞춤에서 정한다.
         /// 층 전환은 도형만 갱신하고 카메라는 유지한다.
@@ -406,6 +411,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             routeFloorID = nil
             view.removeAnnotations(view.annotations.filter { $0 is FeatureAnnotation })
             overlayFeatures.removeAll()
+            if renderedMap != parent.map { applyCameraLimits(in: view) }
             renderedMap = parent.map
             renderedFloorID = parent.floor.id
             renderedNavigationAppearance = parent.navigationAppearance
@@ -430,6 +436,25 @@ struct IndoorMapKitView: UIViewRepresentable {
                       case .point(let coordinate) = feature.geometry else { return nil }
                 return FeatureAnnotation(feature: feature, coordinate: coordinate.clCoordinate)
             })
+        }
+
+        /// 모든 층을 합친 건물 범위로 이동 경계와 최대 축소 거리를 정한다.
+        /// 층마다 경계가 달라지지 않도록 층 전환에서는 다시 계산하지 않는다.
+        private func applyCameraLimits(in view: MKMapView) {
+            let buildingRect = parent.map.floors
+                .map { MapKitGeometry.mapRect(for: $0.geometry) }
+                .reduce(MKMapRect.null) { $0.union($1) }
+            guard !buildingRect.isNull, buildingRect.width > 0, buildingRect.height > 0 else { return }
+            let pointsPerMeter = MKMapPointsPerMeterAtLatitude(
+                MKMapPoint(x: buildingRect.midX, y: buildingRect.midY).coordinate.latitude)
+            let margin = IndoorMapKitView.cameraBoundaryMarginMeters * pointsPerMeter
+            view.setCameraBoundary(
+                MKMapView.CameraBoundary(mapRect: buildingRect.insetBy(dx: -margin, dy: -margin)), animated: false)
+            let longestMeters = max(buildingRect.width, buildingRect.height) / pointsPerMeter
+            let maxDistance = max(longestMeters * IndoorMapKitView.maxZoomOutBuildingRatio, 100)
+            view.setCameraZoomRange(
+                MKMapView.CameraZoomRange(minCenterCoordinateDistance: 5, maxCenterCoordinateDistance: maxDistance),
+                animated: false)
         }
 
         /// 조회 층의 합성·재생·수동 위치만 별도 마커로 표시한다.
