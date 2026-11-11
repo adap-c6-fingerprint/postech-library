@@ -27,6 +27,8 @@ struct BookRoutePreviewView: View {
     @Environment(\.openURL) private var openURL
     @Dependency(\.bookCartClient) private var bookCartClient
     @State private var isProblemReportPresented = false
+    /// 준비가 끝나지 않은 채 오래 머문 경우. 사용자가 빠져나갈 수 있게 실패 화면으로 바꾼다.
+    @State private var preparingTimedOut = false
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
@@ -195,7 +197,7 @@ struct BookRoutePreviewView: View {
     }
 
     private var showsRouteFailure: Bool {
-        routeError != nil && !hidesRouteErrorWhileResolvingOrigin
+        (routeError != nil || preparingTimedOut) && !hidesRouteErrorWhileResolvingOrigin
     }
 
     @ViewBuilder
@@ -431,6 +433,14 @@ struct BookRoutePreviewView: View {
             // Store 교체 시 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
             guard let destinationStore else { return }
             await destinationStore.send(.task).finish()
+        }
+        .task(id: routeStore.requestID) {
+            // 오류도 경로도 없이 준비 문구만 남는 상태를 끝낸다. 요청이 바뀌면 다시 센다.
+            preparingTimedOut = false
+            guard entryMode == .direct else { return }
+            try? await Task.sleep(for: .seconds(20))
+            guard !Task.isCancelled else { return }
+            preparingTimedOut = true
         }
         .task(id: routeRequest) {
             // 소장·지도 로딩이 끝난 시점의 블루닷에서 안내를 시작한다.
