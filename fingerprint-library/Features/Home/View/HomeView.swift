@@ -356,7 +356,8 @@ struct HomeView: View {
         return ScrollView(.horizontal) {
             LazyHStack(alignment: .top, spacing: spacing) {
                 if books.isEmpty {
-                    ForEach(0..<4, id: \.self) { _ in
+                    // 실제 책의 인덱스와 겹치면 목록을 받은 뒤에도 임시 카드가 남을 수 있다.
+                    ForEach(-4..<0, id: \.self) { _ in
                         HomePopularBookCard(book: nil, libraryInfo: nil)
                             .accessibilityLabel("인기 도서 자리")
                     }
