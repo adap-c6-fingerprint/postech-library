@@ -5,6 +5,7 @@ import Foundation
 nonisolated struct RecentSearchBooksClient: Sendable {
     var load: @Sendable () -> [Book]
     var record: @Sendable (Book) -> Void
+    var remove: @Sendable (Book) -> Void
 
     static let maxCount = 5
     private static let storageKey = "recentSearchBooks"
@@ -19,13 +20,18 @@ nonisolated struct RecentSearchBooksClient: Sendable {
             else { return [] }
             return stored.prefix(maxCount).map(\.book)
         }
+        @Sendable func write(_ books: [Book]) {
+            let stored = books.prefix(maxCount).map(StoredBook.init)
+            guard let data = try? JSONEncoder().encode(stored) else { return }
+            defaults().set(data, forKey: storageKey)
+        }
         return Self(
             load: { read() },
             record: { book in
-                let books = [book] + read().filter { $0.recordKey != book.recordKey && $0.id != book.id }
-                let stored = books.prefix(maxCount).map(StoredBook.init)
-                guard let data = try? JSONEncoder().encode(stored) else { return }
-                defaults().set(data, forKey: storageKey)
+                write([book] + read().filter { $0.recordKey != book.recordKey && $0.id != book.id })
+            },
+            remove: { book in
+                write(read().filter { $0.recordKey != book.recordKey && $0.id != book.id })
             }
         )
     }
@@ -66,7 +72,7 @@ nonisolated struct RecentSearchBooksClient: Sendable {
 
 extension RecentSearchBooksClient: DependencyKey {
     static let liveValue = Self.userDefaults()
-    static let testValue = Self(load: { [] }, record: { _ in })
+    static let testValue = Self(load: { [] }, record: { _ in }, remove: { _ in })
 }
 
 extension DependencyValues {

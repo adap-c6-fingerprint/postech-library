@@ -149,32 +149,40 @@ struct BookSearchView: View {
                 description: Text("검색 결과에서 선택한 책이 여기에 표시돼요.")
             )
         } else {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("최근 항목")
-                        .font(.title3.bold())
-                        .accessibilityAddTraits(.isHeader)
-
-                    LazyVStack(spacing: 0) {
-                        ForEach(store.recentBooks) { book in
-                            RecentSearchBookRow(
-                                book: book,
-                                libraryInfo: store.recentBookInfo[book.id],
-                                onSelect: {
-                                    store.send(.bookSelected(book))
-                                }
-                            )
-                            if book.id != store.recentBooks.last?.id {
-                                Divider().padding(.horizontal, 16)
+            // 네이티브 스와이프 삭제(.swipeActions)는 List 행에서만 동작하므로 List로 구성한다.
+            List {
+                Section {
+                    ForEach(store.recentBooks) { book in
+                        RecentSearchBookRow(
+                            book: book,
+                            libraryInfo: store.recentBookInfo[book.id],
+                            onSelect: {
+                                store.send(.bookSelected(book))
+                            }
+                        )
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in 16 }
+                        .alignmentGuide(.listRowSeparatorTrailing) { $0.width - 16 }
+                        .listRowInsets(EdgeInsets())
+                        // listRowBackground를 직접 지정하면 스와이프 중 셀 모서리 처리가 빠져 각지게 보인다.
+                        // insetGrouped 기본 셀 배경(secondarySystemGroupedBackground)을 그대로 쓴다.
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button("삭제", systemImage: "trash", role: .destructive) {
+                                store.send(.recentBookDeleted(book), animation: .default)
                             }
                         }
                     }
-                    .background(Color(.secondarySystemGroupedBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                } header: {
+                    Text("최근 항목")
+                        .font(.title3.bold())
+                        .foregroundStyle(.primary)
+                        .textCase(nil)
+                        .padding(.bottom, 4)
+                        .accessibilityAddTraits(.isHeader)
                 }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
+                .listSectionMargins(.horizontal, 16)
             }
+            .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
             .task {
                 await store.send(.loadRecentBookInfo).finish()
