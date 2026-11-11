@@ -2,7 +2,7 @@ import Foundation
 
 nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     enum Kind: String, CaseIterable, Sendable {
-        case favorite, stairs, elevator, toilet, shop, printer, studio
+        case favorite, stairs, elevator, toilet, shop, printer, media
         case cafe, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone
         case waterDispenser, entranceDesk, circulationDesk, computer, nursingRoom
         case other
@@ -22,7 +22,7 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
             case .toilet: "annotation_toilet"
             case .shop: "annotation_convenienceStore"
             case .printer: "annotation_printer"
-            case .studio: "annotation_tv"
+            case .media: "annotation_tv"
             case .cafe: "annotation_cafe"
             case .conferenceRoom: "annotation_conferenceRoom"
             case .gamingRoom: "annotation_gamingRoom"
@@ -59,7 +59,7 @@ nonisolated enum HomeMapMarkerBuilder {
             case .toilet: "화장실"
             case .shop: "편의점"
             case .printer: "프린터·복사기"
-            case .studio: "영상 스튜디오"
+            case .media: "영상 자료실"
             case .cafe: "카페 니어미"
             case .conferenceRoom: "미팅룸"
             case .gamingRoom: "게임룸"
@@ -181,18 +181,31 @@ nonisolated enum HomeMapMarkerBuilder {
         if name.contains("프린터") || name.contains("복사기") || name.contains("printer") || name.contains("copier") {
             return .printer
         }
-        if name.contains("영상스튜디오") || name.contains("영상 스튜디오") || name.contains("video studio") { return .studio }
+        // 영상 자료를 보거나 편집하는 공간.
+        if compactName.contains("dvd") || compactName.contains("미디어") || compactName.contains("mediaroom") {
+            return .media
+        }
+        if compactName.contains("fun&play") || compactName.contains("funandplay")
+            || compactName.contains("게임룸") || compactName.contains("gamingroom")
+            || compactName.contains("gameroom") { return .gamingRoom }
+        // 여럿이 모여 쓰는 토의 공간.
+        if compactName.contains("그룹스터디룸") || compactName.contains("groupstudyroom")
+            || compactName.hasPrefix("gsr") || compactName.contains("토의실")
+            || compactName.contains("회의실") || compactName.contains("미팅룸")
+            || compactName.contains("meetingroom") || compactName.contains("conferenceroom")
+            || compactName.contains("콜라보") || compactName.contains("collaboration")
+            || compactName.contains("plora") || compactName.contains("플로라") { return .groupStudyRoom }
+        // 발표·촬영처럼 준비된 자리에서 진행하는 공간.
         if category == "classroom" || compactName.contains("강의실")
-            || compactName.hasPrefix("gsr") || compactName.contains("groupstudyroom")
-            || compactName.contains("무은재회의실") { return .groupStudyRoom }
-        if compactName.contains("미팅룸") || compactName.contains("meetingroom")
-            || compactName.contains("conferenceroom") { return .conferenceRoom }
+            || compactName.contains("컨퍼런스홀") || compactName.contains("conferencehall")
+            || compactName.contains("스튜디오") || compactName.contains("studio") { return .conferenceRoom }
         if compactName.contains("니어미") || compactName.contains("nearme")
             || compactName.contains("카페") || compactName.contains("cafe") { return .cafe }
-        if compactName.contains("게임룸") || compactName.contains("gamingroom")
-            || compactName.contains("gameroom") { return .gamingRoom }
-        if category == "lounge" || compactName.contains("휴게실")
+        if category == "lounge" || compactName.contains("휴게실") || compactName.contains("열람석")
             || compactName.contains("relaxzone") || compactName.contains("릴렉스존") { return .relaxZone }
+        if compactName.contains("welcomecenter") || compactName.contains("웰컴센터") { return .entranceDesk }
+        // 사물함은 지도에 표시하지 않는다.
+        if category == "coinlocker" { return nil }
         // 창고·기계실·사무실 등 비공개 공간과 일반 가구에는 시설 핀을 만들지 않는다.
         if feature.kind == .amenity || ["foodservice", "recreation"].contains(category)
             || (category == "room" && !name.isEmpty) { return .other }
