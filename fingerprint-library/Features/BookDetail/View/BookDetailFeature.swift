@@ -100,6 +100,8 @@ struct BookDetailFeature {
         case destinationRouteLoaded(requestID: Int, BookDetailRoutePresentation)
         case destinationRouteFailed(requestID: Int)
         case loadFavorites
+        // ✅ 여러 권 미리보기의 펼친 상세에서 찜 표시만 갱신한다. 최근 본 책은 기록하지 않는다.
+        case loadFavoriteStatus
         case favoriteButtonTapped
         case addToCartButtonTapped
         case cartNoticeDismissed
@@ -147,6 +149,11 @@ struct BookDetailFeature {
                 state.isFavorite = bookFavoritesClient.load().contains(state.book.recordKey)
                 recentlyViewedBooksClient.record(state.book)
                 // ✅ 상세 화면이 뜰 때 한 번 보내는 액션이므로 여기서 조회 기록을 남긴다.
+                return .none
+
+            case .loadFavoriteStatus:
+                // ✅ 다른 화면에서 바뀐 찜도 반영하도록 저장 목록을 다시 읽는다.
+                state.isFavorite = bookFavoritesClient.load().contains(state.book.recordKey)
                 return .none
 
             case .favoriteButtonTapped:

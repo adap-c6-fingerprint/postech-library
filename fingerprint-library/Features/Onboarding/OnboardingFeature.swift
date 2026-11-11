@@ -11,12 +11,9 @@ struct OnboardingFeature {
     static let maxPreferenceCount = 3
     enum Step: Int, CaseIterable, Equatable {
         case welcome
-        case terms
         case affiliation
         case interests
     }
-    // 시작 → 약관 동의 → 소속 → 선호 분류 순서로 진행한다.
-    
 
     enum Entry: Equatable {
         case firstRun
@@ -119,10 +116,7 @@ struct OnboardingFeature {
         case startButtonTapped
         case welcomeLaterButtonTapped
         // 시작 화면의 "다음에 할래요"
-        case termsAgreeButtonTapped
-        // 약관 동의 화면의 "동의하고 계속하기"
-        case termsDeclineButtonTapped
-        // 약관 동의 화면의 "동의 안하고 종료하기"
+
         case skipButtonTapped
         // 소속 화면의 "다음에 할래요"
         case alert(PresentationAction<Alert>)
@@ -184,19 +178,10 @@ struct OnboardingFeature {
                 if state.entry == .firstRun, state.step == .welcome {
                     analytics.record(.init(.onboardingStarted))
                 }
-                state.step = .terms
-                return .none
-
-            case .welcomeLaterButtonTapped:
-                return .run { _ in exit(0) }
-
-            case .termsAgreeButtonTapped:
-                guard state.step == .terms else { return .none }
                 state.step = .affiliation
                 return .none
 
-            case .termsDeclineButtonTapped:
-                // 피그마 주석 "앱 종료": 약관에 동의하지 않으면 앱을 종료한다. (사용자님 결정, 2026-11-06)
+            case .welcomeLaterButtonTapped:
                 return .run { _ in exit(0) }
                 
             case .skipButtonTapped:

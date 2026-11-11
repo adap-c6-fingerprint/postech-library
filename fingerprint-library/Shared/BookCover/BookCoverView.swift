@@ -7,6 +7,8 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
     let cachedURL: URL?
     let onOpen: (() -> Void)?
     let allowsRetry: Bool
+    /// ✅ 칸이 아니라 비율을 유지한 실제 표지 이미지의 모서리를 둥글게 한다. 0이면 기존과 같다.
+    let imageCornerRadius: CGFloat
     private let coverModifier: CoverModifier
     private let lookupLegacyOriginal: (() async throws -> URL?)?
     private let onCoverRecovered: ((URL) -> Void)?
@@ -19,6 +21,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         cachedURL: URL? = nil,
         onOpen: (() -> Void)? = nil,
         allowsRetry: Bool = true,
+        imageCornerRadius: CGFloat = 0,
         lookupLegacyOriginal: (() async throws -> URL?)? = nil,
         onCoverRecovered: ((URL) -> Void)? = nil,
         coverModifier: CoverModifier
@@ -28,6 +31,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         self.cachedURL = cachedURL
         self.onOpen = onOpen
         self.allowsRetry = allowsRetry
+        self.imageCornerRadius = imageCornerRadius
         self.coverModifier = coverModifier
         self.lookupLegacyOriginal = lookupLegacyOriginal
         self.onCoverRecovered = onCoverRecovered
@@ -65,6 +69,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         switch model.phase(for: url, isbn: isbn, cachedURL: cachedURL) {
         case let .loaded(image):
             Image(uiImage: image).resizable().scaledToFit()
+                .clipShape(.rect(cornerRadius: imageCornerRadius)) // ✅
         case .loading:
             ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
         case .failed:
@@ -95,12 +100,13 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
 extension BookCoverView where CoverModifier == EmptyModifier {
     init(
         url: URL?, isbn: String? = nil, cachedURL: URL? = nil, onOpen: (() -> Void)? = nil,
-        allowsRetry: Bool = true, lookupLegacyOriginal: (() async throws -> URL?)? = nil,
+        allowsRetry: Bool = true, imageCornerRadius: CGFloat = 0, // ✅
+        lookupLegacyOriginal: (() async throws -> URL?)? = nil,
         onCoverRecovered: ((URL) -> Void)? = nil
     ) {
         self.init(
             url: url, isbn: isbn, cachedURL: cachedURL, onOpen: onOpen, allowsRetry: allowsRetry,
-            lookupLegacyOriginal: lookupLegacyOriginal, onCoverRecovered: onCoverRecovered, coverModifier: EmptyModifier()
+            imageCornerRadius: imageCornerRadius, lookupLegacyOriginal: lookupLegacyOriginal, onCoverRecovered: onCoverRecovered, coverModifier: EmptyModifier()
         )
     }
 }

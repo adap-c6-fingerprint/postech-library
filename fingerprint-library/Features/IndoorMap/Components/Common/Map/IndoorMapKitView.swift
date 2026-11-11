@@ -40,6 +40,8 @@ struct IndoorMapKitView: UIViewRepresentable {
     var navigationBearingRadians: Double?
     var navigationDestination: BookNavigationMapDestination?
     var onUserCameraInteraction: () -> Void = {}
+    /// 화면 중앙 좌표와 이동이 멈췄는지를 전달한다. 출발지 직접 설정처럼 중앙 기준으로 좌표를 고르는 화면에서 쓴다.
+    var onCenterChanged: ((IndoorMapCoordinate, Bool) -> Void)?
     var appearance: Appearance = .standard
     var homeMarkers: [HomeMapMarker] = []
     var onSelectFavoriteMarker: (HomeMapMarker) -> Void = { _ in }
@@ -302,11 +304,21 @@ struct IndoorMapKitView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
             layoutShelfLabels(in: mapView)
             updatePositionMarkerBearing(in: mapView)
+            reportCenter(of: mapView, isSettled: true)
         }
 
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
             layoutShelfLabels(in: mapView)
             updatePositionMarkerBearing(in: mapView)
+            reportCenter(of: mapView, isSettled: false)
+        }
+
+        /// 중앙 좌표를 쓰지 않는 화면에서는 콜백이 없어 추가 비용이 생기지 않는다.
+        private func reportCenter(of mapView: MKMapView, isSettled: Bool) {
+            guard let onCenterChanged = parent.onCenterChanged else { return }
+            let center = mapView.centerCoordinate
+            guard CLLocationCoordinate2DIsValid(center) else { return }
+            onCenterChanged(IndoorMapCoordinate(latitude: center.latitude, longitude: center.longitude), isSettled)
         }
 
         func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {

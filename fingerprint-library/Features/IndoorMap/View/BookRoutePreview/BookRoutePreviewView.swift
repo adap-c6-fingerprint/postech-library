@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
+import UIKit
 
 /// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
 struct BookRoutePreviewView: View {
@@ -14,6 +15,13 @@ struct BookRoutePreviewView: View {
     @State private var navigationFlow = BookRoutePreviewNavigationState()
     @State private var routeFloorID: UUID?
     @State private var previewStart: IndoorPosition?
+    /// 사용자가 직접 지정한 출발 위치. 권한이 없거나 실제 위치가 맞지 않을 때 센서 위치 대신 사용한다.
+    @State private var manualStart: IndoorPosition?
+    @State private var isOriginPickerPresented = false
+    /// 위치 권한이 없을 때 보여 주는 알림. 설정 앱의 이 앱 권한 화면으로 보내거나 직접 설정으로 넘긴다.
+    @State private var isPermissionAlertPresented = false
+    /// 직접 설정으로 넘어가는 중. 지도가 준비되면 출발지 설정 화면을 연다.
+    @State private var isPreparingManualOrigin = false
     @Environment(\.indoorRouteMapStore) private var mapStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -32,6 +40,8 @@ struct BookRoutePreviewView: View {
     
     private let accent = Color(red: 0.88, green: 0.95, blue: 0.19)
     private var currentStart: IndoorPosition? {
+        // 직접 지정한 출발 위치는 권한·정확도와 무관하게 우선한다.
+        if let manualStart { return manualStart }
         guard let mapStore, let position = mapStore.currentPosition,
               position.source == .manual || mapStore.authorization.isAuthorized,
               position.isRecent(at: Date()) else { return nil }
@@ -154,23 +164,107 @@ struct BookRoutePreviewView: View {
         }
     }
 
+    /// 준비 중에도 목적지 지도를 깔아 둔다. 권한 알림·출발지 직접 설정·길안내로 이어질 때 화면이 끊기지 않는다.
     private var directContent: some View {
-        VStack(spacing: 20) {
-            if let routeError {
-                ContentUnavailableView("길안내를 시작할 수 없어요", systemImage: "location.slash",
-                    description: Text(routeError))
-                Button("다시 시도") { retryDirectNavigation() }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(isLoadingRoute)
+        ZStack {
+            directMapBackdrop
+            directHeader
+            if showsRouteFailure {
+                directFailure
             } else {
-                ProgressView("길안내를 준비하고 있어요")
+                directStatus
             }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityIdentifier("book-navigation-preparing")
+    }
+
+    /// 출발 위치를 정하는 동안에는 경로 오류를 띄우지 않는다. 위치가 없어서 나는 오류라 사용자가 할 일이 아니다.
+    private var hidesRouteErrorWhileResolvingOrigin: Bool {
+        if isPermissionAlertPresented || isOriginPickerPresented || isPreparingManualOrigin { return true }
+        // 직접 지정한 출발점으로 계산하다 난 오류는 사용자가 고칠 수 있으므로 보여 준다.
+        if manualStart != nil { return false }
+        // 지도 Store를 못 받은 경우에는 권한을 알 수 없다. 숨기면 빠져나갈 수 없으므로 오류를 그대로 보여 준다.
+        guard let mapStore else { return false }
+        return !mapStore.authorization.isAuthorized
+    }
+
+    private var showsRouteFailure: Bool {
+        routeError != nil && !hidesRouteErrorWhileResolvingOrigin
+    }
+
+    @ViewBuilder
+    private var directMapBackdrop: some View {
+        if let destinationStore {
+            IndoorMapView(
+                store: destinationStore.scope(state: \.map, action: \.map),
+                showsDestinationCard: false,
+                highlightedFeatureIDs: destinationStore.highlightedFeatureIDs,
+                showsCurrentLocationButton: false,
+                showsFloorPicker: false,
+                extendsUnderBottomSafeArea: true
+            )
+            .ignoresSafeArea()
+            .accessibilityHidden(true)
+            .accessibilityIdentifier("book-navigation-preparing-map")
+        }
+    }
+
+    /// 출발지 설정 화면과 같은 제목을 유지해 어떤 책을 찾는 중인지 놓치지 않게 한다.
+    private var directHeader: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(originPickerTitle)
+                .typography(.title1)
+                .lineLimit(2)
+            if let subtitle = originPickerSubtitle {
+                Text(subtitle)
+                    .typography(.title1)
+                    .foregroundStyle(DS.ColorToken.neutralTertiary)
+            }
+            Spacer(minLength: 0)
+        }
+        .foregroundStyle(DS.ColorToken.neutralPrimary)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
+        .background(alignment: .top) {
+            LibraryTopBarBackground()
+                .ignoresSafeArea(.container, edges: [.top, .horizontal])
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+    }
+
+    private var directStatus: some View {
+        VStack(spacing: 10) {
+            Text(isPreparingManualOrigin ? "서가까지\n수동안내를 시작합니다" : "서가까지\n길안내를 준비합니다")
+                .typography(.body1)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(DS.ColorToken.neutralPrimary)
+            ProgressView()
+                .tint(DS.ColorToken.neutralPrimary)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("book-navigation-preparing-status")
+    }
+
+    private var directFailure: some View {
+        VStack(spacing: 20) {
+            ContentUnavailableView("길안내를 시작할 수 없어요", systemImage: "location.slash",
+                description: Text(routeError ?? ""))
+            Button("다시 시도") { retryDirectNavigation() }
+                .buttonStyle(.borderedProminent)
+                .disabled(isLoadingRoute)
+            Button("출발 위치 직접 설정") { presentOriginPicker() }
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("book-navigation-set-origin")
             Button("돌아가기") { dismiss() }
                 .buttonStyle(.bordered)
         }
         .padding(24)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .accessibilityIdentifier("book-navigation-preparing")
+        .frame(maxWidth: 360)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+        .padding(24)
     }
 
     private func retryDirectNavigation() {
@@ -193,7 +287,7 @@ struct BookRoutePreviewView: View {
                     shelfStore: destinationStore,
                     session: readySession,
                     isLoadingRoute: isLoadingRoute,
-                    routeError: routeError,
+                    routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError,
                     canStart: readySession != nil && currentStart != nil && !isLoadingRoute && routeError == nil,
                     onBack: { dismiss() },
                     onStart: { _ in
@@ -208,6 +302,7 @@ struct BookRoutePreviewView: View {
                             previewStart = currentStart
                         }
                     },
+                    onSetOriginManually: { presentOriginPicker() },
                     homeAnnotations: mapStore?.homeAnnotations
                 )
             } else {
@@ -220,6 +315,35 @@ struct BookRoutePreviewView: View {
             BookNavigationView(session: session, analyticsIsTest: destination.isTestMode) { _ in
                 navigationFlow.navigationEnded()
             }
+        }
+        .fullScreenCover(isPresented: $isOriginPickerPresented, onDismiss: {
+            isPreparingManualOrigin = false
+        }) {
+            originPicker
+        }
+        .overlay {
+            if isPermissionAlertPresented {
+                LibraryPermissionAlert(
+                    title: "필수 권한에 동의해주세요.",
+                    message: "위치 권한을 허용해주세요. 위치를 통해 정확한 책의 위치를 안내합니다.",
+                    onCancel: {
+                        isPermissionAlertPresented = false
+                        isPreparingManualOrigin = true
+                    },
+                    onConfirm: {
+                        isPermissionAlertPresented = false
+                        openLocationSettings()
+                    })
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: isPermissionAlertPresented)
+        .onChange(of: isPreparingManualOrigin ? routeMap != nil : false) { _, isMapReady in
+            // 지도가 준비된 뒤에 출발지 설정 화면을 연다. 그동안은 수동 안내 준비 문구를 보여 준다.
+            if isMapReady { presentOriginPicker() }
+        }
+        .onChange(of: isPreparingManualOrigin) { _, isPreparing in
+            if isPreparing, routeMap != nil { presentOriginPicker() }
         }
         .background(Color(uiColor: .systemBackground))
         .preferredColorScheme(.dark)
@@ -237,6 +361,14 @@ struct BookRoutePreviewView: View {
         }
         .accessibilityIdentifier("book-route-preview")
         .analyticsScreen(.routePreview)
+        .onChange(of: mapStore?.authorization, initial: true) { _, _ in
+            resolveStartAuthorization()
+        }
+        .onAppear { resolveStartAuthorization() }
+        .onChange(of: routeError) { _, _ in
+            // 위치가 없어 경로가 실패했는데 아무것도 안내하지 않으면 준비 문구만 남는다. 그 상태를 만들지 않는다.
+            resolveStartAuthorization()
+        }
         .onChange(of: currentStart, initial: true) { _, position in
             // 처음 위치·층을 받으면 계산한다. 완료·실패 후 위치 수신마다 재계산하지 않는다.
             if previewSession == nil, !isLoadingRoute,
@@ -275,6 +407,85 @@ struct BookRoutePreviewView: View {
             routeStore.send(.disappeared)
             destinationStore?.send(.map(.disappeared))
         }
+    }
+
+    /// 위치 권한이 없으면 설정 앱으로 보내거나 출발 위치를 직접 지정하게 하는 알림을 띄운다.
+    ///
+    /// iOS는 한 번 거부한 뒤에는 시스템 권한 창을 다시 띄우지 않는다. 그래서 권한 요청 대신
+    /// 이 앱의 설정 화면으로 보내는 버튼을 둔다.
+    private func resolveStartAuthorization() {
+        guard let mapStore, manualStart == nil, !isOriginPickerPresented,
+              !isPermissionAlertPresented, navigationFlow.session == nil else { return }
+        guard !mapStore.authorization.isAuthorized else { return }
+        isPermissionAlertPresented = true
+    }
+
+    private func presentOriginPicker() {
+        isPreparingManualOrigin = false
+        isOriginPickerPresented = true
+    }
+
+    /// 설정 앱에서 이 앱의 권한 화면을 연다. 위치 접근을 여기서 바꿀 수 있다.
+    private func openLocationSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
+    }
+
+    /// 출발지 설정과 안내 준비가 쓰는 지도. 공용 지도 Store가 없거나 비어 있으면 이 화면이 불러온 지도를 쓴다.
+    private var routeMap: IndoorMap? {
+        mapStore?.map ?? destinationStore?.state.map.map
+    }
+
+    @ViewBuilder
+    private var originPicker: some View {
+        if let map = routeMap {
+            BookRouteOriginPickerView(
+                map: map, title: originPickerTitle, subtitle: originPickerSubtitle,
+                initialFloorID: originPickerFloorID,
+                onCancel: {
+                    isOriginPickerPresented = false
+                    dismiss()
+                },
+                onConfirm: { position in
+                    manualStart = position
+                    isOriginPickerPresented = false
+                    // routeRequest가 바뀌어 지정한 출발 위치로 경로를 다시 계산한다.
+                    previewStart = position
+                })
+        } else {
+            VStack(spacing: 20) {
+                ContentUnavailableView("지도를 불러오지 못했어요", systemImage: "map",
+                    description: Text("실내지도를 불러온 뒤에 출발 위치를 지정할 수 있어요."))
+                Button("돌아가기") {
+                    isOriginPickerPresented = false
+                    dismiss()
+                }
+                .buttonStyle(.bordered)
+            }
+            .padding(24)
+            .preferredColorScheme(.dark)
+        }
+    }
+
+    private var originPickerTitle: String {
+        orderedBooks.first.map { BookText.plainText($0.title) } ?? "도서 길안내"
+    }
+
+    /// 시안의 "4층 337번 서가"처럼 목적지 서가를 알려 준다. 서가를 아직 모르면 줄을 숨긴다.
+    private var originPickerSubtitle: String? {
+        guard let book = orderedBooks.first,
+              let shelf = destinationStore?.state.shelves(for: book.id).first else { return nil }
+        let floorName = routeMap?.floors.first { $0.id == shelf.floorID }?.name
+        return [floorName, "\(shelf.realNumber)번 서가"].compactMap { $0 }.joined(separator: " ")
+    }
+
+    /// 목적지 서가와 같은 층에서 시작해 사용자가 층을 덜 바꾸게 한다.
+    private var originPickerFloorID: UUID? {
+        guard let book = orderedBooks.first,
+              let shelf = destinationStore?.state.shelves(for: book.id).first else {
+            return mapStore?.selectedFloorID
+        }
+        return shelf.floorID
     }
 
     private var routeMetrics: some View {
@@ -345,6 +556,8 @@ struct BookRoutePreviewView: View {
                     .font(.caption)
                 Button("현재 위치 확인") { mapStore?.send(.currentLocationTapped) }
                     .disabled(mapStore == nil)
+                Button("출발 위치 직접 설정") { presentOriginPicker() }
+                    .accessibilityIdentifier("preview-set-origin")
             }
         }
     }
