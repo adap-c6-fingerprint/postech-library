@@ -3,11 +3,14 @@ import SwiftUI
 /// 나사와 아크릴판을 함께 배치하는 추천 캐러셀의 고정 선반.
 struct RecommendationShelfView: View {
     static let leadingInset: CGFloat = 16
+    static let recommendationCornerRadius: CGFloat = 10
     static let carouselSpace = "recommendationCarousel"
 
     var height: CGFloat = 106
     var width: CGFloat? = nil
     var fillOpacity: Double = 0.5
+    var fixedBoltSize: CGFloat? = nil
+    var cornerRadius: CGFloat? = nil
 
     // Figma 2963:9772. 화면에 배치한 높이를 기준으로 장식의 비율을 유지한다.
     private enum Design {
@@ -29,7 +32,7 @@ struct RecommendationShelfView: View {
             let asset = Self.assetFrame(for: plate)
 
             ZStack {
-                PlateOutline()
+                PlateOutline(cornerRadius: cornerRadius)
                     .fill(Color.limeDark.opacity(fillOpacity))
 
                 // PNG의 채움과 라임색 가장자리를 가리고 바깥 그림자를 남긴다.
@@ -61,12 +64,15 @@ struct RecommendationShelfView: View {
                         .padding(.vertical, -(asset.height - height))
                 }
                 .overlay(alignment: .topLeading) {
+                    let boltSize = fixedBoltSize ?? Design.boltSize * scale
+                    let boltTopInset = fixedBoltSize == nil ? Design.boltY * scale : (height - boltSize) / 2
+
                     Image("Bolt")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: Design.boltSize * scale, height: Design.boltSize * scale)
+                        .frame(width: boltSize, height: boltSize)
                         .padding(.leading, Design.boltX * scale)
-                        .padding(.top, Design.boltY * scale)
+                        .padding(.top, boltTopInset)
                 }
         }
         .frame(height: height)
@@ -90,8 +96,9 @@ struct RecommendationShelfView: View {
     struct CoverBlur: ViewModifier {
         let height: CGFloat
         var width: CGFloat? = nil
+        var cornerRadius: CGFloat? = nil
         @Environment(\.layoutDirection) private var layoutDirection
-        private let blurRadius: CGFloat = 2
+        private let blurRadius: CGFloat = 8
 
         func body(content: Content) -> some View {
             GeometryReader { geometry in
@@ -109,7 +116,8 @@ struct RecommendationShelfView: View {
                         width: width ?? availableWidth,
                         height: height
                     )
-                    let outline = PlateOutline().path(in: RecommendationShelfView.assetFrame(for: plate))
+                    let outline = PlateOutline(cornerRadius: cornerRadius)
+                        .path(in: RecommendationShelfView.assetFrame(for: plate))
                     let coverBounds = Path(CGRect(origin: .zero, size: geometry.size))
                     let blurPadding = blurRadius * 3
 
@@ -135,6 +143,7 @@ struct RecommendationShelfView: View {
     /// PNG의 바깥 여백과 그림자를 제외한 판 본체의 외곽.
     private struct PlateOutline: Shape {
         var inset: CGFloat = 0
+        var cornerRadius: CGFloat? = nil
 
         func path(in rect: CGRect) -> Path {
             let plateBounds = CGRect(
@@ -143,15 +152,23 @@ struct RecommendationShelfView: View {
                 width: Design.width,
                 height: Design.height
             ).insetBy(dx: inset, dy: inset)
-            let shape = UnevenRoundedRectangle(
-                topLeadingRadius: max(0, Design.cornerRadius - inset),
-                topTrailingRadius: max(0, Design.cornerRadius - inset),
-                style: .circular
-            )
             let transform = CGAffineTransform(
                 a: rect.width / Design.assetSize.width, b: 0,
                 c: 0, d: rect.height / Design.assetSize.height,
                 tx: rect.minX, ty: rect.minY
+            )
+            if let cornerRadius {
+                return UnevenRoundedRectangle(
+                    topLeadingRadius: cornerRadius,
+                    bottomLeadingRadius: cornerRadius,
+                    style: .circular
+                ).path(in: plateBounds.applying(transform))
+            }
+
+            let shape = UnevenRoundedRectangle(
+                topLeadingRadius: max(0, Design.cornerRadius - inset),
+                topTrailingRadius: max(0, Design.cornerRadius - inset),
+                style: .circular
             )
             return shape.path(in: plateBounds).applying(transform)
         }

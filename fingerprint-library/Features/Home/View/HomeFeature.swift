@@ -39,7 +39,8 @@ struct HomeFeature {
         @Presents var myPage: MyPageFeature.State?
 
         var recommendationCount: Int {
-            recommendedBooks.isEmpty ? 6 : min(recommendedBooks.count, 6)
+            let count = DatasetRecommendation.displayCount
+            return recommendedBooks.isEmpty ? count : min(recommendedBooks.count, count)
         }
 
         var booksForLibraryInfo: [Book] {
@@ -51,10 +52,45 @@ struct HomeFeature {
         var recommendationErrorMessage: String? = nil
         var recommendationCoverFiles: [Book.ID: URL] = [:]
         var popularBooksErrorMessage: String? = nil
+        var popularBooksPreparation: CarouselPreparation = .idle
+        var popularBooksRefreshID: UUID?
+        var isRefreshingPopularBooks = false
+        var canRefreshPopularBooks: Bool {
+            isProfileComplete && !popularBooks.isEmpty && userProfile?.affiliationKey == displayedProfile?.affiliationKey
+        }
         var recommendationSessionID: UUID?
         var isLoadingRecommendations = false
         var isPreparingRecommendations = false
+        var recommendationLoadMode: RecommendationLoadMode = .restore
+        var carouselPreparation: CarouselPreparation = .idle
+        var isRefreshingRecommendations: Bool {
+            isPreparingRecommendations && recommendationLoadMode == .carouselRefresh
+        }
         var nextRecommendationsSavedAt: Date?
+    }
+
+    enum RecommendationLoadMode {
+        case restore
+        case profileChanged
+        case carouselRefresh
+    }
+
+    enum CarouselPreparation: Equatable {
+        case idle
+        case loading(UUID)
+        case finished(Result<[Book], CarouselFailure>)
+    }
+
+    enum CarouselFailure: Error, Equatable {
+        case insufficientBooks
+        case preparationFailed
+
+        var message: String {
+            switch self {
+            case .insufficientBooks: "새 추천 6권을 찾지 못했어요."
+            case .preparationFailed: "새 추천을 불러오지 못했어요."
+            }
+        }
     }
 
     enum LibraryInfoState: Equatable {
@@ -73,10 +109,16 @@ struct HomeFeature {
     enum Action {
         case task
         case recommendationSessionStarted // 당신을 위한 추천 불러오기 시작
+        case recommendationNearEnd
+        case recommendationEndReached
+        case carouselPreparationFinished(UUID, Result<[Book], CarouselFailure>)
         case retryRecommendationsButtonTapped // 추천 불러오기 실패시 재시도
         case recommendationsRestored(UUID, CachedRecommendations?)
         case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
+        case popularBooksNearEnd
+        case popularBooksRefreshRequested
+        case popularBooksPreparationFinished(UUID, Result<[Book], CarouselFailure>)
         case departmentRecommendationsRequested
         case departmentRecommendationsLoaded([Book])
         case departmentRecommendationsFailed(String)
@@ -121,9 +163,11 @@ struct HomeFeature {
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case recommendationSession
+        case carouselPreparation
         case departmentRecommendations
         case libraryInfo
         case popularBooks
+        case popularBooksPreparation
     }
 
     var body: some Reducer<State, Action> {
@@ -151,37 +195,71 @@ struct HomeFeature {
                 // 예전 조회를 취소한 뒤에 새 조회를 시작한다.
 
             case .recommendationSessionStarted:
-                return startRecommendationSession(state: &state, restoresCache: true)
+                return startRecommendationSession(state: &state, mode: .restore)
+
+            case .recommendationNearEnd:
+                guard !state.showsKulumiCovers, !state.recommendedBooks.isEmpty,
+                      state.carouselPreparation == .idle else { return .none }
+                return prepareCarouselReplacement(state: &state)
+
+            case .recommendationEndReached:
+                guard !state.showsKulumiCovers, !state.recommendedBooks.isEmpty,
+                      !state.isRefreshingRecommendations else { return .none }
+                let sessionID = beginRecommendationSession(state: &state, mode: .carouselRefresh)
+                if case let .finished(result) = state.carouselPreparation {
+                    return applyCarouselReplacement(
+                        result, sessionID: sessionID, retaining: displayedRecommendationCovers(state)
+                    )
+                }
+                let prepare = state.carouselPreparation == .idle ? prepareCarouselReplacement(state: &state) : .none
+                return .merge(.cancel(id: CancelID.recommendationSession), prepare)
+
+            case let .carouselPreparationFinished(id, result):
+                guard state.carouselPreparation == .loading(id) else { return .none }
+                state.carouselPreparation = .finished(result)
+                guard state.isRefreshingRecommendations, let sessionID = state.recommendationSessionID else { return .none }
+                return applyCarouselReplacement(
+                    result, sessionID: sessionID, retaining: displayedRecommendationCovers(state)
+                )
 
             case .retryRecommendationsButtonTapped:
                 guard !state.isPreparingRecommendations else { return .none }
-                return .send(.recommendationSessionStarted)
+                let mode = state.recommendationLoadMode
+                return .send(mode == .carouselRefresh ? .recommendationEndReached : .recommendationSessionStarted)
 
             case let .recommendationsRestored(sessionID, cached):
                 guard state.recommendationSessionID == sessionID else { return .none }
                 if let cached {
+                    let booksChanged = state.recommendedBooks.map(\.id) != cached.books.map(\.id)
                     analytics.record(.init(.recommendationLoadCompleted, [
                         .kind: .text("restored"), .bookCount: .integer(cached.books.count)
                     ]))
                     state.recommendedBooks = cached.books
                     state.recommendationCoverFiles = cached.coverFiles
                     state.isLoadingRecommendations = false
+                    if booksChanged {
+                        state.carouselPreparation = .idle
+                        return .cancel(id: CancelID.carouselPreparation)
+                    }
                 }
                 return .none
 
             case let .recommendationsLoaded(sessionID, prepared):
                 guard state.recommendationSessionID == sessionID else { return .none }
+                let isCarouselRefresh = state.recommendationLoadMode == .carouselRefresh
                 analytics.record(.init(.recommendationLoadCompleted, [
-                    .kind: .text("prepared_for_next_visit"), .bookCount: .integer(prepared.books.count)
+                    .kind: .text(isCarouselRefresh ? "carousel_refresh" : "prepared_for_next_visit"),
+                    .bookCount: .integer(prepared.books.count)
                 ]))
                 state.isLoadingRecommendations = false
                 state.isPreparingRecommendations = false
                 state.nextRecommendationsSavedAt = prepared.savedAt
-                // 이번 접속의 목록 A는 유지한다. 완성된 B는 다음 접속에서 복원한다.
-                if state.recommendedBooks.isEmpty {
+                // 접속 시 미리 준비한 추천은 다음 접속에 쓰고, 스크롤로 요청한 추천은 바로 교체한다.
+                if isCarouselRefresh || state.recommendedBooks.isEmpty {
                     state.recommendedBooks = prepared.books
                     state.recommendationCoverFiles = prepared.coverFiles
                 }
+                if isCarouselRefresh { state.carouselPreparation = .idle }
                 state.recommendationErrorMessage = nil
                 return .none
 
@@ -190,6 +268,7 @@ struct HomeFeature {
                 analytics.record(.init(.recommendationFailed, [.errorCode: .text("preparation_failed")]))
                 state.isLoadingRecommendations = false
                 state.isPreparingRecommendations = false
+                if state.recommendationLoadMode == .carouselRefresh { state.carouselPreparation = .idle }
                 state.recommendationErrorMessage = message
                 return .none
 
@@ -202,6 +281,36 @@ struct HomeFeature {
 
             case let .popularBooksFailed(message):
                 state.popularBooksErrorMessage = message
+                return .none
+
+            case .popularBooksNearEnd:
+                guard state.canRefreshPopularBooks, state.popularBooksPreparation == .idle else { return .none }
+                return preparePopularBooksReplacement(state: &state)
+
+            case .popularBooksRefreshRequested:
+                guard state.canRefreshPopularBooks, !state.isRefreshingPopularBooks else { return .none }
+                state.popularBooksRefreshID = uuid()
+                state.popularBooksErrorMessage = nil
+                if case let .finished(result) = state.popularBooksPreparation {
+                    applyPopularBooksReplacement(result, state: &state)
+                    return .none
+                }
+                state.isRefreshingPopularBooks = true
+                return state.popularBooksPreparation == .idle ? preparePopularBooksReplacement(state: &state) : .none
+
+            case let .popularBooksPreparationFinished(id, result):
+                guard state.popularBooksPreparation == .loading(id) else { return .none }
+                guard state.userProfile?.affiliationKey == state.displayedProfile?.affiliationKey else {
+                    state.popularBooksPreparation = .idle
+                    state.popularBooksRefreshID = nil
+                    state.isRefreshingPopularBooks = false
+                    return .none
+                }
+                if state.isRefreshingPopularBooks {
+                    applyPopularBooksReplacement(result, state: &state)
+                } else {
+                    state.popularBooksPreparation = .finished(result)
+                }
                 return .none
 
             case .departmentRecommendationsRequested:
@@ -402,6 +511,9 @@ struct HomeFeature {
         if current.affiliationKey != previous?.affiliationKey {
             state.popularBooks = []
             state.popularBooksErrorMessage = nil
+            state.popularBooksPreparation = .idle
+            state.popularBooksRefreshID = nil
+            state.isRefreshingPopularBooks = false
             state.departmentRecommendations = .loading
             if !state.libraryInfoInFlight.isEmpty || !state.libraryInfoPending.isEmpty {
                 cancels.append(cancelLibraryInfo(state: &state))
@@ -409,6 +521,7 @@ struct HomeFeature {
             state.libraryInfo = [:]
             state.libraryInfoUpdatedAt = [:]
             cancels.append(.cancel(id: CancelID.popularBooks))
+            cancels.append(.cancel(id: CancelID.popularBooksPreparation))
             cancels.append(.cancel(id: CancelID.departmentRecommendations))
             // 예전 소속으로 받던 조회가 늦게 도착해 새 목록을 덮지 않게 취소한다.
             // 빈 목록은 각 화면의 조회(.task, departmentRecommendationsRequested)가 새 소속으로 다시 채운다.
@@ -418,23 +531,36 @@ struct HomeFeature {
         // 건너뛴 뒤 마이페이지에서 프로필을 처음 만든 경우(nil → 프로필)도 여기로 와서, 하드데이터 전체로 고른 추천을 새 관심 분야로 다시 받는다.
             state.recommendedBooks = []
             state.recommendationCoverFiles = [:]
-            reload = startRecommendationSession(state: &state, restoresCache: false)
+            reload = startRecommendationSession(state: &state, mode: .profileChanged)
             // 저장해 둔 추천은 예전 관심 분야로 만든 것이라 꺼내지 않고 새로 받는다.
             // 진행 중이던 예전 세션은 같은 취소 ID(cancelInFlight)로 자동 취소된다.
         }
         return (.merge(cancels), reload)
     }
 
-    private func startRecommendationSession(state: inout State, restoresCache: Bool) -> Effect<Action> {
+    private func startRecommendationSession(state: inout State, mode: RecommendationLoadMode) -> Effect<Action> {
+        state.carouselPreparation = .idle
+        let sessionID = beginRecommendationSession(state: &state, mode: mode)
+        return .merge(
+            .cancel(id: CancelID.carouselPreparation),
+            loadRecommendations(sessionID: sessionID, retaining: displayedRecommendationCovers(state), restoresCache: mode == .restore)
+        )
+    }
+
+    private func beginRecommendationSession(state: inout State, mode: RecommendationLoadMode) -> UUID {
         let sessionID = uuid()
         state.recommendationSessionID = sessionID
-        state.isLoadingRecommendations = true
+        state.recommendationLoadMode = mode
+        state.isLoadingRecommendations = mode != .carouselRefresh
         state.isPreparingRecommendations = true
         state.nextRecommendationsSavedAt = nil
         state.recommendationErrorMessage = nil
-        let displayedCovers = Array(state.recommendationCoverFiles.values)
+        return sessionID
+    }
+
+    private func displayedRecommendationCovers(_ state: State) -> [URL] {
+        Array(state.recommendationCoverFiles.values)
             + [state.detail?.cachedCoverURL].compactMap { $0 }
-        return loadRecommendations(sessionID: sessionID, retaining: displayedCovers, restoresCache: restoresCache)
     }
 
     private func loadRecommendations(sessionID: UUID, retaining covers: [URL], restoresCache: Bool) -> Effect<Action> {
@@ -447,7 +573,9 @@ struct HomeFeature {
                     await send(.recommendationsRestored(sessionID, cached))
                     // ③ 그대로.
                 }
-                let prepared = try await homeRecommendationForYouClient.refresh(6)
+                let prepared = try await homeRecommendationForYouClient.refresh(
+                    DatasetRecommendation.displayCount, covers
+                )
                 // ④⑤⑥ 새로 받기 + 0권 검사 + 저장.
                 try Task.checkCancellation()
                 await send(.recommendationsLoaded(sessionID, prepared))
@@ -459,6 +587,50 @@ struct HomeFeature {
             } catch {
                 guard !Task.isCancelled else { return }
                 await send(.recommendationsFailed(sessionID, "추천 도서를 준비하지 못했어요. 다시 시도해 주세요."))
+            }
+        }
+        .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
+    }
+
+    private func prepareCarouselReplacement(state: inout State) -> Effect<Action> {
+        let id = uuid()
+        let displayedBooks = state.recommendedBooks
+        state.carouselPreparation = .loading(id)
+        return .run { [homeRecommendationForYouClient, bookCoverClient] send in
+            do {
+                let books = try await homeRecommendationForYouClient.prepareReplacement(
+                    DatasetRecommendation.displayCount, displayedBooks
+                )
+                try Task.checkCancellation()
+                await send(.carouselPreparationFinished(id, .success(books)))
+                await bookCoverClient.prefetch(books.prefix(2).compactMap(\.imageURL))
+            } catch is CancellationError {
+                return
+            } catch HomeRecommendationForYouError.insufficientReplacements {
+                await send(.carouselPreparationFinished(id, .failure(.insufficientBooks)))
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.carouselPreparationFinished(id, .failure(.preparationFailed)))
+            }
+        }
+        .cancellable(id: CancelID.carouselPreparation, cancelInFlight: true)
+    }
+
+    private func applyCarouselReplacement(
+        _ result: Result<[Book], CarouselFailure>, sessionID: UUID, retaining covers: [URL]
+    ) -> Effect<Action> {
+        .run { [homeRecommendationForYouClient] send in
+            do {
+                let prepared = try await homeRecommendationForYouClient.saveReplacement(result.get(), covers)
+                try Task.checkCancellation()
+                await send(.recommendationsLoaded(sessionID, prepared))
+            } catch is CancellationError {
+                return
+            } catch let failure as CarouselFailure {
+                await send(.recommendationsFailed(sessionID, failure.message))
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.recommendationsFailed(sessionID, CarouselFailure.preparationFailed.message))
             }
         }
         .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
@@ -480,5 +652,40 @@ struct HomeFeature {
             }
         }
         .cancellable(id: CancelID.popularBooks, cancelInFlight: true)
+    }
+
+    private func preparePopularBooksReplacement(state: inout State) -> Effect<Action> {
+        let id = uuid()
+        let affiliationKey = state.displayedProfile?.affiliationKey ?? []
+        let excludedKeys = Set(state.popularBooks.flatMap { DatasetRecommendation.identityKeys(of: $0) })
+        state.popularBooksPreparation = .loading(id)
+        return .run { [departmentPopularBooksClient, bookCoverClient] send in
+            do {
+                let pool = try await departmentPopularBooksClient.fetchAll(affiliationKey)
+                let books = DatasetRecommendation.assemble(
+                    candidatesPerSource: [], fallback: pool.shuffled(), excluding: excludedKeys
+                )
+                try Task.checkCancellation()
+                guard books.count == DatasetRecommendation.displayCount else {
+                    await send(.popularBooksPreparationFinished(id, .failure(.insufficientBooks)))
+                    return
+                }
+                await send(.popularBooksPreparationFinished(id, .success(books)))
+                await bookCoverClient.prefetch(books.prefix(2).compactMap(\.imageURL))
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.popularBooksPreparationFinished(id, .failure(.preparationFailed)))
+            }
+        }
+        .cancellable(id: CancelID.popularBooksPreparation, cancelInFlight: true)
+    }
+
+    private func applyPopularBooksReplacement(_ result: Result<[Book], CarouselFailure>, state: inout State) {
+        state.popularBooksPreparation = .idle
+        state.isRefreshingPopularBooks = false
+        switch result {
+        case let .success(books): state.popularBooks = books
+        case let .failure(error): state.popularBooksErrorMessage = error.message
+        }
     }
 }

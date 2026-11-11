@@ -67,7 +67,8 @@ extension DependencyValues {
 nonisolated enum RelatedRecommendationAssembler {
     /// 원본 책들의 후보를 동시에 받은 뒤, 원본 순서대로 중복 없이 1권씩 고른다.
     static func assemble(
-        sources: [Book], fallback: [Book], count: Int, related: HeldRelatedBooksClient
+        sources: [Book], fallback: [Book], count: Int, related: HeldRelatedBooksClient,
+        excluding excludedKeys: Set<String> = [], includesRemainingRelatedBooks: Bool = false
     ) async -> [Book] {
         let candidates = await withTaskGroup(of: (Int, [Book]).self) { group in
             for (index, source) in sources.enumerated() {
@@ -77,6 +78,9 @@ nonisolated enum RelatedRecommendationAssembler {
             for await (index, books) in group { byIndex[index] = books }
             return sources.indices.map { byIndex[$0] ?? [] }
         }
-        return DatasetRecommendation.assemble(candidatesPerSource: candidates, fallback: fallback, count: count)
+        let remaining = includesRemainingRelatedBooks ? fallback + candidates.flatMap { $0 } : fallback
+        return DatasetRecommendation.assemble(
+            candidatesPerSource: candidates, fallback: remaining, count: count, excluding: excludedKeys
+        )
     }
 }
