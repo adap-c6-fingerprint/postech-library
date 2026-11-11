@@ -50,3 +50,41 @@ struct ProblemReportMailSheet: UIViewControllerRepresentable {
         }
     }
 }
+
+/// 메일 작성기도 메일 앱도 쓸 수 없을 때 띄우는 안내. 주소를 복사해 직접 보낼 수 있게 한다.
+struct ProblemReportFallbackSheet: View {
+    let messageBody: String
+    let onClose: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("메일 앱을 열 수 없어요")
+                .typography(.body1)
+                .accessibilityAddTraits(.isHeader)
+            Text("아래 주소로 문제를 보내 주세요.")
+                .typography(.caption1)
+                .foregroundStyle(DS.ColorToken.neutralTertiary)
+            Text(ProblemReportMailSheet.recipient)
+                .typography(.body2)
+                .textSelection(.enabled)
+            HStack(spacing: 12) {
+                Button("주소 복사") {
+                    UIPasteboard.general.string = ProblemReportMailSheet.recipient
+                }
+                .buttonStyle(.borderedProminent)
+                .accessibilityIdentifier("problem-report-copy")
+                Button("내용 복사") {
+                    UIPasteboard.general.string = "\(ProblemReportMailSheet.recipient)\n\n\(messageBody)"
+                }
+                .buttonStyle(.bordered)
+                Spacer(minLength: 0)
+                Button("닫기", action: onClose)
+                    .buttonStyle(.bordered)
+            }
+        }
+        .padding(24)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .presentationDetents([.height(240)])
+        .accessibilityIdentifier("problem-report-fallback")
+    }
+}

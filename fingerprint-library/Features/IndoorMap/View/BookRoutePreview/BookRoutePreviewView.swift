@@ -27,6 +27,8 @@ struct BookRoutePreviewView: View {
     @Environment(\.openURL) private var openURL
     @Dependency(\.bookCartClient) private var bookCartClient
     @State private var isProblemReportPresented = false
+    /// 메일 작성기도 메일 앱도 없을 때 주소를 안내하는 시트.
+    @State private var isProblemReportFallbackPresented = false
     /// 준비가 끝나지 않은 채 오래 머문 경우. 사용자가 빠져나갈 수 있게 실패 화면으로 바꾼다.
     @State private var preparingTimedOut = false
     @Environment(\.dismiss) private var dismiss
@@ -278,13 +280,19 @@ struct BookRoutePreviewView: View {
         dismiss()
     }
 
-    /// 메일 작성기를 띄운다. 계정이 없어 작성기를 못 쓰면 mailto로 넘긴다.
+    /// 메일 작성기를 띄운다. 계정이 없으면 메일 앱으로, 그것도 못 열면 주소 안내 시트로 넘긴다.
     private func presentProblemReport() {
-        if ProblemReportMailSheet.canSendMail {
+        guard !ProblemReportMailSheet.canSendMail else {
             isProblemReportPresented = true
-        } else if let url = ProblemReportMailSheet.mailtoURL(
-            subject: problemReportSubject, body: problemReportBody) {
-            openURL(url)
+            return
+        }
+        guard let url = ProblemReportMailSheet.mailtoURL(
+            subject: problemReportSubject, body: problemReportBody) else {
+            isProblemReportFallbackPresented = true
+            return
+        }
+        openURL(url) { accepted in
+            if !accepted { isProblemReportFallbackPresented = true }
         }
     }
 
@@ -352,6 +360,11 @@ struct BookRoutePreviewView: View {
         }) { session in
             BookNavigationView(session: session, analyticsIsTest: destination.isTestMode) { _ in
                 navigationFlow.navigationEnded()
+            }
+        }
+        .sheet(isPresented: $isProblemReportFallbackPresented) {
+            ProblemReportFallbackSheet(messageBody: problemReportBody) {
+                isProblemReportFallbackPresented = false
             }
         }
         .sheet(isPresented: $isProblemReportPresented) {
