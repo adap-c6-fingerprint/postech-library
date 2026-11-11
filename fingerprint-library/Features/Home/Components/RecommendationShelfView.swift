@@ -5,6 +5,19 @@ struct RecommendationShelfView: View {
     static let leadingInset: CGFloat = 16
     static let recommendationCornerRadius: CGFloat = 10
     static let carouselSpace = "recommendationCarousel"
+    static let thinHeight: CGFloat = 54
+    // 홈 추천 캐러셀의 얇은 선반 높이. 마이페이지 책장도 같은 값을 쓴다.
+
+    static func thin(width: CGFloat? = nil) -> RecommendationShelfView {
+        RecommendationShelfView(
+            height: thinHeight,
+            width: width,
+            fillOpacity: 0.5,
+            fixedBoltSize: 17.08,
+            cornerRadius: recommendationCornerRadius
+        )
+    }
+    // 홈 추천 화면과 마이페이지가 같은 얇은 선반을 쓰도록 설정을 한곳에 모은다.
 
     var height: CGFloat = 106
     var width: CGFloat? = nil
