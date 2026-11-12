@@ -42,7 +42,8 @@ struct BookDetailFeature {
     struct State: Equatable {
         let book: Book
         var cachedCoverURL: URL?
-        var isFavorite = false
+        @Shared(.favoriteBookKeys) var favoriteBookKeys
+        var isFavorite: Bool { favoriteBookKeys.contains(book.recordKey) }
         var sourceFavoriteMarkerID: String?
         @Presents var shelfMap: BookShelfMapFeature.State?
 
@@ -100,8 +101,6 @@ struct BookDetailFeature {
         case destinationRouteLoaded(requestID: Int, BookDetailRoutePresentation)
         case destinationRouteFailed(requestID: Int)
         case loadFavorites
-        // ✅ 여러 권 미리보기의 펼친 상세에서 찜 표시만 갱신한다. 최근 본 책은 기록하지 않는다.
-        case loadFavoriteStatus
         case favoriteButtonTapped
         case addToCartButtonTapped
         case cartNoticeDismissed
@@ -116,7 +115,6 @@ struct BookDetailFeature {
         @CasePathable
         enum Delegate: Equatable {
             case startGuidance(Book)
-            case favoritesChanged(Set<[String?]>)
         }
     }
 
@@ -130,8 +128,6 @@ struct BookDetailFeature {
     @Dependency(\.bookHoldingsClient)
     var bookHoldingsClient
 
-    @Dependency(\.bookFavoritesClient)
-    var bookFavoritesClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
 
     @Dependency(\.indoorRouteClient) var indoorRouteClient
@@ -145,34 +141,17 @@ struct BookDetailFeature {
         Reduce { state, action in
             switch action {
             case .loadFavorites:
-                state.isFavorite = bookFavoritesClient.load().contains(state.book.recordKey)
                 recentlyViewedBooksClient.record(state.book)
                 // ✅ 상세 화면이 뜰 때 한 번 보내는 액션이므로 여기서 조회 기록을 남긴다.
                 return .none
 
-            case .loadFavoriteStatus:
-                // ✅ 다른 화면에서 바뀐 찜도 반영하도록 저장 목록을 다시 읽는다.
-                state.isFavorite = bookFavoritesClient.load().contains(state.book.recordKey)
-                return .none
-
             case .favoriteButtonTapped:
-                // 다른 화면에서 추가한 찜도 보존하도록 최신 저장 목록에서 변경한다.
-                var keys = bookFavoritesClient.load()
-                let key = state.book.recordKey
-                if keys.contains(key) {
-                    keys.remove(key)
-                } else {
-                    keys.insert(key)
-                    bookFavoritesClient.record(state.book, now)
-                    // 찜 목록 화면에서 날짜별로 보여 주도록 책 정보와 찜한 시각을 남긴다.
-                }
-                state.isFavorite = keys.contains(key)
-                bookFavoritesClient.save(keys)
+                let isFavorite = BookFavorites().toggle(state.book, at: now)
                 analytics.record(.init(.bookFavoriteChanged, [
                     .bookRecordID: .text(AnalyticsEvent.bookID(state.book)),
-                    .action: .text(state.isFavorite ? "added" : "removed")
+                    .action: .text(isFavorite ? "added" : "removed")
                 ]))
-                return .send(.delegate(.favoritesChanged(keys)))
+                return .none
 
             case .directionsButtonTapped:
                 var destination = BookShelfMapFeature.State(book: state.book)

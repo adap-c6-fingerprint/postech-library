@@ -205,7 +205,6 @@ struct BookRouteBooksPreviewView: View {
         .accessibilityLabel(store.isFavorite ? "찜 해제" : "찜하기")
         .accessibilityValue(store.isFavorite ? "찜됨" : "찜 안 됨")
         .accessibilityIdentifier("multiBookPreview.expandedFavorite")
-        .task(id: store.book.id) { store.send(.loadFavoriteStatus) }
     }
 
     private func cartButton(_ store: StoreOf<BookDetailFeature>) -> some View {

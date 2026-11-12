@@ -10,7 +10,7 @@ extension BookRecommendationClient: DependencyKey {
         guard count > 0 else { return [] }
 
         let (input, coldStart, personalized, bookClient) = await MainActor.run {
-            @Dependency(\.bookFavoritesClient) var favorites
+            @Shared(.favoriteBookKeys) var favoriteBookKeys
             @Dependency(\.searchHistoryClient) var history
             @Dependency(\.coldStartRecommendationClient) var coldStart
             @Dependency(\.personalizedRecommendationClient) var personalized
@@ -18,7 +18,7 @@ extension BookRecommendationClient: DependencyKey {
             @Shared(.userProfile) var userProfile: UserProfile?
             // 앱 전체가 함께 쓰는 프로필의 관심 분야를 쓴다. 온보딩·마이페이지에서 저장한 값과 같다.
             let input = PersonalizedRecommendationInput(
-                favoriteKeys: favorites.load(),
+                favoriteKeys: favoriteBookKeys,
                 recentQueries: history.load(),
                 interests: userProfile?.interests ?? []
             )

@@ -24,7 +24,7 @@ struct BookSearchFeature {
         var recentBooks: [Book] = []
         var recentBookInfo: [Book.ID: RecentBookInfoState] = [:]
         var recentBookInfoGeneration = 0
-        var favoriteBookKeys: Set<[String?]> = []
+        @Shared(.favoriteBookKeys) var favoriteBookKeys
         var books: [Book] = []
         // 원본 결과를 유지해 탭 전환 시 캐시 조회나 네트워크 요청 없이 필터링한다.
         var visibleBooks: [Book] { books.filter(category.includes) }
@@ -105,8 +105,6 @@ struct BookSearchFeature {
     @Dependency(\.bookHoldingsClient)
     var bookHoldingsClient: BookHoldingsClient
 
-    @Dependency(\.bookFavoritesClient)
-    var bookFavoritesClient: BookFavoritesClient
 
 
     @Dependency(\.date.now)
@@ -124,7 +122,6 @@ struct BookSearchFeature {
             case .task:
                 state.recentQueries = searchHistoryClient.load()
                 state.recentBooks = recentSearchBooksClient.load()
-                state.favoriteBookKeys = bookFavoritesClient.load()
                 return .none
 
             case .loadRecentBookInfo:
@@ -153,36 +150,24 @@ struct BookSearchFeature {
                 return .none
 
             case let .favoriteButtonTapped(book):
-                state.favoriteBookKeys = bookFavoritesClient.load()
-                let key = book.recordKey
-                if state.favoriteBookKeys.contains(key) {
-                    state.favoriteBookKeys.remove(key)
-                } else {
-                    state.favoriteBookKeys.insert(key)
-                    bookFavoritesClient.record(book, now)
-                    // 찜 목록 화면에서 날짜별로 보여 주도록 책 정보와 찜한 시각을 남긴다.
-                }
-                bookFavoritesClient.save(state.favoriteBookKeys)
+                let isFavorite = BookFavorites().toggle(book, at: now)
                 analytics.record(.init(.bookFavoriteChanged, [
                     .bookRecordID: .text(AnalyticsEvent.bookID(book)),
-                    .action: .text(state.favoriteBookKeys.contains(key) ? "added" : "removed")
+                    .action: .text(isFavorite ? "added" : "removed")
                 ]))
-                if let detailBook = state.detail?.book {
-                    let isFavorite = state.favoriteBookKeys.contains(detailBook.recordKey)
-                    state.detail?.isFavorite = isFavorite
-                }
                 return .none
 
             case let .favoriteMarkerTapped(marker):
                 // 마커가 만들어진 뒤 찜이 바뀌었을 수 있으므로 현재 저장 목록으로 다시 확인한다.
-                let activeKeys = bookFavoritesClient.load().intersection(marker.bookKeys)
-                let items = bookFavoritesClient.loadItems().sorted { $0.favoritedAt > $1.favoritedAt }
+                let favorites = BookFavorites()
+                let activeKeys = favorites.keys.intersection(marker.bookKeys)
+                let items = favorites.items.sorted { $0.favoritedAt > $1.favoritedAt }
                 var seen = Set<[String?]>()
                 let books = (items.map(\.book) + state.books + state.recentBooks)
                     .filter { activeKeys.contains($0.recordKey) && seen.insert($0.recordKey).inserted }
                 guard let book = books.first else { return .none }
                 if books.count == 1 {
-                    state.detail = BookDetailFeature.State(book: book, isFavorite: true)
+                    state.detail = BookDetailFeature.State(book: book)
                     state.detail?.sourceFavoriteMarkerID = marker.id
                 } else {
                     state.favoriteShelf = BookShelfMapFeature.State(previewing: books)
@@ -200,18 +185,11 @@ struct BookSearchFeature {
                 ]))
                 recentSearchBooksClient.record(book)
                 state.recentBooks = recentSearchBooksClient.load()
-                state.favoriteBookKeys = bookFavoritesClient.load()
-                state.detail = BookDetailFeature.State(
-                    book: book, isFavorite: state.favoriteBookKeys.contains(book.recordKey)
-                )
+                state.detail = BookDetailFeature.State(book: book)
                 return .none
 
             case let .detail(.presented(.delegate(.startGuidance(book)))):
                 state.shelfMap = BookShelfMapFeature.State(book: book)
-                return .none
-
-            case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
-                state.favoriteBookKeys = keys
                 return .none
 
             case .cartButtonTapped:
@@ -224,11 +202,6 @@ struct BookSearchFeature {
 
             case .favoritesButtonTapped:
                 state.favorites = BookFavoritesFeature.State()
-                return .none
-
-            case let .favorites(.presented(.delegate(.favoritesChanged(keys)))):
-                state.favoriteBookKeys = keys
-                // 지도 찜 표시와 검색 결과 북마크가 찜 목록 화면에서 지운 내용을 따라가게 한다.
                 return .none
 
             case .profileButtonTapped:

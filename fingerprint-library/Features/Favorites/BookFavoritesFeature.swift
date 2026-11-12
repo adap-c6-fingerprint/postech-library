@@ -10,7 +10,9 @@ import ComposableArchitecture
 struct BookFavoritesFeature {
     @ObservableState
     struct State: Equatable {
-        var items: [BookFavoriteItem] = []
+        @Shared(.favoriteBookKeys) var favoriteBookKeys
+        @Shared(.favoriteBookRecords) var favoriteBookRecords
+        var items: [BookFavoriteItem] { favoriteBookRecords.active(in: favoriteBookKeys) }
         var libraryInfo: [Book.ID: BookCartFeature.LibraryInfo] = [:]
         var selectedIDs: [Book.ID] = []
         // 책바구니에 담거나 삭제할 책을 고른 순서대로 보관한다.
@@ -41,18 +43,8 @@ struct BookFavoritesFeature {
         case goToCartButtonTapped
         case cartLimitAlertDismissed
         case cart(PresentationAction<BookCartFeature.Action>)
-        case delegate(Delegate)
-
-        @CasePathable
-        enum Delegate: Equatable {
-            case favoritesChanged(Set<[String?]>)
-            // 다른 화면의 북마크 상태와 지도 표시를 맞추도록 바뀐 찜 키를 알린다.
-            case cartChanged
-            // 다른 화면의 책바구니 권수를 맞추도록 알린다.
-        }
     }
 
-    @Dependency(\.bookFavoritesClient) var bookFavoritesClient
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.date.now) var now
@@ -64,11 +56,12 @@ struct BookFavoritesFeature {
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
+            // 다른 화면에서 찜이 바뀌었을 수 있으므로 선택 ID를 항상 찜 목록의 부분집합으로 맞춘다.
+            let itemIDs = Set(state.items.map(\.id))
+            state.selectedIDs.removeAll { !itemIDs.contains($0) }
+
             switch action {
             case .task:
-                state.items = bookFavoritesClient.loadItems()
-                let itemIDs = Set(state.items.map(\.id))
-                state.selectedIDs.removeAll { !itemIDs.contains($0) }
                 return .none
 
             case .loadLibraryInfo:
@@ -82,8 +75,7 @@ struct BookFavoritesFeature {
                 return .none
 
             case let .coverRecovered(id, oldURL, newURL):
-                bookFavoritesClient.repairLegacyCover(id, oldURL, newURL)
-                state.items = bookFavoritesClient.loadItems()
+                BookFavorites().repairLegacyCover(of: id, from: oldURL, to: newURL)
                 return .none
 
             case let .selectionToggled(id):
@@ -98,19 +90,14 @@ struct BookFavoritesFeature {
             case .removeButtonTapped:
                 let removedKeys = Set(state.selectedBooks.map(\.recordKey))
                 guard !removedKeys.isEmpty else { return .none }
-                var keys = bookFavoritesClient.load()
-                let removedCount = keys.intersection(removedKeys).count
-                // 다른 화면에서 바꾼 찜도 보존하도록 최신 저장 목록에서 뺀다.
-                keys.subtract(removedKeys)
-                bookFavoritesClient.save(keys)
+                let removedCount = BookFavorites().remove(removedKeys)
                 if removedCount > 0 {
                     analytics.record(.init(.bookFavoriteChanged, [
                         .action: .text("removed"), .bookCount: .integer(removedCount)
                     ]))
                 }
-                state.items = bookFavoritesClient.loadItems()
                 state.selectedIDs = []
-                return .send(.delegate(.favoritesChanged(keys)))
+                return .none
 
             case .addToCartButtonTapped:
                 let books = state.selectedBooks
@@ -132,7 +119,7 @@ struct BookFavoritesFeature {
                 state.selectedIDs = []
                 // 찜 목록에는 그대로 두고 선택만 해제한다.
                 state.isAddedToCartAlertPresented = true
-                return .send(.delegate(.cartChanged))
+                return .none
 
             case .addedToCartAlertDismissed:
                 state.isAddedToCartAlertPresented = false
@@ -147,7 +134,7 @@ struct BookFavoritesFeature {
                 state.isCartLimitAlertPresented = false
                 return .none
 
-            case .cart, .delegate:
+            case .cart:
                 return .none
             }
         }

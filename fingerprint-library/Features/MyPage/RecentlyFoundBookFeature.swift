@@ -42,7 +42,6 @@ struct RecentlyFoundBookFeature {
 
     @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
     @Dependency(\.bookCoverClient) var bookCoverClient
-    @Dependency(\.bookFavoritesClient) var bookFavoritesClient
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -81,10 +80,7 @@ struct RecentlyFoundBookFeature {
                 return .none
 
             case let .bookSelected(book):
-                state.detail = BookDetailFeature.State(
-                    book: book, isFavorite: bookFavoritesClient.load().contains(book.recordKey)
-                )
-                // 홈·검색에서 상세를 열 때와 같은 방식으로 찜 여부를 함께 넘긴다.
+                state.detail = BookDetailFeature.State(book: book)
                 return .none
 
             case .detail:

@@ -83,21 +83,6 @@ struct AppFeature {
                 state.selectedTab = .recommendations
                 return .none
 
-            case .bookSearch(.task):
-                synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
-                return .none
-
-            case let .home(.delegate(.favoritesChanged(keys))):
-                synchronizeFavorites(keys, state: &state)
-                return .none
-
-            case .bookSearch(.bookSelected(_)),
-                 .bookSearch(.favoriteButtonTapped(_)),
-                 .bookSearch(.detail(.presented(.delegate(.favoritesChanged(_))))),
-                 .bookSearch(.favorites(.presented(.delegate(.favoritesChanged(_))))):
-                synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
-                return .none
-
             case .bookSearch:
                 return .none
 
@@ -166,15 +151,5 @@ struct AppFeature {
             }
         }
         .ifLet(\.onboarding, action: \.onboarding) { OnboardingFeature() }
-    }
-
-    private func synchronizeFavorites(_ keys: Set<[String?]>, state: inout State) {
-        state.bookSearch.favoriteBookKeys = keys
-        if let book = state.bookSearch.detail?.book {
-            state.bookSearch.detail?.isFavorite = keys.contains(book.recordKey)
-        }
-        if let book = state.home.detail?.book {
-            state.home.detail?.isFavorite = keys.contains(book.recordKey)
-        }
     }
 }

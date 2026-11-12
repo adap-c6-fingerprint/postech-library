@@ -143,7 +143,6 @@ struct HomeFeature {
         case popularBooksFailed(String)
 
         enum Delegate {
-            case favoritesChanged(Set<[String?]>)
             case showProfile
         }
     }
@@ -154,7 +153,6 @@ struct HomeFeature {
     @Dependency(\.departmentPopularBooksClient)
     var departmentPopularBooksClient // 학과별 인기 도서
 
-    @Dependency(\.bookFavoritesClient) var bookFavoritesClient
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient // 대출가능여부
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.uuid) var uuid
@@ -377,8 +375,7 @@ struct HomeFeature {
             case let .bookSelected(book):
                 analytics.record(.init(.recommendationSelected, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
                 state.detail = BookDetailFeature.State(
-                    book: book, cachedCoverURL: state.recommendationCoverFiles[book.id],
-                    isFavorite: bookFavoritesClient.load().contains(book.recordKey)
+                    book: book, cachedCoverURL: state.recommendationCoverFiles[book.id]
                 )
                 return .none
 
@@ -389,9 +386,6 @@ struct HomeFeature {
             case .favoritesButtonTapped:
                 state.favorites = BookFavoritesFeature.State()
                 return .none
-
-            case let .favorites(.presented(.delegate(.favoritesChanged(keys)))):
-                return .send(.delegate(.favoritesChanged(keys)))
 
             case let .cart(.presented(.delegate(.startGuidance(books)))):
                 state.shelfMap = BookShelfMapFeature.State(books: books)
@@ -405,9 +399,6 @@ struct HomeFeature {
                 state.myPage = MyPageFeature.State()
                 // 찜 목록처럼 지금 탭의 내비게이션 안에서 마이페이지를 연다.
                 return .none
-
-            case let .detail(.presented(.delegate(.favoritesChanged(keys)))):
-                return .send(.delegate(.favoritesChanged(keys)))
 
             case .detail, .cart, .favorites, .shelfMap, .myPage, .delegate:
                 return .none
