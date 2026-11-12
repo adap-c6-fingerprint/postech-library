@@ -84,6 +84,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 화면 부착·크기 결정까지 보류한 최신 카메라 요청.
         private(set) var pendingCameraRequest: IndoorMapCameraRequest?
         private var isApplyingCamera = false
+        /// 지도를 만드는 동안 MapKit이 바로 보내는 영역 변경 콜백은 사용자 조작도, 확정된 카메라도 아니다.
+        private var isMakingMapView = false
         /// MapKit overlay 객체와 원본 요소를 연결해 색상·선택 스타일을 결정한다.
         private var overlayFeatures: [ObjectIdentifier: IndoorMapElement] = [:]
         /// 도형마다 첫 renderer 활성화 후 한 번만 다시 그린다. 카메라 이동으로 복구하지 않는다.
@@ -123,6 +125,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 층 전환은 도형만 갱신하고 카메라는 유지한다.
         /// - Returns: SwiftUI 배치가 끝난 시점을 알려줄 수 있는 ``IndoorMapSurface``.
         func makeMapView() -> IndoorMapSurface {
+            isMakingMapView = true
+            defer { isMakingMapView = false }
             let view = IndoorMapSurface()
             view.hidesSystemTopEdgeEffect = parent.appearance == .bookDetail
             view.delegate = self
@@ -316,11 +320,17 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         /// 중앙 좌표를 쓰지 않는 화면에서는 콜백이 없어 추가 비용이 생기지 않는다.
+        ///
+        /// MapKit은 makeUIView·updateUIView 안에서 카메라를 바꾸면 영역 변경 콜백을 바로 보낸다.
+        /// 그 자리에서 SwiftUI 상태를 바꾸면 "Modifying state during view update"가 나므로
+        /// 지도를 만드는 중에는 보고하지 않고, 그 밖에는 다음 실행 순서로 미뤄 보고한다.
         private func reportCenter(of mapView: MKMapView, isSettled: Bool) {
-            guard let onCenterChanged = parent.onCenterChanged else { return }
+            guard !isMakingMapView, let onCenterChanged = parent.onCenterChanged else { return }
             let center = mapView.centerCoordinate
             guard CLLocationCoordinate2DIsValid(center) else { return }
-            onCenterChanged(IndoorMapCoordinate(latitude: center.latitude, longitude: center.longitude), isSettled)
+            let coordinate = IndoorMapCoordinate(latitude: center.latitude, longitude: center.longitude)
+            // main 큐는 넣은 순서대로 실행해 이동 중·멈춤 보고 순서가 바뀌지 않는다.
+            DispatchQueue.main.async { onCenterChanged(coordinate, isSettled) }
         }
 
         func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
