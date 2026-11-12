@@ -2,7 +2,7 @@ import SwiftUI
 
 /// 도착한 서가에서 책등의 청구기호와 표지를 대조한다. 진행 동작은 상위 안내 상태가 처리한다.
 struct BookNavigationArrivalView: View {
-    let session: RoutePlan
+    let routePlan: RoutePlan
     let currentStopIndex: Int
     private let bookInformation: BookNavigationBookInfo?
     private let onContinue: () -> Void
@@ -11,13 +11,13 @@ struct BookNavigationArrivalView: View {
     @Environment(\.dismiss) private var dismiss
     @ScaledMetric(relativeTo: .largeTitle) private var numberSize: CGFloat = 44
 
-    init(session: RoutePlan, currentStopIndex: Int,
+    init(routePlan: RoutePlan, currentStopIndex: Int,
          bookInformation: BookNavigationBookInfo? = nil,
          onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {},
          onCancel: @escaping () -> Void = {}) {
-        self.session = session
+        self.routePlan = routePlan
         self.currentStopIndex = currentStopIndex
-        self.bookInformation = bookInformation ?? BookNavigationBookInfo(session: session, stopIndex: currentStopIndex)
+        self.bookInformation = bookInformation ?? BookNavigationBookInfo(routePlan: routePlan, stopIndex: currentStopIndex)
         self.onContinue = onContinue
         self.onFinish = onFinish
         self.onCancel = onCancel
@@ -85,13 +85,13 @@ struct BookNavigationArrivalView: View {
                 .accessibilityIdentifier("book-navigation-arrival-back")
                 Spacer()
             }
-            if bookInformation != nil, session.stops.count > 1 {
-                Text("\(currentStopIndex + 1)/\(session.stops.count)")
+            if bookInformation != nil, routePlan.stops.count > 1 {
+                Text("\(currentStopIndex + 1)/\(routePlan.stops.count)")
                     .font(.body)
                     .padding(.horizontal, 16).padding(.vertical, 9)
                     .background(.white.opacity(0.12), in: Capsule())
                     .overlay(Capsule().stroke(.white.opacity(0.3), lineWidth: 0.5))
-                    .accessibilityLabel("총 \(session.stops.count)권 중 \(currentStopIndex + 1)번째 책")
+                    .accessibilityLabel("총 \(routePlan.stops.count)권 중 \(currentStopIndex + 1)번째 책")
                     .accessibilityIdentifier("book-navigation-arrival-progress")
             }
         }
@@ -234,7 +234,7 @@ struct BookNavigationArrivalView: View {
         .padding(.horizontal, 32).padding(.bottom, 12)
     }
 
-    private var isIntermediateStop: Bool { currentStopIndex < session.stops.count - 1 }
+    private var isIntermediateStop: Bool { currentStopIndex < routePlan.stops.count - 1 }
 
     private func title(_ info: BookNavigationBookInfo) -> String {
         let text = BookText.plainText(info.book.title).trimmingCharacters(in: .whitespacesAndNewlines)

@@ -19,8 +19,8 @@ struct BookRoutePreviewBookInfo {
     }
 
     init(book: Book, holdings: BookShelfMapFeature.HoldingsState?,
-         resolutions: [ShelfResolution], map: IndoorMap?, session: RoutePlan?) {
-        let stop = session?.stops.first { $0.book.id == book.id }
+         resolutions: [ShelfResolution], map: IndoorMap?, routePlan: RoutePlan?) {
+        let stop = routePlan?.stops.first { $0.book.id == book.id }
 
         let holding: BookHolding?
         if let shelf = stop?.shelf,
@@ -45,8 +45,8 @@ struct BookRoutePreviewBookInfo {
             location = nil
         }
 
-        if let session, let index = session.stops.firstIndex(where: { $0.book.id == book.id }) {
-            let legs = session.legs.prefix(index + 1)
+        if let routePlan, let index = routePlan.stops.firstIndex(where: { $0.book.id == book.id }) {
+            let legs = routePlan.legs.prefix(index + 1)
             let distance = legs.reduce(0) { $0 + $1.distanceMeters }
             let floorChanges = legs.reduce(0) { $0 + $1.floorChanges.count }
             let estimated = legs.contains { $0.usesEstimatedDistances } ? "약 " : ""

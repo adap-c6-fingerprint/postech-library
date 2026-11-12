@@ -11,7 +11,7 @@ struct FavoriteShelfBooksView: View {
         BookRouteBooksPreviewView(
             books: store.books,
             shelfStore: store,
-            session: nil,
+            routePlan: nil,
             isLoadingRoute: false,
             routeError: nil,
             canStart: true,

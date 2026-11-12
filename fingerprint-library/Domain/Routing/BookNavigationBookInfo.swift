@@ -10,14 +10,14 @@ struct BookNavigationBookInfo: Equatable, Sendable {
     let locationNames: [String]
     let callNumbers: [String]
 
-    init?(session: RoutePlan, stopIndex: Int) {
-        guard session.stops.indices.contains(stopIndex) else { return nil }
-        let stop = session.stops[stopIndex]
+    init?(routePlan: RoutePlan, stopIndex: Int) {
+        guard routePlan.stops.indices.contains(stopIndex) else { return nil }
+        let stop = routePlan.stops[stopIndex]
         book = stop.book
         shelf = stop.shelf
         candidateShelves = stop.candidateShelves
-        floorName = session.map.floors.first { $0.id == stop.shelf.floorID }?.name
-        holdings = ShelfResolver().resolve(stop.holdings, on: session.map, labels: session.shelfLabels)
+        floorName = routePlan.map.floors.first { $0.id == stop.shelf.floorID }?.name
+        holdings = ShelfResolver().resolve(stop.holdings, on: routePlan.map, labels: routePlan.shelfLabels)
             .filter { $0.shelves.contains { $0.id == stop.shelf.id } }
             .map(\.holding)
         locationNames = Self.unique(holdings.compactMap(\.locationName))

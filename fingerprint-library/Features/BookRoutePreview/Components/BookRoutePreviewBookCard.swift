@@ -7,7 +7,7 @@ struct BookRoutePreviewBookCard: View {
     let holdings: BookShelfMapFeature.HoldingsState?
     let resolutions: [ShelfResolution]
     let map: IndoorMap?
-    let session: RoutePlan?
+    let routePlan: RoutePlan?
     let showsFullDescription: Bool
     let isSheetMoving: Bool
     let isSelected: Bool
@@ -21,7 +21,7 @@ struct BookRoutePreviewBookCard: View {
 
     init(book: Book, holdings: BookShelfMapFeature.HoldingsState?,
          resolutions: [ShelfResolution], map: IndoorMap?,
-         session: RoutePlan?, detailStore: StoreOf<BookDetailFeature>,
+         routePlan: RoutePlan?, detailStore: StoreOf<BookDetailFeature>,
          showsFullDescription: Bool = false,
          isSheetMoving: Bool = false, isSelected: Bool = true,
          onContentAtTopChange: @escaping (Bool) -> Void = { _ in },
@@ -30,7 +30,7 @@ struct BookRoutePreviewBookCard: View {
         self.holdings = holdings
         self.resolutions = resolutions
         self.map = map
-        self.session = session
+        self.routePlan = routePlan
         self.showsFullDescription = showsFullDescription
         self.isSheetMoving = isSheetMoving
         self.isSelected = isSelected
@@ -42,7 +42,7 @@ struct BookRoutePreviewBookCard: View {
     // ✅ 대표 소장본·위치·경로 요약은 펼친 상세 화면과 같은 계산을 사용한다.
     private var info: BookRoutePreviewBookInfo {
         BookRoutePreviewBookInfo(
-            book: book, holdings: holdings, resolutions: resolutions, map: map, session: session)
+            book: book, holdings: holdings, resolutions: resolutions, map: map, routePlan: routePlan)
     }
 
     var body: some View {

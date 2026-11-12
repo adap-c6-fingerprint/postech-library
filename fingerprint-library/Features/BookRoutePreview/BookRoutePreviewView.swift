@@ -279,7 +279,7 @@ struct BookRoutePreviewView: View {
                 BookRouteBooksPreviewView(
                     books: orderedBooks,
                     shelfStore: destinationStore,
-                    session: readySession,
+                    routePlan: readySession,
                     isLoadingRoute: isLoadingRoute,
                     routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError,
                     // 위치 권한이 없어도 눌러서 출발 위치 설정을 시작할 수 있게 한다.
@@ -296,12 +296,12 @@ struct BookRoutePreviewView: View {
             }
         }
         .fullScreenCover(item: Binding(
-            get: { store.navigationFlow.session },
+            get: { store.navigationFlow.routePlan },
             set: { if $0 == nil { store.send(.navigationCoverClosed) } }
         ), onDismiss: {
             store.send(.navigationCoverDismissed)
-        }) { session in
-            BookNavigationView(session: session, analyticsIsTest: destination.isTestMode) { _ in
+        }) { routePlan in
+            BookNavigationView(routePlan: routePlan, analyticsIsTest: destination.isTestMode) { _ in
                 store.send(.navigationEnded)
             }
         }

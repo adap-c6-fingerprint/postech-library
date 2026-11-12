@@ -5,7 +5,7 @@ import SwiftUI
 struct BookRouteBooksPreviewView: View {
     let books: [Book]
     let shelfStore: StoreOf<BookShelfMapFeature>
-    let session: RoutePlan?
+    let routePlan: RoutePlan?
     let isLoadingRoute: Bool
     let routeError: String?
     let canStart: Bool
@@ -43,7 +43,7 @@ struct BookRouteBooksPreviewView: View {
 
     private var selectedShelves: [IndoorShelfLabel] {
         guard let bookID = selection.wrappedValue else { return [] }
-        if let stop = session?.stops.first(where: { $0.book.id == bookID }) { return stop.candidateShelves }
+        if let stop = routePlan?.stops.first(where: { $0.book.id == bookID }) { return stop.candidateShelves }
         guard case let .loaded(holdings) = shelfStore.holdings[bookID] else { return [] }
         return BookDetailDestinationPresentation.resolve(
             holdings: holdings, map: shelfStore.map.map, labels: shelfStore.map.shelfLabels
@@ -51,7 +51,7 @@ struct BookRouteBooksPreviewView: View {
     }
 
     private var selectedFloor: IndoorMapFloor? {
-        let stop = session?.stops.first { $0.book.id == selection.wrappedValue }
+        let stop = routePlan?.stops.first { $0.book.id == selection.wrappedValue }
         guard let floorID = stop?.shelf.floorID ?? selectedShelves.first?.floorID else { return nil }
         return shelfStore.map.map?.floors.first { $0.id == floorID }
     }
@@ -148,7 +148,7 @@ struct BookRouteBooksPreviewView: View {
                     info: BookRoutePreviewBookInfo(
                         book: book, holdings: shelfStore.holdings[book.id],
                         resolutions: shelfStore.resolutions[book.id] ?? [],
-                        map: shelfStore.map.map, session: session),
+                        map: shelfStore.map.map, routePlan: routePlan),
                     detailStore: detailStores.store(for: book),
                     onRetryHoldings: { shelfStore.send(.retryHoldingsTapped(book.id)) }
                 )
@@ -276,7 +276,7 @@ struct BookRouteBooksPreviewView: View {
                     holdings: shelfStore.holdings[book.id],
                     resolutions: shelfStore.resolutions[book.id] ?? [],
                     map: shelfStore.map.map,
-                    session: session,
+                    routePlan: routePlan,
                     detailStore: detailStores.store(for: book),
                     showsFullDescription: panelPresentation.showsFullDescription,
                     isSheetMoving: panelPresentation.isMoving,

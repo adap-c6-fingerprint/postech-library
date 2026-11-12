@@ -283,7 +283,7 @@ struct BookRoutePreviewFeature {
                 return .none
 
             case .navigationCoverClosed:
-                state.navigationFlow.session = nil
+                state.navigationFlow.routePlan = nil
                 return .none
 
             case .navigationCoverDismissed:
@@ -329,23 +329,23 @@ struct BookRoutePreviewFeature {
                 state.analyticsIsTest = value
                 return .none
 
-            case let .routeLoaded(requestID, session):
+            case let .routeLoaded(requestID, routePlan):
                 guard state.isLoadingRoute,
                       state.requestID == requestID else {
                     return .none
                 }
 
                 state.isLoadingRoute = false
-                state.previewPlan = session
+                state.previewPlan = routePlan
                 analytics.record(.init(.routeCalculationCompleted, [
-                    .operationID: .text(state.analyticsOperation), .navigationID: .text(session.id.uuidString),
-                    .distanceM: .decimal(session.route.distanceMeters), .bookCount: .integer(session.stops.count),
-                    .stepCount: .integer(session.guidance.stepCount),
+                    .operationID: .text(state.analyticsOperation), .navigationID: .text(routePlan.id.uuidString),
+                    .distanceM: .decimal(routePlan.route.distanceMeters), .bookCount: .integer(routePlan.stops.count),
+                    .stepCount: .integer(routePlan.guidance.stepCount),
                     .isTest: .flag(state.analyticsRequestIsTest)
                 ]))
                 if state.startsNavigationWhenLoaded {
                     state.startsNavigationWhenLoaded = false
-                    guard session.start.isRecent(at: now) else {
+                    guard routePlan.start.isRecent(at: now) else {
                         state.previewPlan = nil
                         state.routeError = IndoorRoutingError.invalidPosition.localizedDescription
                         return resolveStartAuthorization(&state)
@@ -354,7 +354,7 @@ struct BookRoutePreviewFeature {
                         return loadRoute(.failed(IndoorRoutingError.invalidPosition.localizedDescription),
                                          startsNavigation: true, state: &state)
                     }
-                    state.navigationFlow.start(session)
+                    state.navigationFlow.start(routePlan)
                 }
                 return .merge(reconcile(&state), resolveStartAuthorization(&state))
 
@@ -441,7 +441,7 @@ struct BookRoutePreviewFeature {
         // 미리보기는 "바로 안내 시작"을 누른 뒤에만 출발 위치 설정을 시작한다.
         guard state.entryMode == .direct || state.isStartRequested,
               state.manualStart == nil, !state.isOriginPickerPresented, !state.isPermissionAlertPresented,
-              !state.isPreparingManualOrigin, state.navigationFlow.session == nil,
+              !state.isPreparingManualOrigin, state.navigationFlow.routePlan == nil,
               !state.isAuthorized else { return .none }
         state.isPermissionAlertPresented = true
         return .none
@@ -495,9 +495,9 @@ struct BookRoutePreviewFeature {
             let calculation: Effect<Action> = .run { [routePreviewClient] send in
                 do {
                     try Task.checkCancellation()
-                    let session = try await routePreviewClient.load(map, labels, start, stops)
+                    let routePlan = try await routePreviewClient.load(map, labels, start, stops)
                     try Task.checkCancellation()
-                    await send(.routeLoaded(requestID: requestID, session))
+                    await send(.routeLoaded(requestID: requestID, routePlan))
                 } catch is CancellationError {
                     return
                 } catch {

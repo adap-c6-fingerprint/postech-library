@@ -10,7 +10,7 @@ struct BookNavigationFeature {
     /// 측위가 잠깐 튀는 것만으로 재탐색하지 않도록 여유를 둔다.
     static let offRouteRerouteDelay: TimeInterval = 5
 
-    enum ExitReason: Equatable, Sendable { case cancelled, completed }
+    typealias ExitReason = NavigationSession.Outcome
     enum SpinePhase: Equatable {
         case loading
         // 책등 이미지를 받는 중
@@ -21,13 +21,16 @@ struct BookNavigationFeature {
     }
     @ObservableState
     struct State: Equatable {
-        let session: RoutePlan
+        /// 현재 방문지·구간 경로·도착·종료 상태. 방문지는 이 값의 메서드로만 바꾼다.
+        var navigation: NavigationSession
+        var routePlan: RoutePlan { navigation.routePlan }
+        var currentStopIndex: Int { navigation.currentStopIndex }
+        var exitReason: ExitReason? { navigation.outcome }
         var analyticsIsTest = false
         var plans: [GuidanceEngine?]
         let bookInfos: [BookNavigationBookInfo?]
         var turnArrowsByStop: [[RouteTurnArrow]]
         var timeline: BookNavigationTimeline
-        var reroutedLegs: [Int: IndoorRoute] = [:]
         var isReroutingToNextBook = false
         /// 경로를 벗어났다고 처음 판정한 위치 시각. 경로로 돌아오거나 다시 찾으면 지운다.
         var offRouteSince: Date?
@@ -38,7 +41,6 @@ struct BookNavigationFeature {
         var rerouteRequestID = 0
         var nextBookRequestID = 0
         var nextBookRouteError: String?
-        var currentStopIndex = 0
         var progress: RouteGuidanceProgress?
         var manuallyCompletedFloorTransition: BookNavigationFloorTransition?
         var rawPosition: IndoorPosition?
@@ -51,24 +53,22 @@ struct BookNavigationFeature {
         var subscriptionID = 0
         var isArrivalPresented = false
         var isSheetExpanded = false
-        var automaticallyArrivedStopIndices: Set<Int> = []
         var isCancelConfirmationPresented = false
-        var exitReason: ExitReason?
         var cameraRequest: IndoorMapCameraRequest
         var followsNavigationCamera = true
         var cameraTracking = BookNavigationCameraTracking()
         var arrivalSpines: [Int: SpinePhase] = [:]
         // 책장 앞 책찾기 화면에 그릴 책등. 키는 목적지 순서(stopIndex)
 
-        init(session: RoutePlan) {
-            self.session = session
-            let plans = session.legs.map { try? GuidanceEngine(route: $0, graph: session.graph) }
+        init(routePlan: RoutePlan) {
+            navigation = NavigationSession(routePlan: routePlan)
+            let plans = routePlan.legs.map { try? GuidanceEngine(route: $0, graph: routePlan.graph) }
             self.plans = plans
-            timeline = .init(plans: plans, bookCount: session.stops.count)
-            bookInfos = session.stops.indices.map { BookNavigationBookInfo(session: session, stopIndex: $0) }
+            timeline = .init(plans: plans, bookCount: routePlan.stops.count)
+            bookInfos = routePlan.stops.indices.map { BookNavigationBookInfo(routePlan: routePlan, stopIndex: $0) }
             turnArrowsByStop = plans.map { plan in plan.map { RouteTurnArrow.make(from: $0) } ?? [] }
-            cameraRequest = .init(id: 0, target: .route(session.legs.first ?? session.route,
-                featureIDs: session.stops.prefix(1).map { $0.shelf.mapElementID }))
+            cameraRequest = .init(id: 0, target: .route(routePlan.legs.first ?? routePlan.route,
+                featureIDs: routePlan.stops.prefix(1).map { $0.shelf.mapElementID }))
         }
 
         /// 길안내 중이고 책등 찾기 화면이 닫혀 있을 때만 "서가를 찾았어요"를 보여 준다.
@@ -79,15 +79,10 @@ struct BookNavigationFeature {
         /// 두 번째 책부터, 이미 찾았다고 넘긴 이전 서가로 다시 안내할 수 있다.
         var canReturnToPreviousStop: Bool {
             exitReason == nil && !isArrivalPresented && !isReroutingToNextBook && !isReturningToPreviousStop
-                && currentStopIndex > 0 && session.stops.indices.contains(currentStopIndex - 1)
+                && navigation.hasPreviousStop
         }
-        var currentStop: RouteStop? {
-            session.stops.indices.contains(currentStopIndex) ? session.stops[currentStopIndex] : nil
-        }
-        var currentRoute: IndoorRoute? {
-            reroutedLegs[currentStopIndex]
-                ?? (session.legs.indices.contains(currentStopIndex) ? session.legs[currentStopIndex] : nil)
-        }
+        var currentStop: RouteStop? { navigation.currentStop }
+        var currentRoute: IndoorRoute? { navigation.currentLeg }
         var currentPlan: GuidanceEngine? {
             plans.indices.contains(currentStopIndex) ? plans[currentStopIndex] : nil
         }
@@ -119,27 +114,27 @@ struct BookNavigationFeature {
             case .straight, .nearDestination: break
             default: return false
             }
-            return session.map.floors.first { $0.ordinal == floor }?.id == currentStop?.shelf.floorID
+            return routePlan.map.floors.first { $0.ordinal == floor }?.id == currentStop?.shelf.floorID
         }
-        var hasNextStop: Bool { currentStopIndex >= 0 && currentStopIndex < session.stops.count - 1 }
+        var hasNextStop: Bool { navigation.hasNextStop }
         var effectiveFloorOrdinal: Int? {
             guard let rawPosition else { return confirmedFloorOrdinal }
             if let reported = rawPosition.floorOrdinal,
-               session.map.floors.contains(where: { $0.ordinal == reported }) { return reported }
+               routePlan.map.floors.contains(where: { $0.ordinal == reported }) { return reported }
             return rawPosition.source == .sensor ? confirmedFloorOrdinal : rawPosition.floorOrdinal
         }
         var canConfirmCurrentFloor: Bool {
             guard let rawPosition else { return true }
-            return rawPosition.source == .sensor && !session.map.floors.contains { $0.ordinal == rawPosition.floorOrdinal }
+            return rawPosition.source == .sensor && !routePlan.map.floors.contains { $0.ordinal == rawPosition.floorOrdinal }
         }
         var currentFloor: IndoorMapFloor? {
             if let transition = manuallyCompletedFloorTransition, !transition.isReached(by: progress) {
-                return session.map.floors.first { $0.id == transition.to.floorID }
+                return routePlan.map.floors.first { $0.id == transition.to.floorID }
             }
             if let ordinal = latestPosition?.floorOrdinal ?? confirmedFloorOrdinal {
-                return session.map.floors.first { $0.ordinal == ordinal }
+                return routePlan.map.floors.first { $0.ordinal == ordinal }
             }
-            return session.map.floors.first { $0.id == currentRoute?.start.floorID }
+            return routePlan.map.floors.first { $0.id == currentRoute?.start.floorID }
         }
         var showsNativeUserLocation: Bool {
             isActive && authorization.isAuthorized && latestPosition?.source == .sensor
@@ -158,7 +153,7 @@ struct BookNavigationFeature {
             case .turnAround: return prefix + "방향을 돌려 이동하세요"
             case .nearDestination: return "목적지 서가 근처예요. 도착을 확인해 주세요"
             case let .changeFloor(category, floorID):
-                let floor = session.map.floors.first { $0.id == floorID }?.name ?? "안내된 층"
+                let floor = routePlan.map.floors.first { $0.id == floorID }?.name ?? "안내된 층"
                 let facility: String = switch category {
                 case .elevator: "엘리베이터"
                 case .stairs: "계단"
@@ -230,7 +225,7 @@ struct BookNavigationFeature {
             switch action {
             case .task:
                 guard state.exitReason == nil, !state.isActive else { return .none }
-                let stopIndices = state.session.stops.indices
+                let stopIndices = state.routePlan.stops.indices
                 let spines = loadArrivalSpines(&state, stopIndices: stopIndices)
                 // 길안내를 시작하는 순간 모든 목적지의 책등을 준비해, 책찾기 화면이 로딩 없이 바로 그린다.
                 return .merge(spines, start(&state))
@@ -339,10 +334,10 @@ struct BookNavigationFeature {
 
             case let .currentFloorConfirmed(ordinal):
                 guard state.exitReason == nil, state.canConfirmCurrentFloor,
-                      state.session.map.floors.contains(where: { $0.ordinal == ordinal }) else { return .none }
+                      state.routePlan.map.floors.contains(where: { $0.ordinal == ordinal }) else { return .none }
                 state.confirmedFloorOrdinal = ordinal
                 state.manuallyCompletedFloorTransition = nil
-                if let floor = state.session.map.floors.first(where: { $0.ordinal == ordinal }) {
+                if let floor = state.routePlan.map.floors.first(where: { $0.ordinal == ordinal }) {
                     state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .floor(floor.id))
                 }
                 state.progress = nil
@@ -353,7 +348,7 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil, !state.isCancelConfirmationPresented,
                       state.currentStopIndex == stopIndex, let transition = state.nextFloorTransition,
                       transition.id == stepIndex,
-                      state.session.map.floors.contains(where: { $0.id == transition.to.floorID }) else { return .none }
+                      state.routePlan.map.floors.contains(where: { $0.id == transition.to.floorID }) else { return .none }
                 state.manuallyCompletedFloorTransition = transition
                 state.confirmedFloorOrdinal = transition.to.level
                 // 실제 좌표는 그대로 두고 다음 층의 경로만 표시한다.
@@ -366,7 +361,7 @@ struct BookNavigationFeature {
                 // 사용자가 서가를 찾았다고 직접 알리면 자동 도착 판정과 같은 책등 찾기 화면으로 간다.
                 guard state.canMarkShelfFound else { return .none }
                 state.isArrivalPresented = true
-                state.automaticallyArrivedStopIndices.insert(state.currentStopIndex)
+                state.navigation.markArrived()
                 return .none
 
             case let .arrivalPresentationChanged(isPresented):
@@ -375,7 +370,7 @@ struct BookNavigationFeature {
                 return .none
 
             case let .arrivalSpineTask(stopIndex):
-                guard state.session.stops.indices.contains(stopIndex) else { return .none }
+                guard state.routePlan.stops.indices.contains(stopIndex) else { return .none }
                 return loadArrivalSpines(&state, stopIndices: [stopIndex])
                 // 길안내 시작 때 이미 준비했으면 아무것도 하지 않는다. 시작 때 상태가 없던 경우에만 받는다.
 
@@ -387,7 +382,7 @@ struct BookNavigationFeature {
             case let .continueFromArrival(stopIndex):
                 guard state.exitReason == nil, state.isArrivalPresented,
                       stopIndex == state.currentStopIndex, state.currentStop != nil, state.hasNextStop else { return .none }
-                state.currentStopIndex += 1
+                state.navigation.advance()
                 state.offRouteSince = nil
                 state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
@@ -409,11 +404,11 @@ struct BookNavigationFeature {
                     return .none
                 }
                 let nextIndex = state.currentStopIndex + 1
-                let nextStop = state.session.stops[nextIndex]
+                let nextStop = state.routePlan.stops[nextIndex]
                 // 방문 순서와 이미 선택한 서가를 유지한다. 남은 책의 순서를 다시 최적화하지 않는다.
                 let destination = RouteCandidateStop(book: nextStop.book, holdings: nextStop.holdings,
                     candidateShelves: [nextStop.shelf])
-                let map = state.session.map, labels = state.session.shelfLabels
+                let map = state.routePlan.map, labels = state.routePlan.shelfLabels
                 state.nextBookRequestID += 1
                 let requestID = state.nextBookRequestID
                 state.isReroutingToNextBook = true
@@ -421,9 +416,9 @@ struct BookNavigationFeature {
                 state.statusMessage = "현재 위치에서 다음 책까지의 경로를 계산하고 있어요."
                 return .run { [routePreviewClient] send in
                     do {
-                        let session = try await routePreviewClient.load(map, labels, position, [destination])
+                        let routePlan = try await routePreviewClient.load(map, labels, position, [destination])
                         try Task.checkCancellation()
-                        guard let route = session.legs.first else { throw IndoorRoutingError.noRoute }
+                        guard let route = routePlan.legs.first else { throw IndoorRoutingError.noRoute }
                         await send(.nextBookRouteLoaded(requestID: requestID, stopIndex: nextIndex, route))
                     } catch is CancellationError {
                         return
@@ -436,16 +431,15 @@ struct BookNavigationFeature {
                 guard state.isReroutingToNextBook, state.exitReason == nil,
                       requestID == state.nextBookRequestID, stopIndex == state.currentStopIndex + 1 else { return .none }
                 state.isReroutingToNextBook = false
-                guard route.destination == state.session.legs[stopIndex].destination,
-                      let plan = try? GuidanceEngine(route: route, graph: state.session.graph) else {
+                guard let plan = try? GuidanceEngine(route: route, graph: state.routePlan.graph),
+                      state.navigation.replaceLeg(at: stopIndex, with: route) else {
                     state.nextBookRouteError = "다음 책의 경로를 확인할 수 없어요. 다시 시도해 주세요."
                     return .none
                 }
-                state.reroutedLegs[stopIndex] = route
                 state.plans[stopIndex] = plan
                 state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
-                state.timeline = .init(plans: state.plans, bookCount: state.session.stops.count)
-                state.currentStopIndex = stopIndex
+                state.timeline = .init(plans: state.plans, bookCount: state.routePlan.stops.count)
+                state.navigation.advance()
                 state.offRouteSince = nil
                 state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
@@ -472,10 +466,10 @@ struct BookNavigationFeature {
                     moveToStop(&state, previousIndex)
                     return .cancel(id: CancelID.reroute)
                 }
-                let stop = state.session.stops[previousIndex]
+                let stop = state.routePlan.stops[previousIndex]
                 let destination = RouteCandidateStop(book: stop.book, holdings: stop.holdings,
                                                          candidateShelves: [stop.shelf])
-                let map = state.session.map, labels = state.session.shelfLabels
+                let map = state.routePlan.map, labels = state.routePlan.shelfLabels
                 state.previousStopRequestID += 1
                 let requestID = state.previousStopRequestID
                 state.isReturningToPreviousStop = true
@@ -483,9 +477,9 @@ struct BookNavigationFeature {
                 state.statusMessage = "현재 위치에서 이전 서가까지의 경로를 계산하고 있어요."
                 return .merge(.cancel(id: CancelID.reroute), .run { [routePreviewClient] send in
                     do {
-                        let session = try await routePreviewClient.load(map, labels, position, [destination])
+                        let routePlan = try await routePreviewClient.load(map, labels, position, [destination])
                         try Task.checkCancellation()
-                        guard let route = session.legs.first else { throw IndoorRoutingError.noRoute }
+                        guard let route = routePlan.legs.first else { throw IndoorRoutingError.noRoute }
                         await send(.previousStopRouteLoaded(requestID: requestID, stopIndex: previousIndex, route))
                     } catch is CancellationError {
                         return
@@ -498,12 +492,11 @@ struct BookNavigationFeature {
                 guard state.isReturningToPreviousStop, requestID == state.previousStopRequestID,
                       state.exitReason == nil, stopIndex == state.currentStopIndex - 1 else { return .none }
                 state.isReturningToPreviousStop = false
-                if route.destination == state.session.legs[stopIndex].destination,
-                   let plan = try? GuidanceEngine(route: route, graph: state.session.graph) {
-                    state.reroutedLegs[stopIndex] = route
+                if let plan = try? GuidanceEngine(route: route, graph: state.routePlan.graph),
+                   state.navigation.replaceLeg(at: stopIndex, with: route) {
                     state.plans[stopIndex] = plan
                     state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
-                    state.timeline = .init(plans: state.plans, bookCount: state.session.stops.count)
+                    state.timeline = .init(plans: state.plans, bookCount: state.routePlan.stops.count)
                 }
                 moveToStop(&state, stopIndex)
                 return .none
@@ -522,13 +515,12 @@ struct BookNavigationFeature {
                 state.isReroutingCurrentStop = false
                 state.offRouteSince = nil
                 guard stopIndex == state.currentStopIndex,
-                      state.session.legs.indices.contains(stopIndex),
-                      route.destination == state.session.legs[stopIndex].destination,
-                      let plan = try? GuidanceEngine(route: route, graph: state.session.graph) else { return .none }
-                state.reroutedLegs[stopIndex] = route
+                      state.routePlan.legs.indices.contains(stopIndex),
+                      let plan = try? GuidanceEngine(route: route, graph: state.routePlan.graph),
+                      state.navigation.replaceLeg(at: stopIndex, with: route) else { return .none }
                 state.plans[stopIndex] = plan
                 state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
-                state.timeline = .init(plans: state.plans, bookCount: state.session.stops.count)
+                state.timeline = .init(plans: state.plans, bookCount: state.routePlan.stops.count)
                 state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
                 state.progress = nil
@@ -579,10 +571,10 @@ struct BookNavigationFeature {
     private func loadArrivalSpines(_ state: inout State, stopIndices: some Sequence<Int>) -> Effect<Action> {
         var requests: [(stopIndex: Int, isbn: String)] = []
         for stopIndex in stopIndices where state.arrivalSpines[stopIndex] == nil {
-            if let isbn = state.session.stops[stopIndex].book.isbn, let image = bookCoverClient.cachedSpineImage(isbn) {
+            if let isbn = state.routePlan.stops[stopIndex].book.isbn, let image = bookCoverClient.cachedSpineImage(isbn) {
                 state.arrivalSpines[stopIndex] = .loaded(image)
                 // 상세·책바구니에서 안내를 시작할 때 미리 받아 둔 책등은 기다리지 않고 바로 쓴다.
-            } else if let isbn = state.session.stops[stopIndex].book.isbn {
+            } else if let isbn = state.routePlan.stops[stopIndex].book.isbn {
                 state.arrivalSpines[stopIndex] = .loading
                 requests.append((stopIndex, isbn))
             } else {
@@ -606,10 +598,10 @@ struct BookNavigationFeature {
     private func start(_ state: inout State) -> Effect<Action> {
         if state.subscriptionID == 0 {
             analytics.record(.init(.navigationStarted, [
-                .navigationID: .text(state.session.id.uuidString),
-                .bookCount: .integer(state.session.stops.count),
-                .distanceM: .decimal(state.session.route.distanceMeters),
-                .stepCount: .integer(state.session.guidance.stepCount),
+                .navigationID: .text(state.routePlan.id.uuidString),
+                .bookCount: .integer(state.routePlan.stops.count),
+                .distanceM: .decimal(state.routePlan.route.distanceMeters),
+                .stepCount: .integer(state.routePlan.guidance.stepCount),
                 .isTest: .flag(isAnalyticsTest(state))
             ]))
         }
@@ -638,10 +630,10 @@ struct BookNavigationFeature {
 
     private func end(_ state: inout State, reason: ExitReason) -> Effect<Action> {
         analytics.record(.init(reason == .completed ? .navigationCompleted : .navigationCancelled, [
-            .navigationID: .text(state.session.id.uuidString),
+            .navigationID: .text(state.routePlan.id.uuidString),
             .stopIndex: .integer(state.currentStopIndex), .isTest: .flag(isAnalyticsTest(state))
         ]))
-        state.exitReason = reason
+        state.navigation.finish(reason)
         state.isArrivalPresented = false
         state.isCancelConfirmationPresented = false
         return stop(&state)
@@ -688,16 +680,16 @@ struct BookNavigationFeature {
         let stopIndex = state.currentStopIndex
         let destination = RouteCandidateStop(book: stop.book, holdings: stop.holdings,
                                                  candidateShelves: [stop.shelf])
-        let map = state.session.map, labels = state.session.shelfLabels
+        let map = state.routePlan.map, labels = state.routePlan.shelfLabels
         state.rerouteRequestID += 1
         let requestID = state.rerouteRequestID
         state.isReroutingCurrentStop = true
         state.statusMessage = "경로를 벗어나 현재 위치에서 경로를 다시 찾고 있어요."
         return .run { [routePreviewClient] send in
             do {
-                let session = try await routePreviewClient.load(map, labels, position, [destination])
+                let routePlan = try await routePreviewClient.load(map, labels, position, [destination])
                 try Task.checkCancellation()
-                guard let route = session.legs.first else { throw IndoorRoutingError.noRoute }
+                guard let route = routePlan.legs.first else { throw IndoorRoutingError.noRoute }
                 await send(.currentStopRerouted(requestID: requestID, stopIndex: stopIndex, route))
             } catch is CancellationError {
                 return
@@ -710,9 +702,8 @@ struct BookNavigationFeature {
     /// 안내할 책을 바꾸고 그 서가까지의 경로를 처음부터 다시 보여 준다.
     /// 돌아간 서가에서는 도착 자동 판정이 다시 동작한다.
     private func moveToStop(_ state: inout State, _ stopIndex: Int) {
-        guard state.session.stops.indices.contains(stopIndex) else { return }
-        state.currentStopIndex = stopIndex
-        state.automaticallyArrivedStopIndices.remove(stopIndex)
+        guard state.routePlan.stops.indices.contains(stopIndex) else { return }
+        state.navigation.move(to: stopIndex)
         state.offRouteSince = nil
         state.manuallyCompletedFloorTransition = nil
         state.followsNavigationCamera = true
@@ -736,7 +727,7 @@ struct BookNavigationFeature {
         let effective = IndoorPosition(coordinate: raw.coordinate, floorOrdinal: ordinal,
             horizontalAccuracy: raw.horizontalAccuracy, timestamp: raw.timestamp, source: raw.source,
             headingDegrees: raw.headingDegrees)
-        guard let ordinal, state.session.map.floors.contains(where: { $0.ordinal == ordinal }) else {
+        guard let ordinal, state.routePlan.map.floors.contains(where: { $0.ordinal == ordinal }) else {
             state.latestPosition = nil
             state.progress = nil
             state.statusMessage = "현재 층을 선택해 주세요."
@@ -769,17 +760,17 @@ struct BookNavigationFeature {
             if let progress = state.progress {
                 // Runtime에서 같은 경유지·edge step의 연속 GPS 갱신을 한 번으로 줄인다.
                 analytics.record(.init(.navigationStepChanged, [
-                    .navigationID: .text(state.session.id.uuidString),
+                    .navigationID: .text(state.routePlan.id.uuidString),
                     .stepIndex: .integer(progress.stepIndex), .stopIndex: .integer(state.currentStopIndex),
                     .isTest: .flag(isAnalyticsTest(state))
                 ]))
             }
             if state.isActive, state.exitReason == nil,
                state.progress?.maneuver == .nearDestination,
-               state.automaticallyArrivedStopIndices.insert(state.currentStopIndex).inserted {
+               state.navigation.markArrived() {
                 state.isArrivalPresented = true
                 analytics.record(.init(.destinationArrivalDetected, [
-                    .navigationID: .text(state.session.id.uuidString),
+                    .navigationID: .text(state.routePlan.id.uuidString),
                     .stopIndex: .integer(state.currentStopIndex), .isTest: .flag(isAnalyticsTest(state))
                 ]))
             }
@@ -810,12 +801,12 @@ struct BookNavigationFeature {
     }
 
     private func isAnalyticsTest(_ state: State) -> Bool {
-        state.analyticsIsTest || state.session.start.source == .replay
+        state.analyticsIsTest || state.routePlan.start.source == .replay
     }
 
     private func recordQuality(_ state: State, code: String) {
         analytics.record(.init(.navigationQualityChanged, [
-            .navigationID: .text(state.session.id.uuidString), .qualityState: .text(code),
+            .navigationID: .text(state.routePlan.id.uuidString), .qualityState: .text(code),
             .isTest: .flag(isAnalyticsTest(state))
         ]))
     }

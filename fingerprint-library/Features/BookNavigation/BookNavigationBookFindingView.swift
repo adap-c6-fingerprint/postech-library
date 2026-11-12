@@ -20,22 +20,22 @@ struct BookNavigationBookFindingView: View {
     @State private var pullHoldTask: Task<Void, Never>?
 
     private struct CallNumberScreen {
-        let session: RoutePlan
+        let routePlan: RoutePlan
         let currentStopIndex: Int
         let onCancel: () -> Void
     }
 
-    init(session: RoutePlan, currentStopIndex: Int,
+    init(routePlan: RoutePlan, currentStopIndex: Int,
          bookInformation: BookNavigationBookInfo? = nil,
          spine: BookNavigationFeature.SpinePhase? = nil,
          onTask: @escaping () -> Void = {},
          onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {},
          onDefer: @escaping () -> Void = {},
          onCancel: @escaping () -> Void = {}) {
-        self.init(bookInformation: bookInformation ?? BookNavigationBookInfo(session: session, stopIndex: currentStopIndex),
-                  isIntermediateStop: currentStopIndex < session.stops.count - 1,
+        self.init(bookInformation: bookInformation ?? BookNavigationBookInfo(routePlan: routePlan, stopIndex: currentStopIndex),
+                  isIntermediateStop: currentStopIndex < routePlan.stops.count - 1,
                   spine: spine, onTask: onTask, onContinue: onContinue, onFinish: onFinish, onDefer: onDefer)
-        callNumberScreen = CallNumberScreen(session: session, currentStopIndex: currentStopIndex, onCancel: onCancel)
+        callNumberScreen = CallNumberScreen(routePlan: routePlan, currentStopIndex: currentStopIndex, onCancel: onCancel)
     }
 
     init(bookInformation: BookNavigationBookInfo?, isIntermediateStop: Bool,
@@ -89,7 +89,7 @@ struct BookNavigationBookFindingView: View {
         .navigationDestination(isPresented: $isCallNumberScreenPresented) {
             if let screen = callNumberScreen {
                 BookNavigationArrivalView(
-                    session: screen.session, currentStopIndex: screen.currentStopIndex,
+                    routePlan: screen.routePlan, currentStopIndex: screen.currentStopIndex,
                     bookInformation: bookInformation,
                     onContinue: onContinue, onFinish: onFinish, onCancel: screen.onCancel
                 )

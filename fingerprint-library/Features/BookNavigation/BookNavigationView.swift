@@ -12,8 +12,8 @@ struct BookNavigationView: View {
     @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
     private var isSheetExpanded: Bool { store.isSheetExpanded }
 
-    init(session: RoutePlan, analyticsIsTest: Bool = false, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
-        var state = BookNavigationFeature.State(session: session)
+    init(routePlan: RoutePlan, analyticsIsTest: Bool = false, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
+        var state = BookNavigationFeature.State(routePlan: routePlan)
         state.analyticsIsTest = analyticsIsTest
         self.init(store: Store(initialState: state) {
             BookNavigationFeature()
@@ -93,7 +93,7 @@ struct BookNavigationView: View {
             )) {
                 let index = store.currentStopIndex
                 BookNavigationBookFindingView(
-                    session: store.session, currentStopIndex: index,
+                    routePlan: store.routePlan, currentStopIndex: index,
                     bookInformation: store.currentBookInfo,
                     spine: store.arrivalSpines[index],
                     onTask: { store.send(.arrivalSpineTask(stopIndex: index)) },
@@ -206,7 +206,7 @@ struct BookNavigationView: View {
                 .frame(minHeight: 28)
                 .accessibilityIdentifier("book-navigation-instruction")
                 BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
-                    progress: store.displayedProgress, floors: store.session.map.floors)
+                    progress: store.displayedProgress, floors: store.routePlan.map.floors)
             }
             .padding(.horizontal, 16)
             .fixedSize(horizontal: false, vertical: true)
@@ -241,7 +241,7 @@ struct BookNavigationView: View {
 
     private var currentFloorMenu: some View {
         Menu {
-            ForEach(store.session.map.floors) { floor in
+            ForEach(store.routePlan.map.floors) { floor in
                 Button(floor.name) { store.send(.currentFloorConfirmed(floor.ordinal)) }
             }
         } label: {
@@ -272,12 +272,12 @@ struct BookNavigationView: View {
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("book-navigation-floor-transition")
-        .accessibilityHint("\(store.session.map.floors.first { $0.id == transition.to.floorID }?.name ?? "다음 층") 경로를 표시합니다")
+        .accessibilityHint("\(store.routePlan.map.floors.first { $0.id == transition.to.floorID }?.name ?? "다음 층") 경로를 표시합니다")
     }
 
     private func navigationMap(stop: RouteStop, route: IndoorRoute, floor: IndoorMapFloor) -> some View {
         IndoorMapKitView(
-            map: store.session.map, floor: floor, selectedFeatureID: nil,
+            map: store.routePlan.map, floor: floor, selectedFeatureID: nil,
             position: store.latestPosition, showsUserLocation: false, isPlacingOrigin: false,
             cameraRequest: store.cameraRequest, onSelect: { _ in }, onPlaceOrigin: { _ in },
             route: route, viewportInsets: .init(top: 140, left: 0,
