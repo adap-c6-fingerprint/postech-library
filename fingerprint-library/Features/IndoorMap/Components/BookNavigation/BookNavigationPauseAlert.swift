@@ -46,8 +46,9 @@ struct BookNavigationPauseAlert: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 12)
                 .padding(.bottom, 12)
-            // 높이를 고정한 창에서 남는 공간은 본문과 버튼 사이에 두고, 버튼은 카드 아래에 붙인다.
-            Spacer(minLength: 0)
+            // 높이를 고정한 두 권 이상 창에서만 남는 공간을 본문과 버튼 사이에 두고 버튼을 카드 아래에 붙인다.
+            // 높이를 고정하지 않는 한 권짜리 창에 Spacer를 두면 화면 높이만큼 늘어나 카드가 길어진다.
+            if hasNextStop { Spacer(minLength: 0) }
             buttons
         }
         .padding(.horizontal, 12)
