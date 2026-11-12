@@ -168,11 +168,11 @@ struct EditMyAffiliationView: View {
     }
 }
 
-// 온보딩 소속 화면과 같은 색 (OnboardingView의 private 색상 토큰과 같은 값)
+// 온보딩 소속 화면과 같은 입력칸 토큰
 private extension Color {
-    static let editAffiliationField = Color(red: 0x24 / 255, green: 0x24 / 255, blue: 0x24 / 255)
-    static let editAffiliationCaption = Color(red: 0x77 / 255, green: 0x77 / 255, blue: 0x77 / 255)
-    static let editAffiliationActionTint = Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)
-    static let editAffiliationDisabledField = Color(red: 0x16 / 255, green: 0x16 / 255, blue: 0x16 / 255)
-    static let editAffiliationDisabledText = Color(red: 0x99 / 255, green: 0x99 / 255, blue: 0x99 / 255)
+    static let editAffiliationField = PobookUI.ColorToken.Field.background
+    static let editAffiliationCaption = PobookUI.ColorToken.Field.caption
+    static let editAffiliationActionTint = PobookUI.ColorToken.Field.actionTint
+    static let editAffiliationDisabledField = PobookUI.ColorToken.Field.disabledBackground
+    static let editAffiliationDisabledText = PobookUI.ColorToken.Field.disabledText
 }

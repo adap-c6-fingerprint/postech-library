@@ -36,7 +36,7 @@ struct BookRoutePreviewView: View {
         routeStore.routeError
     }
     
-    private let accent = Color(red: 0.88, green: 0.95, blue: 0.19)
+    private let accent = PobookUI.ColorToken.accent
     private var currentStart: IndoorPosition? { store.currentStart }
     private var needsStartLocationSetup: Bool { store.needsStartLocationSetup }
     private var routeRequest: BookRoutePreviewRequest { store.routeRequest }

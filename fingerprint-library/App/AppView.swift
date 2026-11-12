@@ -72,7 +72,7 @@ struct AppView: View {
             }
         }
         // 탭바만 강조색을 사용하고, 각 탭의 화면은 위에서 기본 색으로 되돌린다.
-        .tint(Color(red: 0.88, green: 0.95, blue: 0.19))
+        .tint(PobookUI.ColorToken.accent)
         .searchable(
             text: Binding(
                 get: { store.bookSearch.query },

@@ -179,7 +179,7 @@ extension View {
 
 // 피그마 책바구니 시안의 색상 토큰
 extension Color {
-    static let cartCard = Color(red: 0x2B / 255, green: 0x2B / 255, blue: 0x2B / 255)
+    static let cartCard = PobookUI.ColorPrimitive.Grayscale._800
     static let cartBackground = Color.backgroundDefault
     static let cartTextSecondary = Color.textSecondary
     static let cartTextTertiary = Color.textTertiary

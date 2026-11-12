@@ -561,14 +561,13 @@ private struct ChipFlowLayout: Layout {
 // 피그마 온보딩 시안의 색상 토큰 (배경·강조색은 책바구니 토큰을 함께 쓴다)
 private extension Color {
     static let onboardingTextPrimary = Color.textPrimary
-    static let onboardingField = Color(red: 0x24 / 255, green: 0x24 / 255, blue: 0x24 / 255)
-    static let onboardingCaption = Color(red: 0x77 / 255, green: 0x77 / 255, blue: 0x77 / 255)
-    static let onboardingActionTint = Color(red: 0x33 / 255, green: 0x33 / 255, blue: 0x33 / 255)
-    static let onboardingDisabledField = Color(red: 0x16 / 255, green: 0x16 / 255, blue: 0x16 / 255)
-    static let onboardingDisabledText = Color(red: 0x99 / 255, green: 0x99 / 255, blue: 0x99 / 255)
-    static let onboardingTermsLink = Color(red: 0x55 / 255, green: 0x55 / 255, blue: 0x55 / 255)
-    static let onboardingTextLink = Color(red: 0xB6 / 255, green: 0xB6 / 255, blue: 0xB6 / 255)
-    // ✅ 비활성 입력칸 색 (피그마 Black/Gray 1100, Gray 400)
+    static let onboardingField = PobookUI.ColorToken.Field.background
+    static let onboardingCaption = PobookUI.ColorToken.Field.caption
+    static let onboardingActionTint = PobookUI.ColorToken.Field.actionTint
+    static let onboardingDisabledField = PobookUI.ColorToken.Field.disabledBackground
+    static let onboardingDisabledText = PobookUI.ColorToken.Field.disabledText
+    static let onboardingTermsLink = PobookUI.ColorPrimitive.Grayscale._600
+    static let onboardingTextLink = PobookUI.ColorPrimitive.Grayscale._300
 }
 
 

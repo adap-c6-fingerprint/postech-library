@@ -120,6 +120,19 @@ extension PobookUI {
 
         static let recommendationBackground = Primary._600.opacity(0.6)
 
+        /// 탭 선택·주요 버튼 강조색. Primary 500과 다른 기존 앱 tint 값을 그대로 유지한다.
+        static let accent = SwiftUI.Color(red: 0.88, green: 0.95, blue: 0.19)
+
+        /// 온보딩·소속 수정의 선택 입력칸.
+        enum Field {
+            static let background = Gray._900
+            static let caption = Gray._500
+            static let actionTint = Gray._700
+            /// 피그마 Black/Gray 1100 시안 값. Primitive Gray 1100(#121212)과 다르다.
+            static let disabledBackground = SwiftUI.Color(hex: 0x161616)
+            static let disabledText = Gray._400
+        }
+
         /// Figma "Fills/Secondary". 시스템 색이라 라이트 rgba(120,120,128,0.16), 다크 rgba(120,120,128,0.32)로 바뀐다.
         static let fillsSecondary = SwiftUI.Color(uiColor: .secondarySystemFill)
     }
