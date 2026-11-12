@@ -31,7 +31,7 @@ extension SearchHistoryClient: DependencyKey {
     )
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var searchHistoryClient: SearchHistoryClient {
         get { self[SearchHistoryClient.self] }
         set { self[SearchHistoryClient.self] = newValue }

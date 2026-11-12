@@ -15,7 +15,7 @@ extension IndoorNavigationClient: DependencyKey {
     static let testValue = Self(load: { _ in throw IndoorMapLoadError.missingResource("test routing") })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var indoorNavigationClient: IndoorNavigationClient {
         get { self[IndoorNavigationClient.self] }
         set { self[IndoorNavigationClient.self] = newValue }

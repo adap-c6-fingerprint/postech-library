@@ -26,7 +26,7 @@ struct RecommendationShelfView: View {
     var cornerRadius: CGFloat? = nil
 
     // Figma 2963:9772. 화면에 배치한 높이를 기준으로 장식의 비율을 유지한다.
-    private enum Design {
+    private nonisolated enum Design {
         static let width: CGFloat = 707.25
         static let height: CGFloat = 155.458
         static let cornerRadius: CGFloat = 31.962
@@ -154,7 +154,7 @@ struct RecommendationShelfView: View {
     }
 
     /// PNG의 바깥 여백과 그림자를 제외한 판 본체의 외곽.
-    private struct PlateOutline: Shape {
+    private nonisolated struct PlateOutline: Shape {
         var inset: CGFloat = 0
         var cornerRadius: CGFloat? = nil
 

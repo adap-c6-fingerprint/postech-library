@@ -42,7 +42,7 @@ extension BookLocationCacheClient: DependencyKey {
     })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     nonisolated var bookLocationCacheClient: BookLocationCacheClient {
         get { self[BookLocationCacheClient.self] }
         set { self[BookLocationCacheClient.self] = newValue }

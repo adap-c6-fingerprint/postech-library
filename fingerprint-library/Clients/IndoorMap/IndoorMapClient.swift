@@ -15,7 +15,7 @@ extension IndoorMapClient: DependencyKey {
     static let testValue = Self(load: { throw IndoorMapLoadError.missingResource("test map") })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var indoorMapClient: IndoorMapClient {
         get { self[IndoorMapClient.self] }
         set { self[IndoorMapClient.self] = newValue }

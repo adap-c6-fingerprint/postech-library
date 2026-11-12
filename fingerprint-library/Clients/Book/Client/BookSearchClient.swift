@@ -33,7 +33,7 @@ extension BookSearchClient: DependencyKey {
     static let testValue = Self(cached: { _ in nil }, search: { _, _ in [] })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var bookSearchClient: BookSearchClient {
         // BookSearchFeature.swift에서 @Dependency(\.bookSearchClient)로 호출됨
         get { self[BookSearchClient.self] }

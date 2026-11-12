@@ -1,6 +1,6 @@
 import ComposableArchitecture
 
-struct DepartmentPopularBooksClient: Sendable {
+nonisolated struct DepartmentPopularBooksClient: Sendable {
     var fetch: @Sendable (_ affiliationKey: [String], _ count: Int, _ isInitial: Bool) async throws -> [Book]
     // ✅ 학과 이름 대신 소속 경로(상위·그룹·최종)를 받는다. 이름만으로는 학부·대학원의 같은 학과가 섞인다.
     // ✅ isInitial: 온보딩 직후 첫 표시이면 true. 하드데이터만 쓰고 네트워크를 거치지 않는다.
@@ -16,7 +16,7 @@ extension DepartmentPopularBooksClient: DependencyKey {
     static let testValue = Self(fetch: { _, _, _ in [] }, fetchAll: { _ in [] })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var departmentPopularBooksClient: DepartmentPopularBooksClient {
         get { self[DepartmentPopularBooksClient.self] }
         set { self[DepartmentPopularBooksClient.self] = newValue }

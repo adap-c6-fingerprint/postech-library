@@ -31,7 +31,7 @@ extension ColdStartRecommendationClient: DependencyKey {
     static let testValue = Self(fetch: { _ in [] })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var coldStartRecommendationClient: ColdStartRecommendationClient {
         get { self[ColdStartRecommendationClient.self] }
         set { self[ColdStartRecommendationClient.self] = newValue }

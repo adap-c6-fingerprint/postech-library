@@ -28,7 +28,7 @@ nonisolated struct ShelfResolution: Equatable, Identifiable, Sendable {
     }
 }
 
-extension Array where Element == ShelfResolution {
+nonisolated extension Array where Element == ShelfResolution {
     /// 길안내 목적지로 쓸 소장 위치.
     ///
     /// 3·4층 일반 서고에서 서가를 찾았으면 2층 별치 서가는 제외한다. 일반 서고 후보가 없을 때만 2층으로 안내한다.

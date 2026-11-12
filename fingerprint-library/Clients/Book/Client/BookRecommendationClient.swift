@@ -1,7 +1,7 @@
 import Foundation
 import ComposableArchitecture
 
-struct BookRecommendationClient: Sendable {
+nonisolated struct BookRecommendationClient: Sendable {
     var fetch: @Sendable (_ count: Int) async throws -> [Book]
 }
 
@@ -85,7 +85,7 @@ extension BookRecommendationClient: DependencyKey {
     static let testValue = Self(fetch: { _ in [] })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var bookRecommendationClient: BookRecommendationClient {
         get { self[BookRecommendationClient.self] }
         set { self[BookRecommendationClient.self] = newValue }

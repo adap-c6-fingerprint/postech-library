@@ -92,7 +92,7 @@ extension RecentlyFoundBooksClient: DependencyKey {
     )
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var recentlyFoundBooksClient: RecentlyFoundBooksClient {
         get { self[RecentlyFoundBooksClient.self] }
         set { self[RecentlyFoundBooksClient.self] = newValue }

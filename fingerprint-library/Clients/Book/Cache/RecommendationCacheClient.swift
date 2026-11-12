@@ -27,20 +27,20 @@ extension RecommendationCacheClient: DependencyKey {
         }
     )
 
-    private static let store = RecommendationCacheStore(
+    nonisolated private static let store = RecommendationCacheStore(
         directory: URL.applicationSupportDirectory
             // 표지 선택 정책 변경: 이전 저해상도 파일 대신 새 묶음을 준비한다.
             .appendingPathComponent("RecommendationCache-v3", isDirectory: true)
             // ✅ 이슈 #237: LCC 관심사로 만든 이전 추천 저장본을 새 하드데이터 추천과 섞지 않는다.
     )
 
-    private static let preparer = RecommendationCachePreparer(
-        store: store, loadCover: BookCoverClient.liveValue.pngData,
+    nonisolated private static let preparer = RecommendationCachePreparer(
+        store: store, loadCover: { try await BookCoverClient.liveValue.pngData($0) },
         lookupYes24: { try await BookCoverPipeline.yes24Cover.url(for: $0) }
     )
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var recommendationCacheClient: RecommendationCacheClient {
         get { self[RecommendationCacheClient.self] }
         set { self[RecommendationCacheClient.self] = newValue }

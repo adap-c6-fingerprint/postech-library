@@ -41,7 +41,7 @@ extension IndoorLocationClient: DependencyKey {
     static let testValue = Self(events: { AsyncStream { $0.finish() } }, requestPermission: {})
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var indoorLocationClient: IndoorLocationClient {
         get { self[IndoorLocationClient.self] }
         set { self[IndoorLocationClient.self] = newValue }

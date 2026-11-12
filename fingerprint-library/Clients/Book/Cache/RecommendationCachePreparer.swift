@@ -7,7 +7,28 @@ nonisolated struct RecommendationCachePreparer: Sendable {
     let store: RecommendationCacheStore
     var loadCover: @Sendable (URL) async throws -> Data
     var lookupYes24: @Sendable (String) async throws -> URL?
-    var now: @Sendable () -> Date = { Date() }
+    var now: @Sendable () -> Date
+
+    init(
+        store: RecommendationCacheStore,
+        loadCover: @escaping @Sendable (URL) async throws -> Data,
+        lookupYes24: @escaping @Sendable (String) async throws -> URL?,
+        now: @escaping @Sendable () -> Date
+    ) {
+        self.store = store
+        self.loadCover = loadCover
+        self.lookupYes24 = lookupYes24
+        self.now = now
+    }
+
+    /// 저장 시각을 현재 시각으로 기록한다.
+    init(
+        store: RecommendationCacheStore,
+        loadCover: @escaping @Sendable (URL) async throws -> Data,
+        lookupYes24: @escaping @Sendable (String) async throws -> URL?
+    ) {
+        self.init(store: store, loadCover: loadCover, lookupYes24: lookupYes24, now: { Date() })
+    }
 
     func prepare(_ result: [Book]) async throws -> CachedRecommendations {
         try Task.checkCancellation()

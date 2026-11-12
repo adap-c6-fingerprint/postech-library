@@ -38,7 +38,7 @@ extension AnalyticsClient: DependencyKey {
     static let testValue = Self(record: { _ in })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var analyticsClient: AnalyticsClient {
         get { self[AnalyticsClient.self] }
         set { self[AnalyticsClient.self] = newValue }

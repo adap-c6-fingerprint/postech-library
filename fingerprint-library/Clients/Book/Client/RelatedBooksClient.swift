@@ -8,7 +8,7 @@
 import Foundation
 import ComposableArchitecture
 
-struct RelatedBooksClient: Sendable {
+nonisolated struct RelatedBooksClient: Sendable {
     var fetch: @Sendable (_ isbn13: String) async throws -> [Book]
 }
 
@@ -111,7 +111,7 @@ nonisolated enum RelatedBooksClientError: Error {
 }
 
 // Feature에서 사용할 의존성 등록
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var relatedBooksClient: RelatedBooksClient {
         get { self[RelatedBooksClient.self] }
         set { self[RelatedBooksClient.self] = newValue }

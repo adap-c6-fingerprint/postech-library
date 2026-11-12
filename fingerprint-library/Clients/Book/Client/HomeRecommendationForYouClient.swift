@@ -83,7 +83,7 @@ extension HomeRecommendationForYouClient: DependencyKey {
     static let testValue = Self.live(recommendation: { _, _ in [] }, cache: .testValue)
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var homeRecommendationForYouClient: HomeRecommendationForYouClient {
         get { self[HomeRecommendationForYouClient.self] }
         set { self[HomeRecommendationForYouClient.self] = newValue }

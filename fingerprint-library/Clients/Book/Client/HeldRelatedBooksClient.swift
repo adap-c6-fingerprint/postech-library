@@ -55,7 +55,7 @@ extension HeldRelatedBooksClient: DependencyKey {
     static let testValue = Self(candidates: { _, _ in [] })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var heldRelatedBooksClient: HeldRelatedBooksClient {
         get { self[HeldRelatedBooksClient.self] }
         set { self[HeldRelatedBooksClient.self] = newValue }

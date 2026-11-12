@@ -38,7 +38,7 @@ extension RoutePlanningClient: DependencyKey {
     )
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var routePlanningClient: RoutePlanningClient {
         get { self[RoutePlanningClient.self] }
         set { self[RoutePlanningClient.self] = newValue }

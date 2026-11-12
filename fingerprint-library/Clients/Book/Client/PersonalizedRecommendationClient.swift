@@ -36,7 +36,7 @@ extension PersonalizedRecommendationClient: DependencyKey {
     // 테스트: 항상 빈 결과.
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var personalizedRecommendationClient: PersonalizedRecommendationClient {
         get { self[PersonalizedRecommendationClient.self] }
         set { self[PersonalizedRecommendationClient.self] = newValue }

@@ -75,7 +75,7 @@ extension RecentSearchBooksClient: DependencyKey {
     static let testValue = Self(load: { [] }, record: { _ in }, remove: { _ in })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var recentSearchBooksClient: RecentSearchBooksClient {
         get { self[RecentSearchBooksClient.self] }
         set { self[RecentSearchBooksClient.self] = newValue }

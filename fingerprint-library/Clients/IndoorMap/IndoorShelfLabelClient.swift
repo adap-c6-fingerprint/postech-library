@@ -14,7 +14,7 @@ extension IndoorShelfLabelClient: DependencyKey {
     static let testValue = Self(supports: { _ in false }, load: { _ in [] })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var indoorShelfLabelClient: IndoorShelfLabelClient {
         get { self[IndoorShelfLabelClient.self] }
         set { self[IndoorShelfLabelClient.self] = newValue }

@@ -58,7 +58,7 @@ extension BookCoverClient: DependencyKey {
 }
 
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var bookCoverClient: BookCoverClient {
         get { self[BookCoverClient.self] }
         set { self[BookCoverClient.self] = newValue }

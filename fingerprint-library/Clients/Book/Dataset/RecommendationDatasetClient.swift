@@ -25,7 +25,7 @@ extension RecommendationDatasetClient: DependencyKey {
     static let testValue = Self(load: { .empty })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var recommendationDatasetClient: RecommendationDatasetClient {
         get { self[RecommendationDatasetClient.self] }
         set { self[RecommendationDatasetClient.self] = newValue }

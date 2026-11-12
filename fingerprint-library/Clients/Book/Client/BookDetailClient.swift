@@ -8,7 +8,7 @@
 import Foundation
 import ComposableArchitecture
 
-struct BookDetailClient: Sendable {
+nonisolated struct BookDetailClient: Sendable {
     var fetchDescription: @Sendable (_ isbn13: String) async throws -> BookDescription?
 }
 
@@ -24,7 +24,7 @@ extension BookDetailClient: DependencyKey {
     static let testValue = BookDetailClient(fetchDescription: { _ in nil })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var bookDetailClient: BookDetailClient {
         get { self[BookDetailClient.self] }
         set { self[BookDetailClient.self] = newValue }

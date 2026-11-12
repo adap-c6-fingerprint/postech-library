@@ -25,7 +25,7 @@ extension LegacyUserProfileClient: DependencyKey {
     static let testValue = Self(load: { nil })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var legacyUserProfileClient: LegacyUserProfileClient {
         get { self[LegacyUserProfileClient.self] }
         set { self[LegacyUserProfileClient.self] = newValue }

@@ -77,7 +77,7 @@ extension RecentlyViewedBooksClient: DependencyKey {
     )
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var recentlyViewedBooksClient: RecentlyViewedBooksClient {
         get { self[RecentlyViewedBooksClient.self] }
         set { self[RecentlyViewedBooksClient.self] = newValue }
