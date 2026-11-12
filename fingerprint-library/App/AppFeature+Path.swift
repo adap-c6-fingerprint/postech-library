@@ -49,7 +49,8 @@ extension AppFeature {
     func presentGuidance(for books: [Book], state: inout State) {
         guard !books.isEmpty else { return }
         state.modal = .routePreview(BookRoutePreviewFeature.State(
-            books: books, entryMode: books.count > 1 ? .preview : .direct
+            books: books, entryMode: books.count > 1 ? .preview : .direct,
+            homeManualStart: state.indoorMap.manualPosition
         ))
     }
 
