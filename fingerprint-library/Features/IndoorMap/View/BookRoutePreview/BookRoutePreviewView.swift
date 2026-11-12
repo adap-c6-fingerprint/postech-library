@@ -18,6 +18,10 @@ struct BookRoutePreviewView: View {
     /// 사용자가 직접 지정한 출발 위치. 권한이 없거나 실제 위치가 맞지 않을 때 센서 위치 대신 사용한다.
     @State private var manualStart: IndoorPosition?
     @State private var isOriginPickerPresented = false
+    /// 미리보기에서 "바로 안내 시작"을 눌렀는지. 누르기 전에는 위치 권한 알림·출발 위치 설정을 띄우지 않는다.
+    @State private var isStartRequested = false
+    /// 출발 위치를 직접 정한 직후 그 위치로 경로를 계산해 바로 안내를 시작한다.
+    @State private var startsAfterOriginSelected = false
     /// 위치 권한이 없을 때 보여 주는 알림. 설정 앱의 이 앱 권한 화면으로 보내거나 직접 설정으로 넘긴다.
     @State private var isPermissionAlertPresented = false
     /// 직접 설정으로 넘어가는 중. 지도가 준비되면 출발지 설정 화면을 연다.
@@ -55,6 +59,12 @@ struct BookRoutePreviewView: View {
               position.isRecent(at: Date()) else { return nil }
         return position
     }
+    /// 위치 권한이 없고 직접 정한 출발 위치도 없어, 안내 전에 출발 위치 설정이 필요한 상태.
+    private var needsStartLocationSetup: Bool {
+        guard manualStart == nil, let mapStore else { return false }
+        return !mapStore.authorization.isAuthorized
+    }
+
     private var routeRequest: BookRoutePreviewRequest {
         .init(state: destinationStore?.state, start: previewStart)
     }
@@ -359,9 +369,17 @@ struct BookRoutePreviewView: View {
                     session: readySession,
                     isLoadingRoute: isLoadingRoute,
                     routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError,
-                    canStart: readySession != nil && currentStart != nil && !isLoadingRoute && routeError == nil,
+                    // 위치 권한이 없어도 눌러서 출발 위치 설정을 시작할 수 있게 한다.
+                    canStart: !isLoadingRoute && (needsStartLocationSetup
+                        || (readySession != nil && currentStart != nil && routeError == nil)),
                     onBack: { dismiss() },
                     onStart: { _ in
+                        isStartRequested = true
+                        // 출발 위치가 없으면 이때 위치 권한 알림·출발 위치 설정을 시작한다.
+                        guard !needsStartLocationSetup else {
+                            resolveStartAuthorization()
+                            return
+                        }
                         routeStore.send(.startRequested(.init(state: destinationStore.state, start: currentStart)))
                     },
                     onRetry: {
@@ -489,6 +507,9 @@ struct BookRoutePreviewView: View {
 
             if entryMode == .direct {
                 await routeStore.send(.startRequested(request)).finish()
+            } else if startsAfterOriginSelected {
+                startsAfterOriginSelected = false
+                await routeStore.send(.startRequested(request)).finish()
             } else {
                 await routeStore.send(.requestChanged(request)).finish()
             }
@@ -504,6 +525,8 @@ struct BookRoutePreviewView: View {
     /// iOS는 한 번 거부한 뒤에는 시스템 권한 창을 다시 띄우지 않는다. 그래서 권한 요청 대신
     /// 이 앱의 설정 화면으로 보내는 버튼을 둔다.
     private func resolveStartAuthorization() {
+        // 미리보기는 "바로 안내 시작"을 누른 뒤에만 출발 위치 설정을 시작한다.
+        guard entryMode == .direct || isStartRequested else { return }
         guard let mapStore, manualStart == nil, !isOriginPickerPresented,
               !isPermissionAlertPresented, navigationFlow.session == nil else { return }
         guard !mapStore.authorization.isAuthorized else { return }
@@ -537,6 +560,8 @@ struct BookRoutePreviewView: View {
                     dismiss()
                 },
                 onConfirm: { position in
+                    // 미리보기에서 "바로 안내 시작"으로 들어왔으면 정한 위치로 바로 안내를 시작한다.
+                    if entryMode == .preview, isStartRequested { startsAfterOriginSelected = true }
                     manualStart = position
                     isOriginPickerPresented = false
                     // routeRequest가 바뀌어 지정한 출발 위치로 경로를 다시 계산한다.
