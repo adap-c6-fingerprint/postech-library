@@ -3,7 +3,7 @@ import SwiftUI
 
 /// 현재 책까지의 지도와, 화면 폭을 채우는 길안내 시트.
 struct BookNavigationView: View {
-    @State private var store: StoreOf<BookNavigationFeature>
+    @Bindable private var store: StoreOf<BookNavigationFeature>
     private let onExit: ((BookNavigationFeature.ExitReason) -> Void)?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.scenePhase) private var scenePhase
@@ -12,17 +12,10 @@ struct BookNavigationView: View {
     @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
     private var isSheetExpanded: Bool { store.isSheetExpanded }
 
-    init(routePlan: RoutePlan, analyticsIsTest: Bool = false, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
-        var state = BookNavigationFeature.State(routePlan: routePlan)
-        state.analyticsIsTest = analyticsIsTest
-        self.init(store: Store(initialState: state) {
-            BookNavigationFeature()
-        }, onExit: onExit)
-    }
-
+    /// 길안내 Store는 경로 미리보기 reducer가 하위 기능으로 만든다.
     init(store: StoreOf<BookNavigationFeature>, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
         self.onExit = onExit
-        _store = State(initialValue: store)
+        self.store = store
     }
 
     var body: some View {

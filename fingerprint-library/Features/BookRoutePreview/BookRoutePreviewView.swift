@@ -5,7 +5,7 @@ import UIKit
 /// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
 /// 책·진입 방식·서가 조회 상태는 BookRoutePreviewFeature가 소유하고, App의 Modal로 열린다.
 struct BookRoutePreviewView: View {
-    let store: StoreOf<BookRoutePreviewFeature>
+    @Bindable var store: StoreOf<BookRoutePreviewFeature>
 
     private var routeStore: StoreOf<BookRoutePreviewFeature> { store }
     private var entryMode: BookRoutePreviewFeature.EntryMode { store.entryMode }
@@ -295,15 +295,11 @@ struct BookRoutePreviewView: View {
                 previewContent
             }
         }
-        .fullScreenCover(item: Binding(
-            get: { store.navigationFlow.routePlan },
-            set: { if $0 == nil { store.send(.navigationCoverClosed) } }
-        ), onDismiss: {
+        .fullScreenCover(item: $store.scope(state: \.navigation, action: \.navigation), onDismiss: {
             store.send(.navigationCoverDismissed)
-        }) { routePlan in
-            BookNavigationView(routePlan: routePlan, analyticsIsTest: destination.isTestMode) { _ in
-                store.send(.navigationEnded)
-            }
+        }) { navigationStore in
+            // 안내가 끝나면 미리보기 reducer가 길안내를 닫는다.
+            BookNavigationView(store: navigationStore, onExit: { _ in })
         }
         .sheet(isPresented: $isProblemReportFallbackPresented) {
             ProblemReportFallbackSheet(messageBody: problemReportBody) {

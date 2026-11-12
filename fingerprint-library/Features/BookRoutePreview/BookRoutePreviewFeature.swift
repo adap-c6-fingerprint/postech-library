@@ -59,8 +59,10 @@ struct BookRoutePreviewFeature {
         var isRouteMapReady = false
         /// 준비가 끝나지 않은 채 오래 머문 경우. 사용자가 빠져나갈 수 있게 실패 화면으로 바꾼다.
         var preparingTimedOut = false
-        /// 길안내 화면 표시와, 길안내를 마친 뒤 이 화면까지 닫을지.
-        var navigationFlow = BookRoutePreviewNavigationState()
+        /// 길안내. 이 화면 위에 전체 화면으로 띄우고, 안내를 마치면 닫는다.
+        @Presents var navigation: BookNavigationFeature.State?
+        /// 길안내를 마치고 닫았으면, 길안내 화면이 완전히 닫힌 뒤 이 화면도 닫아 안내를 시작한 화면으로 돌아간다.
+        var returnsToOriginAfterNavigation = false
 
         // MARK: 경로 계산
 
@@ -158,9 +160,8 @@ struct BookRoutePreviewFeature {
         case originPickerCancelled
         case originPickerDismissed
         /// 길안내 화면이 안내를 마쳤다. 길안내가 닫히면 이 화면도 닫는다.
-        case navigationEnded
-        /// 시스템이 길안내 화면을 닫았다. 안내를 마친 것은 아니므로 이 화면은 남긴다.
-        case navigationCoverClosed
+        case navigation(PresentationAction<BookNavigationFeature.Action>)
+        /// 길안내 화면의 닫힘 전환이 끝났다.
         case navigationCoverDismissed
         case preparingTimedOut(requestID: Int)
 
@@ -279,17 +280,19 @@ struct BookRoutePreviewFeature {
                 state.isPreparingManualOrigin = false
                 return .none
 
-            case .navigationEnded:
-                state.navigationFlow.navigationEnded()
+            case .navigation(.presented):
+                // 길안내가 끝나면(완료·취소) 길안내를 닫고, 닫힌 뒤 이 화면도 닫는다.
+                guard state.navigation?.exitReason != nil else { return .none }
+                state.navigation = nil
+                state.returnsToOriginAfterNavigation = true
                 return .none
 
-            case .navigationCoverClosed:
-                state.navigationFlow.routePlan = nil
+            case .navigation(.dismiss):
                 return .none
 
             case .navigationCoverDismissed:
-                // 길안내를 마치고 닫혔으면 미리보기도 닫아 안내를 시작한 화면으로 돌아간다.
-                guard state.navigationFlow.presentationDismissed() else { return .none }
+                guard state.returnsToOriginAfterNavigation else { return .none }
+                state.returnsToOriginAfterNavigation = false
                 return .run { _ in await dismiss() }
 
             case let .preparingTimedOut(requestID):
@@ -355,7 +358,11 @@ struct BookRoutePreviewFeature {
                         return loadRoute(.failed(IndoorRoutingError.invalidPosition.localizedDescription),
                                          startsNavigation: true, state: &state)
                     }
-                    state.navigationFlow.start(routePlan)
+                    if state.navigation == nil, !state.returnsToOriginAfterNavigation {
+                        var navigation = BookNavigationFeature.State(routePlan: routePlan)
+                        navigation.analyticsIsTest = state.destination.isTestMode
+                        state.navigation = navigation
+                    }
                 }
                 return .merge(reconcile(&state), resolveStartAuthorization(&state))
 
@@ -398,6 +405,7 @@ struct BookRoutePreviewFeature {
             }
         }
         .ifLet(\.shelf, action: \.shelf) { BookShelfMapFeature() }
+        .ifLet(\.$navigation, action: \.navigation) { BookNavigationFeature() }
     }
 
     /// 공유 위치 상태가 바뀔 때마다 알린다. 위치 센서 스트림은 LocationSessionFeature만 연다.
@@ -442,7 +450,7 @@ struct BookRoutePreviewFeature {
         // 미리보기는 "바로 안내 시작"을 누른 뒤에만 출발 위치 설정을 시작한다.
         guard state.entryMode == .direct || state.isStartRequested,
               state.manualStart == nil, !state.isOriginPickerPresented, !state.isPermissionAlertPresented,
-              !state.isPreparingManualOrigin, state.navigationFlow.routePlan == nil,
+              !state.isPreparingManualOrigin, state.navigation == nil,
               !state.isAuthorized else { return .none }
         state.isPermissionAlertPresented = true
         return .none
