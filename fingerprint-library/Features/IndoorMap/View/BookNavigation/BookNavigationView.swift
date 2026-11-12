@@ -149,7 +149,7 @@ struct BookNavigationView: View {
             }
             Spacer(minLength: 0)
             Button { store.send(.cancelTapped) } label: {
-                Image(systemName: "pause.fill").frame(width: 44, height: 44)
+                Image(systemName: "xmark").frame(width: 44, height: 44)
                     .glassEffect(.regular, in: .circle)
             }
             .accessibilityLabel("안내 일시 정지")
