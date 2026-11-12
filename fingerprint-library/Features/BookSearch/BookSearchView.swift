@@ -13,7 +13,6 @@ struct BookSearchView: View {
     let onShowCart: () -> Void
     var onShowFavorites: (() -> Void)? = nil
     var onShowProfile: (() -> Void)? = nil
-    @Dependency(\.bookLocationCacheClient) private var bookLocationCacheClient
     
     var body: some View {
         VStack(spacing: 0) {
@@ -77,7 +76,7 @@ struct BookSearchView: View {
 
     private var searchResults: some View {
         let books = store.visibleBooks
-        let holdings = bookLocationCacheClient.loadRecent(Set(books.map(\.recordKey)))
+        let holdings = store.cachedResultHoldings
 
         return ScrollView {
             VStack(alignment: .leading, spacing: 12) {
@@ -114,6 +113,7 @@ struct BookSearchView: View {
         .refreshable {
             await store.send(.refreshButtonTapped).finish()
         }
+        .onAppear { store.send(.searchResultsAppeared) }
     }
 
     private func searchStatus(title: String, message: String) -> some View {

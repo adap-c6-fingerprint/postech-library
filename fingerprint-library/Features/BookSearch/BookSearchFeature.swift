@@ -26,6 +26,8 @@ struct BookSearchFeature {
         var recentBookInfoGeneration = 0
         @Shared(.favoriteBookKeys) var favoriteBookKeys
         var books: [Book] = []
+        /// 검색 결과 책들의 최근 소장 위치 캐시. 결과 목록이 보일 때와 새 결과를 받을 때 다시 읽는다.
+        var cachedResultHoldings: [[String?]: [BookHolding]] = [:]
         // 원본 결과를 유지해 탭 전환 시 캐시 조회나 네트워크 요청 없이 필터링한다.
         var visibleBooks: [Book] { books.filter(category.includes) }
         var isLoading: Bool = false
@@ -61,6 +63,7 @@ struct BookSearchFeature {
         case favoritesButtonTapped
         case profileButtonTapped
         case bookSelected(Book)
+        case searchResultsAppeared
         case favoriteMarkerTapped(HomeMapMarker)
         case delegate(Delegate)
 
@@ -88,6 +91,7 @@ struct BookSearchFeature {
     @Dependency(\.recentSearchBooksClient)
     var recentSearchBooksClient: RecentSearchBooksClient
 
+    @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.bookHoldingsClient)
     var bookHoldingsClient: BookHoldingsClient
 
@@ -165,6 +169,11 @@ struct BookSearchFeature {
                 recentSearchBooksClient.record(book)
                 state.recentBooks = recentSearchBooksClient.load()
                 return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: nil)))
+
+            case .searchResultsAppeared:
+                // 상세에서 확인한 소장 위치가 캐시에 남으므로 목록으로 돌아올 때 다시 읽는다.
+                state.cachedResultHoldings = bookLocationCacheClient.loadRecent(Set(state.books.map(\.recordKey)))
+                return .none
 
             case .cartButtonTapped:
                 return .send(.delegate(.showCart))
@@ -248,6 +257,7 @@ struct BookSearchFeature {
                 
                 state.isLoading = false
                 state.books = books
+                state.cachedResultHoldings = bookLocationCacheClient.loadRecent(Set(books.map(\.recordKey)))
                 analytics.record(.init(.searchCompleted, [
                     .operationID: .text(state.analyticsOperation), .resultCount: .integer(books.count),
                     .cacheHit: .flag(false)
