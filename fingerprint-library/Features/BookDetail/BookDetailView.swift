@@ -149,11 +149,7 @@ struct BookDetailView: View {
             .bookDetailCartPresentation(store: store) // ✅ 여러 권 펼친 화면과 같은 책바구니 알림을 사용한다.
             .task { store.send(.loadFavorites) }
             .analyticsScreen(.detail)
-            .onAppear {
-                AnalyticsRuntime.shared.record(.init(.bookDetailViewed, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(store.book))
-                ]))
-            }
+            .onAppear { store.send(.viewAppeared) }
             .task { store.send(.loadHoldings) }
             .task { store.send(.loadDescription) }
             .task { store.send(.loadRelatedBooks) }

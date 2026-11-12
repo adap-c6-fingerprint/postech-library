@@ -100,6 +100,8 @@ struct BookDetailFeature {
         case destinationRouteLoaded(requestID: Int, BookDetailRoutePresentation)
         case destinationRouteFailed(requestID: Int)
         case loadFavorites
+        /// 상세 화면이 보일 때마다 조회 이벤트를 남긴다.
+        case viewAppeared
         case favoriteButtonTapped
         case addToCartButtonTapped
         case cartNoticeDismissed
@@ -140,6 +142,12 @@ struct BookDetailFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .viewAppeared:
+                analytics.record(.init(.bookDetailViewed, [
+                    .bookRecordID: .text(AnalyticsEvent.bookID(state.book))
+                ]))
+                return .none
+
             case .loadFavorites:
                 recentlyViewedBooksClient.record(state.book)
                 // ✅ 상세 화면이 뜰 때 한 번 보내는 액션이므로 여기서 조회 기록을 남긴다.

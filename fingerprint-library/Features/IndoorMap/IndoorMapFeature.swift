@@ -18,7 +18,8 @@ struct IndoorMapFeature {
         ///
         /// 홈 지도와 경로 미리보기가 같은 Feature로 서로 다른 Store를 만든다. 취소 ID가 같으면
         /// 한쪽 화면이 닫히거나 새로 뜰 때 다른 쪽의 지도·서가·위치 작업까지 취소된다.
-        let instanceID = UUID()
+        /// 같은 지도 기능이 여러 화면에 있을 때 취소 ID를 나누는 값. uuid 의존성으로 만든다.
+        let instanceID: UUID = { @Dependency(\.uuid) var uuid; return uuid() }()
         var homeAnnotations = HomeMapAnnotationsFeature.State()
         /// 검증을 마친 도면. navigation의 성공 여부와 독립적으로 유지한다.
         var map: IndoorMap?

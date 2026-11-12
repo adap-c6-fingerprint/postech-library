@@ -14,7 +14,8 @@ struct BookSearchFeature {
     // 화면과 검색 로직에 필요한 데이터
     @ObservableState
     struct State: Equatable {
-        let analyticsID = UUID()
+        /// 검색 분석 이벤트를 묶는 ID. 테스트에서 값을 정할 수 있게 uuid 의존성으로 만든다.
+        let analyticsID: UUID = { @Dependency(\.uuid) var uuid; return uuid() }()
         var analyticsOperation: String { analyticsID.uuidString + ":" + String(searchGeneration) }
         var query: String = ""
         var category: BookSearchCategory = .all

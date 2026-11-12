@@ -20,7 +20,7 @@ struct BookRoutePreviewFeature {
     enum EntryMode: Equatable, Sendable { case preview, direct }
 
     /// 바로 안내 준비가 끝나지 않을 때 실패 화면으로 바꾸기까지 기다리는 시간.
-    static let preparingTimeout: Duration = .seconds(20)
+    nonisolated static let preparingTimeout: Duration = .seconds(20)
 
     @ObservableState
     struct State: Equatable {
@@ -64,7 +64,8 @@ struct BookRoutePreviewFeature {
 
         // MARK: 경로 계산
 
-        let analyticsID = UUID()
+        /// 경로 계산 분석 이벤트를 묶는 ID. 테스트에서 값을 정할 수 있게 uuid 의존성으로 만든다.
+        let analyticsID: UUID = { @Dependency(\.uuid) var uuid; return uuid() }()
         var analyticsOperation: String { analyticsID.uuidString + ":" + String(requestID) }
         var analyticsIsTest = false
         var analyticsRequestIsTest = false

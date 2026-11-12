@@ -5,6 +5,7 @@
 //  Created by Youngmin Cho on 10/15/26.
 //
 
+import Combine
 import ComposableArchitecture
 
 @Reducer
@@ -55,6 +56,9 @@ struct AppFeature {
         case modal(PresentationAction<Modal.Action>)
         case routeSettingsPresentationChanged(Bool)
         case appStarted
+        /// 앱 루트 화면이 뜰 때 프로필·동의 변경을 분석에 반영하기 시작한다.
+        case analyticsObservationStarted
+        case scenePhaseChanged(isActive: Bool)
         case appEnteredBackground
         case appBecameActive
         case profileCheckRequested
@@ -64,6 +68,16 @@ struct AppFeature {
     }
 
     @Dependency(\.legacyUserProfileClient) var legacyUserProfileClient
+    @Dependency(\.analyticsClient) var analytics
+    @Dependency(\.continuousClock) var clock
+
+    /// 앱이 활성인 동안 분석 이벤트를 저장하는 주기.
+    nonisolated static let analyticsCheckpointInterval: Duration = .seconds(60)
+
+    private nonisolated enum CancelID: Hashable, Sendable {
+        case analyticsCheckpoint
+        case analyticsObservation
+    }
 
     var body: some Reducer<State, Action> {
         Scope(state: \.home, action: \.home) { HomeFeature() }
@@ -124,6 +138,38 @@ struct AppFeature {
 
             case .modal:
                 return .none
+
+            case .analyticsObservationStarted:
+                return .run { [analytics] _ in
+                    @Shared(.userProfile) var userProfile
+                    await withTaskGroup(of: Void.self) { group in
+                        group.addTask {
+                            // 처음 값은 런타임이 시작할 때 읽으므로 바뀐 값만 반영한다.
+                            for await profile in $userProfile.publisher.dropFirst().values {
+                                analytics.updateProfile(profile)
+                            }
+                        }
+                        group.addTask {
+                            for await _ in analytics.consentChanges() {
+                                analytics.updateProfile(userProfile)
+                            }
+                        }
+                    }
+                }
+                .cancellable(id: CancelID.analyticsObservation, cancelInFlight: true)
+
+            case let .scenePhaseChanged(isActive):
+                let activity: Effect<Action> = .run { [analytics] _ in await analytics.setActive(isActive) }
+                guard isActive else { return .merge(activity, .cancel(id: CancelID.analyticsCheckpoint)) }
+                return .merge(
+                    activity,
+                    .run { [analytics, clock] _ in
+                        for await _ in clock.timer(interval: Self.analyticsCheckpointInterval) {
+                            analytics.checkpoint()
+                        }
+                    }
+                    .cancellable(id: CancelID.analyticsCheckpoint, cancelInFlight: true)
+                )
 
             case .appStarted:
                 guard !state.hasStartedRecommendationSession else { return .none }

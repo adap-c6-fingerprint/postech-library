@@ -29,24 +29,9 @@ struct AppView: View {
         // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
         .clarityUnmask()
         .task { store.send(.profileCheckRequested) }
-        .task(id: scenePhase) {
-            AnalyticsRuntime.shared.setActive(scenePhase == .active)
-            SessionReplayRuntime.shared.setActive(scenePhase == .active)
-            guard scenePhase == .active else { return }
-            while !Task.isCancelled {
-                do { try await Task.sleep(for: .seconds(60)) } catch { return }
-                AnalyticsRuntime.shared.checkpoint()
-            }
-        }
-        .onChange(of: scenePhase) { _, phase in
-            AnalyticsRuntime.shared.setActive(phase == .active)
-            SessionReplayRuntime.shared.setActive(phase == .active)
-        }
-        .onChange(of: store.userProfile) { _, profile in
-            AnalyticsRuntime.shared.updateProfile(profile)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: AnalyticsRuntime.consentChanged)) { _ in
-            AnalyticsRuntime.shared.updateProfile(store.userProfile)
+        .task { store.send(.analyticsObservationStarted) }
+        .onChange(of: scenePhase, initial: true) { _, phase in
+            store.send(.scenePhaseChanged(isActive: phase == .active))
         }
     }
 
