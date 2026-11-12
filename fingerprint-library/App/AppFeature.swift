@@ -21,6 +21,8 @@ struct AppFeature {
         var home = HomeFeature.State()
         var bookSearch = BookSearchFeature.State()
         var indoorMap = IndoorMapFeature.State()
+        /// 앱 활성 수명 동안 위치 이벤트를 한 곳에서 구독한다.
+        var locationSession = LocationSessionFeature.State()
         // 탭마다 따로 쌓는 push 화면 스택. 기능은 delegate로 요청하고 App이 쌓는다.
         var mapPath = StackState<Path.State>()
         var recommendationsPath = StackState<Path.State>()
@@ -46,6 +48,7 @@ struct AppFeature {
         case home(HomeFeature.Action)
         case bookSearch(BookSearchFeature.Action)
         case indoorMap(IndoorMapFeature.Action)
+        case locationSession(LocationSessionFeature.Action)
         case mapPath(StackActionOf<Path>)
         case recommendationsPath(StackActionOf<Path>)
         case searchPath(StackActionOf<Path>)
@@ -66,6 +69,7 @@ struct AppFeature {
         Scope(state: \.home, action: \.home) { HomeFeature() }
         Scope(state: \.bookSearch, action: \.bookSearch) { BookSearchFeature() }
         Scope(state: \.indoorMap, action: \.indoorMap) { IndoorMapFeature() }
+        Scope(state: \.locationSession, action: \.locationSession) { LocationSessionFeature() }
         Reduce { state, action in
             switch action {
             case let .tabSelected(tab):
@@ -148,7 +152,7 @@ struct AppFeature {
                     ? .send(.indoorMap(.routeRequested)) : .send(.indoorMap(.routeCleared))
             case .home:
                 return .none
-            case .indoorMap:
+            case .indoorMap, .locationSession:
                 return .none
 
             case .profileCheckRequested:

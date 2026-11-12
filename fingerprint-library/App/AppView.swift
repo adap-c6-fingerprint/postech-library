@@ -114,10 +114,12 @@ struct AppView: View {
         // 위치 스트림은 탭 전환이 아닌 앱 루트 수명에 맞춘다.
         .task {
             store.send(.appStarted)
+            store.send(.locationSession(.started))
             await store.send(.indoorMap(.task)).finish()
         }
         .onDisappear { store.send(.indoorMap(.disappeared)) }
         .onChange(of: scenePhase) { _, phase in
+            store.send(.locationSession(.sceneActiveChanged(phase == .active)))
             store.send(.indoorMap(.sceneActiveChanged(phase == .active)))
             if phase == .background { store.send(.appEnteredBackground) }
             if phase == .active { store.send(.appBecameActive) }

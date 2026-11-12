@@ -1,3 +1,4 @@
+import Combine
 import ComposableArchitecture
 import Foundation
 
@@ -557,12 +558,16 @@ struct IndoorMapFeature {
         }.cancellable(id: CancelID(state.instanceID, .shelfLabels), cancelInFlight: true)
     }
 
-    /// 화면 수명에 맞춰 위치 스트림을 구독하고 재구독 시 이전 구독을 취소한다.
+    /// LocationSessionFeature가 쓰는 공유 위치 상태를 화면 수명 동안 읽고, 바뀐 부분을 위치 이벤트로 처리한다.
+    /// 위치 센서 스트림은 새로 열지 않는다. 다시 읽기 시작하면 이전 구독을 취소한다.
     private func locationEvents(_ state: State) -> Effect<Action> {
         .run { send in
-            for await event in await locationClient.events() {
+            @Shared(.indoorLocation) var location
+            var previous: IndoorLocationSnapshot?
+            for await snapshot in $location.publisher.values {
                 guard !Task.isCancelled else { return }
-                await send(.locationEvent(event))
+                for event in snapshot.events(since: previous) { await send(.locationEvent(event)) }
+                previous = snapshot
             }
         }.cancellable(id: CancelID(state.instanceID, .location), cancelInFlight: true)
     }

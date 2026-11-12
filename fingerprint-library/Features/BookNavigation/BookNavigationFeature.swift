@@ -1,3 +1,4 @@
+import Combine
 import ComposableArchitecture
 import Foundation
 import UIKit
@@ -617,10 +618,16 @@ struct BookNavigationFeature {
         invalidate(&state, message: "현재 위치를 확인하고 있어요.")
         let id = state.subscriptionID
         return .merge(
-            .run { [locationClient] send in
-                for await event in await locationClient.events() {
+            // 위치 센서 스트림은 LocationSessionFeature가 연다. 안내는 공유 위치 상태의 변화를 이벤트로 받는다.
+            .run { send in
+                @Shared(.indoorLocation) var location
+                var previous: IndoorLocationSnapshot?
+                for await snapshot in $location.publisher.values {
                     guard !Task.isCancelled else { return }
-                    await send(.locationEvent(subscriptionID: id, event))
+                    for event in snapshot.events(since: previous) {
+                        await send(.locationEvent(subscriptionID: id, event))
+                    }
+                    previous = snapshot
                 }
                 guard !Task.isCancelled else { return }
                 await send(.locationStreamEnded(subscriptionID: id))
