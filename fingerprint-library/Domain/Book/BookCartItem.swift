@@ -5,7 +5,7 @@
 
 import Foundation
 
-// 장바구니에 보관한 책과 보관한 시각
+// 책바구니에 보관한 책과 보관한 시각
 struct BookCartItem: Equatable, Identifiable, Sendable {
     let book: Book
     let addedAt: Date
@@ -15,7 +15,7 @@ struct BookCartItem: Equatable, Identifiable, Sendable {
     // 한 번에 길안내할 수 있는 최대 권수
     static let maxGuidanceCount = 3
 
-    // 장바구니에 보관할 수 있는 최대 권수
+    // 책바구니에 보관할 수 있는 최대 권수
     nonisolated static let maxStoredCount = 30
 }
 

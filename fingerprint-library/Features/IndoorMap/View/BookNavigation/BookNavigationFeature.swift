@@ -464,7 +464,7 @@ struct BookNavigationFeature {
         for stopIndex in stopIndices where state.arrivalSpines[stopIndex] == nil {
             if let isbn = state.session.stops[stopIndex].book.isbn, let image = bookCoverClient.cachedSpineImage(isbn) {
                 state.arrivalSpines[stopIndex] = .loaded(image)
-                // 상세·장바구니에서 안내를 시작할 때 미리 받아 둔 책등은 기다리지 않고 바로 쓴다.
+                // 상세·책바구니에서 안내를 시작할 때 미리 받아 둔 책등은 기다리지 않고 바로 쓴다.
             } else if let isbn = state.session.stops[stopIndex].book.isbn {
                 state.arrivalSpines[stopIndex] = .loading
                 requests.append((stopIndex, isbn))

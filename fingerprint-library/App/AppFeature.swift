@@ -35,7 +35,7 @@ struct AppFeature {
 
     enum Action {
         case tabSelected(Tab)
-        /// 깊은 화면에서 홈 지도 탭으로 돌아간다. 띄워 둔 상세·장바구니 화면을 함께 닫는다.
+        /// 깊은 화면에서 홈 지도 탭으로 돌아간다. 띄워 둔 상세·책바구니 화면을 함께 닫는다.
         case goHomeRequested
         case home(HomeFeature.Action)
         case bookSearch(BookSearchFeature.Action)

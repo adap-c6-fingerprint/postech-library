@@ -152,7 +152,7 @@ struct BookDetailView: View {
             .fullScreenCover(isPresented: $isRoutePreviewPresented) {
                 BookRoutePreviewView(books: [store.book], entryMode: .direct)
             }
-            .bookDetailCartPresentation(store: store) // ✅ 여러 권 펼친 화면과 같은 장바구니 알림을 사용한다.
+            .bookDetailCartPresentation(store: store) // ✅ 여러 권 펼친 화면과 같은 책바구니 알림을 사용한다.
             .task { store.send(.loadFavorites) }
             .analyticsScreen(.detail)
             .onAppear {
@@ -399,7 +399,7 @@ struct BookDetailView: View {
             .buttonBorderShape(.circle)
             .controlSize(.large)
             .frame(width: 50, height: 50)
-            .accessibilityLabel("장바구니에 담기")
+            .accessibilityLabel("책바구니에 담기")
             .accessibilityIdentifier("bookDetail.addToCart")
         }
         .buttonStyle(.glass(.regular.tint(Color(white: 32.0 / 255).opacity(0.45))))

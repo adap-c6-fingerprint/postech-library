@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-// 피그마 Book_Long Version_CartVer: 장바구니·찜 목록에서 책을 고르는 행
+// 피그마 Book_Long Version_CartVer: 책바구니·찜 목록에서 책을 고르는 행
 struct BookSelectionRow: View {
     let book: Book
     let location: String?

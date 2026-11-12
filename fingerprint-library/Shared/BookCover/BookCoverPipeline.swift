@@ -55,7 +55,7 @@ enum BookCoverPipeline {
         for isbn13 in targets where cachedSpineImage(isbn: isbn13) == nil {
             Task { _ = try? await spineImage(isbn: isbn13) }
         }
-        // 화면 작업(Effect)과 떼어 두어, 상세·장바구니 화면이 닫혀도 끝까지 받는다.
+        // 화면 작업(Effect)과 떼어 두어, 상세·책바구니 화면이 닫혀도 끝까지 받는다.
         // 같은 ISBN을 이미 받는 중이면 Yes24BookCoverResolver와 shared가 진행 중 요청을 함께 쓴다.
     }
 
