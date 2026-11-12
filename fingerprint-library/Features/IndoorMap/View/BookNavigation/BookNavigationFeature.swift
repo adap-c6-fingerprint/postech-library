@@ -31,6 +31,9 @@ struct BookNavigationFeature {
         /// 경로를 벗어났다고 처음 판정한 위치 시각. 경로로 돌아오거나 다시 찾으면 지운다.
         var offRouteSince: Date?
         var isReroutingCurrentStop = false
+        /// "이전 서가"로 돌아가는 경로를 계산하는 중인지.
+        var isReturningToPreviousStop = false
+        var previousStopRequestID = 0
         var rerouteRequestID = 0
         var nextBookRequestID = 0
         var nextBookRouteError: String?
@@ -69,8 +72,13 @@ struct BookNavigationFeature {
 
         /// 길안내 중이고 책등 찾기 화면이 닫혀 있을 때만 "서가를 찾았어요"를 보여 준다.
         var canMarkShelfFound: Bool {
-            exitReason == nil && !isArrivalPresented && !isReroutingToNextBook
+            exitReason == nil && !isArrivalPresented && !isReroutingToNextBook && !isReturningToPreviousStop
                 && currentStop != nil && currentRoute != nil
+        }
+        /// 두 번째 책부터, 이미 찾았다고 넘긴 이전 서가로 다시 안내할 수 있다.
+        var canReturnToPreviousStop: Bool {
+            exitReason == nil && !isArrivalPresented && !isReroutingToNextBook && !isReturningToPreviousStop
+                && currentStopIndex > 0 && session.stops.indices.contains(currentStopIndex - 1)
         }
         var currentStop: BookNavigationStop? {
             session.stops.indices.contains(currentStopIndex) ? session.stops[currentStopIndex] : nil
@@ -189,6 +197,9 @@ struct BookNavigationFeature {
         case viewportChanged
         case sheetExpansionChanged(Bool)
         case shelfFoundTapped
+        case previousStopTapped
+        case previousStopRouteLoaded(requestID: Int, stopIndex: Int, IndoorRoute)
+        case previousStopRouteFailed(requestID: Int)
         case arrivalPresentationChanged(Bool)
         case arrivalSpineTask(stopIndex: Int)
         case arrivalSpineLoaded(stopIndex: Int, UIImage?)
@@ -211,7 +222,7 @@ struct BookNavigationFeature {
     @Dependency(\.bookCoverClient) var bookCoverClient
     @Dependency(\.bookRoutePreviewClient) var routePreviewClient
     @Dependency(\.analyticsClient) private var analytics
-    private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute, reroute }
+    private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute, reroute, previousStopRoute }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -387,7 +398,8 @@ struct BookNavigationFeature {
                 return .none
 
             case .nextBookTapped:
-                guard state.exitReason == nil, state.hasNextStop, !state.isReroutingToNextBook else { return .none }
+                guard state.exitReason == nil, state.hasNextStop, !state.isReroutingToNextBook,
+                      !state.isReturningToPreviousStop else { return .none }
                 state.isCancelConfirmationPresented = false
                 state.nextBookRouteError = nil
                 guard let position = state.latestPosition, position.isRecent(at: now),
@@ -447,6 +459,60 @@ struct BookNavigationFeature {
                 guard state.isReroutingToNextBook, requestID == state.nextBookRequestID else { return .none }
                 state.isReroutingToNextBook = false
                 state.nextBookRouteError = "다음 책 경로를 계산하지 못했어요. \(message)"
+                return .none
+
+            case .previousStopTapped:
+                guard state.canReturnToPreviousStop else { return .none }
+                state.isCancelConfirmationPresented = false
+                let previousIndex = state.currentStopIndex - 1
+                // 위치를 아직 못 받았으면 처음 계산해 둔 이전 경로로 바로 돌아간다.
+                guard let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
+                      (-2...RouteGuidancePlan.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
+                    moveToStop(&state, previousIndex)
+                    return .cancel(id: CancelID.reroute)
+                }
+                let stop = state.session.stops[previousIndex]
+                let destination = BookRouteCandidateStop(book: stop.book, holdings: stop.holdings,
+                                                         candidateShelves: [stop.shelf])
+                let map = state.session.map, labels = state.session.shelfLabels
+                state.previousStopRequestID += 1
+                let requestID = state.previousStopRequestID
+                state.isReturningToPreviousStop = true
+                state.progress = nil
+                state.statusMessage = "현재 위치에서 이전 서가까지의 경로를 계산하고 있어요."
+                return .merge(.cancel(id: CancelID.reroute), .run { [routePreviewClient] send in
+                    do {
+                        let session = try await routePreviewClient.load(map, labels, position, [destination])
+                        try Task.checkCancellation()
+                        guard let route = session.legs.first else { throw IndoorRoutingError.noRoute }
+                        await send(.previousStopRouteLoaded(requestID: requestID, stopIndex: previousIndex, route))
+                    } catch is CancellationError {
+                        return
+                    } catch {
+                        await send(.previousStopRouteFailed(requestID: requestID))
+                    }
+                }.cancellable(id: CancelID.previousStopRoute, cancelInFlight: true))
+
+            case let .previousStopRouteLoaded(requestID, stopIndex, route):
+                guard state.isReturningToPreviousStop, requestID == state.previousStopRequestID,
+                      state.exitReason == nil, stopIndex == state.currentStopIndex - 1 else { return .none }
+                state.isReturningToPreviousStop = false
+                if route.destination == state.session.legs[stopIndex].destination,
+                   let plan = try? RouteGuidancePlan(route: route, graph: state.session.graph) {
+                    state.reroutedLegs[stopIndex] = route
+                    state.plans[stopIndex] = plan
+                    state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
+                    state.timeline = .init(plans: state.plans, bookCount: state.session.stops.count)
+                }
+                moveToStop(&state, stopIndex)
+                return .none
+
+            case let .previousStopRouteFailed(requestID):
+                guard state.isReturningToPreviousStop, requestID == state.previousStopRequestID,
+                      state.exitReason == nil else { return .none }
+                state.isReturningToPreviousStop = false
+                // 새 경로를 못 만들면 처음 계산해 둔 이전 경로로 돌아간다.
+                moveToStop(&state, state.currentStopIndex - 1)
                 return .none
 
             case let .currentStopRerouted(requestID, stopIndex, route):
@@ -584,9 +650,13 @@ struct BookNavigationFeature {
             state.isReroutingCurrentStop = false
             state.rerouteRequestID += 1
         }
+        if state.isReturningToPreviousStop {
+            state.isReturningToPreviousStop = false
+            state.previousStopRequestID += 1
+        }
         invalidate(&state, message: state.exitReason == nil ? "안내가 일시 정지됐어요." : "안내를 종료했어요.")
         return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.expiry), .cancel(id: CancelID.nextBookRoute),
-                      .cancel(id: CancelID.reroute))
+                      .cancel(id: CancelID.reroute), .cancel(id: CancelID.previousStopRoute))
     }
 
     private func invalidate(_ state: inout State, message: String) {
@@ -603,7 +673,8 @@ struct BookNavigationFeature {
     /// 현재 책의 서가까지 경로를 다시 찾는다. 방문 순서와 선택한 서가는 유지한다.
     private func rerouteIfOffRoute(_ state: inout State) -> Effect<Action> {
         guard let since = state.offRouteSince, state.exitReason == nil, state.isActive,
-              !state.isReroutingCurrentStop, !state.isReroutingToNextBook, !state.isArrivalPresented,
+              !state.isReroutingCurrentStop, !state.isReroutingToNextBook, !state.isReturningToPreviousStop,
+              !state.isArrivalPresented,
               let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
               position.timestamp.timeIntervalSince(since) >= Self.offRouteRerouteDelay,
               let stop = state.currentStop else { return .none }
@@ -627,6 +698,22 @@ struct BookNavigationFeature {
                 await send(.currentStopRerouteFailed(requestID: requestID))
             }
         }.cancellable(id: CancelID.reroute, cancelInFlight: true)
+    }
+
+    /// 안내할 책을 바꾸고 그 서가까지의 경로를 처음부터 다시 보여 준다.
+    /// 돌아간 서가에서는 도착 자동 판정이 다시 동작한다.
+    private func moveToStop(_ state: inout State, _ stopIndex: Int) {
+        guard state.session.stops.indices.contains(stopIndex) else { return }
+        state.currentStopIndex = stopIndex
+        state.automaticallyArrivedStopIndices.remove(stopIndex)
+        state.offRouteSince = nil
+        state.manuallyCompletedFloorTransition = nil
+        state.followsNavigationCamera = true
+        state.isArrivalPresented = false
+        state.progress = nil
+        fitCurrentRoute(&state)
+        state.statusMessage = "이전 서가까지의 위치를 확인하고 있어요."
+        if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
     }
 
     private func fitCurrentRoute(_ state: inout State) {
