@@ -23,7 +23,7 @@ nonisolated struct BookDetailDestinationPresentation: Equatable, Sendable {
         guard let map else {
             return Self(holding: holding, floorText: nil, shelves: [])
         }
-        let resolutions = BookHoldingShelfResolver().resolve(holdings, on: map, labels: labels)
+        let resolutions = ShelfResolver().resolve(holdings, on: map, labels: labels)
         // 대표 소장본이 2층 삼각서가라도 3·4층 일반 서고에서 서가를 찾았으면 길안내와 같은 일반 서고를 보여 준다.
         if resolutions.first(where: { $0.holding == holding })?.area == .displayShelf {
             let general = resolutions.preferredForRoute.filter { $0.area == .generalStack && !$0.shelves.isEmpty }

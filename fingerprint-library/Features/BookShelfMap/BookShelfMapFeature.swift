@@ -17,7 +17,7 @@ struct BookShelfMapFeature {
         var map = IndoorMapFeature.State()
         var holdings: [Book.ID: HoldingsState] = [:]
         var holdingRequestIDs: [Book.ID: Int] = [:]
-        var resolutions: [Book.ID: [BookHoldingShelfResolution]] = [:]
+        var resolutions: [Book.ID: [ShelfResolution]] = [:]
 
         init(book: Book) { books = [book] }
 
@@ -106,7 +106,7 @@ struct BookShelfMapFeature {
                 if let map = state.map.map {
                     for book in state.books {
                         if case .loaded(let holdings) = state.holdings[book.id] {
-                            state.resolutions[book.id] = BookHoldingShelfResolver().resolve(
+                            state.resolutions[book.id] = ShelfResolver().resolve(
                                 holdings, on: map, labels: state.map.shelfLabels
                             )
                         }

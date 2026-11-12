@@ -126,7 +126,7 @@ nonisolated enum HomeMapMarkerBuilder {
         }
         var groups: [String: Group] = [:]
         for (key, copies) in holdings {
-            for resolution in BookHoldingShelfResolver().resolve(copies, on: map, labels: labels) {
+            for resolution in ShelfResolver().resolve(copies, on: map, labels: labels) {
                 for shelf in resolution.shelves {
                     // 같은 서가의 A/B 면과 복본은 하나의 찜 마커로 표시한다.
                     let shelfID = shelf.physicalShelfID

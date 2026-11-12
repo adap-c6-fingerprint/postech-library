@@ -1,6 +1,10 @@
 import Foundation
 
-nonisolated struct BookHoldingShelfResolution: Equatable, Identifiable, Sendable {
+/// 소장본 하나를 도면 서가 후보로 해석한 결과.
+///
+/// 후보는 여러 개일 수 있고, 안내할 서가 하나를 고르는 일은 RoutePlanner가 경로 거리로 정한다.
+/// 후보가 없거나 지원하지 않는 위치를 성공값으로 바꾸지 않는다.
+nonisolated struct ShelfResolution: Equatable, Identifiable, Sendable {
     enum Outcome: Equatable, Sendable {
         case unsupportedLocation
         case missingCallNumber
@@ -24,11 +28,11 @@ nonisolated struct BookHoldingShelfResolution: Equatable, Identifiable, Sendable
     }
 }
 
-extension Array where Element == BookHoldingShelfResolution {
+extension Array where Element == ShelfResolution {
     /// 길안내 목적지로 쓸 소장 위치.
     ///
     /// 3·4층 일반 서고에서 서가를 찾았으면 2층 별치 서가는 제외한다. 일반 서고 후보가 없을 때만 2층으로 안내한다.
-    var preferredForRoute: [BookHoldingShelfResolution] {
+    var preferredForRoute: [ShelfResolution] {
         let hasGeneralStack = contains { $0.area == .generalStack && !$0.shelves.isEmpty }
         guard hasGeneralStack else { return self }
         return filter { $0.area != .displayShelf }
@@ -42,14 +46,14 @@ extension Array where Element == BookHoldingShelfResolution {
 }
 
 /// 확인한 일반 서고와 2층 삼각서가만 검색한다. 그 밖의 별치 구역·자료 유형으로 층이나 책장을 추측하지 않는다.
-nonisolated struct BookHoldingShelfResolver {
+nonisolated struct ShelfResolver {
     func resolve(_ holdings: [BookHolding], on map: IndoorMap,
-                 labels: [IndoorShelfLabel]) -> [BookHoldingShelfResolution] {
+                 labels: [IndoorShelfLabel]) -> [ShelfResolution] {
         holdings.map { resolve($0, on: map, labels: labels) }
     }
 
     private func resolve(_ holding: BookHolding, on map: IndoorMap,
-                         labels: [IndoorShelfLabel]) -> BookHoldingShelfResolution {
+                         labels: [IndoorShelfLabel]) -> ShelfResolution {
         guard holding.institutionCode == "82POSTECH_INST", holding.libraryCode == "MAIN" else {
             return .init(holding: holding, area: nil, outcome: .unsupportedLocation)
         }

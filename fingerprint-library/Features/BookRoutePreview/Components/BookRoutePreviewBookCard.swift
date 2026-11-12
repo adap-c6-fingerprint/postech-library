@@ -5,7 +5,7 @@ import SwiftUI
 struct BookRoutePreviewBookCard: View {
     let book: Book
     let holdings: BookShelfMapFeature.HoldingsState?
-    let resolutions: [BookHoldingShelfResolution]
+    let resolutions: [ShelfResolution]
     let map: IndoorMap?
     let session: BookNavigationSession?
     let showsFullDescription: Bool
@@ -20,7 +20,7 @@ struct BookRoutePreviewBookCard: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     init(book: Book, holdings: BookShelfMapFeature.HoldingsState?,
-         resolutions: [BookHoldingShelfResolution], map: IndoorMap?,
+         resolutions: [ShelfResolution], map: IndoorMap?,
          session: BookNavigationSession?, detailStore: StoreOf<BookDetailFeature>,
          showsFullDescription: Bool = false,
          isSheetMoving: Bool = false, isSelected: Bool = true,

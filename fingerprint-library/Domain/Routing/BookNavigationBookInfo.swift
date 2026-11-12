@@ -17,7 +17,7 @@ struct BookNavigationBookInfo: Equatable, Sendable {
         shelf = stop.shelf
         candidateShelves = stop.candidateShelves
         floorName = session.map.floors.first { $0.id == stop.shelf.floorID }?.name
-        holdings = BookHoldingShelfResolver().resolve(stop.holdings, on: session.map, labels: session.shelfLabels)
+        holdings = ShelfResolver().resolve(stop.holdings, on: session.map, labels: session.shelfLabels)
             .filter { $0.shelves.contains { $0.id == stop.shelf.id } }
             .map(\.holding)
         locationNames = Self.unique(holdings.compactMap(\.locationName))
