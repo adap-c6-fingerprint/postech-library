@@ -194,7 +194,12 @@ nonisolated enum HomeMapMarkerBuilder {
             || compactName.contains("회의실") || compactName.contains("미팅룸")
             || compactName.contains("meetingroom") || compactName.contains("conferenceroom")
             || compactName.contains("콜라보") || compactName.contains("collaboration")
-            || compactName.contains("plora") || compactName.contains("플로라") { return .groupStudyRoom }
+            || compactName.contains("plora") || compactName.contains("플로라")
+            // 디자이너 지정: 2층 기관 사무 공간도 같은 아이콘을 쓴다.
+            || compactName.contains("postech1986") || compactName.contains("isss")
+            || compactName.contains("국제협력팀") || compactName.contains("internationalrelations") {
+            return .groupStudyRoom
+        }
         // 발표·촬영처럼 준비된 자리에서 진행하는 공간.
         if category == "classroom" || compactName.contains("강의실")
             || compactName.contains("컨퍼런스홀") || compactName.contains("conferencehall")
@@ -203,7 +208,8 @@ nonisolated enum HomeMapMarkerBuilder {
             || compactName.contains("카페") || compactName.contains("cafe") { return .cafe }
         if category == "lounge" || compactName.contains("휴게실") || compactName.contains("열람석")
             || compactName.contains("relaxzone") || compactName.contains("릴렉스존") { return .relaxZone }
-        if compactName.contains("welcomecenter") || compactName.contains("웰컴센터") { return .entranceDesk }
+        if compactName.contains("welcomecenter") || compactName.contains("웰컴센터")
+            || compactName.contains("입학팀") || compactName.contains("admissions") { return .entranceDesk }
         // 사물함은 지도에 표시하지 않는다.
         if category == "coinlocker" { return nil }
         // 창고·기계실·사무실 등 비공개 공간과 일반 가구에는 시설 핀을 만들지 않는다.
