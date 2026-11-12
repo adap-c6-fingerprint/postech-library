@@ -108,9 +108,20 @@ struct BookNavigationView: View {
             }
         }
         .interactiveDismissDisabled()
-        .alert("안내를 잠시 멈췄어요.", isPresented: pauseBinding) {
-            pauseButtons
-        } message: { pauseMessage }
+        // 시스템 alert는 위치를 정할 수 없어 화면 중앙 카드로 직접 띄운다.
+        .overlay {
+            if store.isCancelConfirmationPresented {
+                BookNavigationPauseAlert(
+                    hasNextStop: store.hasNextStop,
+                    isReroutingToNextBook: store.isReroutingToNextBook,
+                    onResume: { store.send(.cancelDismissed) },
+                    onNextBook: { store.send(.nextBookTapped) },
+                    onEnd: { store.send(.cancelConfirmed) }
+                )
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeOut(duration: 0.2), value: store.isCancelConfirmationPresented)
         .onChange(of: store.exitReason) { _, reason in
             guard let reason else { return }
             if let onExit { onExit(reason) } else { dismiss() }
@@ -123,24 +134,6 @@ struct BookNavigationView: View {
         .preferredColorScheme(.dark)
         .accessibilityIdentifier("book-navigation")
         .analyticsScreen(.navigation)
-    }
-
-    private var pauseBinding: Binding<Bool> {
-        Binding(get: { store.isCancelConfirmationPresented },
-                set: { if !$0 { store.send(.cancelDismissed) } })
-    }
-
-    @ViewBuilder private var pauseButtons: some View {
-        Button("돌아가기", role: .cancel) { store.send(.cancelDismissed) }
-        if store.hasNextStop {
-            Button("다음 책 찾기") { store.send(.nextBookTapped) }
-                .disabled(store.isReroutingToNextBook)
-        }
-        Button("안내 종료하기", role: .destructive) { store.send(.cancelConfirmed) }
-    }
-
-    private var pauseMessage: Text {
-        Text("안내로 돌아가서 책을 다시 찾거나 안내를 종료할 수 있어요.")
     }
 
     private var header: some View {
