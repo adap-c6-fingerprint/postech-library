@@ -511,28 +511,11 @@ struct IndoorMapKitView: UIViewRepresentable {
             )
         }
 
-        /// 최초 표시와 같은 줌의 카메라 거리. 현재 층 도형을 같은 여백·배율로 맞췄을 때의 값이다.
-        private func initialCameraDistance(in view: MKMapView) -> CLLocationDistance? {
-            var rect = MapKitGeometry.mapRect(for: parent.floor.geometry)
-            guard !rect.isNull else { return nil }
-            let insetRatio = (1 - 1 / IndoorMapKitView.initialZoomScale) / 2
-            rect = rect.insetBy(dx: rect.width * insetRatio, dy: rect.height * insetRatio)
-            let padding = floorFitPadding
-            guard view.bounds.width > padding.left + padding.right,
-                  view.bounds.height > padding.top + padding.bottom else { return nil }
-            // 최초 표시와 같은 계산을 쓰려고 실제로 맞춰 본 뒤 거리만 읽고 되돌린다.
-            let restoreCamera = view.camera.copy() as! MKMapCamera
-            view.setVisibleMapRect(rect, edgePadding: padding, animated: false)
-            let distance = view.camera.centerCoordinateDistance
-            view.setCamera(restoreCamera, animated: false)
-            return distance.isFinite && distance > 0 ? distance : nil
-        }
-
         /// 최초 확대·층 전체 맞춤 또는 특정 좌표 중심 이동을 명시적으로 적용한다.
         ///
         /// 최초 표시만 도형의 중심을 기준으로 `initialZoomScale`만큼 확대한다.
         /// 층 전체 맞춤은 원본 범위와 padding으로 줌을 계산한다. 위치 이동은 기존 줌을 유지하며,
-        /// `restoresInitialView`인 경우에만 방향과 줌을 최초 표시 상태로 되돌린다.
+        /// `revealsShelfNumbers`인 경우에만 북쪽을 위로 돌리고 서가 번호가 보이는 배율로 확대한다.
         /// 요청 적용 시 평면으로 돌리며, 일반 층 전환에서는 이 메서드를 호출하지 않는다.
         /// - Parameters:
         ///   - request: TCA에서 전달한 최초 확대, 층 맞춤 또는 좌표 이동 요청.
@@ -573,7 +556,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 camera.pitch = 0
                 view.setCamera(camera, animated: false)
                 view.setVisibleMapRect(rect, edgePadding: padding, animated: false)
-            case .position(let coordinate, let restoresInitialView):
+            case .position(let coordinate, let revealsShelfNumbers):
                 guard coordinate.isValid else { return false }
                 let viewport = view.bounds.inset(by: parent.viewportInsets)
                 guard viewport.width > 0, viewport.height > 0 else { return false }
@@ -582,13 +565,20 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let startCamera = view.camera.copy() as! MKMapCamera
                 let targetCamera = startCamera.copy() as! MKMapCamera
                 targetCamera.pitch = 0
-                if restoresInitialView {
+                view.setCamera(targetCamera, animated: false)
+                if revealsShelfNumbers {
+                    // 평면·북쪽 기준에서 잰 배율로 거리를 비례 조정해 서가 번호 묶음이 풀리는 배율에 맞춘다.
                     targetCamera.heading = 0
-                    if let distance = initialCameraDistance(in: view) {
-                        targetCamera.centerCoordinateDistance = distance
+                    view.setCamera(targetCamera, animated: false)
+                    if let scale = IndoorShelfLabelLevel.metersPerPoint(in: view) {
+                        let distance = targetCamera.centerCoordinateDistance
+                            * IndoorShelfLabelLevel.numberRevealMetersPerPoint / scale
+                        if distance.isFinite, distance > 0 {
+                            targetCamera.centerCoordinateDistance = distance
+                            view.setCamera(targetCamera, animated: false)
+                        }
                     }
                 }
-                view.setCamera(targetCamera, animated: false)
                 let point = view.convert(coordinate.clCoordinate, toPointTo: view)
                 // MKMapView의 카메라 중심은 safe area에 따라 bounds의 중심과 다를 수 있다.
                 let cameraCenter = view.convert(view.centerCoordinate, toPointTo: view)

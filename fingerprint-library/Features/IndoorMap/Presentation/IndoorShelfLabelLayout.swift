@@ -8,6 +8,21 @@ enum IndoorShelfLabelLevel: String, CaseIterable {
         let groupBoundary = previous == .group ? 0.09 : (previous == nil ? 0.10 : 0.11)
         return metersPerPoint > groupBoundary ? .group : .number
     }
+
+    /// 묶음에서 서가 번호로 풀리는 가장 엄격한 경계(0.09)보다 한 단계 확대한 배율.
+    /// 현재 위치 버튼이 이 배율로 맞추면 이전 상태와 관계없이 서가 번호가 보인다.
+    static let numberRevealMetersPerPoint = 0.08
+
+    /// 화면 중심에서 1pt가 나타내는 실제 거리(m). 레이블 상세도 판정과 카메라 확대가 같은 측정을 쓴다.
+    @MainActor
+    static func metersPerPoint(in map: MKMapView) -> Double? {
+        guard map.bounds.width > 0, map.bounds.height > 0 else { return nil }
+        let center = CGPoint(x: map.bounds.midX, y: map.bounds.midY)
+        let a = MKMapPoint(map.convert(center, toCoordinateFrom: map))
+        let b = MKMapPoint(map.convert(CGPoint(x: center.x + 10, y: center.y), toCoordinateFrom: map))
+        let scale = a.distance(to: b) / 10
+        return scale.isFinite && scale > 0 ? scale : nil
+    }
 }
 
 struct IndoorShelfLabelPresentation {
