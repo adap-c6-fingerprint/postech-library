@@ -3,25 +3,18 @@ import ComposableArchitecture
 import Foundation
 import UIKit
 
-/// 확정된 경로를 유지하며 위치 스트림·진행 계산·안내 표시를 연결한다.
 @Reducer
 struct BookNavigationFeature {
-    /// 경로 이탈이 이 시간(초) 이상 이어지면 현재 위치에서 경로를 다시 찾는다.
-    /// 측위가 잠깐 튀는 것만으로 재탐색하지 않도록 여유를 둔다.
     static let offRouteRerouteDelay: TimeInterval = 5
 
     typealias ExitReason = NavigationSession.Outcome
     enum SpinePhase: Equatable {
         case loading
-        // 책등 이미지를 받는 중
         case loaded(UIImage)
-        // 받은 책등 이미지. 표지와 같은 메모리 캐시(BookCoverPipeline.shared)에 있는 이미지 그대로다.
         case unavailable
-        // ISBN이 없거나 책등 이미지를 받지 못한 책
     }
     @ObservableState
     struct State: Equatable {
-        /// 현재 방문지·구간 경로·도착·종료 상태. 방문지는 이 값의 메서드로만 바꾼다.
         var navigation: NavigationSession
         var routePlan: RoutePlan { navigation.routePlan }
         var currentStopIndex: Int { navigation.currentStopIndex }
@@ -32,10 +25,8 @@ struct BookNavigationFeature {
         var turnArrowsByStop: [[RouteTurnArrow]]
         var timeline: BookNavigationTimeline
         var isReroutingToNextBook = false
-        /// 경로를 벗어났다고 처음 판정한 위치 시각. 경로로 돌아오거나 다시 찾으면 지운다.
         var offRouteSince: Date?
         var isReroutingCurrentStop = false
-        /// "이전 서가"로 돌아가는 경로를 계산하는 중인지.
         var isReturningToPreviousStop = false
         var previousStopRequestID = 0
         var rerouteRequestID = 0
@@ -58,7 +49,6 @@ struct BookNavigationFeature {
         var followsNavigationCamera = true
         var cameraTracking = BookNavigationCameraTracking()
         var arrivalSpines: [Int: SpinePhase] = [:]
-        // 책장 앞 책찾기 화면에 그릴 책등. 키는 목적지 순서(stopIndex)
 
         init(routePlan: RoutePlan) {
             navigation = NavigationSession(routePlan: routePlan)
@@ -71,12 +61,10 @@ struct BookNavigationFeature {
                 featureIDs: routePlan.stops.prefix(1).map { $0.shelf.mapElementID }))
         }
 
-        /// 길안내 중이고 책등 찾기 화면이 닫혀 있을 때만 "서가를 찾았어요"를 보여 준다.
         var canMarkShelfFound: Bool {
             exitReason == nil && !isArrivalPresented && !isReroutingToNextBook && !isReturningToPreviousStop
                 && currentStop != nil && currentRoute != nil
         }
-        /// 두 번째 책부터, 이미 찾았다고 넘긴 이전 서가로 다시 안내할 수 있다.
         var canReturnToPreviousStop: Bool {
             exitReason == nil && !isArrivalPresented && !isReroutingToNextBook && !isReturningToPreviousStop
                 && navigation.hasPreviousStop
@@ -227,7 +215,6 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil, !state.isActive else { return .none }
                 let stopIndices = state.routePlan.stops.indices
                 let spines = loadArrivalSpines(&state, stopIndices: stopIndices)
-                // 길안내를 시작하는 순간 모든 목적지의 책등을 준비해, 책찾기 화면이 로딩 없이 바로 그린다.
                 return .merge(spines, start(&state))
 
             case let .sceneActiveChanged(active):
@@ -351,14 +338,12 @@ struct BookNavigationFeature {
                       state.routePlan.map.floors.contains(where: { $0.id == transition.to.floorID }) else { return .none }
                 state.manuallyCompletedFloorTransition = transition
                 state.confirmedFloorOrdinal = transition.to.level
-                // 실제 좌표는 그대로 두고 다음 층의 경로만 표시한다.
                 state.progress = nil
                 state.followsNavigationCamera = true
                 fitCurrentRoute(&state)
                 return .none
 
             case .shelfFoundTapped:
-                // 사용자가 서가를 찾았다고 직접 알리면 자동 도착 판정과 같은 책등 찾기 화면으로 간다.
                 guard state.canMarkShelfFound else { return .none }
                 state.isArrivalPresented = true
                 state.navigation.markArrived()
@@ -372,11 +357,9 @@ struct BookNavigationFeature {
             case let .arrivalSpineTask(stopIndex):
                 guard state.routePlan.stops.indices.contains(stopIndex) else { return .none }
                 return loadArrivalSpines(&state, stopIndices: [stopIndex])
-                // 길안내 시작 때 이미 준비했으면 아무것도 하지 않는다. 시작 때 상태가 없던 경우에만 받는다.
 
             case let .arrivalSpineLoaded(stopIndex, image):
                 state.arrivalSpines[stopIndex] = image.map(SpinePhase.loaded) ?? .unavailable
-                // spineImage는 "책등 없음"과 "실패"를 같은 에러로 던지므로 둘 다 준비 중 이미지로 그린다.
                 return .none
 
             case let .continueFromArrival(stopIndex):
@@ -405,7 +388,6 @@ struct BookNavigationFeature {
                 }
                 let nextIndex = state.currentStopIndex + 1
                 let nextStop = state.routePlan.stops[nextIndex]
-                // 방문 순서와 이미 선택한 서가를 유지한다. 남은 책의 순서를 다시 최적화하지 않는다.
                 let destination = RouteCandidateStop(book: nextStop.book, holdings: nextStop.holdings,
                     candidateShelves: [nextStop.shelf])
                 let map = state.routePlan.map, labels = state.routePlan.shelfLabels
@@ -460,7 +442,6 @@ struct BookNavigationFeature {
                 guard state.canReturnToPreviousStop else { return .none }
                 state.isCancelConfirmationPresented = false
                 let previousIndex = state.currentStopIndex - 1
-                // 위치를 아직 못 받았으면 처음 계산해 둔 이전 경로로 바로 돌아간다.
                 guard let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
                       (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
                     moveToStop(&state, previousIndex)
@@ -505,7 +486,6 @@ struct BookNavigationFeature {
                 guard state.isReturningToPreviousStop, requestID == state.previousStopRequestID,
                       state.exitReason == nil else { return .none }
                 state.isReturningToPreviousStop = false
-                // 새 경로를 못 만들면 처음 계산해 둔 이전 경로로 돌아간다.
                 moveToStop(&state, state.currentStopIndex - 1)
                 return .none
 
@@ -533,7 +513,6 @@ struct BookNavigationFeature {
             case let .currentStopRerouteFailed(requestID):
                 guard state.isReroutingCurrentStop, requestID == state.rerouteRequestID else { return .none }
                 state.isReroutingCurrentStop = false
-                // 같은 시간만큼 더 벗어나 있으면 다시 시도한다.
                 state.offRouteSince = state.latestPosition?.timestamp
                 state.statusMessage = "경로를 다시 찾지 못했어요. 표시된 경로 쪽으로 이동해 주세요."
                 return .none
@@ -560,20 +539,17 @@ struct BookNavigationFeature {
                 return .none
 
             case .cancelConfirmed:
-                // Alert의 바인딩이 버튼 액션보다 먼저 닫혀도 확인 동작을 처리한다.
                 guard state.exitReason == nil else { return .none }
                 return end(&state, reason: .cancelled)
             }
         }
     }
 
-    /// 아직 상태가 없는 목적지의 책등을 표지와 같은 메모리 캐시에서 꺼내거나 받는다.
     private func loadArrivalSpines(_ state: inout State, stopIndices: some Sequence<Int>) -> Effect<Action> {
         var requests: [(stopIndex: Int, isbn: String)] = []
         for stopIndex in stopIndices where state.arrivalSpines[stopIndex] == nil {
             if let isbn = state.routePlan.stops[stopIndex].book.isbn, let image = bookCoverClient.cachedSpineImage(isbn) {
                 state.arrivalSpines[stopIndex] = .loaded(image)
-                // 상세·책바구니에서 안내를 시작할 때 미리 받아 둔 책등은 기다리지 않고 바로 쓴다.
             } else if let isbn = state.routePlan.stops[stopIndex].book.isbn {
                 state.arrivalSpines[stopIndex] = .loading
                 requests.append((stopIndex, isbn))
@@ -592,7 +568,6 @@ struct BookNavigationFeature {
                 }
             }
         }
-        // 마이페이지 책장(RecentlyFoundBookFeature)과 같은 방식이다. 미리 받는 중인 책등은 진행 중 요청을 함께 쓴다.
     }
 
     private func start(_ state: inout State) -> Effect<Action> {
@@ -610,7 +585,6 @@ struct BookNavigationFeature {
         invalidate(&state, message: "현재 위치를 확인하고 있어요.")
         let id = state.subscriptionID
         return .merge(
-            // 위치 센서 스트림은 LocationSessionFeature가 연다. 안내는 공유 위치 상태의 변화를 이벤트로 받는다.
             .run { send in
                 @Shared(.indoorLocation) var location
                 var previous: IndoorLocationSnapshot?
@@ -659,7 +633,6 @@ struct BookNavigationFeature {
     }
 
     private func invalidate(_ state: inout State, message: String) {
-        // 위치를 잃은 동안은 이탈 시간을 쌓지 않는다.
         state.offRouteSince = nil
         state.rawPosition = nil
         state.latestPosition = nil
@@ -668,8 +641,6 @@ struct BookNavigationFeature {
         state.cameraTracking = .init()
     }
 
-    /// 경로 이탈이 ``BookNavigationFeature/offRouteRerouteDelay`` 이상 이어지면 현재 위치에서
-    /// 현재 책의 서가까지 경로를 다시 찾는다. 방문 순서와 선택한 서가는 유지한다.
     private func rerouteIfOffRoute(_ state: inout State) -> Effect<Action> {
         guard let since = state.offRouteSince, state.exitReason == nil, state.isActive,
               !state.isReroutingCurrentStop, !state.isReroutingToNextBook, !state.isReturningToPreviousStop,
@@ -699,8 +670,6 @@ struct BookNavigationFeature {
         }.cancellable(id: CancelID.reroute, cancelInFlight: true)
     }
 
-    /// 안내할 책을 바꾸고 그 서가까지의 경로를 처음부터 다시 보여 준다.
-    /// 돌아간 서가에서는 도착 자동 판정이 다시 동작한다.
     private func moveToStop(_ state: inout State, _ stopIndex: Int) {
         guard state.routePlan.stops.indices.contains(stopIndex) else { return }
         state.navigation.move(to: stopIndex)
@@ -758,7 +727,6 @@ struct BookNavigationFeature {
             if !state.isReroutingCurrentStop { state.statusMessage = nil }
             recordQuality(state, code: "on_route")
             if let progress = state.progress {
-                // Runtime에서 같은 경유지·edge step의 연속 GPS 갱신을 한 번으로 줄인다.
                 analytics.record(.init(.navigationStepChanged, [
                     .navigationID: .text(state.routePlan.id.uuidString),
                     .stepIndex: .integer(progress.stepIndex), .stopIndex: .integer(state.currentStopIndex),

@@ -21,7 +21,6 @@ struct BookFavoritesView: View {
                         sectionView(section)
                     }
                 }
-                // 피그마 10. 찜하기_기본 주석 "날짜 사이 간격 28 -> 24": 날짜 묶음 사이 간격
             }
             .padding(.horizontal, 16)
             .padding(.top, 24)
@@ -86,7 +85,6 @@ struct BookFavoritesView: View {
             .accessibilityIdentifier("favorites-add-to-cart")
         }
         .disabled(store.selectedIDs.isEmpty)
-        // 선택 항목이 없으면 삭제·담기 버튼을 모두 비활성화한다.
         .padding(.horizontal, 28)
         .padding(.vertical, 12)
         .background(Color.cartBackground)

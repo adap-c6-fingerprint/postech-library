@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 펼친 길안내 시트에서 현재 향하는 서가의 정보만 표시한다.
 struct BookNavigationCurrentBookCard: View {
     let info: BookNavigationBookInfo
     let route: IndoorRoute

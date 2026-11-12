@@ -1,8 +1,5 @@
 import SwiftUI
 
-/// 시스템 권한 창을 다시 띄울 수 없을 때 쓰는 앱 자체 권한 안내 알림.
-///
-/// 어두운 지도 위에 밝은 카드로 띄우고, 거절과 설정 이동을 나란히 둔다.
 struct LibraryPermissionAlert: View {
     let title: String
     let message: String

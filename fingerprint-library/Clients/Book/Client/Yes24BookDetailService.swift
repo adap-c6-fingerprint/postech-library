@@ -3,9 +3,6 @@ import Foundation
 nonisolated struct Yes24BookDetailService: Sendable {
     var relay: BookAPIClient = .init()
 
-// Yes24 API 응답 중 원하는 값을 파싱한다
-    
-    // 책표지이미지 URL
     func fetchCoverURL(isbn13: String) async throws -> URL? {
         guard let raw = try await matchingItem(isbn13: isbn13)?.cover,
               let url = URL(string: raw.trimmingCharacters(in: .whitespacesAndNewlines)),
@@ -14,9 +11,7 @@ nonisolated struct Yes24BookDetailService: Sendable {
               url.user == nil, url.password == nil else { return nil }
         return url
     }
-    
 
-    // 도서 상세 설명 URL
     func fetchDescription(isbn13: String) async throws -> BookDescription? {
         guard let item = try await matchingItem(isbn13: isbn13),
               let introduction = item.contentDetail?.bookIntroduction else { return nil }
@@ -30,7 +25,6 @@ nonisolated struct Yes24BookDetailService: Sendable {
         return BookDescription(text: text, sourceURL: sourceURL)
     }
 
-    // 책등 이미지 URL
     func fetchSpineURL(isbn13: String) async throws -> URL? {
         guard let raw = try await matchingItem(isbn13: isbn13)?.sideCover,
               let url = URL(string: raw.trimmingCharacters(in: .whitespacesAndNewlines)),
@@ -54,7 +48,6 @@ nonisolated struct Yes24BookDetailService: Sendable {
         }
         let http = response.response
         let result = try? JSONDecoder().decode(Yes24DetailResponse.self, from: response.data)
-        // SEARCH_002도 404이므로 상품이 없다는 오류만 빈 결과로 처리한다.
         if http.statusCode == 404,
            let code = result?.errorCode, ["GOODS_001", "GOODS_002"].contains(code) {
             return nil

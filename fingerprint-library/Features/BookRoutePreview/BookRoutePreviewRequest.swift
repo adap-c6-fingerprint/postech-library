@@ -1,6 +1,5 @@
 import Foundation
 
-/// 기존 소장 조회·서가 해석이 완료된 입력만 경로 계산에 넘긴다.
 enum BookRoutePreviewRequest: Equatable {
     case waiting
     case failed(String)

@@ -12,7 +12,6 @@ nonisolated enum AppConfiguration {
         if channel == "internal" {
             environment = .development
         } else {
-            // 같은 Release 바이너리를 구분한다. 검증 실패를 운영 환경으로 추측하지 않는다.
             guard case let .verified(transaction) = try await AppTransaction.shared else {
                 throw APIRelayError.unknownDistribution
             }

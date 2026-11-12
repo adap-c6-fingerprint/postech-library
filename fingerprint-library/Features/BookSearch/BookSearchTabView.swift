@@ -8,7 +8,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 검색 탭의 첫 화면. 화면 이동 스택은 App이 소유한다.
 struct BookSearchTabView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
 

@@ -5,7 +5,6 @@ import Testing
 
 @MainActor
 struct AppNavigationTests {
-    /// State의 분석·지도 ID도 uuid 의존성으로 만들므로 테스트 값을 넣어 만든다.
     func makeState(_ configure: (inout AppFeature.State) -> Void = { _ in }) -> AppFeature.State {
         withDependencies { $0.uuid = .incrementing } operation: {
             var state = AppFeature.State()
@@ -18,7 +17,6 @@ struct AppNavigationTests {
         let store = TestStore(initialState: state) { AppFeature() } withDependencies: {
             $0.uuid = .incrementing
         }
-        // 화면 이동 상태만 확인한다. 각 기능의 내부 상태는 기능별 테스트가 맡는다.
         store.exhaustivity = .off
         return store
     }

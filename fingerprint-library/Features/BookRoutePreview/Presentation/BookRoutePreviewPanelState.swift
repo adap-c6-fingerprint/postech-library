@@ -11,7 +11,6 @@ nonisolated struct BookRoutePreviewPanelState: Equatable {
 
     func canBeginDrag(translation: CGSize) -> Bool {
         guard abs(translation.height) > abs(translation.width) else { return false }
-        // 펼친 카드에서는 설명 스크롤을 우선하고, 맨 위에서 아래로 당길 때만 접는다.
         return !isExpanded || (translation.height > 0 && isContentAtTop)
     }
 

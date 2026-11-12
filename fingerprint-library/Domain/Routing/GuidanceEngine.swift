@@ -12,7 +12,6 @@ nonisolated struct RouteGuidanceProgress: Equatable, Sendable {
     let coordinate: IndoorMapCoordinate
     let maneuver: RouteManeuver
     let distanceToManeuver: Double?
-    /// 층간 구간별 거리 근거가 부족하면 값을 만들지 않는다.
     let remainingMeters: Double?
 }
 
@@ -20,9 +19,7 @@ nonisolated enum RouteGuidanceError: Error, Equatable, Sendable {
     case invalidRoute, invalidPosition, inaccuratePosition, stalePosition, unknownFloor, offRoute, ambiguousPosition
 }
 
-/// 확정된 경로의 순서를 유지하며 위치를 경로에 투영한다. 탐색·실제 측위·도착 확정은 하지 않는다.
 nonisolated struct GuidanceEngine: Equatable, Sendable {
-    // 실내 통로 안내용 초기 정책값. 실측 보정 결과나 측위 정확도 보장을 뜻하지 않는다.
     static let maximumPositionAge: Double = 10
     static let maximumAccuracyMeters: Double = 10
     static let matchingRadiusMeters: Double = 5
@@ -103,8 +100,6 @@ nonisolated struct GuidanceEngine: Equatable, Sendable {
         let horizontal = pieces.compactMap(\.meters).reduce(0, +)
         guard horizontal <= route.distanceMeters + 0.1 else { throw RouteGuidanceError.invalidRoute }
         let transitions = pieces.indices.filter { pieces[$0].changesFloor }
-        // 층간 간선이 하나면 전체 비용에서 평면 길이를 빼 잔여 비용을 복원할 수 있다.
-        // 여러 간선의 개별 비용은 IndoorRoute에 없으므로 임의로 나눠 넣지 않는다.
         if route.edgeDistancesMeters == nil, transitions.count == 1 {
             pieces[transitions[0]].meters = max(0, route.distanceMeters - horizontal)
         }
@@ -160,7 +155,6 @@ nonisolated struct GuidanceEngine: Equatable, Sendable {
         }
         guard let closest = candidates.map(\.distance).min() else { throw RouteGuidanceError.unknownFloor }
         guard closest <= Self.matchingRadiusMeters else { throw RouteGuidanceError.offRoute }
-        // 가까운 평행 통로·경로 교차점에서 가장 가까운 좌표만으로 뒷구간에 점프하지 않는다.
         candidates = candidates.filter { $0.distance <= min(Self.matchingRadiusMeters, closest + max(0.25, min(accuracy, 1))) }
         if let previous {
             let limit = max(8, min(elapsed ?? 0, Self.maximumPositionAge) * 3 + accuracy)

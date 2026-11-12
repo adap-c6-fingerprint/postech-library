@@ -38,7 +38,6 @@ nonisolated extension DependencyValues {
     }
 }
 
-/// 첫 추천의 페이지 선택·후보 누적·표지 선정 순서만 조정한다.
 nonisolated enum ColdStartRecommendationService {
     nonisolated struct Dependencies: Sendable {
         var searchPrimo: @Sendable (_ query: String, _ offset: Int) async throws -> Data

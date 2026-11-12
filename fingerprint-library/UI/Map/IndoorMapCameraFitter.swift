@@ -1,7 +1,6 @@
 import MapKit
 import UIKit
 
-/// 회전 각도를 유지하면서 시트·안내 UI에 가리지 않는 영역에 맞는 평면 카메라를 계산한다.
 @MainActor
 enum IndoorMapCameraFitter {
     static func camera(fitting coordinates: [IndoorMapCoordinate], minimumSpanMeters: Double, in view: MKMapView,
@@ -22,7 +21,6 @@ enum IndoorMapCameraFitter {
               let minY = points.map(\.y).min(), let maxY = points.map(\.y).max() else { return nil }
         let pointsPerMeter = MKMapPointsPerMeterAtLatitude(first.latitude)
         let margin = 2 * pointsPerMeter
-        // 최소 폭을 화면 비율에 맞춰 적용해 가로 화면에서도 접근에 따라 확대한다.
         let width = max(maxX - minX + margin * 2, minimumSpanMeters * pointsPerMeter)
         let height = max(maxY - minY + margin * 2,
                          minimumSpanMeters * pointsPerMeter * viewport.height / viewport.width)

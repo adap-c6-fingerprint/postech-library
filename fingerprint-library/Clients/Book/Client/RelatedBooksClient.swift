@@ -29,13 +29,11 @@ extension RelatedBooksClient: DependencyKey {
             }
             guard result.isSuccessful else { throw RelatedBooksClientError.invalidResponse }
 
-            // JSON을 Swift 응답 타입으로 변환
             let decoded = try JSONDecoder().decode(
                 RelatedBooksResponse.self,
                 from: result.data
             )
 
-            // 응답의 도서 정보를 앱의 Book으로 변환
             var seenISBNs = Set<String>()
 
             return decoded.response.docs.compactMap { document -> Book? in
@@ -82,7 +80,6 @@ extension RelatedBooksClient: DependencyKey {
     )
 }
 
-// JSON의 response → docs → book 구조에 대응
 private nonisolated struct RelatedBooksResponse: Decodable {
     let response: RelatedBooksPayload
 }
@@ -110,7 +107,6 @@ nonisolated enum RelatedBooksClientError: Error {
     case invalidResponse
 }
 
-// Feature에서 사용할 의존성 등록
 nonisolated extension DependencyValues {
     var relatedBooksClient: RelatedBooksClient {
         get { self[RelatedBooksClient.self] }

@@ -1,7 +1,6 @@
 import Foundation
 import Observation
 
-/// UIKit과 분리해 표지 없음·실패·취소·재시도의 전이를 오프라인에서도 검증한다.
 @MainActor
 @Observable
 final class BookCoverModel<Image: Sendable> {

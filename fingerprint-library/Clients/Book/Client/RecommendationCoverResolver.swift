@@ -1,6 +1,5 @@
 import Foundation
 
-/// 추천 방식과 독립적으로 표지 주소를 조회하고 원본 이미지 응답을 확인한다.
 nonisolated struct RecommendationCoverResolver: Sendable {
     var data4LibraryLookup: @Sendable (String) async -> URL?
     var isRealImage: @Sendable (URL) async -> Bool

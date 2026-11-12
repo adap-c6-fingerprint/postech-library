@@ -1,8 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 지도에서 선택한 서가의 경로 진입 카드를 표시한다.
-/// 이 View는 경로를 계산하지 않고 사용자 조작을 TCA Action으로 전달한다.
 struct IndoorRouteControls: View {
     let store: StoreOf<IndoorMapFeature>
 

@@ -1,6 +1,5 @@
 import Foundation
 
-/// 안내 화면에 표시할 전체 방문 경로. 거리가 없는 구간을 같은 길이로 꾸미지 않는다.
 struct BookNavigationTimeline: Equatable {
     enum Kind: Hashable { case walk, elevator, stairs }
     struct Label: Equatable {
@@ -34,7 +33,6 @@ struct BookNavigationTimeline: Equatable {
         var markers: [Marker] = []
         var offset = 0.0
         var complete = plans.count == bookCount && bookCount > 0
-        // 먼저 실제 거리로 구간을 만들고, 전체 길이가 정해지면 정규화한다.
         var endpoints: [(Double, MarkerKind)] = []
         for (stopIndex, optionalPlan) in plans.enumerated() {
             guard let plan = optionalPlan else { complete = false; continue }
@@ -65,7 +63,6 @@ struct BookNavigationTimeline: Equatable {
                     segments.append(.init(id: segments.count, stopIndex: stopIndex, steps: first..<index,
                         kind: kind, meters: meters, startMeters: offset,
                         fromFloorID: step.from.floorID, toFloorID: plan.steps[index - 1].to.floorID))
-                    // 책 경유지와 다음 보행 시작 아이콘이 같은 자리에 겹치지 않게 한다.
                     if first != 0 || stopIndex == 0 {
                         let marker: MarkerKind = switch kind {
                         case .walk: .walk
@@ -166,7 +163,6 @@ struct BookNavigationTimeline: Equatable {
         if progress.stepIndex >= segment.steps.upperBound { return 1 }
         if progress.stepIndex < segment.steps.lowerBound { return 0 }
         guard segment.meters > 0 else { return progress.fraction >= 1 ? 1 : 0 }
-        // startDistance는 해당 책의 경로 기준이므로 전체 세션 앞쪽 길이를 제외한다.
         let legStart = segments.first { $0.stopIndex == stopIndex }?.startMeters ?? 0
         return min(1, max(0, (progress.distanceAlongRoute - (segment.startMeters - legStart)) / segment.meters))
     }

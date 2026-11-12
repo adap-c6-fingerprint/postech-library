@@ -1,7 +1,6 @@
 import MapKit
 import UIKit
 
-/// 홈 전용 핀의 갱신을 맡는다. 위치·길안내 갱신으로 같은 핀을 다시 만들지 않는다.
 @MainActor
 final class HomeMapAnnotationController {
     private var markers: [HomeMapMarker] = []

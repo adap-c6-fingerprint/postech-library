@@ -5,7 +5,6 @@ import FirebaseCrashlytics
 import Foundation
 import StoreKit
 
-/// SDK 호출·동의 변경을 같은 lock으로 순서화한다. 사용자 입력 원문은 받지 않는다.
 nonisolated final class AnalyticsRuntime: @unchecked Sendable {
     static let shared = AnalyticsRuntime()
     static let consentChanged = Notification.Name("pobook.analytics.consent.changed")
@@ -39,9 +38,7 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
         synchronized {
             guard !configured, FirebaseApp.app() != nil else { return }
             configured = true
-            // 자동 보고를 켜면 철회 후 현재 실행의 전송을 통제할 수 없어 수동 보고만 사용한다.
             Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
-            // 실행 도중 처음 동의했거나 철회한 실행의 로컬 보고서는 소급 전송하지 않는다.
             if storedConsent.permitsDiagnosticReport(previousRunEligible: defaults.bool(forKey: Self.diagnosticEligibilityKey)) {
                 Crashlytics.crashlytics().sendUnsentReports()
             }
@@ -100,7 +97,6 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
                     defaults.removeObject(forKey: key)
                 }
             }
-            // Firebase 미설정 실행의 철회도 다음 실행의 보고서 전송을 막는다.
             if !choice.diagnostics {
                 defaults.set(false, forKey: Self.diagnosticEligibilityKey)
             }
@@ -172,7 +168,6 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
                 let crash = Crashlytics.crashlytics()
                 crash.setCustomValue(event.code.rawValue, forKey: "last_action_code")
                 crash.setCustomValue(parameters["navigation_id"] as? String ?? "", forKey: "navigation_id")
-                // 원문 데이터 대신 코드만 breadcrumb에 남긴다.
                 crash.log(event.code.rawValue)
             }
             guard storedConsent.permitsEvents(configured: configured, active: active) else { return }
@@ -182,7 +177,6 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
                     operations.start(operation)
                 case .searchCompleted, .searchFailed, .searchCancelled,
                      .routeCalculationCompleted, .routeCalculationFailed, .routeCalculationCancelled:
-                    // 동의 전에 시작한 요청과 이미 끝난 요청을 소급·중복 집계하지 않는다.
                     guard let duration = operations.finish(operation) else { return }
                     parameters["duration_ms"] = duration
                 default: break

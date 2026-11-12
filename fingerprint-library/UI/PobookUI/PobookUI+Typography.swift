@@ -9,7 +9,6 @@ import SwiftUI
 import UIKit
 
 extension PobookUI {
-    // Figma 「Typography / Foundation」 Default 모드의 폰트 값.
     enum FontFamily {
         static let Pretendard = "Pretendard"
     }
@@ -65,7 +64,6 @@ extension PobookUI {
     struct Typography {
         enum Scaling {
             case dynamic
-            /// 지도·책등 번호표처럼 그래픽 좌표에 맞춰 그려야 하는 텍스트에만 사용한다.
             case fixed
         }
 
@@ -94,7 +92,6 @@ extension PobookUI {
         static let caption2 = Self(style: .regular, size: FontSize._12,
             lineHeight: LineHeight._12, letterSpacing: LetterSpacing._12, relativeTo: .caption1)
 
-        /// 도서명이 아닌 버튼 문구에는 용도가 드러나는 이름을 사용한다.
         static let button = bookTitle
         static let buttonSmall = body2
         static let shelfHeading = Self(style: .medium, size: FontSize._20,
@@ -111,7 +108,6 @@ extension PobookUI {
             let letterSpacing: CGFloat
 
             var lineSpacing: CGFloat { max(lineHeight - font.lineHeight, 0) }
-            /// 외부 여백이 아니라 디자인 행 높이를 맞추는 글자 위·아래의 여유 공간이다.
             var halfLeading: CGFloat { lineSpacing / 2 }
         }
 
@@ -131,7 +127,6 @@ extension PobookUI {
             return Metrics(font: font, lineHeight: lineHeight * scale, letterSpacing: letterSpacing * scale)
         }
 
-        /// Text 보간처럼 View modifier를 적용할 수 없는 인라인 강조에도 같은 확대 기준을 쓴다.
         @MainActor
         func font(for dynamicTypeSize: DynamicTypeSize, scaling: Scaling = .dynamic) -> Font {
             Font(metrics(for: dynamicTypeSize, scaling: scaling).font)
@@ -140,7 +135,6 @@ extension PobookUI {
 }
 
 extension View {
-    /// 기본값은 Dynamic Type. 화면 간격은 호출부의 spacing/padding으로 별도 지정한다.
     func typography(_ typography: PobookUI.Typography, scaling: PobookUI.Typography.Scaling = .dynamic) -> some View {
         modifier(TypographyModifier(typography: typography, scaling: scaling))
     }

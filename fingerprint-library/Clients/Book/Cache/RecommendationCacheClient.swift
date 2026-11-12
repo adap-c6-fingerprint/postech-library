@@ -29,9 +29,7 @@ extension RecommendationCacheClient: DependencyKey {
 
     nonisolated private static let store = RecommendationCacheStore(
         directory: URL.applicationSupportDirectory
-            // 표지 선택 정책 변경: 이전 저해상도 파일 대신 새 묶음을 준비한다.
             .appendingPathComponent("RecommendationCache-v3", isDirectory: true)
-            // ✅ 이슈 #237: LCC 관심사로 만든 이전 추천 저장본을 새 하드데이터 추천과 섞지 않는다.
     )
 
     nonisolated private static let preparer = RecommendationCachePreparer(

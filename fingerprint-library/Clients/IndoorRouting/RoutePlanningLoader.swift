@@ -1,7 +1,6 @@
 import CryptoKit
 import Foundation
 
-/// 번들의 길찾기 자료를 읽고 검증해 서가 후보와 도착 노드를 연결한 뒤, RoutePlanner로 경로 계획을 만든다.
 nonisolated struct RoutePlanningLoader {
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [RouteCandidateStop],
               in bundle: Bundle = .main) async throws -> RoutePlan {
@@ -79,8 +78,6 @@ nonisolated struct RoutePlanningLoader {
         return (graph, diagnostics, try featureNodes(links, graph: graph, map: map), estimatedTransitionDistances(in: graph))
     }
 
-    /// 실측 거리 제공 전까지 사용자가 승인한 층당 높이 5m로 계산한다.
-    /// 계단 등의 수평 이동을 포함하며, 실측값으로 저장하거나 표시하지 않는다.
     private func estimatedTransitionDistances(in graph: RoutingGraph) -> [String: RouteEdgeDistance] {
         let nodes = Dictionary(uniqueKeysWithValues: graph.nodes.map { ($0.id, $0) })
         return Dictionary(uniqueKeysWithValues: graph.edges.compactMap { edge in
@@ -103,7 +100,6 @@ nonisolated struct RoutePlanningLoader {
                      arrivalNodeID: node.id, arrivalCoordinate: node.coordinate)
     }
 
-    /// 이 묶음의 ordinal은 실제 층 번호다. UUID·descriptor와 대조한 노드만 현재 IMDF ordinal로 변환한다.
     private func normalize(_ graph: RoutingGraphDTO, descriptor: Descriptor, on map: IndoorMap) throws -> RoutingGraphDTO {
         guard Set(map.floors.map(\.id)).count == map.floors.count,
               Set(descriptor.levels.map(\.id)).count == descriptor.levels.count,

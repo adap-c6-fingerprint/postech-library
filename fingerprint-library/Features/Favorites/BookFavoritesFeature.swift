@@ -15,7 +15,6 @@ struct BookFavoritesFeature {
         var items: [BookFavoriteItem] { favoriteBookRecords.active(in: favoriteBookKeys) }
         var libraryInfo: [Book.ID: BookCartFeature.LibraryInfo] = [:]
         var selectedIDs: [Book.ID] = []
-        // 책바구니에 담거나 삭제할 책을 고른 순서대로 보관한다.
         var isAddedToCartAlertPresented = false
         var isCartLimitAlertPresented = false
 
@@ -26,7 +25,6 @@ struct BookFavoritesFeature {
         var selectedBooks: [Book] {
             selectedIDs.compactMap { id in items.first { $0.id == id }?.book }
         }
-        // 아직 찜 목록에 남아 있는 선택 책만 고른 순서대로 돌려준다.
     }
 
     enum Action {
@@ -42,7 +40,6 @@ struct BookFavoritesFeature {
         case cartLimitAlertDismissed
         case delegate(Delegate)
 
-        /// 화면 이동은 App이 맡는다.
         @CasePathable
         enum Delegate: Equatable {
             case showCart
@@ -60,7 +57,6 @@ struct BookFavoritesFeature {
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
-            // 다른 화면에서 찜이 바뀌었을 수 있으므로 선택 ID를 항상 찜 목록의 부분집합으로 맞춘다.
             let itemIDs = Set(state.items.map(\.id))
             state.selectedIDs.removeAll { !itemIDs.contains($0) }
 
@@ -112,7 +108,6 @@ struct BookFavoritesFeature {
                 guard storedKeys.count + newCount <= BookCartItem.maxStoredCount else {
                     state.isCartLimitAlertPresented = true
                     analytics.record(.init(.cartLimitBlocked, [.kind: .text("capacity")]))
-                    // 일부만 담기지 않도록 한도를 넘으면 한 권도 담지 않는다.
                     return .none
                 }
                 for book in books {
@@ -121,7 +116,6 @@ struct BookFavoritesFeature {
                     }
                 }
                 state.selectedIDs = []
-                // 찜 목록에는 그대로 두고 선택만 해제한다.
                 state.isAddedToCartAlertPresented = true
                 return .none
 

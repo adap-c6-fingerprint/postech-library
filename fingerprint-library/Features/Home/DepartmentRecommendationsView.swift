@@ -7,7 +7,6 @@ struct DepartmentRecommendationsView: View {
 
     private var title: String {
         let name = store.departmentName
-        // 앱 전체가 함께 쓰는 프로필의 소속 이름. 마이페이지에서 바꾸면 바로 바뀐다.
         return name.isEmpty ? "많이 빌린 도서" : "'\(name)'에서 많이 빌린"
     }
 
@@ -51,7 +50,6 @@ struct DepartmentRecommendationsView: View {
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .task(id: store.userProfile) { await store.send(.departmentRecommendationsRequested).finish() }
-        // 프로필이 바뀌면 다시 조회한다. 같은 프로필이면 이미 받은 목록을 그대로 쓴다.
     }
 
     private func bookList(_ departmentBooks: [Book]) -> some View {
@@ -102,7 +100,6 @@ enum DepartmentBookSort: String, CaseIterable {
                 BookText.plainText($0.title).localizedStandardCompare(BookText.plainText($1.title)) == .orderedAscending
             }
         case .availability:
-            // 대출 가능 도서를 앞으로 보내고, 같은 그룹 안에서는 기존 추천 순서를 유지한다.
             books.sorted {
                 libraryInfo[$0.id]?.availability == .available && libraryInfo[$1.id]?.availability != .available
             }

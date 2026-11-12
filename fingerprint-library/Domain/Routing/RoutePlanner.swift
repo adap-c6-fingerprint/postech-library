@@ -7,7 +7,6 @@
 
 import Foundation
 
-/// 파일 접근 없이, 준비된 자료로 최단 방문 순서와 안내 세션을 만듦
 nonisolated struct RoutePlanner {
     @concurrent
     func plan(_ input: RoutePlanningInput) async throws -> RoutePlan {
@@ -50,7 +49,6 @@ nonisolated struct RoutePlanner {
                     continue
                 }
                 let distance = legs.reduce(0) { $0 + $1.distanceMeters }
-                // 동률이면 입력 책 순서와 안정화한 후보 ID 순서를 유지한다.
                 if distance < bestDistance {
                     bestDistance = distance
                     bestOrder = order
@@ -88,7 +86,6 @@ nonisolated struct RoutePlanner {
         for (index, shelf) in shelves.enumerated() {
             try Task.checkCancellation()
             let previous = index == 0 ? nil : shelves[index - 1]
-            // 같은 책의 후보가 달라도 다른 구간의 캐시를 재사용하지 않는다.
             let key = LegKey(from: previous?.fixtureNumber, to: shelf.fixtureNumber)
             if unreachable.contains(key) { throw IndoorRoutingError.noRoute }
             if let cached = cache[key] {

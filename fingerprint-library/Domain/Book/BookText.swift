@@ -1,6 +1,5 @@
 import Foundation
 
-/// 검색 결과의 강조 태그와 책 소개의 HTML을 실행하지 않고 일반 텍스트로 표시한다.
 nonisolated enum BookText {
     static func plainText(_ value: String) -> String {
         var text = value

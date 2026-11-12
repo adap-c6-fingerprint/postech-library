@@ -32,7 +32,6 @@ nonisolated extension DependencyValues {
     }
 }
 
-/// 처음 요청할 때 파일을 읽고, 이후에는 메모리의 결과를 돌려준다.
 actor RecommendationDatasetLoader {
     static let resourceName = "RecommendationDataset"
 
@@ -54,10 +53,6 @@ actor RecommendationDatasetLoader {
     }
 }
 
-// MARK: - JSON 형식 (DTO)
-
-/// JSON을 읽기 위한 전용 구조체. 공용 Book은 Codable이 아니므로 이 구조체로 읽은 뒤 Book 초기화 함수로 넘긴다.
-/// 앱이 쓰지 않는 필드(holdings, verification 등)는 선언하지 않으면 디코딩 때 무시된다.
 nonisolated struct RecommendationDatasetDTO: Decodable, Sendable {
     let books: [Entry]
     let affiliations: [Affiliation]
@@ -76,8 +71,8 @@ nonisolated struct RecommendationDatasetDTO: Decodable, Sendable {
         let author: String
         let publisher: String?
         let publicationYear: String?
-        let description: String? // 현재 파일은 전부 null
-        let imageURL: String?    // YES24 표지를 찾지 못한 책은 null
+        let description: String?
+        let imageURL: String?
         let subLocation: String?
     }
 

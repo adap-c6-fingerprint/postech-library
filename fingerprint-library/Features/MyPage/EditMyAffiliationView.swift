@@ -94,7 +94,6 @@ struct EditMyAffiliationView: View {
                                 }
                             }
                         }
-                        // 그룹(예: "학과 및 학부")을 묶음 제목으로 학과를 나눠 보여준다.
                     } label: {
                         fieldRow(store.selectedAffiliation?.name, placeholder: "학과를 선택해주세요", isEnabled: isDepartmentEnabled)
                     }
@@ -164,11 +163,9 @@ struct EditMyAffiliationView: View {
             in: .capsule
         )
         .disabled(!store.canSave)
-        // 바꾼 소속이 있을 때만 라임색으로 켜진다.
     }
 }
 
-// 온보딩 소속 화면과 같은 입력칸 토큰
 private extension Color {
     static let editAffiliationField = PobookUI.ColorToken.Field.background
     static let editAffiliationCaption = PobookUI.ColorToken.Field.caption

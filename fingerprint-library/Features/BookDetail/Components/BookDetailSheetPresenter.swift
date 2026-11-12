@@ -9,12 +9,10 @@ final class BookDetailSheetPresentation {
     var isExpanded: Bool { detent == .large }
 }
 
-/// 책 상세 네이티브 시트의 표시·종료를 소유한다.
 struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     let store: StoreOf<BookDetailFeature>
     let mapStore: StoreOf<IndoorMapFeature>
     let presentation: BookDetailSheetPresentation
-    /// App이 경로 미리보기를 전체 화면으로 띄우는 동안 시트를 내려 둔다.
     var isSuspended = false
     var onDismiss: () -> Void
     var onCompactFrameChange: (CGRect) -> Void
@@ -93,13 +91,11 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         private func presentSheet(_ hosting: UIHostingController<BookDetailSheet>) {
             didFinishPresentation = false
             presentation.detent = .medium
-            // 시트를 닫았다가 다시 띄우면 시스템이 시트 설정을 새로 만들므로 띄울 때마다 설정한다.
             if let sheet = hosting.sheetPresentationController {
                 sheet.detents = [.custom(identifier: Self.compactID) { context in
                     let height = UIFontMetrics(forTextStyle: .body).scaledValue(
                         for: BookDetailCompactLayout.height,
                         compatibleWith: context.containerTraitCollection)
-                    // 가로 화면·큰 글자에서 medium보다 낮은 요약 화면을 확보할 수 없으면 생략한다.
                     guard let medium = UISheetPresentationController.Detent.medium().resolvedValue(in: context),
                           height < medium else { return nil }
                     return height
@@ -108,7 +104,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                 sheet.prefersGrabberVisible = false
                 sheet.preferredCornerRadius = 28
                 sheet.largestUndimmedDetentIdentifier = .medium
-                // 기본 Liquid Glass와 높이에 따른 재질 전환은 시스템에 맡긴다.
                 sheet.delegate = self
             }
             present(hosting, animated: true) { [weak self, weak hosting] in
@@ -124,7 +119,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         private func scheduleCompactFrameReport() {
             compactFrameReportTask?.cancel()
             guard !isInvalidated, didFinishPresentation, !presentation.isExpanded else { return }
-            // 드래그 중 바뀌는 모든 프레임에 지도 카메라를 다시 맞추지 않는다.
             compactFrameReportTask = Task { [weak self] in
                 try? await Task.sleep(for: .milliseconds(120))
                 guard !Task.isCancelled else { return }
@@ -132,7 +126,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             }
         }
 
-        /// compact·medium의 실제 위치를 지도에 전달하고 large에서는 마지막 위치를 유지한다.
         private func reportCompactFrame() {
             guard !isInvalidated, didFinishPresentation, let hosting, hosting.view.window != nil,
                   hosting.sheetPresentationController?.selectedDetentIdentifier != .large
@@ -144,7 +137,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
 
         func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
             guard !isInvalidated else { return }
-            // 높이 전환 애니메이션은 시스템 시트가 처리한다.
             switch sheetPresentationController.selectedDetentIdentifier {
             case Self.compactID: presentation.detent = .compact
             case .large: presentation.detent = .large
@@ -153,7 +145,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             scheduleCompactFrameReport()
         }
 
-        // 높이 전환은 유지하고 아래로 당겨 상세를 닫는 동작만 막는다.
         func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
             false
         }
@@ -173,9 +164,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             onDismiss()
         }
 
-        /// 전체 화면 안내가 뜨기 전에 시트를 내리고, 안내가 완전히 닫힌 뒤 같은 시트를 다시 띄운다.
-        ///
-        /// 시트를 띄운 채로 앱 루트가 전체 화면을 띄우면 시스템이 시트를 내려 버려 상세로 돌아와도 시트가 없다.
         func setSuspended(_ suspended: Bool) {
             guard isSuspended != suspended else { return }
             isSuspended = suspended
@@ -187,7 +175,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                 return
             }
             resumeTask = Task { [weak self, weak hosting] in
-                // 전체 화면 안내의 닫힘 전환이 끝날 때까지 기다린다. 2초가 지나면 포기한다.
                 for _ in 0..<40 {
                     guard let self, let hosting, !Task.isCancelled, !self.isInvalidated, !self.isSuspended else { return }
                     if let window = self.view.window, window.rootViewController?.presentedViewController == nil {
@@ -203,7 +190,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             resumeTask?.cancel()
             guard !isInvalidated else { return }
             isInvalidated = true
-            // 상세에서 연 모달까지 함께 닫는다.
             hosting?.presentingViewController?.dismiss(animated: false)
             hosting = nil
         }

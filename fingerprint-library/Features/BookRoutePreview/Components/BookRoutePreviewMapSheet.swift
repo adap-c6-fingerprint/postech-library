@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 미리보기 전용 배치. 지도는 전체 화면을 유지하고 네이티브 시트가 가리는 높이만 전달한다.
 struct BookRoutePreviewMapSheet<MapContent: View, Details: View>: View {
     let onBack: () -> Void
     let onViewportChange: () -> Void
@@ -15,7 +14,6 @@ struct BookRoutePreviewMapSheet<MapContent: View, Details: View>: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
-                // MapKit은 자체 safe area를 더하므로 중복 여백을 제외한다.
                 map(.init(top: 60, left: 0, bottom: max(0, sheetHeight - geometry.safeAreaInsets.bottom), right: 0), cameraRevision)
                     .ignoresSafeArea()
                 LibraryBackButton(identifier: "book-route-preview-back") {

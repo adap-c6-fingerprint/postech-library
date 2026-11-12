@@ -21,19 +21,16 @@ extension AppFeature {
         case departmentRecommendations(DepartmentRecommendationsDestination)
     }
 
-    /// 전체 화면으로 띄우는 안내. 어느 탭에서 요청해도 App이 하나만 띄운다.
     @Reducer
     enum Modal {
         case routePreview(BookRoutePreviewFeature)
     }
 
-    /// 경로 미리보기를 요청한 스택 화면. 미리보기가 닫히면 그 화면에 알린다.
     struct GuidanceOrigin: Equatable {
         let tab: Tab
         let elementID: StackElementID
     }
 
-    /// 경로 미리보기를 닫은 뒤, 요청한 상세 화면이 내려 둔 시트를 다시 띄우게 한다.
     func guidanceDismissed(state: inout State) -> Effect<Action> {
         guard let origin = state.guidanceOrigin else { return .none }
         state.guidanceOrigin = nil
@@ -45,7 +42,6 @@ extension AppFeature {
         }
     }
 
-    /// 경로 미리보기를 연다. 여러 권은 방문 순서를 확인한 뒤 출발하고, 한 권은 바로 안내한다.
     func presentGuidance(for books: [Book], state: inout State) {
         guard !books.isEmpty else { return }
         state.modal = .routePreview(BookRoutePreviewFeature.State(
@@ -54,7 +50,6 @@ extension AppFeature {
         ))
     }
 
-    /// 화면 이동 요청을 해당 탭의 스택에 반영한다.
     func push(_ destination: Path.State, onto tab: Tab, state: inout State) {
         switch tab {
         case .map: state.mapPath.append(destination)
@@ -63,7 +58,6 @@ extension AppFeature {
         }
     }
 
-    /// 스택에 쌓인 화면이 보낸 이동 요청을 같은 탭의 스택에 이어 쌓는다.
     func handlePath(_ action: StackActionOf<Path>, on tab: Tab, state: inout State) -> Effect<Action> {
         guard case let .element(elementID, action) = action else { return .none }
         switch action {
@@ -100,7 +94,6 @@ extension AppFeature {
         }
     }
 
-    /// 검색 delegate 중 화면 이동 요청만 목적지로 바꾼다. 그 밖의 요청은 nil이다.
     static func destination(for delegate: BookSearchFeature.Action.Delegate) -> Path.State? {
         switch delegate {
         case let .showDetail(book, markerID):

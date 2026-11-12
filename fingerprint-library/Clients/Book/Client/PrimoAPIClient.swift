@@ -1,12 +1,10 @@
 import Foundation
 
-/// 도서관 검색·추천·소장 조회가 공통으로 사용하는 Primo 요청 구성과 전송.
 nonisolated struct PrimoAPIClient: Sendable {
     static let defaultBaseURL = APIRelayEnvironment.development.baseURL
 
     var relay: BookAPIClient = .init()
 
-    /// 재시도 정책이 필요 없는 조회에서 HTTP 성공 응답의 본문을 반환한다.
     func searchData(
         query: String, resourceTypes: [String] = [], offset: Int = 0, limit: Int = 20
     ) async throws -> Data {
@@ -66,7 +64,6 @@ nonisolated struct PrimoAPIClient: Sendable {
         return try await relay.send(.primoSearch, queryItems: items, timeout: timeout)
     }
 
-    /// POSTECH에서는 rid,exact 대신 MMS 번호로 검색한 뒤 호출자가 recordid를 대조한다.
     func search(recordID: String) async throws -> HTTPResponse {
         try await search(query: "any,contains,\(recordID.dropFirst(4))", timeout: 15)
     }

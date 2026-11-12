@@ -1,6 +1,5 @@
 import Foundation
 
-/// 확정한 방문지. 원본 도서·소장 정보와 서가 후보, 그중 안내할 서가 하나를 함께 보존한다.
 struct RouteStop: Equatable, Sendable {
     let book: Book
     let holdings: [BookHolding]
@@ -20,8 +19,6 @@ struct RouteStop: Equatable, Sendable {
     }
 }
 
-/// 확정한 경로 계획. 방문 순서·방문지별 서가·구간 경로를 담는다.
-/// 현재 방문지·진행·완료 상태는 길안내가 따로 관리한다.
 struct RoutePlan: Identifiable, Equatable, Sendable {
     let id = UUID()
     let map: IndoorMap
@@ -69,7 +66,6 @@ struct RoutePlan: Identifiable, Equatable, Sendable {
         guidance = try RoutePreviewGuidance(route: route, graph: graph)
     }
 
-    /// 방문 순서·목적지를 골라도 원본 책·소장·후보가 같은 계산 결과만 사용한다.
     func matches(candidates: [RouteCandidateStop]) -> Bool {
         stops.count == candidates.count
             && stops.allSatisfy { candidates.contains($0.candidateStop) }

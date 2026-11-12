@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import Foundation
 
-/// 검색 화면에서 상세를 열어 본 책만 저장한다. 추천용 조회 기록과는 분리한다.
 nonisolated struct RecentSearchBooksClient: Sendable {
     var load: @Sendable () -> [Book]
     var record: @Sendable (Book) -> Void
@@ -36,7 +35,6 @@ nonisolated struct RecentSearchBooksClient: Sendable {
         )
     }
 
-    // Book의 공통 계약은 유지하고, 검색 기록에 필요한 스냅샷만 직렬화한다.
     private nonisolated struct StoredBook: Codable, Sendable {
         let id: String
         let isbn: String?

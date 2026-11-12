@@ -1,6 +1,5 @@
 import MapKit
 
-/// 점의 지름과 간격을 화면 포인트로 유지한다. 지도 좌표계에서는 줌 배율의 역수로 보정한다.
 nonisolated final class NavigationDottedRouteRenderer: MKPolylineRenderer {
     override func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
         guard zoomScale.isFinite, zoomScale > 0, let path = path, let color = strokeColor else { return }

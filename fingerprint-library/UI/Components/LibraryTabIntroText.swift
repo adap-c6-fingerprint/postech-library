@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 홈·추천 탭에서 상단바 아래에 표시하는 안내 문구.
 struct LibraryTabIntroText: View {
     static let topBarSpacing: CGFloat = 13.59
     let title: String

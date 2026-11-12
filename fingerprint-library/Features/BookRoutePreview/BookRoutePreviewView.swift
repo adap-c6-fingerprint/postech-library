@@ -2,8 +2,6 @@ import ComposableArchitecture
 import SwiftUI
 import UIKit
 
-/// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
-/// 책·진입 방식·서가 조회 상태는 BookRoutePreviewFeature가 소유하고, App의 Modal로 열린다.
 struct BookRoutePreviewView: View {
     @Bindable var store: StoreOf<BookRoutePreviewFeature>
 
@@ -14,12 +12,10 @@ struct BookRoutePreviewView: View {
         store.scope(state: \.shelf, action: \.shelf)
     }
 
-    /// 미리보기 지도에서 고른 층. 화면 표시 전용이다.
     @State private var routeFloorID: UUID?
     @Environment(\.indoorRouteMapStore) private var mapStore
     @Environment(\.openURL) private var openURL
     @State private var isProblemReportPresented = false
-    /// 메일 작성기도 메일 앱도 없을 때 주소를 안내하는 시트.
     @State private var isProblemReportFallbackPresented = false
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -114,11 +110,9 @@ struct BookRoutePreviewView: View {
         }
     }
 
-    /// 준비 중에도 목적지 지도를 깔아 둔다. 권한 알림·출발지 직접 설정·길안내로 이어질 때 화면이 끊기지 않는다.
     private var directContent: some View {
         ZStack {
             if showsRouteFailure {
-                // 실패 화면은 지도 대신 전체를 쓴다.
                 directFailure
             } else {
                 directMapBackdrop
@@ -150,7 +144,6 @@ struct BookRoutePreviewView: View {
         }
     }
 
-    /// 출발지 설정 화면과 같은 제목을 유지해 어떤 책을 찾는 중인지 놓치지 않게 한다.
     private var directHeader: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(originPickerTitle)
@@ -200,8 +193,6 @@ struct BookRoutePreviewView: View {
             onReportProblem: { presentProblemReport() })
     }
 
-    /// 실패 화면에 작게 보여 줄 원인 코드와 위치 상태.
-    /// 예: "E: invalidPosition · ±32m · floor 2 · 4s ago · start 41s ago"
     private var failureDiagnostic: String {
         let code = IndoorRoutingError.allCases.first { $0.errorDescription == routeError }
             .map { "\($0)" } ?? "unknown"
@@ -224,17 +215,14 @@ struct BookRoutePreviewView: View {
         return parts.joined(separator: " · ")
     }
 
-    /// 상세·책바구니 화면까지 닫고 홈 지도 탭으로 돌아간다.
     private func returnHome() {
         store.send(.goHomeTapped)
     }
 
-    /// 지금은 안내할 수 없으니 책을 담아 두고 화면을 닫는다.
     private func addBooksToCart() {
         store.send(.addToCartTapped)
     }
 
-    /// 메일 작성기를 띄운다. 계정이 없으면 메일 앱으로, 그것도 못 열면 주소 안내 시트로 넘긴다.
     private func presentProblemReport() {
         guard !ProblemReportMailSheet.canSendMail else {
             isProblemReportPresented = true
@@ -282,7 +270,6 @@ struct BookRoutePreviewView: View {
                     routePlan: readySession,
                     isLoadingRoute: isLoadingRoute,
                     routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError,
-                    // 위치 권한이 없어도 눌러서 출발 위치 설정을 시작할 수 있게 한다.
                     canStart: !isLoadingRoute && (needsStartLocationSetup
                         || (readySession != nil && currentStart != nil && routeError == nil)),
                     onBack: { dismiss() },
@@ -298,7 +285,6 @@ struct BookRoutePreviewView: View {
         .fullScreenCover(item: $store.scope(state: \.navigation, action: \.navigation), onDismiss: {
             store.send(.navigationCoverDismissed)
         }) { navigationStore in
-            // 안내가 끝나면 미리보기 reducer가 길안내를 닫는다.
             BookNavigationView(store: navigationStore, onExit: { _ in })
         }
         .sheet(isPresented: $isProblemReportFallbackPresented) {
@@ -332,7 +318,6 @@ struct BookRoutePreviewView: View {
         }
         .animation(.easeInOut(duration: 0.2), value: store.isPermissionAlertPresented)
         .onChange(of: routeMap != nil, initial: true) { _, isReady in
-            // 출발지 설정 화면은 지도가 준비된 뒤에 연다.
             store.send(.routeMapAvailabilityChanged(isReady))
         }
         .background(Color(uiColor: .systemBackground))
@@ -353,11 +338,9 @@ struct BookRoutePreviewView: View {
         .analyticsScreen(.routePreview)
         .task { store.send(.task) }
         .onChange(of: store.routeRequest) { _, _ in
-            // 경로 계산 입력이 바뀌면 미리보기 지도의 층 선택을 처음으로 돌린다.
             routeFloorID = nil
         }
         .task(id: destination) {
-            // 도서가 바뀌면(테스트 모드) 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
             guard store.shelf != nil else { return }
             await store.send(.shelf(.task)).finish()
         }
@@ -367,7 +350,6 @@ struct BookRoutePreviewView: View {
         }
     }
 
-    /// 출발지 설정과 안내 준비가 쓰는 지도. 공용 지도 Store가 없거나 비어 있으면 이 화면이 불러온 지도를 쓴다.
     private var routeMap: IndoorMap? {
         mapStore?.map ?? destinationStore?.state.map.map
     }
@@ -396,7 +378,6 @@ struct BookRoutePreviewView: View {
         orderedBooks.first.map { BookText.plainText($0.title) } ?? "도서 길안내"
     }
 
-    /// 시안의 "4층 337번 서가"처럼 목적지 서가를 알려 준다. 서가를 아직 모르면 줄을 숨긴다.
     private var originPickerSubtitle: String? {
         guard let book = orderedBooks.first,
               let shelf = destinationStore?.state.shelves(for: book.id).first else { return nil }
@@ -404,7 +385,6 @@ struct BookRoutePreviewView: View {
         return [floorName, shelf.shelfTitle].compactMap { $0 }.joined(separator: " ")
     }
 
-    /// 목적지 서가와 같은 층에서 시작해 사용자가 층을 덜 바꾸게 한다.
     private var originPickerFloorID: UUID? {
         guard let book = orderedBooks.first,
               let shelf = destinationStore?.state.shelves(for: book.id).first else {

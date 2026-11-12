@@ -1,6 +1,5 @@
 import Foundation
 
-/// 추천 알고리즘과 독립적으로 결과의 표지를 준비한다. 네트워크 동시 작업은 최대 두 개다.
 nonisolated struct RecommendationCachePreparer: Sendable {
     private typealias Cover = RecommendationCacheStore.PreparedCover
 
@@ -21,7 +20,6 @@ nonisolated struct RecommendationCachePreparer: Sendable {
         self.now = now
     }
 
-    /// 저장 시각을 현재 시각으로 기록한다.
     init(
         store: RecommendationCacheStore,
         loadCover: @escaping @Sendable (URL) async throws -> Data,

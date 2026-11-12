@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 단권 상세와 여러 권 미리보기에서 같은 서가 맞춤·시트 가림 영역을 적용한다.
 struct BookDetailShelfMapView: View {
     let store: StoreOf<IndoorMapFeature>
     let floor: IndoorMapFloor?

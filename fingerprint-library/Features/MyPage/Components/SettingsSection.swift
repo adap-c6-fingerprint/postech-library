@@ -14,7 +14,6 @@ struct SettingsSection: View {
     struct Row: Identifiable {
         let title: String
         var action: (() -> Void)?
-        // nil이면 아직 기능명세가 없는 행이다. 눌러도 아무 일이 없다.
         var id: String { title }
     }
 

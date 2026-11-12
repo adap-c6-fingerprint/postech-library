@@ -1,8 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-// ✅ 여러 권 미리보기를 끝까지 올렸을 때 표지 아래에 보이는 선택한 책의 정보.
-// ✅ 단권 상세의 펼친 화면과 같은 순서(소장 상태 → 제목 → 위치·청구기호 → 거리 → 저자·소개)로 보여 준다.
 struct BookRoutePreviewExpandedDetails: View {
     let book: Book
     let holdings: BookShelfMapFeature.HoldingsState?
@@ -34,7 +32,6 @@ struct BookRoutePreviewExpandedDetails: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityIdentifier("multiBookPreview.expandedDetails.\(book.id)")
         .task(id: book.id) {
-            // 접힌 카드를 거치지 않고 넘긴 책도 소개를 불러온다. Store가 중복 요청을 막는다.
             if book.description?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty != false {
                 detailStore.send(.loadDescription)
             }

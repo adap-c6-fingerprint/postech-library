@@ -1,7 +1,5 @@
 import Foundation
 
-// ✅ 여러 권 미리보기의 접힌 카드와 펼친 상세 화면이 같은 기준으로 대표 소장본·위치·경로 요약을 계산한다.
-// ✅ 기존 BookRoutePreviewBookCard의 계산 프로퍼티를 그대로 옮겼다.
 struct BookRoutePreviewBookInfo {
     struct Route: Equatable {
         let distanceText: String
@@ -11,7 +9,6 @@ struct BookRoutePreviewBookInfo {
     let holding: BookHolding?
     let shelves: [IndoorShelfLabel]
     let location: String?
-    /// 경로 시작부터 이 책까지의 누적 거리와 층 이동 횟수.
     let route: Route?
 
     var routeSummary: String? {
@@ -32,7 +29,6 @@ struct BookRoutePreviewBookInfo {
             holding = nil
         }
 
-        // 지도와 같은 대표 소장본의 위치만 표시한다.
         let shelves = stop?.candidateShelves ?? resolutions.first { $0.holding == holding }?.shelves ?? []
 
         if let holding {

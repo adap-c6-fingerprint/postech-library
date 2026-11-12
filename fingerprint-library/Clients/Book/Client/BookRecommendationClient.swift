@@ -16,7 +16,6 @@ extension BookRecommendationClient: DependencyKey {
             @Dependency(\.personalizedRecommendationClient) var personalized
             @Dependency(\.bookClient) var bookClient
             @Shared(.userProfile) var userProfile: UserProfile?
-            // 앱 전체가 함께 쓰는 프로필의 관심 분야를 쓴다. 온보딩·마이페이지에서 저장한 값과 같다.
             let input = PersonalizedRecommendationInput(
                 favoriteKeys: favoriteBookKeys,
                 recentQueries: history.load(),
@@ -53,8 +52,6 @@ extension BookRecommendationClient: DependencyKey {
         }.prefix(min(count, ColdStartRecommendation.resultCount)))
         guard !selected.isEmpty else { return [] }
 
-        // 추천 결과에는 ID·검증한 표지만 있으므로 기존 BookClient로 메타데이터를 보완한다.
-        // BookClient.search가 any,contains를 붙인다. 여기에는 숫자 레코드 번호만 전달한다.
         let recordNumbers = selected.map { recommendation in
             let id = recommendation.recordID
             return id.hasPrefix("alma") ? String(id.dropFirst(4)) : id
@@ -67,7 +64,6 @@ extension BookRecommendationClient: DependencyKey {
         ))
         try Task.checkCancellation()
 
-        // 검색 응답의 순서·표지 대신 알고리즘의 추천 순서·확인된 표지를 유지한다.
         return selected.compactMap { recommendation in
             let identity = "primo:\(recommendation.recordID)"
             guard let book = metadata.first(where: {

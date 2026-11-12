@@ -2,7 +2,6 @@ import Foundation
 import Testing
 @testable import fingerprint_library
 
-/// 책바구니 저장 형식이 이전 BookCartClient가 쓰던 JSON과 같아야 기존 사용자의 책바구니가 유지된다.
 @MainActor
 struct BookCartItemStorageTests {
     @Test func 이전_저장_JSON을_그대로_읽는다() throws {

@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 책 찾기와 직원 도움 안내 화면의 공통 상단바. 화면별 여백은 호출부에서 지정한다.
 struct BookNavigationTopBar: View {
     let backLabel: String
     let backIdentifier: String

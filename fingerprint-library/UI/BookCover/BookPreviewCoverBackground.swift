@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 펼친 시트 전체를 책 표지 색과 어두운 그라디언트로 덮는다.
 struct BookPreviewCoverBackground: View {
     let book: Book
     var cachedURL: URL?

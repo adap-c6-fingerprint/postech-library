@@ -1,8 +1,6 @@
 import SwiftUI
 import UIKit
 
-/// 도착한 서가 앞에서 실제 책등 이미지와 청구기호 번호표로 찾을 책을 보여준다. (피그마 "7. 책장 앞에서 책 찾기")
-/// 진행 동작은 상위 안내 상태(BookNavigationFeature)가 처리한다.
 struct BookNavigationBookFindingView: View {
     private let isIntermediateStop: Bool
     private let bookInformation: BookNavigationBookInfo?
@@ -12,7 +10,6 @@ struct BookNavigationBookFindingView: View {
     private let onFinish: () -> Void
     private let onDefer: () -> Void
     private var callNumberScreen: CallNumberScreen?
-    // 아래로 3초 이상 당기면 여는 기존 청구기호 화면(BookNavigationArrivalView)에 넘길 값. 미리보기에서는 nil
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var isCallNumberScreenPresented = false
@@ -80,7 +77,6 @@ struct BookNavigationBookFindingView: View {
                         .padding(.horizontal, Design.buttonHorizontalPadding)
                         .padding(.bottom, Design.buttonBottomPadding)
                 }
-                // 기본 크기에서는 책장을 하단 버튼 위에 붙이는 기존 디자인을 유지한다.
                 findingHeader
             }
         }
@@ -103,7 +99,6 @@ struct BookNavigationBookFindingView: View {
                 )
             }
         }
-        // 기존 화면의 뒤로가기는 이 책등 화면으로 돌아온다. 찾았어요·안내 취소는 기존과 같은 상위 동작을 쓴다.
         .onDisappear { cancelPullHold() }
         .toolbar(.hidden, for: .navigationBar)
         .preferredColorScheme(.dark)
@@ -129,8 +124,6 @@ struct BookNavigationBookFindingView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - 아래로 당겨 기존 청구기호 화면 열기
-
     private var pullDownToCallNumberScreen: some Gesture {
         DragGesture(minimumDistance: 10)
             .onChanged { value in
@@ -144,7 +137,6 @@ struct BookNavigationBookFindingView: View {
             }
             .onEnded { _ in cancelPullHold() }
     }
-    // 15) 책찾기 화면 문서: 아래로 3초 이상 당기고 있으면 기존 청구기호 화면을 보여준다. 손을 떼거나 덜 당기면 취소한다.
 
     private func startPullHold() {
         guard callNumberScreen != nil, pullHoldTask == nil, !isCallNumberScreenPresented else { return }
@@ -160,8 +152,6 @@ struct BookNavigationBookFindingView: View {
         pullHoldTask?.cancel()
         pullHoldTask = nil
     }
-
-    // MARK: - 상단
 
     private func heading(_ info: BookNavigationBookInfo) -> some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -209,18 +199,13 @@ struct BookNavigationBookFindingView: View {
         let restParticle: String = Self.objectParticle(after: rest)
         let tail: String = keyParticle + " 먼저 찾고,\n이어서 " + rest + restParticle + " 확인하세요."
         return Text("\(prefix)\(Text(tail))")
-        // 강조한 Text를 보간해 스타일을 유지하고, 문장을 나눠 타입 검사 부담을 줄인다.
     }
-    // 피그마: "책등에서 PR2993을 먼저 찾고, / 이어서 .F2.P45를 확인하세요." (PR2993만 굵은 흰 글씨)
-
-    // MARK: - 책장
 
     private var shelf: some View {
         GeometryReader { geometry in
             let spineWidth = spineWidth
             let spineRight = geometry.size.width - Design.spineTrailingInset
             let spineLeft = spineRight - spineWidth
-            // 이미지의 원본 비율로 책등을 먼저 정하고, 작은 번호표는 그 안에 맞춘다.
             let smallLabel = CGRect(x: spineLeft,
                 y: Design.spineHeight - Design.smallLabelBottomInset - Design.smallLabelHeight,
                 width: spineWidth, height: Design.smallLabelHeight)
@@ -241,12 +226,10 @@ struct BookNavigationBookFindingView: View {
                     .frame(width: Design.extraBooksLeftSize.width, height: Design.extraBooksLeftSize.height)
                     .offset(x: spineLeft - Design.extraBooksLeftSize.width,
                             y: Design.spineHeight - Design.extraBooksLeftSize.height)
-                // 피그마 주석: 기준선은 기준도서 좌측 세로선. 기준도서가 두꺼워지면 화면 밖 왼쪽으로 밀려난다.
                 Image(.extraBooksRight)
                     .resizable()
                     .frame(width: Design.extraBooksRightSize.width, height: Design.extraBooksRightSize.height)
                     .offset(x: spineRight, y: Design.spineHeight - Design.extraBooksRightSize.height)
-                // 피그마 주석: 기준선은 기준도서 우측 세로선. 우측 보조도서는 고정한다.
                 spineView(width: spineWidth)
                     .offset(x: spineLeft)
                 if let number, let largeLayout, let largeLabel {
@@ -278,7 +261,6 @@ struct BookNavigationBookFindingView: View {
         } else {
             placeholderSpine(width: width)
         }
-        // 불러오는 중·책등 없음·이미지로 바꾸지 못한 경우 모두 bookSpinePlaceHolder 에셋으로 그린다.
     }
 
     private func placeholderSpine(width: CGFloat) -> some View {
@@ -286,10 +268,8 @@ struct BookNavigationBookFindingView: View {
             .resizable()
             .frame(width: width, height: Design.spineHeight)
             .accessibilityLabel(title)
-        // 책등 이미지가 없으면 최근 찾은 책 책장과 같이 bookSpinePlaceHolder 에셋으로 대신 그린다.
     }
 
-    /// 확대 번호표에서 책등 위 작은 번호표로 이어지는 빛. 피그마 주석: 책 두께에 따라 꼭짓점을 조절한다.
     private func lightBeam(smallLabel: CGRect, largeLabel: CGRect) -> some View {
         Canvas { context, _ in
             var path = Path()
@@ -299,7 +279,6 @@ struct BookNavigationBookFindingView: View {
             path.addLine(to: CGPoint(x: smallLabel.minX - 16, y: smallLabel.maxY - 0.5))
             path.addLine(to: CGPoint(x: smallLabel.maxX, y: smallLabel.maxY - 0.5))
             path.closeSubpath()
-            // 피그마 Vector 6641의 다섯 꼭짓점을 두 번호표의 모서리에 맞춰 옮긴다.
             let bounds = path.boundingRect
             context.fill(path, with: .linearGradient(
                 Gradient(colors: [Design.beamStart, Design.beamEnd]),
@@ -310,8 +289,6 @@ struct BookNavigationBookFindingView: View {
         .allowsHitTesting(false)
         .accessibilityHidden(true)
     }
-
-    // MARK: - 하단
 
     private var findingActions: some View {
         VStack(spacing: Design.findingActionSpacing) {
@@ -342,23 +319,17 @@ struct BookNavigationBookFindingView: View {
         .accessibilityIdentifier(isIntermediateStop ? "book-navigation-next-stop" : "book-navigation-finish")
     }
 
-    // MARK: - 값
-
     private var spineImage: UIImage? {
         guard case let .loaded(image) = spine, image.size.height > 0,
               image.size.width / image.size.height < Design.maxSpineAspectRatio else { return nil }
         return image
     }
-    // Yes24는 책등이 없을 때 빈 값 대신 표지 모양의 "이미지 준비중" 그림을 준다.
-    // 진짜 책등은 세로로 길쭉하므로, 길쭉하지 않은 그림은 책등이 없는 책으로 보고 bookSpinePlaceHolder로 그린다.
 
     private var spineWidth: CGFloat {
         if let image = spineImage {
             return Design.spineHeight * image.size.width / image.size.height
-            // 피그마 주석: 높이는 고정하고, 너비는 책등 원본 비율을 따른다.
         }
         return Design.spineHeight * Design.placeholderAspectRatio
-        // 대체 에셋은 "책표지 준비중" 글자가 찌그러지지 않게 원본 비율을 지킨다. (411 높이에서 약 47)
     }
 
     private var title: String {
@@ -373,38 +344,27 @@ struct BookNavigationBookFindingView: View {
     private func shelfTitle(_ info: BookNavigationBookInfo) -> String {
         [info.floorName, info.shelf.shelfTitle].compactMap { $0 }.joined(separator: " ")
     }
-    // 예: "4층 337번 서가"
 
-    /// 마지막 글자의 받침 유무로 목적격 조사(을/를)를 고른다. 숫자·영문은 읽는 소리 기준이다.
     private static func objectParticle(after text: String) -> String {
         guard let last = text.last(where: { $0.isLetter || $0.isNumber }) else { return "를" }
         if let scalar = last.unicodeScalars.first, (0xAC00...0xD7A3).contains(scalar.value) {
             return (scalar.value - 0xAC00) % 28 == 0 ? "를" : "을"
         }
-        // 한글은 종성 유무로 판단한다.
         if "013678".contains(last) { return "을" }
-        // 영(0) 일 삼 육 칠 팔은 받침이 있다.
         if "LMNRlmnr".contains(last) { return "을" }
-        // 엘 엠 엔 알은 받침이 있다.
         return "를"
     }
 
     private enum Design {
         static let spineHeight: CGFloat = 411
         static let maxSpineAspectRatio: CGFloat = 0.3
-        // 책등으로 인정하는 최대 가로÷세로 비율. 실제 책등은 대략 0.05~0.25이고, Yes24 "이미지 준비중" 그림은 표지처럼 세로로 조금 긴 모양(약 0.5~0.7)이다.
         static let placeholderAspectRatio: CGFloat = 188 / 1644
-        // bookSpinePlaceHolder.png 원본 크기(가로 188 × 세로 1644 px)
-        // 피그마 기준도서(image 129) 크기 25 × 411
         static let spineTrailingInset: CGFloat = 78
-        // 402pt 화면에서 기준도서 우측 세로선이 x = 324
         static let extraBooksLeftSize = CGSize(width: 298.75, height: 382.75)
         static let extraBooksRightSize = CGSize(width: 79, height: 382.75)
-        // 피그마 주석: 4X로 내보낸 에셋(1195 × 1531, 316 × 1531)을 화면 비율에 맞춘다.
         static let smallLabelHeight: CGFloat = 59
         static let smallLabelBottomInset: CGFloat = 5
         static let largeLabelOrigin = CGPoint(x: 68, y: 166)
-        // 책장 영역(기준도서 윗면 = 0) 기준 확대 번호표 위치
         static let beamStart = Color(red: 0xD9 / 255, green: 0xD9 / 255, blue: 0xD9 / 255).opacity(0.2)
         static let beamEnd = Color(red: 0x73 / 255, green: 0x73 / 255, blue: 0x73 / 255).opacity(0.2)
         static let horizontalPadding: CGFloat = 16
@@ -415,13 +375,11 @@ struct BookNavigationBookFindingView: View {
         static let buttonBottomPadding: CGFloat = 18
         static let findingActionSpacing: CGFloat = 12
         static let pullDistance: CGFloat = 60
-        // 이만큼 아래로 당긴 상태를 유지해야 3초를 센다. 살짝 스친 터치는 무시한다.
         static let pullHoldSeconds: Double = 3
     }
 }
 
 #if DEBUG
-// MARK: - 미리보기 (서버 없이 화면만 확인한다)
 
 extension BookNavigationBookInfo {
     init(previewTitle: String, callNumber: String) {
@@ -440,7 +398,6 @@ extension BookNavigationBookInfo {
         locationNames = []
         callNumbers = [callNumber]
     }
-    // 실제 화면은 길안내 세션에서 만들지만, 미리보기는 피그마 예시 값(4층 337번 서가, PR2993 .F2 .P45)으로 바로 만든다.
 }
 
 private func previewSpine(width: CGFloat) -> BookNavigationFeature.SpinePhase {
@@ -451,7 +408,6 @@ private func previewSpine(width: CGFloat) -> BookNavigationFeature.SpinePhase {
     }
     return .loaded(image)
 }
-// 책등 API 대신 단색 이미지를 쓴다. 너비를 바꿔 책 두께에 따른 배치(피그마 주석)를 확인한다.
 
 #Preview("책등 25pt (피그마 기준)") {
     NavigationStack {

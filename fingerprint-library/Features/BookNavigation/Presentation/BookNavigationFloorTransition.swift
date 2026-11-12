@@ -1,6 +1,5 @@
 import Foundation
 
-/// 위치 수신과 독립적으로 사용자가 확인할 수 있는 한 번의 연속 층 이동.
 nonisolated struct BookNavigationFloorTransition: Equatable, Sendable, Identifiable {
     let steps: Range<Int>
     let category: RouteEdgeCategory
@@ -43,13 +42,11 @@ nonisolated struct BookNavigationFloorTransition: Equatable, Sendable, Identifia
         return nil
     }
 
-    /// 뒤늦게 들어온 이전 층의 위치가 수동으로 확인한 진행을 되돌리지 않게 한다.
     func isReached(by progress: RouteGuidanceProgress?) -> Bool {
         guard let progress else { return false }
         return Double(progress.stepIndex) + progress.fraction >= Double(steps.upperBound) - 0.000_001
     }
 
-    /// 안내 표시용 진행이다. 센서 위치를 생성하거나 도착을 자동 판정하는 데 사용하지 않는다.
     func displayedProgress(in plan: GuidanceEngine, liveProgress: RouteGuidanceProgress?) -> RouteGuidanceProgress? {
         if isReached(by: liveProgress) { return liveProgress }
         guard steps.lowerBound >= 0, steps.upperBound <= plan.steps.count,

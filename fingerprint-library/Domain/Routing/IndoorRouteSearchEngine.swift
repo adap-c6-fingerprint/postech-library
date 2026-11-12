@@ -48,8 +48,6 @@ nonisolated struct IndoorRouteSearchEngine: Sendable {
                     segments.append(.init(floorID: from.floorID, coordinates: arc.coordinates))
                 }
             } else {
-                // 같은 graph node에서 같은 방향으로 이어지는 엘리베이터는 내리지 않는 탑승이다.
-                // 도보 간선이 끼거나 이동 방향이 바뀌면 별도 이동으로 남긴다.
                 if arc.category == .elevator, let previousArc, previousArc.category == .elevator,
                     previousArc.toNodeID == from.id,
                     let previousFrom = index.nodesByID[previousArc.fromNodeID], previousFrom.level != from.level,

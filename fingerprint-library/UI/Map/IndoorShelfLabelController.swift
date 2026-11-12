@@ -1,6 +1,5 @@
 import MapKit
 
-/// 확대 단계 전환·고정 위치 표시·재사용을 담당한다. 위치 갱신만으로 군집을 다시 계산하지 않는다.
 @MainActor
 final class IndoorShelfLabelController {
     private var labels: [IndoorShelfLabel] = []
@@ -33,7 +32,6 @@ final class IndoorShelfLabelController {
         isLayingOut = true
         defer { isLayingOut = false }
         guard let nextLevel = resolveLevel(in: map) else { return }
-        // 레벨을 만들 때 정한 순서를 유지한다. 겹침을 숨기지 않으므로 프레임별 우선순위 정렬은 필요 없다.
         let candidates = (levels[nextLevel] ?? []).compactMap { annotation -> (IndoorShelfLabelAnnotation, CGPoint)? in
             let point = map.convert(annotation.coordinate, toPointTo: map)
             guard map.bounds.insetBy(dx: -100, dy: -100).contains(point) else { return nil }
@@ -53,7 +51,6 @@ final class IndoorShelfLabelController {
             let height = abs(sin(angle)) * size.width + abs(cos(angle)) * size.height
             let frame = CGRect(x: point.x - width / 2, y: point.y - height / 2,
                                width: width, height: height)
-            // 화면에 걸친 부분만 그린다. 겹침이나 화면 경계 때문에 자리를 옮기지 않는다.
             guard map.bounds.intersects(frame) else { continue }
             annotation.layoutAngle = angle
             chosen.append(annotation)

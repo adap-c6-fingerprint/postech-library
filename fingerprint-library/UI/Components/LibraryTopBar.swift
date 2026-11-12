@@ -1,7 +1,6 @@
 import SwiftUI
 import UIKit
 
-/// 홈·추천·검색 탭의 제목과 버튼을 같은 위치에 배치한다.
 struct LibraryTabTopBar: View {
     let title: String
     let onFavorites: () -> Void
@@ -10,7 +9,6 @@ struct LibraryTabTopBar: View {
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 12) {
-        // 추천 탭 기준: 제목 아래쪽을 버튼 아래쪽에 맞춘다. 홈도 같은 배치를 쓴다.
             LibraryTopBarTitle(title: title)
                 .padding(.leading, 4)
             Spacer(minLength: 12)
@@ -22,7 +20,6 @@ struct LibraryTabTopBar: View {
             }
             .glassEffect(.regular.interactive(), in: .capsule)
             LibraryTopBarButton(title: "마이페이지", symbol: "person.fill", identifier: "library-top-bar-profile", action: onProfile, size: 44)
-            // 찜·책바구니 버튼처럼 누르는 즉시 이동한다. 데이터 수집 설정은 마이페이지 설정 목록의 행으로 연다.
                 .frame(width: 44, height: 44)
                 .glassEffect(.regular, in: .circle)
         }
@@ -65,7 +62,6 @@ struct LibraryTopBarButton: View {
     }
 }
 
-/// 비활성 여부는 Button이 관리하고, 심볼 색상은 디자인에 맞게 흰색으로 유지한다.
 private struct LibraryTopBarSymbolStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -74,7 +70,6 @@ private struct LibraryTopBarSymbolStyle: ButtonStyle {
     }
 }
 
-/// Material 블러를 상단에 표시하고 아래쪽 경계에서 서서히 사라지게 한다.
 struct LibraryTopBarBackground: View {
     private let height: CGFloat = 361
     private let shade = Color(red: 18.0 / 255, green: 18.0 / 255, blue: 18.0 / 255)

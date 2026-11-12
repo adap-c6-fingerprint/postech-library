@@ -11,13 +11,11 @@ import Foundation
 
 nonisolated struct RecentlyViewedBooksClient: Sendable {
     var load: @Sendable () -> [Book]
-    // 최근에 본 책이 앞에 온다.
     var record: @Sendable (Book) -> Void
 
     static let maxCount = 20
     private static let storageKey = "recentlyViewedBooks"
 
-    // 테스트에서는 별도 suite를 사용해 앱의 실제 기록과 분리한다. (SearchHistoryClient와 같은 방식)
     static func userDefaults(suiteName: String? = nil) -> Self {
         @Sendable func defaults() -> UserDefaults {
             suiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
@@ -29,7 +27,6 @@ nonisolated struct RecentlyViewedBooksClient: Sendable {
         return Self(
             load: { read().map(\.book) },
             record: { book in
-                // 같은 책을 다시 보면 맨 앞으로 옮긴다.
                 let stored = [StoredBook(book)] + read().filter { $0.id != book.id }
                 let data = try? JSONEncoder().encode(Array(stored.prefix(maxCount)))
                 defaults().set(data, forKey: storageKey)
@@ -37,7 +34,6 @@ nonisolated struct RecentlyViewedBooksClient: Sendable {
         )
     }
 
-    /// Book은 Codable이 아니므로 저장용 구조체로 바꿔 보관한다.
     private nonisolated struct StoredBook: Codable, Sendable {
         let id: String
         let isbn: String?

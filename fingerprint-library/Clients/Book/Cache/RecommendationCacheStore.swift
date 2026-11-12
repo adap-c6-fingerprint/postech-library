@@ -2,14 +2,12 @@ import CryptoKit
 import Foundation
 import ImageIO
 
-/// 저장 형식은 Client 내부에 두어 팀이 공유하는 Book 계약은 바꾸지 않는다.
 nonisolated struct CachedRecommendations: Sendable {
     let books: [Book]
     let savedAt: Date
     let coverFiles: [Book.ID: URL]
 }
 
-/// 마지막 정상 목록과 해당 표지를 함께 보존한다. 모든 디스크 작업은 이 actor에서 수행한다.
 actor RecommendationCacheStore {
     nonisolated struct PreparedCover: Sendable {
         let sourceURL: URL
@@ -38,14 +36,12 @@ actor RecommendationCacheStore {
         return id
     }
 
-    /// 접속이 바뀌어도 열린 상세 화면이 참조하는 로컬 표지는 정리하지 않는다.
     func retainDisplayedCovers(_ files: [URL]) {
         retainedDisplayFiles = Set(files.filter {
             $0.isFileURL && $0.deletingLastPathComponent().standardizedFileURL == imagesDirectory.standardizedFileURL
         }.map(\.lastPathComponent))
     }
 
-    /// 목록은 복원하고 읽을 수 있는 표지 파일만 표시용으로 넘긴다.
     func restore() throws -> CachedRecommendations? {
         guard FileManager.default.fileExists(atPath: manifestURL.path) else { return nil }
         let manifest = try JSONDecoder().decode(Manifest.self, from: Data(contentsOf: manifestURL))
@@ -80,7 +76,6 @@ actor RecommendationCacheStore {
         )
     }
 
-    /// 같은 표지 URL의 정상 파일은 다음 추천을 준비할 때 다시 다운로드하지 않는다.
     func coverData(for remoteURL: URL) throws -> Data? {
         let file = imagesDirectory.appendingPathComponent(try coverName(for: remoteURL))
         guard let data = try? Data(contentsOf: file),
@@ -88,7 +83,6 @@ actor RecommendationCacheStore {
         return data
     }
 
-    /// 파일 준비 → 마지막에 목록을 atomic 교체한다. 실패하면 이전 목록과 표지는 유지한다.
     func save(
         books: [Book], covers: [Book.ID: PreparedCover], savedAt: Date,
         preparationID expectedID: UUID? = nil
@@ -129,7 +123,6 @@ actor RecommendationCacheStore {
         let data = try JSONEncoder().encode(manifest)
         try data.write(to: manifestURL, options: .atomic)
 
-        // 지금 표시 중인 A와 다음 접속용 B가 참조하는 표지는 모두 보존한다.
         let retained = displayedFiles.union(retainedDisplayFiles).union(files.values.map(\.lastPathComponent))
         if let contents = try? FileManager.default.contentsOfDirectory(
             at: imagesDirectory, includingPropertiesForKeys: nil

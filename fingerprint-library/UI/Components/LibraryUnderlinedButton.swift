@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 화면별 문구와 동작을 전달하는 공통 밑줄 텍스트 버튼.
 struct LibraryUnderlinedButton: View {
     let title: String
     let action: () -> Void

@@ -10,26 +10,20 @@ import ComposableArchitecture
 
 @Reducer
 struct BookSearchFeature {
-    
-    // 화면과 검색 로직에 필요한 데이터
     @ObservableState
     struct State: Equatable {
-        /// 검색 분석 이벤트를 묶는 ID. 테스트에서 값을 정할 수 있게 uuid 의존성으로 만든다.
         let analyticsID: UUID = { @Dependency(\.uuid) var uuid; return uuid() }()
         var analyticsOperation: String { analyticsID.uuidString + ":" + String(searchGeneration) }
         var query: String = ""
         var category: BookSearchCategory = .all
         var searchGeneration: Int = 0
-        // 검색어 기록은 추천 입력으로 유지하고, 화면에는 선택한 도서를 표시한다.
         var recentQueries: [String] = []
         var recentBooks: [Book] = []
         var recentBookInfo: [Book.ID: RecentBookInfoState] = [:]
         var recentBookInfoGeneration = 0
         @Shared(.favoriteBookKeys) var favoriteBookKeys
         var books: [Book] = []
-        /// 검색 결과 책들의 최근 소장 위치 캐시. 결과 목록이 보일 때와 새 결과를 받을 때 다시 읽는다.
         var cachedResultHoldings: [[String?]: [BookHolding]] = [:]
-        // 원본 결과를 유지해 탭 전환 시 캐시 조회나 네트워크 요청 없이 필터링한다.
         var visibleBooks: [Book] { books.filter(category.includes) }
         var isLoading: Bool = false
         var errorMessage: String? = nil
@@ -43,7 +37,6 @@ struct BookSearchFeature {
         case failed
     }
 
-    // 이 기능에서 발생할 수 있는 이벤트
     enum Action {
         case task
         case loadRecentBookInfo
@@ -68,12 +61,10 @@ struct BookSearchFeature {
         case favoriteMarkerTapped(HomeMapMarker)
         case delegate(Delegate)
 
-        /// 화면 이동은 App이 맡는다. 검색(과 같은 상태를 쓰는 홈 지도)은 어떤 화면을 열지 요청만 한다.
         @CasePathable
         enum Delegate: Equatable {
             case recommendationLayoutRequested(isExpanded: Bool)
             case kulumiCoversRequested
-            /// 찜 마커에서 열면 그 마커를 상세 지도에서 숨기도록 마커 ID를 함께 넘긴다.
             case showDetail(Book, sourceFavoriteMarkerID: String?)
             case showFavoriteShelf([Book], sourceFavoriteMarkerID: String)
             case showCart
@@ -81,8 +72,7 @@ struct BookSearchFeature {
             case showMyPage
         }
     }
-    
-    // 검색에 사용할 BookClient 값
+
     @Dependency(\.bookSearchClient)
     var bookSearchClient: BookSearchClient
     @Dependency(\.analyticsClient) private var analytics
@@ -106,8 +96,7 @@ struct BookSearchFeature {
         case search
         case recentBookInfo
     }
-    
-    // Action을 받아 State를 바꾸고, 필요한 Effect를 반환
+
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -150,7 +139,6 @@ struct BookSearchFeature {
                 return .none
 
             case let .favoriteMarkerTapped(marker):
-                // 마커가 만들어진 뒤 찜이 바뀌었을 수 있으므로 현재 저장 목록으로 다시 확인한다.
                 let favorites = BookFavorites()
                 let activeKeys = favorites.keys.intersection(marker.bookKeys)
                 let items = favorites.items.sorted { $0.favoritedAt > $1.favoritedAt }
@@ -173,7 +161,6 @@ struct BookSearchFeature {
                 return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: nil)))
 
             case .searchResultsAppeared:
-                // 상세에서 확인한 소장 위치가 캐시에 남으므로 목록으로 돌아올 때 다시 읽는다.
                 state.cachedResultHoldings = bookLocationCacheClient.loadRecent(Set(state.books.map(\.recordKey)))
                 return .none
 
@@ -192,7 +179,6 @@ struct BookSearchFeature {
                 guard previousQuery != query.trimmingCharacters(in: .whitespacesAndNewlines),
                       state.hasSearched || state.isLoading || !state.books.isEmpty
                         || state.errorMessage != nil else { return .none }
-                // 새 입력에는 이전 검색의 결과나 늦게 도착한 응답을 표시하지 않는다.
                 recordCancellation(state)
                 state.searchGeneration += 1
                 state.books = []
@@ -236,7 +222,6 @@ struct BookSearchFeature {
                 state.isLoading = false
                 state.errorMessage = nil
                 state.hasSearched = false
-                // 숨겨진 명령은 검색 API나 추천 입력용 검색 기록에 보내지 않는다.
                 return .merge(.cancel(id: CancelID.search), .send(.delegate(delegate)))
 
             case .delegate:
@@ -250,10 +235,8 @@ struct BookSearchFeature {
                 guard generation == state.searchGeneration, state.isLoading else {
                     return .none
                 }
-                // 화면 ID가 모두 다른지 확인
                 assert(Set(books.map(\.id)).count == books.count)
-                
-                // 제어번호가 있는 항목끼리 중복되는지 확인
+
                 let controlNumber = books.compactMap(\.controlNumber)
                 assert(Set(controlNumber).count == controlNumber.count)
                 
@@ -294,7 +277,6 @@ struct BookSearchFeature {
             requests.append((book.id, recordID))
         }
         return .run { [bookHoldingsClient, requests] send in
-            // 도서 목록은 즉시 표시하고, 소장 정보는 최대 3권씩 조회한다.
             for start in stride(from: 0, to: requests.count, by: 3) {
                 guard !Task.isCancelled else { return }
                 await withTaskGroup(of: Void.self) { group in
@@ -321,7 +303,6 @@ struct BookSearchFeature {
         refreshing: Bool = false,
         recordsHistory: Bool = true
     ) -> Effect<Action> {
-        // 자료 유형은 화면 필터다. 검색·새로고침·캐시는 항상 같은 전체 결과를 사용한다.
         let request = BookSearchRequest(query: state.query, category: .all)
         recordCancellation(state)
         state.searchGeneration += 1
@@ -355,7 +336,6 @@ struct BookSearchFeature {
         }
 
         state.isLoading = true
-        // 당겨서 새로고침하는 동안 ScrollView와 기존 목록을 유지한다.
         if !refreshing {
             state.books = []
         }

@@ -1,13 +1,10 @@
 import Foundation
 
-/// 범위 조회에 사용할 소장본 하나의 위치. 지도 ordinal은 실제 층 번호에서 1을 뺀 값이다.
 nonisolated struct BookShelfLocation: Equatable, Sendable {
     let floorNumber: Int
     let callNumber: String
 }
 
-/// 임시 서가 후보 조회. 층을 먼저 제한하고 양 끝을 포함해 겹치는 후보를 모두 보존한다.
-/// 도착 노드나 확정된 ShelfDestination을 만들지 않는다.
 nonisolated struct BookShelfRangeMatcher {
     func candidates(for location: BookShelfLocation, on map: IndoorMap,
                     labels: [IndoorShelfLabel]) -> [IndoorShelfLabel] {
@@ -17,16 +14,12 @@ nonisolated struct BookShelfRangeMatcher {
             guard label.floorID == floor.id,
                   case .callNumberRange(let start, let end) = label.content,
                   let lower = CallNumber(start), let upper = CallNumber(end) else { return false }
-            // 서가의 마지막 표기가 전체 청구기호의 접두어이면 같은 분류의 연도·권차도 후보로 둔다.
             return lower.compare(to: call) != .orderedDescending
                 && (call.compare(to: upper) != .orderedDescending || upper.isPrefix(of: call))
         }
     }
 
-    /// 분류 번호는 수치, 저자 기호의 숫자는 소수로 비교한다. 연도·권차는 범위 판정에 사용하지 않는다.
     private struct CallNumber {
-        // 영문·한글 저자 기호를 보존하고 공백으로 구분된 연도·권차 앞에서 멈춘다.
-        // PL2489.논.독92처럼 숫자 없는 한글 분류 구분도 보존한다.
         private static let cutterRegex = try! NSRegularExpression(
             pattern: #"^\s*\.?\s*([\p{L}]+[0-9]+|[가-힣]+(?=\s*\.))"#
         )
@@ -54,7 +47,6 @@ nonisolated struct BookShelfRangeMatcher {
                 cutters.append(String(rest[token]))
                 rest = String(rest[consumed.upperBound...])
             }
-            // 임시 비교가 해석하지 못한 표기를 임의의 서가에 배정하지 않는다.
             let suffix = rest.trimmingCharacters(in: .whitespacesAndNewlines)
             guard suffix.isEmpty || suffix.range(of: #"^(?:[0-9]{4}(?:\D|$)|[vVcC]\.|권|복본)"#,
                                                  options: .regularExpression) != nil else { return nil }
@@ -67,13 +59,11 @@ nonisolated struct BookShelfRangeMatcher {
             }
             if number != other.number { return number < other.number ? .orderedAscending : .orderedDescending }
             for (left, right) in zip(cutters, other.cutters) where left != right {
-                // 포스텍 배열 규칙: 한글 가나다순 뒤에 영문 알파벳순이 온다.
                 let leftIsKorean = left.range(of: #"^[가-힣]"#, options: .regularExpression) != nil
                 let rightIsKorean = right.range(of: #"^[가-힣]"#, options: .regularExpression) != nil
                 if leftIsKorean != rightIsKorean {
                     return leftIsKorean ? .orderedAscending : .orderedDescending
                 }
-                // Cutter 숫자는 .12 < .2이므로 숫자 정렬을 사용하지 않는다.
                 return left < right ? .orderedAscending : .orderedDescending
             }
             if cutters.count == other.cutters.count { return .orderedSame }

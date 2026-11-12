@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 책 페이지의 가로 넘기기와 설명 스크롤을 유지하는 두 단계 미리보기 패널.
 struct BookRoutePreviewBooksPanel<Content: View>: View {
     @Binding var presentation: BookRoutePreviewPanelState
     let collapsedHeight: CGFloat

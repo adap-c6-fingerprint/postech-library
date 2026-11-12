@@ -2,7 +2,6 @@ import Foundation
 import Testing
 @testable import fingerprint_library
 
-/// 번들의 실제 도면·길찾기 자료로 2권짜리 경로 계획을 만들어 길안내 진행 규칙을 확인한다.
 @MainActor
 struct NavigationSessionTests {
     static func makePlan() async throws -> RoutePlan {

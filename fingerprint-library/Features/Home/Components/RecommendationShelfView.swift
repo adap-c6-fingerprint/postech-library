@@ -1,12 +1,10 @@
 import SwiftUI
 
-/// 나사와 아크릴판을 함께 배치하는 추천 캐러셀의 고정 선반.
 struct RecommendationShelfView: View {
     static let leadingInset: CGFloat = 16
     static let recommendationCornerRadius: CGFloat = 10
     static let carouselSpace = "recommendationCarousel"
     static let thinHeight: CGFloat = 54
-    // 홈 추천 캐러셀의 얇은 선반 높이. 마이페이지 책장도 같은 값을 쓴다.
 
     static func thin(width: CGFloat? = nil) -> RecommendationShelfView {
         RecommendationShelfView(
@@ -17,7 +15,6 @@ struct RecommendationShelfView: View {
             cornerRadius: recommendationCornerRadius
         )
     }
-    // 홈 추천 화면과 마이페이지가 같은 얇은 선반을 쓰도록 설정을 한곳에 모은다.
 
     var height: CGFloat = 106
     var width: CGFloat? = nil
@@ -25,7 +22,6 @@ struct RecommendationShelfView: View {
     var fixedBoltSize: CGFloat? = nil
     var cornerRadius: CGFloat? = nil
 
-    // Figma 2963:9772. 화면에 배치한 높이를 기준으로 장식의 비율을 유지한다.
     private nonisolated enum Design {
         static let width: CGFloat = 707.25
         static let height: CGFloat = 155.458
@@ -48,7 +44,6 @@ struct RecommendationShelfView: View {
                 PlateOutline(cornerRadius: cornerRadius)
                     .fill(Color.limeDark.opacity(fillOpacity))
 
-                // PNG의 채움과 라임색 가장자리를 가리고 바깥 그림자를 남긴다.
                 Image("RecommendationGlass")
                     .resizable()
                     .mask {
@@ -63,7 +58,6 @@ struct RecommendationShelfView: View {
                     }
             }
                 .frame(width: asset.width, height: asset.height)
-                // PNG 여백이 아니라 판 본체를 기준으로 높이와 나사 위치를 맞춘다.
                 .offset(x: asset.minX, y: asset.minY)
                 .frame(
                     width: geometry.size.width,
@@ -71,7 +65,6 @@ struct RecommendationShelfView: View {
                     alignment: .topLeading
                 )
                 .mask {
-                    // 오른쪽 화면 경계에서만 자르고 바깥 그림자는 남긴다.
                     Rectangle()
                         .padding(.leading, asset.minX)
                         .padding(.vertical, -(asset.height - height))
@@ -93,7 +86,6 @@ struct RecommendationShelfView: View {
         .accessibilityHidden(true)
     }
 
-    /// 판을 그릴 때와 표지를 가릴 때 같은 PNG 좌표를 사용한다.
     private static func assetFrame(for plate: CGRect) -> CGRect {
         let scale = plate.height / Design.height
         let horizontalScale = max(plate.width / Design.width, scale)
@@ -119,7 +111,6 @@ struct RecommendationShelfView: View {
                 if let carousel = geometry.bounds(of: .named(RecommendationShelfView.carouselSpace)) {
                     let leadingInset = RecommendationShelfView.leadingInset
                     let availableWidth = max(0, carousel.width - leadingInset)
-                    // 마스크도 SwiftUI가 반전하므로 캐러셀 위치를 leading 기준으로 변환한다.
                     let carouselLeading = layoutDirection == .leftToRight
                         ? carousel.minX
                         : geometry.size.width - carousel.maxX
@@ -153,7 +144,6 @@ struct RecommendationShelfView: View {
         }
     }
 
-    /// PNG의 바깥 여백과 그림자를 제외한 판 본체의 외곽.
     private nonisolated struct PlateOutline: Shape {
         var inset: CGFloat = 0
         var cornerRadius: CGFloat? = nil

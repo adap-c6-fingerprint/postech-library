@@ -1,12 +1,10 @@
 import Foundation
 
-/// 실제 POSTECH 응답의 최상위 delivery를 우선한다. 문서의 pnx.delivery와 PNX 대체 표기도 수용한다.
 nonisolated enum PrimoHoldingsMapper {
     static func decode(_ data: Data, recordID: String) throws -> [BookHolding] {
         try decodeAll(data)[recordID] ?? []
     }
 
-    /// 일반 검색 응답에 이미 포함된 소장을 한 번만 해석한다. 추가 요청은 만들지 않는다.
     static func decodeAll(_ data: Data) throws -> [String: [BookHolding]] {
         let response = try JSONDecoder().decode(Response.self, from: data)
         var result: [String: [BookHolding]] = [:]
@@ -21,11 +19,9 @@ nonisolated enum PrimoHoldingsMapper {
     }
 
     private static func holdings(in document: Document, pnx: PNX) -> [BookHolding]? {
-        // 명시적인 빈 holding 목록은 소장 정보 없음이다. 대체 필드로 과거 위치를 되살리지 않는다.
         let delivery = document.delivery ?? pnx.delivery
         if let holdings = delivery?.holding { return unique(holdings.map(\.value)) }
         if let best = delivery?.bestlocation { return [best.value] }
-        // 필드 누락은 기존 위치를 지우는 근거가 아니다. 빈 목록이 명시된 경우에만 []를 반환한다.
         guard let availability = pnx.display?.availlibrary else { return nil }
         return unique(availability.compactMap(parseAvailability))
     }
@@ -46,7 +42,6 @@ nonisolated enum PrimoHoldingsMapper {
             guard let key = part.first else { continue }
             fields[String(key)] = clean(String(part.dropFirst()))
         }
-        // 공식 PNX: I=기관, L=도서관, 1=소장 위치, 2=청구기호, S=상태, Z=위치 코드.
         guard fields["9"] != "ONLINE", fields["2"] != nil else { return nil }
         return .init(holdingID: fields["J"], institutionCode: fields["I"], libraryCode: fields["L"],
                      locationCode: fields["Z"], locationName: fields["1"], callNumber: fields["2"],

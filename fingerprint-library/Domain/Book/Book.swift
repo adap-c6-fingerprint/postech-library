@@ -8,17 +8,17 @@
 import Foundation
 
 nonisolated struct Book: Equatable, Identifiable, Sendable {
-    let id: String // 화면에서 각 도서를 구분하는 식별자
-    let isbn: String? // 국제표준도서번호
-    let controlNumber: String? // 도서관 자료 정보의 관리번호(제어번호)
-    let title: String // 제목
-    let author: String // 저자
-    let publisher: String? // 출판사
-    let publicationYear: String? // 출판 연도
-    let description: String? // 설명
-    let imageURL: URL? // 책 표지 URL
-    var subLocation: String? = nil // 검색 응답의 소장 위치명
-    var resourceTypes: [String] = [] // 검색 결과 필터용 Primo 자료 유형. 미제공이면 전체에만 표시한다.
+    let id: String
+    let isbn: String?
+    let controlNumber: String?
+    let title: String
+    let author: String
+    let publisher: String?
+    let publicationYear: String?
+    let description: String?
+    let imageURL: URL?
+    var subLocation: String? = nil
+    var resourceTypes: [String] = []
     
     nonisolated var recordKey: [String?] {
         if let controlNumber {
@@ -40,7 +40,6 @@ nonisolated struct Book: Equatable, Identifiable, Sendable {
 }
 
 extension Book {
-    // 표지 주소만 바꾼 같은 책
     nonisolated func replacingImageURL(_ imageURL: URL?) -> Book {
         var book = Book(
             id: id, isbn: isbn, controlNumber: controlNumber, title: title,

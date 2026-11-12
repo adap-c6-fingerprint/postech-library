@@ -1,7 +1,6 @@
 import MapKit
 import UIKit
 
-/// 층간 이동의 진입·출구를 지도 축척과 무관한 원형 배지로 표시한다.
 final class IndoorRouteTransitionAnnotation: NSObject, MKAnnotation {
     let category: RouteEdgeCategory
     let coordinate: CLLocationCoordinate2D

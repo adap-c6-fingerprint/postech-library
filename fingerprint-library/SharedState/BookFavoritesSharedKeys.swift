@@ -23,19 +23,16 @@ extension SharedKey where Self == AppStorageKey<[BookFavoriteItem]>.Default {
     }
 }
 
-/// 찜 키와 찜 기록을 함께 바꾸는 진입점. 모든 화면이 이 동작으로 찜을 바꿔 두 값이 어긋나지 않게 한다.
 struct BookFavorites {
     @Shared(.favoriteBookKeys) var keys
     @Shared(.favoriteBookRecords) var records
 
     init() {}
 
-    /// 찜 목록 화면에 보여 줄 책. 저장 순서대로 돌려준다.
     var items: [BookFavoriteItem] { records.active(in: keys) }
 
     func contains(_ book: Book) -> Bool { keys.contains(book.recordKey) }
 
-    /// 찜을 켜거나 끄고, 바뀐 뒤 찜 여부를 돌려준다. 켤 때는 찜 목록에 보여 줄 정보와 시각을 남긴다.
     @discardableResult
     func toggle(_ book: Book, at date: Date) -> Bool {
         let key = book.recordKey
@@ -56,7 +53,6 @@ struct BookFavorites {
         return isFavorite
     }
 
-    /// 여러 책의 찜을 한 번에 끄고, 실제로 끈 권수를 돌려준다.
     @discardableResult
     func remove(_ removedKeys: Set<[String?]>) -> Int {
         let removedCount = $keys.withLock { keys in

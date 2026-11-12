@@ -1,14 +1,12 @@
 import MapKit
 import UIKit
 
-/// 책 상세에서 확대 단계와 관계없이 대상 서가 번호를 지도 좌표에 고정한다.
 final class BookDetailShelfBadge: NSObject, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
     let text: String
 
     init(_ shelf: IndoorShelfLabelPresentation) {
         coordinate = shelf.coordinate
-        // 2층 삼각서가처럼 이름으로 부르는 서가에는 "번 서가"를 붙이지 않는다.
         text = shelf.members.allSatisfy(\.isNamedShelf) ? shelf.text : "\(shelf.text)번 서가"
     }
 }

@@ -1,6 +1,5 @@
 import UIKit
 
-/// 홈 시설 핀과 길안내 배지에 원본 픽셀·색상을 유지한 에셋을 표시한다.
 enum MapAnnotationImage {
     static let size = CGSize(width: 22, height: 22)
 

@@ -8,7 +8,6 @@
 import CoreGraphics
 
 extension PobookUI {
-    /// Figma 「Radius」 컬렉션
     enum Radius {
         static let _0: CGFloat = 0
         static let bookCover: CGFloat = 8

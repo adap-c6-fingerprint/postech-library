@@ -1,6 +1,5 @@
 import Foundation
 
-/// 호출 경계를 주입할 수 있어 동일한 요청·응답 처리를 로컬 HTTP 시뮬레이션에서도 실행한다.
 nonisolated struct PrimoBookHoldingsService: Sendable {
     var relay: BookAPIClient = .init()
     var sleep: @Sendable (Duration) async throws -> Void = { try await Task.sleep(for: $0) }
@@ -30,7 +29,6 @@ nonisolated struct PrimoBookHoldingsService: Sendable {
             let http = result.response
             if http.statusCode == 429 || (500..<600).contains(http.statusCode) {
                 guard attempt < 2 else { throw BookHoldingsError.serviceUnavailable }
-                // HTTP 오류와 전송 오류가 섞여도 같은 최대 3회 예산을 사용한다.
                 let retryAfter = http.value(forHTTPHeaderField: "Retry-After").flatMap(Double.init) ?? 0
                 guard retryAfter <= 5 else { throw BookHoldingsError.serviceUnavailable }
                 try await pauseBeforeRetry(attempt: attempt, minimumDelay: retryAfter)

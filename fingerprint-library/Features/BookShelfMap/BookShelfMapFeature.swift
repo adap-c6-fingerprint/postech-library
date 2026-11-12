@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import Foundation
 
-/// 도서관 소장 정보 → 청구기호 범위 → 실제 IMDF fixture를 연결한다.
 @Reducer
 struct BookShelfMapFeature {
     enum HoldingsState: Equatable {
@@ -26,13 +25,11 @@ struct BookShelfMapFeature {
             self.init(previewing: books)
         }
 
-        /// 서가의 찜 목록 조회는 길안내의 최대 3권 제한과 별개다.
         init?(previewing books: [Book]) {
             guard !books.isEmpty, Set(books.map(\.id)).count == books.count else { return nil }
             self.books = books
         }
 
-        /// 길안내 목적지 후보. 3·4층 일반 서고에서 찾았으면 2층 삼각서가는 후보에서 뺀다.
         func shelves(for bookID: Book.ID) -> [IndoorShelfLabel] {
             (resolutions[bookID] ?? []).preferredRouteShelves
         }
@@ -55,11 +52,9 @@ struct BookShelfMapFeature {
         case bookShelfTapped(Book.ID)
         case candidateTapped(Book.ID, fixtureNumber: String)
         case map(IndoorMapFeature.Action)
-        /// 찜 서가 미리보기에서 고른 책으로 안내를 시작한다.
         case guidanceRequested(Book)
         case delegate(Delegate)
 
-        /// 경로 미리보기는 App이 전체 화면으로 연다.
         @CasePathable
         enum Delegate: Equatable {
             case startGuidance([Book])
@@ -68,7 +63,6 @@ struct BookShelfMapFeature {
 
     @Dependency(\.bookHoldingsClient) var holdingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
-    /// 같은 책을 보는 다른 화면의 조회를 취소하지 않도록 Store마다 구분한다.
     private nonisolated struct CancelID: Hashable, Sendable {
         let instance: UUID
         let bookID: Book.ID
@@ -191,7 +185,6 @@ struct BookShelfMapFeature {
     }
 
     private func focus(_ shelves: [IndoorShelfLabel], state: inout State) {
-        // 층이 여러 개면 현재 표시 층을 우선하며, 다른 층의 후보는 개별 버튼으로 이동한다.
         guard let floorID = shelves.first(where: { $0.floorID == state.map.selectedFloorID })?.floorID
                 ?? shelves.first?.floorID else { return }
         state.map.selectedFloorID = floorID

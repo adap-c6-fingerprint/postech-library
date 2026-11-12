@@ -5,7 +5,6 @@ nonisolated struct PrimoCandidatePage: Equatable, Sendable {
     let candidates: [ColdStartCandidate]
 }
 
-/// Primo 전송 형식과 추천 서비스의 후보 모델 사이의 변환 경계.
 nonisolated enum PrimoRecommendationMapper {
     static func coldStartPage(from data: Data, codes: [String]) throws -> PrimoCandidatePage {
         let response = try JSONDecoder().decode(ColdStartResponse.self, from: data)
@@ -67,8 +66,6 @@ nonisolated enum PrimoRecommendationMapper {
             .first
     }
 
-    // 첫 추천에는 total이 필요하고 display는 필요 없다. 맞춤 추천은 display를 요구한다.
-    // DTO를 구분해 기존의 누락 필드 처리 계약을 보존한다.
     private nonisolated struct ColdStartResponse: Decodable {
         let info: Info
         let docs: [ColdStartDocument]

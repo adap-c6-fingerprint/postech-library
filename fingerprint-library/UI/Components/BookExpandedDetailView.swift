@@ -1,10 +1,6 @@
 import SwiftUI
 
-// ✅ 시트를 끝까지 올렸을 때 보이는 책 상세 화면의 스크롤 콘텐츠.
-// ✅ 단권은 표지 한 장, 여러 권은 좌우로 넘기는 표지 캐러셀과 페이지 표시를 보여 준다.
-// ✅ 스크롤 뷰·상단 버튼·하단 버튼은 각 화면이 소유하고, 표지 아래 정보는 `details`로 받는다.
 struct BookExpandedDetailView<Details: View>: View {
-    // ✅ 권수가 아니라 화면 종류로 분기한다. 여러 권 미리보기는 1권이어도 캐러셀 디자인을 사용한다.
     enum Style {
         case single
         case carousel
@@ -15,7 +11,6 @@ struct BookExpandedDetailView<Details: View>: View {
     @Binding var selectedBookID: Book.ID?
     var coverTopPadding: CGFloat = BookExpandedDetailLayout.coverTopPadding
     var identifierPrefix = "bookExpandedDetail"
-    /// 단권 상세가 이미 받아 둔 표지 캐시 주소. 여러 권은 각 표지를 따로 불러온다.
     var cachedCoverURL: URL?
     @ViewBuilder let details: (Book) -> Details
 
@@ -55,12 +50,10 @@ struct BookExpandedDetailView<Details: View>: View {
     private func cover(_ book: Book) -> some View {
         let cover = BookCoverView(
             url: book.imageURL, isbn: book.isbn, cachedURL: isMultiple ? nil : cachedCoverURL,
-            imageCornerRadius: isMultiple ? BookExpandedDetailLayout.carouselCoverCornerRadius : 0) // ✅
+            imageCornerRadius: isMultiple ? BookExpandedDetailLayout.carouselCoverCornerRadius : 0)
             .frame(width: BookExpandedDetailLayout.coverSize.width,
                    height: BookExpandedDetailLayout.coverSize.height)
         if isMultiple {
-            // ✅ 표지 비율이 칸과 달라도 남는 영역에 회색 배경이 보이지 않게 한다.
-            // ✅ 배경이 없으므로 그림자도 실제 표지 이미지 모양에만 생긴다.
             cover.shadow(color: .black.opacity(0.3), radius: 18, y: 8)
         } else {
             cover
@@ -70,14 +63,10 @@ struct BookExpandedDetailView<Details: View>: View {
         }
     }
 
-    // MARK: - 여러 권
-
-    /// 선택한 표지를 가운데에 두고 다음 표지를 작게 보여 준다. 표지를 넘기면 아래 정보도 같은 책으로 바뀐다.
     @ViewBuilder
     private var coverCarousel: some View {
         let shadowInset = BookExpandedDetailLayout.carouselShadowInset
         let height = BookExpandedDetailLayout.coverSize.height + shadowInset * 2
-        // 너비를 알기 전에 그리면 가운데 정렬 여백이 0이라 첫 위치가 어긋난다.
         if containerWidth > 0 {
             let coverWidth = BookExpandedDetailLayout.coverSize.width
             let sideMargin = max(0, (containerWidth - coverWidth) / 2)
@@ -115,7 +104,6 @@ struct BookExpandedDetailView<Details: View>: View {
         }
     }
 
-    /// 현재 선택한 책의 순서를 숫자와 점으로 표시한다. VoiceOver에서는 위·아래 쓸기로 책을 바꾼다.
     private var pageIndicator: some View {
         let index = selectedIndex
         return HStack(spacing: 10) {
@@ -154,7 +142,6 @@ struct BookExpandedDetailView<Details: View>: View {
     }
 }
 
-// ✅ 펼친 상세 화면의 도보 거리와 층 이동 횟수 표시. 아이콘 색 외에도 접근성 문구로 의미를 전달한다.
 struct BookExpandedRouteSummary: View {
     let distanceText: String
     let floorChangeCount: Int
@@ -191,26 +178,19 @@ struct BookExpandedRouteSummary: View {
     }
 }
 
-// ✅ 펼친 상세 화면의 표지·캐러셀 치수. 시안 기준 402 × 874 화면에서 맞췄다.
 nonisolated enum BookExpandedDetailLayout {
     static let coverSize = CGSize(width: 218, height: 310)
     static let coverTopPadding: CGFloat = 30
     static let detailsTopPadding: CGFloat = 24
     static let carouselSpacing: CGFloat = 8
-    /// 표지 그림자가 가로 스크롤 영역에서 잘리지 않도록 위아래에 둔 여백.
     static let carouselShadowInset: CGFloat = 28
-    /// 옆 표지는 바닥을 맞춘 채 이 비율만큼 줄어든다.
     static let sideCoverScale: CGFloat = 0.82
     static let indicatorTopPadding: CGFloat = 16
-    static let indicatorHorizontalPadding: CGFloat = 16 // ✅ 시안: 마지막 점이 화면 오른쪽에서 16pt
-    /// ✅ 시안: 여러 권 표지 윗변이 화면 위에서 127pt. 스크롤 상단 바(안전 영역 62 + 버튼 44) 아래로 21pt를 둔다.
+    static let indicatorHorizontalPadding: CGFloat = 16
     static let carouselCoverTopPadding: CGFloat = 21
-    /// ✅ 여러 권 화면의 표지 이미지 모서리.
     static let carouselCoverCornerRadius: CGFloat = 8
-    /// ✅ 시안: 여러 권 펼친 화면의 하단 버튼은 홈 인디케이터 안전 영역 바로 위(1pt)에 붙는다.
     static let carouselActionsBottomPadding: CGFloat = 1
 
-    /// 화면 가운데에서 표지 한 칸만큼 멀어질수록 옆 표지 크기로 줄인다.
     static func carouselScale(midX: CGFloat, viewportWidth: CGFloat) -> CGFloat {
         let step = coverSize.width + carouselSpacing
         guard viewportWidth > 0, step > 0, midX.isFinite else { return 1 }

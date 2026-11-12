@@ -1,7 +1,6 @@
 import MapKit
 import UIKit
 
-/// 홈·서가 위치·길안내에서 함께 사용하는 도면 기본 색상이다.
 enum IndoorMapPalette {
     static let floor = gray(0x35)
     static let furniture = gray(0x55)
@@ -15,10 +14,8 @@ enum IndoorMapPalette {
     static let restroom = gray(0x55)
     static let relaxZone = gray(0x20)
     static let gameZone = gray(0x20)
-    // 원본은 walkway지만 사용자 지정 범위에서 제외한 5층 엘리베이터 앞 홀이다.
     private static let fifthFloorElevatorLobbyID = "732c6ee7-1021-443c-a020-a3ce41460653"
 
-    /// 경계선은 공통 색상을 쓰고, 색상을 정하지 않은 가구·장비의 채움색은 유지한다.
     static func apply(to renderer: MKOverlayPathRenderer, feature: IndoorMapElement?, floorOrdinal: Int) {
         renderer.strokeColor = wallOutline
         guard let feature else {

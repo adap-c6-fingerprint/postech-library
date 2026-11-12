@@ -7,9 +7,6 @@
 
 import ComposableArchitecture
 
-/// 책과 서가 후보, 출발 위치로 경로 계획을 만든다.
-///
-/// 길찾기 자료 조회는 RoutePlanningLoader가, 방문 순서·서가 선택 계산은 Domain의 RoutePlanner가 맡는다.
 nonisolated struct RoutePlanningClient: Sendable {
     var plan: @Sendable (
         IndoorMap,

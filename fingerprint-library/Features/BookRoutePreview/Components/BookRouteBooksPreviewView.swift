@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 탭과 카드가 책 선택을 공유한다. 부모는 선택한 책 또는 전체 경로로 안내를 시작한다.
 struct BookRouteBooksPreviewView: View {
     let books: [Book]
     let shelfStore: StoreOf<BookShelfMapFeature>
@@ -12,7 +11,6 @@ struct BookRouteBooksPreviewView: View {
     let onBack: () -> Void
     let onStart: (Book) -> Void
     let onRetry: () -> Void
-    /// 위치가 부정확하거나 맞지 않을 때 출발 위치를 직접 지정하게 한다.
     var onSetOriginManually: (() -> Void)?
     var guidesSelectedBook = false
     var homeAnnotations: HomeMapAnnotationsFeature.State?
@@ -21,9 +19,7 @@ struct BookRouteBooksPreviewView: View {
     @State private var panelHeight: CGFloat = 0
     @State private var panelPresentation = BookRoutePreviewPanelState()
     @State private var bookTabsHeight: CGFloat = 52
-    // ✅ 접힌 카드와 펼친 상세가 같은 책별 상세 Store(소개·찜·책바구니)를 공유한다.
     @State private var detailStores = BookRoutePreviewDetailStores()
-    // ✅ 펼친 상세 스크롤 뷰의 화면상 위치. 시스템이 붙이는 상단 안전 영역 여부와 관계없이 표지 위치를 시안에 맞춘다.
     @State private var expandedScrollOrigin = ExpandedScrollOrigin(globalMinY: 0, safeAreaTop: 0)
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -38,7 +34,6 @@ struct BookRouteBooksPreviewView: View {
         books.first { $0.id == selection.wrappedValue }
     }
 
-    // ✅ 시트를 끝까지 올린 상태에서만 펼친 상세 화면을 보여 준다. 드래그 중에는 기존 카드가 유지된다.
     private var isShowingExpandedDetail: Bool { panelPresentation.isExpanded }
 
     private var selectedShelves: [IndoorShelfLabel] {
@@ -81,15 +76,12 @@ struct BookRouteBooksPreviewView: View {
                         trailing: geometry.safeAreaInsets.trailing),
                     safeAreaInsets: geometry.safeAreaInsets, topBarHeight: bookTabsHeight,
                     expandedBottomPadding: BookExpandedDetailLayout.carouselActionsBottomPadding,
-                    // ✅ 펼친 상세는 화면 맨 위(상태바 영역 포함)부터 그려 스크롤한 표지가 잘리지 않게 한다.
                     expandedTopInsetOverride: 0,
                     identifierPrefix: "multiBookPreview", onCoveredHeightChange: { panelHeight = $0 }
                 ) {
-                    // ✅ 펼침 여부에 따라 접힌 카드 페이지와 펼친 상세 화면을 분기한다.
                     ZStack {
                         if isShowingExpandedDetail {
                             expandedDetail(
-                                // ✅ 시안: 표지 윗변 = 안전 영역 + 버튼 44 + 21
                                 coverTopGlobalY: geometry.frame(in: .global).minY + 44
                                     + BookExpandedDetailLayout.carouselCoverTopPadding
                             )
@@ -113,7 +105,6 @@ struct BookRouteBooksPreviewView: View {
                         y: geometry.safeAreaInsets.bottom)
             }
             .overlay(alignment: .top) {
-                // ✅ 펼친 상세에서는 책 이름 탭 대신 뒤로가기·찜 버튼을 안전 영역 바로 아래에 띄운다.
                 if isShowingExpandedDetail {
                     expandedTopBar
                 } else {
@@ -130,11 +121,7 @@ struct BookRouteBooksPreviewView: View {
         .accessibilityIdentifier("multiBookPreview")
     }
 
-    // MARK: - 펼친 상세
-
-    // ✅ 표지 캐러셀을 좌우로 넘기면 같은 선택 상태가 바뀌어 아래 정보·지도 서가도 함께 바뀐다.
     private func expandedDetail(coverTopGlobalY: CGFloat) -> some View {
-        // ✅ 스크롤 콘텐츠가 시작하는 화면 위치를 빼서, 표지가 처음에 버튼 아래 21pt에 오도록 한다.
         let contentTop = expandedScrollOrigin.globalMinY + expandedScrollOrigin.safeAreaTop
         return ScrollView {
             BookExpandedDetailView(
@@ -165,7 +152,6 @@ struct BookRouteBooksPreviewView: View {
         .onScrollGeometryChange(for: Bool.self) {
             $0.contentOffset.y + $0.contentInsets.top <= 1
         } action: { _, isAtTop in
-            // 소개를 맨 위로 돌린 뒤 아래로 당길 때만 시트를 접는다.
             panelPresentation.isContentAtTop = isAtTop
         }
         .onAppear { panelPresentation.isContentAtTop = true }
@@ -180,10 +166,9 @@ struct BookRouteBooksPreviewView: View {
                 favoriteButton(detailStores.store(for: book))
             }
         }
-        .padding(.horizontal, 16) // ✅ 시안: 버튼은 안전 영역 바로 아래에 붙는다.
+        .padding(.horizontal, 16)
         .frame(height: 44)
         .background {
-            // ✅ 버튼 뒤로 지나가는 표지 위에서도 상태바·버튼이 잘 보이도록 위쪽만 어둡게 한다.
             LinearGradient(colors: [.black.opacity(0.4), .clear], startPoint: .top, endPoint: .bottom)
                 .padding(.bottom, -16)
                 .ignoresSafeArea(edges: .top)
@@ -310,7 +295,7 @@ struct BookRouteBooksPreviewView: View {
                 .background(.regularMaterial, in: .rect(cornerRadius: 12))
                 .accessibilityIdentifier("multiBookPreview.error")
             }
-            HStack(spacing: 12) { // ✅ 펼친 상세에서는 시안처럼 책바구니 버튼을 함께 보여 준다.
+            HStack(spacing: 12) {
                 Button {
                     guard let book = books.first(where: { $0.id == selection.wrappedValue }) else { return }
                     onStart(book)
@@ -337,13 +322,11 @@ struct BookRouteBooksPreviewView: View {
     }
 }
 
-// ✅ 펼친 상세 스크롤 뷰의 화면상 윗변과 시스템이 붙인 상단 안전 영역.
 private nonisolated struct ExpandedScrollOrigin: Equatable {
     let globalMinY: CGFloat
     let safeAreaTop: CGFloat
 }
 
-// ✅ 책별 상세 Store를 책 ID로 보관한다. 페이지를 넘기거나 펼침 상태가 바뀌어도 불러온 소개·찜 상태를 유지한다.
 @MainActor
 final class BookRoutePreviewDetailStores {
     private var stores: [Book.ID: StoreOf<BookDetailFeature>] = [:]
@@ -356,7 +339,6 @@ final class BookRoutePreviewDetailStores {
     }
 }
 
-// ✅ 펼친 상세의 책바구니 버튼이 단권 상세와 같은 알림을 띄우도록 선택한 책의 Store에 연결한다.
 private struct SelectedBookCartPresentation: ViewModifier {
     let store: StoreOf<BookDetailFeature>?
 
@@ -370,7 +352,6 @@ private struct SelectedBookCartPresentation: ViewModifier {
     }
 }
 
-/// 버튼과 카드가 책의 ID로 같은 선택을 공유한다. 제목·방문 순서가 바뀌어도 선택한 책을 유지한다.
 nonisolated struct BookRoutePreviewSelection: Equatable {
     private(set) var selectedBookID: Book.ID?
 

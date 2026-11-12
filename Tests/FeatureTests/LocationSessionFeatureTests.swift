@@ -22,7 +22,6 @@ struct LocationSessionFeatureTests {
                 }
             }
         }
-        // 공유 위치 상태는 참조라 받은 이벤트가 함께 반영된다. 받은 순서와 최종 상태를 확인한다.
         store.exhaustivity = .off
         await store.send(.started) { $0.isActive = true }
         await store.receive(\.locationEvent, .authorization(.authorized(precise: true)))
@@ -40,7 +39,6 @@ struct LocationSessionFeatureTests {
         }
         await store.send(.started) { $0.isActive = true }
         await store.send(.sceneActiveChanged(false)) { $0.isActive = false }
-        // 구독을 멈춘 뒤에 온 이벤트는 반영하지 않는다.
         continuation.yield(.position(position))
         await store.send(.started) { $0.isActive = true }
         continuation.finish()

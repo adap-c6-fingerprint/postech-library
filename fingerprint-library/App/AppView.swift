@@ -26,7 +26,6 @@ struct AppView: View {
             }
         }
 
-        // 저장된 프로필이 없으면 온보딩을 먼저 보여주고, 마치면 탭 화면으로 넘어간다.
         .clarityUnmask()
         .task { store.send(.profileCheckRequested) }
         .task { store.send(.analyticsObservationStarted) }
@@ -50,7 +49,6 @@ struct AppView: View {
             }
 
             Tab("추천", systemImage: "book", value: AppFeature.Tab.recommendations) {
-            // 피그마 탭바 시안(00.전역_홈)의 펼친 책 심볼. 홈 탭의 "house"처럼 탭바가 채운 모양(book.fill)으로 그린다.
                 NavigationStack(
                     path: $store.scope(state: \.recommendationsPath, action: \.recommendationsPath)
                 ) {
@@ -71,7 +69,6 @@ struct AppView: View {
                 .tint(Color?.none)
             }
         }
-        // 탭바만 강조색을 사용하고, 각 탭의 화면은 위에서 기본 색으로 되돌린다.
         .tint(PobookUI.ColorToken.accent)
         .searchable(
             text: Binding(
@@ -85,7 +82,6 @@ struct AppView: View {
         .tabViewSearchActivation(.searchTabSelection)
         .onSubmit(of: .search, submitBookSearch)
         .onChange(of: store.searchPath.isEmpty) { _, isEmpty in
-            // 검색 탭에서 다른 화면을 열면 검색창 키보드를 내린다.
             if !isEmpty { isBookSearchFocused = false }
         }
         .fullScreenCover(item: $store.scope(state: \.modal, action: \.modal)) { modalStore in
@@ -96,7 +92,6 @@ struct AppView: View {
             }
         }
         .environment(\.indoorRouteMapStore, store.scope(state: \.indoorMap, action: \.indoorMap))
-        // 위치 스트림은 탭 전환이 아닌 앱 루트 수명에 맞춘다.
         .task {
             store.send(.appStarted)
             store.send(.locationSession(.started))

@@ -22,9 +22,7 @@ struct AppFeature {
         var home = HomeFeature.State()
         var bookSearch = BookSearchFeature.State()
         var indoorMap = IndoorMapFeature.State()
-        /// 앱 활성 수명 동안 위치 이벤트를 한 곳에서 구독한다.
         var locationSession = LocationSessionFeature.State()
-        // 탭마다 따로 쌓는 push 화면 스택. 기능은 delegate로 요청하고 App이 쌓는다.
         var mapPath = StackState<Path.State>()
         var recommendationsPath = StackState<Path.State>()
         var searchPath = StackState<Path.State>()
@@ -33,18 +31,14 @@ struct AppFeature {
         var isRouteSettingsPresented = false
         var hasStartedRecommendationSession = false
         var hasEnteredBackground = false
-        // 저장된 프로필을 확인하기 전에는 탭 화면도 온보딩도 띄우지 않는다.
         var hasCheckedProfile = false
         var onboarding: OnboardingFeature.State?
         @Shared(.userProfile) var userProfile: UserProfile?
-        // 앱 전체가 함께 쓰는 프로필 하나. nil이면 온보딩을 보여준다.
         @Shared(.hasSkippedOnboarding) var hasSkippedOnboarding: Bool
-        // 온보딩을 건너뛰었으면 프로필이 없어도 온보딩을 다시 띄우지 않는다.
     }
 
     enum Action {
         case tabSelected(Tab)
-        /// 깊은 화면에서 홈 지도 탭으로 돌아간다. 띄워 둔 상세·책바구니 화면을 함께 닫는다.
         case goHomeRequested
         case home(HomeFeature.Action)
         case bookSearch(BookSearchFeature.Action)
@@ -56,14 +50,12 @@ struct AppFeature {
         case modal(PresentationAction<Modal.Action>)
         case routeSettingsPresentationChanged(Bool)
         case appStarted
-        /// 앱 루트 화면이 뜰 때 프로필·동의 변경을 분석에 반영하기 시작한다.
         case analyticsObservationStarted
         case scenePhaseChanged(isActive: Bool)
         case appEnteredBackground
         case appBecameActive
         case profileCheckRequested
         case legacyProfileLoaded(UserProfile?)
-        // 새 저장소가 비어 있을 때 이전 저장소(SwiftData)에서 읽어 온 프로필
         case onboarding(OnboardingFeature.Action)
     }
 
@@ -71,7 +63,6 @@ struct AppFeature {
     @Dependency(\.analyticsClient) var analytics
     @Dependency(\.continuousClock) var clock
 
-    /// 앱이 활성인 동안 분석 이벤트를 저장하는 주기.
     nonisolated static let analyticsCheckpointInterval: Duration = .seconds(60)
 
     private nonisolated enum CancelID: Hashable, Sendable {
@@ -112,7 +103,6 @@ struct AppFeature {
 
             case let .bookSearch(.delegate(delegate)):
                 guard let destination = Self.destination(for: delegate) else { return .none }
-                // 검색 상태는 홈 지도 탭과 검색 탭이 함께 쓰므로, 요청이 생긴 지금 탭에 쌓는다.
                 push(destination, onto: state.selectedTab, state: &state)
                 return .none
 
@@ -144,7 +134,6 @@ struct AppFeature {
                     @Shared(.userProfile) var userProfile
                     await withTaskGroup(of: Void.self) { group in
                         group.addTask {
-                            // 처음 값은 런타임이 시작할 때 읽으므로 바뀐 값만 반영한다.
                             for await profile in $userProfile.publisher.dropFirst().values {
                                 analytics.updateProfile(profile)
                             }
@@ -207,7 +196,6 @@ struct AppFeature {
                     state.hasCheckedProfile = true
                     return .none
                 }
-                // 새 저장소가 비어 있으면, 이전 버전에서 온보딩을 마친 기기일 수 있으니 이전 저장소를 한 번 확인한다.
                 return .run { [legacyUserProfileClient] send in
                     await send(.legacyProfileLoaded(await legacyUserProfileClient.load()))
                 }
@@ -215,7 +203,6 @@ struct AppFeature {
                 state.hasCheckedProfile = true
                 if let profile {
                     state.$userProfile.withLock { $0 = profile }
-                    // 이전 값을 새 저장소로 옮긴다. 이후로는 새 저장소만 쓴다.
                 } else {
                     state.onboarding = OnboardingFeature.State()
                 }
@@ -223,12 +210,10 @@ struct AppFeature {
             case .onboarding(.delegate(.completed)):
                 state.onboarding = nil
                 state.home.isFirstVisitAfterOnboarding = true
-                // ✅ 이번 실행의 첫 홈 표시는 하드데이터만으로 바로 보여준다. (Q4)
                 return .none
             case .onboarding(.delegate(.skipped)):
                 state.onboarding = nil
                 state.home.isFirstVisitAfterOnboarding = true
-                // 안내 팝업("건너뛰었어요")에서 "확인했어요"를 누른 뒤에만 여기로 온다.
                 return .none
             case .onboarding:
                 return .none

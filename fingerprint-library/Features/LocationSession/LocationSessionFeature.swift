@@ -18,7 +18,6 @@ struct LocationSessionFeature {
     }
 
     enum Action: Equatable {
-        /// 앱 루트 화면이 뜰 때 한 번 보낸다.
         case started
         case sceneActiveChanged(Bool)
         case locationEvent(IndoorLocationEvent)
@@ -41,7 +40,6 @@ struct LocationSessionFeature {
             case let .sceneActiveChanged(isActive):
                 guard state.isActive != isActive else { return .none }
                 state.isActive = isActive
-                // 비활성이 되면 센서 구독을 멈춰 배터리를 아낀다. 다시 활성이 되면 새로 구독한다.
                 return isActive ? subscribe() : .cancel(id: CancelID.events)
 
             case let .locationEvent(event):

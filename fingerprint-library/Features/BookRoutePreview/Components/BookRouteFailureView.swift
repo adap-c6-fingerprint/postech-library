@@ -1,27 +1,18 @@
 import SwiftUI
 
-/// 길안내를 준비하지 못했을 때 보여 주는 화면.
-///
-/// 원인에 따라 문구와 마지막 보조 동작이 달라진다. 데이터 문제는 문제 신고로,
-/// 위치가 도서관 밖인 경우는 책카트에 담아 두는 쪽으로 안내한다.
 struct BookRouteFailureView: View {
     enum Kind: Equatable {
-        /// 길찾기 자료를 불러오지 못했다.
         case dataUnavailable
-        /// 목적지까지의 안내를 만들 수 없다.
         case destinationUnavailable
-        /// 현재 위치가 도서관 길찾기 범위 밖이다.
         case outsideLibrary
     }
 
     let kind: Kind
-    /// 원인 확인용 에러 코드와 위치 상태. 화면 아래에 작게 표시한다.
     var diagnostic: String?
     var isRetrying = false
     let onBack: () -> Void
     let onRetry: () -> Void
     let onGoHome: () -> Void
-    /// 도서관 밖에서만 쓰는 보조 동작. 담을 책이 없으면 전달하지 않는다.
     var onAddToCart: (() -> Void)?
     let onReportProblem: () -> Void
 
@@ -154,7 +145,6 @@ struct BookRouteFailureView: View {
 }
 
 extension BookRouteFailureView.Kind {
-    /// 오류 문구에서 원인을 되찾는다. 문구는 ``IndoorRoutingError``가 만든 것과 같은 값이다.
     init(message: String?) {
         switch IndoorRoutingError.allCases.first(where: { $0.errorDescription == message }) {
         case .farFromGraph, .invalidPosition, .unknownFloor:

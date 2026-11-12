@@ -1,7 +1,5 @@
 import Foundation
 
-/// 필수 문구의 폭을 먼저 확보한 뒤 남은 폭을 실제 거리 비율로 나눈다.
-/// 화면 배치만 조정하며 원본 경로의 거리·도착 지점·진행률은 변경하지 않는다.
 struct BookNavigationProgressLayout {
     enum Content: Equatable {
         case marker(BookNavigationTimeline.MarkerKind)
@@ -35,7 +33,6 @@ struct BookNavigationProgressLayout {
     var trackEnd: CGFloat { items.last.map { $0.x + $0.width / 2 } ?? 0 }
     var trackWidth: CGFloat { max(0, trackEnd - trackStart) }
 
-    /// 텍스트 배치용 칸과 별개로 진행 막대는 마일스톤 중심 아래까지 연결한다.
     var segmentSpans: [SegmentSpan] {
         let segments = items.compactMap { item -> (Item, BookNavigationTimeline.Segment)? in
             switch item.content {
@@ -128,7 +125,6 @@ struct BookNavigationProgressLayout {
                 } else {
                     if encountered.insert(segment.kind).inserted,
                        index == 0 || segments[index - 1].kind != .walk {
-                        // 출발점이 층 이동 구간이어도 첫 이동 문구는 생략하지 않는다.
                         let label = timeline.approachLabel(for: segment, floors: floors)
                         entries.append(.init(content: .approach(segment.kind),
                             minimumWidth: measureText(label.compactText) + padding * 2, label: label))
@@ -148,7 +144,6 @@ struct BookNavigationProgressLayout {
         width = contentWidth
         var extra = contentWidth - minimumWidth
         var preferredWidths = entries.map(\.minimumWidth)
-        // 선택 문구를 늘리기 전에 첫 시설 이동 문구의 전체 표현을 우선 확보한다.
         for (index, entry) in entries.enumerated() {
             guard let label = entry.label, label.isRequired else { continue }
             let addition = max(0, measureText(label.fullText) + padding * 2 - entry.minimumWidth)
@@ -169,7 +164,6 @@ struct BookNavigationProgressLayout {
             } else {
                 text = entry.fixedText
             }
-            // 모든 구간의 거리가 0이어도 끝점 마커는 마지막에 놓는다.
             let origin = totalMeters == 0 && index == entries.count - 1 ? contentWidth - itemWidth : x
             defer { x += itemWidth }
             return .init(id: index, content: entry.content, x: origin, width: itemWidth, text: text)

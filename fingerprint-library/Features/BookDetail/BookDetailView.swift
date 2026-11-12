@@ -2,7 +2,6 @@ import SwiftUI
 import UIKit
 import ComposableArchitecture
 
-/// 추천·검색의 지도 Store를 재사용하고, 책 상세 전용 경로는 별도로 계산한다.
 struct BookDetailMapView: View {
     let store: StoreOf<BookDetailFeature>
     let mapStore: StoreOf<IndoorMapFeature>
@@ -113,7 +112,6 @@ struct BookDetailSheet: View {
                 .containerBackground(.clear, for: .navigation)
                 .toolbar(.hidden, for: .navigationBar)
         }
-        // 새 UIHostingController는 앱 루트의 SwiftUI 환경을 상속하지 않으므로 다시 연결한다.
         .environment(\.indoorRouteMapStore, mapStore)
         .preferredColorScheme(.dark)
         .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { frame in
@@ -146,7 +144,7 @@ struct BookDetailView: View {
             .foregroundStyle(Color.textPrimary)
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-            .bookDetailCartPresentation(store: store) // ✅ 여러 권 펼친 화면과 같은 책바구니 알림을 사용한다.
+            .bookDetailCartPresentation(store: store)
             .task { store.send(.loadFavorites) }
             .analyticsScreen(.detail)
             .onAppear { store.send(.viewAppeared) }
@@ -156,7 +154,7 @@ struct BookDetailView: View {
     }
 
     private var detailContent: some View {
-        GeometryReader { _ in // ✅ 펼친 표지 크기는 공용 상세 화면이 정하므로 너비를 넘기지 않는다.
+        GeometryReader { _ in
             VStack(alignment: .leading, spacing: 0) {
                 if !isExpanded && !usesAccessibleLayout {
                     header
@@ -164,11 +162,9 @@ struct BookDetailView: View {
                         .padding(.top, detent == .compact ? BookDetailCompactLayout.topPadding : 20)
                         .padding(.bottom, detent == .compact ? 0 : 36)
                 }
-                // 높이 단계가 바뀌어도 같은 스크롤 뷰가 제스처를 이어받는다.
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         if isExpanded {
-                            // ✅ 여러 권 미리보기와 같은 펼친 상세 화면을 단권 분기로 사용한다.
                             BookExpandedDetailView(
                                 style: .single, books: [store.book], selectedBookID: .constant(store.book.id),
                                 identifierPrefix: "bookDetail", cachedCoverURL: store.cachedCoverURL
@@ -190,7 +186,6 @@ struct BookDetailView: View {
         }
     }
 
-    // ✅ 표지 아래의 소장 상태·제목·위치·경로 요약. 시안에 맞춰 위치와 청구기호는 body1로 표시한다.
     private var expandedDetails: some View {
         VStack(alignment: .leading, spacing: 8) {
             holdingStatus.typography(.caption2)
@@ -276,7 +271,7 @@ struct BookDetailView: View {
     }
 
     @ViewBuilder
-    private func holdingLocation(typography: PobookUI.Typography = .body2) -> some View { // ✅ 펼친 화면은 body1을 사용한다.
+    private func holdingLocation(typography: PobookUI.Typography = .body2) -> some View {
         if case .loaded = store.holdingsState {
             VStack(alignment: .leading, spacing: 2) {
                 Text(store.destinationPresentation?.locationText
@@ -315,7 +310,6 @@ struct BookDetailView: View {
         }
     }
 
-    // ✅ 거리·층 이동 표시는 여러 권 화면과 같은 공용 컴포넌트를 사용한다.
     @ViewBuilder
     private var expandedRouteSummary: some View {
         if case let .loaded(summary) = store.destinationRouteState {

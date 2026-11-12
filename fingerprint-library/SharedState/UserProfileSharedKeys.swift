@@ -14,13 +14,10 @@ extension SharedKey where Self == FileStorageKey<UserProfile?>.Default {
     nonisolated static var userProfile: Self {
         Self[.fileStorage(.documentsDirectory.appending(component: "user-profile.json")), default: nil]
     }
-    // nil이면 아직 온보딩을 마치지 않았다는 뜻이다.
-    // 테스트에서는 실제 파일 대신 메모리에 저장된다(swift-sharing 기본 동작).
 }
 
 extension SharedKey where Self == AppStorageKey<Bool>.Default {
     nonisolated static var hasSkippedOnboarding: Self {
         Self[.appStorage("hasSkippedOnboarding"), default: false]
     }
-    // 온보딩 소속 화면에서 "다음에 할래요 → 건너뛰기"를 골랐는지. true면 프로필이 없어도 온보딩을 다시 띄우지 않는다.
 }

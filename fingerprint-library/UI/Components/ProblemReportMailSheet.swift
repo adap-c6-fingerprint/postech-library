@@ -2,7 +2,6 @@ import MessageUI
 import SwiftUI
 import UIKit
 
-/// 문제 신고용 메일 작성 화면. 기기의 기본 메일 작성기를 그대로 띄운다.
 struct ProblemReportMailSheet: UIViewControllerRepresentable {
     static let recipient = "hellomaps@fpmaps.com"
 
@@ -12,7 +11,6 @@ struct ProblemReportMailSheet: UIViewControllerRepresentable {
 
     static var canSendMail: Bool { MFMailComposeViewController.canSendMail() }
 
-    /// 메일 계정이 없어 작성기를 띄울 수 없을 때 쓰는 mailto 주소.
     static func mailtoURL(subject: String, body: String) -> URL? {
         var components = URLComponents()
         components.scheme = "mailto"
@@ -51,7 +49,6 @@ struct ProblemReportMailSheet: UIViewControllerRepresentable {
     }
 }
 
-/// 메일 작성기도 메일 앱도 쓸 수 없을 때 띄우는 안내. 주소를 복사해 직접 보낼 수 있게 한다.
 struct ProblemReportFallbackSheet: View {
     let messageBody: String
     let onClose: () -> Void

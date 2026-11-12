@@ -1,6 +1,5 @@
 import MapKit
 
-/// 서가 원본은 유지하고 지도에 보이는 상세도만 바꾼다.
 enum IndoorShelfLabelLevel: String, CaseIterable {
     case group, number
 
@@ -9,11 +8,8 @@ enum IndoorShelfLabelLevel: String, CaseIterable {
         return metersPerPoint > groupBoundary ? .group : .number
     }
 
-    /// 묶음에서 서가 번호로 풀리는 가장 엄격한 경계(0.09)보다 한 단계 확대한 배율.
-    /// 현재 위치 버튼이 이 배율로 맞추면 이전 상태와 관계없이 서가 번호가 보인다.
     static let numberRevealMetersPerPoint = 0.08
 
-    /// 화면 중심에서 1pt가 나타내는 실제 거리(m). 레이블 상세도 판정과 카메라 확대가 같은 측정을 쓴다.
     @MainActor
     static func metersPerPoint(in map: MKMapView) -> Double? {
         guard map.bounds.width > 0, map.bounds.height > 0 else { return nil }
@@ -39,7 +35,6 @@ struct IndoorShelfLabelPresentation {
         members.contains { ids.contains($0.mapElementID) }
     }
 
-    /// 여러 조각으로 구성된 도형도 전체 길이의 주축에 맞춰 서가 번호를 표시한다.
     static func shelfAxis(_ geometry: IndoorMapGeometry) -> (MKMapPoint, MKMapPoint)? {
         var points: [MKMapPoint] = []
         for coordinate in geometry.coordinates {
@@ -64,7 +59,6 @@ struct IndoorShelfLabelPresentation {
     }
 }
 
-/// 같은 fixture의 A/B만 합치고, 가까운 실제 서가 중심을 연결해 층별 군집을 만든다.
 struct IndoorShelfLabelLayout {
     let numbers: [IndoorShelfLabelPresentation]
     let groups: [IndoorShelfLabelPresentation]

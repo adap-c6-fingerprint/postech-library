@@ -1,6 +1,5 @@
 import Foundation
 
-/// Primo 검색 응답을 앱의 Book으로 변환한다. 인증·전송·캐시는 다루지 않는다.
 nonisolated enum PrimoBookMapper {
     nonisolated enum MappingError: Error { case invalidResponse }
 
@@ -37,7 +36,6 @@ nonisolated enum PrimoBookMapper {
         return text
     }
 
-    /// 검색 응답 변환은 인증과 분리해 소장 위치와 서지 정보를 오프라인에서 검증한다.
     nonisolated static func books(from data: Data) throws -> [Book] {
         let decodedResponse = try JSONDecoder().decode(
             PrimoResponse.self,
@@ -75,7 +73,6 @@ nonisolated enum PrimoBookMapper {
                         let host = parts.host, !host.isEmpty
                     else { return nil }
 
-                    // 이미지 대신 정보를 반환하는 조회용 주소는 제외
                     let isLookup = parts.queryItems?.contains {
                         $0.name == "jscmd" && $0.value == "viewapi"
                     } ?? false
@@ -98,7 +95,6 @@ nonisolated enum PrimoBookMapper {
                 author: nonEmpty(
                     document.pnx.display.creator?
                         .map {
-                            // $$Q 앞의 화면 표시용 정보만 사용한다.
                             let displayText = $0.components(separatedBy: "$$Q").first ?? $0
                             return BookText.plainText(displayText)
                         }
@@ -141,7 +137,6 @@ nonisolated enum PrimoBookMapper {
         let bestlocation: PrimoHolding?
 
         var subLocation: String? {
-            // 명시적인 빈 holding은 소장 정보 없음이며, bestlocation으로 되살리지 않는다.
             let locations = holding.map { $0.compactMap(\.subLocation) }
                 ?? [bestlocation?.subLocation].compactMap { $0 }
             var seen = Set<String>()

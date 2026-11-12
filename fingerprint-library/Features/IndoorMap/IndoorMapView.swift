@@ -1,8 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// TCA 상태로 지도·층 선택·위치 포커싱과 로딩 상태를 표시한다.
-/// MapKit 객체의 생성·갱신은 ``IndoorMapKitView``에 위임한다.
 struct IndoorMapView: View {
     struct BookDetailPresentation {
         let floor: IndoorMapFloor?
@@ -12,22 +10,17 @@ struct IndoorMapView: View {
 
     let store: StoreOf<IndoorMapFeature>
     @State private var homeMarkerCache = HomeMapMarkerCache()
-    /// 홈에서는 선택한 서가 카드를, 경로 화면에서는 계산한 경로와 목적지를 표시하도록 구분한다.
     var showsDestinationCard = true
-    /// 책 상세에서는 다른 화면에서 계산한 서가·경로를 책 위치로 오인하지 않게 숨긴다.
     var showsRoute = true
-    /// 경로 시트가 차지하는 하단 영역. 카메라 맞춤과 지도 조작 UI의 배치에 함께 적용한다.
     var bottomContentInset: CGFloat = 0
     var topContentInset: CGFloat = 0
     var appearance: IndoorMapKitView.Appearance = .standard
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
     var showsCurrentLocationButton = true
     var showsFloorPicker = true
-    /// 하단 안내 카드가 있는 화면에서는 지도·카메라 영역을 카드 위로 제한한다.
     var extendsUnderBottomSafeArea = true
     var bookDetail: BookDetailPresentation?
     var onSelectFavoriteMarker: (HomeMapMarker) -> Void = { _ in }
-    /// 별도 지도 Store를 쓰는 미리보기에도 홈과 같은 마커 목록·시설 표시 설정을 전달한다.
     var homeAnnotations: HomeMapAnnotationsFeature.State?
     var hiddenFavoriteMarkerIDs: Set<String> = []
 
@@ -52,7 +45,6 @@ struct IndoorMapView: View {
         .background(Color(uiColor: .systemGroupedBackground))
     }
 
-    /// 지도 위에 조작 UI를 배치하고, 실제 위치의 층과 별개인 조회 층을 전달한다.
     private func mapContent(map: IndoorMap, floor: IndoorMapFloor) -> some View {
         ZStack(alignment: .bottomTrailing) {
             IndoorMapKitView(
@@ -178,7 +170,6 @@ struct IndoorMapView: View {
 
     @ViewBuilder private var currentLocationButton: some View {
         if appearance == .home {
-            // 길안내 화면과 같은 버튼을 쓴다.
             MapRecenterButton { store.send(.currentLocationTapped) }
         } else {
             Button { store.send(.currentLocationTapped) } label: {
@@ -200,7 +191,6 @@ struct IndoorMapView: View {
         }
     }
 
-    /// 실제 위치의 ordinal에 대응하는 표시 이름을 사용한다. 조회 중인 층을 현재 위치로 표시하지 않는다.
     private var currentFloorLabel: String {
         guard let ordinal = store.currentPosition?.floorOrdinal,
             let floor = store.map?.floors.first(where: { $0.ordinal == ordinal })

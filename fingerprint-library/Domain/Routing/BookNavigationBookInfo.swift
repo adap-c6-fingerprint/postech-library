@@ -1,6 +1,5 @@
 import Foundation
 
-/// 현재 목적지 서가에 매칭된 소장본의 표시 정보. 다른 소장 위치의 청구기호를 섞지 않는다.
 struct BookNavigationBookInfo: Equatable, Sendable {
     let book: Book
     let shelf: IndoorShelfLabel

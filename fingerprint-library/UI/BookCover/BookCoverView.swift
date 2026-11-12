@@ -7,7 +7,6 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
     let cachedURL: URL?
     let onOpen: (() -> Void)?
     let allowsRetry: Bool
-    /// ✅ 칸이 아니라 비율을 유지한 실제 표지 이미지의 모서리를 둥글게 한다. 0이면 기존과 같다.
     let imageCornerRadius: CGFloat
     private let coverModifier: CoverModifier
     private let lookupLegacyOriginal: (() async throws -> URL?)?
@@ -69,7 +68,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         switch model.phase(for: url, isbn: isbn, cachedURL: cachedURL) {
         case let .loaded(image):
             Image(uiImage: image).resizable().scaledToFit()
-                .clipShape(.rect(cornerRadius: imageCornerRadius)) // ✅
+                .clipShape(.rect(cornerRadius: imageCornerRadius))
         case .loading:
             ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
         case .failed:
@@ -100,7 +99,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
 extension BookCoverView where CoverModifier == EmptyModifier {
     init(
         url: URL?, isbn: String? = nil, cachedURL: URL? = nil, onOpen: (() -> Void)? = nil,
-        allowsRetry: Bool = true, imageCornerRadius: CGFloat = 0, // ✅
+        allowsRetry: Bool = true, imageCornerRadius: CGFloat = 0,
         lookupLegacyOriginal: (() async throws -> URL?)? = nil,
         onCoverRecovered: ((URL) -> Void)? = nil
     ) {

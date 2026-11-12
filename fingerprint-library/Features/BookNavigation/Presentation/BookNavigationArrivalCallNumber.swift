@@ -1,13 +1,11 @@
 import Foundation
 
-/// 책등에서 먼저 찾을 분류 숫자를 분리한다. 나머지 기호는 생략·재해석하지 않는다.
 nonisolated struct BookNavigationArrivalCallNumber: Equatable {
     let rawValue: String
     let classification: String
     let number: String
     let suffix: String
 
-    /// 번호표는 최대 세 줄을 사용하며 연도·권차 등 남은 기호는 마지막 줄에 함께 보존한다.
     var stickerLines: [String] {
         let first = classification + number
         let parts = suffix.split(whereSeparator: \.isWhitespace).map(String.init)

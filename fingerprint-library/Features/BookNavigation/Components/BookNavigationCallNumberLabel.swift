@@ -1,12 +1,10 @@
 import SwiftUI
 import UIKit
 
-/// 책등과 확대 번호표가 같은 세 줄 데이터를 사용하되 각자의 표시 크기에 맞춰 글자를 배치한다.
 struct BookNavigationCallNumberLabel: View {
     let callNumber: BookNavigationArrivalCallNumber
     let layout: BookNavigationCallNumberLabelLayout
     var emphasizesFirstLine = true
-    // 확대 번호표만 첫 줄(분류+숫자)을 굵게 표시한다
 
     var body: some View {
         VStack(spacing: 0) {
@@ -69,7 +67,6 @@ struct BookNavigationCallNumberLabel: View {
     }
 
     private var classMark: String { String(callNumber.classification.prefix(1)).uppercased() }
-    // 파란 칸에는 분류기호의 첫 글자를 적는다 (PR → P)
 
     enum Design {
         static let cornerRadius: CGFloat = 4.679

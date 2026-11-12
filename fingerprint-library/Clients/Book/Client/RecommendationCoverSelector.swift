@@ -1,6 +1,5 @@
 import Foundation
 
-/// 조회 수단과 분리한 표지 선정 정책. 응답 완료 순서와 관계없이 후보 순서를 유지한다.
 nonisolated enum RecommendationCoverSelector {
     nonisolated enum Policy: Sendable {
         case preferData4Library

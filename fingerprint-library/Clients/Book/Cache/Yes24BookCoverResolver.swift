@@ -1,6 +1,5 @@
 import Foundation
 
-/// 같은 ISBN의 진행 중 조회와 결과를 공유한다. 실패는 저장하지 않아 재시도할 수 있다.
 actor Yes24BookCoverResolver {
     private struct Cached {
         let url: URL?

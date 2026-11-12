@@ -7,7 +7,6 @@ nonisolated struct SearchHistoryClient: Sendable {
 
     private static let storageKey = "recentSearchQueries"
 
-    // 테스트에서는 별도 suite를 사용해 앱의 실제 검색 기록과 분리한다.
     static func userDefaults(suiteName: String? = nil) -> Self {
         Self(
             load: {

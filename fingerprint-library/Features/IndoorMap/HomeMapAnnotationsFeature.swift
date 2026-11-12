@@ -1,6 +1,5 @@
 import ComposableArchitecture
 
-/// 찜과 위치 정보는 로컬에서만 결합한다. 찜을 근거로 API를 조회하지 않는다.
 @Reducer
 struct HomeMapAnnotationsFeature {
     @ObservableState

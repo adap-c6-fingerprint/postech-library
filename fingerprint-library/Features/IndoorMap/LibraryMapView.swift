@@ -41,7 +41,6 @@ struct LibraryMapView: View {
                 onSelectFavoriteMarker: { searchStore.send(.favoriteMarkerTapped($0)) })
                 .ignoresSafeArea(.container, edges: .top)
                 .overlay(alignment: .topLeading) {
-                    // 전체 높이의 컨테이너가 상단 안전 영역까지 확장되어 배경은 기기 맨 위에서 시작한다.
                     VStack(spacing: 0) {
                         LibraryTopBarBackground()
                         Spacer(minLength: 0)

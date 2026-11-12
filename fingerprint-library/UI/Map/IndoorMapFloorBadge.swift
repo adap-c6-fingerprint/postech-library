@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 경로 미리보기와 길안내에서 사용하는 층 표시.
 struct IndoorMapFloorBadge: View {
     let floor: IndoorMapFloor
     var isCurrent: Bool = false

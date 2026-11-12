@@ -41,7 +41,6 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     let id: String
     let kind: Kind
     let floorID: UUID
-    /// 겹친 핀을 합칠 때 무게중심으로 옮긴다.
     var coordinate: IndoorMapCoordinate
     var title: String
     var subtitle: String? = nil
@@ -78,10 +77,8 @@ nonisolated enum HomeMapMarkerBuilder {
         return merging(markers)
     }
 
-    /// 화면에서 겹쳐 보이는 거리. 핀 하나의 폭보다 좁아 두 개를 그려도 구분되지 않는다.
     private static let overlapMeters = 6.0
 
-    /// 괄호로 덧붙인 설명이 없고 짧은 이름을 앞에 둔다.
     private static func isPlainer(_ lhs: String, _ rhs: String) -> Bool {
         let leftHasNote = lhs.contains("(")
         let rightHasNote = rhs.contains("(")
@@ -90,10 +87,6 @@ nonisolated enum HomeMapMarkerBuilder {
         return lhs < rhs
     }
 
-    /// 같은 층·같은 종류의 핀이 겹칠 만큼 가까우면 하나로 합친다.
-    ///
-    /// 한 계단실에 "계단"과 "계단 (아래)"가 따로 있거나 엘리베이터 두 대가 나란히 있는 경우처럼
-    /// 원본이 지점을 나눠 둔 곳에서 핀이 여러 개로 보였다.
     private static func merging(_ markers: [HomeMapMarker]) -> [HomeMapMarker] {
         var clusters: [[HomeMapMarker]] = []
         for marker in markers {
@@ -108,7 +101,6 @@ nonisolated enum HomeMapMarkerBuilder {
         }
         return clusters.map { cluster in
             guard cluster.count > 1, var representative = cluster.first else { return cluster[0] }
-            // "계단 (아래)"처럼 덧붙은 설명이 없는 이름을 대표로 둔다.
             representative.title = cluster.map(\.title).min(by: isPlainer) ?? representative.title
             representative.coordinate = IndoorMapCoordinate(
                 latitude: cluster.map(\.coordinate.latitude).reduce(0, +) / Double(cluster.count),
@@ -128,7 +120,6 @@ nonisolated enum HomeMapMarkerBuilder {
         for (key, copies) in holdings {
             for resolution in ShelfResolver().resolve(copies, on: map, labels: labels) {
                 for shelf in resolution.shelves {
-                    // 같은 서가의 A/B 면과 복본은 하나의 찜 마커로 표시한다.
                     let shelfID = shelf.physicalShelfID
                     var group = groups[shelfID] ?? Group()
                     group.shelves[shelf.id] = shelf
@@ -154,7 +145,6 @@ nonisolated enum HomeMapMarkerBuilder {
         }.sorted { $0.id < $1.id }
     }
 
-    /// IMDF amenity가 표시를 맡은 분류. unit·fixture에 같은 분류가 있어도 핀을 만들지 않는다.
     private static func ownedKind(forCategory category: String) -> HomeMapMarker.Kind? {
         if category == "stairs" || category == "stairway" { return .stairs }
         if category == "elevator" { return .elevator }
@@ -171,8 +161,6 @@ nonisolated enum HomeMapMarkerBuilder {
         let category = feature.category?.lowercased() ?? ""
         let name = feature.name?.lowercased() ?? ""
         let compactName = name.filter { !$0.isWhitespace }
-        // 같은 장소가 unit 도형과 amenity 포인트에 모두 있어 핀이 두 번 찍혔다.
-        // IMDF가 표시용으로 정리한 amenity를 쓰고, unit 쪽은 직원용이 섞여 있어 제외한다.
         if let owned = Self.ownedKind(forCategory: category) {
             return feature.kind == .amenity ? owned : nil
         }
@@ -181,26 +169,22 @@ nonisolated enum HomeMapMarkerBuilder {
         if name.contains("프린터") || name.contains("복사기") || name.contains("printer") || name.contains("copier") {
             return .printer
         }
-        // 영상 자료를 보거나 편집하는 공간.
         if compactName.contains("dvd") || compactName.contains("미디어") || compactName.contains("mediaroom") {
             return .media
         }
         if compactName.contains("fun&play") || compactName.contains("funandplay")
             || compactName.contains("게임룸") || compactName.contains("gamingroom")
             || compactName.contains("gameroom") { return .gamingRoom }
-        // 여럿이 모여 쓰는 토의 공간.
         if compactName.contains("그룹스터디룸") || compactName.contains("groupstudyroom")
             || compactName.hasPrefix("gsr") || compactName.contains("토의실")
             || compactName.contains("회의실") || compactName.contains("미팅룸")
             || compactName.contains("meetingroom") || compactName.contains("conferenceroom")
             || compactName.contains("콜라보") || compactName.contains("collaboration")
             || compactName.contains("plora") || compactName.contains("플로라")
-            // 디자이너 지정: 2층 기관 사무 공간도 같은 아이콘을 쓴다.
             || compactName.contains("postech1986") || compactName.contains("isss")
             || compactName.contains("국제협력팀") || compactName.contains("internationalrelations") {
             return .groupStudyRoom
         }
-        // 발표·촬영처럼 준비된 자리에서 진행하는 공간.
         if category == "classroom" || compactName.contains("강의실")
             || compactName.contains("컨퍼런스홀") || compactName.contains("conferencehall")
             || compactName.contains("스튜디오") || compactName.contains("studio") { return .conferenceRoom }
@@ -210,15 +194,12 @@ nonisolated enum HomeMapMarkerBuilder {
             || compactName.contains("relaxzone") || compactName.contains("릴렉스존") { return .relaxZone }
         if compactName.contains("welcomecenter") || compactName.contains("웰컴센터")
             || compactName.contains("입학팀") || compactName.contains("admissions") { return .entranceDesk }
-        // 사물함은 지도에 표시하지 않는다.
         if category == "coinlocker" { return nil }
-        // 창고·기계실·사무실 등 비공개 공간과 일반 가구에는 시설 핀을 만들지 않는다.
         if feature.kind == .amenity || ["foodservice", "recreation"].contains(category)
             || (category == "room" && !name.isEmpty) { return .other }
         return nil
     }
 
-    /// 도형 안의 점만 선택한다. 오목한 방이나 내부 구멍의 바깥으로 핀이 나가지 않게 한다.
     static func anchor(for geometry: IndoorMapGeometry) -> IndoorMapCoordinate? {
         if case .point(let coordinate) = geometry { return coordinate.isValid ? coordinate : nil }
         let points = geometry.coordinates.filter(\.isValid)
@@ -236,7 +217,6 @@ nonisolated enum HomeMapMarkerBuilder {
     }
 }
 
-/// 센서 위치·카메라만 바뀔 때 청구기호 범위를 다시 해석하지 않는다.
 @MainActor
 final class HomeMapMarkerCache {
     private var map: IndoorMap?

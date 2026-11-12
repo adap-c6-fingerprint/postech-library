@@ -1,6 +1,5 @@
 import Foundation
 
-/// 원본 ID·방향·좌표를 유지한다. 누락된 층간 비용이나 버전을 추정하지 않는다.
 nonisolated struct RoutingGraphMapper {
     func map(_ dto: RoutingGraphDTO, on map: IndoorMap, layoutVersion: String) throws -> (RoutingGraph, RoutingGraphDiagnostics) {
         guard dto.type == "FeatureCollection", dto.schemaVersion == 1,

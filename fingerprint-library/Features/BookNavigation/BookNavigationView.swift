@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 현재 책까지의 지도와, 화면 폭을 채우는 길안내 시트.
 struct BookNavigationView: View {
     @Bindable private var store: StoreOf<BookNavigationFeature>
     private let onExit: ((BookNavigationFeature.ExitReason) -> Void)?
@@ -12,7 +11,6 @@ struct BookNavigationView: View {
     @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
     private var isSheetExpanded: Bool { store.isSheetExpanded }
 
-    /// 길안내 Store는 경로 미리보기 reducer가 하위 기능으로 만든다.
     init(store: StoreOf<BookNavigationFeature>, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
         self.onExit = onExit
         self.store = store
@@ -96,11 +94,9 @@ struct BookNavigationView: View {
                     onCancel: { store.send(.cancelTapped) }
                 )
                 .id(index)
-                // 기존 BookNavigationArrivalView는 책등 화면에서 아래로 3초 이상 당기면 열린다. (15) 책찾기 화면 문서)
             }
         }
         .interactiveDismissDisabled()
-        // 시스템 alert는 위치를 정할 수 없어 화면 중앙 카드로 직접 띄운다.
         .overlay {
             if store.isCancelConfirmationPresented {
                 BookNavigationPauseAlert(
@@ -153,7 +149,6 @@ struct BookNavigationView: View {
         .foregroundStyle(.white)
     }
 
-    /// 이미 찾았다고 넘긴 이전 책의 서가로 다시 안내한다.
     private var previousShelfButton: some View {
         Button { store.send(.previousStopTapped) } label: {
             Label("이전 서가", systemImage: "chevron.backward")
@@ -168,7 +163,6 @@ struct BookNavigationView: View {
         .accessibilityIdentifier("book-navigation-previous-shelf")
     }
 
-    /// 자동 도착 판정을 놓쳤거나 책등 찾기에서 뒤로 나온 뒤에도 사용자가 직접 책등 찾기로 들어가게 한다.
     private var shelfFoundButton: some View {
         Button { store.send(.shelfFoundTapped) } label: {
             Label("서가를 찾았어요", systemImage: "checkmark")
@@ -205,7 +199,6 @@ struct BookNavigationView: View {
             .padding(.horizontal, 16)
             .fixedSize(horizontal: false, vertical: true)
             .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
-                // 접힌 높이에는 안내 문구와 프로그레스바만 포함한다.
                 if abs(height - sheetSummaryHeight) > 0.5 { sheetSummaryHeight = height }
             }
             if isSheetExpanded {

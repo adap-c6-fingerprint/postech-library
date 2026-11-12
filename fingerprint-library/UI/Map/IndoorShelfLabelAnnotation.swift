@@ -1,6 +1,5 @@
 import MapKit
 
-/// 표시 전용 레이블이다. 길찾기와 소장 위치는 members의 원본 도형을 계속 사용한다.
 final class IndoorShelfLabelAnnotation: NSObject, MKAnnotation {
     let presentation: IndoorShelfLabelPresentation
     var coordinate: CLLocationCoordinate2D { presentation.coordinate }
@@ -24,7 +23,6 @@ final class IndoorShelfLabelAnnotation: NSObject, MKAnnotation {
     init(_ presentation: IndoorShelfLabelPresentation) { self.presentation = presentation }
 }
 
-/// 카드·청구기호 없이 번호만 그린다. 번호는 서가 방향을 따르되 거꾸로 뒤집지 않는다.
 final class IndoorShelfLabelView: MKAnnotationView {
     static let reuseID = "indoor-shelf-label"
     private let textLabel = UILabel()
@@ -95,7 +93,6 @@ final class IndoorShelfLabelView: MKAnnotationView {
         textLabel.font = Self.font
         textLabel.attributedText = Self.text(for: annotation, highlighted: highlighted)
         textLabel.transform = CGAffineTransform(rotationAngle: angle)
-        // 겹쳐도 번호를 유지한다. 찜·편의시설은 별도 우선순위로 위에 표시한다.
         displayPriority = .required
         zPriority = MapAnnotationPriority.shelf
         selectedZPriority = MapAnnotationPriority.shelf

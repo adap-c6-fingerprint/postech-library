@@ -27,7 +27,6 @@ struct BookCartFeatureTests {
         await store.send(.guidanceLimitAlertDismissed) { $0.isGuidanceLimitAlertPresented = false }
         await store.send(.selectionToggled(makeBook(4).id)) { $0.selectedIDs.removeLast() }
         await store.send(.selectionToggled(makeBook(5).id)) {
-            // 이미 한 번 보여 줬으면 다시 띄우지 않는다.
             $0.selectedIDs.append(makeBook(5).id)
         }
     }

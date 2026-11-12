@@ -1,6 +1,5 @@
 import Foundation
 
-/// 이미지 미제공과 재시도 가능한 실패를 구분한다. 원본 URL·응답 본문은 오류에 담지 않는다.
 nonisolated enum BookCoverFailure: Error, Equatable, Sendable {
     case unavailable(statusCode: Int)
     case invalidResponse

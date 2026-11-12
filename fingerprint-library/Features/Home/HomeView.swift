@@ -36,10 +36,7 @@ struct HomeView: View {
     var body: some View {
         homeContent
         .task(id: store.userProfile) { store.send(.task) }
-        // 프로필(소속·관심 분야)이 바뀌면 다시 실행해 바뀐 목록을 새로 불러온다. 마이페이지에서 돌아올 때 바로 반영된다.
-        // 추천 홈에서 목록으로 이동해도 두 화면이 공유하는 소장 정보 조회를 이어간다.
         .task(id: LibraryInfoTaskID(bookIDs: store.booksForLibraryInfo.map(\.id), sessionID: store.recommendationSessionID)) {
-            // Effect의 수명은 reducer가 관리한다. 목록 ID 변경으로 기존 요청을 취소하지 않는다.
             store.send(.loadLibraryInfo)
         }
         .onDisappear { store.send(.libraryInfoCancelled) }
@@ -72,7 +69,6 @@ struct HomeView: View {
                 onCart: { store.send(.cartButtonTapped) },
                 onProfile: { store.send(.profileButtonTapped) }
             )
-            // 버튼 아래 여백까지 블러가 적용되는 상단바 영역에 포함한다.
             .padding(.bottom, LibraryTabIntroText.topBarSpacing)
         }
         .scrollEdgeEffectStyle(.hard, for: .top)
@@ -164,7 +160,6 @@ struct HomeView: View {
                 }
             }
             .scrollTargetLayout()
-            // 선반 뒤로 번지는 표지 블러가 스크롤 영역 아래에서 잘리지 않게 한다.
             .padding(.bottom, recommendationLayout.bottomInset)
         }
         .contentMargins(.horizontal, recommendationLayout.horizontalInset, for: .scrollContent)
@@ -252,7 +247,6 @@ struct HomeView: View {
                 Button { store.send(.profileButtonTapped) } label: {
                     popularBooksHeader("맞춤 정보를 설정해 주세요.")
                 }
-                // 쉐브론(제목 줄)을 누르면 마이페이지로 이동한다.
                 .buttonStyle(.plain)
                 .padding(.horizontal, 16)
 
@@ -262,7 +256,6 @@ struct HomeView: View {
                     .accessibilityHidden(true)
                     .overlay { Color.backgroundDefault.opacity(0.5) }
                     .overlay(alignment: .top) { profileSetupPrompt.padding(.top, 56) }
-                // 피그마 '2.추천_온보딩 미완료시'(4100:27254): 책 목록을 흐리게 가리고 그 위에 설정 안내를 띄운다.
             }
         }
     }
@@ -302,7 +295,6 @@ struct HomeView: View {
         .foregroundStyle(.textSecondary)
         .padding(.horizontal, 16)
     }
-    // 블러 위 안내 문구와 '설정하러 가기' 버튼. 버튼도 마이페이지로 이동한다.
 
     private var popularBooksRow: some View {
         let books = store.popularBooks
@@ -311,7 +303,6 @@ struct HomeView: View {
         return ScrollView(.horizontal) {
             LazyHStack(alignment: .top, spacing: spacing) {
                 if books.isEmpty {
-                    // 실제 책의 인덱스와 겹치면 목록을 받은 뒤에도 임시 카드가 남을 수 있다.
                     ForEach(-4..<0, id: \.self) { _ in
                         HomePopularBookCard(book: nil, libraryInfo: nil)
                             .accessibilityLabel("인기 도서 자리")
@@ -388,7 +379,6 @@ private struct HomeBookCover: View {
                     }
                     .modifier(style)
             } else {
-                // 홈 카드는 전체가 상세 이동 버튼이다. 재시도는 열린 상세 화면에서 제공한다.
                 BookCoverView(
                     url: book?.imageURL,
                     isbn: book?.isbn,

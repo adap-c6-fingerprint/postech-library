@@ -1,6 +1,5 @@
 import Foundation
 
-/// 현재 앱 지도 자료만 전달한다. 상세 전용 계산이 공용 지도 경로를 덮어쓰지 않는다.
 nonisolated struct BookDetailMapContext: Equatable, Sendable {
     let map: IndoorMap?
     let navigation: IndoorNavigationData?
@@ -24,7 +23,6 @@ nonisolated struct BookDetailDestinationPresentation: Equatable, Sendable {
             return Self(holding: holding, floorText: nil, shelves: [])
         }
         let resolutions = ShelfResolver().resolve(holdings, on: map, labels: labels)
-        // 대표 소장본이 2층 삼각서가라도 3·4층 일반 서고에서 서가를 찾았으면 길안내와 같은 일반 서고를 보여 준다.
         if resolutions.first(where: { $0.holding == holding })?.area == .displayShelf {
             let general = resolutions.preferredForRoute.filter { $0.area == .generalStack && !$0.shelves.isEmpty }
             if let preferred = BookHoldingPresentation.preferred(in: general.map(\.holding)) { holding = preferred }
@@ -40,7 +38,6 @@ nonisolated struct BookDetailDestinationPresentation: Equatable, Sendable {
         if let floorText, !numbers.isEmpty {
             let suffix = numbers.count > 1 ? " (후보)" : ""
             let names = numbers.joined(separator: "·")
-            // 2층 삼각서가는 번호가 아니라 이름이라 "번 서가"를 붙이지 않는다.
             let shelfText = shelves.allSatisfy(\.isNamedShelf) ? names : "\(names)번 서가"
             return "\(floorText) \(shelfText)\(suffix)"
         }

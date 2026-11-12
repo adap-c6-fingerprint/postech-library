@@ -34,7 +34,6 @@ enum PostechStatus: String, CaseIterable, Codable, Identifiable, Sendable {
             []
         }
     }
-    // 신분별로 선택할 수 있는 학과 목록. 교직원·아카데미는 학과 선택 없음
 
     var requiresDepartment: Bool {
         !departments.isEmpty

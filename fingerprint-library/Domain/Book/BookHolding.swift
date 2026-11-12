@@ -1,6 +1,5 @@
 import Foundation
 
-/// 도서의 소장처. 서지 ID·소장 ID·지도 fixture ID는 각각 다른 식별자다.
 nonisolated struct BookHolding: Codable, Equatable, Identifiable, Sendable {
     let holdingID: String?
     let institutionCode: String?

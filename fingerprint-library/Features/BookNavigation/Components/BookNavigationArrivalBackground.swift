@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 도착 정보 뒤의 흐린 서가. 화면 크기에 맞춰 그려 외부 이미지 로딩에 의존하지 않는다.
 struct BookNavigationArrivalBackground: View {
     var body: some View {
         ZStack {

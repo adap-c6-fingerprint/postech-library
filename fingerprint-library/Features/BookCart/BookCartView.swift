@@ -161,7 +161,6 @@ struct BookCartView: View {
         .locale(Locale(identifier: "en_US"))
 }
 extension View {
-    // 책바구니 보관 한도를 넘겨 새 책을 담지 못했을 때 띄우는 팝업
     func cartLimitAlert(isPresented: Bool, onDismiss: @escaping () -> Void) -> some View {
         alert(
             "책바구니 최대 권수를 초과했어요",
@@ -177,7 +176,6 @@ extension View {
     }
 }
 
-// 피그마 책바구니 시안의 색상 토큰
 extension Color {
     static let cartCard = PobookUI.ColorPrimitive.Grayscale._800
     static let cartBackground = Color.backgroundDefault

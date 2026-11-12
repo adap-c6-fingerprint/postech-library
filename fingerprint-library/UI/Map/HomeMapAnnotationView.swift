@@ -2,7 +2,6 @@ import MapKit
 import SwiftUI
 import UIKit
 
-/// 아이콘 중심을 지도 좌표에 고정하고 시설 이름과 찜한 책 수를 표시한다.
 @MainActor
 final class HomeMapAnnotationView: MKAnnotationView {
     static let reuseID = "home-map-icon"
@@ -64,7 +63,6 @@ final class HomeMapAnnotationView: MKAnnotationView {
         let marker = annotation.marker
         iconView.image = marker.kind.assetName.flatMap(MapAnnotationImage.asset(named:))
             ?? MapAnnotationImage.symbol(named: "mappin.circle.fill", tintColor: .systemCyan)
-        // 지도 위 번호와 같이, 아이콘 아래 시설명은 고정 크기로 그린다.
         let metrics = PobookUI.Typography.caption1.metrics(for: .large, scaling: .fixed)
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .center
@@ -98,7 +96,6 @@ final class HomeMapAnnotationView: MKAnnotationView {
         } else {
             let height: CGFloat = 18
             let width = max(height, ceil(countBadge.intrinsicContentSize.width) + 8)
-            // 배지 중심을 아이콘 우측 상단(1시 30분)에 고정한다. 자릿수가 늘어도 방향은 유지한다.
             countBadge.frame = CGRect(x: bounds.maxX - width / 2, y: bounds.minY - height / 2,
                                       width: width, height: height)
             countBadge.layer.cornerRadius = height / 2

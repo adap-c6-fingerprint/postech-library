@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 서가에서 찾지 못한 책의 제목·청구기호를 직원에게 보여 줄 수 있는 안내 화면.
 struct BookNavigationBookHelpView: View {
     let info: BookNavigationBookInfo
     let hasNextStop: Bool
@@ -73,7 +72,7 @@ struct BookNavigationBookHelpView: View {
 
     private var bookCard: some View {
         let layout = dynamicTypeSize.isAccessibilitySize
-            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16)) // 이거 사실상 HStackLayout만 보여줌
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
             : AnyLayout(HStackLayout(alignment: .top, spacing: 20))
         return layout {
             BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
@@ -116,7 +115,6 @@ struct BookNavigationBookHelpView: View {
                 if hasNextStop {
                     onContinue()
                 } else {
-                    // 데스크 위치와 경로 연결 전에는 목적지나 경유지를 추가하지 않는다.
                     onDefer()
                 }
             } label: {

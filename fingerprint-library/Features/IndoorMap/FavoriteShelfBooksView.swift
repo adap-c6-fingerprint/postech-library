@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 같은 서가의 찜한 책을 기존 경로 미리보기의 탭·페이징 카드로 탐색한다.
 struct FavoriteShelfBooksView: View {
     let store: StoreOf<BookShelfMapFeature>
     let mapStore: StoreOf<IndoorMapFeature>

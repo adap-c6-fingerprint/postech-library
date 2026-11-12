@@ -31,7 +31,6 @@ struct BookSearchView: View {
             .padding(.bottom, 16)
         }
         .toolbar(.hidden, for: .navigationBar)
-        // 검색창은 탭바(role: .search)에 있으므로 내비게이션 바를 숨겨도 된다. 홈 지도 화면과 같은 방식이다.
     }
 
     private var categoryPicker: some View {
@@ -131,7 +130,6 @@ struct BookSearchView: View {
         }
         .multilineTextAlignment(.center)
         .padding(.horizontal, 24)
-        // 상단 필터와 하단 검색창 사이에서 시안의 메시지 중심을 맞춘다.
         .padding(.bottom, 96)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .combine)
@@ -146,7 +144,6 @@ struct BookSearchView: View {
                 description: Text("검색 결과에서 선택한 책이 여기에 표시돼요.")
             )
         } else {
-            // 네이티브 스와이프 삭제(.swipeActions)는 List 행에서만 동작하므로 List로 구성한다.
             List {
                 Section {
                     ForEach(store.recentBooks) { book in
@@ -160,8 +157,6 @@ struct BookSearchView: View {
                         .alignmentGuide(.listRowSeparatorLeading) { _ in 16 }
                         .alignmentGuide(.listRowSeparatorTrailing) { $0.width - 16 }
                         .listRowInsets(EdgeInsets())
-                        // listRowBackground를 직접 지정하면 스와이프 중 셀 모서리 처리가 빠져 각지게 보인다.
-                        // insetGrouped 기본 셀 배경(secondarySystemGroupedBackground)을 그대로 쓴다.
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                             Button("삭제", systemImage: "trash", role: .destructive) {
                                 store.send(.recentBookDeleted(book), animation: .default)

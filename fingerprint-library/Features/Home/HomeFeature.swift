@@ -9,30 +9,23 @@ struct HomeFeature {
         var popularBooks: [Book] = []
         var departmentRecommendations: DepartmentRecommendationsState = .loading
         @Shared(.userProfile) var userProfile: UserProfile?
-        // 앱 전체가 함께 쓰는 프로필. 온보딩·마이페이지에서 바꾼 값이 그대로 보인다.
         var displayedProfile: UserProfile?
-        // 지금 화면의 추천 목록들을 만들 때 쓴 프로필. userProfile과 다르면 목록을 새 프로필로 다시 불러온다.
         var hasSyncedProfile = false
-        // displayedProfile을 한 번이라도 기록했는지. 온보딩을 건너뛰면 기록한 프로필도 nil이라 nil만으로는 '아직 안 불러옴'과 구분되지 않는다.
         var isProfileComplete: Bool {
             guard let userProfile else { return false }
             return RecommendationDataset.AffiliationPath(key: userProfile.affiliationKey) != nil
                 && !userProfile.interests.isEmpty
         }
-        // 소속과 관심 분야를 모두 설정했는지. 아니면 학과 추천 섹션을 '맞춤 정보를 설정해 주세요' 안내로 가린다. (이슈 #396)
         var departmentName: String { userProfile?.departmentName ?? "" }
-        // "'수학과'에서 많이 빌린" 제목에 쓰는 소속 이름. 따로 복사해 두지 않고 프로필에서 바로 읽는다.
         var isRecommendationExpanded = true
         var showsKulumiCovers = false
         var isFirstVisitAfterOnboarding = false
-        // ✅ 온보딩을 마치고 처음 홈을 여는 경우 true. 학과별 추천을 하드데이터 랜덤 6권으로만 보여준다. (Q4)
         var libraryInfo: [Book.ID: LibraryInfoState] = [:]
         var libraryInfoGeneration = 0
         var libraryInfoPending: [Book.ID] = []
         var libraryInfoInFlight: Set<Book.ID> = []
         var libraryInfoUpdatedAt: [Book.ID: Date] = [:]
 
-        /// 마지막으로 연 상세 화면의 추천 표지 파일. 상세가 열려 있는 동안 캐시 정리에서 지우지 않는다.
         var openedDetailCoverURL: URL?
 
         var recommendationCount: Int {
@@ -105,11 +98,11 @@ struct HomeFeature {
 
     enum Action {
         case task
-        case recommendationSessionStarted // 당신을 위한 추천 불러오기 시작
+        case recommendationSessionStarted
         case recommendationNearEnd
         case recommendationEndReached
         case carouselPreparationFinished(UUID, Result<[Book], CarouselFailure>)
-        case retryRecommendationsButtonTapped // 추천 불러오기 실패시 재시도
+        case retryRecommendationsButtonTapped
         case recommendationsRestored(UUID, CachedRecommendations?)
         case recommendationsLoaded(UUID, CachedRecommendations)
         case popularBooksLoaded([Book])
@@ -123,7 +116,7 @@ struct HomeFeature {
         case libraryInfoLoaded(generation: Int, Book.ID, [BookHolding])
         case libraryInfoFailed(generation: Int, Book.ID)
         case libraryInfoCancelled
-        case upcomingCoversChanged( [URL] ) // 다음에 볼 표지 주소 목록이 바뀜
+        case upcomingCoversChanged( [URL] )
 
         case bookSelected(Book)
         case cartButtonTapped
@@ -135,7 +128,6 @@ struct HomeFeature {
         case recommendationsFailed(UUID, String)
         case popularBooksFailed(String)
 
-        /// 화면 이동은 App이 맡는다. 홈은 어떤 화면을 열지 요청만 한다.
         @CasePathable
         enum Delegate: Equatable {
             case showDetail(Book, cachedCoverURL: URL?)
@@ -147,12 +139,11 @@ struct HomeFeature {
     }
 
     @Dependency(\.homeRecommendationForYouClient) var homeRecommendationForYouClient
-    // 홈화면 상단 - 당신을 위한 추천 리스트
-    @Dependency(\.bookCoverClient) var bookCoverClient // 표지 URL 호출
+    @Dependency(\.bookCoverClient) var bookCoverClient
     @Dependency(\.departmentPopularBooksClient)
-    var departmentPopularBooksClient // 학과별 인기 도서
+    var departmentPopularBooksClient
 
-    @Dependency(\.bookHoldingsClient) var bookHoldingsClient // 대출가능여부
+    @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.uuid) var uuid
     @Dependency(\.analyticsClient) private var analytics
@@ -172,7 +163,6 @@ struct HomeFeature {
             switch action {
             case .task:
                 let sync = syncWithProfile(state: &state)
-                // 프로필이 바뀌었으면 먼저 예전 목록을 비운다. 아래에서 빈 목록을 새 프로필로 다시 불러온다.
                 var effects = [sync.reload]
 
                 if state.recommendedBooks.isEmpty && state.recommendationSessionID == nil {
@@ -185,11 +175,9 @@ struct HomeFeature {
                         affiliationKey: state.userProfile?.affiliationKey ?? [],
                         isInitial: state.isFirstVisitAfterOnboarding
                     ))
-                    // ✅ 최초 표시 여부를 함께 넘긴다.
                 }
 
                 return .concatenate(sync.cancel, .merge(effects))
-                // 예전 조회를 취소한 뒤에 새 조회를 시작한다.
 
             case .recommendationSessionStarted:
                 return startRecommendationSession(state: &state, mode: .restore)
@@ -251,7 +239,6 @@ struct HomeFeature {
                 state.isLoadingRecommendations = false
                 state.isPreparingRecommendations = false
                 state.nextRecommendationsSavedAt = prepared.savedAt
-                // 접속 시 미리 준비한 추천은 다음 접속에 쓰고, 스크롤로 요청한 추천은 바로 교체한다.
                 if isCarouselRefresh || state.recommendedBooks.isEmpty {
                     state.recommendedBooks = prepared.books
                     state.recommendationCoverFiles = prepared.coverFiles
@@ -358,7 +345,6 @@ struct HomeFeature {
                     state.libraryInfo[bookID] = .failed
                     state.libraryInfoUpdatedAt[bookID] = nil
                 }
-                // 서비스가 제한된 자동 재시도를 마친 실패다. 나머지 책의 조회는 계속한다.
                 return startNextLibraryInfoRequests(state: &state)
 
             case .libraryInfoCancelled:
@@ -367,7 +353,6 @@ struct HomeFeature {
             case let .upcomingCoversChanged(urls):
                 return .run { [bookCoverClient] _ in
                     await bookCoverClient.prefetch(urls)
-                    // 표지 미리 받기를 Effect로 시킴
                 }
                 
 
@@ -418,7 +403,6 @@ struct HomeFeature {
                 state.libraryInfoPending.append(book.id)
             }
         }
-        // 목록이 추가돼도 진행 중 요청의 세대와 성공 결과는 유지한다.
         if state.libraryInfoInFlight.isEmpty && !state.libraryInfoPending.isEmpty {
             state.libraryInfoGeneration += 1
         }
@@ -444,7 +428,6 @@ struct HomeFeature {
                 }
             }.cancellable(id: CancelID.libraryInfo))
         }
-        // 한 권이 완료될 때마다 다음 요청을 넣어 느린 한 권이 뒤쪽 목록을 막지 않게 한다.
         return .merge(effects)
     }
 
@@ -456,18 +439,13 @@ struct HomeFeature {
     }
 
     private func syncWithProfile(state: inout State) -> (cancel: Effect<Action>, reload: Effect<Action>) {
-    // 화면의 목록을 만들 때 쓴 프로필(displayedProfile)과 지금 프로필(userProfile)을 비교한다.
-    // 소속이 바뀌면 학과 추천을, 관심 분야가 바뀌면 '당신을 위한 추천'을 비우고 새 프로필로 다시 불러온다.
-    // cancel: 예전 프로필로 진행 중인 조회 취소. reload: 새 프로필로 바로 다시 받을 조회.
         let current = state.userProfile
         guard state.hasSyncedProfile else {
             state.hasSyncedProfile = true
             state.displayedProfile = current
-            // 처음 불러오는 경우. 목록이 아직 비어 있으므로 비울 것이 없다.
             return (.none, .none)
         }
         let previous = state.displayedProfile
-        // 온보딩을 건너뛴 상태였다면 nil이다.
         guard let current, current != previous else { return (.none, .none) }
         state.displayedProfile = current
         var cancels: [Effect<Action>] = []
@@ -488,17 +466,12 @@ struct HomeFeature {
             cancels.append(.cancel(id: CancelID.popularBooks))
             cancels.append(.cancel(id: CancelID.popularBooksPreparation))
             cancels.append(.cancel(id: CancelID.departmentRecommendations))
-            // 예전 소속으로 받던 조회가 늦게 도착해 새 목록을 덮지 않게 취소한다.
-            // 빈 목록은 각 화면의 조회(.task, departmentRecommendationsRequested)가 새 소속으로 다시 채운다.
         }
 
         if current.interests != previous?.interests {
-        // 건너뛴 뒤 마이페이지에서 프로필을 처음 만든 경우(nil → 프로필)도 여기로 와서, 하드데이터 전체로 고른 추천을 새 관심 분야로 다시 받는다.
             state.recommendedBooks = []
             state.recommendationCoverFiles = [:]
             reload = startRecommendationSession(state: &state, mode: .profileChanged)
-            // 저장해 둔 추천은 예전 관심 분야로 만든 것이라 꺼내지 않고 새로 받는다.
-            // 진행 중이던 예전 세션은 같은 취소 ID(cancelInFlight)로 자동 취소된다.
         }
         return (.merge(cancels), reload)
     }
@@ -533,22 +506,18 @@ struct HomeFeature {
             do {
                 if restoresCache {
                     let cached = await homeRecommendationForYouClient.restore(covers)
-                    // ①② 보이는 표지 지키기 + 꺼내기.
                     try Task.checkCancellation()
                     await send(.recommendationsRestored(sessionID, cached))
-                    // ③ 그대로.
                 }
                 let prepared = try await homeRecommendationForYouClient.refresh(
                     DatasetRecommendation.displayCount, covers
                 )
-                // ④⑤⑥ 새로 받기 + 0권 검사 + 저장.
                 try Task.checkCancellation()
                 await send(.recommendationsLoaded(sessionID, prepared))
             } catch is CancellationError {
                 return
             } catch HomeRecommendationForYouError.empty {
                 await send(.recommendationsFailed(sessionID, "추천 도서를 찾지 못했어요. 다시 시도해 주세요."))
-                // 추천 도서 0권일 때
             } catch {
                 guard !Task.isCancelled else { return }
                 await send(.recommendationsFailed(sessionID, "추천 도서를 준비하지 못했어요. 다시 시도해 주세요."))
@@ -604,9 +573,7 @@ struct HomeFeature {
     private func loadPopularBooks(affiliationKey: [String], isInitial: Bool) -> Effect<Action> {
         .run { [departmentPopularBooksClient] send in
             do {
-                // 프로필의 소속 경로로 같은 소속의 추천 도서를 고른다. 제목은 State.departmentName이 프로필에서 바로 읽는다.
                 let books = try await departmentPopularBooksClient.fetch(affiliationKey, 6, isInitial)
-                // ✅ 학과 이름 대신 소속 경로로 조회한다. 같은 이름의 학부·대학원 학과가 각자의 목록을 받는다.
                 try Task.checkCancellation()
                 await send(.popularBooksLoaded(books))
             } catch is CancellationError {

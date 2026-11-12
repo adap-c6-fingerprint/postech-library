@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// 화면별 동작과 접근성 문구를 받는 공통 뒤로가기 버튼. 동작이 없으면 비활성화한다.
 struct LibraryBackButton: View {
     var title = "뒤로가기"
     let identifier: String

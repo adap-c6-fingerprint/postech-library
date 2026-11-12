@@ -1,7 +1,6 @@
 import Foundation
 import CoreGraphics
 
-/// 확대 번호표는 20→19pt로 먼저 줄인 뒤 폭을 늘린다. 책등 번호표는 이미지가 정한 크기에 맞춘다.
 struct BookNavigationCallNumberLabelLayout: Equatable {
     enum Metrics {
         static let minimumWidth: CGFloat = 96
@@ -57,7 +56,6 @@ struct BookNavigationCallNumberLabelLayout: Equatable {
             let limit = maximumWidth.flatMap { $0.isFinite ? max(Metrics.minimumWidth, $0) : nil }
                 ?? naturalWidth
             selectedWidth = min(naturalWidth, limit)
-            // 화면의 공간을 다 쓴 매우 긴 기호만 추가로 축소해 세 줄의 정보를 모두 보존한다.
             selectedFont = selectedWidth < naturalWidth
                 ? Self.fittingFont(minimum: 0.01, maximum: Metrics.minimumFontSize,
                     availableWidth: selectedWidth - padding * 2, textWidth: width)

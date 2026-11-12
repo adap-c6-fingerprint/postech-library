@@ -1,6 +1,5 @@
 import Foundation
 
-/// 정보나루의 쿼리·응답 해석은 유지하고 인증·전송은 중계 Client에 맡긴다.
 nonisolated struct Data4LibraryAPIClient: Sendable {
     enum Endpoint: Sendable {
         case relatedBooks

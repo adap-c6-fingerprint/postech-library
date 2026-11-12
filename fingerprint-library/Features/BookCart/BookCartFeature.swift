@@ -12,7 +12,6 @@ struct BookCartFeature {
     struct State: Equatable {
         @Shared(.bookCart) var items
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
-        // 길안내하거나 삭제할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
         @Shared(.hasShownCartGuidanceLimitAlert) var hasShownGuidanceLimitAlert
         var isGuidanceLimitAlertPresented = false
@@ -28,7 +27,6 @@ struct BookCartFeature {
             (1...BookCartItem.maxGuidanceCount).contains(selectedCount)
         }
 
-        // 아직 책바구니에 남아 있는 선택 책만 고른 순서대로 돌려준다.
         var selectedBooks: [Book] {
             selectedIDs.compactMap { id in items.first { $0.id == id }?.book }
         }
@@ -46,14 +44,12 @@ struct BookCartFeature {
         case coverRecovered(Book.ID, URL, URL)
         case selectionToggled(Book.ID)
         case guidanceLimitAlertDismissed
-        // "안내 시작하기"를 눌러 경로 미리보기로 넘어갈 때. 마이페이지 최근 찾은 책에 기록한다.
         case guidanceLinkTapped
         case removeButtonTapped
         case removeConfirmed
         case removeAlertDismissed
         case delegate(Delegate)
 
-        /// 경로 미리보기는 App이 전체 화면으로 연다.
         @CasePathable
         enum Delegate: Equatable {
             case startGuidance([Book])
@@ -73,7 +69,6 @@ struct BookCartFeature {
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
-            // 다른 화면에서 책바구니가 바뀌었을 수 있으므로 선택 ID를 항상 저장 목록의 부분집합으로 맞춘다.
             let itemIDs = Set(state.items.map(\.id))
             state.selectedIDs.removeAll { !itemIDs.contains($0) }
 
@@ -116,9 +111,7 @@ struct BookCartFeature {
             case .guidanceLinkTapped:
                 guard state.canStartGuidance else { return .none }
                 recentlyFoundBooksClient.record(state.selectedBooks)
-                // 고른 순서대로 책장 왼쪽부터 꽂힌다.
                 bookCoverClient.prefetchSpines(state.selectedBooks.compactMap(\.isbn))
-                // 책장에 꽂히는 순간 책등을 미리 받아 둔다. 책찾기 화면과 마이페이지 책장이 로딩 없이 바로 그린다.
                 return .send(.delegate(.startGuidance(state.selectedBooks)))
 
             case .removeButtonTapped:

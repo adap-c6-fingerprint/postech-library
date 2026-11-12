@@ -1,6 +1,5 @@
 import Foundation
 
-/// 화면 수명과 별도로 완료 이미지를 보관하고, URL별 진행 중 작업을 공유한다.
 @MainActor
 final class SharedImageLoader<Image: Sendable> {
     private final class CachedImage: NSObject {
@@ -68,7 +67,6 @@ final class SharedImageLoader<Image: Sendable> {
         return image
     }
 
-    /// 전체 목록을 내려받지 않고 다음 두 표지만 같은 파이프라인으로 준비한다.
     func prefetch(_ urls: [URL]) async {
         var seen: Set<URL> = []
         let targets = urls.filter { seen.insert($0).inserted }.prefix(2)
@@ -112,7 +110,6 @@ final class SharedImageLoader<Image: Sendable> {
     }
 
     private func complete(_ result: Result<Image, Error>, url: URL, requestID: UUID) {
-        // 이전 작업이 늦게 끝나더라도 같은 URL의 새 작업을 제거하지 않는다.
         guard let request = requests[url], request.id == requestID else { return }
         requests[url] = nil
         request.cancellation?.cancel()

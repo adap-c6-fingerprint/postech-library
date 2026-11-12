@@ -8,7 +8,6 @@
 import CoreGraphics
 
 extension PobookUI {
-    /// Figma 「Spacing」 컬렉션
     enum Spacing {
         static let _4: CGFloat = 4
         static let _8: CGFloat = 8

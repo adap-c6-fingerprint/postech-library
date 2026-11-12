@@ -19,7 +19,6 @@ struct BookNavigationProgressBar: View {
                 GeometryReader { geometry in
                     let layout = makeLayout(width: geometry.size.width)
                     if layout.width > geometry.size.width + 0.5 {
-                        // 큰 글자·좁은 화면에서도 필수 문구를 자르거나 숨기지 않는다.
                         ScrollView(.horizontal) {
                             track(layout)
                         }
@@ -49,12 +48,10 @@ struct BookNavigationProgressBar: View {
 
     private func track(_ layout: BookNavigationProgressLayout) -> some View {
         ZStack(alignment: .leading) {
-            // 1. 경로 전체 배경
             Rectangle().fill(.white.opacity(0.16))
                 .frame(width: layout.trackWidth, height: trackHeight)
                 .offset(x: layout.trackStart)
 
-            // 2. 마일스톤 아래까지 끊김 없이 이어지는 진행 막대와 구간 문구
             ZStack(alignment: .leading) {
                 Rectangle().fill(BookNavigationPalette.accent)
                     .frame(width: layout.completedWidth(timeline: timeline, stopIndex: stopIndex, progress: progress),
@@ -68,7 +65,6 @@ struct BookNavigationProgressBar: View {
             }
             .frame(width: layout.width, height: rowHeight, alignment: .leading)
 
-            // 3. 진행 막대를 가리는 마일스톤·층 이동 마커
             ZStack(alignment: .leading) {
                 ForEach(layout.items) { item in
                     markerItem(item, layout: layout)

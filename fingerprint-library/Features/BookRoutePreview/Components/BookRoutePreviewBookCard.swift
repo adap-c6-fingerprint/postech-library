@@ -1,7 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-/// 선택한 책의 소장 위치·경로 정보와 소개를 보여 주는 가로 페이징 카드.
 struct BookRoutePreviewBookCard: View {
     let book: Book
     let holdings: BookShelfMapFeature.HoldingsState?
@@ -13,7 +12,6 @@ struct BookRoutePreviewBookCard: View {
     let isSelected: Bool
     let onContentAtTopChange: (Bool) -> Void
     let onRetryHoldings: () -> Void
-    // ✅ 펼친 상세 화면과 같은 책 소개·찜·책바구니 상태를 쓰도록 부모가 책별 Store를 전달한다.
     let detailStore: StoreOf<BookDetailFeature>
 
     @State private var isContentAtTop = true
@@ -39,7 +37,6 @@ struct BookRoutePreviewBookCard: View {
         self.detailStore = detailStore
     }
 
-    // ✅ 대표 소장본·위치·경로 요약은 펼친 상세 화면과 같은 계산을 사용한다.
     private var info: BookRoutePreviewBookInfo {
         BookRoutePreviewBookInfo(
             book: book, holdings: holdings, resolutions: resolutions, map: map, routePlan: routePlan)
@@ -52,7 +49,6 @@ struct BookRoutePreviewBookCard: View {
                     ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
                     : AnyLayout(HStackLayout(alignment: .top, spacing: 14))
                 layout {
-                    // ✅ 접힌 카드에서도 표지 뒤 배경 없이 이미지 모서리만 둥글게 한다.
                     BookCoverView(
                         url: book.imageURL, isbn: book.isbn,
                         imageCornerRadius: BookExpandedDetailLayout.carouselCoverCornerRadius)
@@ -77,7 +73,6 @@ struct BookRoutePreviewBookCard: View {
         }
         .accessibilityIdentifier("multiBookPreview.card.\(book.id)")
         .task {
-            // Store가 조회를 소유하므로 페이지를 넘겨도 완료된 소개를 재요청하지 않는다.
             if book.description?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty != false {
                 detailStore.send(.loadDescription)
             }
@@ -127,7 +122,6 @@ struct BookRoutePreviewBookCard: View {
     }
 }
 
-// ✅ 접힌 카드와 펼친 상세 화면이 함께 쓰는 저자·책 소개. 카드는 요약 높이를, 펼친 화면은 전문을 보여 준다.
 struct BookRoutePreviewDescription: View {
     enum Style: Equatable {
         case card(showsFullDescription: Bool)
