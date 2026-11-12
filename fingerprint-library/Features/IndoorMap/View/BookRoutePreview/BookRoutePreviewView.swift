@@ -260,12 +260,37 @@ struct BookRoutePreviewView: View {
     private var directFailure: some View {
         BookRouteFailureView(
             kind: .init(message: routeError),
+            diagnostic: failureDiagnostic,
             isRetrying: isLoadingRoute,
             onBack: { dismiss() },
             onRetry: { retryDirectNavigation() },
             onGoHome: { returnHome() },
             onAddToCart: destination.books.isEmpty ? nil : { addBooksToCart() },
             onReportProblem: { presentProblemReport() })
+    }
+
+    /// 실패 화면에 작게 보여 줄 원인 코드와 위치 상태.
+    /// 예: "E: invalidPosition · ±32m · floor 2 · 4s ago · start 41s ago"
+    private var failureDiagnostic: String {
+        let code = IndoorRoutingError.allCases.first { $0.errorDescription == routeError }
+            .map { "\($0)" } ?? "unknown"
+        var parts = ["E: \(code)"]
+        let now = Date()
+        if let mapStore, !mapStore.authorization.isAuthorized, manualStart == nil {
+            parts.append("auth \(mapStore.authorization)")
+        }
+        if let position = manualStart ?? mapStore?.currentPosition {
+            parts.append(position.horizontalAccuracy.map { "±\(Int($0.rounded()))m" } ?? "±?m")
+            parts.append(position.floorOrdinal.map { "floor \($0)" } ?? "floor nil")
+            parts.append("\(Int(now.timeIntervalSince(position.timestamp)))s ago")
+            if position.source != .sensor { parts.append("\(position.source)") }
+        } else {
+            parts.append("no position")
+        }
+        if let previewStart {
+            parts.append("start \(Int(now.timeIntervalSince(previewStart.timestamp)))s ago")
+        }
+        return parts.joined(separator: " · ")
     }
 
     /// 상세·책바구니 화면까지 닫고 홈 지도 탭으로 돌아간다.

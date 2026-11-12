@@ -15,6 +15,8 @@ struct BookRouteFailureView: View {
     }
 
     let kind: Kind
+    /// 원인 확인용 에러 코드와 위치 상태. 화면 아래에 작게 표시한다.
+    var diagnostic: String?
     var isRetrying = false
     let onBack: () -> Void
     let onRetry: () -> Void
@@ -78,6 +80,13 @@ struct BookRouteFailureView: View {
                     .typography(.body2)
                     .foregroundStyle(DS.ColorToken.neutralTertiary)
                     .accessibilityIdentifier("route-failure-message")
+                if let diagnostic {
+                    Text(diagnostic)
+                        .font(.caption2.monospaced())
+                        .foregroundStyle(DS.ColorToken.neutralTertiary.opacity(0.7))
+                        .textSelection(.enabled)
+                        .accessibilityIdentifier("route-failure-code")
+                }
             }
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
