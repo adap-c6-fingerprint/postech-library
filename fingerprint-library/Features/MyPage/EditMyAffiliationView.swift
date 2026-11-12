@@ -133,6 +133,7 @@ struct EditMyAffiliationView: View {
             Image(systemName: "chevron.right")
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(foreground)
+                .accessibilityHidden(true)
         }
         .padding(.leading, 20)
         .padding(.trailing, 23)

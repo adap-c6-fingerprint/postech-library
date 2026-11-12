@@ -325,9 +325,9 @@ struct OnboardingView: View {
             VStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("맞춤 정보 설정을 건너뛰었어요.")
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.body.weight(.semibold))
                     Text("마이페이지에서 언제든지\n다시 설정할 수 있어요.")
-                        .font(.system(size: 17))
+                        .font(.body)
                 }
                 .foregroundStyle(.black)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -340,7 +340,7 @@ struct OnboardingView: View {
                     store.send(.skipNoticeConfirmed)
                 } label: {
                     Text("확인했어요")
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
                         .frame(height: 48)
@@ -411,6 +411,7 @@ struct OnboardingView: View {
             Image(systemName: "chevron.right")
                 .font(.system(size: 14, weight: .medium))
                 .foregroundStyle(foreground)
+                .accessibilityHidden(true)
         }
         .padding(.leading, 20)
         .padding(.trailing, 23)
@@ -468,7 +469,7 @@ struct OnboardingView: View {
             }
         } label: {
             Text(actionTitle(step))
-                .font(.system(size: 17, weight: .semibold))
+                .font(.body.weight(.semibold))
                 .foregroundStyle(isPrimary ? Color.cartBackground : Color.onboardingTextPrimary)
                 .frame(maxWidth: .infinity)
                 .frame(minHeight: 52)

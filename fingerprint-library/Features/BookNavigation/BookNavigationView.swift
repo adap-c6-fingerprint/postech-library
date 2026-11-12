@@ -191,6 +191,7 @@ struct BookNavigationView: View {
                         .font(.system(size: 14, weight: .semibold))
                         .frame(width: 23, height: 23)
                         .background(.black, in: Circle())
+                        .accessibilityHidden(true)
                     Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
                         .typography(.body1).lineLimit(2)
                         .foregroundStyle(PobookUI.ColorToken.neutralPrimary)

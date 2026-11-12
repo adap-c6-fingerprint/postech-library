@@ -440,12 +440,12 @@ private struct HomePopularBookCard: View {
             
             if let book {
                 Text(BookText.plainText(book.title))
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.callout.weight(.semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
                 
                 Text(BookText.plainText(book.author))
-                    .font(.system(size: 12))
+                    .font(.caption)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
             } else {
@@ -483,13 +483,13 @@ private struct HomePopularBookCard: View {
                     Text("대출 정보 없음").foregroundStyle(.secondary)
                 }
             }
-            .font(.system(size: 12))
+            .font(.caption)
         case .failed, .unavailable:
             VStack(alignment: .leading, spacing: 8) {
                 Text("소장 정보 확인 불가")
                 Text("대출 상태 확인 필요")
             }
-            .font(.system(size: 12))
+            .font(.caption)
             .foregroundStyle(.secondary)
         }
     }

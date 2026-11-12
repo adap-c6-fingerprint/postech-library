@@ -2,6 +2,7 @@ import SwiftUI
 
 /// 지도 위에 화면 폭으로 붙는 길안내 시트. 시스템 모달의 바깥 여백을 사용하지 않는다.
 struct BookNavigationBottomSheet<Content: View>: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Binding var isExpanded: Bool
     let height: CGFloat
     let bottomInset: CGFloat
@@ -34,6 +35,7 @@ struct BookNavigationBottomSheet<Content: View>: View {
     }
 
     private func setExpanded(_ expanded: Bool) {
-        withAnimation(.easeInOut(duration: 0.25)) { isExpanded = expanded }
+        // 동작 줄이기를 켜면 높이를 움직이지 않고 바로 바꾼다.
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) { isExpanded = expanded }
     }
 }

@@ -81,7 +81,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
 
     private func placeholder(_ symbol: String, text: String) -> some View {
         VStack(spacing: 4) {
-            Image(systemName: symbol).font(.title2)
+            Image(systemName: symbol).font(.title2).accessibilityHidden(true)
             Text(text).font(.caption2)
         }
         .foregroundStyle(.secondary)

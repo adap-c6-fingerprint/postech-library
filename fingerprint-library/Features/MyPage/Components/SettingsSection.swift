@@ -49,6 +49,7 @@ struct SettingsSection: View {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundStyle(Color.textPrimary)
+                    .accessibilityHidden(true)
             }
             .frame(minHeight: 52)
             .contentShape(.rect)
