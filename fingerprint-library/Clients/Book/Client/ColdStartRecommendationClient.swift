@@ -81,3 +81,7 @@ nonisolated enum ColdStartRecommendationService {
         return result
     }
 }
+
+nonisolated enum RecommendationClientError: Error, Equatable {
+    case noInterests
+}
