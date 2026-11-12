@@ -541,7 +541,7 @@ struct BookRoutePreviewView: View {
         guard let book = orderedBooks.first,
               let shelf = destinationStore?.state.shelves(for: book.id).first else { return nil }
         let floorName = routeMap?.floors.first { $0.id == shelf.floorID }?.name
-        return [floorName, "\(shelf.realNumber)번 서가"].compactMap { $0 }.joined(separator: " ")
+        return [floorName, shelf.shelfTitle].compactMap { $0 }.joined(separator: " ")
     }
 
     /// 목적지 서가와 같은 층에서 시작해 사용자가 층을 덜 바꾸게 한다.
@@ -584,7 +584,7 @@ struct BookRoutePreviewView: View {
                 .disabled(isLoadingRoute || currentStart == nil)
             }
             if let previewSession {
-                Text("현재 위치 → " + previewSession.stops.map { "\($0.shelf.realNumber)-\($0.shelf.side.rawValue)" }.joined(separator: " → "))
+                Text("현재 위치 → " + previewSession.stops.map { $0.shelf.faceTitle }.joined(separator: " → "))
                     .font(.caption).foregroundStyle(.secondary)
             }
             layout {
@@ -692,12 +692,12 @@ struct BookRoutePreviewView: View {
                                     .font(.caption).foregroundStyle(.secondary)
                                 holdingInformation(for: book)
                                 ForEach(shelves) { shelf in
-                                    Text("\(shelves.count > 1 ? "후보 서가" : "서가") \(shelf.realNumber)-\(shelf.side.rawValue)")
+                                    Text("\(shelves.count > 1 ? "후보 서가" : "서가") \(shelf.faceTitle)")
                                         .font(.caption.bold()).foregroundStyle(.orange)
                                 }
                                 if let stop = readySession?.stops.first(where: { $0.book.id == book.id }),
                                    stop.candidateShelves.count > 1 {
-                                    Text("안내 목적지: \(stop.shelf.realNumber)-\(stop.shelf.side.rawValue) · 도착 후 두 서가를 확인해 주세요")
+                                    Text("안내 목적지: \(stop.shelf.faceTitle) · 도착 후 두 서가를 확인해 주세요")
                                         .font(.caption).foregroundStyle(.secondary)
                                         .fixedSize(horizontal: false, vertical: true)
                                 }

@@ -53,6 +53,27 @@ nonisolated struct BundledShelfLabelLoader {
             return .init(fixtureNumber: row.fixtureNumber, realNumber: row.realNumber, side: row.side,
                          sequence: row.sequence, floorID: floors[0].id, mapElementID: fixture.id,
                          geometry: fixture.geometry, content: content)
+        } + Self.namedShelfLabels(on: map)
+    }
+
+    /// 색인 파일에 없는 2층 서가를 도면 fixture 이름에서 직접 만든다.
+    ///
+    /// 이름 규칙은 "S-2F-<서가 이름>"이고 A/B 면 구분이 없다. 화면에는 접두사를 뺀 이름만 쓴다.
+    /// 청구기호 범위가 아니라 분류 이름이므로 범위 검색(``BookShelfRangeMatcher``)에는 걸리지 않는다.
+    static func namedShelfLabels(on map: IndoorMap, floorOrdinal: Int = 1,
+                                 prefix: String = "S-2F-") -> [IndoorShelfLabel] {
+        guard let floor = map.floors.first(where: { $0.ordinal == floorOrdinal }) else { return [] }
+        let fixtures = map.features
+            .filter { $0.kind == .fixture && $0.floorID == floor.id && $0.name?.hasPrefix(prefix) == true }
+            .sorted { ($0.name ?? "") < ($1.name ?? "") }
+        return fixtures.enumerated().compactMap { offset, fixture in
+            guard let name = fixture.name else { return nil }
+            let display = String(name.dropFirst(prefix.count)).trimmingCharacters(in: .whitespaces)
+            guard !display.isEmpty else { return nil }
+            return IndoorShelfLabel(
+                fixtureNumber: name, realNumber: display, side: .a, sequence: offset,
+                floorID: floor.id, mapElementID: fixture.id, geometry: fixture.geometry,
+                content: .category(display))
         }
     }
 

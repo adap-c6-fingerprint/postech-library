@@ -24,7 +24,7 @@ struct BookNavigationCurrentBookCard: View {
                         .foregroundStyle(DS.ColorToken.neutralPrimary)
                         .accessibilityIdentifier("book-navigation-current-title")
                         .padding(.bottom, 12)
-                    Text("\(info.floorName ?? "층 확인 필요") \(info.shelf.realNumber)번 서가")
+                    Text("\(info.floorName ?? "층 확인 필요") \(info.shelf.shelfTitle)")
                         .typography(.body2.weight(.medium)).lineLimit(2)
                         .accessibilityIdentifier("book-navigation-current-shelf")
                     Text(info.callNumbers.isEmpty ? "청구기호 확인 필요" : info.callNumbers.joined(separator: " · "))
