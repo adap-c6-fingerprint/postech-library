@@ -110,14 +110,3 @@ extension DepartmentPopularBooksClient {
         }, fetchAll: fetchAll)
     }
 }
-
-// nonisolated enum DepartmentPopularBooksError: LocalizedError, Equatable {
-//     case missingAffiliation
-//
-//     var errorDescription: String? {
-//         switch self {
-//         case .missingAffiliation: "소속 정보가 없어요. 온보딩에서 소속을 다시 골라주세요."
-//         }
-//     }
-// }
-// ↑ 소속이 없어도 하드데이터 전체에서 랜덤 20권을 쓰게 되어 더 이상 던지지 않는다. 주석으로 남겨 둔다. (이슈 #396)

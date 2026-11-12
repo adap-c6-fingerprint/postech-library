@@ -68,10 +68,6 @@ final class SharedImageLoader<Image: Sendable> {
         return image
     }
 
-    func removeCachedImages() {
-        cache.removeAllObjects()
-    }
-
     /// 전체 목록을 내려받지 않고 다음 두 표지만 같은 파이프라인으로 준비한다.
     func prefetch(_ urls: [URL]) async {
         var seen: Set<URL> = []

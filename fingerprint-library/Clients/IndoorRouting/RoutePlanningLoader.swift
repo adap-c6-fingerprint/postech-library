@@ -1,15 +1,6 @@
 import CryptoKit
 import Foundation
 
-nonisolated struct BookRoutePreviewTestRoute: Equatable, Sendable {
-    let origin: IndoorShelfLabel
-    let destination: IndoorShelfLabel
-    let start: IndoorPosition
-    let route: IndoorRoute
-    let guidance: RoutePreviewGuidance
-    let graph: RoutingGraph
-}
-
 /// 번들의 길찾기 자료를 읽고 검증해 서가 후보와 도착 노드를 연결한 뒤, RoutePlanner로 경로 계획을 만든다.
 nonisolated struct RoutePlanningLoader {
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [RouteCandidateStop],
@@ -70,59 +61,6 @@ nonisolated struct RoutePlanningLoader {
         return .init(map: map, shelfLabels: labels, navigation: navigation, start: start, stops: stops)
     }
 
-    /// 기존 단일 서가 호출도 동일한 후보 계산을 사용한다.
-    func load(on map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [RouteStop],
-              in bundle: Bundle = .main) async throws -> RoutePlan {
-        let candidates = await MainActor.run { stops.map(\.candidateStop) }
-        return try await load(on: map, labels: labels, start: start, stops: candidates, in: bundle)
-    }
-
-    @concurrent
-    func load(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
-              start: IndoorPosition, stops: [RouteStop]) async throws -> RoutePlan {
-        let candidates = await MainActor.run { stops.map(\.candidateStop) }
-        return try await load(directory: directory, on: map, labels: labels, start: start, stops: candidates)
-    }
-    
-    /// 카메라·경로 회귀 테스트용 고정 출발점. 앱의 도서 길안내에서는 호출하지 않는다.
-    func load(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,
-              in bundle: Bundle = .main) async throws -> BookRoutePreviewTestRoute {
-        guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
-            throw IndoorMapLoadError.missingResource("IndoorMaps/POSTECHLibrary")
-        }
-        return try await load(directory: root.appendingPathComponent("POSTECHLibrary"),
-                              on: map, labels: labels, destination: destination)
-    }
-    
-    @concurrent
-    func load(directory: URL, on map: IndoorMap, labels: [IndoorShelfLabel],
-              destination: IndoorShelfLabel) async throws -> BookRoutePreviewTestRoute {
-        let pinned = try await BundledIndoorMapLoader().load(directory: directory.appendingPathComponent("IMDFData"))
-        guard pinned == map else { throw invalid("navigation.json", "현재 지도와 번들 도면이 다릅니다.") }
-        return try build(on: map, labels: labels, destination: destination,
-                         metadata: read("navigation.json", at: directory),
-                         graph: read("routing-graph.geojson", at: directory),
-                         links: read("navigation-feature-links.json", at: directory))
-    }
-    
-    func build(on map: IndoorMap, labels: [IndoorShelfLabel], destination: IndoorShelfLabel,
-               metadata: Data, graph graphData: Data, links linkData: Data,
-               origin previousShelf: IndoorShelfLabel? = nil) throws -> BookRoutePreviewTestRoute {
-        let prepared = try prepareNavigation(on: map, metadata: metadata, graph: graphData, links: linkData)
-        let fixed = try fixedOrigin(on: map, labels: labels)
-        let origin = previousShelf ?? fixed
-        let goal = try self.destination(for: destination, labels: labels, nodes: prepared.nodes)
-        let start = try position(at: origin, labels: labels, nodes: prepared.nodes)
-        let navigation = IndoorNavigationData(
-            graph: prepared.graph,
-            shelves: .init(datasetID: goal.key.datasetID, mode: .library, destinations: [goal]),
-            diagnostics: prepared.diagnostics, transitionDistances: prepared.transitionDistances
-        )
-        let route = try RoutePlanner().route(from: start, to: goal.key, in: navigation)
-        return .init(origin: origin, destination: destination, start: start, route: route,
-                     guidance: try RoutePreviewGuidance(route: route, graph: prepared.graph), graph: prepared.graph)
-    }
-
     private func prepareNavigation(on map: IndoorMap, metadata: Data, graph graphData: Data, links linkData: Data)
         throws -> (graph: RoutingGraph, diagnostics: RoutingGraphDiagnostics, nodes: [IndoorMapElement.ID: RouteNode],
                    transitionDistances: [String: RouteEdgeDistance]) {
@@ -154,17 +92,6 @@ nonisolated struct RoutePlanningLoader {
         })
     }
 
-    private func fixedOrigin(on map: IndoorMap, labels: [IndoorShelfLabel]) throws -> IndoorShelfLabel {
-        let matches = labels.filter { shelf in
-            shelf.realNumber == "311" && shelf.side == .b
-                && map.floors.first(where: { $0.id == shelf.floorID })?.ordinal == 2
-        }
-        guard matches.count == 1, let origin = matches.first else {
-            throw invalid("navigation-feature-links.json", "3층 311-B와 목적지의 명시적 노드 연결이 필요합니다.")
-        }
-        return origin
-    }
-
     private func destination(for shelf: IndoorShelfLabel, labels: [IndoorShelfLabel],
                              nodes: [IndoorMapElement.ID: RouteNode]) throws -> ShelfDestination {
         guard labels.contains(shelf), let node = nodes[shelf.mapElementID] else {
@@ -174,15 +101,6 @@ nonisolated struct RoutePlanningLoader {
                      name: "\(shelf.realNumber)-\(shelf.side.rawValue)", floorID: shelf.floorID,
                      mapElementID: shelf.mapElementID, geometry: shelf.geometry,
                      arrivalNodeID: node.id, arrivalCoordinate: node.coordinate)
-    }
-
-    private func position(at shelf: IndoorShelfLabel, labels: [IndoorShelfLabel],
-                          nodes: [IndoorMapElement.ID: RouteNode]) throws -> IndoorPosition {
-        guard labels.contains(shelf), let node = nodes[shelf.mapElementID] else {
-            throw invalid("navigation-feature-links.json", "3층 311-B와 목적지의 명시적 노드 연결이 필요합니다.")
-        }
-        return .init(coordinate: node.coordinate, floorOrdinal: node.level,
-                     horizontalAccuracy: nil, timestamp: Date(), source: .manual)
     }
 
     /// 이 묶음의 ordinal은 실제 층 번호다. UUID·descriptor와 대조한 노드만 현재 IMDF ordinal로 변환한다.

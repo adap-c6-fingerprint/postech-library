@@ -57,7 +57,6 @@ struct BookDetailFeature {
         // 연관 도서
         var relatedBooksState: RelatedBooksState = .idle
         var holdingsState: HoldingsState = .idle
-        var routeSummary: BookRouteSummary = .mock
         var mapContext: BookDetailMapContext?
         var destinationPresentation: BookDetailDestinationPresentation?
         var destinationRouteState: DestinationRouteState = .idle
@@ -95,7 +94,6 @@ struct BookDetailFeature {
         case retryHoldingsButtonTapped
         case holdingsLoaded([BookHolding])
         case holdingsFailed
-        case routeSummaryUpdated(BookRouteSummary)
         case mapContextChanged(BookDetailMapContext)
         case destinationRouteLoaded(requestID: Int, BookDetailRoutePresentation)
         case destinationRouteFailed(requestID: Int)
@@ -195,10 +193,6 @@ struct BookDetailFeature {
             case let .destinationRouteFailed(requestID):
                 guard requestID == state.destinationRouteRequestID else { return .none }
                 state.destinationRouteState = .unavailable
-                return .none
-
-            case let .routeSummaryUpdated(summary):
-                state.routeSummary = summary
                 return .none
 
             case .loadDescription:

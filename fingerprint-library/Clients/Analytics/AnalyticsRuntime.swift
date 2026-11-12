@@ -192,23 +192,6 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
         }
     }
 
-    #if DEBUG
-    var canRecordDiagnosticTest: Bool {
-        synchronized {
-            configured && storedConsent.diagnostics && defaults.bool(forKey: Self.diagnosticEligibilityKey)
-        }
-    }
-    func recordDiagnosticTest() {
-        synchronized {
-            guard canRecordDiagnosticTest else { return }
-            Crashlytics.crashlytics().record(error: NSError(
-                domain: "PoBook.DiagnosticTest", code: 267,
-                userInfo: [NSLocalizedDescriptionKey: "User requested a nonfatal diagnostic test"]
-            ))
-        }
-    }
-    #endif
-
     func updateProfile(_ profile: UserProfile?) {
         let revision: Int? = synchronized {
             guard configured, storedConsent.analytics else { return nil }

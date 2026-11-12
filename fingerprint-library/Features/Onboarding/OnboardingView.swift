@@ -17,8 +17,6 @@ struct OnboardingView: View {
     // ✅ 칩 영역(ScrollView) 기준 좌표계 이름
     @State private var chipViewportHeight: CGFloat = .infinity
     // ✅ 칩 영역의 보이는 높이
-    private static let termsHeaderTopPadding: CGFloat = 32
-    // ✅ 약관 동의 화면 제목 위 여백. 피그마 제목 위치(163)에 맞춘 값 (소속 38 ↔ 168.59 기준)
     private static let affiliationHeaderTopPadding: CGFloat = 46
     private static let interestsHeaderTopPadding: CGFloat = 30
     // ✅ push된 화면 제목 위 여백. 내비게이션 바 아래에서 피그마 제목 위치(소속 176.59, 선호 분류 160.6)에 오도록 맞춘 값
@@ -566,7 +564,6 @@ private extension Color {
     static let onboardingActionTint = PobookUI.ColorToken.Field.actionTint
     static let onboardingDisabledField = PobookUI.ColorToken.Field.disabledBackground
     static let onboardingDisabledText = PobookUI.ColorToken.Field.disabledText
-    static let onboardingTermsLink = PobookUI.ColorPrimitive.Grayscale._600
     static let onboardingTextLink = PobookUI.ColorPrimitive.Grayscale._300
 }
 
