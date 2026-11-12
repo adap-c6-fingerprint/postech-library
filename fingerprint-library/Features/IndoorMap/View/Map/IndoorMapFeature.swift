@@ -319,7 +319,8 @@ struct IndoorMapFeature {
                     state.wantsRecenter = true
                     return .run { _ in await locationClient.requestPermission() }
                 case .denied:
-                    state.locationMessage = "위치 권한이 꺼져 있어요. 설정에서 위치 접근을 허용해주세요."
+                    // 권한을 거절한 사용자에게 홈 지도 위 경고 문구를 띄우지 않는다.
+                    break
                 case .restricted:
                     state.locationMessage = "기기 설정에서 위치 접근이 제한되어 있어요."
                 case .servicesDisabled:
