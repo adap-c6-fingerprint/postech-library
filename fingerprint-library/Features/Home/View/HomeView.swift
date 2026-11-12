@@ -32,7 +32,7 @@ struct HomeView: View {
         var spacing: CGFloat { self == .expanded ? 22 : 16 }
         var horizontalInset: CGFloat { self == .expanded ? 66 : 48 }
         var bottomInset: CGFloat { self == .expanded ? 22 : 14 }
-        static let shelfHeight: CGFloat = 54
+        static let shelfHeight = RecommendationShelfView.thinHeight
         var shelfWidth: CGFloat? { self == .standard ? 707 : nil }
         var carouselHeight: CGFloat { coverHeight + bottomInset }
     }
@@ -222,13 +222,7 @@ struct HomeView: View {
         ))
         .frame(height: recommendationLayout.carouselHeight)
         .overlay(alignment: .bottomLeading) {
-            RecommendationShelfView(
-                height: RecommendationLayout.shelfHeight,
-                width: recommendationLayout.shelfWidth,
-                fillOpacity: 0.5,
-                fixedBoltSize: 17.08,
-                cornerRadius: RecommendationShelfView.recommendationCornerRadius
-            )
+            RecommendationShelfView.thin(width: recommendationLayout.shelfWidth)
             .padding(.leading, RecommendationShelfView.leadingInset)
         }
         .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
@@ -356,7 +350,8 @@ struct HomeView: View {
         return ScrollView(.horizontal) {
             LazyHStack(alignment: .top, spacing: spacing) {
                 if books.isEmpty {
-                    ForEach(0..<4, id: \.self) { _ in
+                    // 실제 책의 인덱스와 겹치면 목록을 받은 뒤에도 임시 카드가 남을 수 있다.
+                    ForEach(-4..<0, id: \.self) { _ in
                         HomePopularBookCard(book: nil, libraryInfo: nil)
                             .accessibilityLabel("인기 도서 자리")
                     }

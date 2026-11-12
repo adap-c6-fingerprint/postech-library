@@ -56,6 +56,7 @@ struct BookSearchFeature {
         case recentBookInfoLoaded(generation: Int, Book.ID, [BookHolding])
         case recentBookInfoFailed(generation: Int, Book.ID)
         case recentBookInfoCancelled
+        case recentBookDeleted(Book)
         case queryChanged(String)
         case categoryChanged(BookSearchCategory)
         case searchCancelled
@@ -146,6 +147,12 @@ struct BookSearchFeature {
             case .recentBookInfoCancelled:
                 state.recentBookInfoGeneration += 1
                 return .cancel(id: CancelID.recentBookInfo)
+
+            case let .recentBookDeleted(book):
+                recentSearchBooksClient.remove(book)
+                state.recentBooks = recentSearchBooksClient.load()
+                state.recentBookInfo[book.id] = nil
+                return .none
 
             case let .favoriteButtonTapped(book):
                 state.favoriteBookKeys = bookFavoritesClient.load()
