@@ -14,7 +14,7 @@ struct BookCartFeature {
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
         // 길안내하거나 삭제할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
-        @Shared(.appStorage("hasShownCartGuidanceLimitAlert")) var hasShownGuidanceLimitAlert = false
+        @Shared(.hasShownCartGuidanceLimitAlert) var hasShownGuidanceLimitAlert
         var isGuidanceLimitAlertPresented = false
         var isRemoveAlertPresented = false
 

@@ -5,7 +5,7 @@
 //  Created by 이시온 on 10/27/26.
 //
 //  사용자 프로필: 온보딩에서 고른 소속·학과와 관심 분야.
-//  앱 전체에 이 값이 하나만 있다(single source of truth). 저장 위치는 Clients/User/UserProfileStorage.swift의
+//  앱 전체에 이 값이 하나만 있다(single source of truth). 저장 위치는 SharedState/UserProfileSharedKeys.swift의
 //  `@Shared(.userProfile)`이며, 온보딩·마이페이지·홈·추천이 모두 그 하나를 함께 읽고 쓴다.
 //
 
