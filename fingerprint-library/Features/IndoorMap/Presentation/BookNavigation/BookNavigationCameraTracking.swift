@@ -1,12 +1,5 @@
 import Foundation
 
-/// 길안내 카메라에 함께 보여 줄 현재 위치와 다음 안내 구간.
-nonisolated struct BookNavigationCameraFocus: Equatable, Sendable {
-    let floorID: UUID
-    let coordinates: [IndoorMapCoordinate]
-    let minimumSpanMeters: Double
-}
-
 /// 이미 검증된 안내 진행을 화면 범위로 바꾼다. 위치 판정이나 경로 계산은 하지 않는다.
 nonisolated struct BookNavigationCameraTracking: Equatable, Sendable {
     // 실내 지도 표시용 기본값. 디자인·현장 확인 후 조정할 수 있다.
