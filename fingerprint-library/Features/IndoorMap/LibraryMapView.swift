@@ -104,12 +104,6 @@ struct LibraryMapView: View {
                 FavoriteShelfBooksView(store: shelfStore, mapStore: mapStore)
             }
             .navigationDestination(
-                item: $searchStore.scope(state: \.shelfMap, action: \.shelfMap)
-            ) { shelfMapStore in
-                BookShelfMapView(store: shelfMapStore)
-                    .toolbar(.visible, for: .navigationBar)
-            }
-            .navigationDestination(
                 item: $searchStore.scope(state: \.myPage, action: \.myPage)
             ) { myPageStore in
                 MyPageView(store: myPageStore, mapStore: mapStore)

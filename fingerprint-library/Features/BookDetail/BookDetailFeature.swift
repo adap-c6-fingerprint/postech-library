@@ -45,7 +45,6 @@ struct BookDetailFeature {
         @Shared(.favoriteBookKeys) var favoriteBookKeys
         var isFavorite: Bool { favoriteBookKeys.contains(book.recordKey) }
         var sourceFavoriteMarkerID: String?
-        @Presents var shelfMap: BookShelfMapFeature.State?
 
         // 책 소개
         var description: BookDescription? = nil
@@ -90,8 +89,6 @@ struct BookDetailFeature {
         case relatedBooksLoaded([Book])
         case relatedBooksFailed(String)
 
-        case directionsButtonTapped
-        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         case loadHoldings
         case retryHoldingsButtonTapped
         case holdingsLoaded([BookHolding])
@@ -107,15 +104,8 @@ struct BookDetailFeature {
         case cartShortcutTapped
         case cart(PresentationAction<BookCartFeature.Action>)
         case cartLimitAlertDismissed
-        case startGuidanceButtonTapped
-        case guidanceStarted
         // "바로 안내 시작"으로 경로 미리보기를 열 때. 마이페이지 최근 찾은 책에 기록한다.
-        case delegate(Delegate)
-
-        @CasePathable
-        enum Delegate: Equatable {
-            case startGuidance(Book)
-        }
+        case guidanceStarted
     }
 
     @Dependency(\.bookDetailClient)
@@ -151,18 +141,6 @@ struct BookDetailFeature {
                     .bookRecordID: .text(AnalyticsEvent.bookID(state.book)),
                     .action: .text(isFavorite ? "added" : "removed")
                 ]))
-                return .none
-
-            case .directionsButtonTapped:
-                var destination = BookShelfMapFeature.State(book: state.book)
-                // 상세에서 받은 전체 소장처를 지도에 전달해 위치 후보를 보존한다.
-                if case let .loaded(holdings) = state.holdingsState {
-                    destination.holdings[state.book.id] = .loaded(holdings)
-                }
-                state.shelfMap = destination
-                return .none
-
-            case .shelfMap:
                 return .none
 
             case .loadHoldings:
@@ -284,22 +262,14 @@ struct BookDetailFeature {
 
                 return .none
 
-            case .startGuidanceButtonTapped:
-                // 책바구니를 거치지 않고 이 책 1권으로 길안내를 시작한다.
-                return .send(.delegate(.startGuidance(state.book)))
-
             case .guidanceStarted:
                 recentlyFoundBooksClient.record([state.book])
                 // 책바구니를 거치지 않은 1권도 최근 찾은 책 책장 맨 왼쪽에 꽂힌다.
                 bookCoverClient.prefetchSpines([state.book.isbn].compactMap { $0 })
                 // 책장에 꽂히는 순간 책등을 미리 받아 둔다. 책찾기 화면과 마이페이지 책장이 로딩 없이 바로 그린다.
                 return .none
-
-            case .delegate:
-                return .none
             }
         }
-        .ifLet(\.$shelfMap, action: \.shelfMap) { BookShelfMapFeature() }
         .ifLet(\.$cart, action: \.cart) { BookCartFeature() }
     }
 

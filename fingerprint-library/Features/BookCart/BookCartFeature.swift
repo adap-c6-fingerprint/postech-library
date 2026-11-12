@@ -45,20 +45,12 @@ struct BookCartFeature {
         case libraryInfoLoaded(Book.ID, [BookHolding])
         case coverRecovered(Book.ID, URL, URL)
         case selectionToggled(Book.ID)
-        case startGuidanceButtonTapped
         case guidanceLimitAlertDismissed
         // "안내 시작하기"를 눌러 경로 미리보기로 넘어갈 때. 마이페이지 최근 찾은 책에 기록한다.
         case guidanceLinkTapped
         case removeButtonTapped
         case removeConfirmed
         case removeAlertDismissed
-        case delegate(Delegate)
-
-        @CasePathable
-        enum Delegate: Equatable {
-            // 목적 서가 확인 및 경로 미리보기 화면으로 넘길 책
-            case startGuidance([Book])
-        }
     }
 
     @Dependency(\.analyticsClient) private var analytics
@@ -110,10 +102,6 @@ struct BookCartFeature {
                 }
                 return .none
 
-            case .startGuidanceButtonTapped:
-                guard state.canStartGuidance else { return .none }
-                return .send(.delegate(.startGuidance(state.selectedBooks)))
-
             case .guidanceLimitAlertDismissed:
                 state.isGuidanceLimitAlertPresented = false
                 return .none
@@ -143,9 +131,6 @@ struct BookCartFeature {
 
             case .removeAlertDismissed:
                 state.isRemoveAlertPresented = false
-                return .none
-
-            case .delegate:
                 return .none
             }
         }

@@ -32,14 +32,10 @@ struct BookSearchFeature {
         var errorMessage: String? = nil
         var hasSearched: Bool = false
         
-        @Shared(.bookCart) var cartItems
-        var cartBooks: [Book] { cartItems.map(\.book) }
-        var isCartLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
         @Presents var favoriteShelf: BookShelfMapFeature.State?
         @Presents var cart: BookCartFeature.State?
         @Presents var favorites: BookFavoritesFeature.State?
-        @Presents var shelfMap: BookShelfMapFeature.State?
         @Presents var myPage: MyPageFeature.State?
     }
     
@@ -66,23 +62,17 @@ struct BookSearchFeature {
         case searchSucceeded(generation: Int, books: [Book])
         case searchFailed(generation: Int, message: String)
         case favoriteButtonTapped(Book)
-        
-        case addToCart(Book)
+
         case cartButtonTapped
         case favoritesButtonTapped
         case favorites(PresentationAction<BookFavoritesFeature.Action>)
         case profileButtonTapped
         case myPage(PresentationAction<MyPageFeature.Action>)
         case cart(PresentationAction<BookCartFeature.Action>)
-        case cartLimitAlertDismissed
-        case removeFromCart(Set<Book.ID>)
         case bookSelected(Book)
         case favoriteMarkerTapped(HomeMapMarker)
         case favoriteShelf(PresentationAction<BookShelfMapFeature.Action>)
         case detail(PresentationAction<BookDetailFeature.Action>)
-        case directionsButtonTapped(Book)
-        case cartDirectionsButtonTapped(Set<Book.ID>)
-        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         case delegate(Delegate)
 
         enum Delegate {
@@ -188,16 +178,8 @@ struct BookSearchFeature {
                 state.detail = BookDetailFeature.State(book: book)
                 return .none
 
-            case let .detail(.presented(.delegate(.startGuidance(book)))):
-                state.shelfMap = BookShelfMapFeature.State(book: book)
-                return .none
-
             case .cartButtonTapped:
                 state.cart = BookCartFeature.State()
-                return .none
-
-            case let .cart(.presented(.delegate(.startGuidance(books)))):
-                state.shelfMap = BookShelfMapFeature.State(books: books)
                 return .none
 
             case .favoritesButtonTapped:
@@ -209,35 +191,6 @@ struct BookSearchFeature {
                 return .none
 
             case .detail, .cart, .favorites, .myPage:
-                return .none
-
-            case .directionsButtonTapped(let book):
-                state.shelfMap = BookShelfMapFeature.State(book: book)
-                return .none
-
-            case .cartDirectionsButtonTapped(let bookIDs):
-                let books = state.cartBooks.filter { bookIDs.contains($0.id) }
-                guard books.count == bookIDs.count,
-                      let shelfMap = BookShelfMapFeature.State(books: books) else { return .none }
-                state.shelfMap = shelfMap
-                return .none
-
-            case .shelfMap:
-                return .none
-                
-            case let .addToCart(book):
-                let result = state.$cartItems.withLock { $0.add(book, at: now) }
-                if result == .added {
-                    analytics.record(.init(.cartBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
-                }
-                if result == .limitExceeded {
-                    analytics.record(.init(.cartLimitBlocked, [.kind: .text("capacity")]))
-                    state.isCartLimitAlertPresented = true
-                }
-                return .none
-
-            case .cartLimitAlertDismissed:
-                state.isCartLimitAlertPresented = false
                 return .none
 
             case let .queryChanged(query):
@@ -329,19 +282,6 @@ struct BookSearchFeature {
                     .operationID: .text(state.analyticsOperation), .errorCode: .text("request_failed")
                 ]))
                 return .none
-                
-            case let .removeFromCart(bookIDs):
-                let removedKeys = Set(
-                    state.cartBooks.filter { bookIDs.contains($0.id) }.map(\.recordKey)
-                )
-                let removedCount = state.$cartItems.withLock { $0.remove(recordKeys: removedKeys) }
-                if removedCount > 0 {
-                    analytics.record(.init(.cartBooksRemoved, [
-                        .removedCount: .integer(removedCount)
-                    ]))
-                }
-
-                return .none
             }
         }
         .ifLet(\.$detail, action: \.detail) {
@@ -355,9 +295,6 @@ struct BookSearchFeature {
         }
         .ifLet(\.$favorites, action: \.favorites) {
             BookFavoritesFeature()
-        }
-        .ifLet(\.$shelfMap, action: \.shelfMap) {
-            BookShelfMapFeature()
         }
         .ifLet(\.$myPage, action: \.myPage) {
             MyPageFeature()

@@ -111,12 +111,6 @@ struct HomeView: View {
             BookFavoritesView(store: favoritesStore)
         }
         .navigationDestination(
-            item: $store.scope(state: \.shelfMap, action: \.shelfMap)
-        ) { shelfMapStore in
-            BookShelfMapView(store: shelfMapStore)
-                .toolbar(.visible, for: .navigationBar)
-        }
-        .navigationDestination(
             item: $store.scope(state: \.myPage, action: \.myPage)
         ) { myPageStore in
             MyPageView(store: myPageStore, mapStore: mapStore)

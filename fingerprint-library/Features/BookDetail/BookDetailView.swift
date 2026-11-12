@@ -146,9 +146,6 @@ struct BookDetailView: View {
             .foregroundStyle(Color.textPrimary)
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(item: $store.scope(state: \.shelfMap, action: \.shelfMap)) {
-                BookShelfMapView(store: $0).toolbar(.visible, for: .navigationBar)
-            }
             .fullScreenCover(isPresented: $isRoutePreviewPresented) {
                 BookRoutePreviewView(books: [store.book], entryMode: .direct)
             }

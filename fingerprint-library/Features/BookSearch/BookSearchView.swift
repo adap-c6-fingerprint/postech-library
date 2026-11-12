@@ -33,9 +33,6 @@ struct BookSearchView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         // 검색창은 탭바(role: .search)에 있으므로 내비게이션 바를 숨겨도 된다. 홈 지도 화면과 같은 방식이다.
-        .cartLimitAlert(isPresented: store.isCartLimitAlertPresented) {
-            store.send(.cartLimitAlertDismissed)
-        }
     }
 
     private var categoryPicker: some View {

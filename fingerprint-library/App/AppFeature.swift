@@ -65,10 +65,8 @@ struct AppFeature {
             case .goHomeRequested:
                 state.home.detail = nil
                 state.home.cart = nil
-                state.home.shelfMap = nil
                 state.bookSearch.detail = nil
                 state.bookSearch.cart = nil
-                state.bookSearch.shelfMap = nil
                 state.isRouteSettingsPresented = false
                 state.selectedTab = .map
                 return .none

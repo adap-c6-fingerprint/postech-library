@@ -35,7 +35,6 @@ struct HomeFeature {
         @Presents var detail: BookDetailFeature.State?
         @Presents var cart: BookCartFeature.State?
         @Presents var favorites: BookFavoritesFeature.State?
-        @Presents var shelfMap: BookShelfMapFeature.State?
         @Presents var myPage: MyPageFeature.State?
 
         var recommendationCount: Int {
@@ -135,7 +134,6 @@ struct HomeFeature {
         case detail(PresentationAction<BookDetailFeature.Action>)
         case cart(PresentationAction<BookCartFeature.Action>)
         case favorites(PresentationAction<BookFavoritesFeature.Action>)
-        case shelfMap(PresentationAction<BookShelfMapFeature.Action>)
         case myPage(PresentationAction<MyPageFeature.Action>)
         case delegate(Delegate)
 
@@ -387,20 +385,12 @@ struct HomeFeature {
                 state.favorites = BookFavoritesFeature.State()
                 return .none
 
-            case let .cart(.presented(.delegate(.startGuidance(books)))):
-                state.shelfMap = BookShelfMapFeature.State(books: books)
-                return .none
-
-            case let .detail(.presented(.delegate(.startGuidance(book)))):
-                state.shelfMap = BookShelfMapFeature.State(book: book)
-                return .none
-
             case .profileButtonTapped:
                 state.myPage = MyPageFeature.State()
                 // 찜 목록처럼 지금 탭의 내비게이션 안에서 마이페이지를 연다.
                 return .none
 
-            case .detail, .cart, .favorites, .shelfMap, .myPage, .delegate:
+            case .detail, .cart, .favorites, .myPage, .delegate:
                 return .none
             }
         }
@@ -412,9 +402,6 @@ struct HomeFeature {
         }
         .ifLet(\.$favorites, action: \.favorites) {
             BookFavoritesFeature()
-        }
-        .ifLet(\.$shelfMap, action: \.shelfMap) {
-            BookShelfMapFeature()
         }
         .ifLet(\.$myPage, action: \.myPage) {
             MyPageFeature()
