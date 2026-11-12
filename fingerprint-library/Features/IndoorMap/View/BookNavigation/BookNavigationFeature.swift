@@ -67,6 +67,11 @@ struct BookNavigationFeature {
                 featureIDs: session.stops.prefix(1).map { $0.shelf.mapElementID }))
         }
 
+        /// 길안내 중이고 책등 찾기 화면이 닫혀 있을 때만 "서가를 찾았어요"를 보여 준다.
+        var canMarkShelfFound: Bool {
+            exitReason == nil && !isArrivalPresented && !isReroutingToNextBook
+                && currentStop != nil && currentRoute != nil
+        }
         var currentStop: BookNavigationStop? {
             session.stops.indices.contains(currentStopIndex) ? session.stops[currentStopIndex] : nil
         }
@@ -183,7 +188,7 @@ struct BookNavigationFeature {
         case mapInteractionBegan
         case viewportChanged
         case sheetExpansionChanged(Bool)
-        case arrivalTestTapped
+        case shelfFoundTapped
         case arrivalPresentationChanged(Bool)
         case arrivalSpineTask(stopIndex: Int)
         case arrivalSpineLoaded(stopIndex: Int, UIImage?)
@@ -345,9 +350,11 @@ struct BookNavigationFeature {
                 fitCurrentRoute(&state)
                 return .none
 
-            case .arrivalTestTapped:
-                guard state.exitReason == nil, state.currentStop != nil, state.currentRoute != nil else { return .none }
+            case .shelfFoundTapped:
+                // 사용자가 서가를 찾았다고 직접 알리면 자동 도착 판정과 같은 책등 찾기 화면으로 간다.
+                guard state.canMarkShelfFound else { return .none }
                 state.isArrivalPresented = true
+                state.automaticallyArrivedStopIndices.insert(state.currentStopIndex)
                 return .none
 
             case let .arrivalPresentationChanged(isPresented):

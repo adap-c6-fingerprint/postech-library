@@ -51,6 +51,7 @@ struct BookNavigationView: View {
                     VStack(spacing: 16) {
                         Spacer()
                         HStack {
+                            if store.canMarkShelfFound { shelfFoundButton }
                             Spacer()
                             MapRecenterButton(accessibilityIdentifier: "book-navigation-recenter") {
                                 store.send(.recenterTapped)
@@ -152,10 +153,25 @@ struct BookNavigationView: View {
                 Image(systemName: "xmark").frame(width: 44, height: 44)
                     .glassEffect(.regular, in: .circle)
             }
-            .accessibilityLabel("안내 일시 정지")
+            .accessibilityLabel("안내 종료")
             .accessibilityIdentifier("book-navigation-cancel")
         }
         .foregroundStyle(.white)
+    }
+
+    /// 자동 도착 판정을 놓쳤거나 책등 찾기에서 뒤로 나온 뒤에도 사용자가 직접 책등 찾기로 들어가게 한다.
+    private var shelfFoundButton: some View {
+        Button { store.send(.shelfFoundTapped) } label: {
+            Label("서가를 찾았어요", systemImage: "checkmark")
+                .typography(.body2.weight(.semibold))
+                .padding(.horizontal, 18)
+                .frame(height: 48)
+                .glassEffect(.regular.interactive(), in: .capsule)
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.white)
+        .accessibilityHint("책장 앞 책등 찾기 화면으로 이동해요")
+        .accessibilityIdentifier("book-navigation-shelf-found")
     }
 
     private var guidanceSheet: some View {
