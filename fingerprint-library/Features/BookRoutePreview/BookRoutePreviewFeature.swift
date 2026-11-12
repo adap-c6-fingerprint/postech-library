@@ -181,8 +181,8 @@ struct BookRoutePreviewFeature {
         }
     }
 
-    @Dependency(\.bookRoutePreviewClient)
-    private var routePreviewClient
+    @Dependency(\.routePlanningClient)
+    private var routePlanningClient
     @Dependency(\.indoorLocationClient) private var locationClient
     @Dependency(\.date.now) private var now
     @Dependency(\.continuousClock) private var clock
@@ -492,10 +492,10 @@ struct BookRoutePreviewFeature {
             ]))
             let requestID = state.requestID
 
-            let calculation: Effect<Action> = .run { [routePreviewClient] send in
+            let calculation: Effect<Action> = .run { [routePlanningClient] send in
                 do {
                     try Task.checkCancellation()
-                    let routePlan = try await routePreviewClient.load(map, labels, start, stops)
+                    let routePlan = try await routePlanningClient.plan(map, labels, start, stops)
                     try Task.checkCancellation()
                     await send(.routeLoaded(requestID: requestID, routePlan))
                 } catch is CancellationError {

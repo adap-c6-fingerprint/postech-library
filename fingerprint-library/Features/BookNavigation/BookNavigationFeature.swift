@@ -216,7 +216,7 @@ struct BookNavigationFeature {
     @Dependency(\.date.now) var now
     @Dependency(\.continuousClock) var clock
     @Dependency(\.bookCoverClient) var bookCoverClient
-    @Dependency(\.bookRoutePreviewClient) var routePreviewClient
+    @Dependency(\.routePlanningClient) var routePlanningClient
     @Dependency(\.analyticsClient) private var analytics
     private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute, reroute, previousStopRoute }
 
@@ -414,9 +414,9 @@ struct BookNavigationFeature {
                 state.isReroutingToNextBook = true
                 state.progress = nil
                 state.statusMessage = "현재 위치에서 다음 책까지의 경로를 계산하고 있어요."
-                return .run { [routePreviewClient] send in
+                return .run { [routePlanningClient] send in
                     do {
-                        let routePlan = try await routePreviewClient.load(map, labels, position, [destination])
+                        let routePlan = try await routePlanningClient.plan(map, labels, position, [destination])
                         try Task.checkCancellation()
                         guard let route = routePlan.legs.first else { throw IndoorRoutingError.noRoute }
                         await send(.nextBookRouteLoaded(requestID: requestID, stopIndex: nextIndex, route))
@@ -475,9 +475,9 @@ struct BookNavigationFeature {
                 state.isReturningToPreviousStop = true
                 state.progress = nil
                 state.statusMessage = "현재 위치에서 이전 서가까지의 경로를 계산하고 있어요."
-                return .merge(.cancel(id: CancelID.reroute), .run { [routePreviewClient] send in
+                return .merge(.cancel(id: CancelID.reroute), .run { [routePlanningClient] send in
                     do {
-                        let routePlan = try await routePreviewClient.load(map, labels, position, [destination])
+                        let routePlan = try await routePlanningClient.plan(map, labels, position, [destination])
                         try Task.checkCancellation()
                         guard let route = routePlan.legs.first else { throw IndoorRoutingError.noRoute }
                         await send(.previousStopRouteLoaded(requestID: requestID, stopIndex: previousIndex, route))
@@ -685,9 +685,9 @@ struct BookNavigationFeature {
         let requestID = state.rerouteRequestID
         state.isReroutingCurrentStop = true
         state.statusMessage = "경로를 벗어나 현재 위치에서 경로를 다시 찾고 있어요."
-        return .run { [routePreviewClient] send in
+        return .run { [routePlanningClient] send in
             do {
-                let routePlan = try await routePreviewClient.load(map, labels, position, [destination])
+                let routePlan = try await routePlanningClient.plan(map, labels, position, [destination])
                 try Task.checkCancellation()
                 guard let route = routePlan.legs.first else { throw IndoorRoutingError.noRoute }
                 await send(.currentStopRerouted(requestID: requestID, stopIndex: stopIndex, route))

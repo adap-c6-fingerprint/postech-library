@@ -10,8 +10,8 @@ nonisolated struct BookRoutePreviewTestRoute: Equatable, Sendable {
     let graph: RoutingGraph
 }
 
-/// 파일 검증·서가 연결을 담당한다. 앱이 전달한 출발 위치로 방문 순서를 계산한다.
-nonisolated struct BookRoutePreviewTestRouteLoader {
+/// 번들의 길찾기 자료를 읽고 검증해 서가 후보와 도착 노드를 연결한 뒤, RoutePlanner로 경로 계획을 만든다.
+nonisolated struct RoutePlanningLoader {
     func load(on map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [RouteCandidateStop],
               in bundle: Bundle = .main) async throws -> RoutePlan {
         guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
