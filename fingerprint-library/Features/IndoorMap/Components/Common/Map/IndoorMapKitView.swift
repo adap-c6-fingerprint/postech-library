@@ -11,9 +11,6 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         var usesHomeStyle: Bool { self != .standard }
     }
-    /// 최초 도면의 확대 배율. 1은 층 전체 맞춤이며, 3은 그보다 3배 크게 표시한다.
-    /// 층 전환·현재 위치 포커스에는 다시 적용하지 않는다.
-    static let initialZoomScale = 3.0
     /// 단권·여러 권 상세 모두 시트 위에 보이는 영역에서 서가 주변을 같은 배율 기준으로 맞춘다.
     static let bookDetailMinimumSpanMeters = 20.0
     /// 카메라 중심이 건물 외곽에서 벗어날 수 있는 거리. 시트를 피해 중심을 옮기는 포커스가 경계에 걸리지 않게 둔다.
@@ -122,7 +119,7 @@ struct IndoorMapKitView: UIViewRepresentable {
         /// 아래 `setCameraZoomRange`는 도면이 오기 전의 기본값이며,
         /// 도면을 그릴 때 `applyCameraLimits(in:)`가 건물 크기에 맞춘 이동 경계·최대 축소 거리로 바꾼다.
         /// 이 값은 확대·축소의 제한이며,
-        /// 최초 줌은 `initialZoomScale`과 `moveCamera(_:in:animated:)`의 도면 맞춤에서 정한다.
+        /// 최초 줌은 현재 위치 버튼과 같은 서가 번호 배율이며, `moveCamera(_:in:animated:)`에서 정한다.
         /// 층 전환은 도형만 갱신하고 카메라는 유지한다.
         /// - Returns: SwiftUI 배치가 끝난 시점을 알려줄 수 있는 ``IndoorMapSurface``.
         func makeMapView() -> IndoorMapSurface {
@@ -511,28 +508,59 @@ struct IndoorMapKitView: UIViewRepresentable {
             )
         }
 
-        /// 최초 표시와 같은 줌의 카메라 거리. 현재 층 도형을 같은 여백·배율로 맞췄을 때의 값이다.
-        private func initialCameraDistance(in view: MKMapView) -> CLLocationDistance? {
-            var rect = MapKitGeometry.mapRect(for: parent.floor.geometry)
-            guard !rect.isNull else { return nil }
-            let insetRatio = (1 - 1 / IndoorMapKitView.initialZoomScale) / 2
-            rect = rect.insetBy(dx: rect.width * insetRatio, dy: rect.height * insetRatio)
-            let padding = floorFitPadding
-            guard view.bounds.width > padding.left + padding.right,
-                  view.bounds.height > padding.top + padding.bottom else { return nil }
-            // 최초 표시와 같은 계산을 쓰려고 실제로 맞춰 본 뒤 거리만 읽고 되돌린다.
-            let restoreCamera = view.camera.copy() as! MKMapCamera
-            view.setVisibleMapRect(rect, edgePadding: padding, animated: false)
-            let distance = view.camera.centerCoordinateDistance
-            view.setCamera(restoreCamera, animated: false)
-            return distance.isFinite && distance > 0 ? distance : nil
+        /// 좌표를 가려지지 않는 영역의 중심으로 옮긴다. 현재 위치 버튼과 최초 표시가 같이 쓴다.
+        ///
+        /// `revealsShelfNumbers`면 북쪽을 위로 돌리고 서가 번호 묶음이 풀리는 배율로 확대하고, 아니면 현재 줌을 유지한다.
+        /// - Returns: 적용했으면 true, 좌표·화면 크기가 유효하지 않아 보류해야 하면 false.
+        private func center(on coordinate: IndoorMapCoordinate, revealsShelfNumbers: Bool,
+                            in view: MKMapView, animated: Bool) -> Bool {
+            guard coordinate.isValid else { return false }
+            let viewport = view.bounds.inset(by: parent.viewportInsets)
+            guard viewport.width > 0, viewport.height > 0 else { return false }
+            // 평면으로 돌린 뒤, 시트에 가리지 않는 화면 중심으로 좌표를 이동한다.
+            // 방향·줌 복원은 좌표 계산 전에 적용해야 이동 거리가 최종 화면 기준으로 계산된다.
+            let startCamera = view.camera.copy() as! MKMapCamera
+            let targetCamera = startCamera.copy() as! MKMapCamera
+            targetCamera.pitch = 0
+            view.setCamera(targetCamera, animated: false)
+            if revealsShelfNumbers {
+                // 평면·북쪽 기준에서 잰 배율로 거리를 비례 조정해 서가 번호 묶음이 풀리는 배율에 맞춘다.
+                targetCamera.heading = 0
+                view.setCamera(targetCamera, animated: false)
+                if let scale = IndoorShelfLabelLevel.metersPerPoint(in: view) {
+                    let distance = targetCamera.centerCoordinateDistance
+                        * IndoorShelfLabelLevel.numberRevealMetersPerPoint / scale
+                    if distance.isFinite, distance > 0 {
+                        targetCamera.centerCoordinateDistance = distance
+                        view.setCamera(targetCamera, animated: false)
+                    }
+                }
+            }
+            let point = view.convert(coordinate.clCoordinate, toPointTo: view)
+            // MKMapView의 카메라 중심은 safe area에 따라 bounds의 중심과 다를 수 있다.
+            let cameraCenter = view.convert(view.centerCoordinate, toPointTo: view)
+            let center = CGPoint(
+                x: point.x + cameraCenter.x - viewport.midX,
+                y: point.y + cameraCenter.y - viewport.midY
+            )
+            let destination = view.convert(center, toCoordinateFrom: view)
+            guard CLLocationCoordinate2DIsValid(destination) else { return true }
+            if animated, !UIAccessibility.isReduceMotionEnabled {
+                // 계산하려고 미리 돌려 둔 카메라를 되돌리고, 방향과 위치를 한 번에 움직인다.
+                view.setCamera(startCamera, animated: false)
+                targetCamera.centerCoordinate = destination
+                view.setCamera(targetCamera, animated: true)
+            } else {
+                view.setCenter(destination, animated: false)
+            }
+            return true
         }
 
         /// 최초 확대·층 전체 맞춤 또는 특정 좌표 중심 이동을 명시적으로 적용한다.
         ///
-        /// 최초 표시만 도형의 중심을 기준으로 `initialZoomScale`만큼 확대한다.
+        /// 최초 표시는 층 중심을 현재 위치 버튼과 같은 서가 번호 배율로 보여 준다.
         /// 층 전체 맞춤은 원본 범위와 padding으로 줌을 계산한다. 위치 이동은 기존 줌을 유지하며,
-        /// `restoresInitialView`인 경우에만 방향과 줌을 최초 표시 상태로 되돌린다.
+        /// `revealsShelfNumbers`인 경우에만 북쪽을 위로 돌리고 서가 번호가 보이는 배율로 확대한다.
         /// 요청 적용 시 평면으로 돌리며, 일반 층 전환에서는 이 메서드를 호출하지 않는다.
         /// - Parameters:
         ///   - request: TCA에서 전달한 최초 확대, 층 맞춤 또는 좌표 이동 요청.
@@ -563,49 +591,20 @@ struct IndoorMapKitView: UIViewRepresentable {
                 guard view.bounds.width > padding.left + padding.right,
                       view.bounds.height > padding.top + padding.bottom,
                       let floor = parent.map.floors.first(where: { $0.id == id }) else { return false }
-                var rect = MapKitGeometry.mapRect(for: floor.geometry)
+                let rect = MapKitGeometry.mapRect(for: floor.geometry)
                 guard !rect.isNull else { return false }
-                if case .initialFloor = request.target {
-                    let insetRatio = (1 - 1 / IndoorMapKitView.initialZoomScale) / 2
-                    rect = rect.insetBy(dx: rect.width * insetRatio, dy: rect.height * insetRatio)
-                }
                 let camera = view.camera.copy() as! MKMapCamera
                 camera.pitch = 0
                 view.setCamera(camera, animated: false)
                 view.setVisibleMapRect(rect, edgePadding: padding, animated: false)
-            case .position(let coordinate, let restoresInitialView):
-                guard coordinate.isValid else { return false }
-                let viewport = view.bounds.inset(by: parent.viewportInsets)
-                guard viewport.width > 0, viewport.height > 0 else { return false }
-                // 평면으로 돌린 뒤, 시트에 가리지 않는 화면 중심으로 좌표를 이동한다.
-                // 방향·줌 복원은 좌표 계산 전에 적용해야 이동 거리가 최종 화면 기준으로 계산된다.
-                let startCamera = view.camera.copy() as! MKMapCamera
-                let targetCamera = startCamera.copy() as! MKMapCamera
-                targetCamera.pitch = 0
-                if restoresInitialView {
-                    targetCamera.heading = 0
-                    if let distance = initialCameraDistance(in: view) {
-                        targetCamera.centerCoordinateDistance = distance
-                    }
+                if case .initialFloor = request.target {
+                    // 최초 표시는 현재 위치 버튼과 같은 배율로 층 중심을 보여 준다.
+                    let floorCenter = MKMapPoint(x: rect.midX, y: rect.midY).coordinate
+                    return center(on: .init(latitude: floorCenter.latitude, longitude: floorCenter.longitude),
+                                  revealsShelfNumbers: true, in: view, animated: false)
                 }
-                view.setCamera(targetCamera, animated: false)
-                let point = view.convert(coordinate.clCoordinate, toPointTo: view)
-                // MKMapView의 카메라 중심은 safe area에 따라 bounds의 중심과 다를 수 있다.
-                let cameraCenter = view.convert(view.centerCoordinate, toPointTo: view)
-                let center = CGPoint(
-                    x: point.x + cameraCenter.x - viewport.midX,
-                    y: point.y + cameraCenter.y - viewport.midY
-                )
-                let destination = view.convert(center, toCoordinateFrom: view)
-                guard CLLocationCoordinate2DIsValid(destination) else { return true }
-                if animated, !UIAccessibility.isReduceMotionEnabled {
-                    // 계산하려고 미리 돌려 둔 카메라를 되돌리고, 방향과 위치를 한 번에 움직인다.
-                    view.setCamera(startCamera, animated: false)
-                    targetCamera.centerCoordinate = destination
-                    view.setCamera(targetCamera, animated: true)
-                } else {
-                    view.setCenter(destination, animated: false)
-                }
+            case .position(let coordinate, let revealsShelfNumbers):
+                return center(on: coordinate, revealsShelfNumbers: revealsShelfNumbers, in: view, animated: animated)
             case .route(let route, let ids):
                 var rect = parent.map.features.filter { ids.contains($0.id) && $0.floorID == parent.floor.id }
                     .reduce(MKMapRect.null) { $0.union(MapKitGeometry.mapRect(for: $1.geometry)) }
@@ -779,7 +778,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = parent.navigationAppearance ? "경로 진행 방향" : nil
                 view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position"
-                    : (annotation.position.source == .simulation ? "simulation-position" : "user-position")
+                    : "user-position"
                 configurePositionBearing(view, position: annotation.position, in: mapView)
                 return view
             }
@@ -857,30 +856,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = annotation.subtitle
                 view.accessibilityIdentifier = "route-transition-\(annotation.category.rawValue)"
-                return view
-            }
-            if let annotation = annotation as? PositionAnnotation, annotation.position.source == .simulation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "simulation-dot")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "simulation-dot")
-                view.annotation = annotation
-                view.frame.size = CGSize(width: 30, height: 30)
-                view.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.18)
-                view.layer.cornerRadius = 15
-                if view.subviews.isEmpty {
-                    let dot = UIView(frame: CGRect(x: 7, y: 7, width: 16, height: 16))
-                    dot.backgroundColor = .systemBlue
-                    dot.layer.cornerRadius = 8
-                    dot.layer.borderWidth = 2
-                    dot.layer.borderColor = UIColor.white.cgColor
-                    view.addSubview(dot)
-                }
-                view.displayPriority = .required
-                view.zPriority = MapAnnotationPriority.user
-                view.selectedZPriority = MapAnnotationPriority.user
-                view.isEnabled = false
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = "시뮬레이션 위치"
-                view.accessibilityIdentifier = "simulation-position"
                 return view
             }
             if let annotation = annotation as? IndoorShelfAnnotation {
@@ -1069,14 +1044,13 @@ private final class FeatureAnnotation: NSObject, MKAnnotation {
     }
 }
 
-/// 센서의 기본 사용자 위치와 구분해 합성·재생·수동 위치를 표시하는 annotation.
+/// 센서의 기본 사용자 위치와 구분해 재생·수동 위치를 표시하는 annotation.
 private final class PositionAnnotation: NSObject, MKAnnotation {
     private(set) var position: IndoorPosition
     @objc dynamic var coordinate: CLLocationCoordinate2D
     var title: String? {
         switch position.source {
         case .sensor: "현재 위치"
-        case .simulation: "시뮬레이션 위치"
         case .replay: "테스트 재생 위치"
         default: "수동 출발점"
         }

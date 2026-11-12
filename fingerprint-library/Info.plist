@@ -14,10 +14,6 @@
 	<false/>
 	<key>GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED</key>
 	<false/>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_indoor-sim._tcp</string>
-	</array>
 	<key>POBOOK_BUILD_CHANNEL</key>
 	<string>$(POBOOK_BUILD_CHANNEL)</string>
 	<key>POBOOK_RELAY_TOKEN_DEVELOPMENT</key>

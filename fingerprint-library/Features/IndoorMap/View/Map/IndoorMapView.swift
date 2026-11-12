@@ -176,17 +176,12 @@ struct IndoorMapView: View {
             hidingFavoritesFor: bookDetail?.shelves ?? [], hiddenFavoriteMarkerIDs: hiddenFavoriteMarkerIDs)
     }
 
-    private var currentLocationButton: some View {
-        Button { store.send(.currentLocationTapped) } label: {
-            if appearance == .home {
-                HStack(alignment: .center, spacing: 4) {
-                    Image(systemName: "scope").font(.title3.weight(.medium))
-                }
-                .padding(0)
-                .frame(width: 50, height: 50, alignment: .center)
-                .cornerRadius(1000)
-                .glassEffect(.regular, in: .circle)
-            } else {
+    @ViewBuilder private var currentLocationButton: some View {
+        if appearance == .home {
+            // 길안내 화면과 같은 버튼을 쓴다.
+            MapRecenterButton { store.send(.currentLocationTapped) }
+        } else {
+            Button { store.send(.currentLocationTapped) } label: {
                 HStack(spacing: 8) {
                     Image(systemName: "scope").font(.title3.weight(.medium))
                     if !showsDestinationCard {
@@ -199,10 +194,10 @@ struct IndoorMapView: View {
                 .overlay(Capsule().strokeBorder(Color(uiColor: .separator).opacity(0.4)))
                 .shadow(color: .black.opacity(0.12), radius: 6, y: 3)
             }
+            .buttonStyle(.plain)
+            .accessibilityLabel("현재 위치로 지도 이동")
+            .accessibilityIdentifier("recenter-location")
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel("현재 위치로 지도 이동")
-        .accessibilityIdentifier("recenter-location")
     }
 
     /// 실제 위치의 ordinal에 대응하는 표시 이름을 사용한다. 조회 중인 층을 현재 위치로 표시하지 않는다.

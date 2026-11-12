@@ -46,7 +46,7 @@ struct BookFavoritesFeature {
         @CasePathable
         enum Delegate: Equatable {
             case favoritesChanged(Set<[String?]>)
-            // 다른 화면의 하트 상태와 지도 표시를 맞추도록 바뀐 찜 키를 알린다.
+            // 다른 화면의 북마크 상태와 지도 표시를 맞추도록 바뀐 찜 키를 알린다.
             case cartChanged
             // 다른 화면의 책바구니 권수를 맞추도록 알린다.
         }
