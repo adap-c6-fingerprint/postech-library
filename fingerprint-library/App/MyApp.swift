@@ -25,11 +25,17 @@ final class FirebaseAppDelegate: NSObject, UIApplicationDelegate {
 
 @main struct MyApp: App {
     @UIApplicationDelegateAdaptor(FirebaseAppDelegate.self) private var delegate
-    @State private var store = Store(initialState: AppFeature.State()) { AppFeature() }
+    /// 앱 루트 Store. 테스트 호스트로 실행될 때는 만들지 않는다.
+    @MainActor static let store = Store(initialState: AppFeature.State()) { AppFeature() }
 
     var body: some Scene {
         WindowGroup {
-            AppView(store: store)
+            // 테스트가 앱을 호스트로 실행하면 앱 화면과 그 효과가 테스트 의존성을 건드리지 않게 비워 둔다.
+            if isTesting {
+                EmptyView()
+            } else {
+                AppView(store: Self.store)
+            }
         }
     }
 }

@@ -43,6 +43,7 @@ struct BookFavoritesFeature {
         case delegate(Delegate)
 
         /// 화면 이동은 App이 맡는다.
+        @CasePathable
         enum Delegate: Equatable {
             case showCart
         }

@@ -38,6 +38,7 @@ struct RecentlyFoundBookFeature {
         case delegate(Delegate)
 
         /// 최근 찾은 책 화면에서 책등을 누르면 App이 그 책의 상세를 연다. (마이페이지 카드는 쓰지 않는다)
+        @CasePathable
         enum Delegate: Equatable {
             case showDetail(Book)
         }

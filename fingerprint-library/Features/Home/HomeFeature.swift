@@ -136,6 +136,7 @@ struct HomeFeature {
         case popularBooksFailed(String)
 
         /// 화면 이동은 App이 맡는다. 홈은 어떤 화면을 열지 요청만 한다.
+        @CasePathable
         enum Delegate: Equatable {
             case showDetail(Book, cachedCoverURL: URL?)
             case showCart

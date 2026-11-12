@@ -60,6 +60,7 @@ struct BookShelfMapFeature {
         case delegate(Delegate)
 
         /// 경로 미리보기는 App이 전체 화면으로 연다.
+        @CasePathable
         enum Delegate: Equatable {
             case startGuidance([Book])
         }

@@ -37,6 +37,7 @@ struct MyPageFeature {
         case delegate(Delegate)
 
         /// 다른 기능과 함께 쓰는 화면으로의 이동은 App이 맡는다.
+        @CasePathable
         enum Delegate: Equatable {
             case showRecentlyFound(RecentlyFoundBookFeature.State)
         }

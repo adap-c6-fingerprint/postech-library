@@ -143,6 +143,7 @@ struct IndoorMapFeature {
         case dismissMessage
         case delegate(Delegate)
 
+        @CasePathable
         enum Delegate: Equatable {
             case showRouteSettings
         }

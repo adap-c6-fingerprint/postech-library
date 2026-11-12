@@ -177,6 +177,7 @@ struct BookRoutePreviewFeature {
         case reset
         case disappeared
 
+        @CasePathable
         enum Delegate: Equatable {
             /// 미리보기와 그 아래 상세·책바구니 화면까지 닫고 홈 지도 탭으로 돌아간다.
             case goHomeRequested

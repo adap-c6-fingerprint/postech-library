@@ -69,6 +69,7 @@ struct BookSearchFeature {
         case delegate(Delegate)
 
         /// 화면 이동은 App이 맡는다. 검색(과 같은 상태를 쓰는 홈 지도)은 어떤 화면을 열지 요청만 한다.
+        @CasePathable
         enum Delegate: Equatable {
             case recommendationLayoutRequested(isExpanded: Bool)
             case kulumiCoversRequested
