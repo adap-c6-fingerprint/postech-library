@@ -268,7 +268,7 @@ struct BookRoutePreviewView: View {
             onReportProblem: { presentProblemReport() })
     }
 
-    /// 상세·장바구니 화면까지 닫고 홈 지도 탭으로 돌아간다.
+    /// 상세·책바구니 화면까지 닫고 홈 지도 탭으로 돌아간다.
     private func returnHome() {
         dismiss()
         goHome?()

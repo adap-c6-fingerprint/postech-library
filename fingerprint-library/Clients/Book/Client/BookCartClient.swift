@@ -8,7 +8,7 @@ nonisolated struct BookCartClient: Sendable {
 
     private static let storageKey = "bookCartItems"
 
-    // 테스트에서는 별도 suite를 사용해 앱의 실제 장바구니와 분리한다.
+    // 테스트에서는 별도 suite를 사용해 앱의 실제 책바구니와 분리한다.
     static func userDefaults(suiteName: String? = nil) -> Self {
         let defaults: @Sendable () -> UserDefaults = {
             suiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard

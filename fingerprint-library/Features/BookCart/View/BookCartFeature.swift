@@ -28,7 +28,7 @@ struct BookCartFeature {
             (1...BookCartItem.maxGuidanceCount).contains(selectedCount)
         }
 
-        // 아직 장바구니에 남아 있는 선택 책만 고른 순서대로 돌려준다.
+        // 아직 책바구니에 남아 있는 선택 책만 고른 순서대로 돌려준다.
         var selectedBooks: [Book] {
             selectedIDs.compactMap { id in items.first { $0.id == id }?.book }
         }

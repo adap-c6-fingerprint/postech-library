@@ -36,18 +36,18 @@ struct BookFavoritesView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
         .alert(
-            "선택한 책을 장바구니에 담았어요.",
+            "선택한 책을 책바구니에 담았어요.",
             isPresented: Binding(
                 get: { store.isAddedToCartAlertPresented },
                 set: { if !$0 { store.send(.addedToCartAlertDismissed) } }
             )
         ) {
             Button("지금 안함", role: .cancel) {}
-            Button("장바구니 가기") {
+            Button("책바구니 가기") {
                 store.send(.goToCartButtonTapped)
             }
         } message: {
-            Text("장바구니로 이동해 길 안내를 시작할까요?")
+            Text("책바구니로 이동해 길 안내를 시작할까요?")
         }
         .cartLimitAlert(isPresented: store.isCartLimitAlertPresented) {
             store.send(.cartLimitAlertDismissed)
@@ -81,7 +81,7 @@ struct BookFavoritesView: View {
             Button {
                 store.send(.addToCartButtonTapped)
             } label: {
-                Text("장바구니에 담기")
+                Text("책바구니에 담기")
                     .font(.body.weight(.medium))
                     .foregroundStyle(store.selectedIDs.isEmpty ? Color.white : Color.black)
                     .padding(.horizontal, 14)

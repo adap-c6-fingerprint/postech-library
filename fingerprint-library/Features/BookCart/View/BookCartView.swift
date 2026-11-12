@@ -34,12 +34,13 @@ struct BookCartView: View {
                 ContentUnavailableView(
                     "책바구니가 비어 있어요",
                     systemImage: "cart",
-                    description: Text("도서 상세에서 책을 담아 주세요.")
+                    description: Text("찾고 싶은 책을 책바구니에 저장해두면\n빠르게 책의 위치를 찾을 수 있어요.")
                 )
+                .multilineTextAlignment(.center)
             }
         }
         .background { Color.cartBackground.ignoresSafeArea() }
-        .navigationTitle("장바구니")
+        .navigationTitle("책바구니")
         .analyticsScreen(.cart)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
@@ -76,7 +77,7 @@ struct BookCartView: View {
             }
             Button("취소", role: .cancel) {}
         } message: {
-            Text("이 책은 장바구니에서만 삭제돼요.\n다시 검색하여 찾아 추가할 수 있어요.")
+            Text("이 책은 책바구니에서만 삭제돼요.\n다시 검색하여 찾아 추가할 수 있어요.")
         }
         .task { store.send(.task) }
         .task(id: store.items.map(\.id)) { await store.send(.loadLibraryInfo).finish() }
@@ -165,10 +166,10 @@ struct BookCartView: View {
         .locale(Locale(identifier: "en_US"))
 }
 extension View {
-    // 장바구니 보관 한도를 넘겨 새 책을 담지 못했을 때 띄우는 팝업
+    // 책바구니 보관 한도를 넘겨 새 책을 담지 못했을 때 띄우는 팝업
     func cartLimitAlert(isPresented: Bool, onDismiss: @escaping () -> Void) -> some View {
         alert(
-            "장바구니 최대 권수를 초과했어요",
+            "책바구니 최대 권수를 초과했어요",
             isPresented: Binding(
                 get: { isPresented },
                 set: { if !$0 { onDismiss() } }
@@ -176,12 +177,12 @@ extension View {
         ) {
             Button("확인했어요") {}
         } message: {
-            Text("박태준학술정보관 장바구니에는 최대 \(BookCartItem.maxStoredCount)권까지 담을 수 있어요. 새 책을 담으시려면 기존에 담은 책 중 일부를 삭제해 주세요.")
+            Text("박태준학술정보관 책바구니에는 최대 \(BookCartItem.maxStoredCount)권까지 담을 수 있어요. 새 책을 담으시려면 기존에 담은 책 중 일부를 삭제해 주세요.")
         }
     }
 }
 
-// 피그마 장바구니 시안의 색상 토큰
+// 피그마 책바구니 시안의 색상 토큰
 extension Color {
     static let cartCard = Color(red: 0x2B / 255, green: 0x2B / 255, blue: 0x2B / 255)
     static let cartBackground = Color.backgroundDefault

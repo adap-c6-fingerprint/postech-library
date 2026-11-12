@@ -13,7 +13,7 @@ struct BookRoutePreviewBookCard: View {
     let isSelected: Bool
     let onContentAtTopChange: (Bool) -> Void
     let onRetryHoldings: () -> Void
-    // ✅ 펼친 상세 화면과 같은 책 소개·찜·장바구니 상태를 쓰도록 부모가 책별 Store를 전달한다.
+    // ✅ 펼친 상세 화면과 같은 책 소개·찜·책바구니 상태를 쓰도록 부모가 책별 Store를 전달한다.
     let detailStore: StoreOf<BookDetailFeature>
 
     @State private var isContentAtTop = true

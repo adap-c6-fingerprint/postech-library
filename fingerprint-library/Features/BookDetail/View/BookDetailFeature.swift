@@ -66,7 +66,7 @@ struct BookDetailFeature {
             return BookHoldingPresentation.preferred(in: holdings)
         }
 
-        // 장바구니
+        // 책바구니
         var cartNotice: CartNotice?
         @Presents var cart: BookCartFeature.State?
         var isCartLimitAlertPresented = false
@@ -306,12 +306,12 @@ struct BookDetailFeature {
                 return .none
 
             case .startGuidanceButtonTapped:
-                // 장바구니를 거치지 않고 이 책 1권으로 길안내를 시작한다.
+                // 책바구니를 거치지 않고 이 책 1권으로 길안내를 시작한다.
                 return .send(.delegate(.startGuidance(state.book)))
 
             case .guidanceStarted:
                 recentlyFoundBooksClient.record([state.book])
-                // 장바구니를 거치지 않은 1권도 최근 찾은 책 책장 맨 왼쪽에 꽂힌다.
+                // 책바구니를 거치지 않은 1권도 최근 찾은 책 책장 맨 왼쪽에 꽂힌다.
                 bookCoverClient.prefetchSpines([state.book.isbn].compactMap { $0 })
                 // 책장에 꽂히는 순간 책등을 미리 받아 둔다. 책찾기 화면과 마이페이지 책장이 로딩 없이 바로 그린다.
                 return .none

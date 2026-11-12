@@ -557,7 +557,7 @@ private struct ChipFlowLayout: Layout {
     }
 }
 
-// 피그마 온보딩 시안의 색상 토큰 (배경·강조색은 장바구니 토큰을 함께 쓴다)
+// 피그마 온보딩 시안의 색상 토큰 (배경·강조색은 책바구니 토큰을 함께 쓴다)
 private extension Color {
     static let onboardingTextPrimary = Color.textPrimary
     static let onboardingField = Color(red: 0x24 / 255, green: 0x24 / 255, blue: 0x24 / 255)

@@ -21,7 +21,7 @@ struct BookRouteBooksPreviewView: View {
     @State private var panelHeight: CGFloat = 0
     @State private var panelPresentation = BookRoutePreviewPanelState()
     @State private var bookTabsHeight: CGFloat = 52
-    // ✅ 접힌 카드와 펼친 상세가 같은 책별 상세 Store(소개·찜·장바구니)를 공유한다.
+    // ✅ 접힌 카드와 펼친 상세가 같은 책별 상세 Store(소개·찜·책바구니)를 공유한다.
     @State private var detailStores = BookRoutePreviewDetailStores()
     // ✅ 펼친 상세 스크롤 뷰의 화면상 위치. 시스템이 붙이는 상단 안전 영역 여부와 관계없이 표지 위치를 시안에 맞춘다.
     @State private var expandedScrollOrigin = ExpandedScrollOrigin(globalMinY: 0, safeAreaTop: 0)
@@ -194,7 +194,7 @@ struct BookRouteBooksPreviewView: View {
 
     private func favoriteButton(_ store: StoreOf<BookDetailFeature>) -> some View {
         Button { store.send(.favoriteButtonTapped) } label: {
-            Image(systemName: store.isFavorite ? "heart.fill" : "heart")
+            Image(systemName: store.isFavorite ? "bookmark.fill" : "bookmark")
                 .font(.system(size: 22, weight: .regular))
                 .frame(width: 44, height: 44)
                 .glassEffect(.regular.interactive(), in: Circle())
@@ -217,7 +217,7 @@ struct BookRouteBooksPreviewView: View {
         .controlSize(.large)
         .frame(width: 50, height: 50)
         .foregroundStyle(Color.textPrimary)
-        .accessibilityLabel("장바구니에 담기")
+        .accessibilityLabel("책바구니에 담기")
         .accessibilityIdentifier("multiBookPreview.addToCart")
     }
 
@@ -311,7 +311,7 @@ struct BookRouteBooksPreviewView: View {
                 .background(.regularMaterial, in: .rect(cornerRadius: 12))
                 .accessibilityIdentifier("multiBookPreview.error")
             }
-            HStack(spacing: 12) { // ✅ 펼친 상세에서는 시안처럼 장바구니 버튼을 함께 보여 준다.
+            HStack(spacing: 12) { // ✅ 펼친 상세에서는 시안처럼 책바구니 버튼을 함께 보여 준다.
                 Button {
                     guard let book = books.first(where: { $0.id == selection.wrappedValue }) else { return }
                     onStart(book)
@@ -357,7 +357,7 @@ final class BookRoutePreviewDetailStores {
     }
 }
 
-// ✅ 펼친 상세의 장바구니 버튼이 단권 상세와 같은 알림을 띄우도록 선택한 책의 Store에 연결한다.
+// ✅ 펼친 상세의 책바구니 버튼이 단권 상세와 같은 알림을 띄우도록 선택한 책의 Store에 연결한다.
 private struct SelectedBookCartPresentation: ViewModifier {
     let store: StoreOf<BookDetailFeature>?
 
