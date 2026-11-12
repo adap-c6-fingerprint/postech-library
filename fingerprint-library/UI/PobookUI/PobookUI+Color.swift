@@ -1,5 +1,5 @@
 //
-//  DesignSystemColor.swift
+//  PobookUI+Color.swift
 //  fingerprint-library
 //
 //  Created by 이시온 on 11/7/26.
@@ -9,11 +9,11 @@ import SwiftUI
 
 /// 사용법 예시
 /// Text("도서 제목")
-///    .foregroundStyle(DS.ColorToken.neutralPrimary)
-/// RoundedRectangle(cornerRadius: DS.Radius.button)
-///    .fill(DS.ColorToken.Button.primaryBackground)
+///    .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
+/// RoundedRectangle(cornerRadius: PobookUI.Radius.button)
+///    .fill(PobookUI.ColorToken.Button.primaryBackground)
 
-extension DS {
+extension PobookUI {
     /// Figma 「Color / Primitive Token」 컬렉션
     enum ColorPrimitive {
         enum Grayscale {
@@ -119,6 +119,9 @@ extension DS {
         }
 
         static let recommendationBackground = Primary._600.opacity(0.6)
+
+        /// Figma "Fills/Secondary". 시스템 색이라 라이트 rgba(120,120,128,0.16), 다크 rgba(120,120,128,0.32)로 바뀐다.
+        static let fillsSecondary = SwiftUI.Color(uiColor: .secondarySystemFill)
     }
 }
 

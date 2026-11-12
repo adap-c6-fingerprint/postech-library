@@ -21,7 +21,7 @@ struct BookNavigationCurrentBookCard: View {
                         .padding(.bottom, 12)
                     Text(BookText.plainText(info.book.title))
                         .typography(.bookTitle).lineLimit(2)
-                        .foregroundStyle(DS.ColorToken.neutralPrimary)
+                        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                         .accessibilityIdentifier("book-navigation-current-title")
                         .padding(.bottom, 12)
                     Text("\(info.floorName ?? "층 확인 필요") \(info.shelf.shelfTitle)")

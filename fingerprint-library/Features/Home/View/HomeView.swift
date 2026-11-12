@@ -140,12 +140,12 @@ struct HomeView: View {
         let recipient = store.showsKulumiCovers ? "쿠루미에게" : "당신에게"
         let count = store.showsKulumiCovers ? Self.kulumiCoverNames.count : store.recommendationCount
 
-        return VStack(alignment: .leading, spacing: DS.Spacing._20) {
+        return VStack(alignment: .leading, spacing: PobookUI.Spacing._20) {
             LibraryTabIntroText(title: "\(recipient)\n추천하는 책 \(count)선.")
             
             if store.showsKulumiCovers || !store.recommendedBooks.isEmpty {
                 recommendationCarousel
-                    .padding(.top, DS.Spacing._24 - DS.Spacing._20)
+                    .padding(.top, PobookUI.Spacing._24 - PobookUI.Spacing._20)
             } else if store.isLoadingRecommendations || store.recommendationSessionID == nil {
                 VStack(spacing: 8) {
                     ProgressView("추천 도서를 준비하고 있어요")

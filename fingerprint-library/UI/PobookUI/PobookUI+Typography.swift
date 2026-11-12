@@ -1,5 +1,5 @@
 //
-//  DesignSystemTypography.swift
+//  PobookUI+Typography.swift
 //  fingerprint-library
 //
 //  Created by 이시온 on 11/2/26.
@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-extension DS {
+extension PobookUI {
     // Figma 「Typography / Foundation」 Default 모드의 폰트 값.
     enum FontFamily {
         static let Pretendard = "Pretendard"
@@ -141,14 +141,14 @@ extension DS {
 
 extension View {
     /// 기본값은 Dynamic Type. 화면 간격은 호출부의 spacing/padding으로 별도 지정한다.
-    func typography(_ typography: DS.Typography, scaling: DS.Typography.Scaling = .dynamic) -> some View {
+    func typography(_ typography: PobookUI.Typography, scaling: PobookUI.Typography.Scaling = .dynamic) -> some View {
         modifier(TypographyModifier(typography: typography, scaling: scaling))
     }
 }
 
 private struct TypographyModifier: ViewModifier {
-    let typography: DS.Typography
-    let scaling: DS.Typography.Scaling
+    let typography: PobookUI.Typography
+    let scaling: PobookUI.Typography.Scaling
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     func body(content: Content) -> some View {

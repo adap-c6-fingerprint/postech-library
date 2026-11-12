@@ -144,7 +144,7 @@ struct BookRoutePreviewDescription: View {
         return true
     }
 
-    private var bodyTypography: DS.Typography { style == .expanded ? .caption1 : .caption2 }
+    private var bodyTypography: PobookUI.Typography { style == .expanded ? .caption1 : .caption2 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: style == .expanded ? 4 : 6) {
@@ -199,7 +199,7 @@ struct BookRoutePreviewDescription: View {
     }
 
     private var collapsedDescriptionLineCount: Int {
-        let metrics = DS.Typography.caption2.metrics(for: dynamicTypeSize)
+        let metrics = PobookUI.Typography.caption2.metrics(for: dynamicTypeSize)
         let lineHeight = max(metrics.lineHeight, metrics.font.lineHeight)
         return max(1, Int(((100.8 + 0.01) / lineHeight).rounded(.down)))
     }

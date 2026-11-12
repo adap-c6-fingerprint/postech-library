@@ -56,7 +56,7 @@ struct BookRouteFailureView: View {
             content
             actions
         }
-        .foregroundStyle(DS.ColorToken.neutralPrimary)
+        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .accessibilityIdentifier("route-failure")
@@ -68,22 +68,22 @@ struct BookRouteFailureView: View {
                 .font(.system(size: 69))
                 .frame(width: 69, height: 69)
                 .symbolRenderingMode(.palette)
-                .foregroundStyle(DS.ColorToken.neutralDark, DS.ColorToken.primaryLight)
+                .foregroundStyle(PobookUI.ColorToken.neutralDark, PobookUI.ColorToken.primaryLight)
                 .accessibilityHidden(true)
             VStack(spacing: 16) {
                 Text(title)
                     .typography(.title1)
-                    .foregroundStyle(DS.ColorToken.neutralPrimary)
+                    .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                     .accessibilityAddTraits(.isHeader)
                     .accessibilityIdentifier("route-failure-title")
                 Text(message)
                     .typography(.body2)
-                    .foregroundStyle(DS.ColorToken.neutralTertiary)
+                    .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
                     .accessibilityIdentifier("route-failure-message")
                 if let diagnostic {
                     Text(diagnostic)
                         .font(.caption2.monospaced())
-                        .foregroundStyle(DS.ColorToken.neutralTertiary.opacity(0.7))
+                        .foregroundStyle(PobookUI.ColorToken.neutralTertiary.opacity(0.7))
                         .textSelection(.enabled)
                         .accessibilityIdentifier("route-failure-code")
                 }
@@ -100,12 +100,12 @@ struct BookRouteFailureView: View {
             Spacer(minLength: 0)
             Button(action: onRetry) {
                 HStack(spacing: 8) {
-                    if isRetrying { ProgressView().tint(DS.ColorToken.neutralDark) }
+                    if isRetrying { ProgressView().tint(PobookUI.ColorToken.neutralDark) }
                     Text("다시 시도하기").typography(.button)
                 }
                 .frame(maxWidth: .infinity, minHeight: 52)
-                .foregroundStyle(DS.ColorToken.neutralDark)
-                .background(DS.ColorToken.primaryLight, in: Capsule())
+                .foregroundStyle(PobookUI.ColorToken.neutralDark)
+                .background(PobookUI.ColorToken.primaryLight, in: Capsule())
             }
             .buttonStyle(.plain)
             .disabled(isRetrying)
@@ -115,7 +115,7 @@ struct BookRouteFailureView: View {
                 Text("홈으로 돌아가기")
                     .typography(.button)
                     .frame(maxWidth: .infinity, minHeight: 52)
-                    .foregroundStyle(DS.ColorToken.neutralPrimary)
+                    .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                     .background(Color(white: 0.16), in: Capsule())
             }
             .buttonStyle(.plain)
@@ -136,7 +136,7 @@ struct BookRouteFailureView: View {
                 Text("책카트에 담고 닫기")
                     .typography(.body2)
                     .underline()
-                    .foregroundStyle(DS.ColorToken.neutralPrimary)
+                    .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("route-failure-add-to-cart")
@@ -145,7 +145,7 @@ struct BookRouteFailureView: View {
                 Text("문제 신고하기")
                     .typography(.body2)
                     .underline()
-                    .foregroundStyle(DS.ColorToken.neutralPrimary)
+                    .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             }
             .buttonStyle(.plain)
             .accessibilityIdentifier("route-failure-report")

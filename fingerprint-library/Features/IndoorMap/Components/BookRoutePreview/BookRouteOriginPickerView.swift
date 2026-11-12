@@ -109,7 +109,7 @@ struct BookRouteOriginPickerView: View {
                 if let subtitle {
                     Text(subtitle)
                         .typography(.title1)
-                        .foregroundStyle(DS.ColorToken.neutralTertiary)
+                        .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
                         .accessibilityIdentifier("route-origin-picker-shelf")
                 }
             }
@@ -125,7 +125,7 @@ struct BookRouteOriginPickerView: View {
             .accessibilityLabel("출발 위치 직접 설정 그만두기")
             .accessibilityIdentifier("route-origin-picker-cancel")
         }
-        .foregroundStyle(DS.ColorToken.neutralPrimary)
+        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .padding(.horizontal, 20)
         .padding(.top, 20)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -152,7 +152,7 @@ struct BookRouteOriginPickerView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 15, height: 15)
-                    .shadow(color: DS.ColorToken.primaryLight.opacity(0.3), radius: 1.65517)
+                    .shadow(color: PobookUI.ColorToken.primaryLight.opacity(0.3), radius: 1.65517)
                     .transition(.opacity)
             }
             Image("MapLocationStart")
@@ -200,7 +200,7 @@ struct BookRouteOriginPickerView: View {
         Text("층을 선택한 후,\n지도를 움직여 출발 위치를 직접 설정해주세요")
             .typography(.caption1)
             .multilineTextAlignment(.center)
-            .foregroundStyle(DS.ColorToken.neutralPrimary)
+            .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             .padding(.vertical, 10)
             .padding(.horizontal, 16)
             .frame(width: 307, height: 65)
@@ -225,7 +225,7 @@ struct BookRouteOriginPickerView: View {
         .padding(.vertical, 16)
         .padding(.horizontal, 20)
         .frame(width: 330, height: 52)
-        .foregroundStyle(DS.ColorToken.neutralPrimary)
+        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .accessibilityHint("선택한 위치를 출발지로 삼아 길안내를 시작해요")
         .accessibilityIdentifier("route-origin-picker-confirm")
     }
@@ -254,7 +254,7 @@ struct BookRouteOriginCrosshair: View {
                     path.addLine(to: CGPoint(x: center.x + direction.x * outer, y: center.y + direction.y * outer))
                 }
             }
-            .stroke(DS.ColorToken.primaryLight, style: StrokeStyle(lineWidth: 3, lineCap: .round))
+            .stroke(PobookUI.ColorToken.primaryLight, style: StrokeStyle(lineWidth: 3, lineCap: .round))
         }
     }
 }

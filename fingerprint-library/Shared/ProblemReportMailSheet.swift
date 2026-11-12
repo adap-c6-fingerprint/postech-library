@@ -63,7 +63,7 @@ struct ProblemReportFallbackSheet: View {
                 .accessibilityAddTraits(.isHeader)
             Text("아래 주소로 문제를 보내 주세요.")
                 .typography(.caption1)
-                .foregroundStyle(DS.ColorToken.neutralTertiary)
+                .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
             Text(ProblemReportMailSheet.recipient)
                 .typography(.body2)
                 .textSelection(.enabled)

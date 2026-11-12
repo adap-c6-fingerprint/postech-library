@@ -1,5 +1,5 @@
 //
-//  DesignSystemRadius.swift
+//  PobookUI+Radius.swift
 //  fingerprint-library
 //
 //  Created by 이시온 on 11/7/26.
@@ -7,7 +7,7 @@
 
 import CoreGraphics
 
-extension DS {
+extension PobookUI {
     /// Figma 「Radius」 컬렉션
     enum Radius {
         static let _0: CGFloat = 0

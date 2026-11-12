@@ -54,7 +54,7 @@ struct RecentlyFoundBookView: View {
     }
 
     private func highlighted(_ word: String) -> Text {
-        let title1 = DS.Typography.title1
+        let title1 = PobookUI.Typography.title1
         return Text(word)
             .font(.custom(title1.fontName, fixedSize: title1.size))
             .tracking(title1.letterSpacing)

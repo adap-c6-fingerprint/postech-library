@@ -148,7 +148,7 @@ struct IndoorMapView: View {
                 Text("편의시설")
                     .typography(.caption2)
                     .foregroundStyle(store.homeAnnotations.showsAmenities
-                                     ? DS.ColorToken.primaryLight : DS.ColorToken.neutralPrimary)
+                                     ? PobookUI.ColorToken.primaryLight : PobookUI.ColorToken.neutralPrimary)
                     .lineLimit(1)
                     .minimumScaleFactor(0.25)
             }

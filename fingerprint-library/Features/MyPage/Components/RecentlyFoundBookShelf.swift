@@ -201,7 +201,7 @@ struct RecentlyFoundBookShelf: View {
         let length = frame.height * Self.titleLengthRatio
         let thickness = frame.width * Self.titleThicknessRatio
         return Text(Self.spineTitle(title))
-            .font(.custom(DS.Typography.bookTitle.fontName, size: thickness * 0.8))
+            .font(.custom(PobookUI.Typography.bookTitle.fontName, size: thickness * 0.8))
             .foregroundStyle(.black)
             .lineLimit(1)
             .minimumScaleFactor(0.3)

@@ -121,11 +121,11 @@ struct BookExpandedDetailView<Details: View>: View {
         return HStack(spacing: 10) {
             Text("\(index + 1)/\(books.count)")
                 .typography(.caption2)
-                .foregroundStyle(DS.ColorToken.primaryLight)
+                .foregroundStyle(PobookUI.ColorToken.primaryLight)
             HStack(spacing: 8) {
                 ForEach(books.indices, id: \.self) { offset in
                     Capsule()
-                        .fill(offset == index ? DS.ColorToken.primaryLight : Color.white.opacity(0.45))
+                        .fill(offset == index ? PobookUI.ColorToken.primaryLight : Color.white.opacity(0.45))
                         .frame(width: offset == index ? 20 : 8, height: 8)
                 }
             }

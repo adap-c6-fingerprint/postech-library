@@ -37,12 +37,12 @@ struct BookNavigationPauseAlert: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("안내를 종료할까요?")
                 .typography(.body1.weight(.semibold))
-                .foregroundStyle(DS.ColorToken.neutralDark)
+                .foregroundStyle(PobookUI.ColorToken.neutralDark)
                 .accessibilityAddTraits(.isHeader)
                 .padding(.horizontal, 12)
             Text(message)
                 .typography(.body2)
-                .foregroundStyle(DS.ColorToken.neutralDark)
+                .foregroundStyle(PobookUI.ColorToken.neutralDark)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 12)
                 .padding(.bottom, 12)
@@ -93,9 +93,9 @@ struct BookNavigationPauseAlert: View {
                 .typography(.body1.weight(.semibold))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
-                .foregroundStyle(isDestructive ? Self.destructiveColor : DS.ColorToken.neutralDark)
+                .foregroundStyle(isDestructive ? Self.destructiveColor : PobookUI.ColorToken.neutralDark)
                 .frame(maxWidth: .infinity, minHeight: 48)
-                .background(Constants.FillsSecondary, in: Capsule())
+                .background(PobookUI.ColorToken.fillsSecondary, in: Capsule())
         }
         .buttonStyle(.plain)
     }

@@ -259,7 +259,7 @@ struct BookRouteBooksPreviewView: View {
                 .padding(.horizontal, 16)
                 .frame(maxWidth: 114)
                 .frame(minHeight: 32)
-                .foregroundStyle(isSelected ? DS.ColorToken.neutralDark : DS.ColorToken.neutralPrimary)
+                .foregroundStyle(isSelected ? PobookUI.ColorToken.neutralDark : PobookUI.ColorToken.neutralPrimary)
                 .background(isSelected ? Color.limeBase : .clear, in: .capsule)
                 .glassEffect(.regular.interactive(), in: .capsule)
         }

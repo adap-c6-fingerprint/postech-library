@@ -30,8 +30,8 @@ struct IndoorMapFloorPicker: View {
             .fixedSize()
         }
         .background(isHome ? .clear : Color(uiColor: .systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: DS.Radius.floorAmenitiesToggle))
-        .glassEffect(isHome ? .regular : .identity, in: .rect(cornerRadius: DS.Radius.floorAmenitiesToggle))
+        .clipShape(RoundedRectangle(cornerRadius: PobookUI.Radius.floorAmenitiesToggle))
+        .glassEffect(isHome ? .regular : .identity, in: .rect(cornerRadius: PobookUI.Radius.floorAmenitiesToggle))
         .overlay {
             GeometryReader { geometry in
                 if floors.count > 1 {
@@ -57,7 +57,7 @@ struct IndoorMapFloorPicker: View {
             .allowsHitTesting(false)
         }
         .overlay(
-            RoundedRectangle(cornerRadius: DS.Radius.floorAmenitiesToggle)
+            RoundedRectangle(cornerRadius: PobookUI.Radius.floorAmenitiesToggle)
                 .strokeBorder(Color(uiColor: .separator).opacity(0.6))
         )
         .shadow(color: .black.opacity(0.1), radius: 2.5, x: 1, y: 1)
@@ -74,9 +74,9 @@ struct IndoorMapFloorPicker: View {
         switch appearance {
         case .home:
             buttonWidth = 61
-            selectedBackground = DS.ColorToken.primaryLight
-            selectedText = DS.ColorToken.neutralDark
-            unselectedText = DS.ColorToken.neutralPrimary
+            selectedBackground = PobookUI.ColorToken.primaryLight
+            selectedText = PobookUI.ColorToken.neutralDark
+            unselectedText = PobookUI.ColorToken.neutralPrimary
         case .standard, .bookDetail:
             buttonWidth = 56
             selectedBackground = Color(uiColor: .label)
@@ -116,7 +116,7 @@ struct IndoorMapFloorPicker: View {
             base
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.vertical, 10)
-                .padding(.horizontal, DS.Spacing._16)
+                .padding(.horizontal, PobookUI.Spacing._16)
         }
     }
 

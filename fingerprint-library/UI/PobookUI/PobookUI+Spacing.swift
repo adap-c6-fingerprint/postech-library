@@ -1,5 +1,5 @@
 //
-//  DesignSystemSpacing.swift
+//  PobookUI+Spacing.swift
 //  fingerprint-library
 //
 //  Created by 이시온 on 11/2/26.
@@ -7,9 +7,7 @@
 
 import CoreGraphics
 
-enum DS {}
-
-extension DS {
+extension PobookUI {
     /// Figma 「Spacing」 컬렉션
     enum Spacing {
         static let _4: CGFloat = 4

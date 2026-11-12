@@ -50,7 +50,7 @@ final class IndoorShelfLabelView: MKAnnotationView {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    private static let typography = DS.Typography.caption1
+    private static let typography = PobookUI.Typography.caption1
 
     private static var font: UIFont {
         UIFont(name: typography.fontName, size: typography.size)

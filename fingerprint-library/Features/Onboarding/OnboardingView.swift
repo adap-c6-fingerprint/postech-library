@@ -363,8 +363,8 @@ struct OnboardingView: View {
     private func header(
         title: String,
         subtitle: String,
-        subtitleTypography: DS.Typography = .title2,
-        spacing: CGFloat = DS.Spacing._4,
+        subtitleTypography: PobookUI.Typography = .title2,
+        spacing: CGFloat = PobookUI.Spacing._4,
         topPadding: CGFloat
     ) -> some View {
         VStack(alignment: .leading, spacing: spacing) {

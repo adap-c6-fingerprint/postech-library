@@ -39,7 +39,7 @@ private struct LibraryTopBarTitle: View {
     var body: some View {
         Text(title)
             .typography(.largeTitle)
-            .foregroundStyle(DS.ColorToken.neutralPrimary)
+            .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             .fixedSize()
             .accessibilityIdentifier("library-top-bar-title")
     }

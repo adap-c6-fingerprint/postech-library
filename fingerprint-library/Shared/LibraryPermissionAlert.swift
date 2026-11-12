@@ -26,16 +26,16 @@ struct LibraryPermissionAlert: View {
         VStack(alignment: .leading, spacing: 12) {
             Text(title)
                 .typography(.body1)
-                .foregroundStyle(DS.ColorToken.neutralDark)
+                .foregroundStyle(PobookUI.ColorToken.neutralDark)
                 .accessibilityAddTraits(.isHeader)
             Text(message)
                 .typography(.caption1)
-                .foregroundStyle(DS.ColorToken.neutralDark)
+                .foregroundStyle(PobookUI.ColorToken.neutralDark)
                 .fixedSize(horizontal: false, vertical: true)
             HStack(spacing: 10) {
                 button(cancelTitle, background: Color(white: 0.76), action: onCancel)
                     .accessibilityIdentifier("library-permission-alert-cancel")
-                button(confirmTitle, background: DS.ColorToken.primaryLight, action: onConfirm)
+                button(confirmTitle, background: PobookUI.ColorToken.primaryLight, action: onConfirm)
                     .accessibilityIdentifier("library-permission-alert-confirm")
             }
             .padding(.top, 8)
@@ -52,7 +52,7 @@ struct LibraryPermissionAlert: View {
                 .typography(.caption1.weight(.semibold))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
-                .foregroundStyle(DS.ColorToken.neutralDark)
+                .foregroundStyle(PobookUI.ColorToken.neutralDark)
                 .frame(maxWidth: .infinity, minHeight: 48)
                 .background(background, in: Capsule())
         }

@@ -145,7 +145,7 @@ struct BookNavigationView: View {
                 if let info = store.currentBookInfo {
                     Text("\(info.floorName ?? "") \(info.shelf.shelfTitle)")
                         .typography(.title1)
-                        .foregroundStyle(DS.ColorToken.neutralTertiary)
+                        .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
                         .accessibilityIdentifier("book-navigation-shelf")
                 }
             }
@@ -200,7 +200,7 @@ struct BookNavigationView: View {
                         .background(.black, in: Circle())
                     Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
                         .typography(.body1).lineLimit(2)
-                        .foregroundStyle(DS.ColorToken.neutralPrimary)
+                        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                     Spacer(minLength: 0)
                 }
                 .frame(minHeight: 28)
@@ -265,7 +265,7 @@ struct BookNavigationView: View {
             Text(transition.buttonTitle)
                 .typography(.caption2.weight(.medium))
                 .multilineTextAlignment(.center)
-                .foregroundStyle(DS.ColorToken.neutralPrimary)
+                .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                 .padding(.horizontal, 16)
                 .frame(minHeight: 34)
                 .glassEffect(.regular.tint(.black.opacity(0.2)), in: .rect(cornerRadius: 12))

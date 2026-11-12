@@ -8,10 +8,10 @@ struct LibraryTabIntroText: View {
     var body: some View {
         Text(title)
             .typography(.title1)
-            .foregroundStyle(DS.ColorToken.neutralPrimary)
+            .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             .fixedSize(horizontal: false, vertical: true)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, DS.Spacing._16)
+            .padding(.horizontal, PobookUI.Spacing._16)
     }
 }
 
@@ -22,7 +22,7 @@ struct LibraryTabIntroText: View {
         LibraryTabIntroText(title: "당신에게\n추천하는 책 6선.")
     }
     .padding(.vertical, 24)
-    .background(DS.ColorToken.neutralDark)
+    .background(PobookUI.ColorToken.neutralDark)
     .preferredColorScheme(.dark)
 }
 #endif

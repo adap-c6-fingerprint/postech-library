@@ -58,7 +58,7 @@ struct EditMyAffiliationView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing._4) {
+        VStack(alignment: .leading, spacing: PobookUI.Spacing._4) {
             Text("소속과 학과를 변경할래요")
                 .typography(.title1)
                 .foregroundStyle(Color.textPrimary)

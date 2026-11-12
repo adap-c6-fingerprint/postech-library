@@ -238,11 +238,11 @@ struct BookRoutePreviewView: View {
             if let subtitle = originPickerSubtitle {
                 Text(subtitle)
                     .typography(.title1)
-                    .foregroundStyle(DS.ColorToken.neutralTertiary)
+                    .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
             }
             Spacer(minLength: 0)
         }
-        .foregroundStyle(DS.ColorToken.neutralPrimary)
+        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding(.horizontal, 20)
         .padding(.top, 20)
@@ -259,9 +259,9 @@ struct BookRoutePreviewView: View {
             Text(isPreparingManualOrigin ? "서가까지\n수동안내를 시작합니다" : "서가까지\n길안내를 준비합니다")
                 .typography(.body1)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(DS.ColorToken.neutralPrimary)
+                .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             ProgressView()
-                .tint(DS.ColorToken.neutralPrimary)
+                .tint(PobookUI.ColorToken.neutralPrimary)
         }
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier("book-navigation-preparing-status")

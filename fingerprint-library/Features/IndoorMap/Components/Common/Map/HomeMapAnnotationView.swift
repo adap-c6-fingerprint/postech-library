@@ -39,9 +39,9 @@ final class HomeMapAnnotationView: MKAnnotationView {
         addSubview(iconView)
         addSubview(nameLabel)
         countBadge.textAlignment = .center
-        countBadge.font = DS.Typography.caption2.weight(.semibold).metrics(for: .large, scaling: .fixed).font
-        countBadge.textColor = UIColor(DS.ColorToken.neutralDark)
-        countBadge.backgroundColor = UIColor(DS.ColorToken.primaryLight)
+        countBadge.font = PobookUI.Typography.caption2.weight(.semibold).metrics(for: .large, scaling: .fixed).font
+        countBadge.textColor = UIColor(PobookUI.ColorToken.neutralDark)
+        countBadge.backgroundColor = UIColor(PobookUI.ColorToken.primaryLight)
         countBadge.clipsToBounds = true
         countBadge.isUserInteractionEnabled = false
         countBadge.accessibilityIdentifier = "home-marker-count"
@@ -65,7 +65,7 @@ final class HomeMapAnnotationView: MKAnnotationView {
         iconView.image = marker.kind.assetName.flatMap(MapAnnotationImage.asset(named:))
             ?? MapAnnotationImage.symbol(named: "mappin.circle.fill", tintColor: .systemCyan)
         // 지도 위 번호와 같이, 아이콘 아래 시설명은 고정 크기로 그린다.
-        let metrics = DS.Typography.caption1.metrics(for: .large, scaling: .fixed)
+        let metrics = PobookUI.Typography.caption1.metrics(for: .large, scaling: .fixed)
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .center
         paragraph.lineBreakMode = .byTruncatingTail
@@ -76,7 +76,7 @@ final class HomeMapAnnotationView: MKAnnotationView {
             .font: metrics.font,
             .kern: metrics.letterSpacing,
             .paragraphStyle: paragraph,
-            .foregroundColor: UIColor(DS.ColorToken.neutralTertiary)
+            .foregroundColor: UIColor(PobookUI.ColorToken.neutralTertiary)
         ])
         nameLabel.isHidden = marker.kind == .favorite || marker.title.isEmpty
         countBadge.text = String(marker.bookKeys.count)
@@ -109,7 +109,7 @@ final class HomeMapAnnotationView: MKAnnotationView {
         }
         let size = nameLabel.sizeThatFits(CGSize(width: Self.maximumNameWidth, height: .greatestFiniteMagnitude))
         let width = min(Self.maximumNameWidth, ceil(size.width))
-        nameLabel.frame = CGRect(x: bounds.midX - width / 2, y: bounds.maxY + DS.Spacing._4,
+        nameLabel.frame = CGRect(x: bounds.midX - width / 2, y: bounds.maxY + PobookUI.Spacing._4,
                                  width: width, height: ceil(size.height))
     }
 

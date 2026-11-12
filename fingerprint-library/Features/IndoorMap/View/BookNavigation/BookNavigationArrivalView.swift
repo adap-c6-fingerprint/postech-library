@@ -203,7 +203,7 @@ struct BookNavigationArrivalView: View {
             }
         }
         .typography(.body1.weight(.medium))
-        .foregroundStyle(DS.ColorToken.neutralTertiary)
+        .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
         .lineSpacing(4)
         .multilineTextAlignment(.center)
         .fixedSize(horizontal: false, vertical: true)

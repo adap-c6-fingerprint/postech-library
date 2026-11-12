@@ -67,7 +67,7 @@ struct BookDetailMapView: View {
     private func destinationFloorBadge(_ floor: IndoorMapFloor) -> some View {
         Text("\(floor.ordinal + 1)F")
             .typography(.caption2)
-            .foregroundStyle(DS.ColorToken.neutralPrimary)
+            .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             .padding(.horizontal, 12)
             .frame(minWidth: 61, minHeight: 34)
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
@@ -286,7 +286,7 @@ struct BookDetailView: View {
     }
 
     @ViewBuilder
-    private func holdingLocation(typography: DS.Typography = .body2) -> some View { // ✅ 펼친 화면은 body1을 사용한다.
+    private func holdingLocation(typography: PobookUI.Typography = .body2) -> some View { // ✅ 펼친 화면은 body1을 사용한다.
         if case .loaded = store.holdingsState {
             VStack(alignment: .leading, spacing: 2) {
                 Text(store.destinationPresentation?.locationText

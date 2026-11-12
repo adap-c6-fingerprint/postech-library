@@ -3,7 +3,7 @@ import SwiftUI
 
 /// 폰트 역할과 Dynamic Type을 함께 확인하는 개발용 카탈로그.
 struct TypographyCatalogView: View {
-    private let samples: [(String, DS.Typography)] = [
+    private let samples: [(String, PobookUI.Typography)] = [
         ("largeTitle · 화면 대표 제목", .largeTitle),
         ("title1 · 화면 제목", .title1),
         ("title2 · 섹션 제목", .title2),

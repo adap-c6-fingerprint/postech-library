@@ -11,7 +11,7 @@ struct BookNavigationProgressBar: View {
     @ScaledMetric(relativeTo: .caption) private var trackHeight = 20
     @ScaledMetric(relativeTo: .caption) private var rowHeight = 28
 
-    private let typography = DS.Typography.caption2.weight(.semibold)
+    private let typography = PobookUI.Typography.caption2.weight(.semibold)
 
     var body: some View {
         Group {

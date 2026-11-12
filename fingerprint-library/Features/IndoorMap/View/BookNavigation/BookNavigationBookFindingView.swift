@@ -181,7 +181,7 @@ struct BookNavigationBookFindingView: View {
                     .accessibilityIdentifier("book-navigation-shelf")
             }
         }
-        .foregroundStyle(DS.ColorToken.neutralPrimary)
+        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
     }
 
     private func instruction(_ info: BookNavigationBookInfo) -> some View {
@@ -198,7 +198,7 @@ struct BookNavigationBookFindingView: View {
         let key = number.classification + number.number
         let rest = number.suffix.filter { !$0.isWhitespace }
         let keyText = Text(key)
-            .font(DS.Typography.body1.weight(.bold).font(for: dynamicTypeSize))
+            .font(PobookUI.Typography.body1.weight(.bold).font(for: dynamicTypeSize))
             .foregroundColor(Color.textPrimary)
         let keyParticle: String = Self.objectParticle(after: key)
         let prefix = Text("책등에서 \(keyText)")
