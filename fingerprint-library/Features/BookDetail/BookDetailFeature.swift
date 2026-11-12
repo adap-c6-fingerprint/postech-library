@@ -135,7 +135,6 @@ struct BookDetailFeature {
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
 
     @Dependency(\.indoorRouteClient) var indoorRouteClient
-    @Dependency(\.bookCartClient) var bookCartClient
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
     @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
     @Dependency(\.bookCoverClient) var bookCoverClient
@@ -272,7 +271,8 @@ struct BookDetailFeature {
                 return .none
 
             case .addToCartButtonTapped:
-                switch bookCartClient.add(state.book, at: now) {
+                @Shared(.bookCart) var cartItems
+                switch $cartItems.withLock({ $0.add(state.book, at: now) }) {
                 case .added:
                     state.cartNotice = .added
                     analytics.record(.init(.cartBookAdded, [

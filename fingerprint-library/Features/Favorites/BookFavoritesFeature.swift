@@ -53,7 +53,6 @@ struct BookFavoritesFeature {
     }
 
     @Dependency(\.bookFavoritesClient) var bookFavoritesClient
-    @Dependency(\.bookCartClient) var bookCartClient
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.date.now) var now
@@ -116,7 +115,8 @@ struct BookFavoritesFeature {
             case .addToCartButtonTapped:
                 let books = state.selectedBooks
                 guard !books.isEmpty else { return .none }
-                let storedKeys = Set(bookCartClient.load().map(\.book.recordKey))
+                @Shared(.bookCart) var cartItems
+                let storedKeys = Set(cartItems.map(\.book.recordKey))
                 let newCount = books.filter { !storedKeys.contains($0.recordKey) }.count
                 guard storedKeys.count + newCount <= BookCartItem.maxStoredCount else {
                     state.isCartLimitAlertPresented = true
@@ -125,7 +125,7 @@ struct BookFavoritesFeature {
                     return .none
                 }
                 for book in books {
-                    if bookCartClient.add(book, at: now) == .added {
+                    if $cartItems.withLock({ $0.add(book, at: now) }) == .added {
                         analytics.record(.init(.cartBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
                     }
                 }

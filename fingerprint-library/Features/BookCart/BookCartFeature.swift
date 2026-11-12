@@ -10,7 +10,7 @@ import ComposableArchitecture
 struct BookCartFeature {
     @ObservableState
     struct State: Equatable {
-        var items: [BookCartItem] = []
+        @Shared(.bookCart) var items
         var libraryInfo: [Book.ID: LibraryInfo] = [:]
         // 길안내하거나 삭제할 책을 고른 순서대로 보관한다.
         var selectedIDs: [Book.ID] = []
@@ -61,8 +61,6 @@ struct BookCartFeature {
         }
     }
 
-    @Dependency(\.bookCartClient)
-    var bookCartClient: BookCartClient
     @Dependency(\.analyticsClient) private var analytics
 
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
@@ -76,11 +74,12 @@ struct BookCartFeature {
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
+            // 다른 화면에서 책바구니가 바뀌었을 수 있으므로 선택 ID를 항상 저장 목록의 부분집합으로 맞춘다.
+            let itemIDs = Set(state.items.map(\.id))
+            state.selectedIDs.removeAll { !itemIDs.contains($0) }
+
             switch action {
             case .task:
-                state.items = bookCartClient.load()
-                let itemIDs = Set(state.items.map(\.id))
-                state.selectedIDs.removeAll { !itemIDs.contains($0) }
                 return .none
 
             case .loadLibraryInfo:
@@ -94,8 +93,7 @@ struct BookCartFeature {
                 return .none
 
             case let .coverRecovered(id, oldURL, newURL):
-                bookCartClient.repairLegacyCover(id, oldURL, newURL)
-                state.items = bookCartClient.load()
+                state.$items.withLock { $0.repairLegacyCover(of: id, from: oldURL, to: newURL) }
                 return .none
 
             case let .selectionToggled(id):
@@ -135,12 +133,9 @@ struct BookCartFeature {
 
             case .removeConfirmed:
                 state.isRemoveAlertPresented = false
-                let removedIDs = Set(state.selectedIDs)
-                let storedItems = bookCartClient.load()
-                state.items = storedItems.filter { !removedIDs.contains($0.id) }
-                let removedCount = storedItems.count - state.items.count
+                let removedKeys = Set(state.selectedBooks.map(\.recordKey))
+                let removedCount = state.$items.withLock { $0.remove(recordKeys: removedKeys) }
                 state.selectedIDs = []
-                bookCartClient.save(state.items)
                 if removedCount > 0 {
                     analytics.record(.init(.cartBooksRemoved, [.removedCount: .integer(removedCount)]))
                 }

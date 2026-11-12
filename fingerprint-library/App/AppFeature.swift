@@ -50,7 +50,6 @@ struct AppFeature {
         case onboarding(OnboardingFeature.Action)
     }
 
-    @Dependency(\.bookCartClient) var bookCartClient
     @Dependency(\.legacyUserProfileClient) var legacyUserProfileClient
 
     var body: some Reducer<State, Action> {
@@ -84,22 +83,7 @@ struct AppFeature {
                 state.selectedTab = .recommendations
                 return .none
 
-            case .home(.detail(.presented(.addToCartButtonTapped))),
-                 .home(.cart(.presented(.removeConfirmed))),
-                 .home(.detail(.presented(.cart(.presented(.removeConfirmed))))),
-                 .bookSearch(.detail(.presented(.addToCartButtonTapped))),
-                 .bookSearch(.cart(.presented(.removeConfirmed))),
-                 .bookSearch(.detail(.presented(.cart(.presented(.removeConfirmed))))),
-                 .bookSearch(.addToCart(_)), .bookSearch(.removeFromCart(_)),
-                 .home(.favorites(.presented(.delegate(.cartChanged)))),
-                 .home(.favorites(.presented(.cart(.presented(.removeConfirmed))))),
-                 .bookSearch(.favorites(.presented(.delegate(.cartChanged)))),
-                 .bookSearch(.favorites(.presented(.cart(.presented(.removeConfirmed))))):
-                synchronizeCart(state: &state)
-                return .none
-
             case .bookSearch(.task):
-                synchronizeCart(state: &state)
                 synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
                 return .none
 
@@ -182,36 +166,6 @@ struct AppFeature {
             }
         }
         .ifLet(\.onboarding, action: \.onboarding) { OnboardingFeature() }
-    }
-
-    private func synchronizeCart(state: inout State) {
-        let items = bookCartClient.load()
-        let ids = Set(items.map(\.id))
-        state.bookSearch.cartBooks = items.map(\.book)
-        if state.bookSearch.cart != nil {
-            state.bookSearch.cart?.items = items
-            state.bookSearch.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.home.cart != nil {
-            state.home.cart?.items = items
-            state.home.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.bookSearch.detail?.cart != nil {
-            state.bookSearch.detail?.cart?.items = items
-            state.bookSearch.detail?.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.bookSearch.favorites?.cart != nil {
-            state.bookSearch.favorites?.cart?.items = items
-            state.bookSearch.favorites?.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.home.favorites?.cart != nil {
-            state.home.favorites?.cart?.items = items
-            state.home.favorites?.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.home.detail?.cart != nil {
-            state.home.detail?.cart?.items = items
-            state.home.detail?.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
     }
 
     private func synchronizeFavorites(_ keys: Set<[String?]>, state: inout State) {

@@ -38,3 +38,17 @@ nonisolated struct Book: Equatable, Identifiable, Sendable {
         }
     }
 }
+
+extension Book {
+    // 표지 주소만 바꾼 같은 책
+    nonisolated func replacingImageURL(_ imageURL: URL?) -> Book {
+        var book = Book(
+            id: id, isbn: isbn, controlNumber: controlNumber, title: title,
+            author: author, publisher: publisher, publicationYear: publicationYear,
+            description: description, imageURL: imageURL
+        )
+        book.subLocation = subLocation
+        book.resourceTypes = resourceTypes
+        return book
+    }
+}

@@ -32,7 +32,8 @@ struct BookSearchFeature {
         var errorMessage: String? = nil
         var hasSearched: Bool = false
         
-        var cartBooks: [Book] = []
+        @Shared(.bookCart) var cartItems
+        var cartBooks: [Book] { cartItems.map(\.book) }
         var isCartLimitAlertPresented = false
         @Presents var detail: BookDetailFeature.State?
         @Presents var favoriteShelf: BookShelfMapFeature.State?
@@ -107,8 +108,6 @@ struct BookSearchFeature {
     @Dependency(\.bookFavoritesClient)
     var bookFavoritesClient: BookFavoritesClient
 
-    @Dependency(\.bookCartClient)
-    var bookCartClient: BookCartClient
 
     @Dependency(\.date.now)
     var now: Date
@@ -126,7 +125,6 @@ struct BookSearchFeature {
                 state.recentQueries = searchHistoryClient.load()
                 state.recentBooks = recentSearchBooksClient.load()
                 state.favoriteBookKeys = bookFavoritesClient.load()
-                state.cartBooks = bookCartClient.load().map(\.book)
                 return .none
 
             case .loadRecentBookInfo:
@@ -208,11 +206,6 @@ struct BookSearchFeature {
                 )
                 return .none
 
-            case .detail(.presented(.addToCartButtonTapped)),
-                 .detail(.presented(.cart(.presented(.removeConfirmed)))):
-                state.cartBooks = bookCartClient.load().map(\.book)
-                return .none
-
             case let .detail(.presented(.delegate(.startGuidance(book)))):
                 state.shelfMap = BookShelfMapFeature.State(book: book)
                 return .none
@@ -221,17 +214,8 @@ struct BookSearchFeature {
                 state.favoriteBookKeys = keys
                 return .none
 
-            case .detail(.dismiss):
-                // 상세 화면에서 담은 책을 검색 화면의 바로가기 권수에 반영한다.
-                state.cartBooks = bookCartClient.load().map(\.book)
-                return .none
-
             case .cartButtonTapped:
                 state.cart = BookCartFeature.State()
-                return .none
-
-            case .cart(.dismiss), .cart(.presented(.removeConfirmed)):
-                state.cartBooks = bookCartClient.load().map(\.book)
                 return .none
 
             case let .cart(.presented(.delegate(.startGuidance(books)))):
@@ -245,12 +229,6 @@ struct BookSearchFeature {
             case let .favorites(.presented(.delegate(.favoritesChanged(keys)))):
                 state.favoriteBookKeys = keys
                 // 지도 찜 표시와 검색 결과 북마크가 찜 목록 화면에서 지운 내용을 따라가게 한다.
-                return .none
-
-            case .favorites(.presented(.delegate(.cartChanged))),
-                 .favorites(.presented(.cart(.presented(.removeConfirmed)))),
-                 .favorites(.dismiss):
-                state.cartBooks = bookCartClient.load().map(\.book)
                 return .none
 
             case .profileButtonTapped:
@@ -275,11 +253,10 @@ struct BookSearchFeature {
                 return .none
                 
             case let .addToCart(book):
-                let result = bookCartClient.add(book, at: now)
+                let result = state.$cartItems.withLock { $0.add(book, at: now) }
                 if result == .added {
                     analytics.record(.init(.cartBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
                 }
-                state.cartBooks = bookCartClient.load().map(\.book)
                 if result == .limitExceeded {
                     analytics.record(.init(.cartLimitBlocked, [.kind: .text("capacity")]))
                     state.isCartLimitAlertPresented = true
@@ -384,15 +361,10 @@ struct BookSearchFeature {
                 let removedKeys = Set(
                     state.cartBooks.filter { bookIDs.contains($0.id) }.map(\.recordKey)
                 )
-                state.cartBooks.removeAll { book in
-                    bookIDs.contains(book.id)
-                }
-                let stored = bookCartClient.load()
-                let remaining = stored.filter { !removedKeys.contains($0.book.recordKey) }
-                bookCartClient.save(remaining)
-                if stored.count > remaining.count {
+                let removedCount = state.$cartItems.withLock { $0.remove(recordKeys: removedKeys) }
+                if removedCount > 0 {
                     analytics.record(.init(.cartBooksRemoved, [
-                        .removedCount: .integer(stored.count - remaining.count)
+                        .removedCount: .integer(removedCount)
                     ]))
                 }
 

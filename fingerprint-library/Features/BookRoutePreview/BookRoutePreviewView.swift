@@ -29,7 +29,7 @@ struct BookRoutePreviewView: View {
     @Environment(\.indoorRouteMapStore) private var mapStore
     @Environment(\.libraryGoHome) private var goHome
     @Environment(\.openURL) private var openURL
-    @Dependency(\.bookCartClient) private var bookCartClient
+    @Shared(.bookCart) private var cartItems
     @State private var isProblemReportPresented = false
     /// 메일 작성기도 메일 앱도 없을 때 주소를 안내하는 시트.
     @State private var isProblemReportFallbackPresented = false
@@ -311,7 +311,9 @@ struct BookRoutePreviewView: View {
 
     /// 지금은 안내할 수 없으니 책을 담아 두고 화면을 닫는다.
     private func addBooksToCart() {
-        for book in destination.books { _ = bookCartClient.add(book, at: Date()) }
+        $cartItems.withLock { items in
+            for book in destination.books { items.add(book, at: Date()) }
+        }
         dismiss()
     }
 
