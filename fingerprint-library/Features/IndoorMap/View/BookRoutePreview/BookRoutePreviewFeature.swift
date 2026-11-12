@@ -80,7 +80,7 @@ struct BookRoutePreviewFeature {
                         return .cancel(id: CancelID.route)
                     }
                     state.isLoadingRoute = true
-                    state.analyticsRequestIsTest = state.analyticsIsTest || start.source == .simulation || start.source == .replay
+                    state.analyticsRequestIsTest = state.analyticsIsTest || start.source == .replay
                     analytics.record(.init(.guidanceRequested, [
                         .operationID: .text(state.analyticsOperation), .bookCount: .integer(stops.count),
                         .isTest: .flag(state.analyticsRequestIsTest)

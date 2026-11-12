@@ -779,7 +779,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = parent.navigationAppearance ? "경로 진행 방향" : nil
                 view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position"
-                    : (annotation.position.source == .simulation ? "simulation-position" : "user-position")
+                    : "user-position"
                 configurePositionBearing(view, position: annotation.position, in: mapView)
                 return view
             }
@@ -857,30 +857,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = annotation.subtitle
                 view.accessibilityIdentifier = "route-transition-\(annotation.category.rawValue)"
-                return view
-            }
-            if let annotation = annotation as? PositionAnnotation, annotation.position.source == .simulation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "simulation-dot")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "simulation-dot")
-                view.annotation = annotation
-                view.frame.size = CGSize(width: 30, height: 30)
-                view.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.18)
-                view.layer.cornerRadius = 15
-                if view.subviews.isEmpty {
-                    let dot = UIView(frame: CGRect(x: 7, y: 7, width: 16, height: 16))
-                    dot.backgroundColor = .systemBlue
-                    dot.layer.cornerRadius = 8
-                    dot.layer.borderWidth = 2
-                    dot.layer.borderColor = UIColor.white.cgColor
-                    view.addSubview(dot)
-                }
-                view.displayPriority = .required
-                view.zPriority = MapAnnotationPriority.user
-                view.selectedZPriority = MapAnnotationPriority.user
-                view.isEnabled = false
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = "시뮬레이션 위치"
-                view.accessibilityIdentifier = "simulation-position"
                 return view
             }
             if let annotation = annotation as? IndoorShelfAnnotation {
@@ -1069,14 +1045,13 @@ private final class FeatureAnnotation: NSObject, MKAnnotation {
     }
 }
 
-/// 센서의 기본 사용자 위치와 구분해 합성·재생·수동 위치를 표시하는 annotation.
+/// 센서의 기본 사용자 위치와 구분해 재생·수동 위치를 표시하는 annotation.
 private final class PositionAnnotation: NSObject, MKAnnotation {
     private(set) var position: IndoorPosition
     @objc dynamic var coordinate: CLLocationCoordinate2D
     var title: String? {
         switch position.source {
         case .sensor: "현재 위치"
-        case .simulation: "시뮬레이션 위치"
         case .replay: "테스트 재생 위치"
         default: "수동 출발점"
         }

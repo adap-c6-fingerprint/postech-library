@@ -39,6 +39,8 @@ struct IndoorMapFeature {
         var selectedFloorID: UUID?
         /// 실제 위치의 층을 아직 한 번도 반영하지 않았는지. 기본 층에서 한 번만 자동으로 옮기기 위해 쓴다.
         var awaitsPositionFloor = true
+        /// 실내 측위가 마지막으로 알려 준 층. 신호가 잠깐 끊겨도 지우지 않아, 실제로 층이 바뀔 때만 지도를 옮긴다.
+        var lastSensedFloorOrdinal: Int?
         var selectedFeatureID: IndoorMapElement.ID?
         var selectedShelfKey: ShelfKey?
         var manualPosition: IndoorPosition?
@@ -119,9 +121,6 @@ struct IndoorMapFeature {
         case disappeared
         case locationEvent(IndoorLocationEvent)
         case requestLocationPermission
-        #if DEBUG
-        case simulationConnectionChanged
-        #endif
         case currentLocationTapped
         case floorSelected(UUID)
         case fitMapTapped
@@ -196,11 +195,6 @@ struct IndoorMapFeature {
                 state.awaitsPositionFloor = positionFloor == nil
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
-                if let position = state.latestPosition, position.source == .simulation,
-                   !acceptsSimulation(position, on: map) {
-                    state.latestPosition = nil
-                    state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
-                }
                 if let floor { state.requestCamera(.initialFloor(floor.id)) }
                 state.navigation = nil
                 state.isLoadingNavigation = false
@@ -264,19 +258,6 @@ struct IndoorMapFeature {
                               .cancel(id: CancelID(state.instanceID, .navigation)),
                               .cancel(id: CancelID(state.instanceID, .shelfLabels)), invalidateRoute(&state))
 
-            #if DEBUG
-            case .simulationConnectionChanged:
-                state.latestPosition = nil
-                state.manualPosition = nil
-                state.isPlacingOrigin = false
-                state.authorization = .notDetermined
-                // 새 공급자의 첫 위치에 맞춰 다시 층을 따라가게 한다.
-                state.awaitsPositionFloor = true
-                state.locationMessage = "선택한 위치 공급자에 연결하고 있어요."
-                let cancellation = invalidateRoute(&state)
-                return state.isActive ? .merge(cancellation, locationEvents(state)) : cancellation
-            #endif
-
             case .locationEvent(.authorization(let authorization)):
                 state.authorization = authorization
                 if !authorization.isAuthorized {
@@ -301,19 +282,16 @@ struct IndoorMapFeature {
             case .locationEvent(.position(let position)):
                 guard position.isRecent(at: now), position.source != .manual else { return .none }
                 if let latest = state.latestPosition, position.timestamp < latest.timestamp { return .none }
-                if position.source == .simulation, let map = state.map, !acceptsSimulation(position, on: map) {
-                    state.latestPosition = nil
-                    state.locationMessage = "시뮬레이터에서 앱과 같은 도면과 층을 선택해주세요."
-                    return invalidateRoute(&state)
-                }
                 let previousFloor = state.latestPosition?.floorOrdinal
                 state.latestPosition = position
                 if state.manualPosition == nil && !state.isPlacingOrigin {
                     state.locationMessage = nil
-                    let tracksSimulationFloor = position.source == .simulation
-                        && previousFloor != position.floorOrdinal
-                    // 기본 층으로 보고 있었다면 위치를 처음 확인한 시점에 그 층으로 옮긴다. 이후에는 사용자의 조회 층을 지킨다.
-                    if tracksSimulationFloor || state.awaitsPositionFloor,
+                    // 실내 측위가 층 이동을 알리면 지도도 그 층으로 옮긴다.
+                    // 같은 층에 머무는 동안에는 사용자가 고른 조회 층을 지킨다.
+                    let changedFloor = position.floorOrdinal != nil
+                        && position.floorOrdinal != state.lastSensedFloorOrdinal
+                    if let floorOrdinal = position.floorOrdinal { state.lastSensedFloorOrdinal = floorOrdinal }
+                    if changedFloor || state.awaitsPositionFloor,
                        let floor = state.map?.floors.first(where: { $0.ordinal == position.floorOrdinal }) {
                         state.awaitsPositionFloor = false
                         if floor.id != state.selectedFloorID {
@@ -540,13 +518,6 @@ struct IndoorMapFeature {
             catch is CancellationError { }
             catch { await send(.routeFailed(requestID: requestID, error.localizedDescription)) }
         }.cancellable(id: CancelID(state.instanceID, .route), cancelInFlight: true)
-    }
-
-    /// 합성 위치가 알려진 층과 그 층의 도면 경계 안에 있는지 확인한다.
-    /// 도면 개정의 동일성, 벽 통과 여부, 실제 측위 정확도를 인증하는 검사는 아니다.
-    private func acceptsSimulation(_ position: IndoorPosition, on map: IndoorMap) -> Bool {
-        guard let floor = map.floors.first(where: { $0.ordinal == position.floorOrdinal }) else { return false }
-        return floor.geometry.contains(position.coordinate)
     }
 
     /// 지도가 없거나 이전 로딩이 실패한 경우 도면 로딩을 시작하고 성공·실패 Action으로 전달한다.
