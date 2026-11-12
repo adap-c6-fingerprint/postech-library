@@ -17,7 +17,7 @@ nonisolated struct BookNavigationCameraTracking: Equatable, Sendable {
     mutating func focus(
         position: IndoorPosition,
         progress: RouteGuidanceProgress,
-        plan: RouteGuidancePlan,
+        plan: GuidanceEngine,
         floorID: UUID,
         force: Bool = false
     ) -> BookNavigationCameraFocus? {
@@ -25,7 +25,7 @@ nonisolated struct BookNavigationCameraTracking: Equatable, Sendable {
               progress.coordinate.isValid, (0...1).contains(progress.fraction),
               let remaining = progress.remainingMeters, remaining.isFinite, remaining >= 0,
               let accuracy = position.horizontalAccuracy, accuracy.isFinite,
-              (0...RouteGuidancePlan.maximumAccuracyMeters).contains(accuracy),
+              (0...GuidanceEngine.maximumAccuracyMeters).contains(accuracy),
               position.floorOrdinal == plan.destination.level, floorID == plan.destination.floorID
         else { return nil }
 

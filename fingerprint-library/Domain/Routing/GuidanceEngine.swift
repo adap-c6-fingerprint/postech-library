@@ -21,7 +21,7 @@ nonisolated enum RouteGuidanceError: Error, Equatable, Sendable {
 }
 
 /// 확정된 경로의 순서를 유지하며 위치를 경로에 투영한다. 탐색·실제 측위·도착 확정은 하지 않는다.
-nonisolated struct RouteGuidancePlan: Equatable, Sendable {
+nonisolated struct GuidanceEngine: Equatable, Sendable {
     // 실내 통로 안내용 초기 정책값. 실측 보정 결과나 측위 정확도 보장을 뜻하지 않는다.
     static let maximumPositionAge: Double = 10
     static let maximumAccuracyMeters: Double = 10

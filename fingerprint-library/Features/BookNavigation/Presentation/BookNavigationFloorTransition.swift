@@ -18,7 +18,7 @@ nonisolated struct BookNavigationFloorTransition: Equatable, Sendable, Identifia
         }
     }
 
-    static func next(in plan: RouteGuidancePlan, after progress: RouteGuidanceProgress?) -> Self? {
+    static func next(in plan: GuidanceEngine, after progress: RouteGuidanceProgress?) -> Self? {
         let order = progress.map { Double($0.stepIndex) + $0.fraction } ?? 0
         var index = 0
         while index < plan.steps.count {
@@ -50,7 +50,7 @@ nonisolated struct BookNavigationFloorTransition: Equatable, Sendable, Identifia
     }
 
     /// 안내 표시용 진행이다. 센서 위치를 생성하거나 도착을 자동 판정하는 데 사용하지 않는다.
-    func displayedProgress(in plan: RouteGuidancePlan, liveProgress: RouteGuidanceProgress?) -> RouteGuidanceProgress? {
+    func displayedProgress(in plan: GuidanceEngine, liveProgress: RouteGuidanceProgress?) -> RouteGuidanceProgress? {
         if isReached(by: liveProgress) { return liveProgress }
         guard steps.lowerBound >= 0, steps.upperBound <= plan.steps.count,
               let last = plan.steps[steps].last, last.to == to else { return nil }
@@ -76,7 +76,7 @@ nonisolated struct BookNavigationFloorTransition: Equatable, Sendable, Identifia
                      remainingMeters: remaining)
     }
 
-    private static func distance(in steps: ArraySlice<RouteGuidancePlan.Step>) -> Double? {
+    private static func distance(in steps: ArraySlice<GuidanceEngine.Step>) -> Double? {
         steps.reduce(Optional(0.0)) { sum, step in
             guard let sum, let meters = step.meters else { return nil }
             return sum + meters

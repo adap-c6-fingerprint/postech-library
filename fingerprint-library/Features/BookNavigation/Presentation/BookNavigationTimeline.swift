@@ -29,7 +29,7 @@ struct BookNavigationTimeline: Equatable {
     let totalMeters: Double
     let hasCompleteDistances: Bool
 
-    init(plans: [RouteGuidancePlan?], bookCount: Int) {
+    init(plans: [GuidanceEngine?], bookCount: Int) {
         var segments: [Segment] = []
         var markers: [Marker] = []
         var offset = 0.0
@@ -100,7 +100,7 @@ struct BookNavigationTimeline: Equatable {
         hasCompleteDistances = complete
     }
 
-    private static func kind(for step: RouteGuidancePlan.Step) -> Kind {
+    private static func kind(for step: GuidanceEngine.Step) -> Kind {
         guard step.changesFloor else { return .walk }
         switch step.category {
         case .elevator, .platformLift: return .elevator

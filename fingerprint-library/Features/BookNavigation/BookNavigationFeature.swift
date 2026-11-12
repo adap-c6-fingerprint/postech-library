@@ -23,7 +23,7 @@ struct BookNavigationFeature {
     struct State: Equatable {
         let session: RoutePlan
         var analyticsIsTest = false
-        var plans: [RouteGuidancePlan?]
+        var plans: [GuidanceEngine?]
         let bookInfos: [BookNavigationBookInfo?]
         var turnArrowsByStop: [[RouteTurnArrow]]
         var timeline: BookNavigationTimeline
@@ -62,7 +62,7 @@ struct BookNavigationFeature {
 
         init(session: RoutePlan) {
             self.session = session
-            let plans = session.legs.map { try? RouteGuidancePlan(route: $0, graph: session.graph) }
+            let plans = session.legs.map { try? GuidanceEngine(route: $0, graph: session.graph) }
             self.plans = plans
             timeline = .init(plans: plans, bookCount: session.stops.count)
             bookInfos = session.stops.indices.map { BookNavigationBookInfo(session: session, stopIndex: $0) }
@@ -88,7 +88,7 @@ struct BookNavigationFeature {
             reroutedLegs[currentStopIndex]
                 ?? (session.legs.indices.contains(currentStopIndex) ? session.legs[currentStopIndex] : nil)
         }
-        var currentPlan: RouteGuidancePlan? {
+        var currentPlan: GuidanceEngine? {
             plans.indices.contains(currentStopIndex) ? plans[currentStopIndex] : nil
         }
         var currentBookInfo: BookNavigationBookInfo? {
@@ -305,19 +305,19 @@ struct BookNavigationFeature {
                     if let last = state.lastReceivedTimestamp, position.timestamp <= last { return .none }
                     guard position.source != .manual, position.coordinate.isValid,
                           let accuracy = position.horizontalAccuracy, accuracy.isFinite, accuracy >= 0,
-                          (-2...RouteGuidancePlan.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
+                          (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
                         invalidate(&state, message: "새로운 위치 정보를 기다리고 있어요.")
                         return .cancel(id: CancelID.expiry)
                     }
                     state.lastReceivedTimestamp = position.timestamp
-                    guard accuracy <= RouteGuidancePlan.maximumAccuracyMeters else {
+                    guard accuracy <= GuidanceEngine.maximumAccuracyMeters else {
                         invalidate(&state, message: "위치 오차가 커서 안내를 잠시 멈췄어요.")
                         return .cancel(id: CancelID.expiry)
                     }
                     let previousTimestamp = state.rawPosition?.timestamp
                     state.rawPosition = position
                     updateGuidance(&state, previousTimestamp: previousTimestamp)
-                    let delay = RouteGuidancePlan.maximumPositionAge - now.timeIntervalSince(position.timestamp)
+                    let delay = GuidanceEngine.maximumPositionAge - now.timeIntervalSince(position.timestamp)
                     let timestamp = position.timestamp
                     let expiry: Effect<Action> = .run { [clock] send in
                         try await clock.sleep(for: .seconds(max(0, delay)))
@@ -404,7 +404,7 @@ struct BookNavigationFeature {
                 state.isCancelConfirmationPresented = false
                 state.nextBookRouteError = nil
                 guard let position = state.latestPosition, position.isRecent(at: now),
-                      (-2...RouteGuidancePlan.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
+                      (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
                     state.nextBookRouteError = "현재 위치를 확인한 뒤 다시 시도해 주세요."
                     return .none
                 }
@@ -437,7 +437,7 @@ struct BookNavigationFeature {
                       requestID == state.nextBookRequestID, stopIndex == state.currentStopIndex + 1 else { return .none }
                 state.isReroutingToNextBook = false
                 guard route.destination == state.session.legs[stopIndex].destination,
-                      let plan = try? RouteGuidancePlan(route: route, graph: state.session.graph) else {
+                      let plan = try? GuidanceEngine(route: route, graph: state.session.graph) else {
                     state.nextBookRouteError = "다음 책의 경로를 확인할 수 없어요. 다시 시도해 주세요."
                     return .none
                 }
@@ -468,7 +468,7 @@ struct BookNavigationFeature {
                 let previousIndex = state.currentStopIndex - 1
                 // 위치를 아직 못 받았으면 처음 계산해 둔 이전 경로로 바로 돌아간다.
                 guard let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
-                      (-2...RouteGuidancePlan.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
+                      (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
                     moveToStop(&state, previousIndex)
                     return .cancel(id: CancelID.reroute)
                 }
@@ -499,7 +499,7 @@ struct BookNavigationFeature {
                       state.exitReason == nil, stopIndex == state.currentStopIndex - 1 else { return .none }
                 state.isReturningToPreviousStop = false
                 if route.destination == state.session.legs[stopIndex].destination,
-                   let plan = try? RouteGuidancePlan(route: route, graph: state.session.graph) {
+                   let plan = try? GuidanceEngine(route: route, graph: state.session.graph) {
                     state.reroutedLegs[stopIndex] = route
                     state.plans[stopIndex] = plan
                     state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
@@ -524,7 +524,7 @@ struct BookNavigationFeature {
                 guard stopIndex == state.currentStopIndex,
                       state.session.legs.indices.contains(stopIndex),
                       route.destination == state.session.legs[stopIndex].destination,
-                      let plan = try? RouteGuidancePlan(route: route, graph: state.session.graph) else { return .none }
+                      let plan = try? GuidanceEngine(route: route, graph: state.session.graph) else { return .none }
                 state.reroutedLegs[stopIndex] = route
                 state.plans[stopIndex] = plan
                 state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)

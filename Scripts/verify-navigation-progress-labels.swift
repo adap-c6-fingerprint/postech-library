@@ -16,7 +16,7 @@ struct VerifyNavigationProgressLabels {
             for books in 1...3 {
                 for changes in 0...min(books, 2) {
                     var level = 2
-                    var plans: [RouteGuidancePlan?] = []
+                    var plans: [GuidanceEngine?] = []
                     for book in 0..<books {
                         if book < changes {
                             let next = level == 2 ? 3 : 2
@@ -148,7 +148,7 @@ struct VerifyNavigationProgressLabels {
             }
         }
     }
-    static func plan(levels: [Int], categories: [RouteEdgeCategory], distances: [Double]) throws -> RouteGuidancePlan {
+    static func plan(levels: [Int], categories: [RouteEdgeCategory], distances: [Double]) throws -> GuidanceEngine {
         let nodes = levels.enumerated().map { index, level in
             RouteNode(id: "node-\(index)", coordinate: .init(latitude: 36, longitude: 129 + Double(index) * 0.00001),
                       level: level, floorID: floorIDs[level]!, name: nil, category: nil)
@@ -163,7 +163,7 @@ struct VerifyNavigationProgressLabels {
             usesEstimatedDistances: true, start: .init(actualCoordinate: nodes[0].coordinate,
                 routeCoordinate: nodes[0].coordinate, floorID: nodes[0].floorID, distanceToGraphMeters: 0),
             edgeDistancesMeters: distances)
-        return try RouteGuidancePlan(route: route, graph: .init(schemaVersion: 1, layoutVersion: "test",
+        return try GuidanceEngine(route: route, graph: .init(schemaVersion: 1, layoutVersion: "test",
             hardSearchRadiusMeters: 10, nodes: nodes, edges: edges))
     }
 }

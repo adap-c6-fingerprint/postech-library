@@ -9,7 +9,7 @@ nonisolated struct RouteTurnArrow: Identifiable, Equatable, Sendable {
     let coordinates: [IndoorMapCoordinate]
     var id: Int { stepIndex }
 
-    static func make(from plan: RouteGuidancePlan) -> [Self] {
+    static func make(from plan: GuidanceEngine) -> [Self] {
         plan.instructions.compactMap { instruction in
             let index = instruction.stepIndex
             guard instruction.maneuver == .left || instruction.maneuver == .right,
@@ -60,7 +60,7 @@ nonisolated struct RouteTurnArrow: Identifiable, Equatable, Sendable {
     }
 }
 
-extension RouteGuidancePlan {
+extension GuidanceEngine {
     /// 현재 경로 구간의 접선 방향. 기기가 바라보는 센서 heading을 뜻하지 않는다.
     nonisolated func bearing(at progress: RouteGuidanceProgress) -> Double? {
         guard steps.indices.contains(progress.stepIndex) else { return nil }
