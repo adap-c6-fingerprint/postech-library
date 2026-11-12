@@ -81,7 +81,7 @@ struct BookDetailMapView: View {
             LibraryBackButton(identifier: "bookDetail.back", action: { dismiss() })
             Spacer()
             Button { store.send(.favoriteButtonTapped) } label: {
-                Image(systemName: store.isFavorite ? "heart.fill" : "heart")
+                Image(systemName: store.isFavorite ? "bookmark.fill" : "bookmark")
                     .frame(width: 44, height: 44)
                     .glassEffect(.regular.interactive(), in: Circle())
             }
@@ -222,7 +222,7 @@ struct BookDetailView: View {
             .accessibilityIdentifier("bookDetail.expandedBack")
             Spacer()
             Button { store.send(.favoriteButtonTapped) } label: {
-                Image(systemName: store.isFavorite ? "heart.fill" : "heart")
+                Image(systemName: store.isFavorite ? "bookmark.fill" : "bookmark")
                     .frame(width: 44, height: 44)
                     .glassEffect(.regular.interactive(), in: Circle())
             }

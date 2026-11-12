@@ -194,7 +194,7 @@ struct BookRouteBooksPreviewView: View {
 
     private func favoriteButton(_ store: StoreOf<BookDetailFeature>) -> some View {
         Button { store.send(.favoriteButtonTapped) } label: {
-            Image(systemName: store.isFavorite ? "heart.fill" : "heart")
+            Image(systemName: store.isFavorite ? "bookmark.fill" : "bookmark")
                 .font(.system(size: 22, weight: .regular))
                 .frame(width: 44, height: 44)
                 .glassEffect(.regular.interactive(), in: Circle())
