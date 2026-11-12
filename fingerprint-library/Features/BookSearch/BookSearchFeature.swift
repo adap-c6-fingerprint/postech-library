@@ -31,12 +31,6 @@ struct BookSearchFeature {
         var isLoading: Bool = false
         var errorMessage: String? = nil
         var hasSearched: Bool = false
-        
-        @Presents var detail: BookDetailFeature.State?
-        @Presents var favoriteShelf: BookShelfMapFeature.State?
-        @Presents var cart: BookCartFeature.State?
-        @Presents var favorites: BookFavoritesFeature.State?
-        @Presents var myPage: MyPageFeature.State?
     }
     
     enum RecentBookInfoState: Equatable {
@@ -65,19 +59,21 @@ struct BookSearchFeature {
 
         case cartButtonTapped
         case favoritesButtonTapped
-        case favorites(PresentationAction<BookFavoritesFeature.Action>)
         case profileButtonTapped
-        case myPage(PresentationAction<MyPageFeature.Action>)
-        case cart(PresentationAction<BookCartFeature.Action>)
         case bookSelected(Book)
         case favoriteMarkerTapped(HomeMapMarker)
-        case favoriteShelf(PresentationAction<BookShelfMapFeature.Action>)
-        case detail(PresentationAction<BookDetailFeature.Action>)
         case delegate(Delegate)
 
-        enum Delegate {
+        /// 화면 이동은 App이 맡는다. 검색(과 같은 상태를 쓰는 홈 지도)은 어떤 화면을 열지 요청만 한다.
+        enum Delegate: Equatable {
             case recommendationLayoutRequested(isExpanded: Bool)
             case kulumiCoversRequested
+            /// 찜 마커에서 열면 그 마커를 상세 지도에서 숨기도록 마커 ID를 함께 넘긴다.
+            case showDetail(Book, sourceFavoriteMarkerID: String?)
+            case showFavoriteShelf([Book], sourceFavoriteMarkerID: String)
+            case showCart
+            case showFavorites
+            case showMyPage
         }
     }
     
@@ -157,16 +153,9 @@ struct BookSearchFeature {
                     .filter { activeKeys.contains($0.recordKey) && seen.insert($0.recordKey).inserted }
                 guard let book = books.first else { return .none }
                 if books.count == 1 {
-                    state.detail = BookDetailFeature.State(book: book)
-                    state.detail?.sourceFavoriteMarkerID = marker.id
-                } else {
-                    state.favoriteShelf = BookShelfMapFeature.State(previewing: books)
-                    state.favoriteShelf?.sourceFavoriteMarkerID = marker.id
+                    return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: marker.id)))
                 }
-                return .none
-
-            case .favoriteShelf:
-                return .none
+                return .send(.delegate(.showFavoriteShelf(books, sourceFavoriteMarkerID: marker.id)))
 
             case let .bookSelected(book):
                 analytics.record(.init(.searchResultSelected, [
@@ -175,23 +164,16 @@ struct BookSearchFeature {
                 ]))
                 recentSearchBooksClient.record(book)
                 state.recentBooks = recentSearchBooksClient.load()
-                state.detail = BookDetailFeature.State(book: book)
-                return .none
+                return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: nil)))
 
             case .cartButtonTapped:
-                state.cart = BookCartFeature.State()
-                return .none
+                return .send(.delegate(.showCart))
 
             case .favoritesButtonTapped:
-                state.favorites = BookFavoritesFeature.State()
-                return .none
+                return .send(.delegate(.showFavorites))
 
             case .profileButtonTapped:
-                state.myPage = MyPageFeature.State()
-                return .none
-
-            case .detail, .cart, .favorites, .myPage:
-                return .none
+                return .send(.delegate(.showMyPage))
 
             case let .queryChanged(query):
                 let previousQuery = state.query.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -283,21 +265,6 @@ struct BookSearchFeature {
                 ]))
                 return .none
             }
-        }
-        .ifLet(\.$detail, action: \.detail) {
-            BookDetailFeature()
-        }
-        .ifLet(\.$favoriteShelf, action: \.favoriteShelf) {
-            BookShelfMapFeature()
-        }
-        .ifLet(\.$cart, action: \.cart) {
-            BookCartFeature()
-        }
-        .ifLet(\.$favorites, action: \.favorites) {
-            BookFavoritesFeature()
-        }
-        .ifLet(\.$myPage, action: \.myPage) {
-            MyPageFeature()
         }
     }
 

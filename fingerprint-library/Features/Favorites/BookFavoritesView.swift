@@ -52,12 +52,6 @@ struct BookFavoritesView: View {
         .cartLimitAlert(isPresented: store.isCartLimitAlertPresented) {
             store.send(.cartLimitAlertDismissed)
         }
-        .navigationDestination(
-            item: $store.scope(state: \.cart, action: \.cart)
-        ) { cartStore in
-            BookCartView(store: cartStore)
-                .toolbar(.visible, for: .navigationBar)
-        }
         .task { store.send(.task) }
         .task(id: store.items.map(\.id)) { await store.send(.loadLibraryInfo).finish() }
     }

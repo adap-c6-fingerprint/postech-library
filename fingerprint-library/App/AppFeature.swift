@@ -21,6 +21,10 @@ struct AppFeature {
         var home = HomeFeature.State()
         var bookSearch = BookSearchFeature.State()
         var indoorMap = IndoorMapFeature.State()
+        // 탭마다 따로 쌓는 push 화면 스택. 기능은 delegate로 요청하고 App이 쌓는다.
+        var mapPath = StackState<Path.State>()
+        var recommendationsPath = StackState<Path.State>()
+        var searchPath = StackState<Path.State>()
         var isRouteSettingsPresented = false
         var hasStartedRecommendationSession = false
         var hasEnteredBackground = false
@@ -40,6 +44,9 @@ struct AppFeature {
         case home(HomeFeature.Action)
         case bookSearch(BookSearchFeature.Action)
         case indoorMap(IndoorMapFeature.Action)
+        case mapPath(StackActionOf<Path>)
+        case recommendationsPath(StackActionOf<Path>)
+        case searchPath(StackActionOf<Path>)
         case routeSettingsPresentationChanged(Bool)
         case appStarted
         case appEnteredBackground
@@ -63,10 +70,9 @@ struct AppFeature {
                 return .none
 
             case .goHomeRequested:
-                state.home.detail = nil
-                state.home.cart = nil
-                state.bookSearch.detail = nil
-                state.bookSearch.cart = nil
+                state.mapPath.removeAll()
+                state.recommendationsPath.removeAll()
+                state.searchPath.removeAll()
                 state.isRouteSettingsPresented = false
                 state.selectedTab = .map
                 return .none
@@ -81,8 +87,25 @@ struct AppFeature {
                 state.selectedTab = .recommendations
                 return .none
 
+            case let .bookSearch(.delegate(delegate)):
+                guard let destination = Self.destination(for: delegate) else { return .none }
+                // 검색 상태는 홈 지도 탭과 검색 탭이 함께 쓰므로, 요청이 생긴 지금 탭에 쌓는다.
+                push(destination, onto: state.selectedTab, state: &state)
+                return .none
+
             case .bookSearch:
                 return .none
+
+            case let .home(.delegate(delegate)):
+                push(Self.destination(for: delegate), onto: .recommendations, state: &state)
+                return .none
+
+            case let .mapPath(action):
+                return handlePath(action, on: .map, state: &state)
+            case let .recommendationsPath(action):
+                return handlePath(action, on: .recommendations, state: &state)
+            case let .searchPath(action):
+                return handlePath(action, on: .search, state: &state)
 
             case .appStarted:
                 guard !state.hasStartedRecommendationSession else { return .none }
@@ -110,7 +133,6 @@ struct AppFeature {
                 return isPresented
                     ? .send(.indoorMap(.routeRequested)) : .send(.indoorMap(.routeCleared))
             case .home:
-                // TODO: 홈 delegate 액션으로 책바구니·프로필을 연결한다.
                 return .none
             case .indoorMap:
                 return .none
@@ -148,6 +170,9 @@ struct AppFeature {
                 return .none
             }
         }
+        .forEach(\.mapPath, action: \.mapPath)
+        .forEach(\.recommendationsPath, action: \.recommendationsPath)
+        .forEach(\.searchPath, action: \.searchPath)
         .ifLet(\.onboarding, action: \.onboarding) { OnboardingFeature() }
     }
 }

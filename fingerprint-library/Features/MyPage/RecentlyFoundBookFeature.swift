@@ -28,8 +28,6 @@ struct RecentlyFoundBookFeature {
         var books: [Book] = []
         // 최근에 찾은 책이 앞(책장의 왼쪽)에 온다.
         var spines: [Book.ID: SpinePhase] = [:]
-        @Presents var detail: BookDetailFeature.State?
-        // 최근 찾은 책 화면에서 책등을 누르면 그 책의 상세를 연다. (마이페이지 카드는 쓰지 않는다)
     }
 
     enum Action {
@@ -37,7 +35,12 @@ struct RecentlyFoundBookFeature {
         // 화면이 뜰 때마다 기록을 다시 읽고, 아직 없는 책등만 받는다.
         case spineLoaded(Book.ID, UIImage?)
         case bookSelected(Book)
-        case detail(PresentationAction<BookDetailFeature.Action>)
+        case delegate(Delegate)
+
+        /// 최근 찾은 책 화면에서 책등을 누르면 App이 그 책의 상세를 연다. (마이페이지 카드는 쓰지 않는다)
+        enum Delegate: Equatable {
+            case showDetail(Book)
+        }
     }
 
     @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
@@ -80,13 +83,11 @@ struct RecentlyFoundBookFeature {
                 return .none
 
             case let .bookSelected(book):
-                state.detail = BookDetailFeature.State(book: book)
-                return .none
+                return .send(.delegate(.showDetail(book)))
 
-            case .detail:
+            case .delegate:
                 return .none
             }
         }
-        .ifLet(\.$detail, action: \.detail) { BookDetailFeature() }
     }
 }

@@ -36,11 +36,6 @@ struct RecentlyFoundBookView: View {
         .toolbar(.hidden, for: .tabBar)
         .toolbarBackground(.hidden, for: .navigationBar)
         .task { store.send(.task) }
-        .navigationDestination(
-            item: $store.scope(state: \.detail, action: \.detail)
-        ) { detailStore in
-            BookDetailMapView(store: detailStore, mapStore: mapStore)
-        }
     }
 
     private var guide: some View {

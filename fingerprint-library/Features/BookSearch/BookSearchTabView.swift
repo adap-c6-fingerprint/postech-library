@@ -8,49 +8,23 @@
 import ComposableArchitecture
 import SwiftUI
 
+/// 검색 탭의 첫 화면. 화면 이동 스택은 App이 소유한다.
 struct BookSearchTabView: View {
     @Bindable var store: StoreOf<BookSearchFeature>
-    let mapStore: StoreOf<IndoorMapFeature>
 
     var body: some View {
-        NavigationStack {
-            BookSearchView(
-                store: store,
-                onShowCart: {
-                    store.send(.cartButtonTapped)
-                },
-                onShowFavorites: {
-                    store.send(.favoritesButtonTapped)
-                },
-                onShowProfile: {
-                    store.send(.profileButtonTapped)
-                }
-            )
-            .navigationDestination(
-                item: $store.scope(state: \.favorites, action: \.favorites)
-            ) { favoritesStore in
-                BookFavoritesView(store: favoritesStore)
+        BookSearchView(
+            store: store,
+            onShowCart: {
+                store.send(.cartButtonTapped)
+            },
+            onShowFavorites: {
+                store.send(.favoritesButtonTapped)
+            },
+            onShowProfile: {
+                store.send(.profileButtonTapped)
             }
-            .navigationDestination(
-                item: $store.scope(state: \.cart, action: \.cart)
-            ) { cartStore in
-                BookCartView(store: cartStore)
-                    .toolbar(.visible, for: .navigationBar)
-            }
-            .navigationDestination(
-                item: $store.scope(state: \.detail, action: \.detail)
-            ) { detailStore in
-                BookDetailMapView(
-                    store: detailStore,
-                    mapStore: mapStore
-                )
-            }
-            .navigationDestination(
-                item: $store.scope(state: \.myPage, action: \.myPage)
-            ) { myPageStore in
-                MyPageView(store: myPageStore, mapStore: mapStore)
-            }
-        }
+        )
         .task {
             store.send(.task)
         }

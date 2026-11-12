@@ -51,11 +51,6 @@ struct MyPageView: View {
         .task { store.send(.shelf(.task)) }
         .analyticsScreen(.myPage)
         .navigationDestination(
-            item: $store.scope(state: \.recentlyFound, action: \.recentlyFound)
-        ) { recentlyFoundStore in
-            RecentlyFoundBookView(store: recentlyFoundStore, mapStore: mapStore)
-        }
-        .navigationDestination(
             item: $store.scope(state: \.editAffiliation, action: \.editAffiliation)
         ) { editStore in
             EditMyAffiliationView(store: editStore)

@@ -17,7 +17,6 @@ struct MyPageFeature {
     struct State: Equatable {
         var shelf = RecentlyFoundBookFeature.State()
         // 마이페이지 책장 카드. 최근 찾은 책 화면과 같은 State를 쓴다.
-        @Presents var recentlyFound: RecentlyFoundBookFeature.State?
         @Presents var editAffiliation: EditMyAffiliationFeature.State?
         @Presents var editInterests: OnboardingFeature.State?
         // 관심 분야 변경은 별도 화면 없이 온보딩의 선호 분류 화면을 그대로 쓴다.
@@ -32,10 +31,15 @@ struct MyPageFeature {
         // "최근 찾은 책 목록" 오른쪽 + 버튼
         case editAffiliationRowTapped
         case editInterestsRowTapped
-        case recentlyFound(PresentationAction<RecentlyFoundBookFeature.Action>)
         case editAffiliation(PresentationAction<EditMyAffiliationFeature.Action>)
         case editInterests(PresentationAction<OnboardingFeature.Action>)
         case setupProfile(PresentationAction<OnboardingFeature.Action>)
+        case delegate(Delegate)
+
+        /// 다른 기능과 함께 쓰는 화면으로의 이동은 App이 맡는다.
+        enum Delegate: Equatable {
+            case showRecentlyFound(RecentlyFoundBookFeature.State)
+        }
     }
 
     var body: some Reducer<State, Action> {
@@ -43,9 +47,8 @@ struct MyPageFeature {
         Reduce { state, action in
             switch action {
             case .addButtonTapped:
-                state.recentlyFound = state.shelf
                 // 이미 받은 책등을 그대로 넘겨 화면이 바로 채워지게 한다.
-                return .none
+                return .send(.delegate(.showRecentlyFound(state.shelf)))
 
             case .editAffiliationRowTapped:
                 guard state.userProfile != nil else {
@@ -79,11 +82,10 @@ struct MyPageFeature {
                 // 프로필을 만들면 마이페이지로 돌아온다.
                 return .none
 
-            case .shelf, .recentlyFound, .editAffiliation, .editInterests, .setupProfile:
+            case .shelf, .editAffiliation, .editInterests, .setupProfile, .delegate:
                 return .none
             }
         }
-        .ifLet(\.$recentlyFound, action: \.recentlyFound) { RecentlyFoundBookFeature() }
         .ifLet(\.$editAffiliation, action: \.editAffiliation) { EditMyAffiliationFeature() }
         .ifLet(\.$editInterests, action: \.editInterests) { OnboardingFeature() }
         .ifLet(\.$setupProfile, action: \.setupProfile) { OnboardingFeature() }

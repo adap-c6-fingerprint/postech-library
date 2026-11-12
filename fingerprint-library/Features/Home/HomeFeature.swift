@@ -32,10 +32,8 @@ struct HomeFeature {
         var libraryInfoInFlight: Set<Book.ID> = []
         var libraryInfoUpdatedAt: [Book.ID: Date] = [:]
 
-        @Presents var detail: BookDetailFeature.State?
-        @Presents var cart: BookCartFeature.State?
-        @Presents var favorites: BookFavoritesFeature.State?
-        @Presents var myPage: MyPageFeature.State?
+        /// 마지막으로 연 상세 화면의 추천 표지 파일. 상세가 열려 있는 동안 캐시 정리에서 지우지 않는다.
+        var openedDetailCoverURL: URL?
 
         var recommendationCount: Int {
             let count = DatasetRecommendation.displayCount
@@ -131,17 +129,19 @@ struct HomeFeature {
         case cartButtonTapped
         case favoritesButtonTapped
         case profileButtonTapped
-        case detail(PresentationAction<BookDetailFeature.Action>)
-        case cart(PresentationAction<BookCartFeature.Action>)
-        case favorites(PresentationAction<BookFavoritesFeature.Action>)
-        case myPage(PresentationAction<MyPageFeature.Action>)
+        case departmentRecommendationsButtonTapped
         case delegate(Delegate)
 
         case recommendationsFailed(UUID, String)
         case popularBooksFailed(String)
 
-        enum Delegate {
-            case showProfile
+        /// 화면 이동은 App이 맡는다. 홈은 어떤 화면을 열지 요청만 한다.
+        enum Delegate: Equatable {
+            case showDetail(Book, cachedCoverURL: URL?)
+            case showCart
+            case showFavorites
+            case showMyPage
+            case showDepartmentRecommendations
         }
     }
 
@@ -372,39 +372,25 @@ struct HomeFeature {
 
             case let .bookSelected(book):
                 analytics.record(.init(.recommendationSelected, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
-                state.detail = BookDetailFeature.State(
-                    book: book, cachedCoverURL: state.recommendationCoverFiles[book.id]
-                )
-                return .none
+                let coverURL = state.recommendationCoverFiles[book.id]
+                state.openedDetailCoverURL = coverURL
+                return .send(.delegate(.showDetail(book, cachedCoverURL: coverURL)))
 
             case .cartButtonTapped:
-                state.cart = BookCartFeature.State()
-                return .none
+                return .send(.delegate(.showCart))
 
             case .favoritesButtonTapped:
-                state.favorites = BookFavoritesFeature.State()
-                return .none
+                return .send(.delegate(.showFavorites))
 
             case .profileButtonTapped:
-                state.myPage = MyPageFeature.State()
-                // 찜 목록처럼 지금 탭의 내비게이션 안에서 마이페이지를 연다.
-                return .none
+                return .send(.delegate(.showMyPage))
 
-            case .detail, .cart, .favorites, .myPage, .delegate:
+            case .departmentRecommendationsButtonTapped:
+                return .send(.delegate(.showDepartmentRecommendations))
+
+            case .delegate:
                 return .none
             }
-        }
-        .ifLet(\.$detail, action: \.detail) {
-            BookDetailFeature()
-        }
-        .ifLet(\.$cart, action: \.cart) {
-            BookCartFeature()
-        }
-        .ifLet(\.$favorites, action: \.favorites) {
-            BookFavoritesFeature()
-        }
-        .ifLet(\.$myPage, action: \.myPage) {
-            MyPageFeature()
         }
     }
 
@@ -538,7 +524,7 @@ struct HomeFeature {
 
     private func displayedRecommendationCovers(_ state: State) -> [URL] {
         Array(state.recommendationCoverFiles.values)
-            + [state.detail?.cachedCoverURL].compactMap { $0 }
+            + [state.openedDetailCoverURL].compactMap { $0 }
     }
 
     private func loadRecommendations(sessionID: UUID, retaining covers: [URL], restoresCache: Bool) -> Effect<Action> {

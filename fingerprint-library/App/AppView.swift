@@ -10,7 +10,7 @@ import SwiftUI
 import Clarity
 
 struct AppView: View {
-    let store: StoreOf<AppFeature>
+    @Bindable var store: StoreOf<AppFeature>
     @Environment(\.scenePhase) private var scenePhase
     @FocusState private var isBookSearchFocused: Bool
 
@@ -56,26 +56,32 @@ struct AppView: View {
             set: { store.send(.tabSelected($0)) }
         )) {
             Tab("홈", systemImage: "house", value: AppFeature.Tab.map) {
-                LibraryMapView(store: store)
-                    .analyticsScreen(.map)
-                    .tint(Color?.none)
+                NavigationStack(path: $store.scope(state: \.mapPath, action: \.mapPath)) {
+                    LibraryMapView(store: store)
+                } destination: { pathDestination($0) }
+                .tint(.primary)
+                .analyticsScreen(.map)
+                .tint(Color?.none)
             }
 
             Tab("추천", systemImage: "book", value: AppFeature.Tab.recommendations) {
             // 피그마 탭바 시안(00.전역_홈)의 펼친 책 심볼. 홈 탭의 "house"처럼 탭바가 채운 모양(book.fill)으로 그린다.
-                HomeView(
-                    store: store.scope(state: \.home, action: \.home),
-                    mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
-                )
+                NavigationStack(
+                    path: $store.scope(state: \.recommendationsPath, action: \.recommendationsPath)
+                ) {
+                    HomeView(
+                        store: store.scope(state: \.home, action: \.home),
+                        mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
+                    )
+                } destination: { pathDestination($0) }
                 .analyticsScreen(.recommendations)
                 .tint(Color?.none)
             }
 
             Tab(value: AppFeature.Tab.search, role: .search) {
-                BookSearchTabView(
-                    store: store.scope(state: \.bookSearch, action: \.bookSearch),
-                    mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
-                )
+                NavigationStack(path: $store.scope(state: \.searchPath, action: \.searchPath)) {
+                    BookSearchTabView(store: store.scope(state: \.bookSearch, action: \.bookSearch))
+                } destination: { pathDestination($0) }
                 .analyticsScreen(.search)
                 .tint(Color?.none)
             }
@@ -93,8 +99,9 @@ struct AppView: View {
         .searchPresentationToolbarBehavior(.avoidHidingContent)
         .tabViewSearchActivation(.searchTabSelection)
         .onSubmit(of: .search, submitBookSearch)
-        .onChange(of: store.bookSearch.detail != nil) { _, showsDetail in
-            if showsDetail { isBookSearchFocused = false }
+        .onChange(of: store.searchPath.isEmpty) { _, isEmpty in
+            // 검색 탭에서 다른 화면을 열면 검색창 키보드를 내린다.
+            if !isEmpty { isBookSearchFocused = false }
         }
         .environment(\.indoorRouteMapStore, store.scope(state: \.indoorMap, action: \.indoorMap))
         .environment(\.libraryGoHome) { store.send(.goHomeRequested) }
@@ -109,6 +116,14 @@ struct AppView: View {
             if phase == .background { store.send(.appEnteredBackground) }
             if phase == .active { store.send(.appBecameActive) }
         }
+    }
+
+    private func pathDestination(_ pathStore: StoreOf<AppFeature.Path>) -> some View {
+        AppPathDestinationView(
+            store: pathStore,
+            homeStore: store.scope(state: \.home, action: \.home),
+            mapStore: store.scope(state: \.indoorMap, action: \.indoorMap)
+        )
     }
 
     private func submitBookSearch() {

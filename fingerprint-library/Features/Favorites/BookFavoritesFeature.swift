@@ -19,8 +19,6 @@ struct BookFavoritesFeature {
         var isAddedToCartAlertPresented = false
         var isCartLimitAlertPresented = false
 
-        @Presents var cart: BookCartFeature.State?
-
         var sections: [BookFavoriteSection] {
             BookFavoriteSection.grouped(items, calendar: .current)
         }
@@ -42,7 +40,12 @@ struct BookFavoritesFeature {
         case addedToCartAlertDismissed
         case goToCartButtonTapped
         case cartLimitAlertDismissed
-        case cart(PresentationAction<BookCartFeature.Action>)
+        case delegate(Delegate)
+
+        /// 화면 이동은 App이 맡는다.
+        enum Delegate: Equatable {
+            case showCart
+        }
     }
 
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
@@ -127,19 +130,15 @@ struct BookFavoritesFeature {
 
             case .goToCartButtonTapped:
                 state.isAddedToCartAlertPresented = false
-                state.cart = BookCartFeature.State()
-                return .none
+                return .send(.delegate(.showCart))
 
             case .cartLimitAlertDismissed:
                 state.isCartLimitAlertPresented = false
                 return .none
 
-            case .cart:
+            case .delegate:
                 return .none
             }
-        }
-        .ifLet(\.$cart, action: \.cart) {
-            BookCartFeature()
         }
     }
 

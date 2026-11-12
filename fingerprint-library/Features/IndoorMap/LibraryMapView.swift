@@ -11,7 +11,7 @@ import SwiftUI
 struct LibraryMapView: View {
     @Bindable var store: StoreOf<AppFeature>
 
-    @Bindable private var searchStore: StoreOf<BookSearchFeature>
+    private let searchStore: StoreOf<BookSearchFeature>
     @ScaledMetric(relativeTo: .title) private var headerHeight: CGFloat = 160
 
 
@@ -25,12 +25,16 @@ struct LibraryMapView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            moreDestinations(destinations(mapContent))
-        }
-        .tint(.primary)
+        mapContent
+            .navigationDestination(
+                isPresented: Binding(
+                    get: { store.isRouteSettingsPresented },
+                    set: { store.send(.routeSettingsPresentationChanged($0)) }
+                )
+            ) {
+                IndoorRouteSettingsView(store: mapStore)
+            }
     }
-    // 수식어가 한 줄로 길게 이어지면 컴파일러가 타입 검사를 제시간에 끝내지 못해 지도 화면과 이동 목적지를 나눈다.
 
     private var mapLayout: some View {
             IndoorMapView(store: mapStore, topContentInset: headerHeight, appearance: .home,
@@ -72,52 +76,6 @@ struct LibraryMapView: View {
             .onDisappear { mapStore.send(.homeAnnotations(.disappeared)) }
     }
 
-    private func destinations(_ content: some View) -> some View {
-        content
-            .navigationDestination(
-                item: $searchStore.scope(state: \.cart, action: \.cart)
-            ) { cartStore in
-                BookCartView(store: cartStore)
-                    .toolbar(.visible, for: .navigationBar)
-            }
-            .navigationDestination(
-                item: $searchStore.scope(state: \.favorites, action: \.favorites)
-            ) { favoritesStore in
-                BookFavoritesView(store: favoritesStore)
-                    .toolbar(.visible, for: .navigationBar)
-            }
-            .navigationDestination(
-                item: $searchStore.scope(state: \.detail, action: \.detail)
-            ) { detailStore in
-                BookDetailMapView(
-                    store: detailStore,
-                    mapStore: mapStore
-                )
-            }
-    }
-
-    private func moreDestinations(_ content: some View) -> some View {
-        content
-            .navigationDestination(
-                item: $searchStore.scope(state: \.favoriteShelf, action: \.favoriteShelf)
-            ) { shelfStore in
-                FavoriteShelfBooksView(store: shelfStore, mapStore: mapStore)
-            }
-            .navigationDestination(
-                item: $searchStore.scope(state: \.myPage, action: \.myPage)
-            ) { myPageStore in
-                MyPageView(store: myPageStore, mapStore: mapStore)
-            }
-            .navigationDestination(
-                isPresented: Binding(
-                    get: { store.isRouteSettingsPresented },
-                    set: { store.send(.routeSettingsPresentationChanged($0)) }
-                )
-            ) {
-                IndoorRouteSettingsView(store: mapStore)
-            }
-    }
-    
     private var homeHeader: some View {
         LibraryTabIntroText(title: "오늘은 어떤 책을\n읽어볼까요?")
             .frame(maxWidth: .infinity, minHeight: headerHeight, alignment: .topLeading)

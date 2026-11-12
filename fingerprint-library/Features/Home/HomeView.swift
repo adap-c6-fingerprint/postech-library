@@ -14,10 +14,6 @@ struct HomeView: View {
 
     private static let kulumiCoverNames = (1...6).map { "KulumiCover\($0)" }
 
-    private enum Destination: Hashable {
-        case departmentRecommendations
-    }
-
     private var recommendationLayout: RecommendationLayout {
         store.isRecommendationExpanded ? .expanded : .standard
     }
@@ -38,9 +34,7 @@ struct HomeView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            homeContent
-        }
+        homeContent
         .task(id: store.userProfile) { store.send(.task) }
         // 프로필(소속·관심 분야)이 바뀌면 다시 실행해 바뀐 목록을 새로 불러온다. 마이페이지에서 돌아올 때 바로 반영된다.
         // 추천 홈에서 목록으로 이동해도 두 화면이 공유하는 소장 정보 조회를 이어간다.
@@ -87,33 +81,6 @@ struct HomeView: View {
         .toolbar(.hidden, for: .navigationBar)
         .task(id: upcomingCoverURLs) {
             await store.send(.upcomingCoversChanged(upcomingCoverURLs)).finish()
-        }
-        .navigationDestination(for: Destination.self) { _ in
-            DepartmentRecommendationsView(store: store)
-        }
-        .navigationDestination(
-            item: $store.scope(state: \.detail, action: \.detail)
-        ) { detailStore in
-            BookDetailMapView(
-                store: detailStore,
-                mapStore: mapStore
-            )
-        }
-        .navigationDestination(
-            item: $store.scope(state: \.cart, action: \.cart)
-        ) { cartStore in
-            BookCartView(store: cartStore)
-                .toolbar(.visible, for: .navigationBar)
-        }
-        .navigationDestination(
-            item: $store.scope(state: \.favorites, action: \.favorites)
-        ) { favoritesStore in
-            BookFavoritesView(store: favoritesStore)
-        }
-        .navigationDestination(
-            item: $store.scope(state: \.myPage, action: \.myPage)
-        ) { myPageStore in
-            MyPageView(store: myPageStore, mapStore: mapStore)
         }
     }
 
@@ -270,7 +237,7 @@ struct HomeView: View {
     private var popularBooksSection: some View {
         VStack(alignment: .leading, spacing: 16) {
             if store.isProfileComplete {
-                NavigationLink(value: Destination.departmentRecommendations) {
+                Button { store.send(.departmentRecommendationsButtonTapped) } label: {
                     popularBooksHeader(store.departmentName.isEmpty ? "많이 빌린 도서" : "'\(store.departmentName)'에서 많이 빌린")
                 }
                 .buttonStyle(.plain)
