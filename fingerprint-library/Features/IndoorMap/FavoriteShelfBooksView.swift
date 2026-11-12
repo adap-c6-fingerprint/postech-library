@@ -5,7 +5,6 @@ import SwiftUI
 struct FavoriteShelfBooksView: View {
     let store: StoreOf<BookShelfMapFeature>
     let mapStore: StoreOf<IndoorMapFeature>
-    @State private var guidanceBook: Book?
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -17,7 +16,7 @@ struct FavoriteShelfBooksView: View {
             routeError: nil,
             canStart: true,
             onBack: { dismiss() },
-            onStart: { guidanceBook = $0 },
+            onStart: { store.send(.guidanceRequested($0)) },
             onRetry: {},
             guidesSelectedBook: true,
             homeAnnotations: mapStore.homeAnnotations
@@ -25,10 +24,6 @@ struct FavoriteShelfBooksView: View {
         .background(Color(uiColor: .systemBackground))
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
-        .fullScreenCover(item: $guidanceBook) { book in
-            BookRoutePreviewView(books: [book], entryMode: .direct)
-                .environment(\.indoorRouteMapStore, mapStore)
-        }
         .task { await store.send(.task).finish() }
         .onDisappear { store.send(.map(.disappeared)) }
         .accessibilityIdentifier("favoriteShelfBooks")

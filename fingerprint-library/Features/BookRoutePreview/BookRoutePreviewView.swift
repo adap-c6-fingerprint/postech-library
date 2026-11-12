@@ -3,15 +3,17 @@ import SwiftUI
 import UIKit
 
 /// PLI-96 / #116. 이전 화면의 도서를 받고, 버튼으로만 테스트 목적지로 전환한다.
+/// 책·진입 방식·서가 조회 상태는 BookRoutePreviewFeature가 소유하고, App의 Modal로 열린다.
 struct BookRoutePreviewView: View {
-    enum EntryMode { case preview, direct }
+    let store: StoreOf<BookRoutePreviewFeature>
 
-    // 한 권은 바로 안내하고, 여러 권은 책별 서가를 확인한 뒤 안내한다.
-    private let entryMode: EntryMode
-    @State private var routeStore: StoreOf<BookRoutePreviewFeature>
-    
-    @State private var destination: BookRoutePreviewDestination
-    @State private var destinationStore: StoreOf<BookShelfMapFeature>?
+    private var routeStore: StoreOf<BookRoutePreviewFeature> { store }
+    private var entryMode: BookRoutePreviewFeature.EntryMode { store.entryMode }
+    private var destination: BookRoutePreviewDestination { store.destination }
+    private var destinationStore: StoreOf<BookShelfMapFeature>? {
+        store.scope(state: \.shelf, action: \.shelf)
+    }
+
     @State private var navigationFlow = BookRoutePreviewNavigationState()
     @State private var routeFloorID: UUID?
     @State private var previewStart: IndoorPosition?
@@ -27,9 +29,7 @@ struct BookRoutePreviewView: View {
     /// 직접 설정으로 넘어가는 중. 지도가 준비되면 출발지 설정 화면을 연다.
     @State private var isPreparingManualOrigin = false
     @Environment(\.indoorRouteMapStore) private var mapStore
-    @Environment(\.libraryGoHome) private var goHome
     @Environment(\.openURL) private var openURL
-    @Shared(.bookCart) private var cartItems
     @State private var isProblemReportPresented = false
     /// 메일 작성기도 메일 앱도 없을 때 주소를 안내하는 시트.
     @State private var isProblemReportFallbackPresented = false
@@ -76,33 +76,6 @@ struct BookRoutePreviewView: View {
         return previewSession
     }
     private var orderedBooks: [Book] { readySession?.stops.map(\.book) ?? destination.books }
-
-    init(books: [Book] = [], entryMode: EntryMode = .preview,
-         routeStore: StoreOf<BookRoutePreviewFeature>? = nil) {
-        self.entryMode = entryMode
-        let destination = BookRoutePreviewDestination(books: books)
-        _routeStore = State(initialValue: routeStore ?? Store(initialState: BookRoutePreviewFeature.State()) {
-            BookRoutePreviewFeature()
-        })
-        _destination = State(initialValue: destination)
-        _destinationStore = State(initialValue: Self.makeStore(for: destination))
-    }
-
-    static func makeShelfMapState(for destination: BookRoutePreviewDestination) -> BookShelfMapFeature.State? {
-        guard var state = BookShelfMapFeature.State(books: destination.books) else { return nil }
-        if destination.isTestMode {
-            for item in BookRoutePreviewSample.testItems {
-                state.holdings[item.book.id] = .loaded([item.holding])
-            }
-        }
-        return state
-    }
-
-    private static func makeStore(for destination: BookRoutePreviewDestination) -> StoreOf<BookShelfMapFeature>? {
-        makeShelfMapState(for: destination).map { state in
-            Store(initialState: state) { BookShelfMapFeature() }
-        }
-    }
 
     private var previewContent: some View {
         BookRoutePreviewMapSheet(onBack: { dismiss() }, onViewportChange: {
@@ -154,15 +127,9 @@ struct BookRoutePreviewView: View {
                     .padding(.top, 24)
                     .padding(.bottom, 16)
                 Button("테스트모드") {
-                    destinationStore?.send(.map(.disappeared))
-                    
-                    routeStore.send(.reset)
-                    routeStore.send(.analyticsTestModeChanged(true))
                     routeFloorID = nil
                     previewStart = currentStart
-                    
-                    destination.useTestMode()
-                    destinationStore = Self.makeStore(for: destination)
+                    store.send(.testModeTapped)
                 }
                 .buttonStyle(.bordered)
                 .accessibilityIdentifier("preview-test-mode")
@@ -305,16 +272,12 @@ struct BookRoutePreviewView: View {
 
     /// 상세·책바구니 화면까지 닫고 홈 지도 탭으로 돌아간다.
     private func returnHome() {
-        dismiss()
-        goHome?()
+        store.send(.goHomeTapped)
     }
 
     /// 지금은 안내할 수 없으니 책을 담아 두고 화면을 닫는다.
     private func addBooksToCart() {
-        $cartItems.withLock { items in
-            for book in destination.books { items.add(book, at: Date()) }
-        }
-        dismiss()
+        store.send(.addToCartTapped)
     }
 
     /// 메일 작성기를 띄운다. 계정이 없으면 메일 앱으로, 그것도 못 열면 주소 안내 시트로 넘긴다.
@@ -487,10 +450,10 @@ struct BookRoutePreviewView: View {
             navigationFlow.start(session)
             routeStore.send(.navigationStarted)
         }
-        .task(id: destinationStore.map { ObjectIdentifier($0) }) { [destinationStore] in
-            // Store 교체 시 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
-            guard let destinationStore else { return }
-            await destinationStore.send(.task).finish()
+        .task(id: destination) {
+            // 도서가 바뀌면(테스트 모드) 기존 로딩 task를 취소해 이전 도서의 응답을 분리한다.
+            guard store.shelf != nil else { return }
+            await store.send(.shelf(.task)).finish()
         }
         .task(id: routeStore.requestID) {
             // 오류도 경로도 없이 준비 문구만 남는 상태를 끝낸다. 요청이 바뀌면 다시 센다.
@@ -518,7 +481,7 @@ struct BookRoutePreviewView: View {
         }
         .onDisappear {
             routeStore.send(.disappeared)
-            destinationStore?.send(.map(.disappeared))
+            if store.shelf != nil { store.send(.shelf(.map(.disappeared))) }
         }
     }
 
@@ -794,6 +757,8 @@ struct BookRoutePreviewView: View {
 
 #Preview("도서 입력 대기 · 다크 모드") {
     NavigationStack {
-        BookRoutePreviewView()
+        BookRoutePreviewView(store: Store(initialState: BookRoutePreviewFeature.State()) {
+            BookRoutePreviewFeature()
+        })
     }
 }

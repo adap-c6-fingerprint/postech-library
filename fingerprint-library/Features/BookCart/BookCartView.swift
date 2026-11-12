@@ -98,11 +98,8 @@ struct BookCartView: View {
 
             Spacer()
 
-            NavigationLink {
-                BookRoutePreviewView(
-                    books: store.selectedBooks,
-                    entryMode: store.selectedCount > 1 ? .preview : .direct
-                )
+            Button {
+                store.send(.guidanceLinkTapped)
             } label: {
                 Text(store.selectedCount == 0 ? "안내 시작하기" : "안내 시작하기 (\(store.selectedCount)권)")
                     .font(.body.weight(.medium))
@@ -118,8 +115,6 @@ struct BookCartView: View {
                     .interactive(store.canStartGuidance),
                 in: .capsule
             )
-            // NavigationLink는 화면 이동만 하므로, 같은 탭에서 최근 찾은 책 기록을 남긴다.
-            .simultaneousGesture(TapGesture().onEnded { store.send(.guidanceLinkTapped) })
             .accessibilityIdentifier("cart-directions")
             .disabled(!store.canStartGuidance)
         }

@@ -51,6 +51,12 @@ struct BookCartFeature {
         case removeButtonTapped
         case removeConfirmed
         case removeAlertDismissed
+        case delegate(Delegate)
+
+        /// 경로 미리보기는 App이 전체 화면으로 연다.
+        enum Delegate: Equatable {
+            case startGuidance([Book])
+        }
     }
 
     @Dependency(\.analyticsClient) private var analytics
@@ -112,7 +118,7 @@ struct BookCartFeature {
                 // 고른 순서대로 책장 왼쪽부터 꽂힌다.
                 bookCoverClient.prefetchSpines(state.selectedBooks.compactMap(\.isbn))
                 // 책장에 꽂히는 순간 책등을 미리 받아 둔다. 책찾기 화면과 마이페이지 책장이 로딩 없이 바로 그린다.
-                return .none
+                return .send(.delegate(.startGuidance(state.selectedBooks)))
 
             case .removeButtonTapped:
                 guard !state.selectedBooks.isEmpty else { return .none }
@@ -131,6 +137,9 @@ struct BookCartFeature {
 
             case .removeAlertDismissed:
                 state.isRemoveAlertPresented = false
+                return .none
+
+            case .delegate:
                 return .none
             }
         }

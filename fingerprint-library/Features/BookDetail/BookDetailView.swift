@@ -58,6 +58,7 @@ struct BookDetailMapView: View {
         .background {
             BookDetailSheetPresenter(
                 store: store, mapStore: mapStore, presentation: sheetPresentation,
+                isSuspended: store.isGuidancePresented,
                 onDismiss: { dismiss() }, onCompactFrameChange: { compactSheetFrame = $0 }
             )
             .id(store.book.id)
@@ -130,7 +131,6 @@ struct BookDetailView: View {
     var onDismiss: () -> Void = { }
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
-    @State private var isRoutePreviewPresented = false
 
     var body: some View {
         detailContent
@@ -146,9 +146,6 @@ struct BookDetailView: View {
             .foregroundStyle(Color.textPrimary)
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
-            .fullScreenCover(isPresented: $isRoutePreviewPresented) {
-                BookRoutePreviewView(books: [store.book], entryMode: .direct)
-            }
             .bookDetailCartPresentation(store: store) // ✅ 여러 권 펼친 화면과 같은 책바구니 알림을 사용한다.
             .task { store.send(.loadFavorites) }
             .analyticsScreen(.detail)
@@ -381,7 +378,6 @@ struct BookDetailView: View {
         HStack(spacing: 12) {
             Button {
                 store.send(.guidanceStarted)
-                isRoutePreviewPresented = true
             } label: {
                 Text("바로 안내 시작").typography(.button).frame(maxWidth: .infinity)
             }

@@ -43,6 +43,8 @@ struct BookDetailFeature {
         let book: Book
         var cachedCoverURL: URL?
         @Shared(.favoriteBookKeys) var favoriteBookKeys
+        /// App이 이 상세에서 요청한 경로 미리보기를 전체 화면으로 띄우고 있는지. 그동안 상세 시트를 내려 둔다.
+        var isGuidancePresented = false
         var isFavorite: Bool { favoriteBookKeys.contains(book.recordKey) }
         var sourceFavoriteMarkerID: String?
 
@@ -106,6 +108,14 @@ struct BookDetailFeature {
         case cartLimitAlertDismissed
         // "바로 안내 시작"으로 경로 미리보기를 열 때. 마이페이지 최근 찾은 책에 기록한다.
         case guidanceStarted
+        /// App이 이 상세에서 요청한 경로 미리보기를 닫았다.
+        case guidanceDismissed
+        case delegate(Delegate)
+
+        /// 경로 미리보기는 App이 전체 화면으로 연다.
+        enum Delegate: Equatable {
+            case startGuidance([Book])
+        }
     }
 
     @Dependency(\.bookDetailClient)
@@ -254,7 +264,13 @@ struct BookDetailFeature {
                 state.cart = BookCartFeature.State()
                 return .none
 
-            case .cart:
+            case let .cart(.presented(.delegate(.startGuidance(books)))):
+                // 상세 안에서 연 책바구니를 닫고 App에 안내를 요청한다.
+                state.cart = nil
+                state.isGuidancePresented = true
+                return .send(.delegate(.startGuidance(books)))
+
+            case .cart, .delegate:
                 return .none
 
             case .cartLimitAlertDismissed:
@@ -262,12 +278,17 @@ struct BookDetailFeature {
 
                 return .none
 
+            case .guidanceDismissed:
+                state.isGuidancePresented = false
+                return .none
+
             case .guidanceStarted:
+                state.isGuidancePresented = true
                 recentlyFoundBooksClient.record([state.book])
                 // 책바구니를 거치지 않은 1권도 최근 찾은 책 책장 맨 왼쪽에 꽂힌다.
                 bookCoverClient.prefetchSpines([state.book.isbn].compactMap { $0 })
                 // 책장에 꽂히는 순간 책등을 미리 받아 둔다. 책찾기 화면과 마이페이지 책장이 로딩 없이 바로 그린다.
-                return .none
+                return .send(.delegate(.startGuidance([state.book])))
             }
         }
         .ifLet(\.$cart, action: \.cart) { BookCartFeature() }

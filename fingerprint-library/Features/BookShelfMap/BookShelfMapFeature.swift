@@ -55,6 +55,14 @@ struct BookShelfMapFeature {
         case bookShelfTapped(Book.ID)
         case candidateTapped(Book.ID, fixtureNumber: String)
         case map(IndoorMapFeature.Action)
+        /// 찜 서가 미리보기에서 고른 책으로 안내를 시작한다.
+        case guidanceRequested(Book)
+        case delegate(Delegate)
+
+        /// 경로 미리보기는 App이 전체 화면으로 연다.
+        enum Delegate: Equatable {
+            case startGuidance([Book])
+        }
     }
 
     @Dependency(\.bookHoldingsClient) var holdingsClient
@@ -142,6 +150,12 @@ struct BookShelfMapFeature {
 
             case .map(.retryShelfLabelsTapped):
                 state.resolutions = [:]
+                return .none
+
+            case let .guidanceRequested(book):
+                return .send(.delegate(.startGuidance([book])))
+
+            case .delegate:
                 return .none
 
             case .map:

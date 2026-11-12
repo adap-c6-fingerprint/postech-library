@@ -103,8 +103,14 @@ struct AppView: View {
             // 검색 탭에서 다른 화면을 열면 검색창 키보드를 내린다.
             if !isEmpty { isBookSearchFocused = false }
         }
+        .fullScreenCover(item: $store.scope(state: \.modal, action: \.modal)) { modalStore in
+            switch modalStore.case {
+            case let .routePreview(routeStore):
+                BookRoutePreviewView(store: routeStore)
+                    .environment(\.indoorRouteMapStore, store.scope(state: \.indoorMap, action: \.indoorMap))
+            }
+        }
         .environment(\.indoorRouteMapStore, store.scope(state: \.indoorMap, action: \.indoorMap))
-        .environment(\.libraryGoHome) { store.send(.goHomeRequested) }
         // 위치 스트림은 탭 전환이 아닌 앱 루트 수명에 맞춘다.
         .task {
             store.send(.appStarted)

@@ -25,6 +25,8 @@ struct AppFeature {
         var mapPath = StackState<Path.State>()
         var recommendationsPath = StackState<Path.State>()
         var searchPath = StackState<Path.State>()
+        @Presents var modal: Modal.State?
+        var guidanceOrigin: GuidanceOrigin?
         var isRouteSettingsPresented = false
         var hasStartedRecommendationSession = false
         var hasEnteredBackground = false
@@ -47,6 +49,7 @@ struct AppFeature {
         case mapPath(StackActionOf<Path>)
         case recommendationsPath(StackActionOf<Path>)
         case searchPath(StackActionOf<Path>)
+        case modal(PresentationAction<Modal.Action>)
         case routeSettingsPresentationChanged(Bool)
         case appStarted
         case appEnteredBackground
@@ -73,6 +76,8 @@ struct AppFeature {
                 state.mapPath.removeAll()
                 state.recommendationsPath.removeAll()
                 state.searchPath.removeAll()
+                state.modal = nil
+                state.guidanceOrigin = nil
                 state.isRouteSettingsPresented = false
                 state.selectedTab = .map
                 return .none
@@ -106,6 +111,15 @@ struct AppFeature {
                 return handlePath(action, on: .recommendations, state: &state)
             case let .searchPath(action):
                 return handlePath(action, on: .search, state: &state)
+
+            case .modal(.presented(.routePreview(.delegate(.goHomeRequested)))):
+                return .send(.goHomeRequested)
+
+            case .modal(.dismiss):
+                return guidanceDismissed(state: &state)
+
+            case .modal:
+                return .none
 
             case .appStarted:
                 guard !state.hasStartedRecommendationSession else { return .none }
@@ -173,6 +187,7 @@ struct AppFeature {
         .forEach(\.mapPath, action: \.mapPath)
         .forEach(\.recommendationsPath, action: \.recommendationsPath)
         .forEach(\.searchPath, action: \.searchPath)
+        .ifLet(\.$modal, action: \.modal)
         .ifLet(\.onboarding, action: \.onboarding) { OnboardingFeature() }
     }
 }
