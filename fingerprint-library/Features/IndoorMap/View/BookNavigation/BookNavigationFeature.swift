@@ -5,6 +5,10 @@ import UIKit
 /// 확정된 경로를 유지하며 위치 스트림·진행 계산·안내 표시를 연결한다.
 @Reducer
 struct BookNavigationFeature {
+    /// 경로 이탈이 이 시간(초) 이상 이어지면 현재 위치에서 경로를 다시 찾는다.
+    /// 측위가 잠깐 튀는 것만으로 재탐색하지 않도록 여유를 둔다.
+    static let offRouteRerouteDelay: TimeInterval = 5
+
     enum ExitReason: Equatable, Sendable { case cancelled, completed }
     enum SpinePhase: Equatable {
         case loading
@@ -24,6 +28,10 @@ struct BookNavigationFeature {
         var timeline: BookNavigationTimeline
         var reroutedLegs: [Int: IndoorRoute] = [:]
         var isReroutingToNextBook = false
+        /// 경로를 벗어났다고 처음 판정한 위치 시각. 경로로 돌아오거나 다시 찾으면 지운다.
+        var offRouteSince: Date?
+        var isReroutingCurrentStop = false
+        var rerouteRequestID = 0
         var nextBookRequestID = 0
         var nextBookRouteError: String?
         var currentStopIndex = 0
@@ -188,6 +196,8 @@ struct BookNavigationFeature {
         case nextBookTapped
         case nextBookRouteLoaded(requestID: Int, stopIndex: Int, IndoorRoute)
         case nextBookRouteFailed(requestID: Int, String)
+        case currentStopRerouted(requestID: Int, stopIndex: Int, IndoorRoute)
+        case currentStopRerouteFailed(requestID: Int)
     }
 
     @Dependency(\.indoorLocationClient) var locationClient
@@ -196,7 +206,7 @@ struct BookNavigationFeature {
     @Dependency(\.bookCoverClient) var bookCoverClient
     @Dependency(\.bookRoutePreviewClient) var routePreviewClient
     @Dependency(\.analyticsClient) private var analytics
-    private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute }
+    private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute, reroute }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -292,10 +302,11 @@ struct BookNavigationFeature {
                     updateGuidance(&state, previousTimestamp: previousTimestamp)
                     let delay = RouteGuidancePlan.maximumPositionAge - now.timeIntervalSince(position.timestamp)
                     let timestamp = position.timestamp
-                    return .run { [clock] send in
+                    let expiry: Effect<Action> = .run { [clock] send in
                         try await clock.sleep(for: .seconds(max(0, delay)))
                         await send(.locationExpired(subscriptionID: subscriptionID, timestamp: timestamp))
                     }.cancellable(id: CancelID.expiry, cancelInFlight: true)
+                    return .merge(expiry, rerouteIfOffRoute(&state))
                 }
 
             case let .locationExpired(subscriptionID, timestamp):
@@ -358,6 +369,7 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil, state.isArrivalPresented,
                       stopIndex == state.currentStopIndex, state.currentStop != nil, state.hasNextStop else { return .none }
                 state.currentStopIndex += 1
+                state.offRouteSince = nil
                 state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
                 fitCurrentRoute(&state)
@@ -414,6 +426,7 @@ struct BookNavigationFeature {
                 state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
                 state.timeline = .init(plans: state.plans, bookCount: state.session.stops.count)
                 state.currentStopIndex = stopIndex
+                state.offRouteSince = nil
                 state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
                 state.isArrivalPresented = false
@@ -427,6 +440,36 @@ struct BookNavigationFeature {
                 guard state.isReroutingToNextBook, requestID == state.nextBookRequestID else { return .none }
                 state.isReroutingToNextBook = false
                 state.nextBookRouteError = "다음 책 경로를 계산하지 못했어요. \(message)"
+                return .none
+
+            case let .currentStopRerouted(requestID, stopIndex, route):
+                guard state.isReroutingCurrentStop, requestID == state.rerouteRequestID,
+                      state.exitReason == nil else { return .none }
+                state.isReroutingCurrentStop = false
+                state.offRouteSince = nil
+                guard stopIndex == state.currentStopIndex,
+                      state.session.legs.indices.contains(stopIndex),
+                      route.destination == state.session.legs[stopIndex].destination,
+                      let plan = try? RouteGuidancePlan(route: route, graph: state.session.graph) else { return .none }
+                state.reroutedLegs[stopIndex] = route
+                state.plans[stopIndex] = plan
+                state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
+                state.timeline = .init(plans: state.plans, bookCount: state.session.stops.count)
+                state.manuallyCompletedFloorTransition = nil
+                state.followsNavigationCamera = true
+                state.progress = nil
+                fitCurrentRoute(&state)
+                state.statusMessage = "현재 위치에서 경로를 다시 찾았어요."
+                recordQuality(state, code: "rerouted")
+                if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
+                return .none
+
+            case let .currentStopRerouteFailed(requestID):
+                guard state.isReroutingCurrentStop, requestID == state.rerouteRequestID else { return .none }
+                state.isReroutingCurrentStop = false
+                // 같은 시간만큼 더 벗어나 있으면 다시 시도한다.
+                state.offRouteSince = state.latestPosition?.timestamp
+                state.statusMessage = "경로를 다시 찾지 못했어요. 표시된 경로 쪽으로 이동해 주세요."
                 return .none
 
             case let .finishFromArrival(stopIndex):
@@ -530,16 +573,53 @@ struct BookNavigationFeature {
             state.isReroutingToNextBook = false
             state.nextBookRequestID += 1
         }
+        if state.isReroutingCurrentStop {
+            state.isReroutingCurrentStop = false
+            state.rerouteRequestID += 1
+        }
         invalidate(&state, message: state.exitReason == nil ? "안내가 일시 정지됐어요." : "안내를 종료했어요.")
-        return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.expiry), .cancel(id: CancelID.nextBookRoute))
+        return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.expiry), .cancel(id: CancelID.nextBookRoute),
+                      .cancel(id: CancelID.reroute))
     }
 
     private func invalidate(_ state: inout State, message: String) {
+        // 위치를 잃은 동안은 이탈 시간을 쌓지 않는다.
+        state.offRouteSince = nil
         state.rawPosition = nil
         state.latestPosition = nil
         state.progress = nil
         state.statusMessage = message
         state.cameraTracking = .init()
+    }
+
+    /// 경로 이탈이 ``BookNavigationFeature/offRouteRerouteDelay`` 이상 이어지면 현재 위치에서
+    /// 현재 책의 서가까지 경로를 다시 찾는다. 방문 순서와 선택한 서가는 유지한다.
+    private func rerouteIfOffRoute(_ state: inout State) -> Effect<Action> {
+        guard let since = state.offRouteSince, state.exitReason == nil, state.isActive,
+              !state.isReroutingCurrentStop, !state.isReroutingToNextBook, !state.isArrivalPresented,
+              let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
+              position.timestamp.timeIntervalSince(since) >= Self.offRouteRerouteDelay,
+              let stop = state.currentStop else { return .none }
+        let stopIndex = state.currentStopIndex
+        let destination = BookRouteCandidateStop(book: stop.book, holdings: stop.holdings,
+                                                 candidateShelves: [stop.shelf])
+        let map = state.session.map, labels = state.session.shelfLabels
+        state.rerouteRequestID += 1
+        let requestID = state.rerouteRequestID
+        state.isReroutingCurrentStop = true
+        state.statusMessage = "경로를 벗어나 현재 위치에서 경로를 다시 찾고 있어요."
+        return .run { [routePreviewClient] send in
+            do {
+                let session = try await routePreviewClient.load(map, labels, position, [destination])
+                try Task.checkCancellation()
+                guard let route = session.legs.first else { throw IndoorRoutingError.noRoute }
+                await send(.currentStopRerouted(requestID: requestID, stopIndex: stopIndex, route))
+            } catch is CancellationError {
+                return
+            } catch {
+                await send(.currentStopRerouteFailed(requestID: requestID))
+            }
+        }.cancellable(id: CancelID.reroute, cancelInFlight: true)
     }
 
     private func fitCurrentRoute(_ state: inout State) {
@@ -582,7 +662,8 @@ struct BookNavigationFeature {
             if state.manuallyCompletedFloorTransition != nil, previousFloor != state.currentFloor?.id {
                 fitCurrentRoute(&state)
             }
-            state.statusMessage = nil
+            state.offRouteSince = nil
+            if !state.isReroutingCurrentStop { state.statusMessage = nil }
             recordQuality(state, code: "on_route")
             if let progress = state.progress {
                 // Runtime에서 같은 경유지·edge step의 연속 GPS 갱신을 한 번으로 줄인다.
@@ -608,7 +689,11 @@ struct BookNavigationFeature {
             switch error as? RouteGuidanceError {
             case .unknownFloor: state.statusMessage = "현재 층에는 안내 경로가 없어요. 층을 확인해 주세요."
             case .ambiguousPosition: state.statusMessage = "경로에서 현재 위치를 구분하기 어려워요. 위치를 다시 확인해 주세요."
-            case .offRoute: state.statusMessage = "표시된 경로에서 벗어났어요. 위치와 층을 확인해 주세요."
+            case .offRoute:
+                if state.offRouteSince == nil { state.offRouteSince = effective.timestamp }
+                if !state.isReroutingCurrentStop {
+                    state.statusMessage = "표시된 경로에서 벗어났어요. 위치와 층을 확인해 주세요."
+                }
             default:
                 state.latestPosition = nil
                 state.statusMessage = "현재 위치로 안내할 수 없어요. 새로운 위치 정보를 기다리고 있어요."
