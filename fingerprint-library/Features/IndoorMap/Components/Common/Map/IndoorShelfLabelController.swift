@@ -22,12 +22,7 @@ final class IndoorShelfLabelController {
     }
 
     private func resolveLevel(in map: MKMapView) -> IndoorShelfLabelLevel? {
-        guard map.bounds.width > 0, map.bounds.height > 0 else { return nil }
-        let center = CGPoint(x: map.bounds.midX, y: map.bounds.midY)
-        let a = MKMapPoint(map.convert(center, toCoordinateFrom: map))
-        let b = MKMapPoint(map.convert(CGPoint(x: center.x + 10, y: center.y), toCoordinateFrom: map))
-        let scale = a.distance(to: b) / 10
-        guard scale.isFinite, scale > 0 else { return nil }
+        guard let scale = IndoorShelfLabelLevel.metersPerPoint(in: map) else { return nil }
         let next = IndoorShelfLabelLevel.resolve(metersPerPoint: scale, previous: level)
         level = next
         return next

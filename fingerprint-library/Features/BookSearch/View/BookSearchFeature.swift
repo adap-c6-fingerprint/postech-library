@@ -244,7 +244,7 @@ struct BookSearchFeature {
 
             case let .favorites(.presented(.delegate(.favoritesChanged(keys)))):
                 state.favoriteBookKeys = keys
-                // 지도 찜 표시와 검색 결과 하트가 찜 목록 화면에서 지운 내용을 따라가게 한다.
+                // 지도 찜 표시와 검색 결과 북마크가 찜 목록 화면에서 지운 내용을 따라가게 한다.
                 return .none
 
             case .favorites(.presented(.delegate(.cartChanged))),

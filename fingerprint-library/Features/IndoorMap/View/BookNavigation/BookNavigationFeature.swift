@@ -221,7 +221,7 @@ struct BookNavigationFeature {
                 if updateCamera(&state, force: true) { return .none }
                 if let position = state.latestPosition,
                    state.manuallyCompletedFloorTransition == nil || position.floorOrdinal == state.currentFloor?.ordinal {
-                    state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .position(position.coordinate, restoresInitialView: false))
+                    state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .position(position.coordinate, revealsShelfNumbers: false))
                     return .none
                 }
                 if state.authorization == .notDetermined {

@@ -52,12 +52,9 @@ struct BookNavigationView: View {
                         Spacer()
                         HStack {
                             Spacer()
-                            Button { store.send(.recenterTapped) } label: {
-                                Image(systemName: "scope").font(.title3)
-                                    .frame(width: 48, height: 48).glassEffect(.regular, in: .circle)
+                            MapRecenterButton(accessibilityIdentifier: "book-navigation-recenter") {
+                                store.send(.recenterTapped)
                             }
-                            .accessibilityLabel("현재 위치로 지도 이동")
-                            .accessibilityIdentifier("book-navigation-recenter")
                         }
                         if let transition = store.nextFloorTransition {
                             floorTransitionButton(transition, stopIndex: store.currentStopIndex)

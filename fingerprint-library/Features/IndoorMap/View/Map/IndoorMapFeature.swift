@@ -370,7 +370,7 @@ struct IndoorMapFeature {
                 state.wantsRecenter = false
                 state.selectedFeatureID = nil
                 state.locationMessage = nil
-                state.requestCamera(.position(coordinate, restoresInitialView: false))
+                state.requestCamera(.position(coordinate, revealsShelfNumbers: false))
                 return .none
 
             case .manualFloorSelected(let id):
@@ -598,8 +598,8 @@ struct IndoorMapFeature {
             state.selectedFloorID = floor.id
             state.awaitsPositionFloor = false
         }
-        // 현재 위치 버튼은 위치와 함께 방향·줌도 최초 표시 상태로 되돌린다.
-        state.requestCamera(.position(position.coordinate, restoresInitialView: true))
+        // 현재 위치 버튼은 북쪽을 위로 돌리고, 주변 서가 번호가 보이는 배율로 확대한다.
+        state.requestCamera(.position(position.coordinate, revealsShelfNumbers: true))
         state.wantsRecenter = false
         state.locationMessage = nil
     }
@@ -614,8 +614,8 @@ nonisolated struct IndoorMapCameraRequest: Equatable, Sendable {
         /// 지정 층의 도형 전체를 표시 영역에 맞춘다.
         case floor(UUID)
         /// 현재 줌을 유지한 채 해당 좌표를 가려지지 않는 영역의 중심으로 이동한다.
-        /// `restoresInitialView`면 북쪽이 위로 오게 하고 줌도 최초 표시 배율로 되돌린다.
-        case position(IndoorMapCoordinate, restoresInitialView: Bool)
+        /// `revealsShelfNumbers`면 북쪽이 위로 오게 하고, 서가 번호 묶음이 풀리는 배율로 확대한다.
+        case position(IndoorMapCoordinate, revealsShelfNumbers: Bool)
         /// 같은 층의 서가 후보들을 함께 볼 수 있도록 도형 전체에 맞춘다.
         case features([IndoorMapElement.ID])
         /// 표시 층의 경로 전체와 출발·도착 서가 도형을 함께 맞춘다.
