@@ -23,9 +23,8 @@ struct BookNavigationPauseAlert: View {
         .accessibilityIdentifier("book-navigation-pause-alert")
     }
 
-    /// 시안 색. 카드보다 한 단계 어두운 버튼과, 종료 동작만 빨간 글씨로 구분한다.
+    /// 시안 색. 버튼은 Figma "Fills/Secondary"(``Constants/FillsSecondary``)를 쓰고, 종료 동작만 빨간 글씨로 구분한다.
     private static let cardColor = Color(white: 0.77)
-    private static let buttonColor = Color(white: 0.68)
     private static let destructiveColor = Color(hex: 0xE5534B)
 
     private var message: String {
@@ -47,14 +46,21 @@ struct BookNavigationPauseAlert: View {
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, 12)
                 .padding(.bottom, 12)
+            // 높이를 고정한 창에서 남는 공간은 본문과 버튼 사이에 두고, 버튼은 카드 아래에 붙인다.
+            Spacer(minLength: 0)
             buttons
         }
         .padding(.horizontal, 12)
         .padding(.top, 20)
-        .padding(.bottom, 12)
-        .frame(width: 274)
-        .background(Self.cardColor, in: RoundedRectangle(cornerRadius: 28))
-        .shadow(color: .black.opacity(0.25), radius: 20, y: 8)
+        .padding(.bottom, 14)
+        // 시안 크기. 버튼이 한 줄인 한 권짜리 창은 높이를 고정하지 않아 아래에 빈 공간이 생기지 않게 한다.
+        .frame(width: 300, height: hasNextStop ? 318 : nil, alignment: .top)
+        // 그림자를 카드 도형에만 걸어 안쪽 버튼·글자에는 그림자가 생기지 않게 한다.
+        .background {
+            RoundedRectangle(cornerRadius: 28)
+                .fill(Self.cardColor)
+                .shadow(color: .black.opacity(0.25), radius: 20, y: 8)
+        }
     }
 
     /// 책이 두 권 이상이면 돌아가기·다음 책 찾기·안내 종료하기를 세로로, 한 권이면 돌아가기·안내 종료하기를 가로로 둔다.
@@ -88,7 +94,7 @@ struct BookNavigationPauseAlert: View {
                 .minimumScaleFactor(0.8)
                 .foregroundStyle(isDestructive ? Self.destructiveColor : DS.ColorToken.neutralDark)
                 .frame(maxWidth: .infinity, minHeight: 48)
-                .background(Self.buttonColor, in: Capsule())
+                .background(Constants.FillsSecondary, in: Capsule())
         }
         .buttonStyle(.plain)
     }
