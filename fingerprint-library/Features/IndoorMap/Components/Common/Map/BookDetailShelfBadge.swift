@@ -8,7 +8,8 @@ final class BookDetailShelfBadge: NSObject, MKAnnotation {
 
     init(_ shelf: IndoorShelfLabelPresentation) {
         coordinate = shelf.coordinate
-        text = "\(shelf.text)번 서가"
+        // 2층 삼각서가처럼 이름으로 부르는 서가에는 "번 서가"를 붙이지 않는다.
+        text = shelf.members.allSatisfy(\.isNamedShelf) ? shelf.text : "\(shelf.text)번 서가"
     }
 }
 

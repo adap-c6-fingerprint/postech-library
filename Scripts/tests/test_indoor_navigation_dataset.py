@@ -54,9 +54,10 @@ class NavigationDatasetTests(unittest.TestCase):
                         self.assertEqual(value, hashlib.sha256((root / "IMDFData" / name).read_bytes()).hexdigest())
                     self.assertEqual(manifest["schema_version"], 1)
 
-    def test_actual_library_map_hashes_exclude_amenity_and_include_section(self):
+    def test_actual_library_map_hashes_include_amenity_and_section(self):
+        # 261111_1107 자료부터 편의시설(amenity)이 포함된다.
         imdf = SCRIPT.parents[1] / "fingerprint-library/Resources/IndoorMaps/POSTECHLibrary/IMDFData"
-        self.assertEqual(set(map_hashes(imdf)), REQUIRED | {"section.geojson"})
+        self.assertEqual(set(map_hashes(imdf)), REQUIRED | {"section.geojson", "amenity.geojson"})
 
     def test_missing_required_file_preserves_existing_manifest(self):
         for name in REQUIRED:
