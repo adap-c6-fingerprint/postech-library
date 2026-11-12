@@ -105,7 +105,7 @@ struct BookShelfMapView: View {
                         store.send(.candidateTapped(bookID, fixtureNumber: shelf.fixtureNumber))
                     } label: {
                         let floor = store.map.map?.floors.first { $0.id == shelf.floorID }
-                        Label("\(floor.map { "\($0.ordinal + 1)층" } ?? "층 확인 필요") · 서가 \(shelf.realNumber)-\(shelf.side.rawValue)",
+                        Label("\(floor.map { "\($0.ordinal + 1)층" } ?? "층 확인 필요") · \(shelf.isNamedShelf ? "" : "서가 ")\(shelf.faceTitle)",
                               systemImage: "mappin.circle.fill")
                             .font(.subheadline)
                             .frame(maxWidth: .infinity, alignment: .leading)

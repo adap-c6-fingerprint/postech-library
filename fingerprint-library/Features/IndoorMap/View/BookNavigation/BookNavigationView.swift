@@ -151,7 +151,7 @@ struct BookNavigationView: View {
                     .lineLimit(2)
                     .accessibilityIdentifier("book-navigation-book-title")
                 if let info = store.currentBookInfo {
-                    Text("\(info.floorName ?? "") \(info.shelf.realNumber)번 서가")
+                    Text("\(info.floorName ?? "") \(info.shelf.shelfTitle)")
                         .typography(.title1)
                         .foregroundStyle(DS.ColorToken.neutralTertiary)
                         .accessibilityIdentifier("book-navigation-shelf")

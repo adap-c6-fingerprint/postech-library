@@ -371,7 +371,7 @@ struct BookNavigationBookFindingView: View {
     }
 
     private func shelfTitle(_ info: BookNavigationBookInfo) -> String {
-        [info.floorName, "\(info.shelf.realNumber)번 서가"].compactMap { $0 }.joined(separator: " ")
+        [info.floorName, info.shelf.shelfTitle].compactMap { $0 }.joined(separator: " ")
     }
     // 예: "4층 337번 서가"
 

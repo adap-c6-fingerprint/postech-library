@@ -27,4 +27,13 @@ nonisolated struct IndoorShelfLabel: Identifiable, Equatable, Sendable {
     let mapElementID: IndoorMapElement.ID
     let geometry: IndoorMapGeometry
     let content: Content
+
+    /// 2층 삼각서가처럼 번호 대신 이름으로 부르는 서가. 면 구분도 없다.
+    var isNamedShelf: Bool {
+        if case .category = content { true } else { false }
+    }
+    /// 문장 속 서가 이름. "337번 서가" 또는 "삼각서가 C".
+    var shelfTitle: String { isNamedShelf ? realNumber : "\(realNumber)번 서가" }
+    /// 면까지 구분한 서가 표기. "337-A" 또는 "삼각서가 C".
+    var faceTitle: String { isNamedShelf ? realNumber : "\(realNumber)-\(side.rawValue)" }
 }

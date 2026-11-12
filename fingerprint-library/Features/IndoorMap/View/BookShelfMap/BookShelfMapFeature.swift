@@ -32,9 +32,9 @@ struct BookShelfMapFeature {
             self.books = books
         }
 
+        /// 길안내 목적지 후보. 3·4층 일반 서고에서 찾았으면 2층 삼각서가는 후보에서 뺀다.
         func shelves(for bookID: Book.ID) -> [IndoorShelfLabel] {
-            var seen = Set<String>()
-            return (resolutions[bookID] ?? []).flatMap(\.shelves).filter { seen.insert($0.id).inserted }
+            (resolutions[bookID] ?? []).preferredRouteShelves
         }
 
         var shelves: [IndoorShelfLabel] {
