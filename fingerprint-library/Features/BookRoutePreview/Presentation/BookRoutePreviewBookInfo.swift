@@ -19,7 +19,7 @@ struct BookRoutePreviewBookInfo {
     }
 
     init(book: Book, holdings: BookShelfMapFeature.HoldingsState?,
-         resolutions: [ShelfResolution], map: IndoorMap?, session: BookNavigationSession?) {
+         resolutions: [ShelfResolution], map: IndoorMap?, session: RoutePlan?) {
         let stop = session?.stops.first { $0.book.id == book.id }
 
         let holding: BookHolding?

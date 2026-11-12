@@ -2,7 +2,7 @@ import SwiftUI
 
 /// 도착한 서가에서 책등의 청구기호와 표지를 대조한다. 진행 동작은 상위 안내 상태가 처리한다.
 struct BookNavigationArrivalView: View {
-    let session: BookNavigationSession
+    let session: RoutePlan
     let currentStopIndex: Int
     private let bookInformation: BookNavigationBookInfo?
     private let onContinue: () -> Void
@@ -11,7 +11,7 @@ struct BookNavigationArrivalView: View {
     @Environment(\.dismiss) private var dismiss
     @ScaledMetric(relativeTo: .largeTitle) private var numberSize: CGFloat = 44
 
-    init(session: BookNavigationSession, currentStopIndex: Int,
+    init(session: RoutePlan, currentStopIndex: Int,
          bookInformation: BookNavigationBookInfo? = nil,
          onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {},
          onCancel: @escaping () -> Void = {}) {

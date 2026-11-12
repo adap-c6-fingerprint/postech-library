@@ -5,7 +5,7 @@ import SwiftUI
 struct BookRouteBooksPreviewView: View {
     let books: [Book]
     let shelfStore: StoreOf<BookShelfMapFeature>
-    let session: BookNavigationSession?
+    let session: RoutePlan?
     let isLoadingRoute: Bool
     let routeError: String?
     let canStart: Bool

@@ -10,7 +10,7 @@ struct BookNavigationBookInfo: Equatable, Sendable {
     let locationNames: [String]
     let callNumbers: [String]
 
-    init?(session: BookNavigationSession, stopIndex: Int) {
+    init?(session: RoutePlan, stopIndex: Int) {
         guard session.stops.indices.contains(stopIndex) else { return nil }
         let stop = session.stops[stopIndex]
         book = stop.book

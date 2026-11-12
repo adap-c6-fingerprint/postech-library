@@ -1,5 +1,5 @@
 //
-//  BookRoutePlanner.swift
+//  RoutePlanner.swift
 //  fingerprint-library
 //
 //  Created by Youngmin Cho on 10/31/26.
@@ -8,9 +8,9 @@
 import Foundation
 
 /// 파일 접근 없이, 준비된 자료로 최단 방문 순서와 안내 세션을 만듦
-nonisolated struct BookRoutePlanner {
+nonisolated struct RoutePlanner {
     @concurrent
-    func plan(_ input: BookRoutePlanningInput) async throws -> BookNavigationSession {
+    func plan(_ input: RoutePlanningInput) async throws -> RoutePlan {
         let selections = await MainActor.run {
             input.stops.map {
                 (
@@ -66,7 +66,7 @@ nonisolated struct BookRoutePlanner {
         let stops = await MainActor.run {
             chosenOrder.map { input.stops[$0].resolved(at: chosenShelves[$0]) }
         }
-        return try await BookNavigationSession(
+        return try await RoutePlan(
             map: input.map,
             shelfLabels: input.shelfLabels,
             stops: stops,
@@ -82,7 +82,7 @@ nonisolated struct BookRoutePlanner {
         }
     }
 
-    private func buildLegs(for shelves: [IndoorShelfLabel], input: BookRoutePlanningInput,
+    private func buildLegs(for shelves: [IndoorShelfLabel], input: RoutePlanningInput,
                            cache: inout [LegKey: IndoorRoute], unreachable: inout Set<LegKey>) throws -> [IndoorRoute] {
         var legs: [IndoorRoute] = []
         for (index, shelf) in shelves.enumerated() {

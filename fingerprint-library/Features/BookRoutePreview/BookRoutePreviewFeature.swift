@@ -68,7 +68,7 @@ struct BookRoutePreviewFeature {
         var analyticsOperation: String { analyticsID.uuidString + ":" + String(requestID) }
         var analyticsIsTest = false
         var analyticsRequestIsTest = false
-        var previewSession: BookNavigationSession?
+        var previewPlan: RoutePlan?
         var isLoadingRoute = false
         var routeError: String?
         var requestID = 0
@@ -99,12 +99,12 @@ struct BookRoutePreviewFeature {
         var routeRequest: BookRoutePreviewRequest { .init(state: shelf, start: previewStart) }
 
         /// 지금 화면의 서가·출발 위치와 맞는 계산 결과. 입력이 바뀐 뒤의 이전 결과는 쓰지 않는다.
-        var readySession: BookNavigationSession? {
-            guard let previewSession, case let .ready(map, labels, start, stops) = routeRequest,
-                  previewSession.map == map, previewSession.shelfLabels == labels,
-                  previewSession.start == start,
-                  previewSession.matches(candidates: stops) else { return nil }
-            return previewSession
+        var readySession: RoutePlan? {
+            guard let previewPlan, case let .ready(map, labels, start, stops) = routeRequest,
+                  previewPlan.map == map, previewPlan.shelfLabels == labels,
+                  previewPlan.start == start,
+                  previewPlan.matches(candidates: stops) else { return nil }
+            return previewPlan
         }
 
         var orderedBooks: [Book] { readySession?.stops.map(\.book) ?? destination.books }
@@ -170,7 +170,7 @@ struct BookRoutePreviewFeature {
         case goHomeTapped
         case delegate(Delegate)
         case analyticsTestModeChanged(Bool)
-        case routeLoaded(requestID: Int, BookNavigationSession)
+        case routeLoaded(requestID: Int, RoutePlan)
         case routeFailed(requestID: Int, String)
         case reset
         case disappeared
@@ -336,7 +336,7 @@ struct BookRoutePreviewFeature {
                 }
 
                 state.isLoadingRoute = false
-                state.previewSession = session
+                state.previewPlan = session
                 analytics.record(.init(.routeCalculationCompleted, [
                     .operationID: .text(state.analyticsOperation), .navigationID: .text(session.id.uuidString),
                     .distanceM: .decimal(session.route.distanceMeters), .bookCount: .integer(session.stops.count),
@@ -346,7 +346,7 @@ struct BookRoutePreviewFeature {
                 if state.startsNavigationWhenLoaded {
                     state.startsNavigationWhenLoaded = false
                     guard session.start.isRecent(at: now) else {
-                        state.previewSession = nil
+                        state.previewPlan = nil
                         state.routeError = IndoorRoutingError.invalidPosition.localizedDescription
                         return resolveStartAuthorization(&state)
                     }
@@ -377,7 +377,7 @@ struct BookRoutePreviewFeature {
             case .reset:
                 recordCancellation(state)
                 state.requestID += 1
-                state.previewSession = nil
+                state.previewPlan = nil
                 state.isLoadingRoute = false
                 state.routeError = nil
                 state.startsNavigationWhenLoaded = false
@@ -414,7 +414,7 @@ struct BookRoutePreviewFeature {
     ///
     /// 처음 위치·층을 받으면 그 위치로 계산하고, 계산을 마치거나 실패한 뒤에는 위치를 받을 때마다 다시 계산하지 않는다.
     private func reconcile(_ state: inout State) -> Effect<Action> {
-        if state.previewSession == nil, !state.isLoadingRoute,
+        if state.previewPlan == nil, !state.isLoadingRoute,
            state.previewStart == nil || state.previewStart?.floorOrdinal == nil {
             state.previewStart = state.currentStart
         }
@@ -458,7 +458,7 @@ struct BookRoutePreviewFeature {
     ) -> Effect<Action> {
         recordCancellation(state)
         state.requestID += 1
-        state.previewSession = nil
+        state.previewPlan = nil
         state.isLoadingRoute = false
         state.routeError = nil
         state.startsNavigationWhenLoaded = startsNavigation

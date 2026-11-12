@@ -1,5 +1,5 @@
 //
-//  BookRoutePlanningInput.swift
+//  RoutePlanningInput.swift
 //  fingerprint-library
 //
 //  Created by Youngmin Cho on 10/31/26.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// 파일 검증과 서가의 도착 노드 연결이 끝난 입력
-nonisolated struct BookRoutePlanningInput: Sendable {
+nonisolated struct RoutePlanningInput: Sendable {
     // 최종 Session에 담아서 지도, 안내 화면에 전달
     let map: IndoorMap
     let shelfLabels: [IndoorShelfLabel]
@@ -20,5 +20,5 @@ nonisolated struct BookRoutePlanningInput: Sendable {
     let start: IndoorPosition
 
     // 방문할 책과 서가 목록
-    let stops: [BookRouteCandidateStop]
+    let stops: [RouteCandidateStop]
 }

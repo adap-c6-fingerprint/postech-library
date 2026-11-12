@@ -4,14 +4,14 @@ import Foundation
 enum BookRoutePreviewRequest: Equatable {
     case waiting
     case failed(String)
-    case ready(map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [BookRouteCandidateStop])
+    case ready(map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [RouteCandidateStop])
 
     init(state: BookShelfMapFeature.State?, start: IndoorPosition? = nil) {
         guard let state else { self = .waiting; return }
         if let error = state.map.loadError ?? state.map.shelfLabelError {
             self = .failed(error); return
         }
-        var stops: [BookRouteCandidateStop] = []
+        var stops: [RouteCandidateStop] = []
         for book in state.books {
             switch state.holdings[book.id] {
             case nil, .loading: self = .waiting; return

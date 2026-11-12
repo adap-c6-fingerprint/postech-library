@@ -21,7 +21,7 @@ struct BookNavigationFeature {
     }
     @ObservableState
     struct State: Equatable {
-        let session: BookNavigationSession
+        let session: RoutePlan
         var analyticsIsTest = false
         var plans: [RouteGuidancePlan?]
         let bookInfos: [BookNavigationBookInfo?]
@@ -60,7 +60,7 @@ struct BookNavigationFeature {
         var arrivalSpines: [Int: SpinePhase] = [:]
         // 책장 앞 책찾기 화면에 그릴 책등. 키는 목적지 순서(stopIndex)
 
-        init(session: BookNavigationSession) {
+        init(session: RoutePlan) {
             self.session = session
             let plans = session.legs.map { try? RouteGuidancePlan(route: $0, graph: session.graph) }
             self.plans = plans
@@ -81,7 +81,7 @@ struct BookNavigationFeature {
             exitReason == nil && !isArrivalPresented && !isReroutingToNextBook && !isReturningToPreviousStop
                 && currentStopIndex > 0 && session.stops.indices.contains(currentStopIndex - 1)
         }
-        var currentStop: BookNavigationStop? {
+        var currentStop: RouteStop? {
             session.stops.indices.contains(currentStopIndex) ? session.stops[currentStopIndex] : nil
         }
         var currentRoute: IndoorRoute? {
@@ -411,7 +411,7 @@ struct BookNavigationFeature {
                 let nextIndex = state.currentStopIndex + 1
                 let nextStop = state.session.stops[nextIndex]
                 // 방문 순서와 이미 선택한 서가를 유지한다. 남은 책의 순서를 다시 최적화하지 않는다.
-                let destination = BookRouteCandidateStop(book: nextStop.book, holdings: nextStop.holdings,
+                let destination = RouteCandidateStop(book: nextStop.book, holdings: nextStop.holdings,
                     candidateShelves: [nextStop.shelf])
                 let map = state.session.map, labels = state.session.shelfLabels
                 state.nextBookRequestID += 1
@@ -473,7 +473,7 @@ struct BookNavigationFeature {
                     return .cancel(id: CancelID.reroute)
                 }
                 let stop = state.session.stops[previousIndex]
-                let destination = BookRouteCandidateStop(book: stop.book, holdings: stop.holdings,
+                let destination = RouteCandidateStop(book: stop.book, holdings: stop.holdings,
                                                          candidateShelves: [stop.shelf])
                 let map = state.session.map, labels = state.session.shelfLabels
                 state.previousStopRequestID += 1
@@ -686,7 +686,7 @@ struct BookNavigationFeature {
               position.timestamp.timeIntervalSince(since) >= Self.offRouteRerouteDelay,
               let stop = state.currentStop else { return .none }
         let stopIndex = state.currentStopIndex
-        let destination = BookRouteCandidateStop(book: stop.book, holdings: stop.holdings,
+        let destination = RouteCandidateStop(book: stop.book, holdings: stop.holdings,
                                                  candidateShelves: [stop.shelf])
         let map = state.session.map, labels = state.session.shelfLabels
         state.rerouteRequestID += 1

@@ -12,8 +12,8 @@ nonisolated struct BookRoutePreviewClient: Sendable {
         IndoorMap,
         [IndoorShelfLabel],
         IndoorPosition,
-        [BookRouteCandidateStop]
-    ) async throws -> BookNavigationSession
+        [RouteCandidateStop]
+    ) async throws -> RoutePlan
 }
 
 extension BookRoutePreviewClient: DependencyKey {

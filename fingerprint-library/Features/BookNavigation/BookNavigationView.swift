@@ -12,7 +12,7 @@ struct BookNavigationView: View {
     @ScaledMetric(relativeTo: .body) private var expandedSheetHeight: CGFloat = 352
     private var isSheetExpanded: Bool { store.isSheetExpanded }
 
-    init(session: BookNavigationSession, analyticsIsTest: Bool = false, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
+    init(session: RoutePlan, analyticsIsTest: Bool = false, onExit: ((BookNavigationFeature.ExitReason) -> Void)? = nil) {
         var state = BookNavigationFeature.State(session: session)
         state.analyticsIsTest = analyticsIsTest
         self.init(store: Store(initialState: state) {
@@ -275,7 +275,7 @@ struct BookNavigationView: View {
         .accessibilityHint("\(store.session.map.floors.first { $0.id == transition.to.floorID }?.name ?? "다음 층") 경로를 표시합니다")
     }
 
-    private func navigationMap(stop: BookNavigationStop, route: IndoorRoute, floor: IndoorMapFloor) -> some View {
+    private func navigationMap(stop: RouteStop, route: IndoorRoute, floor: IndoorMapFloor) -> some View {
         IndoorMapKitView(
             map: store.session.map, floor: floor, selectedFeatureID: nil,
             position: store.latestPosition, showsUserLocation: false, isPlacingOrigin: false,

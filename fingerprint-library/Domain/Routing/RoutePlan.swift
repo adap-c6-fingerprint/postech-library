@@ -1,7 +1,7 @@
 import Foundation
 
-/// 입력 도서 순서의 방문 목적지. 원본 도서·소장 정보와 실제 서가를 함께 보존한다.
-struct BookNavigationStop: Equatable, Sendable {
+/// 확정한 방문지. 원본 도서·소장 정보와 서가 후보, 그중 안내할 서가 하나를 함께 보존한다.
+struct RouteStop: Equatable, Sendable {
     let book: Book
     let holdings: [BookHolding]
     let shelf: IndoorShelfLabel
@@ -15,24 +15,25 @@ struct BookNavigationStop: Equatable, Sendable {
         self.candidateShelves = (candidateShelves ?? [shelf]).sorted { $0.fixtureNumber < $1.fixtureNumber }
     }
 
-    var candidateStop: BookRouteCandidateStop {
+    var candidateStop: RouteCandidateStop {
         .init(book: book, holdings: holdings, candidateShelves: candidateShelves)
     }
 }
 
-/// 미리보기에서 확정한 안내 입력 스냅샷. 실시간 위치·진행 단계는 수신 화면에서 구현한다.
-struct BookNavigationSession: Identifiable, Equatable, Sendable {
+/// 확정한 경로 계획. 방문 순서·방문지별 서가·구간 경로를 담는다.
+/// 현재 방문지·진행·완료 상태는 길안내가 따로 관리한다.
+struct RoutePlan: Identifiable, Equatable, Sendable {
     let id = UUID()
     let map: IndoorMap
     let shelfLabels: [IndoorShelfLabel]
-    let stops: [BookNavigationStop]
+    let stops: [RouteStop]
     let legs: [IndoorRoute]
     let graph: RoutingGraph
     let start: IndoorPosition
     let route: IndoorRoute
     let guidance: RoutePreviewGuidance
 
-    init(map: IndoorMap, shelfLabels: [IndoorShelfLabel], stops: [BookNavigationStop],
+    init(map: IndoorMap, shelfLabels: [IndoorShelfLabel], stops: [RouteStop],
          legs: [IndoorRoute], graph: RoutingGraph, start: IndoorPosition) throws {
         guard BookRouteSelection.allows(bookCount: stops.count),
               Set(stops.map { $0.book.id }).count == stops.count,
@@ -69,7 +70,7 @@ struct BookNavigationSession: Identifiable, Equatable, Sendable {
     }
 
     /// 방문 순서·목적지를 골라도 원본 책·소장·후보가 같은 계산 결과만 사용한다.
-    func matches(candidates: [BookRouteCandidateStop]) -> Bool {
+    func matches(candidates: [RouteCandidateStop]) -> Bool {
         stops.count == candidates.count
             && stops.allSatisfy { candidates.contains($0.candidateStop) }
     }

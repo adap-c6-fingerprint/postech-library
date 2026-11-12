@@ -24,8 +24,8 @@ struct BookRoutePreviewView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    private var previewSession: BookNavigationSession? {
-        routeStore.previewSession
+    private var previewPlan: RoutePlan? {
+        routeStore.previewPlan
     }
     
     private var isLoadingRoute: Bool {
@@ -40,30 +40,30 @@ struct BookRoutePreviewView: View {
     private var currentStart: IndoorPosition? { store.currentStart }
     private var needsStartLocationSetup: Bool { store.needsStartLocationSetup }
     private var routeRequest: BookRoutePreviewRequest { store.routeRequest }
-    private var readySession: BookNavigationSession? { store.readySession }
+    private var readySession: RoutePlan? { store.readySession }
     private var orderedBooks: [Book] { store.orderedBooks }
 
     private var previewContent: some View {
         BookRoutePreviewMapSheet(onBack: { dismiss() }, onViewportChange: {
-            if previewSession == nil { destinationStore?.send(.focusShelfTapped) }
+            if previewPlan == nil { destinationStore?.send(.focusShelfTapped) }
         }) { insets, cameraRevision in
             Group {
-                if let previewSession,
-                   let floor = previewSession.map.floors.first(where: { floor in
+                if let previewPlan,
+                   let floor = previewPlan.map.floors.first(where: { floor in
                        routeFloorID.map { $0 == floor.id }
-                           ?? (floor.ordinal == previewSession.start.floorOrdinal)
+                           ?? (floor.ordinal == previewPlan.start.floorOrdinal)
                    }) {
                     IndoorMapKitView(
-                        map: previewSession.map, floor: floor, selectedFeatureID: nil,
-                        position: previewSession.start, showsUserLocation: false, isPlacingOrigin: false,
-                        cameraRequest: .init(id: cameraRevision * 100 + floor.ordinal, target: .route(previewSession.route,
-                            featureIDs: previewSession.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })),
+                        map: previewPlan.map, floor: floor, selectedFeatureID: nil,
+                        position: previewPlan.start, showsUserLocation: false, isPlacingOrigin: false,
+                        cameraRequest: .init(id: cameraRevision * 100 + floor.ordinal, target: .route(previewPlan.route,
+                            featureIDs: previewPlan.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })),
                         onSelect: { _ in }, onPlaceOrigin: { _ in },
-                        route: previewSession.route,
-                        groupTransitionNodes: previewSession.guidance.groupTransitionNodes,
+                        route: previewPlan.route,
+                        groupTransitionNodes: previewPlan.guidance.groupTransitionNodes,
                         viewportInsets: insets,
-                        shelfLabels: previewSession.shelfLabels,
-                        highlightedFeatureIDs: Set(previewSession.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })
+                        shelfLabels: previewPlan.shelfLabels,
+                        highlightedFeatureIDs: Set(previewPlan.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })
                     )
                     .accessibilityIdentifier("preview-test-route-map")
                 } else if let destinationStore {
@@ -343,9 +343,9 @@ struct BookRoutePreviewView: View {
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .overlay(alignment: .topTrailing) {
-            if entryMode == .preview, destination.books.count <= 1, let previewSession {
+            if entryMode == .preview, destination.books.count <= 1, let previewPlan {
                 Menu("층 보기", systemImage: "square.3.layers.3d") {
-                    ForEach(previewSession.map.floors) { floor in
+                    ForEach(previewPlan.map.floors) { floor in
                         Button("\(floor.ordinal + 1)층") { routeFloorID = floor.id }
                     }
                 }
@@ -429,7 +429,7 @@ struct BookRoutePreviewView: View {
                     .foregroundStyle(.secondary)
                     .accessibilityIdentifier("preview-test-mode-status")
             }
-            if destinationStore != nil, previewSession == nil, routeError == nil {
+            if destinationStore != nil, previewPlan == nil, routeError == nil {
                 ProgressView(isLoadingRoute ? "현재 위치에서 목적지까지 경로 계산 중" : "도서·서가 위치 확인 중")
                     .font(.caption)
             }
@@ -440,17 +440,17 @@ struct BookRoutePreviewView: View {
                 .buttonStyle(.bordered)
                 .disabled(isLoadingRoute || currentStart == nil)
             }
-            if let previewSession {
-                Text("현재 위치 → " + previewSession.stops.map { $0.shelf.faceTitle }.joined(separator: " → "))
+            if let previewPlan {
+                Text("현재 위치 → " + previewPlan.stops.map { $0.shelf.faceTitle }.joined(separator: " → "))
                     .font(.caption).foregroundStyle(.secondary)
             }
             layout {
                 HStack(spacing: 12) {
-                    metric("도보", unit: "min", value: previewSession.map {
+                    metric("도보", unit: "min", value: previewPlan.map {
                         $0.guidance.walkingMinutes.formatted(.number.precision(.fractionLength(2)))
                     })
-                    metric("단계", unit: "steps", value: previewSession.map { String($0.guidance.stepCount) })
-                    metric("거리", unit: "m", value: previewSession.map { $0.route.distanceMeters.formatted(.number.precision(.fractionLength(0))) })
+                    metric("단계", unit: "steps", value: previewPlan.map { String($0.guidance.stepCount) })
+                    metric("거리", unit: "m", value: previewPlan.map { $0.route.distanceMeters.formatted(.number.precision(.fractionLength(0))) })
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Button("출발") { store.send(.departTapped) }
@@ -466,7 +466,7 @@ struct BookRoutePreviewView: View {
             .padding(16)
             .background(Color(uiColor: .tertiarySystemBackground), in: RoundedRectangle(cornerRadius: 20))
 
-            Text(previewSession == nil ? "경로 계산 후 시간·단계·거리가 표시돼요."
+            Text(previewPlan == nil ? "경로 계산 후 시간·단계·거리가 표시돼요."
                  : "시속 5km 기준 예상 시간이에요(10m ≈ 7.2초). 단계는 그룹 전환 횟수 + 1이며, 주황색 원은 전환 노드예요. 모든 방문 순서 중 실제 이동거리가 가장 짧은 경로예요. 출발을 누르면 최신 현재 위치로 다시 계산해요.")
                 .font(.caption)
                 .foregroundStyle(.secondary)

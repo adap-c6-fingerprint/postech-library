@@ -20,12 +20,12 @@ struct BookNavigationBookFindingView: View {
     @State private var pullHoldTask: Task<Void, Never>?
 
     private struct CallNumberScreen {
-        let session: BookNavigationSession
+        let session: RoutePlan
         let currentStopIndex: Int
         let onCancel: () -> Void
     }
 
-    init(session: BookNavigationSession, currentStopIndex: Int,
+    init(session: RoutePlan, currentStopIndex: Int,
          bookInformation: BookNavigationBookInfo? = nil,
          spine: BookNavigationFeature.SpinePhase? = nil,
          onTask: @escaping () -> Void = {},

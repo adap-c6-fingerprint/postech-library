@@ -7,7 +7,7 @@ struct BookRoutePreviewBookCard: View {
     let holdings: BookShelfMapFeature.HoldingsState?
     let resolutions: [ShelfResolution]
     let map: IndoorMap?
-    let session: BookNavigationSession?
+    let session: RoutePlan?
     let showsFullDescription: Bool
     let isSheetMoving: Bool
     let isSelected: Bool
@@ -21,7 +21,7 @@ struct BookRoutePreviewBookCard: View {
 
     init(book: Book, holdings: BookShelfMapFeature.HoldingsState?,
          resolutions: [ShelfResolution], map: IndoorMap?,
-         session: BookNavigationSession?, detailStore: StoreOf<BookDetailFeature>,
+         session: RoutePlan?, detailStore: StoreOf<BookDetailFeature>,
          showsFullDescription: Bool = false,
          isSheetMoving: Bool = false, isSelected: Bool = true,
          onContentAtTopChange: @escaping (Bool) -> Void = { _ in },

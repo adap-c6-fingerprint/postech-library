@@ -1,7 +1,7 @@
 import Foundation
 
 /// 경로 계산 전의 책·소장 정보와 서가 후보. 목적지 한 곳으로 미리 확정하지 않는다.
-struct BookRouteCandidateStop: Equatable, Sendable {
+struct RouteCandidateStop: Equatable, Sendable {
     let book: Book
     let holdings: [BookHolding]
     let candidateShelves: [IndoorShelfLabel]
@@ -13,7 +13,7 @@ struct BookRouteCandidateStop: Equatable, Sendable {
         self.candidateShelves = candidateShelves.sorted { $0.fixtureNumber < $1.fixtureNumber }
     }
 
-    func resolved(at shelf: IndoorShelfLabel) -> BookNavigationStop {
+    func resolved(at shelf: IndoorShelfLabel) -> RouteStop {
         .init(book: book, holdings: holdings, shelf: shelf, candidateShelves: candidateShelves)
     }
 }
