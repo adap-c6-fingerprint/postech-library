@@ -60,7 +60,6 @@ struct BookCartFeature {
 
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
-    @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
     @Dependency(\.bookCoverClient) var bookCoverClient
 
     private nonisolated enum CancelID: Hashable, Sendable {
@@ -110,7 +109,6 @@ struct BookCartFeature {
 
             case .guidanceLinkTapped:
                 guard state.canStartGuidance else { return .none }
-                recentlyFoundBooksClient.record(state.selectedBooks)
                 bookCoverClient.prefetchSpines(state.selectedBooks.compactMap(\.isbn))
                 return .send(.delegate(.startGuidance(state.selectedBooks)))
 

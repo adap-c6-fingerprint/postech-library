@@ -206,6 +206,7 @@ struct BookNavigationFeature {
     @Dependency(\.bookCoverClient) var bookCoverClient
     @Dependency(\.routePlanningClient) var routePlanningClient
     @Dependency(\.analyticsClient) private var analytics
+    @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
     private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute, reroute, previousStopRoute }
 
     var body: some Reducer<State, Action> {
@@ -364,7 +365,8 @@ struct BookNavigationFeature {
 
             case let .continueFromArrival(stopIndex):
                 guard state.exitReason == nil, state.isArrivalPresented,
-                      stopIndex == state.currentStopIndex, state.currentStop != nil, state.hasNextStop else { return .none }
+                      stopIndex == state.currentStopIndex, let stop = state.currentStop, state.hasNextStop else { return .none }
+                recentlyFoundBooksClient.record([stop.book])
                 state.navigation.advance()
                 state.offRouteSince = nil
                 state.manuallyCompletedFloorTransition = nil
@@ -520,7 +522,8 @@ struct BookNavigationFeature {
             case let .finishFromArrival(stopIndex):
                 guard state.exitReason == nil, state.isArrivalPresented,
                       stopIndex == state.currentStopIndex, !state.hasNextStop,
-                      state.currentStop != nil else { return .none }
+                      let stop = state.currentStop else { return .none }
+                recentlyFoundBooksClient.record([stop.book])
                 return end(&state, reason: .completed)
 
             case let .deferFromArrival(stopIndex):

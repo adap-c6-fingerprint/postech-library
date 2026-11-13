@@ -121,7 +121,6 @@ struct BookDetailFeature {
 
     @Dependency(\.indoorRouteClient) var indoorRouteClient
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
-    @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
     @Dependency(\.bookCoverClient) var bookCoverClient
     @Dependency(\.date.now) var now
 
@@ -271,7 +270,6 @@ struct BookDetailFeature {
 
             case .guidanceStarted:
                 state.isGuidancePresented = true
-                recentlyFoundBooksClient.record([state.book])
                 bookCoverClient.prefetchSpines([state.book.isbn].compactMap { $0 })
                 return .send(.delegate(.startGuidance([state.book])))
             }
