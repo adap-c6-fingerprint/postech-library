@@ -29,6 +29,15 @@ struct AppNavigationTests {
         #expect(store.state.mapPath.isEmpty && store.state.searchPath.isEmpty)
     }
 
+    @Test func 학과_추천은_상태_없는_경로로_쌓는다() async {
+        let store = makeStore(makeState())
+        await store.send(.home(.delegate(.showDepartmentRecommendations)))
+        #expect(store.state.recommendationsPath.count == 1)
+        #expect(store.state.recommendationsPath.first.flatMap {
+            if case .departmentRecommendations = $0 { true } else { nil }
+        } == true)
+    }
+
     @Test func 검색의_이동_요청은_요청한_지금_탭에_쌓는다() async {
         let store = makeStore(makeState())
         await store.send(.tabSelected(.map))

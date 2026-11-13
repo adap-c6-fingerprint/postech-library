@@ -18,7 +18,7 @@ extension AppFeature {
         case favoriteShelf(BookShelfMapFeature)
         case myPage(MyPageFeature)
         case recentlyFound(RecentlyFoundBookFeature)
-        case departmentRecommendations(DepartmentRecommendationsDestination)
+        case departmentRecommendations
     }
 
     @Reducer
@@ -90,7 +90,7 @@ extension AppFeature {
         case .showMyPage:
             .myPage(MyPageFeature.State())
         case .showDepartmentRecommendations:
-            .departmentRecommendations(DepartmentRecommendationsDestination.State())
+            .departmentRecommendations
         }
     }
 
