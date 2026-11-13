@@ -72,7 +72,10 @@ struct IndoorMapKitView: UIViewRepresentable {
         private(set) var pendingCameraRequest: IndoorMapCameraRequest?
         private var isApplyingCamera = false
         private var isMakingMapView = false
-        private var overlayFeatures: [ObjectIdentifier: IndoorMapElement] = [:]
+        private var overlayStyles: [ObjectIdentifier: IndoorOverlayStyle] = [:]
+        private var highlightOverlays: [any MKOverlay] = []
+        /// 기본 도형에서 빼고 강조 도형으로만 그린 요소. 반투명 강조가 기본 도형 위에 겹쳐 색이 달라지지 않게 한다.
+        private var baseExcludedIDs: Set<IndoorMapElement.ID> = []
         private var pendingOverlayRedrawIDs = Set<ObjectIdentifier>()
         private var readyOverlayRenderers: [ObjectIdentifier: MKOverlayRenderer] = [:]
         private var overlayRedrawTask: Task<Void, Never>?
@@ -155,10 +158,10 @@ struct IndoorMapKitView: UIViewRepresentable {
             if selectedID != parent.selectedFeatureID || highlightedIDs != parent.highlightedFeatureIDs {
                 selectedID = parent.selectedFeatureID
                 highlightedIDs = parent.highlightedFeatureIDs
-                for overlay in view.overlays {
-                    if let renderer = view.renderer(for: overlay) as? MKOverlayPathRenderer {
-                        style(renderer, overlay: overlay)
-                    }
+                if baseExcludedIDs.isSubset(of: emphasizedIDs) {
+                    updateHighlightOverlays(in: view)
+                } else {
+                    render(in: view)
                 }
                 layoutShelfLabels(in: view)
             }
@@ -372,30 +375,77 @@ struct IndoorMapKitView: UIViewRepresentable {
             routeOverlayIDs.removeAll()
             routeFloorID = nil
             view.removeAnnotations(view.annotations.filter { $0 is FeatureAnnotation })
-            overlayFeatures.removeAll()
+            overlayStyles.removeAll()
+            highlightOverlays.removeAll()
             if renderedMap != parent.map { applyCameraLimits(in: view) }
             renderedMap = parent.map
             renderedFloorID = parent.floor.id
             renderedNavigationAppearance = parent.navigationAppearance
             renderedAppearance = parent.appearance
             selectedID = parent.selectedFeatureID
-            var overlays = MapKitGeometry.overlays(for: parent.floor.geometry)
+            highlightedIDs = parent.highlightedFeatureIDs
+            baseExcludedIDs = emphasizedIDs
+            var batcher = IndoorOverlayBatcher()
+            batcher.append(parent.floor.geometry, style: baseStyle(for: nil))
             let features = parent.map.features.filter { $0.floorID == parent.floor.id }
-            for kind in [IndoorMapElement.Kind.unit, .section, .fixture, .opening] {
-                for feature in features where feature.kind == kind {
-                    for overlay in MapKitGeometry.overlays(for: feature.geometry) {
-                        overlayFeatures[ObjectIdentifier(overlay)] = feature
-                        overlays.append(overlay)
-                    }
-                }
+            for feature in Self.orderedOverlayFeatures(features) where !baseExcludedIDs.contains(feature.id) {
+                batcher.append(feature.geometry, style: baseStyle(for: feature))
             }
+            let overlays = register(batcher.finish())
             pendingOverlayRedrawIDs = Set(overlays.map { ObjectIdentifier($0) })
             view.addOverlays(overlays, level: .aboveRoads)
+            updateHighlightOverlays(in: view)
             view.addAnnotations(features.compactMap { feature in
                 guard !parent.appearance.usesHomeStyle, feature.kind == .amenity,
                       case .point(let coordinate) = feature.geometry else { return nil }
                 return FeatureAnnotation(feature: feature, coordinate: coordinate.clCoordinate)
             })
+        }
+
+        private static let overlayKinds: [IndoorMapElement.Kind] = [.unit, .section, .fixture, .opening]
+
+        /// 기존과 같은 그리기 순서(unit → section → fixture → opening, 같은 종류 안에서는 원래 순서)를 만든다.
+        private static func orderedOverlayFeatures(_ features: [IndoorMapElement]) -> [IndoorMapElement] {
+            overlayKinds.flatMap { kind in features.filter { $0.kind == kind } }
+        }
+
+        /// 강조 또는 선택으로 기본과 다르게 그려야 하는 요소.
+        private var emphasizedIDs: Set<IndoorMapElement.ID> {
+            var ids = highlightedIDs
+            if let selectedID { ids.insert(selectedID) }
+            return ids
+        }
+
+        private func register(_ batches: [(overlay: any MKOverlay, style: IndoorOverlayStyle)]) -> [any MKOverlay] {
+            for batch in batches { overlayStyles[ObjectIdentifier(batch.overlay)] = batch.style }
+            return batches.map(\.overlay)
+        }
+
+        /// 강조·선택된 도형만 기본 도형 위에 따로 그린다. 강조가 바뀌어도 층 전체 도형을 다시 칠하지 않는다.
+        private func updateHighlightOverlays(in view: MKMapView) {
+            if !highlightOverlays.isEmpty {
+                view.removeOverlays(highlightOverlays)
+                for overlay in highlightOverlays {
+                    let id = ObjectIdentifier(overlay)
+                    overlayStyles[id] = nil
+                    pendingOverlayRedrawIDs.remove(id)
+                    readyOverlayRenderers[id] = nil
+                }
+                highlightOverlays.removeAll()
+            }
+            let emphasized = emphasizedIDs
+            guard !emphasized.isEmpty else { return }
+            var batcher = IndoorOverlayBatcher()
+            let features = parent.map.features.filter { $0.floorID == parent.floor.id && emphasized.contains($0.id) }
+            for feature in Self.orderedOverlayFeatures(features) {
+                let emphasizedStyle = style(for: feature)
+                guard baseExcludedIDs.contains(feature.id) || emphasizedStyle != baseStyle(for: feature) else { continue }
+                batcher.append(feature.geometry, style: emphasizedStyle)
+            }
+            highlightOverlays = register(batcher.finish())
+            guard !highlightOverlays.isEmpty else { return }
+            pendingOverlayRedrawIDs.formUnion(highlightOverlays.map { ObjectIdentifier($0) })
+            view.addOverlays(highlightOverlays, level: .aboveRoads)
         }
 
         private func applyCameraLimits(in view: MKMapView) {
@@ -588,6 +638,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, rendererFor overlay: any MKOverlay) -> MKOverlayRenderer {
             let renderer: MKOverlayPathRenderer
             if let polygon = overlay as? MKPolygon { renderer = MKPolygonRenderer(polygon: polygon) }
+            else if let polygons = overlay as? MKMultiPolygon { renderer = MKMultiPolygonRenderer(multiPolygon: polygons) }
+            else if let lines = overlay as? MKMultiPolyline { renderer = MKMultiPolylineRenderer(multiPolyline: lines) }
             else if let line = overlay as? MKPolyline {
                 if parent.navigationAppearance, routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
                     let dotted = NavigationDottedRouteRenderer(polyline: line)
@@ -624,67 +676,80 @@ struct IndoorMapKitView: UIViewRepresentable {
                 }
                 return
             }
-            let feature = overlayFeatures[ObjectIdentifier(overlay)]
+            (overlayStyles[ObjectIdentifier(overlay)] ?? baseStyle(for: nil)).apply(to: renderer)
+        }
+
+        private func baseStyle(for feature: IndoorMapElement?) -> IndoorOverlayStyle {
+            style(for: feature, isHighlighted: false, isSelected: false)
+        }
+
+        private func style(for feature: IndoorMapElement) -> IndoorOverlayStyle {
+            style(for: feature, isHighlighted: highlightedIDs.contains(feature.id), isSelected: feature.id == selectedID)
+        }
+
+        private func style(for feature: IndoorMapElement?, isHighlighted: Bool, isSelected: Bool) -> IndoorOverlayStyle {
+            var style = IndoorOverlayStyle()
             if parent.navigationAppearance {
-                renderer.strokeColor = UIColor(white: 0.12, alpha: 1)
-                renderer.lineWidth = 0.5
+                style.strokeColor = UIColor(white: 0.12, alpha: 1)
+                style.lineWidth = 0.5
                 let shade: CGFloat = feature?.kind == .fixture ? 0.09 : (feature?.category == "walkway" ? 0.22 : 0.17)
-                renderer.fillColor = UIColor(white: shade, alpha: 1)
-                IndoorMapPalette.apply(to: renderer, feature: feature, floorOrdinal: parent.floor.ordinal)
-                if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
-                    renderer.fillColor = BookNavigationPalette.uiAccent
-                    renderer.strokeColor = BookNavigationPalette.uiAccent
+                style.fillColor = UIColor(white: shade, alpha: 1)
+                IndoorMapPalette.apply(to: &style, feature: feature, floorOrdinal: parent.floor.ordinal)
+                if isHighlighted {
+                    style.fillColor = BookNavigationPalette.uiAccent
+                    style.strokeColor = BookNavigationPalette.uiAccent
                 }
-                return
+                return style
             }
             if parent.appearance.usesHomeStyle {
-                renderer.strokeColor = UIColor(white: 0.12, alpha: 1)
-                renderer.lineWidth = 0.8
+                style.strokeColor = UIColor(white: 0.12, alpha: 1)
+                style.lineWidth = 0.8
                 switch feature?.kind {
-                case .fixture: renderer.fillColor = UIColor(white: 0.09, alpha: 1)
-                case .unit: renderer.fillColor = UIColor(white: feature?.category == "walkway" ? 0.23 : 0.29, alpha: 1)
+                case .fixture: style.fillColor = UIColor(white: 0.09, alpha: 1)
+                case .unit: style.fillColor = UIColor(white: feature?.category == "walkway" ? 0.23 : 0.29, alpha: 1)
                 case .opening:
-                    renderer.fillColor = .clear
-                    renderer.strokeColor = UIColor(white: 0.35, alpha: 1)
-                default: renderer.fillColor = UIColor(white: 0.23, alpha: 1)
+                    style.fillColor = .clear
+                    style.strokeColor = UIColor(white: 0.35, alpha: 1)
+                default: style.fillColor = UIColor(white: 0.23, alpha: 1)
                 }
-                IndoorMapPalette.apply(to: renderer, feature: feature, floorOrdinal: parent.floor.ordinal)
-                if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
+                IndoorMapPalette.apply(to: &style, feature: feature, floorOrdinal: parent.floor.ordinal)
+                if isHighlighted {
                     if parent.appearance == .bookDetail {
-                        renderer.fillColor = BookNavigationPalette.uiAccent
-                        renderer.strokeColor = BookNavigationPalette.uiAccent
+                        style.fillColor = BookNavigationPalette.uiAccent
+                        style.strokeColor = BookNavigationPalette.uiAccent
                     } else {
-                        renderer.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
-                        renderer.strokeColor = .systemOrange
+                        style.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
+                        style.strokeColor = .systemOrange
                     }
-                    renderer.lineWidth = 3
+                    style.lineWidth = 3
                 }
-                return
+                return style
             }
-            renderer.lineWidth = feature?.kind == .opening ? 2 : 0.8
-            renderer.strokeColor = .systemGray2
+            style.lineWidth = feature?.kind == .opening ? 2 : 0.8
+            style.strokeColor = .systemGray2
             switch feature?.kind {
-            case .fixture: renderer.fillColor = UIColor(red: 0.83, green: 0.73, blue: 0.57, alpha: 1)
+            case .fixture: style.fillColor = UIColor(red: 0.83, green: 0.73, blue: 0.57, alpha: 1)
             case .section:
-                renderer.fillColor = UIColor.systemGray5.withAlphaComponent(0.35)
+                style.fillColor = UIColor.systemGray5.withAlphaComponent(0.35)
             case .unit:
-                renderer.fillColor = feature?.category == "walkway" ? .systemGray6 : .white
-                if feature?.category == "stairs" { renderer.fillColor = UIColor.systemPurple.withAlphaComponent(0.12) }
-                if feature?.category == "elevator" { renderer.fillColor = UIColor.systemBlue.withAlphaComponent(0.15) }
+                style.fillColor = feature?.category == "walkway" ? .systemGray6 : .white
+                if feature?.category == "stairs" { style.fillColor = UIColor.systemPurple.withAlphaComponent(0.12) }
+                if feature?.category == "elevator" { style.fillColor = UIColor.systemBlue.withAlphaComponent(0.15) }
             case .opening:
-                renderer.strokeColor = .white
-            default: renderer.fillColor = UIColor.systemGray6.withAlphaComponent(0.95)
+                style.strokeColor = .white
+            default: style.fillColor = UIColor.systemGray6.withAlphaComponent(0.95)
             }
-            IndoorMapPalette.apply(to: renderer, feature: feature, floorOrdinal: parent.floor.ordinal)
-            if let feature, parent.highlightedFeatureIDs.contains(feature.id) {
-                renderer.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
-                renderer.strokeColor = .systemOrange
-                renderer.lineWidth = 3
-            } else if let feature, feature.id == selectedID {
-                renderer.fillColor = UIColor.systemTeal.withAlphaComponent(0.35)
-                renderer.strokeColor = .systemTeal
-                renderer.lineWidth = 2
+            IndoorMapPalette.apply(to: &style, feature: feature, floorOrdinal: parent.floor.ordinal)
+            if isHighlighted {
+                style.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
+                style.strokeColor = .systemOrange
+                style.lineWidth = 3
+            } else if isSelected {
+                style.fillColor = UIColor.systemTeal.withAlphaComponent(0.35)
+                style.strokeColor = .systemTeal
+                style.lineWidth = 2
             }
+            return style
         }
 
         func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {

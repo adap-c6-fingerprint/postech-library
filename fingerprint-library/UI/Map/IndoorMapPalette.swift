@@ -1,4 +1,3 @@
-import MapKit
 import UIKit
 
 enum IndoorMapPalette {
@@ -16,40 +15,40 @@ enum IndoorMapPalette {
     static let gameZone = gray(0x20)
     private static let fifthFloorElevatorLobbyID = "732c6ee7-1021-443c-a020-a3ce41460653"
 
-    static func apply(to renderer: MKOverlayPathRenderer, feature: IndoorMapElement?, floorOrdinal: Int) {
-        renderer.strokeColor = wallOutline
+    static func apply(to style: inout IndoorOverlayStyle, feature: IndoorMapElement?, floorOrdinal: Int) {
+        style.strokeColor = wallOutline
         guard let feature else {
-            renderer.fillColor = floor
+            style.fillColor = floor
             return
         }
         switch (feature.kind, feature.category?.lowercased()) {
         case (.opening, _):
-            renderer.fillColor = .clear
-            renderer.strokeColor = opening
+            style.fillColor = .clear
+            style.strokeColor = opening
         case (.unit, "structure"), (.fixture, "wall"):
-            renderer.fillColor = wall
+            style.fillColor = wall
         case (.unit, "stairs"), (.unit, "stairway"), (.unit, "elevator"):
-            renderer.fillColor = stairsAndElevator
+            style.fillColor = stairsAndElevator
         case (.unit, "walkway") where floorOrdinal == 4
             && feature.sourceID.uuidString.lowercased() == fifthFloorElevatorLobbyID:
-            renderer.fillColor = floor
-            renderer.strokeColor = .clear
+            style.fillColor = floor
+            style.strokeColor = .clear
         case (.unit, "walkway"):
-            renderer.fillColor = walkway
+            style.fillColor = walkway
         case (.unit, "opentobelow"):
-            renderer.fillColor = openSpace
+            style.fillColor = openSpace
         case (.unit, "nonpublic"):
-            renderer.fillColor = privateSpace
+            style.fillColor = privateSpace
         case (.unit, "lounge") where floorOrdinal == 4 && feature.name?.lowercased() == "relax zone":
-            renderer.fillColor = relaxZone
+            style.fillColor = relaxZone
         case (.unit, "recreation"):
-            renderer.fillColor = gameZone
+            style.fillColor = gameZone
         case (.unit, let category?) where category.hasPrefix("restroom") || category == "toilets":
-            renderer.fillColor = restroom
+            style.fillColor = restroom
         case (.fixture, "desk"), (.fixture, "furniture"):
-            renderer.fillColor = furniture
+            style.fillColor = furniture
         case (.unit, _), (.section, _):
-            renderer.fillColor = floor
+            style.fillColor = floor
         default:
             break
         }
