@@ -282,7 +282,7 @@ struct OnboardingView: View {
         let scrollSpace = Self.chipScrollSpace
         return VStack(alignment: .leading, spacing: 0) {
             header(title: "어떤 책에 끌리나요?",
-                   subtitle: "관심 있는 분야를 골라주세요\n최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요",
+                   subtitle: "관심 있는 분야를 골라주세요.",
                    topPadding: Self.interestsHeaderTopPadding)
                 // ✅ 시안 문구에 맞춰 첫 줄 마침표를 뺐다.
                 .padding(.horizontal, 16)
@@ -421,7 +421,9 @@ struct OnboardingView: View {
 
     private func chip(_ name: String) -> some View {
         let isSelected = store.selectedPreferences.contains(name)
-        let isBlocked = !isSelected && store.isPreferenceLimitReached
+//        let isBlocked = !isSelected
+//        테스트 결과 preferenceLimit값이 결정되면 주석을 해제함 (밑에 modifier도~)
+//        영민이 바보
         return Button {
             store.send(.preferenceToggled(name))
         } label: {
@@ -435,10 +437,9 @@ struct OnboardingView: View {
                 .background(isSelected ? Color.cartPrimary : Color.onboardingField, in: .capsule)
         }
         .buttonStyle(.plain)
-        .opacity(isBlocked ? 0.4 : 1)
-        .disabled(isBlocked)
+//        .opacity(isBlocked ? 0.4 : 1)
+//        .disabled(isBlocked)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityHint(isBlocked ? "최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요" : "")
     }
 
     private static let indicatorSteps: [OnboardingFeature.Step] = [.affiliation, .interests]
