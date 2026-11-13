@@ -6,7 +6,7 @@ struct BookRouteOriginPickerView: View {
     let subtitle: String?
     var initialFloorID: UUID?
     let onCancel: () -> Void
-    let onConfirm: (IndoorPosition) -> Void
+    let onConfirm: (IndoorMapCoordinate, _ floorOrdinal: Int) -> Void
 
     @State private var selectedFloorID: UUID?
     @State private var center: IndoorMapCoordinate?
@@ -190,8 +190,8 @@ struct BookRouteOriginPickerView: View {
 
     private var confirmButton: some View {
         Button {
-            guard let position = confirmedPosition() else { return }
-            onConfirm(position)
+            guard let center, let floor = selectedFloor, isCenterOnFloor else { return }
+            onConfirm(center, floor.ordinal)
         } label: {
             Text("위치 확정하고 안내 받기")
                 .typography(.button)
@@ -208,13 +208,6 @@ struct BookRouteOriginPickerView: View {
         .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .accessibilityHint("선택한 위치를 출발지로 삼아 길안내를 시작해요")
         .accessibilityIdentifier("route-origin-picker-confirm")
-    }
-
-    private func confirmedPosition() -> IndoorPosition? {
-        guard let center, let floor = selectedFloor, isCenterOnFloor else { return nil }
-        return IndoorPosition(
-            coordinate: center, floorOrdinal: floor.ordinal, horizontalAccuracy: nil,
-            timestamp: Date(), source: .manual)
     }
 }
 

@@ -120,7 +120,7 @@ struct BookRoutePreviewFeature {
         case setOriginManuallyTapped
         case permissionAlertSettingsTapped
         case permissionAlertCancelTapped
-        case originConfirmed(IndoorPosition)
+        case originConfirmed(IndoorMapCoordinate, floorOrdinal: Int)
         case originPickerCancelled
         case originPickerDismissed
         case navigation(PresentationAction<BookNavigationFeature.Action>)
@@ -217,7 +217,10 @@ struct BookRoutePreviewFeature {
                 if state.isRouteMapReady { presentOriginPicker(&state) }
                 return .none
 
-            case let .originConfirmed(position):
+            case let .originConfirmed(coordinate, floorOrdinal):
+                let position = IndoorPosition(
+                    coordinate: coordinate, floorOrdinal: floorOrdinal, horizontalAccuracy: nil,
+                    timestamp: now, source: .manual)
                 if state.entryMode == .preview, state.isStartRequested { state.startsAfterOriginSelected = true }
                 state.manualStart = position
                 state.isOriginPickerPresented = false

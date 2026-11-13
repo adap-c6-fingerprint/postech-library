@@ -361,7 +361,9 @@ struct BookRoutePreviewView: View {
                 map: map, title: originPickerTitle, subtitle: originPickerSubtitle,
                 initialFloorID: originPickerFloorID,
                 onCancel: { store.send(.originPickerCancelled) },
-                onConfirm: { position in store.send(.originConfirmed(position)) })
+                onConfirm: { coordinate, floorOrdinal in
+                    store.send(.originConfirmed(coordinate, floorOrdinal: floorOrdinal))
+                })
         } else {
             VStack(spacing: 20) {
                 ContentUnavailableView("지도를 불러오지 못했어요", systemImage: "map",

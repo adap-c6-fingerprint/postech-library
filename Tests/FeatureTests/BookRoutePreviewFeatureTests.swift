@@ -43,4 +43,24 @@ struct BookRoutePreviewFeatureTests {
         #expect(cart.map(\.book.id) == [makeBook(1).id])
         #expect(isDismissed.value)
     }
+
+    @Test func 수동_출발_위치는_주입한_현재_시각으로_만든다() async {
+        let now = Date(timeIntervalSinceReferenceDate: 1_000)
+        var state = withDependencies { $0.uuid = .incrementing } operation: {
+            BookRoutePreviewFeature.State(books: [makeBook(1)], entryMode: .preview)
+        }
+        state.isOriginPickerPresented = true
+        let store = TestStore(initialState: state) { BookRoutePreviewFeature() } withDependencies: {
+            $0.uuid = .incrementing
+            $0.date.now = now
+        }
+        store.exhaustivity = .off
+        let coordinate = IndoorMapCoordinate(latitude: 36.0127633, longitude: 129.3251348)
+
+        await store.send(.originConfirmed(coordinate, floorOrdinal: 2))
+
+        #expect(!store.state.isOriginPickerPresented)
+        #expect(store.state.manualStart == IndoorPosition(
+            coordinate: coordinate, floorOrdinal: 2, horizontalAccuracy: nil, timestamp: now, source: .manual))
+    }
 }
