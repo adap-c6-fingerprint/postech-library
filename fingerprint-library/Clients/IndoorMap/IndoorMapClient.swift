@@ -1,0 +1,18 @@
+import ComposableArchitecture
+
+nonisolated struct IndoorMapClient: Sendable {
+    var load: @Sendable () async throws -> IndoorMap
+}
+
+extension IndoorMapClient: DependencyKey {
+    static let liveValue = Self(load: { try await BundledIndoorMapLoader().loadLibrary() })
+    static let testValue = Self(load: { throw IndoorMapLoadError.missingResource("test map") })
+}
+
+nonisolated extension DependencyValues {
+    var indoorMapClient: IndoorMapClient {
+        get { self[IndoorMapClient.self] }
+        set { self[IndoorMapClient.self] = newValue }
+    }
+}
+

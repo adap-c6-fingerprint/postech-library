@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+proof_binary="${TMPDIR:-/tmp}/postech-navigation-floor-transition-proof"
+xcrun swiftc -swift-version 6 -parse-as-library \
+  fingerprint-library/Domain/IndoorMap/IndoorMap.swift \
+  fingerprint-library/Domain/IndoorMap/IndoorMapGeometry+Queries.swift \
+  fingerprint-library/Domain/IndoorMap/IndoorPosition.swift \
+  fingerprint-library/Domain/IndoorMap/ShelfDirectory.swift \
+  fingerprint-library/Domain/Routing/RoutingGraph.swift \
+  fingerprint-library/Domain/Routing/RoutingGeometry.swift \
+  fingerprint-library/Domain/Routing/IndoorRoute.swift \
+  fingerprint-library/Domain/Routing/GuidanceEngine.swift \
+  fingerprint-library/Features/BookNavigation/Presentation/BookNavigationFloorTransition.swift \
+  Scripts/verify-navigation-floor-transition.swift -o "$proof_binary"
+exec "$proof_binary"

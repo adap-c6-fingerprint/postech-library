@@ -1,0 +1,7988 @@
+{
+  "features" : [
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32570752064959,
+          36.014282319926423
+        ],
+        "type" : "Point"
+      },
+      "id" : "00460373-3fe8-4bd3-8a00-7afad009e10f",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3258241417096,
+          36.014216030638714
+        ],
+        "type" : "Point"
+      },
+      "id" : "00b7c0a5-7230-4e41-b3b9-62889be48405",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590639289248,
+          36.014089093893261
+        ],
+        "type" : "Point"
+      },
+      "id" : "01109126-1b35-425c-8515-c325e110d339",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32578980801659,
+          36.014099311398361
+        ],
+        "type" : "Point"
+      },
+      "id" : "01e2b756-57e6-40cd-b39d-b76770f96580",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32596785720958,
+          36.014093480702897
+        ],
+        "type" : "Point"
+      },
+      "id" : "0266b747-f0ad-484a-94a3-c65f3fb9f339",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3259628465884,
+          36.014050093131686
+        ],
+        "type" : "Point"
+      },
+      "id" : "02a7cafc-27b2-4bf1-9dba-9e8191db1bf0",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32579951567524,
+          36.0141924315339
+        ],
+        "type" : "Point"
+      },
+      "id" : "037674cd-755c-4b08-a1ec-c148cd5d73d0",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32570133997646,
+          36.014217188261533
+        ],
+        "type" : "Point"
+      },
+      "id" : "037ede1b-deca-4630-b94b-72796e4837cd",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32572308178814,
+          36.014345630701136
+        ],
+        "type" : "Point"
+      },
+      "id" : "038f1fd1-4cd6-446a-acf7-5d29e3b44184",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32578600742374,
+          36.014036423484185
+        ],
+        "type" : "Point"
+      },
+      "id" : "0392b729-3959-4ce5-996e-5618dc94b65b",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32571450571587,
+          36.014269537065452
+        ],
+        "type" : "Point"
+      },
+      "id" : "04530af8-675a-4f62-b8d6-e4e6eb0b3603",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32581714207868,
+          36.014048634197486
+        ],
+        "type" : "Point"
+      },
+      "id" : "05bf0c68-6516-431d-b714-714df0eba88a",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32578324606794,
+          36.014062655011166
+        ],
+        "type" : "Point"
+      },
+      "id" : "060fddbb-90fd-42dd-a9f7-775bca781fc0",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32577171358469,
+          36.014137390172415
+        ],
+        "type" : "Point"
+      },
+      "id" : "0813c461-4711-4bca-91bd-c7567cc98a84",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3259624951416,
+          36.01411600242789
+        ],
+        "type" : "Point"
+      },
+      "id" : "085c1434-057a-4214-8f74-f5a9bac65f39",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583529319811,
+          36.014013114891775
+        ],
+        "type" : "Point"
+      },
+      "id" : "0a9863b0-45c5-4ed1-8fa5-d56b2c377cf6",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3257965564612,
+          36.014230109075314
+        ],
+        "type" : "Point"
+      },
+      "id" : "0cdb364a-f6cb-4001-a7d4-850b85ae39e5",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590683499745,
+          36.014080286239505
+        ],
+        "type" : "Point"
+      },
+      "id" : "0cfa4a93-b7f8-496f-8df4-d3dc7bbe7e83",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32585555198884,
+          36.014065168994485
+        ],
+        "type" : "Point"
+      },
+      "id" : "0e6326f4-1947-41e0-a100-752f51ab584c",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32585466266048,
+          36.014246870779722
+        ],
+        "type" : "Point"
+      },
+      "id" : "11943f82-c774-40cc-b741-9f4195c3a4ba",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32596433344844,
+          36.014101987484104
+        ],
+        "type" : "Point"
+      },
+      "id" : "155e83d6-7b55-4a99-bfc0-960da125c0ec",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32584471344808,
+          36.014068601646358
+        ],
+        "type" : "Point"
+      },
+      "id" : "160f55e4-6d8f-438a-b6e2-57735901564d",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32579012261664,
+          36.01420467844337
+        ],
+        "type" : "Point"
+      },
+      "id" : "1a03d71a-cc9b-4743-a0bb-e0fefbcc63a7",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590795394228,
+          36.014089981331018
+        ],
+        "type" : "Point"
+      },
+      "id" : "1a7a88d7-1a76-4b4e-a7c8-1d29e13b4963",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32593718670745,
+          36.014234353487552
+        ],
+        "type" : "Point"
+      },
+      "id" : "1ab064de-8b3f-4144-ae3c-c875a637e7aa",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32575197795202,
+          36.014192000162126
+        ],
+        "type" : "Point"
+      },
+      "id" : "1ab99a9c-c55a-4d28-9775-756de9813d93",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590326670805,
+          36.014038345870887
+        ],
+        "type" : "Point"
+      },
+      "id" : "1e0613c2-c221-4fa1-bc79-8aa561b78143",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588430022179,
+          36.014304086717722
+        ],
+        "type" : "Point"
+      },
+      "id" : "1edf81d2-0de5-4ec8-9532-313320977e0f",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32591371549313,
+          36.014167759989355
+        ],
+        "type" : "Point"
+      },
+      "id" : "1fac4a66-51bf-4c33-8249-024fc5213a90",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32586811106344,
+          36.014025394938876
+        ],
+        "type" : "Point"
+      },
+      "id" : "2299fefe-a49b-4046-81fb-e4adcac31e64",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32578733615907,
+          36.014057489333496
+        ],
+        "type" : "Point"
+      },
+      "id" : "22df2bf0-01c4-47ac-815c-2e888fa4baa8",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3258642726266,
+          36.013998464468791
+        ],
+        "type" : "Point"
+      },
+      "id" : "2501f7ce-71b0-4a81-892e-ca2997be50de",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32571317071773,
+          36.014235766090685
+        ],
+        "type" : "Point"
+      },
+      "id" : "26683114-98da-4396-8f7c-ddfda5d14c2b",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590165238173,
+          36.014033093968351
+        ],
+        "type" : "Point"
+      },
+      "id" : "27053403-4374-4353-80c1-2e1deae99a0b",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32582268298424,
+          36.01403582291352
+        ],
+        "type" : "Point"
+      },
+      "id" : "2823cc06-f867-424e-89db-6dc447f33296",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32566837996868,
+          36.01423015489781
+        ],
+        "type" : "Point"
+      },
+      "id" : "2855dfcd-ac06-43fc-98c2-83243bae809d",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3257941955321,
+          36.014026483900174
+        ],
+        "type" : "Point"
+      },
+      "id" : "285ba63e-352a-4c5a-8648-cc4b7f225f37",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590360334868,
+          36.014160541906499
+        ],
+        "type" : "Point"
+      },
+      "id" : "292a58f4-6b71-470c-b888-b04d10c98bac",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32582906038016,
+          36.01420290971172
+        ],
+        "type" : "Point"
+      },
+      "id" : "29577cd3-83b9-4b93-9921-692af053d2d8",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32595692441512,
+          36.014105548352603
+        ],
+        "type" : "Point"
+      },
+      "id" : "2998759b-c222-4fe2-b318-d7cf188f835c",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32567833543337,
+          36.014338158746419
+        ],
+        "type" : "Point"
+      },
+      "id" : "2d01e1e6-5492-4584-bca3-b05c18383bbb",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590346352643,
+          36.014096932298862
+        ],
+        "type" : "Point"
+      },
+      "id" : "310d0aae-ce5f-475b-832d-40573b680077",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590439194402,
+          36.014097442331909
+        ],
+        "type" : "Point"
+      },
+      "id" : "34223dde-8d13-4ca0-ab26-b26413a46da9",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32587262245249,
+          36.014017655203382
+        ],
+        "type" : "Point"
+      },
+      "id" : "342a9e9c-38cd-4e36-ae35-462de6908120",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32569475260726,
+          36.014300895191511
+        ],
+        "type" : "Point"
+      },
+      "id" : "36e73c21-1d67-4fbb-a3b1-f38ad08ff2ea",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32589033242039,
+          36.014034573445855
+        ],
+        "type" : "Point"
+      },
+      "id" : "385343a1-b347-49cc-9c4a-31c5fcf111e9",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32595854966968,
+          36.014058709617345
+        ],
+        "type" : "Point"
+      },
+      "id" : "39ff8272-b46f-40ef-ab1f-d40361facbfc",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588398178333,
+          36.014117324965099
+        ],
+        "type" : "Point"
+      },
+      "id" : "3aa15627-2b3c-41c7-a991-71dfc6806354",
+      "properties" : {
+        "category" : "stairs",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32579196793094,
+          36.014099113404512
+        ],
+        "type" : "Point"
+      },
+      "id" : "3efc66d9-be5d-4f4e-ae1c-349ab2e8a9b2",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3258355324966,
+          36.014015177754885
+        ],
+        "type" : "Point"
+      },
+      "id" : "3f14af0d-e5be-4a22-b764-3338bf1e581d",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32598777446114,
+          36.014022570613022
+        ],
+        "type" : "Point"
+      },
+      "id" : "42591e0a-f61b-430c-a0de-41405611b8ca",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32581626765827,
+          36.014189115087945
+        ],
+        "type" : "Point"
+      },
+      "id" : "46d32e56-a5d4-478e-9ae8-7beb6c4653b9",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.325673221801,
+          36.014311629097023
+        ],
+        "type" : "Point"
+      },
+      "id" : "4967af5c-a5f9-4b0f-a9f3-13b250668619",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32585497766647,
+          36.013974267302068
+        ],
+        "type" : "Point"
+      },
+      "id" : "4a4c1c33-2b14-4135-9293-8e9f04982ae1",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583072849442,
+          36.014202836559889
+        ],
+        "type" : "Point"
+      },
+      "id" : "4b55f936-1413-4eb8-9b95-5d9ce9323c70",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32592138128032,
+          36.014094831854017
+        ],
+        "type" : "Point"
+      },
+      "id" : "4cdc579c-01f1-4af5-bd75-b8248e02c083",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32589836156555,
+          36.014233899975501
+        ],
+        "type" : "Point"
+      },
+      "id" : "4e641647-7a28-4cee-8f55-8cabe51a6ec4",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32594027894575,
+          36.014135822373859
+        ],
+        "type" : "Point"
+      },
+      "id" : "4f0fe64d-a377-4e85-9327-8ba74e60c7b5",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32591998817514,
+          36.014132855766363
+        ],
+        "type" : "Point"
+      },
+      "id" : "53c5a050-c212-4f29-829b-4e31352d5c27",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32589680796474,
+          36.014079203935061
+        ],
+        "type" : "Point"
+      },
+      "id" : "573f4f29-1166-406b-96b6-dc652dcf7493",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32593188530382,
+          36.014105255672561
+        ],
+        "type" : "Point"
+      },
+      "id" : "57428f49-10b3-48dd-a88c-086dfd9b4baf",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32595066671684,
+          36.014027015040185
+        ],
+        "type" : "Point"
+      },
+      "id" : "581da8ab-3f5c-43eb-a73f-577407fb5857",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583459416588,
+          36.01415558283994
+        ],
+        "type" : "Point"
+      },
+      "id" : "5a6a3ac7-b42e-47ca-99fb-2bece2360d78",
+      "properties" : {
+        "category" : "elevator",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32576033861699,
+          36.014068838147779
+        ],
+        "type" : "Point"
+      },
+      "id" : "5a9ff24f-5eaf-4b63-9405-0f06d4fa9b72",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32585490988978,
+          36.014065445071509
+        ],
+        "type" : "Point"
+      },
+      "id" : "5abfa563-4fdd-492e-89b2-04d201e71b91",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32585993386564,
+          36.014227720163383
+        ],
+        "type" : "Point"
+      },
+      "id" : "5b1c20c4-51dc-41ab-96a9-0ffe716f97a3",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32584550945893,
+          36.014068760739484
+        ],
+        "type" : "Point"
+      },
+      "id" : "5bd289fb-392c-4931-baca-89e1ce9561aa",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3256723918804,
+          36.01435020910273
+        ],
+        "type" : "Point"
+      },
+      "id" : "5be743e5-cb27-4cd3-a256-0c91a7b3d6bb",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3259193421388,
+          36.014131470379461
+        ],
+        "type" : "Point"
+      },
+      "id" : "5d360fec-106d-42c7-9881-e723bd0e5c17",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "ㅇㅇ",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32589575566647,
+          36.014180731799648
+        ],
+        "type" : "Point"
+      },
+      "id" : "5d52d149-705f-408c-92a7-5d2511259676",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3257696830905,
+          36.014218832629282
+        ],
+        "type" : "Point"
+      },
+      "id" : "5dd13c0c-04ee-4bb5-948e-fffea41fa6ea",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588645949809,
+          36.014183006700073
+        ],
+        "type" : "Point"
+      },
+      "id" : "5e3e8f28-d170-434b-bced-bbb24e95f31d",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32598109317937,
+          36.014016471615712
+        ],
+        "type" : "Point"
+      },
+      "id" : "61f11c61-2cec-4172-9011-a16b28f0eb32",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32571579037034,
+          36.014205173155148
+        ],
+        "type" : "Point"
+      },
+      "id" : "64221f7a-b720-4f7a-942b-6ffa767f98a3",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32577504927934,
+          36.014051495133742
+        ],
+        "type" : "Point"
+      },
+      "id" : "6624eb24-6628-446b-b350-d0bd0a3bc760",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32569484055165,
+          36.014343428517371
+        ],
+        "type" : "Point"
+      },
+      "id" : "6a255068-72f3-4243-9619-744462a92ee9",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32597393193566,
+          36.014028940720443
+        ],
+        "type" : "Point"
+      },
+      "id" : "6b125ccd-b91f-48ad-b98a-411044d1942b",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32575085503748,
+          36.014187237099343
+        ],
+        "type" : "Point"
+      },
+      "id" : "6cf00bff-c8cd-43a1-bb5a-7532899e89c8",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32592553709117,
+          36.014190663328513
+        ],
+        "type" : "Point"
+      },
+      "id" : "6e0bc653-6c7c-4b4e-9268-eaed18f7d7fd",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32597865064383,
+          36.014020232882444
+        ],
+        "type" : "Point"
+      },
+      "id" : "72299709-93b8-43e3-9819-4c9cd9097295",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32582326797896,
+          36.014215028939915
+        ],
+        "type" : "Point"
+      },
+      "id" : "735a7040-16d7-4515-976f-85e0f4c9d8b8",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32584077072772,
+          36.014077123972989
+        ],
+        "type" : "Point"
+      },
+      "id" : "79ca0e53-4751-46be-a6fb-347956dc2ab6",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32568744901081,
+          36.014316507408253
+        ],
+        "type" : "Point"
+      },
+      "id" : "7b0be79a-b54c-41f4-a388-be55977d3f34",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32582223198648,
+          36.014306488914194
+        ],
+        "type" : "Point"
+      },
+      "id" : "7c1a99fe-9ead-4fa2-8879-15487c99f8f4",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3257397592738,
+          36.014219788560212
+        ],
+        "type" : "Point"
+      },
+      "id" : "7ca5520a-4133-4574-b3e1-e221b5a581be",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588477106671,
+          36.014080699631862
+        ],
+        "type" : "Point"
+      },
+      "id" : "80159bea-3fb4-4abe-b947-c4f784a5c6b8",
+      "properties" : {
+        "category" : "destination",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32597829049675,
+          36.014105298384351
+        ],
+        "type" : "Point"
+      },
+      "id" : "8058ae84-1c1c-4294-a1ab-fd666a389647",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32569890358332,
+          36.014210547427361
+        ],
+        "type" : "Point"
+      },
+      "id" : "80a02aae-67b9-4e83-8ea6-943ce05d7a66",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590467014344,
+          36.014125928836584
+        ],
+        "type" : "Point"
+      },
+      "id" : "813167f8-eaae-4caa-888a-eb64619d434d",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32597358152927,
+          36.014092896646588
+        ],
+        "type" : "Point"
+      },
+      "id" : "81648cbc-dbf8-4526-9599-8decfc063656",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32594820733371,
+          36.014085414117346
+        ],
+        "type" : "Point"
+      },
+      "id" : "855c9a36-6075-42b4-9d4d-9e1d9c9d96d1",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32571867427617,
+          36.014172950323001
+        ],
+        "type" : "Point"
+      },
+      "id" : "861ff6ae-6bf8-49af-87d0-11401c3b88f6",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32580042036034,
+          36.014352423162741
+        ],
+        "type" : "Point"
+      },
+      "id" : "8b7092a8-7548-40ff-a040-6e2be420415c",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32569051796767,
+          36.014276773461056
+        ],
+        "type" : "Point"
+      },
+      "id" : "8ce2e1fb-c8db-4363-a7d2-f3cf7a802798",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.325965567823,
+          36.014027362782073
+        ],
+        "type" : "Point"
+      },
+      "id" : "8e3b2181-969d-4325-a467-aad4f855217b",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32591761956448,
+          36.014101503258352
+        ],
+        "type" : "Point"
+      },
+      "id" : "8e448d8a-907e-40c1-8c82-ebcc18470a1d",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32600799469802,
+          36.01396114414873
+        ],
+        "type" : "Point"
+      },
+      "id" : "8ee3dd41-94ec-4b2e-ad1a-438405d40c97",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3258853340744,
+          36.014272866504797
+        ],
+        "type" : "Point"
+      },
+      "id" : "927cc5f5-d020-4231-9909-e49f986eae10",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32599240886455,
+          36.014058796428813
+        ],
+        "type" : "Point"
+      },
+      "id" : "92ccd251-3961-47f3-b9e7-5019072684d5",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32577054309945,
+          36.014059006103125
+        ],
+        "type" : "Point"
+      },
+      "id" : "9719edf6-f482-45b7-a1f7-969c82b8a4c0",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32573793850139,
+          36.014128081327286
+        ],
+        "type" : "Point"
+      },
+      "id" : "9725db94-12f5-4358-829f-47eb5972cef9",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588790949973,
+          36.014012170465257
+        ],
+        "type" : "Point"
+      },
+      "id" : "9b8eae99-0140-4847-a155-b11864755ca9",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3258650831111,
+          36.013959689519289
+        ],
+        "type" : "Point"
+      },
+      "id" : "9c07cd70-76ad-44a3-a10d-2f6804ddbe41",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.325867482002,
+          36.013951302580018
+        ],
+        "type" : "Point"
+      },
+      "id" : "9fe9976f-4563-4547-ac24-b9f706c09cc5",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32592982931385,
+          36.013932781751713
+        ],
+        "type" : "Point"
+      },
+      "id" : "a3a8155b-c526-444c-b37e-0975861eac09",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32597131272138,
+          36.013948332483196
+        ],
+        "type" : "Point"
+      },
+      "id" : "a4a23b93-40b2-415c-a119-78e27fadca39",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32572954561428,
+          36.014240851922736
+        ],
+        "type" : "Point"
+      },
+      "id" : "a5ae9814-11e7-48db-bdb0-4d5b60290ca0",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32579731903624,
+          36.014193769688141
+        ],
+        "type" : "Point"
+      },
+      "id" : "a877b85c-3a5a-4a9d-a677-4d7ddd9e8c60",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588864486539,
+          36.014120571823163
+        ],
+        "type" : "Point"
+      },
+      "id" : "a998e0eb-7ade-4802-a3b1-12fee805b22a",
+      "properties" : {
+        "category" : "stairs",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32565500047693,
+          36.014345671943133
+        ],
+        "type" : "Point"
+      },
+      "id" : "ae00f6fa-9906-4477-aec1-db5d2e68a7ba",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588354884308,
+          36.01402194193134
+        ],
+        "type" : "Point"
+      },
+      "id" : "ae2e6a83-affa-4d2a-8adf-ddf91a4a6345",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32585580821421,
+          36.013975498832146
+        ],
+        "type" : "Point"
+      },
+      "id" : "af0d96dc-5dfb-457d-b5df-a661c170a34c",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590621690784,
+          36.014124664134798
+        ],
+        "type" : "Point"
+      },
+      "id" : "b024aed1-e6d9-4141-b772-c6c4956acf0e",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583997509886,
+          36.014040423348177
+        ],
+        "type" : "Point"
+      },
+      "id" : "b1be54c7-4bee-4d75-bd3f-3b7510040804",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32594267193841,
+          36.014043531072033
+        ],
+        "type" : "Point"
+      },
+      "id" : "b2c3ab5c-ca5f-4b44-bc74-d53bbf305865",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32581162574365,
+          36.014066312245163
+        ],
+        "type" : "Point"
+      },
+      "id" : "b2fc014a-b1e9-4558-9fbe-907c9b362d52",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32598534579344,
+          36.014098131055661
+        ],
+        "type" : "Point"
+      },
+      "id" : "b4531d5a-843e-43eb-8ad4-6e673f26c30b",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32565938525636,
+          36.014294925243696
+        ],
+        "type" : "Point"
+      },
+      "id" : "b4a09ff1-85ee-49a9-9dd2-dacbd0572436",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32567745766355,
+          36.014325403363422
+        ],
+        "type" : "Point"
+      },
+      "id" : "b5404cb9-dc99-440c-8916-b6d71882b2f5",
+      "properties" : {
+        "category" : "destination",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32592508704894,
+          36.014088219994534
+        ],
+        "type" : "Point"
+      },
+      "id" : "b77505b0-01ca-4605-aaf6-e68d4f8f779b",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583617192716,
+          36.014158136909288
+        ],
+        "type" : "Point"
+      },
+      "id" : "b9166bb5-68a6-414f-a86e-1063f37bd64e",
+      "properties" : {
+        "category" : "elevator",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32569623597649,
+          36.014153421324934
+        ],
+        "type" : "Point"
+      },
+      "id" : "bb3a9aa6-1d67-4728-bde4-894d4f0ee358",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32577705516576,
+          36.014238561333158
+        ],
+        "type" : "Point"
+      },
+      "id" : "bb7dbe26-be25-45cd-a09e-9890637b7614",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32578182816135,
+          36.01409557714117
+        ],
+        "type" : "Point"
+      },
+      "id" : "bc2dfc20-d95c-484a-9b40-2f558301509a",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32584642354132,
+          36.014256471318269
+        ],
+        "type" : "Point"
+      },
+      "id" : "bc833f44-5af7-40df-ac6f-3d3f83733a79",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32574822148112,
+          36.014167420490566
+        ],
+        "type" : "Point"
+      },
+      "id" : "bd28c8b2-fdc6-475c-8dcb-c22776ce4986",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32586949424226,
+          36.014230218002822
+        ],
+        "type" : "Point"
+      },
+      "id" : "bf47db85-19c7-4815-8213-7586bf8da1e0",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32575700101947,
+          36.01422475805483
+        ],
+        "type" : "Point"
+      },
+      "id" : "bffcac09-cf79-452b-b5ad-8e72b769a4de",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32567719842274,
+          36.014256134572918
+        ],
+        "type" : "Point"
+      },
+      "id" : "c12a1433-10f4-4a07-bc0c-2c86beda9d87",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588665739206,
+          36.013916740756983
+        ],
+        "type" : "Point"
+      },
+      "id" : "c224827d-28d9-410c-8484-2585e5dfe825",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32577900732824,
+          36.014074106675587
+        ],
+        "type" : "Point"
+      },
+      "id" : "c23c437b-182a-4496-a4e6-dcb53d710fae",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32587129607953,
+          36.014008202265899
+        ],
+        "type" : "Point"
+      },
+      "id" : "c2c051a5-8de4-4387-a1f3-6ff91b613582",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32592049007783,
+          36.014095730829546
+        ],
+        "type" : "Point"
+      },
+      "id" : "c565c922-21b2-4ca5-9598-f0c721eade9b",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32598936323097,
+          36.014001206258925
+        ],
+        "type" : "Point"
+      },
+      "id" : "c77059db-b856-4eb4-a659-ac91ec215764",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32586474846875,
+          36.014113705666674
+        ],
+        "type" : "Point"
+      },
+      "id" : "c7c39da8-6bbc-4d60-ada1-6b815c97c309",
+      "properties" : {
+        "category" : "stairs",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32591008288207,
+          36.013964933585733
+        ],
+        "type" : "Point"
+      },
+      "id" : "c7d341b1-a993-4940-ab5d-e9104e30f944",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3258054699927,
+          36.014329710720709
+        ],
+        "type" : "Point"
+      },
+      "id" : "c84afd67-bdb5-4e66-9717-2c847d024bdf",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32573475300796,
+          36.014221388688917
+        ],
+        "type" : "Point"
+      },
+      "id" : "cfc9d673-2382-4eb1-acd0-4ac08c443a38",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3259265643363,
+          36.014086950012661
+        ],
+        "type" : "Point"
+      },
+      "id" : "cfd58923-2ced-45de-929d-717962c4c2cb",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32584139066213,
+          36.014075827966572
+        ],
+        "type" : "Point"
+      },
+      "id" : "d233e877-469a-4024-a2e3-1ad4e3c72dab",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32566869412844,
+          36.014241990991266
+        ],
+        "type" : "Point"
+      },
+      "id" : "d46b3cfd-d595-4c38-91c6-e391251059e6",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32591844261327,
+          36.014100770877903
+        ],
+        "type" : "Point"
+      },
+      "id" : "d5b36f16-dbbd-4aca-858b-57b8cac3c5ed",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32594614824092,
+          36.014081553353783
+        ],
+        "type" : "Point"
+      },
+      "id" : "d6ef93a2-ec76-4ba1-abb9-3e1bb1785697",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583549041539,
+          36.014154599276644
+        ],
+        "type" : "Point"
+      },
+      "id" : "d946c096-edc9-49eb-bfc7-d629d4bdcb7c",
+      "properties" : {
+        "category" : "elevator",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583178324484,
+          36.014037671185484
+        ],
+        "type" : "Point"
+      },
+      "id" : "da73412e-a82c-4cb7-a412-407d8bf45b63",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583171723743,
+          36.014284867021964
+        ],
+        "type" : "Point"
+      },
+      "id" : "db81b8bf-a74f-4775-a0bf-259468fa4304",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32582564699428,
+          36.0141746090992
+        ],
+        "type" : "Point"
+      },
+      "id" : "dc169ddd-9b39-4343-8cfd-e132325a6ffb",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32589074903672,
+          36.014034542052222
+        ],
+        "type" : "Point"
+      },
+      "id" : "de7d1d87-648d-4cef-9c61-3a3c0ca32420",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32581135562313,
+          36.014065068926378
+        ],
+        "type" : "Point"
+      },
+      "id" : "df75b3a8-f3a2-422f-8df0-e0d1a2a601d6",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32587209686071,
+          36.014311992505334
+        ],
+        "type" : "Point"
+      },
+      "id" : "df917b97-f577-425a-bb46-018fcbf15623",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32595550644126,
+          36.014105133791986
+        ],
+        "type" : "Point"
+      },
+      "id" : "e08abf41-c434-4ef6-b0b4-57ecb4c7cfc2",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32580852606486,
+          36.014045469505085
+        ],
+        "type" : "Point"
+      },
+      "id" : "e4974422-3789-450e-9c5b-7cc3a04e4ced",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32600959388546,
+          36.014027670033471
+        ],
+        "type" : "Point"
+      },
+      "id" : "e4b24e59-8a69-470c-b0ac-0669b08f59e4",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32595387484946,
+          36.013979339865308
+        ],
+        "type" : "Point"
+      },
+      "id" : "e551a0eb-f5b5-4d0f-97ce-38dbd462f471",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32578272855721,
+          36.014095870336497
+        ],
+        "type" : "Point"
+      },
+      "id" : "e901c2bc-1ae5-4dfb-a7f6-8b187373011e",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32572431128253,
+          36.014248544352625
+        ],
+        "type" : "Point"
+      },
+      "id" : "e9494c7c-03e7-4fa6-a3c8-cde9b39e4bc4",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32584819704567,
+          36.013993120807854
+        ],
+        "type" : "Point"
+      },
+      "id" : "eab47b27-4121-4114-815b-2a284e2073a7",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32587878448501,
+          36.014029478581008
+        ],
+        "type" : "Point"
+      },
+      "id" : "ebc71711-3ce0-4099-a347-08ba2e79c6eb",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32590328375497,
+          36.014126079297128
+        ],
+        "type" : "Point"
+      },
+      "id" : "ec5109d3-9fbe-4037-a91c-499c82c6bfd9",
+      "properties" : {
+        "category" : "entrance",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32588816135208,
+          36.014211864416978
+        ],
+        "type" : "Point"
+      },
+      "id" : "f1888d27-9cd5-4310-9111-b9db96e89eda",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 0,
+        "level_id" : "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32579155261459,
+          36.014205468306656
+        ],
+        "type" : "Point"
+      },
+      "id" : "f1d40736-81ee-49ed-aaa6-bc63a29562fe",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32583803314066,
+          36.013943321189117
+        ],
+        "type" : "Point"
+      },
+      "id" : "f1e82b9f-ab67-40a6-bed6-44386c298cc2",
+      "properties" : {
+        "category" : "destination",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32564201911978,
+          36.014332723902093
+        ],
+        "type" : "Point"
+      },
+      "id" : "f33482c7-db67-4bfd-bf75-5e25b8a3e240",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32581877298864,
+          36.014303082702163
+        ],
+        "type" : "Point"
+      },
+      "id" : "f3d9a6de-87f1-4f9b-8beb-2593c6ade8c0",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32597601064469,
+          36.014114926092375
+        ],
+        "type" : "Point"
+      },
+      "id" : "f6823cb9-0b47-42d8-85a3-a139b082815c",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32576111563739,
+          36.014097510065348
+        ],
+        "type" : "Point"
+      },
+      "id" : "faa93607-e21e-45e1-bf8f-7733e294a6a9",
+      "properties" : {
+        "category" : "destination",
+        "level" : 5,
+        "level_id" : "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.3258279234573,
+          36.014173075942622
+        ],
+        "type" : "Point"
+      },
+      "id" : "fab956d9-9e2f-4970-8eb4-964f7bc885f8",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          129.32593287409335,
+          36.014106789564472
+        ],
+        "type" : "Point"
+      },
+      "id" : "fae04109-f9a7-4409-8678-499ac26b4ec2",
+      "properties" : {
+        "category" : "waypoint",
+        "level" : 4,
+        "level_id" : "90005828-dce9-49ff-be8c-d392a8254e77",
+        "metadata" : {
+
+        },
+        "name" : "",
+        "role" : "node"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32581135562313,
+            36.014065068926378
+          ],
+          [
+            129.32578733615907,
+            36.014057489333496
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "02bf4baf-060e-4eef-9cd2-55a32a4363c8",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "df75b3a8-f3a2-422f-8df0-e0d1a2a601d6",
+        "role" : "edge",
+        "to" : "22df2bf0-01c4-47ac-815c-2e888fa4baa8"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32573793850139,
+            36.014128081327286
+          ],
+          [
+            129.32577171358469,
+            36.014137390172415
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "030d0952-5c0b-48c2-819c-f35c7335b4e5",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "9725db94-12f5-4358-829f-47eb5972cef9",
+        "role" : "edge",
+        "to" : "0813c461-4711-4bca-91bd-c7567cc98a84"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590328375497,
+            36.014126079297128
+          ],
+          [
+            129.32591998817514,
+            36.014132855766363
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "0314077c-a580-4a58-a351-cf9b5e4008a7",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "ec5109d3-9fbe-4037-a91c-499c82c6bfd9",
+        "role" : "edge",
+        "to" : "53c5a050-c212-4f29-829b-4e31352d5c27"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32573475300796,
+            36.014221388688917
+          ],
+          [
+            129.32572431128253,
+            36.014248544352625
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "079df5b9-8ea9-4f85-b066-28b44b125b41",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "cfc9d673-2382-4eb1-acd0-4ac08c443a38",
+        "role" : "edge",
+        "to" : "e9494c7c-03e7-4fa6-a3c8-cde9b39e4bc4"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32598777446114,
+            36.014022570613022
+          ],
+          [
+            129.32600959388546,
+            36.014027670033471
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "0dab11d7-7e37-4ede-9221-6c69926e9616",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "42591e0a-f61b-430c-a0de-41405611b8ca",
+        "role" : "edge",
+        "to" : "e4b24e59-8a69-470c-b0ac-0669b08f59e4"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32581162574365,
+            36.014066312245163
+          ],
+          [
+            129.32581714207868,
+            36.014048634197486
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "1030a257-877d-4297-b404-79d2efc07695",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "b2fc014a-b1e9-4558-9fbe-907c9b362d52",
+        "role" : "edge",
+        "to" : "05bf0c68-6516-431d-b714-714df0eba88a"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3258355324966,
+            36.014015177754885
+          ],
+          [
+            129.32587878448501,
+            36.014029478581008
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "1104a3e9-656c-40ba-8e2d-30cb78b3a6f4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "3f14af0d-e5be-4a22-b764-3338bf1e581d",
+        "role" : "edge",
+        "to" : "ebc71711-3ce0-4099-a347-08ba2e79c6eb"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582906038016,
+            36.01420290971172
+          ],
+          [
+            129.3258241417096,
+            36.014216030638714
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "17b632d3-3d37-4e0b-a308-b6b8b6478b6d",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "29577cd3-83b9-4b93-9921-692af053d2d8",
+        "role" : "edge",
+        "to" : "00b7c0a5-7230-4e41-b3b9-62889be48405"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584550945893,
+            36.014068760739484
+          ],
+          [
+            129.32584077072772,
+            36.014077123972989
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "1821dbca-9df9-48b2-aa0d-1bda2c44f91d",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5bd289fb-392c-4931-baca-89e1ce9561aa",
+        "role" : "edge",
+        "to" : "79ca0e53-4751-46be-a6fb-347956dc2ab6"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578272855721,
+            36.014095870336497
+          ],
+          [
+            129.32576111563739,
+            36.014097510065348
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "1833cf53-fa44-49f4-bad1-504eebc4f799",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "e901c2bc-1ae5-4dfb-a7f6-8b187373011e",
+        "role" : "edge",
+        "to" : "faa93607-e21e-45e1-bf8f-7733e294a6a9"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32597829049675,
+            36.014105298384351
+          ],
+          [
+            129.32597601064469,
+            36.014114926092375
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "18568e50-ac8f-4e3f-bdf2-a468cf46c2ed",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "8058ae84-1c1c-4294-a1ab-fd666a389647",
+        "role" : "edge",
+        "to" : "f6823cb9-0b47-42d8-85a3-a139b082815c"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584819704567,
+            36.013993120807854
+          ],
+          [
+            129.3258355324966,
+            36.014015177754885
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "18c1b755-bfa3-4193-980c-e67025b717b1",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "eab47b27-4121-4114-815b-2a284e2073a7",
+        "role" : "edge",
+        "to" : "3f14af0d-e5be-4a22-b764-3338bf1e581d"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32579155261459,
+            36.014205468306656
+          ],
+          [
+            129.32579731903624,
+            36.014193769688141
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "18fec1cf-f8ad-46f4-9af3-f0dfc7efe53e",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "f1d40736-81ee-49ed-aaa6-bc63a29562fe",
+        "role" : "edge",
+        "to" : "a877b85c-3a5a-4a9d-a677-4d7ddd9e8c60"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584471344808,
+            36.014068601646358
+          ],
+          [
+            129.32584139066213,
+            36.014075827966572
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "1b0f11f4-eaec-411b-8c2d-01f27b45313c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "160f55e4-6d8f-438a-b6e2-57735901564d",
+        "role" : "edge",
+        "to" : "d233e877-469a-4024-a2e3-1ad4e3c72dab"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32595854966968,
+            36.014058709617345
+          ],
+          [
+            129.32594614824092,
+            36.014081553353783
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "1ba8335e-4a4d-4afe-8716-8b9d465ac3dc",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "39ff8272-b46f-40ef-ab1f-d40361facbfc",
+        "role" : "edge",
+        "to" : "d6ef93a2-ec76-4ba1-abb9-3e1bb1785697"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584550945893,
+            36.014068760739484
+          ],
+          [
+            129.32585555198884,
+            36.014065168994485
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "1da0016b-3b05-4860-ac9a-a404e5c8f1b7",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5bd289fb-392c-4931-baca-89e1ce9561aa",
+        "role" : "edge",
+        "to" : "0e6326f4-1947-41e0-a100-752f51ab584c"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32591844261327,
+            36.014100770877903
+          ],
+          [
+            129.32592049007783,
+            36.014095730829546
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "21eb2590-33b3-47fa-a551-f36ef9ddc129",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "d5b36f16-dbbd-4aca-858b-57b8cac3c5ed",
+        "role" : "edge",
+        "to" : "c565c922-21b2-4ca5-9598-f0c721eade9b"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32576033861699,
+            36.014068838147779
+          ],
+          [
+            129.32577054309945,
+            36.014059006103125
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "23f20d43-76ce-4de4-84cb-b487917c69a1",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5a9ff24f-5eaf-4b63-9405-0f06d4fa9b72",
+        "role" : "edge",
+        "to" : "9719edf6-f482-45b7-a1f7-969c82b8a4c0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32581162574365,
+            36.014066312245163
+          ],
+          [
+            129.32579196793094,
+            36.014099113404512
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "23f7ed53-9e9a-4767-a7ad-46f37fba975a",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "b2fc014a-b1e9-4558-9fbe-907c9b362d52",
+        "role" : "edge",
+        "to" : "3efc66d9-be5d-4f4e-ae1c-349ab2e8a9b2"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32571450571587,
+            36.014269537065452
+          ],
+          [
+            129.32572431128253,
+            36.014248544352625
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "25e2052b-033f-4cb5-8bd6-d111a31f7d9a",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "04530af8-675a-4f62-b8d6-e4e6eb0b3603",
+        "role" : "edge",
+        "to" : "e9494c7c-03e7-4fa6-a3c8-cde9b39e4bc4"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32593287409335,
+            36.014106789564472
+          ],
+          [
+            129.32591998817514,
+            36.014132855766363
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "295e83c1-3549-42ba-8bc6-a6eec4872559",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "fae04109-f9a7-4409-8678-499ac26b4ec2",
+        "role" : "edge",
+        "to" : "53c5a050-c212-4f29-829b-4e31352d5c27"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32574822148112,
+            36.014167420490566
+          ],
+          [
+            129.32581626765827,
+            36.014189115087945
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "29e8de34-2d01-489a-bf7b-53a50b66c8b4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "bd28c8b2-fdc6-475c-8dcb-c22776ce4986",
+        "role" : "edge",
+        "to" : "46d32e56-a5d4-478e-9ae8-7beb6c4653b9"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588645949809,
+            36.014183006700073
+          ],
+          [
+            129.32585993386564,
+            36.014227720163383
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "2bd0d811-a865-4f4f-8640-e9e1f6f7eacd",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5e3e8f28-d170-434b-bced-bbb24e95f31d",
+        "role" : "edge",
+        "to" : "5b1c20c4-51dc-41ab-96a9-0ffe716f97a3"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32583617192716,
+            36.014158136909288
+          ],
+          [
+            129.32583549041539,
+            36.014154599276644
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "2c6725b6-a4b1-4cfe-b922-41587614a01d",
+      "properties" : {
+        "accessible" : true,
+        "category" : "elevator",
+        "direction" : "undirected",
+        "from" : "b9166bb5-68a6-414f-a86e-1063f37bd64e",
+        "role" : "edge",
+        "to" : "d946c096-edc9-49eb-bfc7-d629d4bdcb7c"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.325673221801,
+            36.014311629097023
+          ],
+          [
+            129.32565938525636,
+            36.014294925243696
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "2c829400-e9f5-48ef-a3c6-43094889675b",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "4967af5c-a5f9-4b0f-a9f3-13b250668619",
+        "role" : "edge",
+        "to" : "b4a09ff1-85ee-49a9-9dd2-dacbd0572436"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32597131272138,
+            36.013948332483196
+          ],
+          [
+            129.32600799469802,
+            36.01396114414873
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "301686b9-d0cd-4228-bf0d-36afd0553014",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "a4a23b93-40b2-415c-a119-78e27fadca39",
+        "role" : "edge",
+        "to" : "8ee3dd41-94ec-4b2e-ad1a-438405d40c97"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32585993386564,
+            36.014227720163383
+          ],
+          [
+            129.32582326797896,
+            36.014215028939915
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "30ed699e-54a2-4c82-b566-79c31b4fbfb4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5b1c20c4-51dc-41ab-96a9-0ffe716f97a3",
+        "role" : "edge",
+        "to" : "735a7040-16d7-4515-976f-85e0f4c9d8b8"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32581877298864,
+            36.014303082702163
+          ],
+          [
+            129.32583171723743,
+            36.014284867021964
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "32a23e46-5941-42aa-b705-a1e0edff1b12",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "f3d9a6de-87f1-4f9b-8beb-2593c6ade8c0",
+        "role" : "edge",
+        "to" : "db81b8bf-a74f-4775-a0bf-259468fa4304"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32569890358332,
+            36.014210547427361
+          ],
+          [
+            129.32566837996868,
+            36.01423015489781
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "342dcfdc-5f5f-4a8c-a0f7-6c109ea03582",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "80a02aae-67b9-4e83-8ea6-943ce05d7a66",
+        "role" : "edge",
+        "to" : "2855dfcd-ac06-43fc-98c2-83243bae809d"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3259628465884,
+            36.014050093131686
+          ],
+          [
+            129.32599240886455,
+            36.014058796428813
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "35432fc7-b6b9-41ae-8d7e-6d8cf5dfccce",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "02a7cafc-27b2-4bf1-9dba-9e8191db1bf0",
+        "role" : "edge",
+        "to" : "92ccd251-3961-47f3-b9e7-5019072684d5"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32586811106344,
+            36.014025394938876
+          ],
+          [
+            129.32587262245249,
+            36.014017655203382
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "373ca506-94f6-46bb-8e04-6d07fef87eeb",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2299fefe-a49b-4046-81fb-e4adcac31e64",
+        "role" : "edge",
+        "to" : "342a9e9c-38cd-4e36-ae35-462de6908120"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32591844261327,
+            36.014100770877903
+          ],
+          [
+            129.32593188530382,
+            36.014105255672561
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "39b2c91f-1277-48aa-8fc6-adf3a49f0639",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "d5b36f16-dbbd-4aca-858b-57b8cac3c5ed",
+        "role" : "edge",
+        "to" : "57428f49-10b3-48dd-a88c-086dfd9b4baf"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3257397592738,
+            36.014219788560212
+          ],
+          [
+            129.32575700101947,
+            36.01422475805483
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "3a3a9cc4-9b85-4f51-aa0f-d180c640941c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "7ca5520a-4133-4574-b3e1-e221b5a581be",
+        "role" : "edge",
+        "to" : "bffcac09-cf79-452b-b5ad-8e72b769a4de"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32566837996868,
+            36.01423015489781
+          ],
+          [
+            129.32566869412844,
+            36.014241990991266
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "3a943818-d04f-4343-9963-bf138f5b5534",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2855dfcd-ac06-43fc-98c2-83243bae809d",
+        "role" : "edge",
+        "to" : "d46b3cfd-d595-4c38-91c6-e391251059e6"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578733615907,
+            36.014057489333496
+          ],
+          [
+            129.32577504927934,
+            36.014051495133742
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "3bdcd0c1-365b-4182-82d8-bafa95f9e4d9",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "22df2bf0-01c4-47ac-815c-2e888fa4baa8",
+        "role" : "edge",
+        "to" : "6624eb24-6628-446b-b350-d0bd0a3bc760"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32568744901081,
+            36.014316507408253
+          ],
+          [
+            129.32567833543337,
+            36.014338158746419
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "3d42fde3-df0e-4582-a327-e783164c71d7",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "7b0be79a-b54c-41f4-a388-be55977d3f34",
+        "role" : "edge",
+        "to" : "2d01e1e6-5492-4584-bca3-b05c18383bbb"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588864486539,
+            36.014120571823163
+          ],
+          [
+            129.32590328375497,
+            36.014126079297128
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "3ead08d8-893f-46b8-bc2e-5befab3f4c53",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "a998e0eb-7ade-4802-a3b1-12fee805b22a",
+        "role" : "edge",
+        "to" : "ec5109d3-9fbe-4037-a91c-499c82c6bfd9"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3258054699927,
+            36.014329710720709
+          ],
+          [
+            129.32581877298864,
+            36.014303082702163
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "4199d7f6-9d94-4e89-88bc-aab84e99ba8b",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "c84afd67-bdb5-4e66-9717-2c847d024bdf",
+        "role" : "edge",
+        "to" : "f3d9a6de-87f1-4f9b-8beb-2593c6ade8c0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32583178324484,
+            36.014037671185484
+          ],
+          [
+            129.32583997509886,
+            36.014040423348177
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "41ad62ab-97b5-49f9-9fe7-8e25d5ac35e0",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "da73412e-a82c-4cb7-a412-407d8bf45b63",
+        "role" : "edge",
+        "to" : "b1be54c7-4bee-4d75-bd3f-3b7510040804"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32598534579344,
+            36.014098131055661
+          ],
+          [
+            129.32597829049675,
+            36.014105298384351
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "448db88e-65bf-4b72-a53b-d3e354ed8a56",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "b4531d5a-843e-43eb-8ad4-6e673f26c30b",
+        "role" : "edge",
+        "to" : "8058ae84-1c1c-4294-a1ab-fd666a389647"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582223198648,
+            36.014306488914194
+          ],
+          [
+            129.32580042036034,
+            36.014352423162741
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "44c8d415-94d4-45d4-8fac-382cfab27094",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "7c1a99fe-9ead-4fa2-8879-15487c99f8f4",
+        "role" : "edge",
+        "to" : "8b7092a8-7548-40ff-a040-6e2be420415c"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32569051796767,
+            36.014276773461056
+          ],
+          [
+            129.32567719842274,
+            36.014256134572918
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "454510e5-8805-4de0-93ca-d9f02d9179ad",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "8ce2e1fb-c8db-4363-a7d2-f3cf7a802798",
+        "role" : "edge",
+        "to" : "c12a1433-10f4-4a07-bc0c-2c86beda9d87"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32579731903624,
+            36.014193769688141
+          ],
+          [
+            129.32582564699428,
+            36.0141746090992
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "46625bf0-ad03-44c3-b25d-260ab1ec69e9",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "a877b85c-3a5a-4a9d-a677-4d7ddd9e8c60",
+        "role" : "edge",
+        "to" : "dc169ddd-9b39-4343-8cfd-e132325a6ffb"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32586949424226,
+            36.014230218002822
+          ],
+          [
+            129.32589836156555,
+            36.014233899975501
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "46ebad79-5433-415b-b606-6cb55e4251d8",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "bf47db85-19c7-4815-8213-7586bf8da1e0",
+        "role" : "edge",
+        "to" : "4e641647-7a28-4cee-8f55-8cabe51a6ec4"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582268298424,
+            36.01403582291352
+          ],
+          [
+            129.32583178324484,
+            36.014037671185484
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "47b9ccba-1be6-4758-b84b-494c677bcb9f",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2823cc06-f867-424e-89db-6dc447f33296",
+        "role" : "edge",
+        "to" : "da73412e-a82c-4cb7-a412-407d8bf45b63"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584077072772,
+            36.014077123972989
+          ],
+          [
+            129.32590346352643,
+            36.014096932298862
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "49521ae7-1584-442c-8e04-d9385cb46a93",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "79ca0e53-4751-46be-a6fb-347956dc2ab6",
+        "role" : "edge",
+        "to" : "310d0aae-ce5f-475b-832d-40573b680077"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582268298424,
+            36.01403582291352
+          ],
+          [
+            129.32583529319811,
+            36.014013114891775
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "4ae85489-b2c7-4932-9ce3-b8f3656d5e10",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2823cc06-f867-424e-89db-6dc447f33296",
+        "role" : "edge",
+        "to" : "0a9863b0-45c5-4ed1-8fa5-d56b2c377cf6"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32597358152927,
+            36.014092896646588
+          ],
+          [
+            129.3259624951416,
+            36.01411600242789
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "4bfe80b2-0d1e-4de5-927c-8eac13111b23",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "81648cbc-dbf8-4526-9599-8decfc063656",
+        "role" : "edge",
+        "to" : "085c1434-057a-4214-8f74-f5a9bac65f39"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32575197795202,
+            36.014192000162126
+          ],
+          [
+            129.32579155261459,
+            36.014205468306656
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "4f5200f1-9572-4050-bb5a-7fadac4ffcf4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "1ab99a9c-c55a-4d28-9775-756de9813d93",
+        "role" : "edge",
+        "to" : "f1d40736-81ee-49ed-aaa6-bc63a29562fe"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32583171723743,
+            36.014284867021964
+          ],
+          [
+            129.32584642354132,
+            36.014256471318269
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "51501972-f9d7-496f-8dbd-377ec04128c9",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "db81b8bf-a74f-4775-a0bf-259468fa4304",
+        "role" : "edge",
+        "to" : "bc833f44-5af7-40df-ac6f-3d3f83733a79"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32597865064383,
+            36.014020232882444
+          ],
+          [
+            129.32598777446114,
+            36.014022570613022
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "518fc34c-aa6e-4ea0-a538-22a098572d19",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "72299709-93b8-43e3-9819-4c9cd9097295",
+        "role" : "edge",
+        "to" : "42591e0a-f61b-430c-a0de-41405611b8ca"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32594614824092,
+            36.014081553353783
+          ],
+          [
+            129.32593287409335,
+            36.014106789564472
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "53848b2f-b6a2-4125-bd88-60697576caa4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "d6ef93a2-ec76-4ba1-abb9-3e1bb1785697",
+        "role" : "edge",
+        "to" : "fae04109-f9a7-4409-8678-499ac26b4ec2"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3259628465884,
+            36.014050093131686
+          ],
+          [
+            129.32594267193841,
+            36.014043531072033
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "53f10e52-3690-461c-a950-a038ba18e970",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "02a7cafc-27b2-4bf1-9dba-9e8191db1bf0",
+        "role" : "edge",
+        "to" : "b2c3ab5c-ca5f-4b44-bc74-d53bbf305865"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32591008288207,
+            36.013964933585733
+          ],
+          [
+            129.32592982931385,
+            36.013932781751713
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "540fc3f0-b778-4d92-8327-6856c2d5da90",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "c7d341b1-a993-4940-ab5d-e9104e30f944",
+        "role" : "edge",
+        "to" : "a3a8155b-c526-444c-b37e-0975861eac09"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32575197795202,
+            36.014192000162126
+          ],
+          [
+            129.3257397592738,
+            36.014219788560212
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "54c14254-84d7-4004-83be-7a7a4e95257d",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "1ab99a9c-c55a-4d28-9775-756de9813d93",
+        "role" : "edge",
+        "to" : "7ca5520a-4133-4574-b3e1-e221b5a581be"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3258241417096,
+            36.014216030638714
+          ],
+          [
+            129.32586949424226,
+            36.014230218002822
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "5599d740-b5bd-4950-aea3-f3b2deaafbeb",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "00b7c0a5-7230-4e41-b3b9-62889be48405",
+        "role" : "edge",
+        "to" : "bf47db85-19c7-4815-8213-7586bf8da1e0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32587262245249,
+            36.014017655203382
+          ],
+          [
+            129.32587129607953,
+            36.014008202265899
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "570f620a-801f-42c4-a854-3d2f467808cf",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "342a9e9c-38cd-4e36-ae35-462de6908120",
+        "role" : "edge",
+        "to" : "c2c051a5-8de4-4387-a1f3-6ff91b613582"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32600799469802,
+            36.01396114414873
+          ],
+          [
+            129.32597865064383,
+            36.014020232882444
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "57377a76-a86d-43fa-9bee-bf3b2e2ed5c4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "8ee3dd41-94ec-4b2e-ad1a-438405d40c97",
+        "role" : "edge",
+        "to" : "72299709-93b8-43e3-9819-4c9cd9097295"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.325867482002,
+            36.013951302580018
+          ],
+          [
+            129.32583803314066,
+            36.013943321189117
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "57a1e056-259a-45e9-b64a-226769a44f94",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "9fe9976f-4563-4547-ac24-b9f706c09cc5",
+        "role" : "edge",
+        "to" : "f1e82b9f-ab67-40a6-bed6-44386c298cc2"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32594614824092,
+            36.014081553353783
+          ],
+          [
+            129.32597358152927,
+            36.014092896646588
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "5973caed-48a4-4f7e-aaa4-f3826957ce15",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "d6ef93a2-ec76-4ba1-abb9-3e1bb1785697",
+        "role" : "edge",
+        "to" : "81648cbc-dbf8-4526-9599-8decfc063656"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588816135208,
+            36.014211864416978
+          ],
+          [
+            129.32593718670745,
+            36.014234353487552
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "5a6400aa-2cf2-454f-8b16-42fdd3c3616c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "f1888d27-9cd5-4310-9111-b9db96e89eda",
+        "role" : "edge",
+        "to" : "1ab064de-8b3f-4144-ae3c-c875a637e7aa"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32586474846875,
+            36.014113705666674
+          ],
+          [
+            129.32588864486539,
+            36.014120571823163
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "5a904676-0472-4bb3-858a-547afe6adb1a",
+      "properties" : {
+        "accessible" : false,
+        "category" : "stairs",
+        "direction" : "undirected",
+        "from" : "c7c39da8-6bbc-4d60-ada1-6b815c97c309",
+        "role" : "edge",
+        "to" : "a998e0eb-7ade-4802-a3b1-12fee805b22a"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.325867482002,
+            36.013951302580018
+          ],
+          [
+            129.32588665739206,
+            36.013916740756983
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "5b41b660-c1e4-4674-9fb0-32eed7d6daf9",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "9fe9976f-4563-4547-ac24-b9f706c09cc5",
+        "role" : "edge",
+        "to" : "c224827d-28d9-410c-8484-2585e5dfe825"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32583529319811,
+            36.014013114891775
+          ],
+          [
+            129.32586811106344,
+            36.014025394938876
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "5e3c5c09-3ca2-4e28-9944-741adf623c07",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "0a9863b0-45c5-4ed1-8fa5-d56b2c377cf6",
+        "role" : "edge",
+        "to" : "2299fefe-a49b-4046-81fb-e4adcac31e64"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32579012261664,
+            36.01420467844337
+          ],
+          [
+            129.32575085503748,
+            36.014187237099343
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "5ed479b6-16e9-4a0d-ade2-2bf4a4067f0a",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "1a03d71a-cc9b-4743-a0bb-e0fefbcc63a7",
+        "role" : "edge",
+        "to" : "6cf00bff-c8cd-43a1-bb5a-7532899e89c8"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32581626765827,
+            36.014189115087945
+          ],
+          [
+            129.3257965564612,
+            36.014230109075314
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "611d21f6-c04e-4026-9ce8-19acae079d67",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "46d32e56-a5d4-478e-9ae8-7beb6c4653b9",
+        "role" : "edge",
+        "to" : "0cdb364a-f6cb-4001-a7d4-850b85ae39e5"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590360334868,
+            36.014160541906499
+          ],
+          [
+            129.32591371549313,
+            36.014167759989355
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "615204e4-63eb-41e3-a579-54a624511167",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "292a58f4-6b71-470c-b888-b04d10c98bac",
+        "role" : "edge",
+        "to" : "1fac4a66-51bf-4c33-8249-024fc5213a90"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3259628465884,
+            36.014050093131686
+          ],
+          [
+            129.32598109317937,
+            36.014016471615712
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "62f96a7f-a152-4912-953e-71d9a6bf6add",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "02a7cafc-27b2-4bf1-9dba-9e8191db1bf0",
+        "role" : "edge",
+        "to" : "61f11c61-2cec-4172-9011-a16b28f0eb32"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32571579037034,
+            36.014205173155148
+          ],
+          [
+            129.32567745766355,
+            36.014325403363422
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "63eaf7a1-6c15-46ac-b0cc-ddbf74025822",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "64221f7a-b720-4f7a-942b-6ffa767f98a3",
+        "role" : "edge",
+        "to" : "b5404cb9-dc99-440c-8916-b6d71882b2f5"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32596433344844,
+            36.014101987484104
+          ],
+          [
+            129.32596785720958,
+            36.014093480702897
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "65e0b94a-b125-4cd1-b9a3-90a7e8849ec6",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "155e83d6-7b55-4a99-bfc0-960da125c0ec",
+        "role" : "edge",
+        "to" : "0266b747-f0ad-484a-94a3-c65f3fb9f339"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32583072849442,
+            36.014202836559889
+          ],
+          [
+            129.3258279234573,
+            36.014173075942622
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "679dfbcd-917e-42fa-b6bf-1607035afc12",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "4b55f936-1413-4eb8-9b95-5d9ce9323c70",
+        "role" : "edge",
+        "to" : "fab956d9-9e2f-4970-8eb4-964f7bc885f8"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32570752064959,
+            36.014282319926423
+          ],
+          [
+            129.32569051796767,
+            36.014276773461056
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "685ed3b9-53c2-4b55-a1e6-2fd792876e06",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "00460373-3fe8-4bd3-8a00-7afad009e10f",
+        "role" : "edge",
+        "to" : "8ce2e1fb-c8db-4363-a7d2-f3cf7a802798"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3259193421388,
+            36.014131470379461
+          ],
+          [
+            129.32590467014344,
+            36.014125928836584
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "69b7f804-3254-4ee5-8fb9-f703b38ca437",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5d360fec-106d-42c7-9881-e723bd0e5c17",
+        "role" : "edge",
+        "to" : "813167f8-eaae-4caa-888a-eb64619d434d"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582326797896,
+            36.014215028939915
+          ],
+          [
+            129.32583072849442,
+            36.014202836559889
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "6ad9362a-1d35-41b0-843a-c2fa98d1499d",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "735a7040-16d7-4515-976f-85e0f4c9d8b8",
+        "role" : "edge",
+        "to" : "4b55f936-1413-4eb8-9b95-5d9ce9323c70"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590439194402,
+            36.014097442331909
+          ],
+          [
+            129.32584139066213,
+            36.014075827966572
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "6b19143b-e55c-4d69-8ec1-93bea7bd7844",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "34223dde-8d13-4ca0-ab26-b26413a46da9",
+        "role" : "edge",
+        "to" : "d233e877-469a-4024-a2e3-1ad4e3c72dab"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32589033242039,
+            36.014034573445855
+          ],
+          [
+            129.32590326670805,
+            36.014038345870887
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "6b79ad9a-430a-4d86-9931-a75c48e7b5e0",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "385343a1-b347-49cc-9c4a-31c5fcf111e9",
+        "role" : "edge",
+        "to" : "1e0613c2-c221-4fa1-bc79-8aa561b78143"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3257397592738,
+            36.014219788560212
+          ],
+          [
+            129.32572954561428,
+            36.014240851922736
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "70b0a110-62fd-4f56-a8ac-f72e40b5435f",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "7ca5520a-4133-4574-b3e1-e221b5a581be",
+        "role" : "edge",
+        "to" : "a5ae9814-11e7-48db-bdb0-4d5b60290ca0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32581626765827,
+            36.014189115087945
+          ],
+          [
+            129.32588816135208,
+            36.014211864416978
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "73e3d0ce-e9ac-4ed1-8cf1-6fd539205555",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "46d32e56-a5d4-478e-9ae8-7beb6c4653b9",
+        "role" : "edge",
+        "to" : "f1888d27-9cd5-4310-9111-b9db96e89eda"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3257696830905,
+            36.014218832629282
+          ],
+          [
+            129.32571579037034,
+            36.014205173155148
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "73e70b88-dc3b-42ed-b822-087f9c6e979c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5dd13c0c-04ee-4bb5-948e-fffea41fa6ea",
+        "role" : "edge",
+        "to" : "64221f7a-b720-4f7a-942b-6ffa767f98a3"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32589074903672,
+            36.014034542052222
+          ],
+          [
+            129.32590165238173,
+            36.014033093968351
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "73edcba4-d960-4d86-ae43-06f49568c197",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "de7d1d87-648d-4cef-9c61-3a3c0ca32420",
+        "role" : "edge",
+        "to" : "27053403-4374-4353-80c1-2e1deae99a0b"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32568744901081,
+            36.014316507408253
+          ],
+          [
+            129.325673221801,
+            36.014311629097023
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "746b7afe-4a93-4e25-80a0-665b211dcba1",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "7b0be79a-b54c-41f4-a388-be55977d3f34",
+        "role" : "edge",
+        "to" : "4967af5c-a5f9-4b0f-a9f3-13b250668619"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32594027894575,
+            36.014135822373859
+          ],
+          [
+            129.32590621690784,
+            36.014124664134798
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "74b6449c-fb46-4600-9af7-4b7042dfa270",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "4f0fe64d-a377-4e85-9327-8ba74e60c7b5",
+        "role" : "edge",
+        "to" : "b024aed1-e6d9-4141-b772-c6c4956acf0e"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578272855721,
+            36.014095870336497
+          ],
+          [
+            129.32579196793094,
+            36.014099113404512
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "7734fc21-4188-4a61-a25e-9bce6b929d60",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "e901c2bc-1ae5-4dfb-a7f6-8b187373011e",
+        "role" : "edge",
+        "to" : "3efc66d9-be5d-4f4e-ae1c-349ab2e8a9b2"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584471344808,
+            36.014068601646358
+          ],
+          [
+            129.32585490988978,
+            36.014065445071509
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "7869ebe3-d6fe-4cf9-acec-02abe65fe020",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "160f55e4-6d8f-438a-b6e2-57735901564d",
+        "role" : "edge",
+        "to" : "5abfa563-4fdd-492e-89b2-04d201e71b91"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32589575566647,
+            36.014180731799648
+          ],
+          [
+            129.3259193421388,
+            36.014131470379461
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "7a095179-cc94-417d-8a4b-c6b4b49fc7b1",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5d52d149-705f-408c-92a7-5d2511259676",
+        "role" : "edge",
+        "to" : "5d360fec-106d-42c7-9881-e723bd0e5c17"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590439194402,
+            36.014097442331909
+          ],
+          [
+            129.32590639289248,
+            36.014089093893261
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "7e6bbcbe-a038-477b-a14e-b5a31fdb6703",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "34223dde-8d13-4ca0-ab26-b26413a46da9",
+        "role" : "edge",
+        "to" : "01109126-1b35-425c-8515-c325e110d339"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578182816135,
+            36.01409557714117
+          ],
+          [
+            129.32578980801659,
+            36.014099311398361
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "7f774622-9012-458e-91a9-54dd379c5e52",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "bc2dfc20-d95c-484a-9b40-2f558301509a",
+        "role" : "edge",
+        "to" : "01e2b756-57e6-40cd-b39d-b76770f96580"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32571317071773,
+            36.014235766090685
+          ],
+          [
+            129.32570133997646,
+            36.014217188261533
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8061ace8-c4d7-4889-80dd-09617e9dee5c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "26683114-98da-4396-8f7c-ddfda5d14c2b",
+        "role" : "edge",
+        "to" : "037ede1b-deca-4630-b94b-72796e4837cd"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32581626765827,
+            36.014189115087945
+          ],
+          [
+            129.32583459416588,
+            36.01415558283994
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8752ec09-e7c7-49f4-b00d-4d0f3aedc7de",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "46d32e56-a5d4-478e-9ae8-7beb6c4653b9",
+        "role" : "edge",
+        "to" : "5a6a3ac7-b42e-47ca-99fb-2bece2360d78"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32583459416588,
+            36.01415558283994
+          ],
+          [
+            129.32583549041539,
+            36.014154599276644
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8808ce41-7c65-40cf-99a1-7ad1fc07f418",
+      "properties" : {
+        "accessible" : true,
+        "category" : "elevator",
+        "direction" : "undirected",
+        "from" : "5a6a3ac7-b42e-47ca-99fb-2bece2360d78",
+        "role" : "edge",
+        "to" : "d946c096-edc9-49eb-bfc7-d629d4bdcb7c"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588430022179,
+            36.014304086717722
+          ],
+          [
+            129.32587209686071,
+            36.014311992505334
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8962982c-73aa-47ab-871d-327e41e53cae",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "1edf81d2-0de5-4ec8-9532-313320977e0f",
+        "role" : "edge",
+        "to" : "df917b97-f577-425a-bb46-018fcbf15623"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584819704567,
+            36.013993120807854
+          ],
+          [
+            129.3258642726266,
+            36.013998464468791
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8bec0bfd-c21b-434c-946b-7ca3845c76f6",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "eab47b27-4121-4114-815b-2a284e2073a7",
+        "role" : "edge",
+        "to" : "2501f7ce-71b0-4a81-892e-ca2997be50de"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3258650831111,
+            36.013959689519289
+          ],
+          [
+            129.32585580821421,
+            36.013975498832146
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8d4b0c2d-ea8d-4263-a735-ec936493dd99",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "9c07cd70-76ad-44a3-a10d-2f6804ddbe41",
+        "role" : "edge",
+        "to" : "af0d96dc-5dfb-457d-b5df-a661c170a34c"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578980801659,
+            36.014099311398361
+          ],
+          [
+            129.32577171358469,
+            36.014137390172415
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8dd0cad2-baa2-4950-b705-0be01d383299",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "01e2b756-57e6-40cd-b39d-b76770f96580",
+        "role" : "edge",
+        "to" : "0813c461-4711-4bca-91bd-c7567cc98a84"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32591761956448,
+            36.014101503258352
+          ],
+          [
+            129.32592138128032,
+            36.014094831854017
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8f6e07f5-a35a-4dc9-a918-f6ba4c0f4ca7",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "8e448d8a-907e-40c1-8c82-ebcc18470a1d",
+        "role" : "edge",
+        "to" : "4cdc579c-01f1-4af5-bd75-b8248e02c083"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32567833543337,
+            36.014338158746419
+          ],
+          [
+            129.32569484055165,
+            36.014343428517371
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "8f84079b-daac-4644-82a2-d706ba111e37",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2d01e1e6-5492-4584-bca3-b05c18383bbb",
+        "role" : "edge",
+        "to" : "6a255068-72f3-4243-9619-744462a92ee9"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3257941955321,
+            36.014026483900174
+          ],
+          [
+            129.32582268298424,
+            36.01403582291352
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "91c0adcc-2df3-4f44-bbdd-4d1bd98a9dd2",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "285ba63e-352a-4c5a-8648-cc4b7f225f37",
+        "role" : "edge",
+        "to" : "2823cc06-f867-424e-89db-6dc447f33296"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32573475300796,
+            36.014221388688917
+          ],
+          [
+            129.32569890358332,
+            36.014210547427361
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "9274442c-8a85-472e-81be-576b29f0a015",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "cfc9d673-2382-4eb1-acd0-4ac08c443a38",
+        "role" : "edge",
+        "to" : "80a02aae-67b9-4e83-8ea6-943ce05d7a66"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590360334868,
+            36.014160541906499
+          ],
+          [
+            129.32588645949809,
+            36.014183006700073
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "9284bd09-ed8f-4dea-b597-b96cdb4f65fe",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "292a58f4-6b71-470c-b888-b04d10c98bac",
+        "role" : "edge",
+        "to" : "5e3e8f28-d170-434b-bced-bbb24e95f31d"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32595550644126,
+            36.014105133791986
+          ],
+          [
+            129.32594027894575,
+            36.014135822373859
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "92a88e9b-3c33-49d7-926c-c6d761945867",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "e08abf41-c434-4ef6-b0b4-57ecb4c7cfc2",
+        "role" : "edge",
+        "to" : "4f0fe64d-a377-4e85-9327-8ba74e60c7b5"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32591761956448,
+            36.014101503258352
+          ],
+          [
+            129.32590346352643,
+            36.014096932298862
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "935054d6-56da-412d-8645-658d651f2384",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "8e448d8a-907e-40c1-8c82-ebcc18470a1d",
+        "role" : "edge",
+        "to" : "310d0aae-ce5f-475b-832d-40573b680077"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32597865064383,
+            36.014020232882444
+          ],
+          [
+            129.32597393193566,
+            36.014028940720443
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "95b10267-a2e4-49f0-bbc0-b4151a5f8944",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "72299709-93b8-43e3-9819-4c9cd9097295",
+        "role" : "edge",
+        "to" : "6b125ccd-b91f-48ad-b98a-411044d1942b"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3258355324966,
+            36.014015177754885
+          ],
+          [
+            129.32581714207868,
+            36.014048634197486
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "96ed21eb-ede0-4cea-84f9-9ffb0145e27c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "3f14af0d-e5be-4a22-b764-3338bf1e581d",
+        "role" : "edge",
+        "to" : "05bf0c68-6516-431d-b714-714df0eba88a"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582564699428,
+            36.0141746090992
+          ],
+          [
+            129.32583549041539,
+            36.014154599276644
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "9720b0fa-202b-4197-8955-1ee3287da470",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "dc169ddd-9b39-4343-8cfd-e132325a6ffb",
+        "role" : "edge",
+        "to" : "d946c096-edc9-49eb-bfc7-d629d4bdcb7c"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590467014344,
+            36.014125928836584
+          ],
+          [
+            129.32588398178333,
+            36.014117324965099
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "97eee3e4-9e66-498c-ba2c-a9a6f3cc67db",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "813167f8-eaae-4caa-888a-eb64619d434d",
+        "role" : "edge",
+        "to" : "3aa15627-2b3c-41c7-a991-71dfc6806354"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32575085503748,
+            36.014187237099343
+          ],
+          [
+            129.32573475300796,
+            36.014221388688917
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "9d813199-325c-4343-9da6-86e7fa90f0d7",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "6cf00bff-c8cd-43a1-bb5a-7532899e89c8",
+        "role" : "edge",
+        "to" : "cfc9d673-2382-4eb1-acd0-4ac08c443a38"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32567833543337,
+            36.014338158746419
+          ],
+          [
+            129.3256723918804,
+            36.01435020910273
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "9df4ee63-06b3-4e8c-b54d-230e0a206963",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2d01e1e6-5492-4584-bca3-b05c18383bbb",
+        "role" : "edge",
+        "to" : "5be743e5-cb27-4cd3-a256-0c91a7b3d6bb"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32592138128032,
+            36.014094831854017
+          ],
+          [
+            129.32592508704894,
+            36.014088219994534
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "9f17102f-fc6f-4714-aca7-64e5a270062c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "4cdc579c-01f1-4af5-bd75-b8248e02c083",
+        "role" : "edge",
+        "to" : "b77505b0-01ca-4605-aaf6-e68d4f8f779b"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588354884308,
+            36.01402194193134
+          ],
+          [
+            129.32588790949973,
+            36.014012170465257
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "9f70d203-57f3-4dbf-a8bb-103c893360f5",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "ae2e6a83-affa-4d2a-8adf-ddf91a4a6345",
+        "role" : "edge",
+        "to" : "9b8eae99-0140-4847-a155-b11864755ca9"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582223198648,
+            36.014306488914194
+          ],
+          [
+            129.32585466266048,
+            36.014246870779722
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a0f26b1a-8317-48f7-b3a4-3ff71db75f13",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "7c1a99fe-9ead-4fa2-8879-15487c99f8f4",
+        "role" : "edge",
+        "to" : "11943f82-c774-40cc-b741-9f4195c3a4ba"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590439194402,
+            36.014097442331909
+          ],
+          [
+            129.32591844261327,
+            36.014100770877903
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a175e7a2-9882-4585-b62b-895a006fbfee",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "34223dde-8d13-4ca0-ab26-b26413a46da9",
+        "role" : "edge",
+        "to" : "d5b36f16-dbbd-4aca-858b-57b8cac3c5ed"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582326797896,
+            36.014215028939915
+          ],
+          [
+            129.32579012261664,
+            36.01420467844337
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a352b696-2384-49f8-ab37-3ea90ffdfd47",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "735a7040-16d7-4515-976f-85e0f4c9d8b8",
+        "role" : "edge",
+        "to" : "1a03d71a-cc9b-4743-a0bb-e0fefbcc63a7"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578733615907,
+            36.014057489333496
+          ],
+          [
+            129.32578324606794,
+            36.014062655011166
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a3ff21df-535f-4bd9-bceb-e0795237bc9d",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "22df2bf0-01c4-47ac-815c-2e888fa4baa8",
+        "role" : "edge",
+        "to" : "060fddbb-90fd-42dd-a9f7-775bca781fc0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32577171358469,
+            36.014137390172415
+          ],
+          [
+            129.32575085503748,
+            36.014187237099343
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a448d24f-495c-400a-a127-9ab3d39a4670",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "0813c461-4711-4bca-91bd-c7567cc98a84",
+        "role" : "edge",
+        "to" : "6cf00bff-c8cd-43a1-bb5a-7532899e89c8"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32583459416588,
+            36.01415558283994
+          ],
+          [
+            129.32583617192716,
+            36.014158136909288
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a5438f11-e574-4ade-81b8-5dc7267724ed",
+      "properties" : {
+        "accessible" : true,
+        "category" : "elevator",
+        "direction" : "undirected",
+        "from" : "5a6a3ac7-b42e-47ca-99fb-2bece2360d78",
+        "role" : "edge",
+        "to" : "b9166bb5-68a6-414f-a86e-1063f37bd64e"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32591761956448,
+            36.014101503258352
+          ],
+          [
+            129.32593287409335,
+            36.014106789564472
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a6330dbf-3a8b-4a2f-b418-dbe553c8e6c4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "8e448d8a-907e-40c1-8c82-ebcc18470a1d",
+        "role" : "edge",
+        "to" : "fae04109-f9a7-4409-8678-499ac26b4ec2"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582564699428,
+            36.0141746090992
+          ],
+          [
+            129.32582906038016,
+            36.01420290971172
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a6d8e8cc-bcbb-4b59-996f-6eae6b410ff8",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "dc169ddd-9b39-4343-8cfd-e132325a6ffb",
+        "role" : "edge",
+        "to" : "29577cd3-83b9-4b93-9921-692af053d2d8"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32596785720958,
+            36.014093480702897
+          ],
+          [
+            129.32598534579344,
+            36.014098131055661
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a77387c8-0f3a-4893-8823-a88624292414",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "0266b747-f0ad-484a-94a3-c65f3fb9f339",
+        "role" : "edge",
+        "to" : "b4531d5a-843e-43eb-8ad4-6e673f26c30b"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578600742374,
+            36.014036423484185
+          ],
+          [
+            129.32580852606486,
+            36.014045469505085
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "a89183db-2a71-4251-a9a4-3b070fb024b8",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "0392b729-3959-4ce5-996e-5618dc94b65b",
+        "role" : "edge",
+        "to" : "e4974422-3789-450e-9c5b-7cc3a04e4ced"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32571867427617,
+            36.014172950323001
+          ],
+          [
+            129.32575085503748,
+            36.014187237099343
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "ad39ac20-cb79-4097-a646-586aac6caf3e",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "861ff6ae-6bf8-49af-87d0-11401c3b88f6",
+        "role" : "edge",
+        "to" : "6cf00bff-c8cd-43a1-bb5a-7532899e89c8"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32592049007783,
+            36.014095730829546
+          ],
+          [
+            129.3259265643363,
+            36.014086950012661
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "af0ad93c-7b18-4837-a216-c618b5fbf15d",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "c565c922-21b2-4ca5-9598-f0c721eade9b",
+        "role" : "edge",
+        "to" : "cfd58923-2ced-45de-929d-717962c4c2cb"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32597131272138,
+            36.013948332483196
+          ],
+          [
+            129.32595387484946,
+            36.013979339865308
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b223d571-5795-462d-9aa5-57d6c17d9434",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "a4a23b93-40b2-415c-a119-78e27fadca39",
+        "role" : "edge",
+        "to" : "e551a0eb-f5b5-4d0f-97ce-38dbd462f471"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32569484055165,
+            36.014343428517371
+          ],
+          [
+            129.32572308178814,
+            36.014345630701136
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b3697f34-8579-4342-8eb5-9df313df9ee4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "6a255068-72f3-4243-9619-744462a92ee9",
+        "role" : "edge",
+        "to" : "038f1fd1-4cd6-446a-acf7-5d29e3b44184"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32595692441512,
+            36.014105548352603
+          ],
+          [
+            129.32596433344844,
+            36.014101987484104
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b5399bc9-b78a-4880-9b2e-cb8c9596b67b",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2998759b-c222-4fe2-b318-d7cf188f835c",
+        "role" : "edge",
+        "to" : "155e83d6-7b55-4a99-bfc0-960da125c0ec"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32581135562313,
+            36.014065068926378
+          ],
+          [
+            129.32584077072772,
+            36.014077123972989
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b53d6cdb-386e-472c-8c69-dd088e120e86",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "df75b3a8-f3a2-422f-8df0-e0d1a2a601d6",
+        "role" : "edge",
+        "to" : "79ca0e53-4751-46be-a6fb-347956dc2ab6"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32587878448501,
+            36.014029478581008
+          ],
+          [
+            129.32588354884308,
+            36.01402194193134
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b5a5e70a-be45-422d-a1d7-02e871ff62a0",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "ebc71711-3ce0-4099-a347-08ba2e79c6eb",
+        "role" : "edge",
+        "to" : "ae2e6a83-affa-4d2a-8adf-ddf91a4a6345"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590639289248,
+            36.014089093893261
+          ],
+          [
+            129.32589680796474,
+            36.014079203935061
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b5e7f620-8eca-46c1-a075-28209a0bd2b7",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "01109126-1b35-425c-8515-c325e110d339",
+        "role" : "edge",
+        "to" : "573f4f29-1166-406b-96b6-dc652dcf7493"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32587878448501,
+            36.014029478581008
+          ],
+          [
+            129.32589074903672,
+            36.014034542052222
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b6eb9883-7323-4973-85a9-2fc9b6f1a76c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "ebc71711-3ce0-4099-a347-08ba2e79c6eb",
+        "role" : "edge",
+        "to" : "de7d1d87-648d-4cef-9c61-3a3c0ca32420"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588816135208,
+            36.014211864416978
+          ],
+          [
+            129.32585466266048,
+            36.014246870779722
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b73256e5-fa7c-46ae-8672-c3be20c8aa55",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "f1888d27-9cd5-4310-9111-b9db96e89eda",
+        "role" : "edge",
+        "to" : "11943f82-c774-40cc-b741-9f4195c3a4ba"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32580042036034,
+            36.014352423162741
+          ],
+          [
+            129.32567745766355,
+            36.014325403363422
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b7f993ce-c870-4b6e-86e2-15f1b99e060f",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "8b7092a8-7548-40ff-a040-6e2be420415c",
+        "role" : "edge",
+        "to" : "b5404cb9-dc99-440c-8916-b6d71882b2f5"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3258279234573,
+            36.014173075942622
+          ],
+          [
+            129.32583617192716,
+            36.014158136909288
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "b8cbf434-4c4f-4355-aa9c-b3907f6a0981",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "fab956d9-9e2f-4970-8eb4-964f7bc885f8",
+        "role" : "edge",
+        "to" : "b9166bb5-68a6-414f-a86e-1063f37bd64e"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.325965567823,
+            36.014027362782073
+          ],
+          [
+            129.32595066671684,
+            36.014027015040185
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "bb5bbc73-fc00-4037-8eb8-405c77c08ed0",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "8e3b2181-969d-4325-a467-aad4f855217b",
+        "role" : "edge",
+        "to" : "581da8ab-3f5c-43eb-a73f-577407fb5857"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588665739206,
+            36.013916740756983
+          ],
+          [
+            129.32592982931385,
+            36.013932781751713
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "bb8c9c7b-1d10-401e-9cc3-781f06581995",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "c224827d-28d9-410c-8484-2585e5dfe825",
+        "role" : "edge",
+        "to" : "a3a8155b-c526-444c-b37e-0975861eac09"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32595854966968,
+            36.014058709617345
+          ],
+          [
+            129.32597393193566,
+            36.014028940720443
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "bc230cf1-b83c-4f48-93aa-2a08fe073a36",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "39ff8272-b46f-40ef-ab1f-d40361facbfc",
+        "role" : "edge",
+        "to" : "6b125ccd-b91f-48ad-b98a-411044d1942b"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32597393193566,
+            36.014028940720443
+          ],
+          [
+            129.325965567823,
+            36.014027362782073
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "bcc6469d-6cae-425c-a12d-03df663381cd",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "6b125ccd-b91f-48ad-b98a-411044d1942b",
+        "role" : "edge",
+        "to" : "8e3b2181-969d-4325-a467-aad4f855217b"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32594820733371,
+            36.014085414117346
+          ],
+          [
+            129.32596785720958,
+            36.014093480702897
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "bcef3528-16ea-4a88-aafb-350fa466bba7",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "855c9a36-6075-42b4-9d4d-9e1d9c9d96d1",
+        "role" : "edge",
+        "to" : "0266b747-f0ad-484a-94a3-c65f3fb9f339"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32585497766647,
+            36.013974267302068
+          ],
+          [
+            129.325867482002,
+            36.013951302580018
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "bec2e33d-a6d4-4705-8f16-a94b7e3abb16",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "4a4c1c33-2b14-4135-9293-8e9f04982ae1",
+        "role" : "edge",
+        "to" : "9fe9976f-4563-4547-ac24-b9f706c09cc5"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32569475260726,
+            36.014300895191511
+          ],
+          [
+            129.32571450571587,
+            36.014269537065452
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "bee01703-e8a8-4190-a9b7-146a7f83f14b",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "36e73c21-1d67-4fbb-a3b1-f38ad08ff2ea",
+        "role" : "edge",
+        "to" : "04530af8-675a-4f62-b8d6-e4e6eb0b3603"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32577054309945,
+            36.014059006103125
+          ],
+          [
+            129.32577504927934,
+            36.014051495133742
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "bffdc420-bc49-42f0-abb5-ba8a2cfd33dd",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "9719edf6-f482-45b7-a1f7-969c82b8a4c0",
+        "role" : "edge",
+        "to" : "6624eb24-6628-446b-b350-d0bd0a3bc760"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32580852606486,
+            36.014045469505085
+          ],
+          [
+            129.32581714207868,
+            36.014048634197486
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c01af5d5-4357-4245-89d1-72f7ace25879",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "e4974422-3789-450e-9c5b-7cc3a04e4ced",
+        "role" : "edge",
+        "to" : "05bf0c68-6516-431d-b714-714df0eba88a"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32585497766647,
+            36.013974267302068
+          ],
+          [
+            129.32583529319811,
+            36.014013114891775
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c06ef81a-4b6c-4e20-bd31-eab9530a1cee",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "4a4c1c33-2b14-4135-9293-8e9f04982ae1",
+        "role" : "edge",
+        "to" : "0a9863b0-45c5-4ed1-8fa5-d56b2c377cf6"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32586811106344,
+            36.014025394938876
+          ],
+          [
+            129.32589033242039,
+            36.014034573445855
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c081693b-8ba2-414e-af69-9fc74f58e706",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2299fefe-a49b-4046-81fb-e4adcac31e64",
+        "role" : "edge",
+        "to" : "385343a1-b347-49cc-9c4a-31c5fcf111e9"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32589575566647,
+            36.014180731799648
+          ],
+          [
+            129.32592553709117,
+            36.014190663328513
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c26830c4-c5ce-4db0-a4a8-e85ec75f43cc",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5d52d149-705f-408c-92a7-5d2511259676",
+        "role" : "edge",
+        "to" : "6e0bc653-6c7c-4b4e-9268-eaed18f7d7fd"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32564201911978,
+            36.014332723902093
+          ],
+          [
+            129.32565500047693,
+            36.014345671943133
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c26a1080-f018-4f4f-9e1e-fbc1f94861a6",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "f33482c7-db67-4bfd-bf75-5e25b8a3e240",
+        "role" : "edge",
+        "to" : "ae00f6fa-9906-4477-aec1-db5d2e68a7ba"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588816135208,
+            36.014211864416978
+          ],
+          [
+            129.32594027894575,
+            36.014135822373859
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c2a0cc19-03cd-4bf4-989a-1edccd93e9a3",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "f1888d27-9cd5-4310-9111-b9db96e89eda",
+        "role" : "edge",
+        "to" : "4f0fe64d-a377-4e85-9327-8ba74e60c7b5"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590683499745,
+            36.014080286239505
+          ],
+          [
+            129.32590795394228,
+            36.014089981331018
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c3049e00-eed4-428e-befb-2a8bfc234996",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "0cfa4a93-b7f8-496f-8df4-d3dc7bbe7e83",
+        "role" : "edge",
+        "to" : "1a7a88d7-1a76-4b4e-a7c8-1d29e13b4963"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32569623597649,
+            36.014153421324934
+          ],
+          [
+            129.32574822148112,
+            36.014167420490566
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c6c5ff79-de1d-4718-be87-7208eae0a9d5",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "bb3a9aa6-1d67-4728-bde4-894d4f0ee358",
+        "role" : "edge",
+        "to" : "bd28c8b2-fdc6-475c-8dcb-c22776ce4986"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32572954561428,
+            36.014240851922736
+          ],
+          [
+            129.32570752064959,
+            36.014282319926423
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c9331096-3ac2-4a69-8d15-3131bc93936f",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "a5ae9814-11e7-48db-bdb0-4d5b60290ca0",
+        "role" : "edge",
+        "to" : "00460373-3fe8-4bd3-8a00-7afad009e10f"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590795394228,
+            36.014089981331018
+          ],
+          [
+            129.32590346352643,
+            36.014096932298862
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "c9579778-b7d2-4074-bb52-c1ec744c3428",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "1a7a88d7-1a76-4b4e-a7c8-1d29e13b4963",
+        "role" : "edge",
+        "to" : "310d0aae-ce5f-475b-832d-40573b680077"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32572954561428,
+            36.014240851922736
+          ],
+          [
+            129.32571317071773,
+            36.014235766090685
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "cc64d0b8-f882-4167-b0f5-a7bf0ea036c8",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "a5ae9814-11e7-48db-bdb0-4d5b60290ca0",
+        "role" : "edge",
+        "to" : "26683114-98da-4396-8f7c-ddfda5d14c2b"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32594820733371,
+            36.014085414117346
+          ],
+          [
+            129.3259628465884,
+            36.014050093131686
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "cf00d9a3-890d-4cd5-b262-c0c03548b740",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "855c9a36-6075-42b4-9d4d-9e1d9c9d96d1",
+        "role" : "edge",
+        "to" : "02a7cafc-27b2-4bf1-9dba-9e8191db1bf0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32598109317937,
+            36.014016471615712
+          ],
+          [
+            129.32598936323097,
+            36.014001206258925
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "d1e4fd24-a810-4bb3-a86c-b05a61234f77",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "61f11c61-2cec-4172-9011-a16b28f0eb32",
+        "role" : "edge",
+        "to" : "c77059db-b856-4eb4-a659-ac91ec215764"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588477106671,
+            36.014080699631862
+          ],
+          [
+            129.32595550644126,
+            36.014105133791986
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "d53dcc32-0064-4272-9d5a-15cd976cd508",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "80159bea-3fb4-4abe-b947-c4f784a5c6b8",
+        "role" : "edge",
+        "to" : "e08abf41-c434-4ef6-b0b4-57ecb4c7cfc2"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32592982931385,
+            36.013932781751713
+          ],
+          [
+            129.32597131272138,
+            36.013948332483196
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "d55aa6ef-29e4-498e-924a-c2d2992ded8c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "a3a8155b-c526-444c-b37e-0975861eac09",
+        "role" : "edge",
+        "to" : "a4a23b93-40b2-415c-a119-78e27fadca39"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32579012261664,
+            36.01420467844337
+          ],
+          [
+            129.32579951567524,
+            36.0141924315339
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "d8cd9759-ab35-418a-8f6d-d9bba1199c31",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "1a03d71a-cc9b-4743-a0bb-e0fefbcc63a7",
+        "role" : "edge",
+        "to" : "037674cd-755c-4b08-a1ec-c148cd5d73d0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588430022179,
+            36.014304086717722
+          ],
+          [
+            129.3258853340744,
+            36.014272866504797
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "da008860-96b0-4022-aa9d-8577cb50c6e0",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "1edf81d2-0de5-4ec8-9532-313320977e0f",
+        "role" : "edge",
+        "to" : "927cc5f5-d020-4231-9909-e49f986eae10"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32593188530382,
+            36.014105255672561
+          ],
+          [
+            129.32594820733371,
+            36.014085414117346
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "ddf43a29-ba5d-45ad-a1dc-48e88a1505a5",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "57428f49-10b3-48dd-a88c-086dfd9b4baf",
+        "role" : "edge",
+        "to" : "855c9a36-6075-42b4-9d4d-9e1d9c9d96d1"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32586949424226,
+            36.014230218002822
+          ],
+          [
+            129.32589575566647,
+            36.014180731799648
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "de3921c3-31a7-433a-b7d1-43ac415d0f7f",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "bf47db85-19c7-4815-8213-7586bf8da1e0",
+        "role" : "edge",
+        "to" : "5d52d149-705f-408c-92a7-5d2511259676"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32585580821421,
+            36.013975498832146
+          ],
+          [
+            129.32584819704567,
+            36.013993120807854
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "e027efdc-d0f0-4b0f-9e4a-ad36f88b5ef3",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "af0d96dc-5dfb-457d-b5df-a661c170a34c",
+        "role" : "edge",
+        "to" : "eab47b27-4121-4114-815b-2a284e2073a7"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32565500047693,
+            36.014345671943133
+          ],
+          [
+            129.3256723918804,
+            36.01435020910273
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "e0a881dc-8a41-4d20-97f1-d5452157810d",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "ae00f6fa-9906-4477-aec1-db5d2e68a7ba",
+        "role" : "edge",
+        "to" : "5be743e5-cb27-4cd3-a256-0c91a7b3d6bb"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584139066213,
+            36.014075827966572
+          ],
+          [
+            129.32581162574365,
+            36.014066312245163
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "e36fa4a7-3271-464f-94c8-d3f283d91e35",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "d233e877-469a-4024-a2e3-1ad4e3c72dab",
+        "role" : "edge",
+        "to" : "b2fc014a-b1e9-4558-9fbe-907c9b362d52"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32582268298424,
+            36.01403582291352
+          ],
+          [
+            129.32581135562313,
+            36.014065068926378
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "e37fb80f-3e8e-4d12-9bd0-744ac6e4a30c",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "2823cc06-f867-424e-89db-6dc447f33296",
+        "role" : "edge",
+        "to" : "df75b3a8-f3a2-422f-8df0-e0d1a2a601d6"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32571450571587,
+            36.014269537065452
+          ],
+          [
+            129.32581877298864,
+            36.014303082702163
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "e57a67e5-146f-44f6-b3c9-ab091a222878",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "04530af8-675a-4f62-b8d6-e4e6eb0b3603",
+        "role" : "edge",
+        "to" : "f3d9a6de-87f1-4f9b-8beb-2593c6ade8c0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32585466266048,
+            36.014246870779722
+          ],
+          [
+            129.3257965564612,
+            36.014230109075314
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "e7719094-f5c1-401b-9b47-13d07e7c3a31",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "11943f82-c774-40cc-b741-9f4195c3a4ba",
+        "role" : "edge",
+        "to" : "0cdb364a-f6cb-4001-a7d4-850b85ae39e5"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32579196793094,
+            36.014099113404512
+          ],
+          [
+            129.32575197795202,
+            36.014192000162126
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "e95894de-2558-463f-bc03-f2a9c98031d1",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "3efc66d9-be5d-4f4e-ae1c-349ab2e8a9b2",
+        "role" : "edge",
+        "to" : "1ab99a9c-c55a-4d28-9775-756de9813d93"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584642354132,
+            36.014256471318269
+          ],
+          [
+            129.32585993386564,
+            36.014227720163383
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "eb912f9a-dee1-4ef7-b719-4b7214e7f6df",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "bc833f44-5af7-40df-ac6f-3d3f83733a79",
+        "role" : "edge",
+        "to" : "5b1c20c4-51dc-41ab-96a9-0ffe716f97a3"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578324606794,
+            36.014062655011166
+          ],
+          [
+            129.32577900732824,
+            36.014074106675587
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "ec2234d7-b6ac-4f95-b788-dbeb24905562",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "060fddbb-90fd-42dd-a9f7-775bca781fc0",
+        "role" : "edge",
+        "to" : "c23c437b-182a-4496-a4e6-dcb53d710fae"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32584642354132,
+            36.014256471318269
+          ],
+          [
+            129.3258853340744,
+            36.014272866504797
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "ec5e1935-5e25-427a-8edc-fd353f87fb7f",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "bc833f44-5af7-40df-ac6f-3d3f83733a79",
+        "role" : "edge",
+        "to" : "927cc5f5-d020-4231-9909-e49f986eae10"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3258279234573,
+            36.014173075942622
+          ],
+          [
+            129.32579951567524,
+            36.0141924315339
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "f27635d6-1dca-4d90-9dd3-7f55a4a24c98",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "fab956d9-9e2f-4970-8eb4-964f7bc885f8",
+        "role" : "edge",
+        "to" : "037674cd-755c-4b08-a1ec-c148cd5d73d0"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590360334868,
+            36.014160541906499
+          ],
+          [
+            129.32591998817514,
+            36.014132855766363
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "f2cccca6-8260-4aae-b19d-cd5b0ec509a8",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "292a58f4-6b71-470c-b888-b04d10c98bac",
+        "role" : "edge",
+        "to" : "53c5a050-c212-4f29-829b-4e31352d5c27"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32575700101947,
+            36.01422475805483
+          ],
+          [
+            129.32577705516576,
+            36.014238561333158
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "f4ab1a2e-deab-40e1-8732-ac9c85a36da7",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "bffcac09-cf79-452b-b5ad-8e72b769a4de",
+        "role" : "edge",
+        "to" : "bb7dbe26-be25-45cd-a09e-9890637b7614"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3257965564612,
+            36.014230109075314
+          ],
+          [
+            129.3257696830905,
+            36.014218832629282
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "f548b8d9-0344-4e10-86e4-98908434b0c4",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "0cdb364a-f6cb-4001-a7d4-850b85ae39e5",
+        "role" : "edge",
+        "to" : "5dd13c0c-04ee-4bb5-948e-fffea41fa6ea"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32588864486539,
+            36.014120571823163
+          ],
+          [
+            129.32588398178333,
+            36.014117324965099
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "f65565dd-8c40-4ddf-bcb7-2ef7aa95a3a8",
+      "properties" : {
+        "accessible" : false,
+        "category" : "stairs",
+        "direction" : "undirected",
+        "from" : "a998e0eb-7ade-4802-a3b1-12fee805b22a",
+        "role" : "edge",
+        "to" : "3aa15627-2b3c-41c7-a991-71dfc6806354"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32578980801659,
+            36.014099311398361
+          ],
+          [
+            129.32581135562313,
+            36.014065068926378
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "f72528f2-f11f-472a-affa-0042ffc9d5ac",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "01e2b756-57e6-40cd-b39d-b76770f96580",
+        "role" : "edge",
+        "to" : "df75b3a8-f3a2-422f-8df0-e0d1a2a601d6"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.3259193421388,
+            36.014131470379461
+          ],
+          [
+            129.32593188530382,
+            36.014105255672561
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "f81b6cfc-2480-4f2e-a3e6-45b1f63ef497",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "5d360fec-106d-42c7-9881-e723bd0e5c17",
+        "role" : "edge",
+        "to" : "57428f49-10b3-48dd-a88c-086dfd9b4baf"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32590621690784,
+            36.014124664134798
+          ],
+          [
+            129.32586474846875,
+            36.014113705666674
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "fab06a3f-6f48-40cc-a352-bb3d396a2529",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "b024aed1-e6d9-4141-b772-c6c4956acf0e",
+        "role" : "edge",
+        "to" : "c7c39da8-6bbc-4d60-ada1-6b815c97c309"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32579155261459,
+            36.014205468306656
+          ],
+          [
+            129.3258241417096,
+            36.014216030638714
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "fb98594d-03a8-4b7d-8457-fd1aca8f0b46",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "f1d40736-81ee-49ed-aaa6-bc63a29562fe",
+        "role" : "edge",
+        "to" : "00b7c0a5-7230-4e41-b3b9-62889be48405"
+      },
+      "type" : "Feature"
+    },
+    {
+      "geometry" : {
+        "coordinates" : [
+          [
+            129.32568744901081,
+            36.014316507408253
+          ],
+          [
+            129.32570752064959,
+            36.014282319926423
+          ]
+        ],
+        "type" : "LineString"
+      },
+      "id" : "fb9f0ade-7f6e-453b-a82f-ffa3a1f7ac50",
+      "properties" : {
+        "accessible" : true,
+        "category" : "walkway",
+        "direction" : "undirected",
+        "from" : "7b0be79a-b54c-41f4-a388-be55977d3f34",
+        "role" : "edge",
+        "to" : "00460373-3fe8-4bd3-8a00-7afad009e10f"
+      },
+      "type" : "Feature"
+    }
+  ],
+  "layout_version" : "2025-11-14T14:35:25.142Z",
+  "routing_config" : {
+    "hard_search_radius_meters" : 25
+  },
+  "schema_version" : 1,
+  "type" : "FeatureCollection"
+}

@@ -1,0 +1,186 @@
+import ComposableArchitecture
+import Foundation
+
+nonisolated struct BookLocationCacheClient: Sendable {
+    var load: @Sendable (_ keys: Set<[String?]>) -> [[String?]: [BookHolding]]
+    var record: @Sendable (_ book: Book, _ holdings: [BookHolding]) -> Void
+    var updates: @Sendable () -> AsyncStream<Void>
+    var prepare: @Sendable () async -> Void = {}
+    var recordBatch: (@Sendable ([(Book, [BookHolding])]) -> Void)? = nil
+    var loadRecent: @Sendable (_ keys: Set<[String?]>) -> [[String?]: [BookHolding]] = { _ in [:] }
+
+    static func userDefaults(suiteName: String? = nil) -> Self {
+        let store = LocalBookLocationStore(suiteName: suiteName)
+        let bundled = BundledBookLocationLoader()
+        return Self(load: { store.load($0) }, record: { store.record($0, holdings: $1) }, updates: { store.updates() }, prepare: {
+            guard let entries = try? await bundled.load(), !Task.isCancelled else { return }
+            store.seed(entries)
+        }, recordBatch: { store.recordBatch($0) }, loadRecent: { store.loadRecent($0) })
+    }
+
+    func recordSearchResponse(_ data: Data, books: [Book]) {
+        guard let decoded = try? PrimoHoldingsMapper.decodeAll(data) else { return }
+        let entries = books.compactMap { book -> (Book, [BookHolding])? in
+            guard let id = BookHoldingsClient.recordID(for: book), let holdings = decoded[id] else { return nil }
+            return (book, holdings)
+        }
+        guard !entries.isEmpty else { return }
+        if let recordBatch {
+            recordBatch(entries)
+        } else {
+            for (book, holdings) in entries { record(book, holdings) }
+        }
+    }
+}
+
+extension BookLocationCacheClient: DependencyKey {
+    static let liveValue = Self.userDefaults()
+    static let testValue = Self(load: { _ in [:] }, record: { _, _ in }, updates: {
+        AsyncStream { $0.yield(()); $0.finish() }
+    })
+}
+
+nonisolated extension DependencyValues {
+    nonisolated var bookLocationCacheClient: BookLocationCacheClient {
+        get { self[BookLocationCacheClient.self] }
+        set { self[BookLocationCacheClient.self] = newValue }
+    }
+}
+
+private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
+    private struct Entry: Codable, Equatable {
+        let key: [String?]
+        let isbn: String?
+        let holdings: [BookHolding]
+    }
+
+    private static let storageKey = "bookLocationSnapshots.v1"
+    private let lock = NSLock()
+    private let defaults: UserDefaults
+    private var entries: [[String?]: Entry] = [:]
+    private var recentObservations: [[String?]: Date] = [:]
+    private var observers: [UUID: AsyncStream<Void>.Continuation] = [:]
+    private var hasSeededBundle = false
+
+    init(suiteName: String?) {
+        defaults = suiteName.flatMap(UserDefaults.init(suiteName:)) ?? .standard
+        if let data = defaults.data(forKey: Self.storageKey),
+           let saved = try? JSONDecoder().decode([Entry].self, from: data) {
+            for entry in saved { entries[entry.key] = entry }
+        }
+    }
+
+    func load(_ keys: Set<[String?]>) -> [[String?]: [BookHolding]] {
+        lock.withLock {
+            var result: [[String?]: [BookHolding]] = [:]
+            for key in keys {
+                if let exact = entries[Self.normalized(key)] {
+                    result[key] = exact.holdings
+                } else if key.count > 1, key[0] == "metadata", let isbn = BookISBN.isbn13(from: key[1]) {
+                    let matches = entries.values.filter { $0.isbn == isbn }
+                    if !matches.isEmpty {
+                        var seen = Set<String>()
+                        result[key] = matches.flatMap(\.holdings).filter { seen.insert($0.id).inserted }
+                    }
+                }
+            }
+            return result
+        }
+    }
+
+    func loadRecent(_ keys: Set<[String?]>) -> [[String?]: [BookHolding]] {
+        let cutoff = Date().addingTimeInterval(-60)
+        return lock.withLock {
+            var result: [[String?]: [BookHolding]] = [:]
+            for key in keys {
+                let normalizedKey = Self.normalized(key)
+                guard let observedAt = recentObservations[normalizedKey], observedAt > cutoff else { continue }
+                result[key] = entries[normalizedKey]?.holdings
+            }
+            return result
+        }
+    }
+
+    func record(_ book: Book, holdings: [BookHolding]) {
+        recordBatch([(book, holdings)])
+    }
+
+    func recordBatch(_ books: [(Book, [BookHolding])]) {
+        let updates = books.map { book, holdings in
+            Entry(key: Self.normalized(book.recordKey), isbn: BookISBN.isbn13(from: book.isbn), holdings: holdings)
+        }
+        let listeners = lock.withLock { () -> [AsyncStream<Void>.Continuation] in
+            let now = Date()
+            let cutoff = now.addingTimeInterval(-60)
+            recentObservations = recentObservations.filter { $0.value > cutoff }
+            for entry in updates {
+                recentObservations[entry.key] = now
+            }
+
+            var changed = false
+            for entry in updates where entries[entry.key] != entry {
+                entries[entry.key] = entry
+                changed = true
+            }
+            guard changed else { return [] }
+            if let data = try? JSONEncoder().encode(Array(entries.values)) { defaults.set(data, forKey: Self.storageKey) }
+            return Array(observers.values)
+        }
+        for listener in listeners { listener.yield(()) }
+    }
+
+    func seed(_ books: [(Book, [BookHolding])]) {
+        let listeners = lock.withLock { () -> [AsyncStream<Void>.Continuation] in
+            guard !hasSeededBundle else { return [] }
+            hasSeededBundle = true
+            var changed = false
+            for (book, holdings) in books {
+                let key = Self.normalized(book.recordKey)
+                guard entries[key] == nil else { continue }
+                entries[key] = Entry(key: key, isbn: BookISBN.isbn13(from: book.isbn), holdings: holdings)
+                changed = true
+            }
+            guard changed else { return [] }
+            if let data = try? JSONEncoder().encode(Array(entries.values)) { defaults.set(data, forKey: Self.storageKey) }
+            return Array(observers.values)
+        }
+        for listener in listeners { listener.yield(()) }
+    }
+
+    func updates() -> AsyncStream<Void> {
+        AsyncStream(bufferingPolicy: .bufferingNewest(1)) { continuation in
+            let id = UUID()
+            lock.withLock { observers[id] = continuation }
+            continuation.onTermination = { [weak self] _ in
+                guard let self else { return }
+                _ = self.lock.withLock { self.observers.removeValue(forKey: id) }
+            }
+            continuation.yield(())
+        }
+    }
+
+    private static func normalized(_ key: [String?]) -> [String?] {
+        guard key.count == 2, key[0] == "control", let value = key[1] else { return key }
+        return ["control", value.hasPrefix("primo:") ? String(value.dropFirst(6)) : value]
+    }
+}
+
+private actor BundledBookLocationLoader {
+    private nonisolated struct Dataset: Decodable {
+        let books: [Entry]
+        nonisolated struct Entry: Decodable {
+            let book: RecommendationDatasetDTO.BookDTO
+            let holdings: [BookHolding]?
+        }
+    }
+    private var cached: [(Book, [BookHolding])]?
+
+    func load() throws -> [(Book, [BookHolding])] {
+        if let cached { return cached }
+        guard let url = Bundle.main.url(forResource: "RecommendationDataset", withExtension: "json") else { return [] }
+        let data = try JSONDecoder().decode(Dataset.self, from: Data(contentsOf: url))
+        let result = data.books.compactMap { entry in entry.holdings.map { (entry.book.book, $0) } }
+        cached = result
+        return result
+    }
+}

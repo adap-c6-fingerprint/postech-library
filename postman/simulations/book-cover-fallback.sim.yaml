@@ -1,0 +1,10 @@
+simulation: book-cover-fallback
+routing: path
+mocks:
+  - name: book-cover-providers
+    routeKey: covers
+    origin:
+      - apis.yes24.com
+      - image.yes24.com
+      - local.4libs.org
+    path: postman/mocks/book-cover-providers/config.yaml

@@ -11,8 +11,19 @@ xcuserdata/
 DerivedData/
 build/
 .build/
+__pycache__/
+*.pyc
+
+# Local API keys
+Secrets.xcconfig
+
+# Firebase client configuration is supplied locally for each checkout.
+GoogleService-Info.plist
 
 # Private career notes
 .career-log/
+
+# C5 development data is tracked at the project owner's request.
+# Preserve its bundled Apple sample-data license; see Docs/IndoorMapData.md.
 
 # Keep project files, shared schemes, and Package.resolved tracked.

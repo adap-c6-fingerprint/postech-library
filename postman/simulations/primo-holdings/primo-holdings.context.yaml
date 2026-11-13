@@ -1,0 +1,34 @@
+purpose:
+  stands_in_for: POSTECH Primo 소장 조회 API
+  unblocks: 공통 HTTP 전송과 도서관 API 계층을 사용하는 소장 서비스의 응답 변환과 재시도를 키 없이 검증한다.
+assumptions:
+  - id: shared-http-holdings-regression
+    status: supported
+    claim: 구성한 로컬 HTTP 사례에서 공통 전송으로 전환한 소장 서비스가 기존 응답 변환과 오류·재시도 정책을 유지한다.
+    reason: 실제 Swift 서비스·공통 전송·mapper를 실행하고 시뮬레이션의 요청 횟수와 반환 결과를 대조했다.
+    verification: 2026-10-30 Swift 6 검증 프로그램이 소장처 3개·불완전 문서·대상 자료번호 일치·빈 결과·401 1회·잘못된 JSON 1회·503 3회·429 2회 회복을 통과했다. library 멤버 요청 이벤트 12건을 확인했다.
+    source: Scripts/verify-primo-holdings.swift; fingerprint-library/Clients/Network/HTTPClient.swift; fingerprint-library/Clients/Book/Client/PrimoAPIClient.swift; postman/mocks/primo-holdings/default.js
+    updated_at: '2026-10-30'
+  - id: live-proxy-and-catalog-coverage
+    status: unknown
+    claim: 현재 배포된 기관 프록시와 전체 도서관 카탈로그가 구성한 시뮬레이션 응답과 같은 동작을 한다.
+    reason: 이번 검증은 기존 모의 서버와 과거 축소 서지 샘플만 사용했다.
+    verification: 실제 프록시의 인증·배포 상태와 현재 실서버 응답은 호출하지 않았다. 과거 출처와 검증 범위는 기존 context.md에 보존했다.
+    source: postman/simulations/primo-holdings/primo-holdings.context.md; postman/contracts/primo-holdings.openapi.json
+    updated_at: '2026-10-30'
+  - id: search-holdings-omission-preserves-snapshot
+    status: supported
+    claim: 준비한 검색 응답 사례에서 소장 필드가 누락되거나 delivery가 빈 객체이면 로컬 위치를 유지하고, holding 또는 availlibrary에 빈 목록이 명시되면 기존 위치를 제거한다.
+    reason: 변경 범위가 응답 해석과 로컬 저장이어서 실제 mapper와 캐시에 JSON 사례를 전달하는 검사를 사용했다. HTTP 전송과 실서버의 응답 정책을 검증했다는 의미는 아니다.
+    verification: 2026-11-02 수정 전 Swift 6 재현 프로그램에서 필드 누락이 빈 위치 갱신으로 해석됨을 확인했고 수정 후 갱신 대상에서 제외됨을 확인했다. 캐시·지도 23개 및 기존 소장 파서 7개 검사가 통과했다. 누락·빈 객체·null의 기존 위치 보존과 명시적 빈 목록의 제거·복원을 확인했다. Postman 서버와 실서버는 이번에 호출하지 않았으며 실제 서버의 필드 생략 조건과 빈도는 여전히 확인되지 않았다.
+    source: fingerprint-library/Clients/Book/Client/PrimoHoldingsMapper.swift; IndoorMapTests/BookLocationCacheClientTests.swift; BookDetailTests/PrimoHoldingsMapperTests.swift
+    updated_at: '2026-11-02'
+fingerprints:
+  - id: shared-http-20261030
+    date: '2026-10-30'
+    commit: aae6f8d831a943877c1f7cbd0cfee530a57b0778 기반 refactor/books-dependency-centralization의 커밋 전 작업 트리
+    cli: Postman CLI 1.73.0; Swift 6
+  - id: pr261-review-fixtures-20261102
+    date: '2026-11-02'
+    commit: 3e2760cd5923b82fb8c51ab63bd6c30f40eb3f0b 기반 feat/#229-home-map-annotations의 CodeRabbit 수정 작업 트리
+    cli: Swift 6; Xcode 시뮬레이터 검사; 이번 검증에서 Postman CLI와 서버는 실행하지 않음

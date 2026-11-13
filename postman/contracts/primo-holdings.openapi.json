@@ -1,0 +1,347 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "POSTECH Primo Holdings Read",
+    "version": "1.0.0",
+    "description": "Subset observed from Primo Search 2026-10-28; exact record ID must be checked by the caller."
+  },
+  "servers": [
+    {
+      "url": "https://api-ap.hosted.exlibrisgroup.com"
+    }
+  ],
+  "paths": {
+    "/primo/v1/search": {
+      "get": {
+        "parameters": [
+          {
+            "name": "vid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tab",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skipDelivery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search response; delivery is top-level on observed POSTECH records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "docs"
+                  ],
+                  "properties": {
+                    "docs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "pnx"
+                        ],
+                        "properties": {
+                          "pnx": {
+                            "type": "object"
+                          },
+                          "delivery": {
+                            "type": "object",
+                            "nullable": true
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "docs": [
+                    {
+                      "pnx": {
+                        "control": {
+                          "sourcerecordid": [
+                            "991000958759703286"
+                          ],
+                          "recordid": [
+                            "alma991000958759703286"
+                          ],
+                          "sourceid": "alma",
+                          "originalsourceid": [
+                            "b14710973-82postech_inst"
+                          ],
+                          "sourcesystem": [
+                            "ILS"
+                          ],
+                          "sourceformat": [
+                            "KORMARC"
+                          ],
+                          "score": [
+                            "1.1581758"
+                          ],
+                          "isDedup": false
+                        },
+                        "display": {
+                          "title": [
+                            "사피엔스 "
+                          ]
+                        }
+                      },
+                      "delivery": {
+                        "holding": [
+                          {
+                            "organization": "82POSTECH_INST",
+                            "libraryCode": "MAIN",
+                            "subLocation": "단행본3층",
+                            "subLocationCode": "c3b",
+                            "callNumber": "CB113.H4 .H3713 2015",
+                            "holdId": "2294156640003286",
+                            "availabilityStatus": "available"
+                          },
+                          {
+                            "organization": "82POSTECH_INST",
+                            "libraryCode": "MAIN",
+                            "subLocation": "스마트도서관",
+                            "subLocationCode": "smart",
+                            "callNumber": "CB113.H4 .H3713 2015",
+                            "holdId": "22107952900003286",
+                            "availabilityStatus": "available"
+                          },
+                          {
+                            "organization": "82POSTECH_INST",
+                            "libraryCode": "MAIN",
+                            "subLocation": "삼각서가A2-3: 권장도서100선 (2층)",
+                            "subLocationCode": "rec100",
+                            "callNumber": "CB113.H4 .H3713 2015",
+                            "holdId": "22269461870003286",
+                            "availabilityStatus": "unavailable"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "pnx": {
+                        "control": {
+                          "sourcerecordid": [
+                            "991003794556703286"
+                          ],
+                          "recordid": [
+                            "alma991003794556703286"
+                          ],
+                          "sourceid": "alma",
+                          "originalsourceid": [
+                            "000017015615"
+                          ],
+                          "sourcesystem": [
+                            "KERIS (KORMARC & MARC21)"
+                          ],
+                          "sourceformat": [
+                            "KORMARC"
+                          ],
+                          "score": [
+                            "0.5291599"
+                          ],
+                          "isDedup": false
+                        },
+                        "display": {
+                          "title": [
+                            "AI 사피엔스 = 전혀 다른 세상의 인류 "
+                          ]
+                        }
+                      },
+                      "delivery": {
+                        "holding": [
+                          {
+                            "organization": "82POSTECH_INST",
+                            "libraryCode": "MAIN",
+                            "subLocation": "단행본3층",
+                            "subLocationCode": "c3b",
+                            "callNumber": "HM851 .최73 2024",
+                            "holdId": "22289661570003286",
+                            "availabilityStatus": "available"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "pnx": {
+                        "control": {
+                          "sourcerecordid": [
+                            "991003550478203286"
+                          ],
+                          "recordid": [
+                            "alma991003550478203286"
+                          ],
+                          "sourceid": "alma",
+                          "originalsourceid": [
+                            "000015468777"
+                          ],
+                          "sourcesystem": [
+                            "KERIS (KORMARC & MARC21)"
+                          ],
+                          "sourceformat": [
+                            "KORMARC"
+                          ],
+                          "score": [
+                            "0.49805602"
+                          ],
+                          "isDedup": false
+                        },
+                        "display": {
+                          "title": [
+                            "왜 호모 사피엔스만 살아남았을까? "
+                          ]
+                        }
+                      },
+                      "delivery": {
+                        "holding": [
+                          {
+                            "organization": "82POSTECH_INST",
+                            "libraryCode": "MAIN",
+                            "subLocation": "단행본3층",
+                            "subLocationCode": "c3b",
+                            "callNumber": "GN470 .이92 2020",
+                            "holdId": "22226262430003286",
+                            "availabilityStatus": "available"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "pnx": {
+                        "control": {
+                          "sourcerecordid": [
+                            "991003565079503286"
+                          ],
+                          "recordid": [
+                            "alma991003565079503286"
+                          ],
+                          "sourceid": "alma",
+                          "originalsourceid": [
+                            "000050672253"
+                          ],
+                          "sourcesystem": [
+                            "KERIS (KORMARC & MARC21)"
+                          ],
+                          "sourceformat": [
+                            "KORMARC"
+                          ],
+                          "score": [
+                            "0.3840352"
+                          ],
+                          "isDedup": false
+                        },
+                        "display": {
+                          "title": [
+                            "코로나 사피엔스 : 문명의 대전환, 대한민국 대표 석학 6인이 신인류의 미래를 말한다 "
+                          ]
+                        }
+                      },
+                      "delivery": {
+                        "holding": [
+                          {
+                            "organization": "82POSTECH_INST",
+                            "libraryCode": "MAIN",
+                            "subLocation": "단행본3층",
+                            "subLocationCode": "c3b",
+                            "callNumber": "HB3730 .코295 2020",
+                            "holdId": "22230482870003286",
+                            "availabilityStatus": "available"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "pnx": {
+                        "control": {
+                          "sourcerecordid": [
+                            "991003347372803286"
+                          ],
+                          "recordid": [
+                            "alma991003347372803286"
+                          ],
+                          "sourceid": "alma",
+                          "originalsourceid": [
+                            "000015047181"
+                          ],
+                          "sourcesystem": [
+                            "KERIS (KORMARC & MARC21)"
+                          ],
+                          "sourceformat": [
+                            "KORMARC"
+                          ],
+                          "score": [
+                            "0.3683647"
+                          ],
+                          "isDedup": false
+                        },
+                        "display": {
+                          "title": [
+                            "먹고 마시는 것들의 자연사 : 맛, 요리, 음식, 사피엔스, 그리고 진화 "
+                          ]
+                        }
+                      },
+                      "delivery": {
+                        "holding": [
+                          {
+                            "organization": "82POSTECH_INST",
+                            "libraryCode": "MAIN",
+                            "subLocation": "단행본3층",
+                            "subLocationCode": "c3b",
+                            "callNumber": "GT2855 .S58 2019",
+                            "holdId": "22156020940003286",
+                            "availabilityStatus": "available"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credential"
+          },
+          "429": {
+            "description": "Rate limited"
+          },
+          "503": {
+            "description": "Service unavailable"
+          }
+        }
+      }
+    }
+  }
+}

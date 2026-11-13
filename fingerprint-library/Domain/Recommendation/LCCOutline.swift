@@ -1,0 +1,42 @@
+//
+//  LCCOutline.swift
+//  fingerprint-library
+//
+
+import Foundation
+
+nonisolated enum LCCOutline {
+    static let subclasses: [String: [String]] = [
+        "A": ["A", "AC", "AE", "AG", "AI", "AM", "AN", "AP", "AS", "AY", "AZ"],
+        "B": ["B", "BC", "BD", "BF", "BH", "BJ", "BL", "BM", "BP", "BQ", "BR", "BS", "BT", "BV", "BX"],
+        "C": ["C", "CB", "CC", "CD", "CE", "CJ", "CN", "CR", "CS", "CT"],
+        "D": ["D", "DA", "DAW", "DB", "DC", "DD", "DE", "DF", "DG", "DH", "DJ", "DJK", "DK", "DL",
+              "DP", "DQ", "DR", "DS", "DT", "DU", "DX"],
+        "E": ["E"],
+        "F": ["F"],
+        "G": ["G", "GA", "GB", "GC", "GE", "GF", "GN", "GR", "GT", "GV"],
+        "H": ["H", "HA", "HB", "HC", "HD", "HE", "HF", "HG", "HJ", "HM", "HN", "HQ", "HS", "HT", "HV", "HX"],
+        "J": ["J", "JA", "JC", "JF", "JJ", "JK", "JL", "JN", "JQ", "JS", "JV", "JX", "JZ"],
+        "K": ["K", "KB", "KD", "KE", "KF", "KG", "KH", "KJ", "KK", "KL", "KM", "KN", "KP", "KQ",
+              "KR", "KS", "KT", "KU", "KV", "KW", "KZ"],
+        "L": ["L", "LA", "LB", "LC", "LD", "LE", "LF", "LG", "LH", "LJ", "LT"],
+        "M": ["M", "ML", "MT"],
+        "N": ["N", "NA", "NB", "NC", "ND", "NE", "NK", "NX"],
+        "P": ["P", "PA", "PB", "PC", "PD", "PE", "PF", "PG", "PH", "PJ", "PK", "PL", "PM", "PN",
+              "PQ", "PR", "PS", "PT", "PZ"],
+        "Q": ["Q", "QA", "QB", "QC", "QD", "QE", "QH", "QK", "QL", "QM", "QP", "QR"],
+        "R": ["R", "RA", "RB", "RC", "RD", "RE", "RF", "RG", "RJ", "RK", "RL", "RM", "RS", "RT", "RV", "RX", "RZ"],
+        "S": ["S", "SB", "SD", "SF", "SH", "SK"],
+        "T": ["T", "TA", "TC", "TD", "TE", "TF", "TG", "TH", "TJ", "TK", "TL", "TN", "TP", "TR", "TS", "TT", "TX"],
+        "U": ["U", "UA", "UB", "UC", "UD", "UE", "UF", "UG", "UH"],
+        "V": ["V", "VA", "VB", "VC", "VD", "VE", "VF", "VG", "VK", "VM"],
+        "Z": ["Z", "ZA"]
+    ]
+
+    static func expand(_ code: String) -> [String] {
+        if code.count == 1 {
+            return subclasses[code] ?? [code]
+        }
+        return [code]
+    }
+}

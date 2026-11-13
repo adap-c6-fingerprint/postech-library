@@ -1,0 +1,21 @@
+{
+  "features" : [
+    {
+      "feature_type" : "address",
+      "geometry" : null,
+      "id" : "0c6923f2-312d-46b5-a021-39d68506a27c",
+      "properties" : {
+        "address" : "경북 포함시 남구 청암로 77",
+        "country" : "KR",
+        "locality" : "포항시",
+        "postal_code" : "37673",
+        "postal_code_ext" : null,
+        "postal_code_vanity" : null,
+        "province" : "KR-47",
+        "unit" : null
+      },
+      "type" : "Feature"
+    }
+  ],
+  "type" : "FeatureCollection"
+}

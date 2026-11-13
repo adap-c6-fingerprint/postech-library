@@ -1,0 +1,25 @@
+{
+  "dataset_id": "c5",
+  "source_project": "2026-C6-M06-Fingerprint",
+  "source_commit": "ec34f3412694f9afd2bd710302369a4d92cf1201",
+  "source_directory": "Fingerprint/App/Domain/IMDF/C5/IMDFData",
+  "source_worktree_changes": [
+    "Fingerprint/App/Domain/IMDF/C5/IMDFData/LICENSE/LICENSE.txt",
+    "Fingerprint/App/Domain/IMDF/C5/IMDFData/amenity.geojson"
+  ],
+  "files_sha256": {
+    "LICENSE/LICENSE.txt": "27c075c909cecf69cbc953cdb63b8e20616bc9d7645c537af8f57599d9e4c6fa",
+    "address.geojson": "8a8394d4f35178d8c0d57f28b2e9cb78a5d293296084a10e737531358f64120e",
+    "amenity.geojson": "0702d724829242cf85b59554fc552115dbbd5037f3fdd64d39adb4f567810256",
+    "anchor.geojson": "95b5b249187e75eacbcd1711a2e22a5b656a49cabf7c3c68f63bc697f13611bb",
+    "building.geojson": "88bbd1dc116a3c2f733294e19059a16f5439fcfa98128e1017510f5d8f4e6b6b",
+    "fixture.geojson": "6b54989edbad6c95c762a0b110f2cd05544a5bd2b13f2c27b9052348757a0fe5",
+    "footprint.geojson": "82d854fae714b831b3eaab54857f26f869f3cc2d4b03b02aa816e3923bb64c0f",
+    "level.geojson": "80f4bd467da33d9f57c549fabac6b3d33a5717c1374b9c95ebb8dfa823178e8c",
+    "manifest.json": "580264964c921e7d836ed03720f0916f76843773794218f83c2b9f54cc189c9c",
+    "occupant.geojson": "14dfd3a628ed5e7795e5cd5807265f8278616e23efc320293f494566b14c10cf",
+    "opening.geojson": "b8b1de705ad2b75c8b99ac25efb24a0a8b3c9eaed13435c6146cf2fa01237a8d",
+    "unit.geojson": "8071f4bbcbc29566a3f5f9fc72645a9ad27761370b12804b09434581db4f0049",
+    "venue.geojson": "592f631f0a59c3c020bac5363fea21ea131d7d87d1d01cadb4ade658eae7eb0f"
+  }
+}

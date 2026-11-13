@@ -1,0 +1,2416 @@
+{
+  "features" : [
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3246675,
+          36.012800799999994
+        ],
+        "type" : "Point"
+      },
+      "id" : "b2f0804a-a286-478b-b2d5-e634cca9a30c",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "097591dd-64ce-494f-a776-da6a3723075e",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "2087dae2-42f8-4faf-903d-b3bb8f6be562"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32545290000002,
+          36.013120899999997
+        ],
+        "type" : "Point"
+      },
+      "id" : "af03d477-0474-4589-a21e-0f3faec1558f",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "097591dd-64ce-494f-a776-da6a3723075e",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "38283cd1-0707-48e1-8b06-8453c61c2804"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32544240000001,
+          36.012867099999994
+        ],
+        "type" : "Point"
+      },
+      "id" : "a80da190-dc44-49ec-aa28-18a02f31e43a",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs (Up)",
+          "ko" : "계단 (위)"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "097591dd-64ce-494f-a776-da6a3723075e",
+        "name" : {
+          "en" : "Stairs (Up)",
+          "ko" : "계단 (위)"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "2a83a2ef-e4ef-4541-af1a-3cb966ecb817"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32466890000001,
+          36.012804900000006
+        ],
+        "type" : "Point"
+      },
+      "id" : "795dd109-a745-4b61-8dfb-8eefa998d3b7",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "3a63e036-9fea-47fd-945c-40afc2e13d7d"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32540839999999,
+          36.013138500000004
+        ],
+        "type" : "Point"
+      },
+      "id" : "f3cc9953-ffd5-4d0e-944d-f9302a2ebbae",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "category" : "restroom.female",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "ffb82b63-60a3-4389-9298-2af6334d5435"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32536240000002,
+          36.013120200000003
+        ],
+        "type" : "Point"
+      },
+      "id" : "26193326-ed40-4741-a102-395f7f9b9496",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.male",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "032fbb3a-c9d2-4ebe-ac80-bef251598f99"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3253287,
+          36.013042400000003
+        ],
+        "type" : "Point"
+      },
+      "id" : "d601be61-a3bb-4cc7-b167-3bfc84d281da",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "category" : "drinkingfountain",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "c5040ae8-203e-4e9b-aae4-5630a1ddbb51"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32494279999997,
+          36.012567499999996
+        ],
+        "type" : "Point"
+      },
+      "id" : "d6092030-4bc8-4fcc-bafc-c0ba6043b62e",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.male",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "af99edcd-d476-4f1d-b342-bb60f28edbc1"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32490469999999,
+          36.012539000000004
+        ],
+        "type" : "Point"
+      },
+      "id" : "12da3c12-97e3-4f95-abfd-7eb19db9dd3f",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "category" : "restroom.female",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "4e6f5860-6768-445a-89a2-6ea075b2b505"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32540779999999,
+          36.013110200000014
+        ],
+        "type" : "Point"
+      },
+      "id" : "88f22c85-db6f-475e-b7cf-eb964147147e",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Accessible restroom",
+          "ko" : "장애인 화장실"
+        },
+        "category" : "restroom.unisex.wheelchair",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Accessible restroom",
+          "ko" : "장애인 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "417bf9d2-af97-41ec-983a-99183e9b5f5c"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32545050000002,
+          36.013128999999999
+        ],
+        "type" : "Point"
+      },
+      "id" : "80635792-df26-4ab3-9b15-0e67f0dfae55",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "963b2b6f-f39f-46aa-8cba-a66fe3dc12c1"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32503019999999,
+          36.012522199999999
+        ],
+        "type" : "Point"
+      },
+      "id" : "36eeeed8-e5f4-45e5-bfbb-e90e23573117",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "e1aad42c-0bea-4e02-b32b-2aaa3d0d66db"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32540190000003,
+          36.012852999999993
+        ],
+        "type" : "Point"
+      },
+      "id" : "1d4d3c1f-2ae5-4665-8962-5f4abd8c69fd",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs (Down)",
+          "ko" : "계단 (아래)"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Stairs (Down)",
+          "ko" : "계단 (아래)"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a7ed03b2-de65-48aa-bbba-6863760cd45f"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32513160000002,
+          36.012864
+        ],
+        "type" : "Point"
+      },
+      "id" : "3e37b6dd-956f-4a85-807c-d01edb16e2f7",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs (Up)",
+          "ko" : "계단 (위)"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Stairs (Up)",
+          "ko" : "계단 (위)"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "17f13c6f-b397-48e4-bb2d-1a20e5667bed"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32504460000001,
+          36.012809399999995
+        ],
+        "type" : "Point"
+      },
+      "id" : "b871af58-49f8-42d4-9f69-520e032c3353",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "category" : "elevator",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "63950bbe-5080-4e55-a2da-dc47f44f9301"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32506190000001,
+          36.012780100000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "fe36e4cc-71e1-41e1-b6d6-774afacd7e57",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "category" : "elevator",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a10323cf-778f-4b3a-844f-ac429f4d2b0c"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32503439999999,
+          36.012620799999993
+        ],
+        "type" : "Point"
+      },
+      "id" : "345ba93f-350c-4929-a067-1e5f636f12f2",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Mother's Room",
+          "ko" : "수유실"
+        },
+        "category" : "mothersroom",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Mother's Room",
+          "ko" : "수유실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "6e37409b-4c14-4515-95cc-d3c712eb4242"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32533170000002,
+          36.012877600000003
+        ],
+        "type" : "Point"
+      },
+      "id" : "7641f96a-81a3-43a1-b74b-6d9b1afb5f3a",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Library Security Desk",
+          "ko" : "출입구 데스크"
+        },
+        "category" : "information",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Library Security Desk",
+          "ko" : "출입구 데스크"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "0b962eec-243e-4172-b65e-8da4605b2668"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32533900000001,
+          36.012956700000004
+        ],
+        "type" : "Point"
+      },
+      "id" : "37af2932-b52c-4606-9204-de6a3e651934",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Reading Room",
+          "ko" : "자유열람석"
+        },
+        "category" : "seating",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Reading Room",
+          "ko" : "자유열람석"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "0b962eec-243e-4172-b65e-8da4605b2668"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32511840000001,
+          36.012628200000002
+        ],
+        "type" : "Point"
+      },
+      "id" : "2deb0c35-7fad-4da2-bf3b-8a952de25348",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Circulation Desk",
+          "ko" : "대출 데스크"
+        },
+        "category" : "reception.desk",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Circulation Desk",
+          "ko" : "대출 데스크"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "0b962eec-243e-4172-b65e-8da4605b2668"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32507480000001,
+          36.012997000000006
+        ],
+        "type" : "Point"
+      },
+      "id" : "94f06649-2b7f-4c99-b826-ed0529d87cd4",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Welcome Center",
+          "ko" : "Welcome Center"
+        },
+        "category" : "businesscenter",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Welcome Center",
+          "ko" : "Welcome Center"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "0b962eec-243e-4172-b65e-8da4605b2668"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32494982754429,
+          36.012660919009868
+        ],
+        "type" : "Point"
+      },
+      "id" : "34293493-548c-4aed-8775-5492b58fa2ac",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : null,
+        "category" : "seating",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "ffb65b79-c78a-48fb-9d71-9a8ed7c0bfac",
+        "name" : {
+          "en" : "Reading Room",
+          "ko" : "자유열람석"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "0b962eec-243e-4172-b65e-8da4605b2668"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3253632,
+          36.013120000000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "721b199f-c639-45bc-ad64-ac70a8f5e1c7",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.male",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "44c5e7ac-9660-47c2-9c5c-f35965ca949f"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32541290000003,
+          36.013138900000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "e5f23c7e-6aa3-4003-a48d-b8d5ef9d7f44",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "category" : "restroom.female",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "e336b294-4648-4558-a499-9a4d2adbf6f1"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32532329999998,
+          36.013044399999998
+        ],
+        "type" : "Point"
+      },
+      "id" : "610a574f-55f0-4fc4-92b8-65a92729b150",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "category" : "drinkingfountain",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "ce3c3f45-f01d-4411-8a62-cd2a5dbe4ed9"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32497910000001,
+          36.012550200000007
+        ],
+        "type" : "Point"
+      },
+      "id" : "1aee0c04-5636-4dfd-8bb4-86545e37a957",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "category" : "drinkingfountain",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "8f488d2a-98d5-4d89-8eba-c0ab3ae9130c"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3249429,
+          36.012567000000004
+        ],
+        "type" : "Point"
+      },
+      "id" : "632983dd-a587-4068-9dde-19888bbc1ea8",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.male",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "85484f42-234d-4f60-a582-28f3591b6f38"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32490469999999,
+          36.012537700000003
+        ],
+        "type" : "Point"
+      },
+      "id" : "3e6eb667-fc0c-484a-aa2e-ab795bc211ac",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "category" : "restroom.female",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "ecd8e174-ee2e-431e-813e-1becc145122e"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32540699999998,
+          36.013110599999997
+        ],
+        "type" : "Point"
+      },
+      "id" : "7201d90b-58da-4a0a-bcaf-cb61c3b373bd",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Accessible restroom",
+          "ko" : "장애인 화장실"
+        },
+        "category" : "restroom.unisex.wheelchair",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Accessible restroom",
+          "ko" : "장애인 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "077158f9-ac15-4a3a-9dc6-5a93f4e65978"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32502629999999,
+          36.012523399999999
+        ],
+        "type" : "Point"
+      },
+      "id" : "54084177-886e-4e34-9d8e-847c24853e05",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "2347aa20-e3a4-4e7c-ac4b-3c0e3c5f8d2c"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32466730000002,
+          36.012801799999998
+        ],
+        "type" : "Point"
+      },
+      "id" : "4b0d0849-771b-4ea8-a2b3-39426abfc146",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "5302e6d4-12a5-4336-97a4-2c012583d4fd"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3254531,
+          36.013124499999996
+        ],
+        "type" : "Point"
+      },
+      "id" : "01c6864f-9c3b-44f9-8424-bfc49659dda8",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "7ea44790-6568-4b0c-b135-f84cad8fcb37"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3250434,
+          36.012809099999998
+        ],
+        "type" : "Point"
+      },
+      "id" : "25fc6c7b-2eae-477b-a316-ba55a68b6ae4",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "category" : "elevator",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "1ecdcb5e-b07a-4de0-8b14-f1dd124b59c4"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32506129999996,
+          36.012778900000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "c5a8a87f-61e3-45a3-a34d-8a3834939d5c",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "category" : "elevator",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "2618c0ea-0ffb-4196-8d1e-e1d8925bc7cd"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32528450000001,
+          36.012755100000007
+        ],
+        "type" : "Point"
+      },
+      "id" : "4375d0f8-d3b6-4e0f-b4c1-aaba83b4c8c4",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs (Up)",
+          "ko" : "계단 (위)"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Stairs (Up)",
+          "ko" : "계단 (위)"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "71d012f0-4b08-4735-9ee3-aa66e6c91608"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32522760000001,
+          36.0128445
+        ],
+        "type" : "Point"
+      },
+      "id" : "14de9660-70f9-4bd5-8c3b-fd62fb68f21a",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs (Down)",
+          "ko" : "계단 (아래)"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Stairs (Down)",
+          "ko" : "계단 (아래)"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "8cae3667-da52-4e99-a060-deace23198b7"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32539800000001,
+          36.012853700000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "c249424c-3321-403f-865b-cc3be0524ee1",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Plora",
+          "ko" : "Plora"
+        },
+        "category" : "seating",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "2a287490-7514-4f42-bad5-e6619ec45b79",
+        "name" : {
+          "en" : "Plora",
+          "ko" : "Plora"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "72f8a821-0694-4bcf-b6e9-aae7558d5659"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32532309999999,
+          36.013044999999998
+        ],
+        "type" : "Point"
+      },
+      "id" : "1698df06-3cb0-4567-8439-1f4815ed4757",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "category" : "drinkingfountain",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "d16a1087-f52e-4e25-bd47-4743e32d833c"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32498029999999,
+          36.012550499999996
+        ],
+        "type" : "Point"
+      },
+      "id" : "1b63b7d1-5d73-47f5-a3d9-10f8179e6181",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "category" : "drinkingfountain",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "44cab46a-bcae-405a-b1e1-c16fe3f04389"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32541290000003,
+          36.013139200000005
+        ],
+        "type" : "Point"
+      },
+      "id" : "650df45a-b101-4ffe-901e-dcbc16eeb5a1",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "category" : "restroom.female",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "f3b9bd76-c222-4e30-b954-4234953b0353"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32490440000004,
+          36.012538799999994
+        ],
+        "type" : "Point"
+      },
+      "id" : "3d0e46cb-4ef9-4c05-ab07-cde1245ce07f",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "category" : "restroom.female",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Women's Restroom",
+          "ko" : "여자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "8573b890-1be2-4659-97a9-fd37a4d02b4f"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3249429,
+          36.012566399999997
+        ],
+        "type" : "Point"
+      },
+      "id" : "49658f6b-5dc0-408d-9b53-9c3fc8704a91",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.male",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "e0db8f4d-6d37-414b-accf-fd45fc45ff63"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32536229999999,
+          36.013120100000002
+        ],
+        "type" : "Point"
+      },
+      "id" : "630866d6-4544-43df-9f8b-c889ccbf2acd",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.male",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Men's Restroom",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "99ee7ba3-7ae5-418b-b56a-089be804d40d"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3254053,
+          36.013110499999996
+        ],
+        "type" : "Point"
+      },
+      "id" : "388d4e49-676b-4112-8a0c-5502a52945e4",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Accessible restroom",
+          "ko" : "장애인 화장실"
+        },
+        "category" : "restroom.unisex.wheelchair",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Accessible restroom",
+          "ko" : "장애인 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "d15c83b2-5941-4ca2-b610-ff59c63184ed"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32466680000002,
+          36.012802000000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "a71c3632-76ae-448d-a2df-e9ca94d47446",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "ddb9524f-5445-4438-a3c8-ddbd7123c88b"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3254541,
+          36.013124899999994
+        ],
+        "type" : "Point"
+      },
+      "id" : "63b359af-c7f1-409c-941b-b33e7b5c05f4",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "15ea89dd-dd26-4f7c-9cd7-0999b4a97f7f"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32502890000001,
+          36.012518899999996
+        ],
+        "type" : "Point"
+      },
+      "id" : "09ab5e57-fafa-40c6-a0cd-52e1b4b1fcc7",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "603b2e99-8437-4572-8d07-25bf3c235d71"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32504349999999,
+          36.012809300000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "97d48a5c-b73d-44de-b09f-9fd032d1b101",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "category" : "elevator",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "b3bd755b-a0ad-4a76-a127-63f3d3fb7b1f"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32506230000004,
+          36.012778900000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "3c005f41-37f2-40fd-ab64-39013de6c504",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "category" : "elevator",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "757ff31f-9336-4d8e-a873-147a5133cb15"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3251491,
+          36.012647700000009
+        ],
+        "type" : "Point"
+      },
+      "id" : "0b82f903-e903-48de-8207-d073bf9b9b34",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs (Up)",
+          "ko" : "계단 (위)"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Stairs (Up)",
+          "ko" : "계단 (위)"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "b30c3db2-ba74-4199-b316-2a3ccc9176bc"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32525079999999,
+          36.012684899999996
+        ],
+        "type" : "Point"
+      },
+      "id" : "20e416aa-1ea0-4fcb-af2d-381eead57fe1",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs (Down)",
+          "ko" : "계단 (아래)"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Stairs (Down)",
+          "ko" : "계단 (아래)"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "5fd7be5d-2a68-4881-bae3-51543a4e5e08"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32526709999996,
+          36.0125539
+        ],
+        "type" : "Point"
+      },
+      "id" : "156b19c5-e68b-4c8c-8bc6-76b9edfd7184",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Plora",
+          "ko" : "Plora"
+        },
+        "category" : "seating",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "cb541244-bf35-4e93-b5aa-8a10187f9abc",
+        "name" : {
+          "en" : "Plora",
+          "ko" : "Plora"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "4d36499f-7df6-45bc-9868-571687926436"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3253287,
+          36.013044999999998
+        ],
+        "type" : "Point"
+      },
+      "id" : "3d62613a-716c-4bfa-b054-755d8438531c",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "category" : "drinkingfountain",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "d8e51c33-d86d-45b8-b72e-0d0c06eba8d4"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32498170000002,
+          36.012551200000004
+        ],
+        "type" : "Point"
+      },
+      "id" : "cdd5ee27-4ae1-4c39-acb1-cabbe9e75f99",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "category" : "drinkingfountain",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Water dispenser",
+          "ko" : "정수기"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a6e37932-d482-4807-bf2a-400352b1e3e4"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32541280000001,
+          36.013139500000008
+        ],
+        "type" : "Point"
+      },
+      "id" : "df48e96e-1fb6-4238-a5fa-b7db9c267a44",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Restroom Female",
+          "ko" : "여자 화장실"
+        },
+        "category" : "restroom.female",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Restroom Female",
+          "ko" : "여자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a75b3399-0960-4785-94ad-b80674df5366"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32536370000003,
+          36.013120200000003
+        ],
+        "type" : "Point"
+      },
+      "id" : "708b77d6-2617-4622-992e-69fc1745d3d2",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Restroom Male",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.male",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Restroom Male",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "74300372-5137-4d45-bf81-ea27b8e84068"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32494279999997,
+          36.012566899999996
+        ],
+        "type" : "Point"
+      },
+      "id" : "f6bbc67c-1087-46fb-8b2a-346e8349beb8",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Restroom Male",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.male",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Restroom Male",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "ee3403d7-9e6b-49b5-83d3-73474c0a6873"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32490519999999,
+          36.012538200000009
+        ],
+        "type" : "Point"
+      },
+      "id" : "c8248db9-f0d2-45b0-94cf-69e6b2cdb69a",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Restroom Female",
+          "ko" : "남자 화장실"
+        },
+        "category" : "restroom.female",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Restroom Female",
+          "ko" : "남자 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "e4bb8f8a-a93a-4d3a-be03-fa39b16d067f"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32540589999999,
+          36.013111399999993
+        ],
+        "type" : "Point"
+      },
+      "id" : "0e08b244-6e82-4fb7-8835-950cff378361",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Accessible restroom",
+          "ko" : "장애인 화장실"
+        },
+        "category" : "restroom.unisex.wheelchair",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Accessible restroom",
+          "ko" : "장애인 화장실"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "ef3caa2d-4c85-4d3d-a50d-d529e9955ca0"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3246662,
+          36.012802899999997
+        ],
+        "type" : "Point"
+      },
+      "id" : "2d2583a4-4a3d-4d73-bccb-facc50f8d7cd",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "ad300b6f-d84b-493a-a65e-64c6b61ead4e"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32545229999999,
+          36.013126999999997
+        ],
+        "type" : "Point"
+      },
+      "id" : "300315a3-ba2f-44c3-83ca-e791574205cf",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "19b5bb75-a7ba-4ada-8e52-12b1d7e4b480"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32502719999999,
+          36.012523800000004
+        ],
+        "type" : "Point"
+      },
+      "id" : "d9a5b092-e82d-48a8-bc69-9de1f2d82f55",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "2ae9a774-e2e6-4088-a9d0-30b7dbf6f301"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3250262,
+          36.012706599999994
+        ],
+        "type" : "Point"
+      },
+      "id" : "c0a98504-0aa6-4c2c-9416-aee390197a12",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Stairs",
+          "ko" : "계단"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a6e37932-d482-4807-bf2a-400352b1e3e4"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32504279999998,
+          36.012809200000007
+        ],
+        "type" : "Point"
+      },
+      "id" : "fd16f17f-b195-4e3d-b2ca-ba9b844f7061",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "category" : "elevator",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "3d4901c3-dddd-422c-ac10-bc229f82cc36"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32506010000003,
+          36.012779999999999
+        ],
+        "type" : "Point"
+      },
+      "id" : "70869a35-61a7-4453-9ec9-9df469f635fd",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "category" : "elevator",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Elevator",
+          "ko" : "엘리베이터"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "e5837a07-4176-4e6c-92c6-9ed05bb43c14"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3250692,
+          36.012670200000009
+        ],
+        "type" : "Point"
+      },
+      "id" : "8b677c9b-30b4-4a36-998d-ca2677670963",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Stairs (Down)",
+          "ko" : "계단 (아래)"
+        },
+        "category" : "stairs",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Stairs (Down)",
+          "ko" : "계단 (아래)"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "43aa98fa-46a4-4c64-ae54-a1e09bd67fe3"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32545929999998,
+          36.012769300000002
+        ],
+        "type" : "Point"
+      },
+      "id" : "1cc43f99-f200-4691-b12a-e21fdf52e8dd",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "PC Zone",
+          "ko" : "PC 존"
+        },
+        "category" : "businesscenter",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "PC Zone",
+          "ko" : "PC 존"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a6e37932-d482-4807-bf2a-400352b1e3e4"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3254101,
+          36.012668500000004
+        ],
+        "type" : "Point"
+      },
+      "id" : "4b7bcdf3-4f9a-44ed-be88-ab9c62672631",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Media Wall",
+          "ko" : "미디어 월"
+        },
+        "category" : "recreation",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Media Wall",
+          "ko" : "미디어 월"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a6e37932-d482-4807-bf2a-400352b1e3e4"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3253378,
+          36.012581699999998
+        ],
+        "type" : "Point"
+      },
+      "id" : "df2e794f-f2bb-4ca7-807c-17adb61d5cbe",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Collaboration Zone",
+          "ko" : "Collaboration 존"
+        },
+        "category" : "seating",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Collaboration Zone",
+          "ko" : "Collaboration 존"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a6e37932-d482-4807-bf2a-400352b1e3e4"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.32477480000003,
+          36.012830600000001
+        ],
+        "type" : "Point"
+      },
+      "id" : "a2373033-3f90-4a61-84e9-7a39a8a04012",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Lockers",
+          "ko" : "사물함"
+        },
+        "category" : "coinlocker",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Lockers",
+          "ko" : "사물함"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "f5601d27-b86e-41a7-9e73-1cc1f13226cd"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    },
+    {
+      "feature_type" : "amenity",
+      "geometry" : {
+        "coordinates" : [
+          129.3248901,
+          36.0127685
+        ],
+        "type" : "Point"
+      },
+      "id" : "cb67096b-bd67-4e98-b78b-bb50ece50c12",
+      "properties" : {
+        "accessibility" : null,
+        "address_id" : null,
+        "alt_name" : {
+          "en" : "Library Security Desk",
+          "ko" : "출입구 데스크"
+        },
+        "category" : "information",
+        "correlation_id" : null,
+        "display_point" : null,
+        "hours" : null,
+        "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
+        "name" : {
+          "en" : "Library Security Desk",
+          "ko" : "출입구 데스크"
+        },
+        "phone" : null,
+        "unit_ids" : [
+          "a6e37932-d482-4807-bf2a-400352b1e3e4"
+        ],
+        "website" : null
+      },
+      "type" : "Feature"
+    }
+  ],
+  "type" : "FeatureCollection"
+}

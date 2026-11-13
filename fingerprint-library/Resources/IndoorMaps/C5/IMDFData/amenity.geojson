@@ -1,0 +1,1116 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "5f00264a-ba80-4beb-86b3-d723427865ab",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "stairs",
+        "accessibility": null,
+        "name": {
+          "en": "5F Stairs",
+          "ko": "5층 계단"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "6dfd5562-fd29-43fd-9cee-c1fec9523f43"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258803,
+          36.0141191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "47e9c5a1-7b0f-4d2e-9c8d-3a5f8e6c7d12",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "stairsNotNow",
+        "accessibility": null,
+        "name": {
+          "en": "Stairs 2",
+          "ko": "계단 2"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "92c7dcbc-4a32-41b7-90d9-78ba7bbd52a0"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258803,
+          36.0141191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "d1f8a7e3-4c9b-4f0e-8d6a-5b3c2e1f4a79",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "accessibility": null,
+        "name": {
+          "en": "Stairs 3",
+          "ko": "계단 3"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "77ba3384-b507-492e-b49d-b02f274bc76a"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258803,
+          36.0141191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "2b4d6c8f-e1a3-4b7d-9f5c-8e3a2f0d1b47",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "accessibility": null,
+        "name": {
+          "en": "Stairs 4",
+          "ko": "계단 4"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "2fab30e4-89dc-48e5-a20c-876b8a808762"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258803,
+          36.0141191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "c9a0b3f5-6d2e-4e8c-a7b1-9f5d3e4c0a68",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "accessibility": null,
+        "name": {
+          "en": "Stairs 5",
+          "ko": "계단 5"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "493409a2-2d1c-44f9-a915-bc37bfda93d8"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258803,
+          36.0141191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "9f5b1d8c-4a7e-4f3d-8e2b-1c5a0d3f4e9a",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "stairs",
+        "accessibility": null,
+        "name": {
+          "en": "6F Stairs",
+          "ko": "6층 계단"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258803,
+          36.0141191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "b94fb497-db45-49b2-a223-ae7105febf04",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "restroom.unisex.wheelchair",
+        "accessibility": null,
+        "name": {
+          "en": "Restroom(wheelchair)",
+          "ko": "5층 장애인 화장실"
+
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "fd5734b6-8d4e-4387-9eed-d604c4d0be9e"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258717,
+          36.0140043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "7f1c0f4a-a8df-4610-9e7d-52a6983f6361",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "restroom.unisex.wheelchair",
+        "accessibility": null,
+        "name": {
+          "en": "Restroom(wheelchair)",
+          "ko": "6층 장애인 화장실"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "cbc93991-423f-4e6e-872c-5d44c04cc658"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3259043,
+          36.0140333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5f4a1f2d-dde8-4f4b-9d9a-1c51cc0c3f8d",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "restroom",
+        "accessibility": null,
+        "name": {
+          "en": "Restroom",
+          "ko": "6층 화장실"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "a89e1ea4-85f1-4522-bb37-de1cf8ee7777"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+            129.3258764,
+          36.01406045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "a046159f-1199-4459-b47b-c408cd100f2b",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "restroom",
+        "accessibility": null,
+        "name": {
+          "en": "Restroom",
+          "ko": "5층 화장실"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "33af737f-830a-4350-a657-b273c4141893"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+            129.32587505,
+            36.0140617
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "8fbccde3-67a0-43cc-a8c5-62ee0db31bef",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "phone",
+        "accessibility": null,
+        "name": {
+          "en": "PhoneBooth6",
+          "ko": "폰부스6"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "dda79c22-b0fd-46a9-a0fb-fe3479075725"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3259568,
+          36.0141084
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "7a17736c-71a8-47c6-befd-0fc55451ee53",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "phone",
+        "accessibility": null,
+        "name": {
+          "en": "PhoneBooth"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "f2189cef-eeb0-4327-a4b8-dd7573c19e19"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3259777,
+          36.0141168
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ac056606-771b-4668-9b13-4cc295e722e5",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "phone",
+        "accessibility": null,
+        "name": {
+          "en": "PhoneBooth3",
+          "ko": "폰부스3"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "9b6be91e-033e-4186-8f07-617ded085fc6"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325763,
+          36.014065
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "343c747a-2bf0-4897-9fbf-ff088f15f004",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "phone",
+        "accessibility": null,
+        "name": {
+          "en": "PhoneBooth2",
+          "ko": "폰부스2"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "e8336a35-795e-4393-bcc2-025e833c7e63"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325782,
+          36.014069
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "483044c1-a903-47c8-a355-ec9f7fef8009",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "phone",
+        "accessibility": null,
+        "name": {
+          "en": "PhoneBooth4",
+          "ko": "폰부스4"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "df0d8fa5-96ee-421c-89ff-468306a09ba3"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325668,
+          36.014241
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "0a3d66ab-c836-40ba-ae9a-c0b252022d3e",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "phone",
+        "accessibility": null,
+        "name": {
+          "en": "PhoneBooth1"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "d58385c3-8779-45ae-abd8-883a47581392"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325874,
+          36.014318
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "c703488a-40be-4df4-91d6-441f233f361a",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "level_id": "c8a71e5c-9907-4247-aa34-b653d4eff8d9",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.3258277,
+            36.0141412
+          ]
+        },
+        "name": {
+          "en": "1F Elevator",
+          "ko": "1층 엘리베이터"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "b84073b4-b68f-4bc5-a25b-6a5cc8f7cd65"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258401,
+          36.0141454
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "e8b1d15d-898d-47e7-887e-b710006026f6",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "level_id": "3bf68384-6c73-4b9a-a396-cf4be4081a16",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.3258277,
+            36.0141412
+          ]
+        },
+        "name": {
+          "en": "Elevator - Level 2",
+          "ko": "엘리베이터 - Level 2"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "adbeb80c-2cb9-4742-a5d6-59bfd2e004ee"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258277,
+          36.0141412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "581a32a9-1c8e-4cb8-8d6e-c2d334e13554",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "level_id": "3bf68384-6c73-4b9a-a396-cf4be4081a16",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.3258525,
+            36.0141496
+          ]
+        },
+        "name": {
+          "en": "Elevator 2 - Level 2",
+          "ko": "엘리베이터 2 - Level 2"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "63c2b841-61c4-4093-b036-b7b5e3180f1d"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258525,
+          36.0141496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6389049a-2227-47fd-974b-f8f4ef77cd73",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "level_id": "858b3048-0671-4922-8d1b-5238dd98044d",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.3258277,
+            36.0141412
+          ]
+        },
+        "name": {
+          "en": "Elevator - Level 3",
+          "ko": "엘리베이터 - Level 3"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0e66efc8-dc26-4b36-b57b-6ff63d85271c"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258277,
+          36.0141412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "4e922626-a7de-4ae0-8133-31273e89c1d1",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "level_id": "858b3048-0671-4922-8d1b-5238dd98044d",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.3258525,
+            36.0141496
+          ]
+        },
+        "name": {
+          "en": "Elevator 2 - Level 3",
+          "ko": "엘리베이터 2 - Level 3"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "de5c42e0-0080-4b16-af33-43f591e3e875"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258525,
+          36.0141496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "8c5832c2-9b82-462c-9618-2ad76440de88",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "level_id": "a9b7f6ca-56fa-44d2-9b54-85d152b3d892",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.3258277,
+            36.0141412
+          ]
+        },
+        "name": {
+          "en": "Elevator - Level 4",
+          "ko": "엘리베이터 - Level 4"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "19e40c4c-5651-4dc6-9c33-803f87db4f82"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258277,
+          36.0141412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "846253b1-c873-4a27-9f88-2fe58ec4d7aa",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevatorNotNow",
+        "level_id": "a9b7f6ca-56fa-44d2-9b54-85d152b3d892",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.3258525,
+            36.0141496
+          ]
+        },
+        "name": {
+          "en": "Elevator 2 - Level 4",
+          "ko": "엘리베이터 2 - Level 4"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "e1b2adcb-6e25-4c63-9019-f70b4d804f37"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258525,
+          36.0141496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ae97413e-cec6-4c8b-a8f2-67e3c6e61d32",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevator",
+        "level_id": "87f7a8b3-0ccc-4a1e-86e4-1d9602dcb96f",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.3258401,
+            36.0141454
+          ]
+        },
+        "name": {
+          "en": "6F Elevator",
+          "ko": "6층 엘리베이터"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "4ed3e92d-6295-4893-9b59-a567f4bdcc97"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3258401,
+          36.0141454
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6c5d268b-3e85-44d6-bbe6-9e98df7dc167",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "elevator",
+        "level_id": "90005828-dce9-49ff-be8c-d392a8254e77",
+        "display_point": {
+          "type": "Point",
+          "coordinates": [
+            129.32584,
+            36.0141455
+          ]
+        },
+        "name": {
+          "en": "5F Elevator",
+          "ko": "5층 엘리베이터"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "15488817-ec8e-434c-9988-92517c35d9ea"
+        ],
+        "address_id": null,
+        "correlation_id": null,
+        "accessibility": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.32584,
+          36.0141455
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5f4a1f2d-dde8-4f4b-9d9a-1c51cc0c3f82",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "diningarea",
+        "accessibility": null,
+        "name": {
+          "en": "DiningArea",
+          "ko": "취식공간1"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325706,36.014282
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5f4a1f2d-dde8-4f4b-9d9a-1c51cc0c3f83",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "coatroom",
+        "accessibility": null,
+        "name": {
+          "en": "Coatroom",
+          "ko": "코트룸"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325750,36.014176
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5f4a1f2d-dde8-4f4b-9d9a-1c51cc0c3f84",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "registrationdesk",
+        "accessibility": null,
+        "name": {
+          "en": "RegistrationDesk",
+          "ko": "등록데스크1"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325857,36.014186
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5f4a1f2d-dde8-4f4b-9d9a-1c51cc0c3f85",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "registrationdesk",
+        "accessibility": null,
+        "name": {
+          "en": "RegistrationDesk",
+          "ko": "등록데스크2"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325794,36.014164
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5f4a1f2d-dde8-4f4b-9d9a-1c51cc0c3f86",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "diningarea",
+        "accessibility": null,
+        "name": {
+          "en": "DiningArea",
+          "ko": "취식공간2"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325914,36.014217
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "5f4a1f2d-dde8-4f4b-9d9a-1c51cc0c3f87",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "diningarea",
+        "accessibility": null,
+        "name": {
+          "en": "DiningArea",
+          "ko": "취식공간3"
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325941,36.014033
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "b94fb497-db45-49b2-a223-ae7105febf01",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "breakarea",
+        "accessibility": null,
+        "name": {
+          "en": "Break Area 1",
+          "ko": "휴식공간1"
+
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "6dfd5562-fd29-43fd-9cee-c1fec9523f43"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.3257640,
+          36.014237
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "b94fb497-db45-49b2-a223-ae7105febf05",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "photobooth",
+        "accessibility": null,
+        "name": {
+          "en": "PhotoBooth",
+          "ko": "포토부스"
+
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "6dfd5562-fd29-43fd-9cee-c1fec9523f43"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325874,36.014192
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "b94fb497-db45-49b2-a223-ae7105febf02",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "informationdesk",
+        "accessibility": null,
+        "name": {
+          "en": "InformationDesk",
+          "ko": "안내데스크"
+
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "6dfd5562-fd29-43fd-9cee-c1fec9523f43"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325818,36.014256
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6dfd5562-fd29-43fd-9cee-c1fec9523f43",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "breakarea",
+        "accessibility": null,
+        "name": {
+          "en": "Break Area 2",
+          "ko": "휴식공간2"
+
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          129.325979,36.014088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "6dfd5562-fd29-43fd-9cee-c1fec9523f20",
+      "feature_type": "amenity",
+      "properties": {
+        "category": "auditorium",
+        "accessibility": null,
+        "name": {
+          "en": "insight session",
+          "ko": "인사이트 세션"
+
+        },
+        "alt_name": null,
+        "hours": null,
+        "phone": null,
+        "website": null,
+        "unit_ids": [
+          "0b2edfe6-0954-4d91-bf8a-a7a2b895cc32"
+        ],
+        "address_id": "dc65079c-8ec3-46cb-8895-cb844f6c7112",
+        "correlation_id": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+            129.325796,36.014309
+        ]
+      }
+    }
+
+  ]
+}
