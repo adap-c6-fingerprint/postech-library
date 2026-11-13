@@ -18,14 +18,14 @@ nonisolated struct BookDetailDestinationPresentation: Equatable, Sendable {
     }
 
     static func resolve(holdings: [BookHolding], map: IndoorMap?, labels: [IndoorShelfLabel]) -> Self? {
-        guard var holding = BookHoldingPresentation.preferred(in: holdings) else { return nil }
+        guard var holding = BookHolding.preferred(in: holdings) else { return nil }
         guard let map else {
             return Self(holding: holding, floorText: nil, shelves: [])
         }
         let resolutions = ShelfResolver().resolve(holdings, on: map, labels: labels)
         if resolutions.first(where: { $0.holding == holding })?.area == .displayShelf {
             let general = resolutions.preferredForRoute.filter { $0.area == .generalStack && !$0.shelves.isEmpty }
-            if let preferred = BookHoldingPresentation.preferred(in: general.map(\.holding)) { holding = preferred }
+            if let preferred = BookHolding.preferred(in: general.map(\.holding)) { holding = preferred }
         }
         let shelves = (resolutions.first { $0.holding == holding }?.shelves ?? []).sorted { $0.id < $1.id }
         let floor = shelves.first.flatMap { shelf in map.floors.first { $0.id == shelf.floorID } }

@@ -51,7 +51,7 @@ struct BookDetailFeature {
 
         var displayedHolding: BookHolding? {
             guard case let .loaded(holdings) = holdingsState else { return nil }
-            return BookHoldingPresentation.preferred(in: holdings)
+            return BookHolding.preferred(in: holdings)
         }
 
         var cartNotice: CartNotice?

@@ -9,7 +9,7 @@ struct BookNavigationBookHelpView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    private var holding: BookHolding? { BookHoldingPresentation.preferred(in: info.holdings) }
+    private var holding: BookHolding? { BookHolding.preferred(in: info.holdings) }
 
     var body: some View {
         VStack(spacing: 0) {

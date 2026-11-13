@@ -13,7 +13,7 @@ struct BookFavoritesFeature {
         @Shared(.favoriteBookKeys) var favoriteBookKeys
         @Shared(.favoriteBookRecords) var favoriteBookRecords
         var items: [BookFavoriteItem] { favoriteBookRecords.active(in: favoriteBookKeys) }
-        var libraryInfo: [Book.ID: BookCartFeature.LibraryInfo] = [:]
+        var libraryInfo: [Book.ID: BookLocationStatus] = [:]
         var selectedIDs: [Book.ID] = []
         var isAddedToCartAlertPresented = false
         var isCartLimitAlertPresented = false

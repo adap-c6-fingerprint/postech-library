@@ -24,7 +24,7 @@ struct BookRoutePreviewBookInfo {
            let resolution = resolutions.first(where: { $0.shelves.contains(shelf) }) {
             holding = resolution.holding
         } else if case let .loaded(items) = holdings {
-            holding = BookHoldingPresentation.preferred(in: items)
+            holding = BookHolding.preferred(in: items)
         } else {
             holding = nil
         }

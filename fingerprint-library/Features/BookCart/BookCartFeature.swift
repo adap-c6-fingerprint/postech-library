@@ -11,7 +11,7 @@ struct BookCartFeature {
     @ObservableState
     struct State: Equatable {
         @Shared(.bookCart) var items
-        var libraryInfo: [Book.ID: LibraryInfo] = [:]
+        var libraryInfo: [Book.ID: BookLocationStatus] = [:]
         var selectedIDs: [Book.ID] = []
         @Shared(.hasShownCartGuidanceLimitAlert) var hasShownGuidanceLimitAlert
         var isGuidanceLimitAlertPresented = false
@@ -30,11 +30,6 @@ struct BookCartFeature {
         var selectedBooks: [Book] {
             selectedIDs.compactMap { id in items.first { $0.id == id }?.book }
         }
-    }
-
-    struct LibraryInfo: Equatable {
-        let location: String?
-        let availability: BookCardLibraryInfo.Availability?
     }
 
     enum Action {
@@ -81,7 +76,7 @@ struct BookCartFeature {
             case let .libraryInfoLoaded(id, holdings):
                 guard let book = state.items.first(where: { $0.id == id })?.book else { return .none }
                 let info = BookCardLibraryInfo(holdings: holdings)
-                state.libraryInfo[id] = LibraryInfo(location: info.location, availability: info.availability)
+                state.libraryInfo[id] = BookLocationStatus(location: info.location, availability: info.availability)
                 bookLocationCacheClient.record(book, holdings)
                 return .none
 
@@ -148,11 +143,11 @@ struct BookCartFeature {
         for book in books {
             if let holdings = recent[book.recordKey] {
                 let info = BookCardLibraryInfo(holdings: holdings)
-                state.libraryInfo[book.id] = LibraryInfo(location: info.location, availability: info.availability)
+                state.libraryInfo[book.id] = BookLocationStatus(location: info.location, availability: info.availability)
             } else {
                 if let holdings = cached[book.recordKey] {
                     let location = BookCardLibraryInfo(holdings: holdings).location
-                    state.libraryInfo[book.id] = LibraryInfo(location: location, availability: nil)
+                    state.libraryInfo[book.id] = BookLocationStatus(location: location, availability: nil)
                 }
                 if let recordID = BookHoldingsClient.recordID(for: book) {
                     requests.append((book.id, recordID))
