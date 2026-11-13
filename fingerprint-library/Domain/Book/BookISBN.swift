@@ -1,7 +1,6 @@
 import Foundation
 
 nonisolated enum BookISBN {
-    /// 도서관 응답에 여러 ISBN이 있으면 ISBN13을 우선하고 ISBN10은 변환한다.
     static func isbn13(from value: String?) -> String? {
         guard let value else { return nil }
         let separators = CharacterSet.whitespacesAndNewlines

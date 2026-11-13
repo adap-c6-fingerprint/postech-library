@@ -5,6 +5,7 @@
 //  Created by Youngmin Cho on 10/15/26.
 //
 
+import Combine
 import ComposableArchitecture
 
 @Reducer
@@ -21,42 +22,59 @@ struct AppFeature {
         var home = HomeFeature.State()
         var bookSearch = BookSearchFeature.State()
         var indoorMap = IndoorMapFeature.State()
+        var locationSession = LocationSessionFeature.State()
+        var mapPath = StackState<Path.State>()
+        var recommendationsPath = StackState<Path.State>()
+        var searchPath = StackState<Path.State>()
+        @Presents var modal: Modal.State?
+        var guidanceOrigin: GuidanceOrigin?
         var isRouteSettingsPresented = false
         var hasStartedRecommendationSession = false
         var hasEnteredBackground = false
-        // 저장된 프로필을 확인하기 전에는 탭 화면도 온보딩도 띄우지 않는다.
         var hasCheckedProfile = false
         var onboarding: OnboardingFeature.State?
         @Shared(.userProfile) var userProfile: UserProfile?
-        // 앱 전체가 함께 쓰는 프로필 하나. nil이면 온보딩을 보여준다.
         @Shared(.hasSkippedOnboarding) var hasSkippedOnboarding: Bool
-        // 온보딩을 건너뛰었으면 프로필이 없어도 온보딩을 다시 띄우지 않는다.
     }
 
     enum Action {
         case tabSelected(Tab)
-        /// 깊은 화면에서 홈 지도 탭으로 돌아간다. 띄워 둔 상세·책바구니 화면을 함께 닫는다.
         case goHomeRequested
         case home(HomeFeature.Action)
         case bookSearch(BookSearchFeature.Action)
         case indoorMap(IndoorMapFeature.Action)
+        case locationSession(LocationSessionFeature.Action)
+        case mapPath(StackActionOf<Path>)
+        case recommendationsPath(StackActionOf<Path>)
+        case searchPath(StackActionOf<Path>)
+        case modal(PresentationAction<Modal.Action>)
         case routeSettingsPresentationChanged(Bool)
         case appStarted
+        case analyticsObservationStarted
+        case scenePhaseChanged(isActive: Bool)
         case appEnteredBackground
         case appBecameActive
         case profileCheckRequested
         case legacyProfileLoaded(UserProfile?)
-        // 새 저장소가 비어 있을 때 이전 저장소(SwiftData)에서 읽어 온 프로필
         case onboarding(OnboardingFeature.Action)
     }
 
-    @Dependency(\.bookCartClient) var bookCartClient
     @Dependency(\.legacyUserProfileClient) var legacyUserProfileClient
+    @Dependency(\.analyticsClient) var analytics
+    @Dependency(\.continuousClock) var clock
+
+    nonisolated static let analyticsCheckpointInterval: Duration = .seconds(60)
+
+    private nonisolated enum CancelID: Hashable, Sendable {
+        case analyticsCheckpoint
+        case analyticsObservation
+    }
 
     var body: some Reducer<State, Action> {
         Scope(state: \.home, action: \.home) { HomeFeature() }
         Scope(state: \.bookSearch, action: \.bookSearch) { BookSearchFeature() }
         Scope(state: \.indoorMap, action: \.indoorMap) { IndoorMapFeature() }
+        Scope(state: \.locationSession, action: \.locationSession) { LocationSessionFeature() }
         Reduce { state, action in
             switch action {
             case let .tabSelected(tab):
@@ -64,12 +82,11 @@ struct AppFeature {
                 return .none
 
             case .goHomeRequested:
-                state.home.detail = nil
-                state.home.cart = nil
-                state.home.shelfMap = nil
-                state.bookSearch.detail = nil
-                state.bookSearch.cart = nil
-                state.bookSearch.shelfMap = nil
+                state.mapPath.removeAll()
+                state.recommendationsPath.removeAll()
+                state.searchPath.removeAll()
+                state.modal = nil
+                state.guidanceOrigin = nil
                 state.isRouteSettingsPresented = false
                 state.selectedTab = .map
                 return .none
@@ -84,38 +101,64 @@ struct AppFeature {
                 state.selectedTab = .recommendations
                 return .none
 
-            case .home(.detail(.presented(.addToCartButtonTapped))),
-                 .home(.cart(.presented(.removeConfirmed))),
-                 .home(.detail(.presented(.cart(.presented(.removeConfirmed))))),
-                 .bookSearch(.detail(.presented(.addToCartButtonTapped))),
-                 .bookSearch(.cart(.presented(.removeConfirmed))),
-                 .bookSearch(.detail(.presented(.cart(.presented(.removeConfirmed))))),
-                 .bookSearch(.addToCart(_)), .bookSearch(.removeFromCart(_)),
-                 .home(.favorites(.presented(.delegate(.cartChanged)))),
-                 .home(.favorites(.presented(.cart(.presented(.removeConfirmed))))),
-                 .bookSearch(.favorites(.presented(.delegate(.cartChanged)))),
-                 .bookSearch(.favorites(.presented(.cart(.presented(.removeConfirmed))))):
-                synchronizeCart(state: &state)
-                return .none
-
-            case .bookSearch(.task):
-                synchronizeCart(state: &state)
-                synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
-                return .none
-
-            case let .home(.delegate(.favoritesChanged(keys))):
-                synchronizeFavorites(keys, state: &state)
-                return .none
-
-            case .bookSearch(.bookSelected(_)),
-                 .bookSearch(.favoriteButtonTapped(_)),
-                 .bookSearch(.detail(.presented(.delegate(.favoritesChanged(_))))),
-                 .bookSearch(.favorites(.presented(.delegate(.favoritesChanged(_))))):
-                synchronizeFavorites(state.bookSearch.favoriteBookKeys, state: &state)
+            case let .bookSearch(.delegate(delegate)):
+                guard let destination = Self.destination(for: delegate) else { return .none }
+                push(destination, onto: state.selectedTab, state: &state)
                 return .none
 
             case .bookSearch:
                 return .none
+
+            case let .home(.delegate(delegate)):
+                push(Self.destination(for: delegate), onto: .recommendations, state: &state)
+                return .none
+
+            case let .mapPath(action):
+                return handlePath(action, on: .map, state: &state)
+            case let .recommendationsPath(action):
+                return handlePath(action, on: .recommendations, state: &state)
+            case let .searchPath(action):
+                return handlePath(action, on: .search, state: &state)
+
+            case .modal(.presented(.routePreview(.delegate(.goHomeRequested)))):
+                return .send(.goHomeRequested)
+
+            case .modal(.dismiss):
+                return guidanceDismissed(state: &state)
+
+            case .modal:
+                return .none
+
+            case .analyticsObservationStarted:
+                return .run { [analytics] _ in
+                    @Shared(.userProfile) var userProfile
+                    await withTaskGroup(of: Void.self) { group in
+                        group.addTask {
+                            for await profile in $userProfile.publisher.dropFirst().values {
+                                analytics.updateProfile(profile)
+                            }
+                        }
+                        group.addTask {
+                            for await _ in analytics.consentChanges() {
+                                analytics.updateProfile(userProfile)
+                            }
+                        }
+                    }
+                }
+                .cancellable(id: CancelID.analyticsObservation, cancelInFlight: true)
+
+            case let .scenePhaseChanged(isActive):
+                let activity: Effect<Action> = .run { [analytics] _ in await analytics.setActive(isActive) }
+                guard isActive else { return .merge(activity, .cancel(id: CancelID.analyticsCheckpoint)) }
+                return .merge(
+                    activity,
+                    .run { [analytics, clock] _ in
+                        for await _ in clock.timer(interval: Self.analyticsCheckpointInterval) {
+                            analytics.checkpoint()
+                        }
+                    }
+                    .cancellable(id: CancelID.analyticsCheckpoint, cancelInFlight: true)
+                )
 
             case .appStarted:
                 guard !state.hasStartedRecommendationSession else { return .none }
@@ -143,9 +186,8 @@ struct AppFeature {
                 return isPresented
                     ? .send(.indoorMap(.routeRequested)) : .send(.indoorMap(.routeCleared))
             case .home:
-                // TODO: 홈 delegate 액션으로 책바구니·프로필을 연결한다.
                 return .none
-            case .indoorMap:
+            case .indoorMap, .locationSession:
                 return .none
 
             case .profileCheckRequested:
@@ -154,7 +196,6 @@ struct AppFeature {
                     state.hasCheckedProfile = true
                     return .none
                 }
-                // 새 저장소가 비어 있으면, 이전 버전에서 온보딩을 마친 기기일 수 있으니 이전 저장소를 한 번 확인한다.
                 return .run { [legacyUserProfileClient] send in
                     await send(.legacyProfileLoaded(await legacyUserProfileClient.load()))
                 }
@@ -162,7 +203,6 @@ struct AppFeature {
                 state.hasCheckedProfile = true
                 if let profile {
                     state.$userProfile.withLock { $0 = profile }
-                    // 이전 값을 새 저장소로 옮긴다. 이후로는 새 저장소만 쓴다.
                 } else {
                     state.onboarding = OnboardingFeature.State()
                 }
@@ -170,57 +210,19 @@ struct AppFeature {
             case .onboarding(.delegate(.completed)):
                 state.onboarding = nil
                 state.home.isFirstVisitAfterOnboarding = true
-                // ✅ 이번 실행의 첫 홈 표시는 하드데이터만으로 바로 보여준다. (Q4)
                 return .none
             case .onboarding(.delegate(.skipped)):
                 state.onboarding = nil
                 state.home.isFirstVisitAfterOnboarding = true
-                // 안내 팝업("건너뛰었어요")에서 "확인했어요"를 누른 뒤에만 여기로 온다.
                 return .none
             case .onboarding:
                 return .none
             }
         }
+        .forEach(\.mapPath, action: \.mapPath)
+        .forEach(\.recommendationsPath, action: \.recommendationsPath)
+        .forEach(\.searchPath, action: \.searchPath)
+        .ifLet(\.$modal, action: \.modal)
         .ifLet(\.onboarding, action: \.onboarding) { OnboardingFeature() }
-    }
-
-    private func synchronizeCart(state: inout State) {
-        let items = bookCartClient.load()
-        let ids = Set(items.map(\.id))
-        state.bookSearch.cartBooks = items.map(\.book)
-        if state.bookSearch.cart != nil {
-            state.bookSearch.cart?.items = items
-            state.bookSearch.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.home.cart != nil {
-            state.home.cart?.items = items
-            state.home.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.bookSearch.detail?.cart != nil {
-            state.bookSearch.detail?.cart?.items = items
-            state.bookSearch.detail?.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.bookSearch.favorites?.cart != nil {
-            state.bookSearch.favorites?.cart?.items = items
-            state.bookSearch.favorites?.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.home.favorites?.cart != nil {
-            state.home.favorites?.cart?.items = items
-            state.home.favorites?.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-        if state.home.detail?.cart != nil {
-            state.home.detail?.cart?.items = items
-            state.home.detail?.cart?.selectedIDs.removeAll { !ids.contains($0) }
-        }
-    }
-
-    private func synchronizeFavorites(_ keys: Set<[String?]>, state: inout State) {
-        state.bookSearch.favoriteBookKeys = keys
-        if let book = state.bookSearch.detail?.book {
-            state.bookSearch.detail?.isFavorite = keys.contains(book.recordKey)
-        }
-        if let book = state.home.detail?.book {
-            state.home.detail?.isFavorite = keys.contains(book.recordKey)
-        }
     }
 }

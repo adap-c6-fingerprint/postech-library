@@ -31,7 +31,6 @@ nonisolated struct APIRelayConfiguration: Sendable {
     var token: String
 }
 
-/// 도서 API 경로만 선택한다. 이미지 다운로드와 공급자별 응답 해석은 변경하지 않는다.
 nonisolated struct BookAPIClient: Sendable {
     enum Endpoint: String, Sendable {
         case primoSearch = "primo/v1/search"

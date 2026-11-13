@@ -1,6 +1,5 @@
 import Foundation
 
-/// Fingerprint의 heap·best-cost 갱신·동률 순서를 유지하고 시간 비용을 거리로 전환했다.
 nonisolated struct AStarSearcher: Sendable {
     let index: RoutingGraphIndex
 

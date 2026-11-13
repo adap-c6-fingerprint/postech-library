@@ -12,7 +12,6 @@ final class FirebaseAppDelegate: NSObject, UIApplicationDelegate {
         guard let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
               let options = FirebaseOptions(contentsOfFile: path),
               options.bundleID == Bundle.main.bundleIdentifier else {
-            // Firebase 설정 누락이 기존 도서·길안내 기능을 막지 않게 한다.
             Logger(subsystem: "com.youngmin.fingerprint-library", category: "Firebase")
                 .error("Firebase configuration is missing or does not match this app; initialization skipped.")
             return true
@@ -25,11 +24,15 @@ final class FirebaseAppDelegate: NSObject, UIApplicationDelegate {
 
 @main struct MyApp: App {
     @UIApplicationDelegateAdaptor(FirebaseAppDelegate.self) private var delegate
-    @State private var store = Store(initialState: AppFeature.State()) { AppFeature() }
+    @MainActor static let store = Store(initialState: AppFeature.State()) { AppFeature() }
 
     var body: some Scene {
         WindowGroup {
-            AppView(store: store)
+            if isTesting {
+                EmptyView()
+            } else {
+                AppView(store: Self.store)
+            }
         }
     }
 }

@@ -9,13 +9,11 @@
 import Foundation
 
 nonisolated struct RecommendationDataset: Equatable, Sendable {
-    /// 소속 하나의 3단계 경로. 이름만으로는 학부·대학원의 같은 학과가 섞이므로 세 값을 함께 쓴다.
     nonisolated struct AffiliationPath: Hashable, Sendable {
-        let parent: String // 상위 소속. 예: "POSTECH 학부"
-        let group: String  // 중위 그룹. 예: "학과 및 학부"
-        let name: String   // 최종 소속. 예: "수학과"
+        let parent: String
+        let group: String
+        let name: String
 
-        /// 저장·조회에 쓰는 키. JSON의 selectionKey와 같은 순서다.
         var key: [String] { [parent, group, name] }
 
         init(parent: String, group: String, name: String) {
@@ -30,9 +28,7 @@ nonisolated struct RecommendationDataset: Equatable, Sendable {
         }
     }
 
-    /// 화면에 보여줄 순서 그대로의 소속 경로 301개.
     let affiliationPaths: [AffiliationPath]
-    /// 화면에 보여줄 순서 그대로의 선호 분류 20개.
     let preferenceNames: [String]
 
     private let booksByRecordID: [String: Book]
@@ -47,7 +43,6 @@ nonisolated struct RecommendationDataset: Equatable, Sendable {
         booksByRecordID = books
         affiliationPaths = affiliations.map(\.path)
         preferenceNames = preferences.map(\.name)
-        // 같은 키가 두 번 나오면 뒤의 값을 버린다. 원본은 중복이 없음을 테스트로 확인한다.
         affiliationRecordIDs = Dictionary(affiliations.map { ($0.path, $0.recordIDs) }) { first, _ in first }
         preferenceRecordIDs = Dictionary(preferences.map { ($0.name, $0.recordIDs) }) { first, _ in first }
     }
@@ -60,18 +55,14 @@ nonisolated struct RecommendationDataset: Equatable, Sendable {
         booksByRecordID[recordID]
     }
 
-    /// 하드데이터에 든 모든 도서. recordID 순서로 돌려준다.
     var allBooks: [Book] {
         booksByRecordID.keys.sorted().compactMap { booksByRecordID[$0] }
     }
-    // 딕셔너리는 순서가 매번 달라질 수 있어 recordID로 정렬해 같은 순서를 지킨다.
 
-    /// 소속 목록의 도서. 표시 순서일 뿐 인기순이 아니다.
     func books(forAffiliation path: AffiliationPath) -> [Book] {
         (affiliationRecordIDs[path] ?? []).compactMap { booksByRecordID[$0] }
     }
 
-    /// 여러 선호 분류의 목록을 합치고 recordID로 중복을 뺀다. (Q3)
     func books(forPreferences names: [String]) -> [Book] {
         var seen = Set<String>()
         return names
@@ -80,7 +71,6 @@ nonisolated struct RecommendationDataset: Equatable, Sendable {
             .compactMap { booksByRecordID[$0] }
     }
 
-    /// 순서상 처음으로 분류를 찾을 수 있는 책의 관심 분야에서 후보를 가져온다.
     func books(inSamePreferencesAs anchors: [Book]) -> [Book] {
         for anchor in anchors {
             let keys = DatasetRecommendation.identityKeys(of: anchor)
@@ -102,9 +92,6 @@ nonisolated struct RecommendationDataset: Equatable, Sendable {
         preferenceRecordIDs[name] ?? []
     }
 
-    // MARK: - 온보딩 3단계 선택지
-
-    /// 상위 소속을 원본 순서대로 한 번씩.
     var parents: [String] {
         var seen = Set<String>()
         return affiliationPaths.map(\.parent).filter { seen.insert($0).inserted }

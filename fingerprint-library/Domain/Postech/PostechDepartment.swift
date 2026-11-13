@@ -10,7 +10,6 @@ import Foundation
 enum PostechDepartment: Hashable, Sendable {
     case undergraduate(Undergraduate)
     case graduate(Graduate)
-    // 학부·대학원은 같은 이름의 학과가 있어도 별개의 소속으로 구분
 
     var koreanName: String {
         switch self {
@@ -32,15 +31,12 @@ enum PostechDepartment: Hashable, Sendable {
         case .graduate: .graduate
         }
     }
-    // 학과가 속한 신분. 저장된 학과가 선택한 신분과 맞는지 검사할 때 사용
 
     static var allCases: [PostechDepartment] {
         Undergraduate.allCases.map(PostechDepartment.undergraduate)
             + Graduate.allCases.map(PostechDepartment.graduate)
     }
 }
-
-// MARK: - 학부
 
 extension PostechDepartment {
     enum Undergraduate: String, CaseIterable, Codable, Identifiable, Sendable {
@@ -118,15 +114,12 @@ extension PostechDepartment {
             case .computerScience: "Computer Science & Engineering"
             case .chemicalEngineering: "Chemical Engineering"
             case .biomedicalEngineering: "Biomedical Engineering"
-            // 예전 명칭: CiTE
             case .semiconductorEngineering: "Semiconductor Engineering"
             case .humanitiesSocialSciences: "Division of Humanities & Social Sciences"
             }
         }
     }
 }
-
-// MARK: - 대학원
 
 extension PostechDepartment {
     enum Graduate: String, CaseIterable, Codable, Identifiable, Sendable {

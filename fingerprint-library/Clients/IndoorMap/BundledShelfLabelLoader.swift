@@ -1,7 +1,5 @@
 import Foundation
 
-/// 원본 서가 인덱스를 현재 IMDF fixture의 이름·층에 정확히 연결한다.
-/// 범위 검색이나 길찾기 도착점 추정은 수행하지 않는다.
 nonisolated struct BundledShelfLabelLoader {
     static let libraryVenueID = UUID(uuidString: "a1dc84ab-1569-4c1b-a024-5a89ec75e564")!
 
@@ -17,7 +15,6 @@ nonisolated struct BundledShelfLabelLoader {
         return try decode(data, on: map)
     }
 
-    /// 빈 서가와 기타 분류를 보존하고, 부분 범위·중복·누락된 도형은 오류로 보고한다.
     func decode(_ data: Data, on map: IndoorMap) throws -> [IndoorShelfLabel] {
         try Task.checkCancellation()
         let rows: [Record]
@@ -56,10 +53,6 @@ nonisolated struct BundledShelfLabelLoader {
         } + Self.namedShelfLabels(on: map)
     }
 
-    /// 색인 파일에 없는 2층 서가를 도면 fixture 이름에서 직접 만든다.
-    ///
-    /// 이름 규칙은 "S-2F-<서가 이름>"이고 A/B 면 구분이 없다. 화면에는 접두사를 뺀 이름만 쓴다.
-    /// 청구기호 범위가 아니라 분류 이름이므로 범위 검색(``BookShelfRangeMatcher``)에는 걸리지 않는다.
     static func namedShelfLabels(on map: IndoorMap, floorOrdinal: Int = 1,
                                  prefix: String = "S-2F-") -> [IndoorShelfLabel] {
         guard let floor = map.floors.first(where: { $0.ordinal == floorOrdinal }) else { return [] }

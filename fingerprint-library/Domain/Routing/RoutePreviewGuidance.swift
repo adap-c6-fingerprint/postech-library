@@ -1,6 +1,5 @@
 import Foundation
 
-/// 계산된 경로의 표시 정보다. 최단경로·거리·통행 정책은 바꾸지 않는다.
 nonisolated struct RoutePreviewGuidance: Equatable, Sendable {
     let walkingSeconds: Double
     let groupTransitionNodes: [RouteNode]
@@ -25,7 +24,6 @@ nonisolated struct RoutePreviewGuidance: Equatable, Sendable {
             current = route.nodeIDs.first
             arrivals = Array(route.nodeIDs.dropFirst())
         } else if !route.edgeIDs.isEmpty, route.nodeIDs.count == route.edgeIDs.count {
-            // 기존 엔진은 통로 중간에 투영한 가상 출발 노드를 nodeIDs에서 제외한다.
             arrivals = route.nodeIDs
         } else {
             throw IndoorRoutingError.invalidGraph

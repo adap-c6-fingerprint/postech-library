@@ -1,0 +1,108 @@
+//
+//  RelatedBooksClient.swift
+//  fingerprint-library
+//
+//  Created by Youngmin Cho on 10/18/26.
+//
+
+import Foundation
+import ComposableArchitecture
+
+nonisolated struct RelatedBookCandidate: Equatable, Sendable {
+    let isbn13: String
+    let title: String
+    let imageURL: URL?
+}
+
+nonisolated struct RelatedBooksClient: Sendable {
+    var fetch: @Sendable (_ isbn13: String) async throws -> [RelatedBookCandidate]
+}
+
+extension RelatedBooksClient: DependencyKey {
+    static let liveValue = RelatedBooksClient(
+        fetch: { rawISBN in
+            guard let isbn13 = BookISBN.isbn13(from: rawISBN) else {
+                throw RelatedBooksClientError.invalidISBN
+            }
+
+            @Dependency(\.httpClient) var httpClient
+            let result: HTTPResponse
+            do {
+                result = try await Data4LibraryAPIClient(relay: .init(httpClient: httpClient))
+                    .fetch(.relatedBooks, isbn13: isbn13)
+            } catch is HTTPClientError {
+                throw RelatedBooksClientError.invalidResponse
+            }
+            guard result.isSuccessful else { throw RelatedBooksClientError.invalidResponse }
+
+            let decoded = try JSONDecoder().decode(
+                RelatedBooksResponse.self,
+                from: result.data
+            )
+
+            var seenISBNs = Set<String>()
+
+            return decoded.response.docs.compactMap { document -> RelatedBookCandidate? in
+                let item = document.book
+
+                guard
+                    let relatedISBN = BookISBN.isbn13(from: item.isbn13),
+                    relatedISBN != isbn13,
+                    seenISBNs.insert(relatedISBN).inserted
+                else {
+                    return nil
+                }
+
+                let imageURL = item.bookImageURL.flatMap { value -> URL? in
+                    guard
+                        let url = URL(string: value),
+                        let scheme = url.scheme?.lowercased(),
+                        ["https", "http"].contains(scheme),
+                        url.host != nil
+                    else {
+                        return nil
+                    }
+
+                    return url
+                }
+
+                return RelatedBookCandidate(isbn13: relatedISBN, title: item.bookname, imageURL: imageURL)
+            }
+        }
+    )
+
+    static let testValue = RelatedBooksClient(
+        fetch: { _ in [] }
+    )
+}
+
+private nonisolated struct RelatedBooksResponse: Decodable {
+    let response: RelatedBooksPayload
+}
+
+private nonisolated struct RelatedBooksPayload: Decodable {
+    let docs: [RelatedBookDocument]
+}
+
+private nonisolated struct RelatedBookDocument: Decodable {
+    let book: RelatedBookDTO
+}
+
+private nonisolated struct RelatedBookDTO: Decodable {
+    let bookname: String
+    let isbn13: String
+    let bookImageURL: String?
+}
+
+nonisolated enum RelatedBooksClientError: Error {
+    case invalidISBN
+    case invalidURL
+    case invalidResponse
+}
+
+nonisolated extension DependencyValues {
+    var relatedBooksClient: RelatedBooksClient {
+        get { self[RelatedBooksClient.self] }
+        set { self[RelatedBooksClient.self] = newValue }
+    }
+}

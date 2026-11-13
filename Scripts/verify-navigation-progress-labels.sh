@@ -10,8 +10,8 @@ xcrun swiftc -swift-version 6 -parse-as-library \
   fingerprint-library/Domain/Routing/RoutingGraph.swift \
   fingerprint-library/Domain/Routing/RoutingGeometry.swift \
   fingerprint-library/Domain/Routing/IndoorRoute.swift \
-  fingerprint-library/Domain/Routing/RouteGuidancePlan.swift \
-  fingerprint-library/Features/IndoorMap/Presentation/BookNavigation/BookNavigationTimeline.swift \
-  fingerprint-library/Features/IndoorMap/Presentation/BookNavigation/BookNavigationProgressLayout.swift \
+  fingerprint-library/Domain/Routing/GuidanceEngine.swift \
+  fingerprint-library/Features/BookNavigation/Presentation/BookNavigationTimeline.swift \
+  fingerprint-library/Features/BookNavigation/Presentation/BookNavigationProgressLayout.swift \
   Scripts/verify-navigation-progress-labels.swift -o "$proof_binary"
 exec "$proof_binary"

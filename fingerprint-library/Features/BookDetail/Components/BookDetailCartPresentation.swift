@@ -1,8 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
 
-// ✅ 단권 상세와 여러 권 펼친 상세가 같은 책바구니 담기 알림·한도 알림·책바구니 화면을 사용한다.
-// ✅ 기존 BookDetailView에 있던 표시 코드를 그대로 옮겼다.
 private struct BookDetailCartPresentation: ViewModifier {
     @Bindable var store: StoreOf<BookDetailFeature>
 

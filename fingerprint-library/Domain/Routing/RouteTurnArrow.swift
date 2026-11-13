@@ -1,15 +1,13 @@
 import Foundation
 
-/// 경로 좌표계에 놓는 회전 화살표. 지도 회전·확대 시에도 실제 경로 방향을 따른다.
 nonisolated struct RouteTurnArrow: Identifiable, Equatable, Sendable {
     let stepIndex: Int
     let floorID: UUID
     let maneuver: RouteManeuver
-    /// 진입 구간 → 회전 지점 → 진출 구간 → 화살촉의 순서다.
     let coordinates: [IndoorMapCoordinate]
     var id: Int { stepIndex }
 
-    static func make(from plan: RouteGuidancePlan) -> [Self] {
+    static func make(from plan: GuidanceEngine) -> [Self] {
         plan.instructions.compactMap { instruction in
             let index = instruction.stepIndex
             guard instruction.maneuver == .left || instruction.maneuver == .right,
@@ -27,7 +25,6 @@ nonisolated struct RouteTurnArrow: Identifiable, Equatable, Sendable {
             let length = hypot(x, y)
             guard length > 1e-12, abs(scale) > 1e-6 else { return nil }
             let unitX = x / length, unitY = y / length
-            // 화살촉은 지도상 약 0.8m, 축과의 벌어진 각도는 35도다.
             let size = 0.8 / 111_195.0, angle = 35.0 * .pi / 180
             func wing(_ sign: Double) -> IndoorMapCoordinate {
                 .init(latitude: tip.latitude + size * (-unitY * cos(angle) + sign * unitX * sin(angle)),
@@ -60,8 +57,7 @@ nonisolated struct RouteTurnArrow: Identifiable, Equatable, Sendable {
     }
 }
 
-extension RouteGuidancePlan {
-    /// 현재 경로 구간의 접선 방향. 기기가 바라보는 센서 heading을 뜻하지 않는다.
+extension GuidanceEngine {
     nonisolated func bearing(at progress: RouteGuidanceProgress) -> Double? {
         guard steps.indices.contains(progress.stepIndex) else { return nil }
         let step = steps[progress.stepIndex]

@@ -8,9 +8,6 @@
 import Foundation
 
 nonisolated enum UserInterest: String, CaseIterable, Codable, Identifiable, Sendable {
-// 온보딩에서 고르는 관심사 키워드.
-// 각 키워드는 LCC 대분류 알파벳에 맵핑된다. 온보딩은 이슈 #237부터 이 키워드 대신 선호 분류 이름을 저장한다.
-// 총류(A)와 서지학·도서관학(Z)은 관심사 키워드에서 제외한다.
     case philosophyPsychologyReligion
     case archaeology
     case history
@@ -58,7 +55,6 @@ nonisolated enum UserInterest: String, CaseIterable, Codable, Identifiable, Send
         case .philosophyPsychologyReligion: ["B"]
         case .archaeology: ["C"]
         case .history: ["D", "E", "F"]
-        // 세계사(D)·아메리카사(E)·아메리카 지역사(F)를 하나의 "역사"로 묶는다.
         case .geographyAnthropology: ["G"]
         case .socialSciences: ["H"]
         case .politicalScience: ["J"]
@@ -75,10 +71,8 @@ nonisolated enum UserInterest: String, CaseIterable, Codable, Identifiable, Send
         case .navalScience: ["V"]
         }
     }
-    // LCCOutline.subclasses의 키(대분류 알파벳)와 같은 값.
 
     static func lccClasses(for interests: [UserInterest]) -> [String] {
         interests.flatMap(\.lccClasses)
     }
-    // 고른 순서대로 알파벳을 이어 붙인다. 예: [.science, .history] → ["Q", "D", "E", "F"]
 }

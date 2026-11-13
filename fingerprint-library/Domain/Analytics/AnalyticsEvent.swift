@@ -5,7 +5,6 @@ nonisolated struct AnalyticsConsent: Codable, Equatable, Sendable {
     var diagnostics = true
     var hasChosen = true
     static let storageKey = "pobook.analytics.consent.v2"
-    // 동의 화면이 없어졌으므로 시작하자마자 기본으로 수집한다. 키를 v2로 올려 예전 빌드에 저장된 선택(거부 포함)은 읽지 않는다.
 
     func permitsEvents(configured: Bool, active: Bool) -> Bool {
         hasChosen && analytics && configured && active
@@ -15,7 +14,6 @@ nonisolated struct AnalyticsConsent: Codable, Equatable, Sendable {
     }
 }
 
-/// 자유 입력·좌표·층·서가 필드는 이 계약에 넣지 않는다.
 nonisolated struct AnalyticsEvent: Equatable, Sendable {
     enum Code: String, CaseIterable, Sendable {
         case screenView = "screen_view"
@@ -87,7 +85,6 @@ nonisolated enum AnalyticsScreen: String, Sendable {
     case routePreview = "route_preview", navigation, analyticsSettings = "analytics_settings"
 }
 
-/// 요청 세대와 함께 사용해 취소·늦은 응답·동의 변경을 중복 집계하지 않는다.
 nonisolated struct AnalyticsOperations {
     private var starts: [String: ContinuousClock.Instant] = [:]
 
