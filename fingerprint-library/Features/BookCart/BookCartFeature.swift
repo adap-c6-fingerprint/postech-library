@@ -24,7 +24,7 @@ struct BookCartFeature {
         var selectedCount: Int { selectedBooks.count }
 
         var canStartGuidance: Bool {
-            (1...BookCartItem.maxGuidanceCount).contains(selectedCount)
+            (1...BookCartItem.maxStoredCount).contains(selectedCount)
         }
 
         var selectedBooks: [Book] {
@@ -90,7 +90,7 @@ struct BookCartFeature {
                     state.selectedIDs.remove(at: index)
                 } else {
                     state.selectedIDs.append(id)
-                    if state.selectedCount == BookCartItem.maxGuidanceCount + 1,
+                    if state.selectedCount == BookCartItem.maxStoredCount + 1,
                        !state.hasShownGuidanceLimitAlert {
                         state.$hasShownGuidanceLimitAlert.withLock { $0 = true }
                         state.isGuidanceLimitAlertPresented = true
