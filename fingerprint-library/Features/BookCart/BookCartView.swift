@@ -55,7 +55,7 @@ struct BookCartView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
         .alert(
-            "길안내는 최대 \(BookCartItem.maxGuidanceCount)권까지 가능해요",
+            "아이고 무거워! 책이 너무 많아서 안내를 시작할 수 없어요.",
             isPresented: Binding(
                 get: { store.isGuidanceLimitAlertPresented },
                 set: { if !$0 { store.send(.guidanceLimitAlertDismissed) } }
