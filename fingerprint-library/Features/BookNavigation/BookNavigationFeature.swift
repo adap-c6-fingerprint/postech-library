@@ -107,6 +107,11 @@ struct BookNavigationFeature {
         var hasNextStop: Bool { navigation.hasNextStop }
         var effectiveFloorOrdinal: Int? {
             guard let rawPosition else { return confirmedFloorOrdinal }
+            // 사용자가 층 이동을 확인했는데 센서가 아직 출발 층을 보고하면 센서 층 반영 지연으로 보고 도착 층을 쓴다.
+            if let transition = manuallyCompletedFloorTransition, rawPosition.source == .sensor,
+               rawPosition.floorOrdinal == transition.from.level {
+                return transition.to.level
+            }
             if let reported = rawPosition.floorOrdinal,
                routePlan.map.floors.contains(where: { $0.ordinal == reported }) { return reported }
             return rawPosition.source == .sensor ? confirmedFloorOrdinal : rawPosition.floorOrdinal
@@ -342,6 +347,7 @@ struct BookNavigationFeature {
                 state.progress = nil
                 state.followsNavigationCamera = true
                 fitCurrentRoute(&state)
+                if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
                 return .none
 
             case .shelfFoundTapped:
