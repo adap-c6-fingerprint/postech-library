@@ -8,7 +8,6 @@ import ComposableArchitecture
 
 @Reducer
 struct OnboardingFeature {
-    static let maxPreferenceCount = 3
     enum Step: Int, CaseIterable, Equatable {
         case welcome
         case affiliation
@@ -55,10 +54,6 @@ struct OnboardingFeature {
         }
 
         var preferenceNames: [String] { dataset.preferenceNames }
-        
-        var isPreferenceLimitReached: Bool {
-            selectedPreferences.count >= OnboardingFeature.maxPreferenceCount }
-        
         
         var isAffiliationComplete: Bool {
             selectedAffiliation != nil
@@ -207,7 +202,7 @@ struct OnboardingFeature {
             case let .preferenceToggled(name):
                 if let index = state.selectedPreferences.firstIndex(of: name) {
                     state.selectedPreferences.remove(at: index)
-                } else if state.preferenceNames.contains(name), !state.isPreferenceLimitReached {
+                } else if state.preferenceNames.contains(name) {
                     state.selectedPreferences.append(name)
                 }
                 return .none

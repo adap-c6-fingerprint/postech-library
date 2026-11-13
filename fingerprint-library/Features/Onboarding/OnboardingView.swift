@@ -11,8 +11,15 @@ struct OnboardingView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     private static let chipTopBlurHeight: CGFloat = 30
     private static let chipBottomBlurHeight: CGFloat = 30
-    private static let chipScrollSpace = "onboardingChipScroll"
-    @State private var chipViewportHeight: CGFloat = .infinity
+    // 칩 영역 아래쪽 블러 높이
+    @State private var chipScrollFrame: CGRect = .zero
+    // ✅ 칩 영역(ScrollView)의 화면 기준 위치
+    @State private var pageBottomInWindow: CGFloat = 0
+    // ✅ 화면 맨 아래 끝(하단 안전 영역 포함)의 화면 기준 위치
+    @State private var interestsHeaderHeight: CGFloat = 0
+    // ✅ 선호 분류 화면 제목 블록(위·아래 여백 포함)의 높이
+    private static let termsHeaderTopPadding: CGFloat = 32
+    // ✅ 약관 동의 화면 제목 위 여백. 피그마 제목 위치(163)에 맞춘 값 (소속 38 ↔ 168.59 기준)
     private static let affiliationHeaderTopPadding: CGFloat = 46
     private static let interestsHeaderTopPadding: CGFloat = 30
 
@@ -92,6 +99,9 @@ struct OnboardingView: View {
             if Self.indicatorSteps.contains(step) {
                 pageIndicator(step)
                     .padding(.bottom, 30)
+                    .frame(maxWidth: .infinity)
+                    .contentShape(.rect)
+                    // ✅ 선호 분류 화면에서 페이지 점 뒤로 내려간 칩이 눌리지 않게 막는다.
             }
             let link = bottomLink(step)
             VStack(spacing: 12) {
@@ -102,7 +112,15 @@ struct OnboardingView: View {
             }
             .padding(.horizontal, 36)
             .padding(.bottom, link != nil ? 12 : (Self.indicatorSteps.contains(step) ? 3.41 : 24))
+            // ✅ 버튼 아래 밑줄 문구가 있으면 간격 12로 두고, 그만큼 아래 여백을 줄인다.
+            // 소속·선호 분류는 피그마 08.-5·08.-6 버튼 위치(784.59, 아래 끝 836.59)에 맞춰 하단 안전 영역(34) 위 3.41만 띄운다.
+            .frame(maxWidth: .infinity)
+            .contentShape(.rect)
+            // ✅ 선호 분류 화면에서 버튼 뒤로 내려간 칩이 버튼 사이 빈 곳에서 눌리지 않게 막는다.
         }
+        .onGeometryChange(for: CGFloat.self) { $0.frame(in: .global).maxY + $0.safeAreaInsets.bottom } action: { pageBottomInWindow = $0 }
+        // ✅ 화면 맨 아래 끝 위치. 선호 분류 화면 아래쪽 블러 띠의 시작점이다.
+        // ✅ 화면마다 내용 아래에 페이지 표시·버튼을 둔다(push 전환 시 화면과 함께 움직인다).
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.cartBackground)
         .contentShape(.rect)
@@ -234,31 +252,73 @@ struct OnboardingView: View {
     private var interests: some View {
         let topBlurHeight = Self.chipTopBlurHeight
         let bottomBlurHeight = Self.chipBottomBlurHeight
-        let viewportHeight = chipViewportHeight
-        let scrollSpace = Self.chipScrollSpace
+        let titleGap = max(interestsHeaderHeight - Self.interestsHeaderTopPadding, 0)
+        // 칩 영역 위쪽 경계에서 제목("어떤 책에 끌리나요?") 첫 줄 윗변까지의 거리
+        let bottomGap = max(pageBottomInWindow - chipScrollFrame.maxY, 0)
+        // 칩 영역 아래쪽 경계에서 화면 맨 아래 끝까지의 거리
         return VStack(alignment: .leading, spacing: 0) {
             header(title: "어떤 책에 끌리나요?",
-                   subtitle: "관심 있는 분야를 골라주세요\n최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요",
+                   subtitle: "관심 있는 분야를 골라주세요.",
                    topPadding: Self.interestsHeaderTopPadding)
+                // 시안 문구에 맞춰 첫 줄 마침표를 뺐다.
                 .padding(.horizontal, 16)
                 .padding(.bottom, 32 - topBlurHeight)
+                // ✅ 기존 gradient 레이어처럼 블러 띠 높이만큼 칩 영역을 위로 넓힌다(제목과 첫 줄 간격 32는 그대로).
+                .contentShape(.rect)
+                // ✅ 제목 뒤로 올라간 칩이 제목 영역에서 눌리지 않게 막는다.
+                .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { interestsHeaderHeight = $0 }
+                .zIndex(1)
+                // ✅ 칩과 블러 띠가 제목 뒤로 지나가도 제목은 항상 맨 위에 선명하게 그린다.
 
             ScrollView {
                 ChipFlowLayout(spacing: 8, lineSpacing: 12) {
                     ForEach(store.preferenceNames, id: \.self) { name in
                         chip(name)
-                            .visualEffect { content, proxy in
-                                let frame = proxy.frame(in: .named(scrollSpace))
-                                let isUnderEdge = frame.midY < topBlurHeight || frame.midY > viewportHeight - bottomBlurHeight
-                                return content.blur(radius: isUnderEdge ? 5 : 0)
-                            }
                     }
                 }
                 .padding(.horizontal, 10)
             }
             .contentMargins(.top, topBlurHeight, for: .scrollContent)
-            .coordinateSpace(.named(Self.chipScrollSpace))
-            .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { chipViewportHeight = $0 }
+            // ✅ 정지 상태에서 첫 줄은 위쪽 블러 띠 아래에 놓여 선명하다(피그마와 같음). 스크롤로 올라갈 때만 흐려진다.
+            .scrollIndicators(.hidden)
+            // ✅ 칩 영역 오른쪽에 스크롤 바(스크롤 위치 표시 막대)를 보이지 않게 한다.
+            .scrollClipDisabled()
+            // ✅ 스크롤된 칩이 칩 영역에서 잘리지 않고 제목·버튼 뒤를 지나 보인다.
+            .mask(alignment: .top) {
+                Rectangle()
+                    .frame(height: titleGap + chipScrollFrame.height + bottomGap)
+                    .offset(y: -titleGap)
+            }
+            // ✅ 위쪽 스크롤 영역은 제목 첫 줄 윗변까지만 보이게 자른다. 아래쪽은 화면 맨 아래 끝까지 그대로 보인다.
+            .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { chipScrollFrame = $0 }
+            // ✅ 칩 영역의 화면 기준 위치. 화면 끝에서 칩 영역 경계까지의 거리를 구하는 데 쓴다.
+            .overlay(alignment: .top) {
+                ZStack {
+                    OnboardingChipEdgeBlur(edge: .top)
+
+                    LinearGradient(
+                        stops: [
+                            .init(color: Color.cartBackground, location: 0),
+                            .init(color: Color.cartBackground.opacity(0), location: 1)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+                .frame(height: titleGap + topBlurHeight)
+                .offset(y: -titleGap)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+            }
+            // ✅ 위쪽은 LibraryTopBarBackground처럼 Material 블러 위에 배경색 그라데이션을 한 겹 더 얹는다.
+            // 둘 다 제목 첫 줄 윗변이 가장 진하고 칩 영역 안쪽 경계 띠(30)로 갈수록 투명해진다. 배경색이 Material의 뿌연 밝기를 눌러 준다.
+            .overlay(alignment: .bottom) {
+                OnboardingChipEdgeBlur(edge: .bottom)
+                    .frame(height: bottomGap + bottomBlurHeight)
+                    .offset(y: bottomGap)
+            }
+            // ✅ 아래쪽 블러 띠는 화면 맨 아래 끝에서 시작해(가장 진함) 칩 영역 안쪽 경계 띠(30)까지 이어지며 연해진다.
+            // 제목은 zIndex로, 페이지 점·버튼은 뒤에 그려지는 형제 뷰라서 블러 위에 선명하게 남는다.
             .scrollBounceBehavior(.basedOnSize)
         }
     }
@@ -360,7 +420,9 @@ struct OnboardingView: View {
 
     private func chip(_ name: String) -> some View {
         let isSelected = store.selectedPreferences.contains(name)
-        let isBlocked = !isSelected && store.isPreferenceLimitReached
+//        let isBlocked = !isSelected
+//        테스트 결과 preferenceLimit값이 결정되면 주석을 해제함 (밑에 modifier도~)
+//        영민이 바보
         return Button {
             store.send(.preferenceToggled(name))
         } label: {
@@ -373,10 +435,9 @@ struct OnboardingView: View {
                 .background(isSelected ? Color.cartPrimary : Color.onboardingField, in: .capsule)
         }
         .buttonStyle(.plain)
-        .opacity(isBlocked ? 0.4 : 1)
-        .disabled(isBlocked)
+//        .opacity(isBlocked ? 0.4 : 1)
+//        .disabled(isBlocked)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityHint(isBlocked ? "최대 \(OnboardingFeature.maxPreferenceCount)개까지 선택할 수 있어요" : "")
     }
 
     private static let indicatorSteps: [OnboardingFeature.Step] = [.affiliation, .interests]
@@ -435,6 +496,31 @@ struct OnboardingView: View {
     }
 }
 
+private struct OnboardingChipEdgeBlur: View {
+    let edge: VerticalEdge
+
+    var body: some View {
+        Rectangle()
+            .fill(.ultraThinMaterial)
+            .mask {
+                LinearGradient(
+                    stops: [
+                        .init(color: .white, location: 0),
+                        .init(color: .clear, location: 1)
+                    ],
+                    startPoint: edge == .top ? .top : .bottom,
+                    endPoint: edge == .top ? .bottom : .top
+                )
+            }
+            // 화면 바깥쪽 끝이 가장 진하고 칩 영역 안쪽으로 갈수록 투명해진다.
+            .allowsHitTesting(false)
+            // ✅ 블러 띠 위에서도 탭이 아래 칩에 그대로 들어간다.
+            .accessibilityHidden(true)
+    }
+}
+
+// 칩을 넓은 것부터 들어갈 수 있는 첫 줄에 채운다(First-Fit Decreasing). 원래 순서와 달라도 줄 수가 가장 적어지게 조합한다.
+// 칩 크기를 매번 측정하므로 기기·화면 크기·글꼴 크기(Dynamic Type)가 바뀌어도 같은 원칙으로 다시 배치된다.
 private struct ChipFlowLayout: Layout {
     var spacing: CGFloat
     var lineSpacing: CGFloat
