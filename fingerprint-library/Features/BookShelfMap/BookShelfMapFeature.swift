@@ -3,18 +3,12 @@ import Foundation
 
 @Reducer
 struct BookShelfMapFeature {
-    enum HoldingsState: Equatable {
-        case loading
-        case loaded([BookHolding])
-        case failed(String)
-    }
-
     @ObservableState
     struct State: Equatable {
         let books: [Book]
         var sourceFavoriteMarkerID: String?
         var map = IndoorMapFeature.State()
-        var holdings: [Book.ID: HoldingsState] = [:]
+        var holdings: [Book.ID: BookHoldingsState] = [:]
         var holdingRequestIDs: [Book.ID: Int] = [:]
         var resolutions: [Book.ID: [ShelfResolution]] = [:]
 

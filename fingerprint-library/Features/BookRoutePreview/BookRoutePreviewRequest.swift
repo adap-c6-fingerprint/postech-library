@@ -13,7 +13,7 @@ enum BookRoutePreviewRequest: Equatable {
         var stops: [RouteCandidateStop] = []
         for book in state.books {
             switch state.holdings[book.id] {
-            case nil, .loading: self = .waiting; return
+            case nil, .idle, .loading: self = .waiting; return
             case .failed(let message): self = .failed(message); return
             case .loaded(let holdings):
                 guard state.map.map != nil, !state.map.isLoading, !state.map.isLoadingShelfLabels,

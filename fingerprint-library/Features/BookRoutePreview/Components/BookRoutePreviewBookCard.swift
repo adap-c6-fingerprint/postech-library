@@ -3,7 +3,7 @@ import SwiftUI
 
 struct BookRoutePreviewBookCard: View {
     let book: Book
-    let holdings: BookShelfMapFeature.HoldingsState?
+    let holdings: BookHoldingsState?
     let resolutions: [ShelfResolution]
     let map: IndoorMap?
     let routePlan: RoutePlan?
@@ -17,7 +17,7 @@ struct BookRoutePreviewBookCard: View {
     @State private var isContentAtTop = true
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
-    init(book: Book, holdings: BookShelfMapFeature.HoldingsState?,
+    init(book: Book, holdings: BookHoldingsState?,
          resolutions: [ShelfResolution], map: IndoorMap?,
          routePlan: RoutePlan?, detailStore: StoreOf<BookDetailFeature>,
          showsFullDescription: Bool = false,
@@ -84,7 +84,7 @@ struct BookRoutePreviewBookCard: View {
         let holding = info.holding
         return VStack(alignment: .leading, spacing: 8) {
             switch holdings {
-            case nil, .loading:
+            case nil, .idle, .loading:
                 ProgressView("소장 위치 확인 중").font(.caption)
             case .failed:
                 Text("소장 위치 확인 실패").font(.caption)

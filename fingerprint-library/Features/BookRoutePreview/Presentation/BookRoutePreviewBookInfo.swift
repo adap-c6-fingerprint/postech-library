@@ -15,7 +15,7 @@ struct BookRoutePreviewBookInfo {
         route.map { "\($0.distanceText) · 층 이동 \($0.floorChangeCount)회" }
     }
 
-    init(book: Book, holdings: BookShelfMapFeature.HoldingsState?,
+    init(book: Book, holdings: BookHoldingsState?,
          resolutions: [ShelfResolution], map: IndoorMap?, routePlan: RoutePlan?) {
         let stop = routePlan?.stops.first { $0.book.id == book.id }
 

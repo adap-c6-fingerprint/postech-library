@@ -10,13 +10,6 @@ import ComposableArchitecture
 
 @Reducer
 struct BookDetailFeature {
-    enum HoldingsState: Equatable {
-        case idle
-        case loading
-        case loaded([BookHolding])
-        case failed
-    }
-
     enum DestinationRouteState: Equatable {
         case idle
         case loading
@@ -43,7 +36,7 @@ struct BookDetailFeature {
         var errorMessage: String? = nil
         var hasLoaded = false
 
-        var holdingsState: HoldingsState = .idle
+        var holdingsState: BookHoldingsState = .idle
         var mapContext: BookDetailMapContext?
         var destinationPresentation: BookDetailDestinationPresentation?
         var destinationRouteState: DestinationRouteState = .idle
@@ -144,7 +137,7 @@ struct BookDetailFeature {
                 return state.mapContext == nil ? .none : refreshDestination(state: &state)
 
             case .holdingsFailed:
-                state.holdingsState = .failed
+                state.holdingsState = .failed("소장 정보를 불러오지 못했어요.")
                 return state.mapContext == nil ? .none : refreshDestination(state: &state)
 
             case let .mapContextChanged(context):
@@ -265,7 +258,11 @@ struct BookDetailFeature {
         let requestID = state.destinationRouteRequestID
         let cancel: Effect<Action> = .cancel(id: CancelID.destinationRoute)
         guard case .loaded = state.holdingsState else {
-            state.destinationRouteState = state.holdingsState == .failed ? .unavailable : .idle
+            if case .failed = state.holdingsState {
+                state.destinationRouteState = .unavailable
+            } else {
+                state.destinationRouteState = .idle
+            }
             return cancel
         }
         guard let destination = state.destinationPresentation,
@@ -316,7 +313,7 @@ struct BookDetailFeature {
     private func loadHoldings(state: inout State) -> Effect<Action> {
         guard state.holdingsState != .loading else { return .none }
         guard let recordID = BookHoldingsClient.recordID(for: state.book) else {
-            state.holdingsState = .failed
+            state.holdingsState = .failed(BookHoldingsError.invalidRecordID.localizedDescription)
             return state.mapContext == nil ? .none : refreshDestination(state: &state)
         }
         state.holdingsState = .loading

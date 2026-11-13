@@ -548,7 +548,7 @@ struct BookRoutePreviewView: View {
     @ViewBuilder
     private func holdingInformation(for book: Book) -> some View {
         switch destinationStore?.holdings[book.id] {
-        case nil, .loading:
+        case nil, .idle, .loading:
             ProgressView("소장 위치 확인 중").font(.caption)
         case .failed(let message):
             Text(message).font(.caption).foregroundStyle(.secondary)

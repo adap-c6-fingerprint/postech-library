@@ -3,7 +3,7 @@ import SwiftUI
 
 struct BookRoutePreviewExpandedDetails: View {
     let book: Book
-    let holdings: BookShelfMapFeature.HoldingsState?
+    let holdings: BookHoldingsState?
     let info: BookRoutePreviewBookInfo
     let detailStore: StoreOf<BookDetailFeature>
     let onRetryHoldings: () -> Void
@@ -41,7 +41,7 @@ struct BookRoutePreviewExpandedDetails: View {
     @ViewBuilder
     private var holdingStatus: some View {
         switch holdings {
-        case nil, .loading:
+        case nil, .idle, .loading:
             ProgressView("소장 위치 확인 중").typography(.caption2)
         case .failed:
             HStack(spacing: 8) {
