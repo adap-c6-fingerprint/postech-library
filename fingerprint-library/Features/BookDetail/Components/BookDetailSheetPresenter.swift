@@ -9,11 +9,11 @@ final class BookDetailSheetPresentation {
     var isExpanded: Bool { detent == .large }
 }
 
-/// 책 상세 네이티브 시트의 표시·종료를 소유한다.
 struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     let store: StoreOf<BookDetailFeature>
     let mapStore: StoreOf<IndoorMapFeature>
     let presentation: BookDetailSheetPresentation
+    var isSuspended = false
     var onDismiss: () -> Void
     var onCompactFrameChange: (CGRect) -> Void
 
@@ -26,6 +26,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
     func updateUIViewController(_ controller: Controller, context: Context) {
         controller.onDismiss = onDismiss
         controller.onCompactFrameChange = onCompactFrameChange
+        controller.setSuspended(isSuspended)
     }
 
     static func dismantleUIViewController(_ controller: Controller, coordinator: ()) {
@@ -44,6 +45,8 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         private var hasPresented = false
         private var didFinishPresentation = false
         private var isInvalidated = false
+        private var isSuspended = false
+        private var resumeTask: Task<Void, Never>?
         private let presentation: BookDetailSheetPresentation
 
         init(
@@ -81,12 +84,18 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             hosting.modalPresentationStyle = .pageSheet
             hosting.view.backgroundColor = .clear
             hosting.overrideUserInterfaceStyle = .dark
+            self.hosting = hosting
+            presentSheet(hosting)
+        }
+
+        private func presentSheet(_ hosting: UIHostingController<BookDetailSheet>) {
+            didFinishPresentation = false
+            presentation.detent = .medium
             if let sheet = hosting.sheetPresentationController {
                 sheet.detents = [.custom(identifier: Self.compactID) { context in
                     let height = UIFontMetrics(forTextStyle: .body).scaledValue(
                         for: BookDetailCompactLayout.height,
                         compatibleWith: context.containerTraitCollection)
-                    // 가로 화면·큰 글자에서 medium보다 낮은 요약 화면을 확보할 수 없으면 생략한다.
                     guard let medium = UISheetPresentationController.Detent.medium().resolvedValue(in: context),
                           height < medium else { return nil }
                     return height
@@ -95,10 +104,8 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                 sheet.prefersGrabberVisible = false
                 sheet.preferredCornerRadius = 28
                 sheet.largestUndimmedDetentIdentifier = .medium
-                // 기본 Liquid Glass와 높이에 따른 재질 전환은 시스템에 맡긴다.
                 sheet.delegate = self
             }
-            self.hosting = hosting
             present(hosting, animated: true) { [weak self, weak hosting] in
                 guard let self, !self.isInvalidated else {
                     hosting?.presentingViewController?.dismiss(animated: false)
@@ -112,7 +119,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         private func scheduleCompactFrameReport() {
             compactFrameReportTask?.cancel()
             guard !isInvalidated, didFinishPresentation, !presentation.isExpanded else { return }
-            // 드래그 중 바뀌는 모든 프레임에 지도 카메라를 다시 맞추지 않는다.
             compactFrameReportTask = Task { [weak self] in
                 try? await Task.sleep(for: .milliseconds(120))
                 guard !Task.isCancelled else { return }
@@ -120,7 +126,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             }
         }
 
-        /// compact·medium의 실제 위치를 지도에 전달하고 large에서는 마지막 위치를 유지한다.
         private func reportCompactFrame() {
             guard !isInvalidated, didFinishPresentation, let hosting, hosting.view.window != nil,
                   hosting.sheetPresentationController?.selectedDetentIdentifier != .large
@@ -132,7 +137,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
 
         func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
             guard !isInvalidated else { return }
-            // 높이 전환 애니메이션은 시스템 시트가 처리한다.
             switch sheetPresentationController.selectedDetentIdentifier {
             case Self.compactID: presentation.detent = .compact
             case .large: presentation.detent = .large
@@ -141,7 +145,6 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             scheduleCompactFrameReport()
         }
 
-        // 높이 전환은 유지하고 아래로 당겨 상세를 닫는 동작만 막는다.
         func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
             false
         }
@@ -161,10 +164,32 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             onDismiss()
         }
 
+        func setSuspended(_ suspended: Bool) {
+            guard isSuspended != suspended else { return }
+            isSuspended = suspended
+            resumeTask?.cancel()
+            guard hasPresented, !isInvalidated, let hosting else { return }
+            if suspended {
+                compactFrameReportTask?.cancel()
+                hosting.presentingViewController?.dismiss(animated: false)
+                return
+            }
+            resumeTask = Task { [weak self, weak hosting] in
+                for _ in 0..<40 {
+                    guard let self, let hosting, !Task.isCancelled, !self.isInvalidated, !self.isSuspended else { return }
+                    if let window = self.view.window, window.rootViewController?.presentedViewController == nil {
+                        self.presentSheet(hosting)
+                        return
+                    }
+                    try? await Task.sleep(for: .milliseconds(50))
+                }
+            }
+        }
+
         func tearDown() {
+            resumeTask?.cancel()
             guard !isInvalidated else { return }
             isInvalidated = true
-            // 상세에서 연 모달까지 함께 닫는다.
             hosting?.presentingViewController?.dismiss(animated: false)
             hosting = nil
         }

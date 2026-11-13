@@ -1,8 +1,6 @@
 import Foundation
 import Synchronization
 
-/// 검색어와 자료 유형별 결과를 보관한다.
-/// 범위·정렬·페이지가 가변 값이 되면 BookSearchRequest에도 반드시 포함한다.
 nonisolated final class BookSearchResultCache: Sendable {
     private struct Entry: Sendable {
         let books: [Book]

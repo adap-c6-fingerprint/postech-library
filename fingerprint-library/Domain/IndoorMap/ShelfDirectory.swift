@@ -1,6 +1,5 @@
 import Foundation
 
-/// API의 표시 문자열이나 도서 ID와 구분되는 데이터셋 내부 키.
 nonisolated struct ShelfKey: Hashable, Sendable {
     let datasetID: String
     let value: String

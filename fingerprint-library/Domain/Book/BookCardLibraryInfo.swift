@@ -1,13 +1,11 @@
 import Foundation
 
-/// 카드에 표시하는 위치와 상태는 항상 같은 소장처에서 가져온다.
 nonisolated struct BookCardLibraryInfo: Equatable, Sendable {
     enum Availability: Equatable, Sendable { case available, unavailable, unknown }
 
     let holdings: [BookHolding]
 
     var primaryHolding: BookHolding? {
-        // 본관 소장처를 우선하고, 같은 도서관에서는 이용 가능한 소장처를 먼저 보여준다.
         let local = holdings.filter { $0.institutionCode == "82POSTECH_INST" && $0.libraryCode == "MAIN" }
         let candidates = local.isEmpty ? holdings : local
         return candidates.first { $0.availability == "available" }

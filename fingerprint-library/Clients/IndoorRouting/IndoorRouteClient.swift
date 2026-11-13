@@ -18,7 +18,7 @@ extension IndoorRouteClient: DependencyKey {
     static let testValue = Self(search: { _ in throw IndoorRoutingError.noRoute })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     var indoorRouteClient: IndoorRouteClient {
         get { self[IndoorRouteClient.self] }
         set { self[IndoorRouteClient.self] = newValue }

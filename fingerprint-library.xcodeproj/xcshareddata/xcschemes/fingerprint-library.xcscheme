@@ -34,8 +34,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C50000000000000000000006"
-               BuildableName = "IndoorMapTests.xctest"
-               BlueprintName = "IndoorMapTests"
+               BuildableName = "DomainTests.xctest"
+               BlueprintName = "DomainTests"
                ReferencedContainer = "container:fingerprint-library.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -43,8 +43,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B40000000000000000000006"
-               BuildableName = "BookDetailTests.xctest"
-               BlueprintName = "BookDetailTests"
+               BuildableName = "FeatureTests.xctest"
+               BlueprintName = "FeatureTests"
                ReferencedContainer = "container:fingerprint-library.xcodeproj">
             </BuildableReference>
          </TestableReference>

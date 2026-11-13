@@ -1,14 +1,12 @@
 import ComposableArchitecture
 import Foundation
 
-/// 일반 검색·상세에서 이미 받은 소장 정보의 로컬 사본. 네트워크 의존성은 없다.
 nonisolated struct BookLocationCacheClient: Sendable {
     var load: @Sendable (_ keys: Set<[String?]>) -> [[String?]: [BookHolding]]
     var record: @Sendable (_ book: Book, _ holdings: [BookHolding]) -> Void
     var updates: @Sendable () -> AsyncStream<Void>
     var prepare: @Sendable () async -> Void = {}
     var recordBatch: (@Sendable ([(Book, [BookHolding])]) -> Void)? = nil
-    // 대출 상태를 표시할 때에는 오래된 로컬 사본과 번들 자료를 제외한다.
     var loadRecent: @Sendable (_ keys: Set<[String?]>) -> [[String?]: [BookHolding]] = { _ in [:] }
 
     static func userDefaults(suiteName: String? = nil) -> Self {
@@ -42,14 +40,13 @@ extension BookLocationCacheClient: DependencyKey {
     })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     nonisolated var bookLocationCacheClient: BookLocationCacheClient {
         get { self[BookLocationCacheClient.self] }
         set { self[BookLocationCacheClient.self] = newValue }
     }
 }
 
-/// 저장과 구독 목록은 같은 lock으로 보호하며, 변경 알림은 lock 밖에서 전달한다.
 private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
     private struct Entry: Codable, Equatable {
         let key: [String?]
@@ -80,7 +77,6 @@ private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
                 if let exact = entries[Self.normalized(key)] {
                     result[key] = exact.holdings
                 } else if key.count > 1, key[0] == "metadata", let isbn = BookISBN.isbn13(from: key[1]) {
-                    // 이미 로컬에 있는 같은 ISBN의 자료만 연결한다. 검색 API로 보충하지 않는다.
                     let matches = entries.values.filter { $0.isbn == isbn }
                     if !matches.isEmpty {
                         var seen = Set<String>()
@@ -109,7 +105,6 @@ private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
         recordBatch([(book, holdings)])
     }
 
-    /// 검색 한 번의 변경을 모두 반영한 뒤 전체 저장과 변경 알림을 한 번만 수행한다.
     func recordBatch(_ books: [(Book, [BookHolding])]) {
         let updates = books.map { book, holdings in
             Entry(key: Self.normalized(book.recordKey), isbn: BookISBN.isbn13(from: book.isbn), holdings: holdings)
@@ -134,7 +129,6 @@ private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
         for listener in listeners { listener.yield(()) }
     }
 
-    /// 번들 자료는 기본값이다. 일반 조회로 저장한 최신 사본은 덮어쓰지 않는다.
     func seed(_ books: [(Book, [BookHolding])]) {
         let listeners = lock.withLock { () -> [AsyncStream<Void>.Continuation] in
             guard !hasSeededBundle else { return [] }
@@ -171,7 +165,6 @@ private nonisolated final class LocalBookLocationStore: @unchecked Sendable {
     }
 }
 
-/// 추천 JSON의 이미 포함된 소장 필드만 읽는다. 파일 읽기·해석은 메인 스레드에서 하지 않는다.
 private actor BundledBookLocationLoader {
     private nonisolated struct Dataset: Decodable {
         let books: [Entry]

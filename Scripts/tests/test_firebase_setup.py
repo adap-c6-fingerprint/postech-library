@@ -95,7 +95,7 @@ class FirebaseSetupTests(unittest.TestCase):
     def test_consent_is_available_at_first_launch_and_in_settings(self):
         app = (ROOT / "fingerprint-library/App/AppView.swift").read_text()
         settings = (ROOT / "fingerprint-library/Features/Analytics/AnalyticsSettingsView.swift").read_text()
-        my_page = (ROOT / "fingerprint-library/Features/MyPage/View/MyPageView.swift").read_text()
+        my_page = (ROOT / "fingerprint-library/Features/MyPage/MyPageView.swift").read_text()
         self.assertIn("!AnalyticsRuntime.shared.consent.hasChosen", app)
         self.assertIn("AnalyticsSettingsView(isFirstChoice: true)", app)
         self.assertIn("AnalyticsSettingsView(isFirstChoice: false)", my_page)

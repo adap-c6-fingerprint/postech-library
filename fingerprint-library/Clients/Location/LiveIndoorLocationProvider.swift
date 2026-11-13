@@ -1,7 +1,6 @@
 import CoreLocation
 import Foundation
 
-/// CLLocationManager의 delegate를 Feature에서 취소할 수 있는 비동기 스트림으로 변환한다.
 @MainActor
 final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
     static let shared = LiveIndoorLocationProvider()
@@ -75,7 +74,6 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
             publishHeadingChange()
             return
         }
-        // 방향 콜백만으로 실패 전 좌표를 다시 발행하지 않는다.
         lastLocation = nil
         let event = Self.failureEvent(for: error)
         if case .authorization(.denied) = event {
@@ -96,7 +94,6 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
         lastHeading = nil
     }
 
-    /// 방향만 갱신될 때 위치 시각을 바꿔 오래된 좌표를 유효하게 만들지 않는다.
     private func publishHeadingChange() {
         guard let lastLocation else { return }
         let position = position(from: lastLocation)

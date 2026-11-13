@@ -17,7 +17,6 @@ nonisolated extension IndoorMapGeometry {
         }
     }
 
-    /// 작은 WGS 84 실내 도형에 사용한다. 외곽 경계는 포함하고 내부 ring은 제외한다.
     func contains(_ point: IndoorMapCoordinate) -> Bool {
         switch self {
         case .polygon(let rings): Self.contains(point, rings: rings)

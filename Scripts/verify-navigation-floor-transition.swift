@@ -62,14 +62,14 @@ struct VerifyNavigationFloorTransition {
         print("PASS: elevator/stairs labels, no-position/manual progress, delayed old-floor position, live recovery, completed/absent transitions, consecutive floors, descending/reversing and unknown distances")
     }
 
-    private static func progress(in plan: RouteGuidancePlan, step: Int, fraction: Double) -> RouteGuidanceProgress {
+    private static func progress(in plan: GuidanceEngine, step: Int, fraction: Double) -> RouteGuidanceProgress {
         let value = plan.steps[step]
         return .init(stepIndex: step, fraction: fraction,
                      distanceAlongRoute: value.startDistance + (value.meters ?? 0) * fraction,
                      coordinate: value.to.coordinate, maneuver: .straight, distanceToManeuver: nil, remainingMeters: 5)
     }
 
-    private static func plan(levels: [Int], categories: [RouteEdgeCategory], measured: Bool = true) throws -> RouteGuidancePlan {
+    private static func plan(levels: [Int], categories: [RouteEdgeCategory], measured: Bool = true) throws -> GuidanceEngine {
         let floors = Dictionary(uniqueKeysWithValues: Set(levels).map { ($0, UUID()) })
         let nodes = levels.enumerated().map { index, level in
             RouteNode(id: "node-\(index)", coordinate: .init(latitude: 36, longitude: 129 + Double(index) * 0.00001),
@@ -88,6 +88,6 @@ struct VerifyNavigationFloorTransition {
             edgeDistancesMeters: measured ? distances : nil)
         let graph = RoutingGraph(schemaVersion: 1, layoutVersion: "test", hardSearchRadiusMeters: 10,
                                  nodes: nodes, edges: edges)
-        return try RouteGuidancePlan(route: route, graph: graph)
+        return try GuidanceEngine(route: route, graph: graph)
     }
 }

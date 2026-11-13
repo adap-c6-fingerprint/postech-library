@@ -16,23 +16,23 @@ struct RecentSearchBookRow: View {
 
                 VStack(alignment: .leading, spacing: 6) {
                     Text(BookText.plainText(book.title))
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.body.weight(.semibold))
                         .foregroundStyle(.primary)
                         .lineLimit(2)
 
                     Text(BookText.plainText(locationText))
-                        .font(.system(size: 16))
+                        .font(.callout)
                         .foregroundStyle(.primary)
                         .lineLimit(1)
 
                     Text(BookText.plainText(book.author))
-                        .font(.system(size: 12))
+                        .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
 
                     Spacer(minLength: 8)
                     availabilityText
-                        .font(.system(size: 12))
+                        .font(.caption)
                 }
                 .frame(maxWidth: .infinity, minHeight: 110, alignment: .leading)
             }

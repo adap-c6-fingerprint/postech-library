@@ -10,7 +10,6 @@ nonisolated struct RouteTraversal: Equatable, Sendable {
     let isEstimated: Bool
 }
 
-/// Fingerprint의 방향별 adjacency 구성을 이식했다. 비용 단위는 미터로 통일한다.
 nonisolated struct RoutingGraphIndex: Sendable {
     let graph: RoutingGraph
     var nodesByID: [String: RouteNode]
@@ -55,7 +54,6 @@ nonisolated struct RoutingGraphIndex: Sendable {
                 }
                 distance = measurement.meters
                 estimated = measurement.source == .estimated
-                // A*의 수평 직선거리 heuristic이 하한이 되도록 한다.
                 guard distance >= RoutingGeometry.distanceMeters(from: from.coordinate, to: to.coordinate) else {
                     throw IndoorRoutingError.invalidGraph
                 }

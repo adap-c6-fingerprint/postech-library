@@ -10,7 +10,6 @@ import Foundation
 nonisolated enum RoutingGeometry {
     private static let earthRadiusMeters = 6_371_008.8
 
-    /// Great-circle distance in meters using the haversine formula.
     static func distanceMeters(
         from start: IndoorMapCoordinate,
         to end: IndoorMapCoordinate

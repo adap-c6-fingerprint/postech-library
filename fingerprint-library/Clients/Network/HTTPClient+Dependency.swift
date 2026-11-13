@@ -6,7 +6,7 @@ extension HTTPClient: DependencyKey {
     static let testValue = Self(load: { _ in throw URLError(.unsupportedURL) })
 }
 
-extension DependencyValues {
+nonisolated extension DependencyValues {
     nonisolated var httpClient: HTTPClient {
         get { self[HTTPClient.self] }
         set { self[HTTPClient.self] = newValue }

@@ -1,6 +1,5 @@
 import Foundation
 
-/// 도서의 소장처. 서지 ID·소장 ID·지도 fixture ID는 각각 다른 식별자다.
 nonisolated struct BookHolding: Codable, Equatable, Identifiable, Sendable {
     let holdingID: String?
     let institutionCode: String?
@@ -21,5 +20,21 @@ nonisolated struct BookHolding: Codable, Equatable, Identifiable, Sendable {
         case "unavailable": "대출 중 또는 이용 불가"
         default: "대출 상태 확인 필요"
         }
+    }
+}
+
+nonisolated extension BookHolding {
+    static func preferred(in holdings: [BookHolding]) -> BookHolding? {
+        func rank(_ holding: BookHolding) -> Int {
+            switch holding.availability {
+            case "available": return 0
+            case "unavailable": return 2
+            default: return 1
+            }
+        }
+        return holdings.enumerated().min {
+            (rank($0.element), $0.element.callNumber == nil ? 1 : 0, $0.offset)
+                < (rank($1.element), $1.element.callNumber == nil ? 1 : 0, $1.offset)
+        }?.element
     }
 }
