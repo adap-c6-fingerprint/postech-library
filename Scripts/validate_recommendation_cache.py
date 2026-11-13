@@ -27,8 +27,8 @@ let package = Package(name: "RecommendationCacheValidation", platforms: [.macOS(
 ''')
     for relative in [
         "fingerprint-library/Domain/Book/Book.swift",
-        "fingerprint-library/Clients/Book/Cache/RecommendationCacheStore.swift",
-        "fingerprint-library/Clients/Book/Cache/RecommendationCachePreparer.swift",
+        "fingerprint-library/Clients/Recommendation/RecommendationCacheStore.swift",
+        "fingerprint-library/Clients/Recommendation/RecommendationCachePreparer.swift",
         "fingerprint-library/Shared/BookCover/SharedImageLoader.swift",
         "fingerprint-library/Shared/BookCover/BookCoverFailure.swift",
         "fingerprint-library/Shared/BookCover/BookCoverModel.swift",
