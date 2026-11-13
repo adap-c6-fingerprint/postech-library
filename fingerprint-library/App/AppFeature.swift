@@ -209,11 +209,9 @@ struct AppFeature {
                 return .none
             case .onboarding(.delegate(.completed)):
                 state.onboarding = nil
-                state.home.isFirstVisitAfterOnboarding = true
                 return .none
             case .onboarding(.delegate(.skipped)):
                 state.onboarding = nil
-                state.home.isFirstVisitAfterOnboarding = true
                 return .none
             case .onboarding:
                 return .none
