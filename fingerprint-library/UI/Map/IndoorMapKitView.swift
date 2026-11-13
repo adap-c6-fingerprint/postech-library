@@ -1,4 +1,5 @@
 import MapKit
+import os
 import SwiftUI
 import Clarity
 
@@ -43,12 +44,16 @@ struct IndoorMapKitView: UIViewRepresentable {
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
     func makeUIView(context: Context) -> IndoorMapSurface {
+        let signpostState = MapPerformanceSignpost.signposter.beginInterval("MapViewCreate", "\(String(describing: appearance), privacy: .public)")
+        defer { MapPerformanceSignpost.signposter.endInterval("MapViewCreate", signpostState) }
         let view = context.coordinator.makeMapView()
         ClaritySDK.unmaskView(view)
         return view
     }
 
     func updateUIView(_ view: IndoorMapSurface, context: Context) {
+        let signpostState = MapPerformanceSignpost.signposter.beginInterval("MapUpdate", "\(String(describing: appearance), privacy: .public)")
+        defer { MapPerformanceSignpost.signposter.endInterval("MapUpdate", signpostState) }
         context.coordinator.update(parent: self, in: view)
     }
 
@@ -336,6 +341,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                       self.pendingCameraRequest == nil, !self.isApplyingCamera else { return }
                 let renderers = self.readyOverlayRenderers
                 self.readyOverlayRenderers.removeAll()
+                MapPerformanceSignpost.signposter.emitEvent("OverlayRedraw", "renderers=\(renderers.count, privacy: .public)")
                 for (id, renderer) in renderers where self.pendingOverlayRedrawIDs.remove(id) != nil {
                     renderer.setNeedsDisplay()
                 }
@@ -367,6 +373,9 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         func render(in view: MKMapView) {
+            let signpostState = MapPerformanceSignpost.signposter.beginInterval(
+                "MapRender", "floor=\(self.parent.floor.name, privacy: .public) appearance=\(String(describing: self.parent.appearance), privacy: .public)")
+            defer { MapPerformanceSignpost.signposter.endInterval("MapRender", signpostState, "overlays=\(view.overlays.count, privacy: .public)") }
             cancelOverlayRedraw()
             view.removeOverlays(view.overlays)
             view.removeAnnotations(routeTransitionAnnotations)
@@ -556,6 +565,7 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         @discardableResult
         func moveCamera(_ request: IndoorMapCameraRequest, in view: MKMapView, animated: Bool = true) -> Bool {
+            MapPerformanceSignpost.signposter.emitEvent("CameraMove", "id=\(request.id, privacy: .public) target=\(String(String(describing: request.target).prefix(40)), privacy: .public)")
             switch request.target {
             case .navigation(let focus):
                 guard focus.floorID == parent.floor.id, !focus.coordinates.isEmpty,

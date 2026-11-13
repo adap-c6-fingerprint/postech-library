@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import os
 import Observation
 import SwiftUI
 import UIKit
@@ -106,7 +107,9 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                 sheet.largestUndimmedDetentIdentifier = .medium
                 sheet.delegate = self
             }
+            let signpostState = MapPerformanceSignpost.signposter.beginInterval("SheetPresent")
             present(hosting, animated: true) { [weak self, weak hosting] in
+                MapPerformanceSignpost.signposter.endInterval("SheetPresent", signpostState)
                 guard let self, !self.isInvalidated else {
                     hosting?.presentingViewController?.dismiss(animated: false)
                     return
@@ -132,6 +135,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             else { return }
             let frame = hosting.view.convert(hosting.view.bounds, to: view)
             guard frame.minY.isFinite, frame.height.isFinite, frame.height > 0 else { return }
+            MapPerformanceSignpost.signposter.emitEvent("CompactFrameReport", "minY=\(frame.minY, privacy: .public)")
             onCompactFrameChange(frame)
         }
 

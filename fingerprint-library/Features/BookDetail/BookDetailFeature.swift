@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import os
 import ComposableArchitecture
 
 @Reducer
@@ -133,6 +134,7 @@ struct BookDetailFeature {
                 return loadHoldings(state: &state)
 
             case let .holdingsLoaded(holding):
+                MapPerformanceSignpost.signposter.emitEvent("HoldingsLoaded")
                 state.holdingsState = .loaded(holding)
                 bookLocationCacheClient.record(state.book, holding)
                 return state.mapContext == nil ? .none : refreshDestination(state: &state)
@@ -144,6 +146,7 @@ struct BookDetailFeature {
             case let .mapContextChanged(context):
                 let previousContext = state.mapContext
                 guard previousContext != context else { return .none }
+                MapPerformanceSignpost.signposter.emitEvent("MapContextChanged")
                 state.mapContext = context
                 if previousContext?.map != context.map || previousContext?.labels != context.labels {
                     return refreshDestination(state: &state)
@@ -288,6 +291,8 @@ struct BookDetailFeature {
             IndoorRouteRequest(navigation: navigation, start: position, destination: $0.key, preference: context.preference)
         }
         return .run { [indoorRouteClient] send in
+            let signpostState = MapPerformanceSignpost.signposter.beginInterval("DetailRouteSearch", "requests=\(requests.count, privacy: .public)")
+            defer { MapPerformanceSignpost.signposter.endInterval("DetailRouteSearch", signpostState) }
             var best: BookDetailRoutePresentation?
             var bestDistance = Double.infinity
             for request in requests {
