@@ -10,13 +10,6 @@ import ComposableArchitecture
 
 @Reducer
 struct BookDetailFeature {
-    enum RelatedBooksState: Equatable {
-        case idle
-        case loading
-        case loaded([Book])
-        case failed(String)
-    }
-
     enum HoldingsState: Equatable {
         case idle
         case loading
@@ -50,7 +43,6 @@ struct BookDetailFeature {
         var errorMessage: String? = nil
         var hasLoaded = false
 
-        var relatedBooksState: RelatedBooksState = .idle
         var holdingsState: HoldingsState = .idle
         var mapContext: BookDetailMapContext?
         var destinationPresentation: BookDetailDestinationPresentation?
@@ -77,10 +69,6 @@ struct BookDetailFeature {
         case descriptionLoaded(BookDescription?)
         case descriptionFailed(String)
 
-        case loadRelatedBooks
-        case retryRelatedBooksButtonTapped
-        case relatedBooksLoaded([Book])
-        case relatedBooksFailed(String)
 
         case loadHoldings
         case retryHoldingsButtonTapped
@@ -111,8 +99,6 @@ struct BookDetailFeature {
     var bookDetailClient
     @Dependency(\.analyticsClient) private var analytics
 
-    @Dependency(\.relatedBooksClient)
-    var relatedBooksClient
 
     @Dependency(\.bookHoldingsClient)
     var bookHoldingsClient
@@ -205,26 +191,6 @@ struct BookDetailFeature {
 
                 return .none
 
-            case .loadRelatedBooks:
-                guard case .idle = state.relatedBooksState else {
-                    return .none
-                }
-
-                return loadRelatedBooks(state: &state)
-
-            case .retryRelatedBooksButtonTapped:
-                return loadRelatedBooks(state: &state)
-
-            case let .relatedBooksLoaded(books):
-                state.relatedBooksState = .loaded(books)
-
-                return .none
-
-            case let .relatedBooksFailed(message):
-                state.relatedBooksState = .failed(message)
-
-                return .none
-
             case .addToCartButtonTapped:
                 @Shared(.bookCart) var cartItems
                 switch $cartItems.withLock({ $0.add(state.book, at: now) }) {
@@ -279,7 +245,6 @@ struct BookDetailFeature {
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case description
-        case relatedBooks
         case holdings
         case destinationRoute
     }
@@ -416,48 +381,6 @@ struct BookDetailFeature {
         }
         .cancellable(
             id: CancelID.description,
-            cancelInFlight: true
-        )
-    }
-
-    private func loadRelatedBooks(
-        state: inout State
-    ) -> Effect<Action> {
-        if case .loading = state.relatedBooksState {
-            return .none
-        }
-
-        guard let isbn13 = state.isbn13 else {
-            state.relatedBooksState = .failed(
-                "조회 가능한 ISBN 정보가 없어 연관 도서를 불러올 수 없어요."
-            )
-
-            return .none
-        }
-
-        state.relatedBooksState = .loading
-
-        return .run { [relatedBooksClient] send in
-            do {
-                let books = try await relatedBooksClient.fetch(isbn13)
-
-                try Task.checkCancellation()
-
-                await send(.relatedBooksLoaded(books))
-            } catch {
-                guard !Task.isCancelled else {
-                    return
-                }
-
-                await send(
-                    .relatedBooksFailed(
-                        "연관 도서를 불러오지 못했어요. 다시 시도해 주세요."
-                    )
-                )
-            }
-        }
-        .cancellable(
-            id: CancelID.relatedBooks,
             cancelInFlight: true
         )
     }

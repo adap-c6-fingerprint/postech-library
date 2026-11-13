@@ -8,8 +8,14 @@
 import Foundation
 import ComposableArchitecture
 
+nonisolated struct RelatedBookCandidate: Equatable, Sendable {
+    let isbn13: String
+    let title: String
+    let imageURL: URL?
+}
+
 nonisolated struct RelatedBooksClient: Sendable {
-    var fetch: @Sendable (_ isbn13: String) async throws -> [Book]
+    var fetch: @Sendable (_ isbn13: String) async throws -> [RelatedBookCandidate]
 }
 
 extension RelatedBooksClient: DependencyKey {
@@ -36,7 +42,7 @@ extension RelatedBooksClient: DependencyKey {
 
             var seenISBNs = Set<String>()
 
-            return decoded.response.docs.compactMap { document -> Book? in
+            return decoded.response.docs.compactMap { document -> RelatedBookCandidate? in
                 let item = document.book
 
                 guard
@@ -60,17 +66,7 @@ extension RelatedBooksClient: DependencyKey {
                     return url
                 }
 
-                return Book(
-                    id: "isbn:\(relatedISBN)",
-                    isbn: relatedISBN,
-                    controlNumber: nil,
-                    title: item.bookname,
-                    author: item.authors ?? "저자 정보 없음",
-                    publisher: item.publisher,
-                    publicationYear: item.publication_year,
-                    description: nil,
-                    imageURL: imageURL
-                )
+                return RelatedBookCandidate(isbn13: relatedISBN, title: item.bookname, imageURL: imageURL)
             }
         }
     )
@@ -94,9 +90,6 @@ private nonisolated struct RelatedBookDocument: Decodable {
 
 private nonisolated struct RelatedBookDTO: Decodable {
     let bookname: String
-    let authors: String?
-    let publisher: String?
-    let publication_year: String?
     let isbn13: String
     let bookImageURL: String?
 }

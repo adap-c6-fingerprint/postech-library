@@ -150,7 +150,6 @@ struct BookDetailView: View {
             .onAppear { store.send(.viewAppeared) }
             .task { store.send(.loadHoldings) }
             .task { store.send(.loadDescription) }
-            .task { store.send(.loadRelatedBooks) }
     }
 
     private var detailContent: some View {

@@ -28,9 +28,9 @@ nonisolated struct HeldRelatedBooksClient: Sendable {
         })
     }
 
-    private static func heldBook(for candidate: Book, bookClient: BookClient) async -> Book? {
-        guard let isbn = BookISBN.isbn13(from: candidate.isbn),
-              let results = try? await bookClient.search(BookSearchRequest(query: isbn, category: .monograph))
+    private static func heldBook(for candidate: RelatedBookCandidate, bookClient: BookClient) async -> Book? {
+        let isbn = candidate.isbn13
+        guard let results = try? await bookClient.search(BookSearchRequest(query: isbn, category: .monograph))
         else { return nil }
         guard let match = results.first(where: {
             BookISBN.isbn13(from: $0.isbn) == isbn && BookHoldingsClient.recordID(for: $0) != nil
