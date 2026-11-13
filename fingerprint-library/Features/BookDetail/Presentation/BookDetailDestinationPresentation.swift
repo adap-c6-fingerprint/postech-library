@@ -23,9 +23,9 @@ nonisolated struct BookDetailDestinationPresentation: Equatable, Sendable {
             return Self(holding: holding, floorText: nil, shelves: [])
         }
         let resolutions = ShelfResolver().resolve(holdings, on: map, labels: labels)
-        if resolutions.first(where: { $0.holding == holding })?.area == .displayShelf {
-            let general = resolutions.preferredForRoute.filter { $0.area == .generalStack && !$0.shelves.isEmpty }
-            if let preferred = BookHolding.preferred(in: general.map(\.holding)) { holding = preferred }
+        let routable = resolutions.preferredForRoute.filter { !$0.shelves.isEmpty }
+        if let preferred = BookHolding.preferred(in: routable.map(\.holding)) {
+            holding = preferred
         }
         let shelves = (resolutions.first { $0.holding == holding }?.shelves ?? []).sorted { $0.id < $1.id }
         let floor = shelves.first.flatMap { shelf in map.floors.first { $0.id == shelf.floorID } }

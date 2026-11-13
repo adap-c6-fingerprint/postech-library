@@ -118,7 +118,7 @@ nonisolated enum HomeMapMarkerBuilder {
         }
         var groups: [String: Group] = [:]
         for (key, copies) in holdings {
-            for resolution in ShelfResolver().resolve(copies, on: map, labels: labels) {
+            for resolution in ShelfResolver().resolve(copies, on: map, labels: labels).preferredForRoute {
                 for shelf in resolution.shelves {
                     let shelfID = shelf.physicalShelfID
                     var group = groups[shelfID] ?? Group()
