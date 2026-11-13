@@ -23,8 +23,9 @@ struct BookDetailFeature {
     }
 
     @ObservableState
-    struct State: Equatable {
+    struct State: Equatable, Identifiable {
         let book: Book
+        var id: Book.ID { book.id }
         var cachedCoverURL: URL?
         @Shared(.favoriteBookKeys) var favoriteBookKeys
         var isGuidancePresented = false

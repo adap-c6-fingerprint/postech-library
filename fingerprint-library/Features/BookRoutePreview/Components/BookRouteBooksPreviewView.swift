@@ -19,7 +19,6 @@ struct BookRouteBooksPreviewView: View {
     @State private var panelHeight: CGFloat = 0
     @State private var panelPresentation = BookRoutePreviewPanelState()
     @State private var bookTabsHeight: CGFloat = 52
-    @State private var detailStores = BookRoutePreviewDetailStores()
     @State private var expandedScrollOrigin = ExpandedScrollOrigin(globalMinY: 0, safeAreaTop: 0)
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -35,6 +34,10 @@ struct BookRouteBooksPreviewView: View {
     }
 
     private var isShowingExpandedDetail: Bool { panelPresentation.isExpanded }
+
+    private func detailStore(for book: Book) -> StoreOf<BookDetailFeature>? {
+        shelfStore.scope(state: \.details[id: book.id], action: \.details[id: book.id])
+    }
 
     private var selectedShelves: [IndoorShelfLabel] {
         guard let bookID = selection.wrappedValue else { return [] }
@@ -117,7 +120,7 @@ struct BookRouteBooksPreviewView: View {
         .onChange(of: books.map(\.id)) { _, _ in
             bookSelection.reconcile(with: books)
         }
-        .modifier(SelectedBookCartPresentation(store: selectedBook.map { detailStores.store(for: $0) }))
+        .modifier(SelectedBookCartPresentation(store: selectedBook.flatMap(detailStore(for:))))
         .accessibilityIdentifier("multiBookPreview")
     }
 
@@ -129,6 +132,7 @@ struct BookRouteBooksPreviewView: View {
                 coverTopPadding: max(0, coverTopGlobalY - contentTop),
                 identifierPrefix: "multiBookPreview"
             ) { book in
+                if let detailStore = detailStore(for: book) {
                 BookRoutePreviewExpandedDetails(
                     book: book,
                     holdings: shelfStore.holdings[book.id],
@@ -136,10 +140,11 @@ struct BookRouteBooksPreviewView: View {
                         book: book, holdings: shelfStore.holdings[book.id],
                         resolutions: shelfStore.resolutions[book.id] ?? [],
                         map: shelfStore.map.map, routePlan: routePlan),
-                    detailStore: detailStores.store(for: book),
+                    detailStore: detailStore,
                     onRetryHoldings: { shelfStore.send(.retryHoldingsTapped(book.id)) }
                 )
                 .padding(.horizontal, 16)
+                }
             }
             .padding(.bottom, 20)
         }
@@ -162,8 +167,8 @@ struct BookRouteBooksPreviewView: View {
         HStack {
             LibraryBackButton(identifier: "multiBookPreview.expandedBack", action: onBack)
             Spacer()
-            if let book = selectedBook {
-                favoriteButton(detailStores.store(for: book))
+            if let book = selectedBook, let store = detailStore(for: book) {
+                favoriteButton(store)
             }
         }
         .padding(.horizontal, 16)
@@ -256,13 +261,14 @@ struct BookRouteBooksPreviewView: View {
     private var bookPages: some View {
         TabView(selection: selection) {
             ForEach(books) { book in
+                if let detailStore = detailStore(for: book) {
                 BookRoutePreviewBookCard(
                     book: book,
                     holdings: shelfStore.holdings[book.id],
                     resolutions: shelfStore.resolutions[book.id] ?? [],
                     map: shelfStore.map.map,
                     routePlan: routePlan,
-                    detailStore: detailStores.store(for: book),
+                    detailStore: detailStore,
                     showsFullDescription: panelPresentation.showsFullDescription,
                     isSheetMoving: panelPresentation.isMoving,
                     isSelected: selection.wrappedValue == book.id,
@@ -273,6 +279,7 @@ struct BookRouteBooksPreviewView: View {
                     onRetryHoldings: { shelfStore.send(.retryHoldingsTapped(book.id)) }
                 )
                 .tag(Optional(book.id))
+                }
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
@@ -314,8 +321,8 @@ struct BookRouteBooksPreviewView: View {
                     ? "현재 보고 있는 책의 서가로 안내해요"
                     : "선택한 전체 \(books.count)권을 최적 경로 순서로 안내해요")
                 .accessibilityIdentifier("multiBookPreview.start")
-                if isShowingExpandedDetail, let book = selectedBook {
-                    cartButton(detailStores.store(for: book))
+                if isShowingExpandedDetail, let book = selectedBook, let store = detailStore(for: book) {
+                    cartButton(store)
                 }
             }
         }
@@ -325,18 +332,6 @@ struct BookRouteBooksPreviewView: View {
 private nonisolated struct ExpandedScrollOrigin: Equatable {
     let globalMinY: CGFloat
     let safeAreaTop: CGFloat
-}
-
-@MainActor
-final class BookRoutePreviewDetailStores {
-    private var stores: [Book.ID: StoreOf<BookDetailFeature>] = [:]
-
-    func store(for book: Book) -> StoreOf<BookDetailFeature> {
-        if let store = stores[book.id] { return store }
-        let store = Store(initialState: BookDetailFeature.State(book: book)) { BookDetailFeature() }
-        stores[book.id] = store
-        return store
-    }
 }
 
 private struct SelectedBookCartPresentation: ViewModifier {

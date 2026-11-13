@@ -11,8 +11,12 @@ struct BookShelfMapFeature {
         var holdings: [Book.ID: BookHoldingsState] = [:]
         var holdingRequestIDs: [Book.ID: Int] = [:]
         var resolutions: [Book.ID: [ShelfResolution]] = [:]
+        var details: IdentifiedArrayOf<BookDetailFeature.State>
 
-        init(book: Book) { books = [book] }
+        init(book: Book) {
+            books = [book]
+            details = [BookDetailFeature.State(book: book)]
+        }
 
         init?(books: [Book]) {
             guard BookRouteSelection.allows(bookCount: books.count) else { return nil }
@@ -22,6 +26,7 @@ struct BookShelfMapFeature {
         init?(previewing books: [Book]) {
             guard !books.isEmpty, Set(books.map(\.id)).count == books.count else { return nil }
             self.books = books
+            details = IdentifiedArray(uniqueElements: books.map { BookDetailFeature.State(book: $0) })
         }
 
         func shelves(for bookID: Book.ID) -> [IndoorShelfLabel] {
@@ -36,7 +41,7 @@ struct BookShelfMapFeature {
         var highlightedFeatureIDs: Set<IndoorMapElement.ID> { Set(shelves.map(\.mapElementID)) }
     }
 
-    enum Action: Equatable {
+    enum Action {
         case task
         case retryHoldingsTapped(Book.ID)
         case holdingsLoaded(Book.ID, requestID: Int, [BookHolding])
@@ -46,6 +51,7 @@ struct BookShelfMapFeature {
         case bookShelfTapped(Book.ID)
         case candidateTapped(Book.ID, fixtureNumber: String)
         case map(IndoorMapFeature.Action)
+        case details(IdentifiedActionOf<BookDetailFeature>)
         case guidanceRequested(Book)
         case delegate(Delegate)
 
@@ -147,10 +153,11 @@ struct BookShelfMapFeature {
             case .delegate:
                 return .none
 
-            case .map:
+            case .map, .details:
                 return .none
             }
         }
+        .forEach(\.details, action: \.details) { BookDetailFeature() }
         Scope(state: \.map, action: \.map) { IndoorMapFeature() }
     }
 

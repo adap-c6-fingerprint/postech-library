@@ -107,7 +107,7 @@ struct BookRoutePreviewFeature {
         }
     }
 
-    enum Action: Equatable {
+    enum Action {
         case shelf(BookShelfMapFeature.Action)
         case task
         case locationUpdated
@@ -199,7 +199,7 @@ struct BookRoutePreviewFeature {
                     state.previewStart = state.currentStart
                     return .merge(permission, reconcile(&state))
                 }
-                let startsNavigation = action == .directRetryTapped
+                let startsNavigation = action.is(\.directRetryTapped)
                 return .merge(permission, loadRoute(request, startsNavigation: startsNavigation, state: &state))
 
             case .setOriginManuallyTapped:
