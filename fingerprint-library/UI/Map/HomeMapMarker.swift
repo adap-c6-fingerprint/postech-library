@@ -219,6 +219,9 @@ nonisolated enum HomeMapMarkerBuilder {
 
 @MainActor
 final class HomeMapMarkerCache {
+    /// 시설 마커는 지도 데이터만으로 정해진다. 화면마다 캐시가 새로 생겨도 같은 지도면 다시 계산하지 않는다.
+    private static var sharedAmenities: (map: IndoorMap, markers: [HomeMapMarker])?
+
     private var map: IndoorMap?
     private var labels: [IndoorShelfLabel] = []
     private var holdings: [[String?]: [BookHolding]] = [:]
@@ -236,9 +239,16 @@ final class HomeMapMarkerCache {
             self.holdings = holdings
         }
         self.map = map
-        if amenityMarkers == nil { amenityMarkers = HomeMapMarkerBuilder.amenities(on: map) }
+        if amenityMarkers == nil { amenityMarkers = Self.amenities(on: map) }
         let hiddenIDs = Set(shelves.map { "favorite-\($0.physicalShelfID)" }).union(hiddenFavoriteMarkerIDs)
         let favorites = favoriteMarkers.filter { !hiddenIDs.contains($0.id) }
         return favorites + (amenityMarkers ?? []).filter { showsAmenities || $0.kind.isAlwaysVisible }
+    }
+
+    private static func amenities(on map: IndoorMap) -> [HomeMapMarker] {
+        if let shared = sharedAmenities, shared.map == map { return shared.markers }
+        let markers = HomeMapMarkerBuilder.amenities(on: map)
+        sharedAmenities = (map, markers)
+        return markers
     }
 }
