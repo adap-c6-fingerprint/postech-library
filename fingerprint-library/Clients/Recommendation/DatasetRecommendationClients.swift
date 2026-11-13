@@ -83,15 +83,24 @@ extension DepartmentPopularBooksClient {
             }
             return data.books(forAffiliation: path)
         }
-        return Self(fetch: { affiliationKey, count, isInitial in
+        // 첫 표시는 데이터셋 목록만 사용한다. 연관도서 조회는 책마다 정보나루·Primo 왕복을
+        // 여러 번 기다려 목록 표시가 10초 넘게 늦어질 수 있으므로 다음 묶음 준비에서만 섞는다.
+        return Self(fetch: { affiliationKey, count in
             guard count > 0 else { return [] }
             let pool = try await fetchAll(affiliationKey)
             var generator = SystemRandomNumberGenerator()
-            let sources = DatasetRecommendation.randomPicks(from: pool, count: count, using: &generator)
-            guard !isInitial else { return sources }
-            let fallback = pool.shuffled(using: &generator)
+            return DatasetRecommendation.randomPicks(from: pool, count: count, using: &generator)
+        }, prepareReplacement: { affiliationKey, count, excludedKeys in
+            guard count > 0 else { return [] }
+            let pool = try await fetchAll(affiliationKey)
+            let candidates = pool.filter {
+                excludedKeys.isDisjoint(with: DatasetRecommendation.identityKeys(of: $0))
+            }
+            var generator = SystemRandomNumberGenerator()
+            let sources = DatasetRecommendation.randomPicks(from: candidates, count: count, using: &generator)
             return await RelatedRecommendationAssembler.assemble(
-                sources: sources, fallback: fallback, count: count, related: related
+                sources: sources, fallback: candidates.shuffled(using: &generator), count: count,
+                related: related, excluding: excludedKeys
             )
         }, fetchAll: fetchAll)
     }

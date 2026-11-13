@@ -19,7 +19,6 @@ struct HomeFeature {
         var departmentName: String { userProfile?.departmentName ?? "" }
         var isRecommendationExpanded = true
         var showsKulumiCovers = false
-        var isFirstVisitAfterOnboarding = false
         var libraryInfo: [Book.ID: LibraryInfoState] = [:]
         var libraryInfoGeneration = 0
         var libraryInfoPending: [Book.ID] = []
@@ -171,10 +170,7 @@ struct HomeFeature {
 
                 if state.popularBooks.isEmpty {
                     state.popularBooksErrorMessage = nil
-                    effects.append(loadPopularBooks(
-                        affiliationKey: state.userProfile?.affiliationKey ?? [],
-                        isInitial: state.isFirstVisitAfterOnboarding
-                    ))
+                    effects.append(loadPopularBooks(affiliationKey: state.userProfile?.affiliationKey ?? []))
                 }
 
                 return .concatenate(sync.cancel, .merge(effects))
@@ -570,10 +566,12 @@ struct HomeFeature {
         .cancellable(id: CancelID.recommendationSession, cancelInFlight: true)
     }
 
-    private func loadPopularBooks(affiliationKey: [String], isInitial: Bool) -> Effect<Action> {
+    private func loadPopularBooks(affiliationKey: [String]) -> Effect<Action> {
         .run { [departmentPopularBooksClient] send in
             do {
-                let books = try await departmentPopularBooksClient.fetch(affiliationKey, 6, isInitial)
+                let books = try await departmentPopularBooksClient.fetch(
+                    affiliationKey, DatasetRecommendation.displayCount
+                )
                 try Task.checkCancellation()
                 await send(.popularBooksLoaded(books))
             } catch is CancellationError {
@@ -593,9 +591,8 @@ struct HomeFeature {
         state.popularBooksPreparation = .loading(id)
         return .run { [departmentPopularBooksClient, bookCoverClient] send in
             do {
-                let pool = try await departmentPopularBooksClient.fetchAll(affiliationKey)
-                let books = DatasetRecommendation.assemble(
-                    candidatesPerSource: [], fallback: pool.shuffled(), excluding: excludedKeys
+                let books = try await departmentPopularBooksClient.prepareReplacement(
+                    affiliationKey, DatasetRecommendation.displayCount, excludedKeys
                 )
                 try Task.checkCancellation()
                 guard books.count == DatasetRecommendation.displayCount else {
