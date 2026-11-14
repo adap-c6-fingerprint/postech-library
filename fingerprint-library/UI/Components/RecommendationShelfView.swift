@@ -12,6 +12,7 @@ struct RecommendationShelfView: View {
             width: width,
             fillOpacity: 0.5,
             fixedBoltSize: 17.08,
+            fixedBoltLeadingInset: 15,
             cornerRadius: recommendationCornerRadius
         )
     }
@@ -20,6 +21,7 @@ struct RecommendationShelfView: View {
     var width: CGFloat? = nil
     var fillOpacity: Double = 0.5
     var fixedBoltSize: CGFloat? = nil
+    var fixedBoltLeadingInset: CGFloat? = nil
     var cornerRadius: CGFloat? = nil
 
     private nonisolated enum Design {
@@ -72,12 +74,13 @@ struct RecommendationShelfView: View {
                 .overlay(alignment: .topLeading) {
                     let boltSize = fixedBoltSize ?? Design.boltSize * scale
                     let boltTopInset = fixedBoltSize == nil ? Design.boltY * scale : (height - boltSize) / 2
+                    let boltLeadingInset = fixedBoltLeadingInset ?? Design.boltX * scale
 
                     Image("Bolt")
                         .resizable()
                         .scaledToFit()
                         .frame(width: boltSize, height: boltSize)
-                        .padding(.leading, Design.boltX * scale)
+                        .padding(.leading, boltLeadingInset)
                         .padding(.top, boltTopInset)
                 }
         }
