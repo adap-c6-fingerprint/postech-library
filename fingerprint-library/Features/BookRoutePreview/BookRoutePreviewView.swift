@@ -116,10 +116,12 @@ struct BookRoutePreviewView: View {
         ZStack {
             if showsRouteFailure {
                 directFailure
-            } else {
+            } else if hidesRouteErrorWhileResolvingOrigin {
                 directLoadingBackdrop
                 directHeader
                 directStatus
+            } else {
+                BookRoutePreparingView(onBack: { dismiss() }, onGoHome: { returnHome() })
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -215,9 +217,9 @@ struct BookRoutePreviewView: View {
 
     private var directFailure: some View {
         BookRouteFailureView(
-            kind: .init(failure: routeError),
+            kind: .init(failure: store.failureMessage),
             diagnostic: failureDiagnostic,
-            isRetrying: isLoadingRoute,
+            isRetrying: store.isRetryingDirectNavigation,
             onBack: { dismiss() },
             onRetry: { retryDirectNavigation() },
             onGoHome: { returnHome() },
@@ -226,7 +228,7 @@ struct BookRoutePreviewView: View {
     }
 
     private var failureDiagnostic: String {
-        let code = routeError?.diagnosticCode ?? "unknown"
+        let code = store.failureMessage?.diagnosticCode ?? "unknown"
         var parts = ["E: \(code)"]
         let now = Date()
         if !store.isAuthorized, store.manualStart == nil {

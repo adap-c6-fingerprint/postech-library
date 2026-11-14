@@ -41,6 +41,8 @@ struct BookRoutePreviewFeature {
         var isOriginPickerPresented = false
         var isRouteMapReady = false
         var preparingTimedOut = false
+        var isRetryingDirectNavigation = false
+        var retryingRouteError: RouteFailure?
         @Presents var navigation: BookNavigationFeature.State?
         var returnsToOriginAfterNavigation = false
 
@@ -122,7 +124,17 @@ struct BookRoutePreviewFeature {
         }
 
         var showsRouteFailure: Bool {
-            (routeError != nil || preparingTimedOut) && !hidesRouteErrorWhileResolvingOrigin
+            (routeError != nil || preparingTimedOut || isRetryingDirectNavigation) && !hidesRouteErrorWhileResolvingOrigin
+        }
+
+        var failureMessage: RouteFailure? {
+            isRetryingDirectNavigation ? retryingRouteError : routeError
+        }
+
+        var isShelfLoading: Bool {
+            guard let shelf else { return false }
+            return shelf.map.isLoading || shelf.map.isLoadingShelfLabels
+                || shelf.books.contains { shelf.holdings[$0.id] == .loading }
         }
 
         mutating func refreshCurrentStart(at now: Date) {
@@ -243,18 +255,16 @@ struct BookRoutePreviewFeature {
                 guard !state.needsStartLocationSetup else { return resolveStartAuthorization(&state) }
                 return loadRoute(.init(state: state.shelf, start: state.currentStart), startsNavigation: true, state: &state)
 
-            case .retryTapped, .directRetryTapped:
+            case .directRetryTapped where state.showsRouteFailure:
+                state.isRetryingDirectNavigation = true
+                state.retryingRouteError = state.routeError
                 state.refreshCurrentStart(at: now)
-                let permission: Effect<Action> = state.currentStart == nil
-                    && state.location.authorization == .notDetermined
-                    ? .run { [locationClient] _ in await locationClient.requestPermission() } : .none
-                let request = BookRoutePreviewRequest(state: state.shelf, start: state.currentStart)
-                guard request == state.routeRequest else {
-                    state.previewStart = state.currentStart
-                    return .merge(permission, reconcile(&state))
-                }
-                let startsNavigation = action.is(\.directRetryTapped)
-                return .merge(permission, loadRoute(request, startsNavigation: startsNavigation, state: &state))
+                let reloads = shelfReloads(state)
+                guard !reloads.isEmpty else { return retryRoute(startsNavigation: true, state: &state) }
+                return .merge(permissionRequest(state), restartPreparingTimeout(&state), .merge(reloads))
+
+            case .retryTapped, .directRetryTapped:
+                return retryRoute(startsNavigation: action.is(\.directRetryTapped), state: &state)
 
             case .setOriginManuallyTapped:
                 presentOriginPicker(&state)
@@ -320,6 +330,7 @@ struct BookRoutePreviewFeature {
                 guard requestID == state.requestID, state.navigation == nil,
                       !state.returnsToOriginAfterNavigation, state.previewPlan == nil else { return .none }
                 state.preparingTimedOut = true
+                endDirectRetry(&state)
                 return .none
 
             case .testModeTapped:
@@ -366,6 +377,7 @@ struct BookRoutePreviewFeature {
                 state.refreshCurrentStart(at: now)
                 state.previewPlan = routePlan
                 state.preparingTimedOut = false
+                endDirectRetry(&state)
                 analytics.record(.init(.routeCalculationCompleted, [
                     .operationID: .text(state.analyticsOperation), .navigationID: .text(routePlan.id.uuidString),
                     .distanceM: .decimal(routePlan.route.distanceMeters), .bookCount: .integer(routePlan.stops.count),
@@ -403,6 +415,7 @@ struct BookRoutePreviewFeature {
 
                 state.isLoadingRoute = false
                 state.routeError = message
+                endDirectRetry(&state)
                 analytics.record(.init(.routeCalculationFailed, [
                     .operationID: .text(state.analyticsOperation), .errorCode: .text("calculation_failed"),
                     .isTest: .flag(state.analyticsRequestIsTest)
@@ -418,6 +431,7 @@ struct BookRoutePreviewFeature {
                 state.routeError = nil
                 state.startsNavigationWhenLoaded = false
                 state.lastRequest = nil
+                endDirectRetry(&state)
                 return .merge(.cancel(id: CancelID.route), restartPreparingTimeout(&state))
 
             case .disappeared:
@@ -426,6 +440,7 @@ struct BookRoutePreviewFeature {
                 state.isLoadingRoute = false
                 state.startsNavigationWhenLoaded = false
                 state.isLocatingTimerRunning = false
+                endDirectRetry(&state)
                 return .merge(
                     .cancel(id: CancelID.route),
                     .cancel(id: CancelID.location),
@@ -508,12 +523,48 @@ struct BookRoutePreviewFeature {
         case nil, .current, .entrance, .locating:
             break
         }
+        if state.isPermissionAlertPresented || state.isPreparingManualOrigin { endDirectRetry(&state) }
         return .none
     }
 
     private func presentOriginPicker(_ state: inout State) {
+        endDirectRetry(&state)
         state.isPreparingManualOrigin = false
         state.isOriginPickerPresented = true
+    }
+
+    private func retryRoute(startsNavigation: Bool, state: inout State) -> Effect<Action> {
+        state.refreshCurrentStart(at: now)
+        let permission = permissionRequest(state)
+        let request = BookRoutePreviewRequest(state: state.shelf, start: state.currentStart)
+        guard request == state.routeRequest else {
+            state.previewStart = state.currentStart
+            return .merge(permission, reconcile(&state))
+        }
+        return .merge(permission, loadRoute(request, startsNavigation: startsNavigation, state: &state))
+    }
+
+    private func permissionRequest(_ state: State) -> Effect<Action> {
+        guard state.currentStart == nil, state.location.authorization == .notDetermined else { return .none }
+        return .run { [locationClient] _ in await locationClient.requestPermission() }
+    }
+
+    private func shelfReloads(_ state: State) -> [Effect<Action>] {
+        guard let shelf = state.shelf else { return [] }
+        var reloads: [Effect<Action>] = []
+        if shelf.map.map == nil || shelf.map.loadError != nil || shelf.map.shelfLabelError != nil {
+            reloads.append(.send(.shelf(.map(.retryTapped))))
+        }
+        for book in shelf.books {
+            guard case .failed = shelf.holdings[book.id] else { continue }
+            reloads.append(.send(.shelf(.retryHoldingsTapped(book.id))))
+        }
+        return reloads
+    }
+
+    private func endDirectRetry(_ state: inout State) {
+        state.isRetryingDirectNavigation = false
+        state.retryingRouteError = nil
     }
 
     private func loadRoute(
@@ -536,12 +587,14 @@ struct BookRoutePreviewFeature {
         case .failed(let message):
             state.routeError = message
             state.startsNavigationWhenLoaded = false
+            if !state.isShelfLoading { endDirectRetry(&state) }
             return .merge(.cancel(id: CancelID.route), timeout, resolveStartAuthorization(&state))
 
         case let .ready(map, labels, start, stops):
             guard start.isRecent(at: now) else {
                 state.routeError = .routing(.invalidPosition)
                 state.startsNavigationWhenLoaded = false
+                endDirectRetry(&state)
                 return .merge(.cancel(id: CancelID.route), timeout, resolveStartAuthorization(&state))
             }
             state.isLoadingRoute = true
