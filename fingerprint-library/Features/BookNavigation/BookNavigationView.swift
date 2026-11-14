@@ -22,6 +22,9 @@ struct BookNavigationView: View {
                 ZStack(alignment: .top) {
                     if let stop = store.currentStop, let route = store.currentRoute, let floor = store.currentFloor {
                         navigationMap(stop: stop, route: route, floor: floor)
+                            .overlay {
+                                if store.diagnostics.isPlacingCheckpoint { BookNavigationDiagnosticsCrosshair() }
+                            }
                             .ignoresSafeArea(.container, edges: [.top, .bottom])
                     } else {
                         ContentUnavailableView("안내 정보를 확인해 주세요", systemImage: "map")
@@ -36,7 +39,11 @@ struct BookNavigationView: View {
                     .allowsHitTesting(false)
                     VStack(alignment: .leading, spacing: 38) {
                         header
-                        currentFloorIndicator
+                        VStack(alignment: .leading, spacing: 12) {
+                            currentFloorIndicator
+                            if store.diagnostics.isRecording { BookNavigationDiagnosticsHUD(store: store) }
+                            if store.diagnostics.isPlacingCheckpoint { BookNavigationCheckpointBar(store: store) }
+                        }
                     }
                     .padding(.horizontal, 20).padding(.top, 20)
                     VStack(spacing: 16) {
@@ -97,6 +104,11 @@ struct BookNavigationView: View {
             }
         }
         .interactiveDismissDisabled()
+        .sheet(isPresented: Binding(get: { store.diagnostics.isPanelPresented },
+                                    set: { store.send(.diagnostics(.panelPresentationChanged($0))) })) {
+            BookNavigationDiagnosticsPanel(store: store)
+                .presentationDetents([.medium, .large])
+        }
         .overlay {
             if store.isCancelConfirmationPresented {
                 BookNavigationPauseAlert(
@@ -139,6 +151,16 @@ struct BookNavigationView: View {
                 }
             }
             Spacer(minLength: 0)
+            #if DEBUG
+            Button { store.send(.diagnostics(.panelButtonTapped)) } label: {
+                Image(systemName: store.diagnostics.isRecording ? "record.circle" : "waveform.path.ecg")
+                    .foregroundStyle(store.diagnostics.isRecording ? .red : .white)
+                    .frame(width: 44, height: 44)
+                    .glassEffect(.regular, in: .circle)
+            }
+            .accessibilityLabel(store.diagnostics.isRecording ? "위치 진단 기록 중, 진단 메뉴 열기" : "위치 진단")
+            .accessibilityIdentifier("book-navigation-diagnostics")
+            #endif
             Button { store.send(.cancelTapped) } label: {
                 Image(systemName: "xmark").frame(width: 44, height: 44)
                     .glassEffect(.regular, in: .circle)
@@ -281,7 +303,9 @@ struct BookNavigationView: View {
             shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),
             navigationAppearance: true,
             navigationDestination: store.currentPlan.map { .init(book: stop.book, coordinate: $0.destination.coordinate, floorID: stop.shelf.floorID) },
-            onUserCameraInteraction: { store.send(.mapInteractionBegan) }
+            onUserCameraInteraction: { store.send(.mapInteractionBegan) },
+            onCenterChanged: store.diagnostics.isPlacingCheckpoint
+                ? { coordinate, _ in store.send(.diagnostics(.checkpointCenterChanged(coordinate))) } : nil
         )
         .accessibilityIdentifier("book-navigation-map")
     }
