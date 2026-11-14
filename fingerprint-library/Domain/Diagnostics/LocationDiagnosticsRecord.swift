@@ -57,7 +57,7 @@ nonisolated enum LocationDiagnosticsRecord: Equatable, Sendable {
         var at: Date
         var positionTimestamp: Date?
         var stopIndex: Int
-        /// on_route, off_route, ambiguous_position, unknown_floor, inaccurate, stale, outside, floor_unselected, rerouting, unusable_position
+        /// on_route, degraded, lost, off_route, ambiguous_position, unknown_floor, inaccurate, stale, outside, floor_unselected, rerouting, unusable_position
         var quality: String
         var floorOrdinal: Int?
         var displayedLatitude: Double?
@@ -71,6 +71,10 @@ nonisolated enum LocationDiagnosticsRecord: Equatable, Sendable {
         var maneuver: String?
         var instruction: String?
         var cameraRequestID: Int
+        /// GuidanceTracker 상태: tracking, degraded, lost
+        var trackingStatus: String? = nil
+        /// 진행 거리 추정의 표준편차(m)
+        var uncertaintyMeters: Double? = nil
     }
 
     nonisolated struct MotionSample: Codable, Equatable, Sendable {

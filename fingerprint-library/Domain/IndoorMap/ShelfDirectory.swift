@@ -16,10 +16,7 @@ nonisolated struct ShelfDestination: Equatable, Sendable {
 }
 
 nonisolated struct ShelfDirectory: Equatable, Sendable {
-    enum Mode: String, Decodable, Sendable { case mock, library }
-
     let datasetID: String
-    let mode: Mode
     let destinations: [ShelfDestination]
 
     func destination(for key: ShelfKey) throws -> ShelfDestination {

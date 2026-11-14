@@ -15,19 +15,11 @@ struct IndoorMapKitView: UIViewRepresentable {
 
     let map: IndoorMap
     let floor: IndoorMapFloor
-    let selectedFeatureID: IndoorMapElement.ID?
     let position: IndoorPosition?
     let showsUserLocation: Bool
-    let isPlacingOrigin: Bool
     let cameraRequest: IndoorMapCameraRequest?
-    let onSelect: (IndoorMapElement.ID?) -> Void
-    let onPlaceOrigin: (IndoorMapCoordinate) -> Void
-    var shelves: [ShelfDestination] = []
-    var selectedShelfKey: ShelfKey?
-    var onSelectShelf: (ShelfKey?) -> Void = { _ in }
     var route: IndoorRoute?
     var entranceApproach: LibraryEntranceApproach?
-    var groupTransitionNodes: [RouteNode] = []
     var viewportInsets: UIEdgeInsets = .zero
     var shelfLabels: [IndoorShelfLabel] = []
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
@@ -69,12 +61,11 @@ struct IndoorMapKitView: UIViewRepresentable {
         coordinator.detachMapView()
     }
 
-    final class Coordinator: NSObject, MKMapViewDelegate, UIGestureRecognizerDelegate {
+    final class Coordinator: NSObject, MKMapViewDelegate {
         var parent: IndoorMapKitView
         weak var mapView: MKMapView?
         var renderedMap: IndoorMap?
         var renderedFloorID: UUID?
-        var selectedID: IndoorMapElement.ID?
         private var highlightedIDs: Set<IndoorMapElement.ID> = []
         private var renderedAppearance: Appearance = .standard
         var lastCameraRequest: IndoorMapCameraRequest?
@@ -93,14 +84,12 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var renderedPosition: IndoorPosition?
         private var renderedPositionAppearance: Appearance?
         private var renderedPositionNavigationAppearance = false
-        private var renderedShelves: [ShelfDestination] = []
         private let shelfLabelController = IndoorShelfLabelController()
         private var renderedDetailShelfLabels: [IndoorShelfLabel] = []
         private let homeAnnotations = HomeMapAnnotationController()
         private var renderedRoute: IndoorRoute?
         private var renderedEntranceApproach: LibraryEntranceApproach?
         private var entranceApproachOverlay: MKPolyline?
-        private var renderedGroupTransitionNodes: [RouteNode] = []
         private var renderedTurnArrows: [RouteTurnArrow] = []
         private var renderedNavigationAppearance = false
         private var renderedNavigationDestination: BookNavigationMapDestination?
@@ -109,7 +98,6 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var routeFloorID: UUID?
         private var routeOverlays: [any MKOverlay] = []
         private var routeOverlayIDs = Set<ObjectIdentifier>()
-        private var groupTransitionAnnotations: [MKPointAnnotation] = []
         private var routeTransitionAnnotations: [IndoorRouteTransitionAnnotation] = []
 
         init(parent: IndoorMapKitView) { self.parent = parent }
@@ -130,15 +118,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.showsScale = false
             view.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 5, maxCenterCoordinateDistance: 5_000), animated: false)
             view.accessibilityIdentifier = "indoor-map"
-            let tap = UITapGestureRecognizer(target: self, action: #selector(tapped(_:)))
-            tap.cancelsTouchesInView = false
-            tap.delegate = self
-            view.addGestureRecognizer(tap)
-            let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(_:)))
-            longPress.minimumPressDuration = 0.6
-            longPress.cancelsTouchesInView = false
-            longPress.delegate = self
-            view.addGestureRecognizer(longPress)
             view.onLayout = { [weak self] view in
                 self?.applyPendingCamera(in: view)
                 self?.layoutShelfLabels(in: view)
@@ -159,16 +138,14 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.overrideUserInterfaceStyle = .dark
             view.showsUserLocation = parent.showsUserLocation && !parent.appearance.usesHomeStyle
             updatePosition(in: view)
-            updatePositionMarkerBearing(in: view)
-            updateShelves(in: view)
+            updatePositionMarkerBearing(in: view, animated: true)
             homeAnnotations.update(parent.appearance.usesHomeStyle
                 ? parent.homeMarkers.filter { $0.floorID == parent.floor.id } : [], in: view)
             updateShelfLabels(in: view)
             updateDetailShelfBadges(in: view)
             updateRoute(in: view)
             updateEntranceApproach(in: view)
-            if selectedID != parent.selectedFeatureID || highlightedIDs != parent.highlightedFeatureIDs {
-                selectedID = parent.selectedFeatureID
+            if highlightedIDs != parent.highlightedFeatureIDs {
                 highlightedIDs = parent.highlightedFeatureIDs
                 if baseExcludedIDs.isSubset(of: emphasizedIDs) {
                     updateHighlightOverlays(in: view)
@@ -183,13 +160,11 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         private func updateRoute(in view: MKMapView) {
             guard renderedRoute != parent.route || routeFloorID != parent.floor.id
-                || renderedGroupTransitionNodes != parent.groupTransitionNodes
                 || renderedTurnArrows != parent.routeTurnArrows
                 || renderedNavigationDestination != parent.navigationDestination else { return }
             view.removeOverlays(routeOverlays)
             view.removeOverlays(turnArrowOverlays)
             view.removeAnnotations(routeTransitionAnnotations)
-            view.removeAnnotations(groupTransitionAnnotations)
             view.removeAnnotations(view.annotations.filter {
                 $0 is BookNavigationDestinationAnnotation || $0 is BookNavigationStartAnnotation
             })
@@ -197,10 +172,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             turnArrowOverlays.removeAll()
             turnArrowOverlayIDs.removeAll()
             routeOverlayIDs.removeAll()
-            groupTransitionAnnotations.removeAll()
             routeTransitionAnnotations.removeAll()
             renderedRoute = parent.route
-            renderedGroupTransitionNodes = parent.groupTransitionNodes
             renderedTurnArrows = parent.routeTurnArrows
             renderedNavigationDestination = parent.navigationDestination
             routeFloorID = parent.floor.id
@@ -214,13 +187,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
             if parent.navigationAppearance, route.start.floorID == parent.floor.id {
                 view.addAnnotation(BookNavigationStartAnnotation(coordinate: route.start.actualCoordinate))
-            }
-            for (index, node) in parent.groupTransitionNodes.enumerated() where node.floorID == parent.floor.id {
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = node.coordinate.clCoordinate
-                annotation.title = "\(index + 2)단계 시작 · 그룹 전환"
-                annotation.subtitle = node.id
-                groupTransitionAnnotations.append(annotation)
             }
             for change in route.floorChanges {
                 let from = parent.map.floors.first { $0.id == change.fromFloorID }?.ordinal
@@ -243,7 +209,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.addOverlays(routeOverlays, level: .aboveLabels)
             view.addOverlays(turnArrowOverlays, level: .aboveLabels)
             view.addAnnotations(routeTransitionAnnotations)
-            view.addAnnotations(groupTransitionAnnotations)
             if let destination = parent.navigationDestination, destination.floorID == parent.floor.id {
                 view.addAnnotation(BookNavigationDestinationAnnotation(destination))
             }
@@ -260,23 +225,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             let line = MKPolyline(coordinates: points, count: points.count)
             entranceApproachOverlay = line
             view.addOverlay(line, level: .aboveLabels)
-        }
-
-        private func updateShelves(in view: MKMapView) {
-            let shelves = parent.shelves.filter { $0.floorID == parent.floor.id }
-            if renderedShelves != shelves {
-                view.removeAnnotations(view.annotations.filter { $0 is IndoorShelfAnnotation })
-                renderedShelves = shelves
-                view.addAnnotations(shelves.map { IndoorShelfAnnotation(destination: $0) })
-            }
-            for case let annotation as IndoorShelfAnnotation in view.annotations {
-                (view.view(for: annotation) as? MKMarkerAnnotationView)?.markerTintColor =
-                    annotation.destination.key == parent.selectedShelfKey ? .systemOrange : .systemIndigo
-            }
-            for case let annotation as IndoorShelfAnnotation in view.selectedAnnotations
-                where annotation.destination.key != parent.selectedShelfKey {
-                view.deselectAnnotation(annotation, animated: false)
-            }
         }
 
         private func updateShelfLabels(in view: MKMapView) {
@@ -413,7 +361,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             renderedFloorID = parent.floor.id
             renderedNavigationAppearance = parent.navigationAppearance
             renderedAppearance = parent.appearance
-            selectedID = parent.selectedFeatureID
             highlightedIDs = parent.highlightedFeatureIDs
             baseExcludedIDs = emphasizedIDs
             var batcher = IndoorOverlayBatcher()
@@ -440,12 +387,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             overlayKinds.flatMap { kind in features.filter { $0.kind == kind } }
         }
 
-        /// 강조 또는 선택으로 기본과 다르게 그려야 하는 요소.
-        private var emphasizedIDs: Set<IndoorMapElement.ID> {
-            var ids = highlightedIDs
-            if let selectedID { ids.insert(selectedID) }
-            return ids
-        }
+        /// 강조로 기본과 다르게 그려야 하는 요소.
+        private var emphasizedIDs: Set<IndoorMapElement.ID> { highlightedIDs }
 
         private func register(_ batches: [(overlay: any MKOverlay, style: IndoorOverlayStyle)]) -> [any MKOverlay] {
             for batch in batches { overlayStyles[ObjectIdentifier(batch.overlay)] = batch.style }
@@ -521,15 +464,18 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = positionAnnotation { view.addAnnotation(annotation) }
         }
 
-        private func updatePositionMarkerBearing(in map: MKMapView) {
+        private func updatePositionMarkerBearing(in map: MKMapView, animated: Bool = false) {
             guard let annotation = positionAnnotation,
                   let view = map.view(for: annotation) as? MapUserLocationAnnotationView else { return }
-            configurePositionBearing(view, position: annotation.position, in: map)
+            configurePositionBearing(view, position: annotation.position, in: map, animated: animated)
         }
+        // 기기 방향이 바뀐 갱신(update)만 애니메이션한다. 지도 회전 콜백은 지도와 어긋나지 않게 즉시 맞춘다.
 
         private func configurePositionBearing(_ view: MapUserLocationAnnotationView,
-                                              position: IndoorPosition, in map: MKMapView) {
-            view.configure(headingDegrees: position.headingDegrees, mapHeading: map.camera.heading)
+                                              position: IndoorPosition, in map: MKMapView,
+                                              animated: Bool = false) {
+            view.configure(headingDegrees: position.headingDegrees, mapHeading: map.camera.heading,
+                           animated: animated)
         }
 
         private var floorFitPadding: UIEdgeInsets {
@@ -715,14 +661,14 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         private func baseStyle(for feature: IndoorMapElement?) -> IndoorOverlayStyle {
-            style(for: feature, isHighlighted: false, isSelected: false)
+            style(for: feature, isHighlighted: false)
         }
 
         private func style(for feature: IndoorMapElement) -> IndoorOverlayStyle {
-            style(for: feature, isHighlighted: highlightedIDs.contains(feature.id), isSelected: feature.id == selectedID)
+            style(for: feature, isHighlighted: highlightedIDs.contains(feature.id))
         }
 
-        private func style(for feature: IndoorMapElement?, isHighlighted: Bool, isSelected: Bool) -> IndoorOverlayStyle {
+        private func style(for feature: IndoorMapElement?, isHighlighted: Bool) -> IndoorOverlayStyle {
             var style = IndoorOverlayStyle()
             if parent.navigationAppearance {
                 style.strokeColor = UIColor(white: 0.12, alpha: 1)
@@ -749,13 +695,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 }
                 IndoorMapPalette.apply(to: &style, feature: feature, floorOrdinal: parent.floor.ordinal)
                 if isHighlighted {
-                    if parent.appearance == .bookDetail {
-                        style.fillColor = BookNavigationPalette.uiAccent
-                        style.strokeColor = BookNavigationPalette.uiAccent
-                    } else {
-                        style.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
-                        style.strokeColor = .systemOrange
-                    }
+                    style.fillColor = BookNavigationPalette.uiAccent
+                    style.strokeColor = BookNavigationPalette.uiAccent
                     style.lineWidth = 3
                 }
                 return style
@@ -775,15 +716,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             default: style.fillColor = UIColor.systemGray6.withAlphaComponent(0.95)
             }
             IndoorMapPalette.apply(to: &style, feature: feature, floorOrdinal: parent.floor.ordinal)
-            if isHighlighted {
-                style.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
-                style.strokeColor = .systemOrange
-                style.lineWidth = 3
-            } else if isSelected {
-                style.fillColor = UIColor.systemTeal.withAlphaComponent(0.35)
-                style.strokeColor = .systemTeal
-                style.lineWidth = 2
-            }
             return style
         }
 
@@ -799,9 +731,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = annotation as? HomeMapPointAnnotation {
                 return HomeMapAnnotationController.view(for: annotation, in: mapView)
             }
-            if let annotation = annotation as? PositionAnnotation,
-               parent.navigationAppearance || parent.visibleEntranceApproach?.position == annotation.position
-                || (parent.appearance.usesHomeStyle && annotation.position.source != .manual) {
+            if let annotation = annotation as? PositionAnnotation {
                 let reuseID = parent.navigationAppearance ? "navigation-position" : "home-user-position"
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID) as? MapUserLocationAnnotationView
                     ?? MapUserLocationAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
@@ -835,32 +765,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityIdentifier = isStart ? "book-navigation-start" : "book-navigation-destination"
                 return view
             }
-            if let annotation = annotation as? MKPointAnnotation,
-               groupTransitionAnnotations.contains(where: { $0 === annotation }) {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-group-transition")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-group-transition")
-                view.annotation = annotation
-                let size = MapAnnotationImage.size
-                view.image = UIGraphicsImageRenderer(size: size).image { _ in
-                    let circle = UIBezierPath(ovalIn: CGRect(origin: .zero, size: size).insetBy(dx: 2, dy: 2))
-                    UIColor.white.setFill()
-                    circle.fill()
-                    UIColor.systemOrange.setStroke()
-                    circle.lineWidth = 3
-                    circle.stroke()
-                }
-                view.centerOffset = .zero
-                view.zPriority = MapAnnotationPriority.route
-                view.selectedZPriority = MapAnnotationPriority.route
-                view.displayPriority = .required
-                view.collisionMode = .circle
-                view.clusteringIdentifier = nil
-                view.isEnabled = false
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = annotation.title
-                view.accessibilityIdentifier = "route-group-transition-\(annotation.subtitle ?? "")"
-                return view
-            }
             if let annotation = annotation as? IndoorShelfLabelAnnotation {
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: IndoorShelfLabelView.reuseID)
                     as? IndoorShelfLabelView
@@ -891,23 +795,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityIdentifier = "route-transition-\(annotation.category.rawValue)"
                 return view
             }
-            if let annotation = annotation as? IndoorShelfAnnotation {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "virtual-shelf") as? MKMarkerAnnotationView
-                    ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "virtual-shelf")
-                view.annotation = annotation
-                view.glyphImage = UIImage(systemName: "book.fill")
-                view.markerTintColor = annotation.destination.key == parent.selectedShelfKey ? .systemOrange : .systemIndigo
-                view.canShowCallout = true
-                view.titleVisibility = .visible
-                view.displayPriority = .required
-                view.zPriority = MapAnnotationPriority.marker
-                view.selectedZPriority = MapAnnotationPriority.marker
-                view.clusteringIdentifier = nil
-                view.accessibilityLabel = annotation.title
-                view.accessibilityValue = annotation.subtitle
-                view.accessibilityIdentifier = "shelf-\(annotation.destination.key.value)"
-                return view
-            }
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: "indoor-marker") as? MKMarkerAnnotationView
                 ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "indoor-marker")
             view.annotation = annotation
@@ -921,13 +808,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.glyphImage = UIImage(systemName: Self.symbol(for: annotation.feature.category))
                 view.markerTintColor = .systemTeal
                 view.accessibilityLabel = annotation.title
-            } else if let annotation = annotation as? PositionAnnotation {
-                view.glyphImage = UIImage(systemName: annotation.position.source == .replay ? "play.fill" : "mappin")
-                view.markerTintColor = annotation.position.source == .replay ? .systemOrange : .systemPurple
-                view.displayPriority = .required
-                view.zPriority = MapAnnotationPriority.user
-                view.selectedZPriority = MapAnnotationPriority.user
-                view.accessibilityLabel = annotation.title
             }
             return view
         }
@@ -938,70 +818,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 parent.onSelectFavoriteMarker(annotation.marker)
                 return
             }
-            if let annotation = annotation as? IndoorShelfAnnotation {
-                parent.onSelectShelf(annotation.destination.key)
-                return
-            }
             guard let annotation = annotation as? FeatureAnnotation else { return }
-            if parent.isPlacingOrigin {
-                parent.onPlaceOrigin(IndoorMapCoordinate(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude))
-            } else {
-                parent.onSelect(annotation.feature.id)
-            }
             mapView.deselectAnnotation(annotation, animated: false)
-        }
-
-        func mapView(_ mapView: MKMapView, didDeselect annotation: any MKAnnotation) {
-            if let annotation = annotation as? IndoorShelfAnnotation,
-               parent.selectedShelfKey == annotation.destination.key { parent.onSelectShelf(nil) }
-        }
-
-        @objc func tapped(_ gesture: UITapGestureRecognizer) {
-            guard let view = mapView else { return }
-            let location = gesture.location(in: view)
-            let value = view.convert(location, toCoordinateFrom: view)
-            let coordinate = IndoorMapCoordinate(latitude: value.latitude, longitude: value.longitude)
-            if parent.isPlacingOrigin {
-                parent.onPlaceOrigin(coordinate)
-            } else {
-                parent.onSelectShelf(nil)
-                let features = parent.map.features.filter { $0.floorID == parent.floor.id }
-                let amenities = features.compactMap { feature -> (IndoorMapElement, CGFloat)? in
-                    guard feature.kind == .amenity, case .point(let point) = feature.geometry else { return nil }
-                    let projected = view.convert(point.clCoordinate, toPointTo: view)
-                    let distance = hypot(projected.x - location.x, projected.y - location.y)
-                    return distance <= 22 ? (feature, distance) : nil
-                }
-                let selected = amenities.min { $0.1 < $1.1 }?.0
-                    ?? features.first { $0.kind == .fixture && $0.geometry.contains(coordinate) }
-                    ?? features.first { $0.kind == .unit && $0.geometry.contains(coordinate) }
-                parent.onSelect(selected?.id)
-            }
-        }
-
-        @objc func longPressed(_ gesture: UILongPressGestureRecognizer) {
-            guard gesture.state == .began, let view = mapView else { return }
-            let value = view.convert(gesture.location(in: view), toCoordinateFrom: view)
-            parent.onPlaceOrigin(IndoorMapCoordinate(latitude: value.latitude, longitude: value.longitude))
-        }
-
-        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool { true }
-
-        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-            var view = touch.view
-            while let current = view {
-                if current is MKAnnotationView { return false }
-                view = current.superview
-            }
-            if let mapView {
-                let point = touch.location(in: mapView)
-                for annotation in mapView.annotations {
-                    guard let annotationView = mapView.view(for: annotation) else { continue }
-                    let bounds = annotationView.convert(annotationView.bounds, to: mapView).insetBy(dx: -6, dy: -6)
-                    if bounds.contains(point) { return false }
-                }
-            }
-            return true
         }
 
         private static func symbol(for category: String?) -> String {
@@ -1087,10 +905,3 @@ private final class PositionAnnotation: NSObject, MKAnnotation {
     }
 }
 
-final class IndoorShelfAnnotation: NSObject, MKAnnotation {
-    let destination: ShelfDestination
-    var coordinate: CLLocationCoordinate2D { destination.arrivalCoordinate.clCoordinate }
-    var title: String? { destination.name }
-    var subtitle: String? { "테스트용 가상 서가" }
-    init(destination: ShelfDestination) { self.destination = destination }
-}

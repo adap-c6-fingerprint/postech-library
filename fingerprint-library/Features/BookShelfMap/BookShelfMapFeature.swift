@@ -37,8 +37,6 @@ struct BookShelfMapFeature {
             var seen = Set<String>()
             return books.flatMap { shelves(for: $0.id) }.filter { seen.insert($0.id).inserted }
         }
-
-        var highlightedFeatureIDs: Set<IndoorMapElement.ID> { Set(shelves.map(\.mapElementID)) }
     }
 
     enum Action {
@@ -49,7 +47,6 @@ struct BookShelfMapFeature {
         case holdingsLoaded(Book.ID, requestID: Int, [BookHolding])
         case holdingsFailed(Book.ID, requestID: Int, String)
         case resolveLocations
-        case focusShelfTapped
         case bookShelfTapped(Book.ID)
         case candidateTapped(Book.ID, fixtureNumber: String)
         case map(IndoorMapFeature.Action)
@@ -128,10 +125,6 @@ struct BookShelfMapFeature {
                 }
                 state.map.selectedFloorID = shelf.floorID
                 state.map.requestCamera(.features([shelf.mapElementID]))
-                return .none
-
-            case .focusShelfTapped:
-                focus(state.shelves, state: &state)
                 return .none
 
             case .map(.mapLoaded):

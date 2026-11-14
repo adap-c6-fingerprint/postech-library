@@ -295,10 +295,22 @@ struct BookNavigationView: View {
     }
 
     private func navigationMap(stop: RouteStop, route: IndoorRoute, floor: IndoorMapFloor) -> some View {
+        BookNavigationMap(store: store, stop: stop, route: route, floor: floor, sheetHeight: sheetHeight)
+    }
+}
+
+private struct BookNavigationMap: View {
+    let store: StoreOf<BookNavigationFeature>
+    let stop: RouteStop
+    let route: IndoorRoute
+    let floor: IndoorMapFloor
+    let sheetHeight: CGFloat
+
+    var body: some View {
         IndoorMapKitView(
-            map: store.routePlan.map, floor: floor, selectedFeatureID: nil,
-            position: store.mapPosition, showsUserLocation: false, isPlacingOrigin: false,
-            cameraRequest: store.cameraRequest, onSelect: { _ in }, onPlaceOrigin: { _ in },
+            map: store.routePlan.map, floor: floor,
+            position: store.mapPosition, showsUserLocation: false,
+            cameraRequest: store.cameraRequest,
             route: route, entranceApproach: store.entranceApproach, viewportInsets: .init(top: 140, left: 0,
                 bottom: sheetHeight + (store.nextFloorTransition == nil ? 0 : 50), right: 0),
             shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),
@@ -310,4 +322,5 @@ struct BookNavigationView: View {
         )
         .accessibilityIdentifier("book-navigation-map")
     }
+    // 기기 방향(deviceHeadingDegrees)을 읽는 곳을 이 뷰로 한정해, 나침반 갱신 때 안내 시트·상단 UI는 다시 계산되지 않게 한다.
 }

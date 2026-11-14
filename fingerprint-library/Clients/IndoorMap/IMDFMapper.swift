@@ -1,15 +1,9 @@
 import Foundation
 
-nonisolated enum IMDFImportPolicy: Sendable {
-    case strict
-    case c5Compatibility
-}
-
 nonisolated struct IMDFMapper {
     func map(
         version: String,
-        collections: [String: IMDFFeatureCollectionDTO],
-        policy: IMDFImportPolicy = .strict
+        collections: [String: IMDFFeatureCollectionDTO]
     ) throws -> IndoorMap {
         var ids: [UUID: [String]] = [:]
         for file in collections.keys.sorted() {
@@ -28,7 +22,7 @@ nonisolated struct IMDFMapper {
             }
         }
         let duplicates = ids.filter { $0.value.count > 1 }.sorted { $0.key.uuidString < $1.key.uuidString }
-        if policy == .strict, let duplicate = duplicates.first {
+        if let duplicate = duplicates.first {
             throw IndoorMapLoadError.invalidData(
                 file: duplicate.value.map { "\($0).geojson" }.joined(separator: ", "),
                 reason: "타입 간 중복 ID가 있습니다: \(duplicate.key)"

@@ -26,14 +26,6 @@ struct LibraryMapView: View {
 
     var body: some View {
         mapContent
-            .navigationDestination(
-                isPresented: Binding(
-                    get: { store.isRouteSettingsPresented },
-                    set: { store.send(.routeSettingsPresentationChanged($0)) }
-                )
-            ) {
-                IndoorRouteSettingsView(store: mapStore)
-            }
     }
 
     private var mapLayout: some View {

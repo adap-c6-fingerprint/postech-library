@@ -17,7 +17,6 @@ struct IndoorMapLocationFloorTests {
         let store = TestStore(initialState: state) { IndoorMapFeature() } withDependencies: {
             $0.uuid = .incrementing
             $0.date.now = now
-            $0.indoorNavigationClient.load = { _ in throw CancellationError() }
             $0.indoorShelfLabelClient.load = { _ in [] }
         }
         store.exhaustivity = .off
@@ -61,24 +60,6 @@ struct IndoorMapLocationFloorTests {
         #expect(store.state.selectedFloor?.ordinal == 3)
         await store.send(.locationEvent(.position(position(inside: false, floor: 4, offset: 1))))
         #expect(store.state.selectedFloor?.ordinal == 2)
-        await store.finish()
-    }
-
-    @Test func 수동_출발점은_센서_층_변경이나_권한_변경으로_초기화하지_않는다() async throws {
-        let map = try await BundledIndoorMapLoader().loadLibrary()
-        var state = withDependencies { $0.uuid = .incrementing } operation: { IndoorMapFeature.State() }
-        state.map = map
-        state.selectedFloorID = map.floors.first { $0.ordinal == 2 }?.id
-        let manual = IndoorPosition(coordinate: position(inside: true, floor: 2).coordinate,
-            floorOrdinal: 2, horizontalAccuracy: nil, timestamp: now, source: .manual)
-        state.manualPosition = manual
-        state.isRouting = true
-        let store = store(state)
-        await store.send(.locationEvent(.position(position(inside: false, floor: 4))))
-        await store.send(.locationEvent(.authorization(.denied)))
-        #expect(store.state.currentPosition == manual)
-        #expect(store.state.selectedFloor?.ordinal == 2)
-        #expect(store.state.isRouting)
         await store.finish()
     }
 }

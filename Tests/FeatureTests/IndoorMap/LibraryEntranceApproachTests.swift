@@ -14,9 +14,9 @@ struct LibraryEntranceApproachTests {
         let floor = try #require(map.floors.first { $0.ordinal == start.floorOrdinal })
         let approach = try #require(LibraryEntranceApproach(position: sensed, entrance: start, map: map))
         func makeParent(position: IndoorPosition, approach: LibraryEntranceApproach?) -> IndoorMapKitView {
-            IndoorMapKitView(map: map, floor: floor, selectedFeatureID: nil, position: position,
-                showsUserLocation: false, isPlacingOrigin: false, cameraRequest: nil,
-                onSelect: { _ in }, onPlaceOrigin: { _ in }, entranceApproach: approach, navigationAppearance: true)
+            IndoorMapKitView(map: map, floor: floor, position: position,
+                showsUserLocation: false, cameraRequest: nil,
+                entranceApproach: approach, navigationAppearance: true)
         }
         var parent = makeParent(position: sensed, approach: approach)
         let coordinator = parent.makeCoordinator()

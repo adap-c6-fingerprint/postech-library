@@ -277,7 +277,9 @@ extension BookNavigationFeature {
             remainingMeters: progress?.remainingMeters, stepIndex: progress?.stepIndex,
             maneuver: progress.map { Self.maneuverName($0.maneuver) },
             instruction: state.nextBookRouteError ?? state.statusMessage ?? state.instructionText,
-            cameraRequestID: state.cameraRequest.id)))
+            cameraRequestID: state.cameraRequest.id,
+            trackingStatus: state.trackingStatus.map { "\($0)" },
+            uncertaintyMeters: state.tracker?.uncertaintyMeters)))
     }
 
     func recordDiagnosticsEvent(_ state: State, _ name: String, _ detail: [String: String] = [:]) {

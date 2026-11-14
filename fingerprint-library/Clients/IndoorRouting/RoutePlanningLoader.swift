@@ -54,7 +54,7 @@ nonisolated struct RoutePlanningLoader {
         }
         let navigation = IndoorNavigationData(
             graph: prepared.graph,
-            shelves: .init(datasetID: "postech-library-preview-test", mode: .library, destinations: destinations),
+            shelves: .init(datasetID: "postech-library-preview-test", destinations: destinations),
             diagnostics: prepared.diagnostics, transitionDistances: prepared.transitionDistances
         )
         return .init(map: map, shelfLabels: labels, navigation: navigation, start: start, stops: stops)

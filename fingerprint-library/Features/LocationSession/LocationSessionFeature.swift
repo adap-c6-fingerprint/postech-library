@@ -14,6 +14,8 @@ struct LocationSessionFeature {
     @ObservableState
     struct State: Equatable {
         var isActive = false
+        var isBarometerActive = false
+        var floorEstimator = FloorEstimator()
         @Shared(.indoorLocation) var location
     }
 
@@ -21,12 +23,15 @@ struct LocationSessionFeature {
         case started
         case sceneActiveChanged(Bool)
         case locationEvent(IndoorLocationEvent)
+        case barometerSample(BarometerSample)
     }
 
     @Dependency(\.indoorLocationClient) var locationClient
+    @Dependency(\.barometerClient) var barometerClient
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case events
+        case barometer
     }
 
     var body: some Reducer<State, Action> {
@@ -35,18 +40,56 @@ struct LocationSessionFeature {
             case .started:
                 guard !state.isActive else { return .none }
                 state.isActive = true
-                return subscribe()
+                state.floorEstimator.locationUpdatesDidRestart()
+                return .merge(subscribe(), updateBarometerSubscription(state: &state))
 
             case let .sceneActiveChanged(isActive):
                 guard state.isActive != isActive else { return .none }
                 state.isActive = isActive
-                return isActive ? subscribe() : .cancel(id: CancelID.events)
+                if isActive { state.floorEstimator.locationUpdatesDidRestart() }
+                return .merge(
+                    isActive ? subscribe() : .cancel(id: CancelID.events),
+                    updateBarometerSubscription(state: &state)
+                )
 
             case let .locationEvent(event):
-                state.$location.withLock { $0.apply(event) }
+                if case let .position(position) = event, position.source == .sensor {
+                    state.floorEstimator.ingestFloor(level: position.floorOrdinal, at: position.timestamp)
+                    let estimate = state.floorEstimator.estimate(at: position.timestamp)
+                    state.$location.withLock { $0.apply(.position(position.replacingFloor(estimate.ordinal))) }
+                } else {
+                    let wasAuthorized = state.location.authorization.isAuthorized
+                    state.$location.withLock { $0.apply(event) }
+                    if case .authorization = event {
+                        if !wasAuthorized, state.location.authorization.isAuthorized {
+                            state.floorEstimator.locationUpdatesDidRestart()
+                        }
+                        return updateBarometerSubscription(state: &state)
+                    }
+                }
+                return .none
+
+            case let .barometerSample(sample):
+                guard state.isActive, state.isBarometerActive else { return .none }
+                state.floorEstimator.ingestPressure(kilopascals: sample.kilopascals, at: sample.timestamp)
+                // GPS 측정 시각을 연장하지 않는다. 다음 위치 이벤트에 추정 층을 반영한다.
                 return .none
             }
         }
+    }
+
+    private func updateBarometerSubscription(state: inout State) -> Effect<Action> {
+        let shouldSubscribe = state.isActive && state.location.authorization.isAuthorized
+        guard state.isBarometerActive != shouldSubscribe else { return .none }
+        state.isBarometerActive = shouldSubscribe
+        guard shouldSubscribe else { return .cancel(id: CancelID.barometer) }
+        return .run { send in
+            for await sample in await barometerClient.samples() {
+                guard !Task.isCancelled else { return }
+                await send(.barometerSample(sample))
+            }
+        }
+        .cancellable(id: CancelID.barometer, cancelInFlight: true)
     }
 
     private func subscribe() -> Effect<Action> {
