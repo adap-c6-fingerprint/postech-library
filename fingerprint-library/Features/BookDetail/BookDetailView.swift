@@ -10,8 +10,7 @@ struct BookDetailMapView: View {
     @State private var sheetPresentation = BookDetailSheetPresentation()
 
     private var context: BookDetailMapContext {
-        .init(map: mapStore.map, navigation: mapStore.navigation, labels: mapStore.shelfLabels,
-              position: mapStore.currentPosition, preference: mapStore.routePreference)
+        .init(map: mapStore.map, labels: mapStore.shelfLabels)
     }
 
     private var destinationFloor: IndoorMapFloor? {
@@ -192,7 +191,6 @@ struct BookDetailView: View {
                 .lineLimit(usesAccessibleLayout ? nil : 2)
                 .truncationMode(.tail)
             holdingLocation(typography: .body1)
-            expandedRouteSummary
         }
     }
 
@@ -250,9 +248,6 @@ struct BookDetailView: View {
             bookTitle
             VStack(alignment: .leading, spacing: detent == .medium ? 4 : 8) {
                 holdingLocation()
-                routeSummary
-                    .typography(.caption1)
-                    .foregroundStyle(Color.textTertiary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -296,35 +291,6 @@ struct BookDetailView: View {
                 Text("소장정보를 불러오지 못했어요.")
                 Button("다시 시도") { store.send(.retryHoldingsButtonTapped) }
             }
-        }
-    }
-
-    @ViewBuilder
-    private var routeSummary: some View {
-        switch store.destinationRouteState {
-        case .idle: Text("거리 확인 중")
-        case .loading: ProgressView("거리 확인 중")
-        case .unavailable: EmptyView()
-        case .loaded(let summary): Text(summary.text)
-        }
-    }
-
-    @ViewBuilder
-    private var expandedRouteSummary: some View {
-        if case let .loaded(summary) = store.destinationRouteState {
-            BookExpandedRouteSummary(
-                distanceText: "\(summary.isEstimated ? "약 " : "")\(summary.distanceMeters)m",
-                floorChangeCount: summary.floorChangeCount
-            )
-            .padding(.top, 2)
-        } else {
-            HStack(spacing: 16) {
-                Spacer(minLength: 0)
-                routeSummary
-            }
-            .typography(.caption1)
-            .foregroundStyle(Color.textSecondary)
-            .padding(.top, 2)
         }
     }
 
