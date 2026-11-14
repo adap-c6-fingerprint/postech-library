@@ -186,13 +186,22 @@ struct BookNavigationView: View {
                         .frame(width: 23, height: 23)
                         .background(.black, in: Circle())
                         .accessibilityHidden(true)
-                    Text(store.nextBookRouteError ?? store.instructionText ?? store.statusMessage ?? "현재 위치를 확인하고 있어요.")
+                    Text(store.nextBookRouteError ?? store.statusMessage ?? store.instructionText ?? "현재 위치를 확인하고 있어요.")
                         .typography(.body1).lineLimit(2)
                         .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                     Spacer(minLength: 0)
                 }
                 .frame(minHeight: 28)
                 .accessibilityIdentifier("book-navigation-instruction")
+                if let notice = store.startNotice {
+                    RouteStartNoticeView(notice: notice)
+                        .typography(.caption1)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("book-navigation-start-notice")
+                    Button("출발 위치 직접 설정") { store.send(.setOriginManuallyTapped) }
+                        .font(.caption.bold())
+                        .accessibilityIdentifier("book-navigation-set-origin")
+                }
                 BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
                     progress: store.displayedProgress, floors: store.routePlan.map.floors)
             }
@@ -265,9 +274,9 @@ struct BookNavigationView: View {
     private func navigationMap(stop: RouteStop, route: IndoorRoute, floor: IndoorMapFloor) -> some View {
         IndoorMapKitView(
             map: store.routePlan.map, floor: floor, selectedFeatureID: nil,
-            position: store.latestPosition, showsUserLocation: false, isPlacingOrigin: false,
+            position: store.mapPosition, showsUserLocation: false, isPlacingOrigin: false,
             cameraRequest: store.cameraRequest, onSelect: { _ in }, onPlaceOrigin: { _ in },
-            route: route, viewportInsets: .init(top: 140, left: 0,
+            route: route, entranceApproach: store.entranceApproach, viewportInsets: .init(top: 140, left: 0,
                 bottom: sheetHeight + (store.nextFloorTransition == nil ? 0 : 50), right: 0),
             shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),
             navigationAppearance: true, navigationBearingRadians: store.navigationBearing,

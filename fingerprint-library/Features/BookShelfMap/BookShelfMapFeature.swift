@@ -43,6 +43,8 @@ struct BookShelfMapFeature {
 
     enum Action {
         case task
+        case prepareMap
+        case loadMissingHoldings
         case retryHoldingsTapped(Book.ID)
         case holdingsLoaded(Book.ID, requestID: Int, [BookHolding])
         case holdingsFailed(Book.ID, requestID: Int, String)
@@ -72,7 +74,13 @@ struct BookShelfMapFeature {
         Reduce { state, action in
             switch action {
             case .task:
-                var effects: [Effect<Action>] = [.send(.map(.retryTapped))]
+                return .merge(.send(.prepareMap), .send(.loadMissingHoldings))
+
+            case .prepareMap:
+                return .send(.map(.retryTapped))
+
+            case .loadMissingHoldings:
+                var effects: [Effect<Action>] = []
                 for book in state.books where state.holdings[book.id] == nil {
                     effects.append(loadHoldings(book.id, state: &state))
                 }

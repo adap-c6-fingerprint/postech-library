@@ -145,11 +145,11 @@ struct BookRouteFailureView: View {
 }
 
 extension BookRouteFailureView.Kind {
-    init(message: String?) {
-        switch IndoorRoutingError.allCases.first(where: { $0.errorDescription == message }) {
-        case .farFromGraph, .invalidPosition, .unknownFloor:
+    init(failure: RouteFailure?) {
+        switch failure {
+        case .routing(.farFromGraph), .routing(.invalidPosition), .routing(.unknownFloor):
             self = .outsideLibrary
-        case .invalidDestination, .noRoute:
+        case .routing(.invalidDestination), .routing(.noRoute):
             self = .destinationUnavailable
         default:
             self = .dataUnavailable

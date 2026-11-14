@@ -28,7 +28,7 @@ struct BookRoutePreviewView: View {
         routeStore.isLoadingRoute
     }
 
-    private var routeError: String? {
+    private var routeError: RouteFailure? {
         routeStore.routeError
     }
     
@@ -51,11 +51,13 @@ struct BookRoutePreviewView: View {
                    }) {
                     IndoorMapKitView(
                         map: previewPlan.map, floor: floor, selectedFeatureID: nil,
-                        position: previewPlan.start, showsUserLocation: false, isPlacingOrigin: false,
+                        position: store.entranceApproach?.position ?? previewPlan.start,
+                        showsUserLocation: false, isPlacingOrigin: false,
                         cameraRequest: .init(id: cameraRevision * 100 + floor.ordinal, target: .route(previewPlan.route,
                             featureIDs: previewPlan.stops.flatMap { $0.candidateShelves.map(\.mapElementID) })),
                         onSelect: { _ in }, onPlaceOrigin: { _ in },
                         route: previewPlan.route,
+                        entranceApproach: store.entranceApproach,
                         groupTransitionNodes: previewPlan.guidance.groupTransitionNodes,
                         viewportInsets: insets,
                         shelfLabels: previewPlan.shelfLabels,
@@ -115,17 +117,32 @@ struct BookRoutePreviewView: View {
             if showsRouteFailure {
                 directFailure
             } else {
-                directMapBackdrop
+                directLoadingBackdrop
                 directHeader
                 directStatus
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(uiColor: .systemBackground).ignoresSafeArea())
         .accessibilityIdentifier("book-navigation-preparing")
     }
 
     private var hidesRouteErrorWhileResolvingOrigin: Bool { store.hidesRouteErrorWhileResolvingOrigin }
     private var showsRouteFailure: Bool { store.showsRouteFailure }
+
+    private var directLoadingBackdrop: some View {
+        ZStack {
+            Color(uiColor: .systemBackground)
+            directMapBackdrop
+            Rectangle()
+                .fill(.regularMaterial)
+                .overlay(Color.black.opacity(0.25))
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+        .accessibilityIdentifier("book-navigation-preparing-background")
+    }
 
     @ViewBuilder
     private var directMapBackdrop: some View {
@@ -176,14 +193,24 @@ struct BookRoutePreviewView: View {
                 .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             ProgressView()
                 .tint(PobookUI.ColorToken.neutralPrimary)
+            if let notice = store.startNotice {
+                RouteStartNoticeView(notice: notice)
+                    .typography(.caption1)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button("출발 위치 직접 설정") { store.send(.setOriginManuallyTapped) }
+                    .font(.caption.bold())
+                    .accessibilityIdentifier("book-navigation-preparing-set-origin")
+            }
         }
-        .accessibilityElement(children: .combine)
+        .padding(.horizontal, 20)
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("book-navigation-preparing-status")
     }
 
     private var directFailure: some View {
         BookRouteFailureView(
-            kind: .init(message: routeError),
+            kind: .init(failure: routeError),
             diagnostic: failureDiagnostic,
             isRetrying: isLoadingRoute,
             onBack: { dismiss() },
@@ -194,8 +221,7 @@ struct BookRoutePreviewView: View {
     }
 
     private var failureDiagnostic: String {
-        let code = IndoorRoutingError.allCases.first { $0.errorDescription == routeError }
-            .map { "\($0)" } ?? "unknown"
+        let code = routeError?.diagnosticCode ?? "unknown"
         var parts = ["E: \(code)"]
         let now = Date()
         if !store.isAuthorized, store.manualStart == nil {
@@ -249,7 +275,7 @@ struct BookRoutePreviewView: View {
 
 
         ---
-        증상: \(routeError ?? "길안내를 준비하지 못함")
+        증상: \(routeError?.message ?? "길안내를 준비하지 못함")
         책: \(book)
         앱 버전: \(version) (\(build))
         """
@@ -269,7 +295,8 @@ struct BookRoutePreviewView: View {
                     shelfStore: destinationStore,
                     routePlan: readySession,
                     isLoadingRoute: isLoadingRoute,
-                    routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError,
+                    routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError?.message,
+                    startNotice: store.startNotice,
                     canStart: !isLoadingRoute && (needsStartLocationSetup
                         || (readySession != nil && currentStart != nil && routeError == nil)),
                     onBack: { dismiss() },
@@ -342,7 +369,7 @@ struct BookRoutePreviewView: View {
         }
         .task(id: destination) {
             guard store.shelf != nil else { return }
-            await store.send(.shelf(.task)).finish()
+            await store.send(.shelf(.prepareMap)).finish()
         }
         .onDisappear {
             routeStore.send(.disappeared)
@@ -359,6 +386,7 @@ struct BookRoutePreviewView: View {
         if let map = routeMap {
             BookRouteOriginPickerView(
                 map: map, title: originPickerTitle, subtitle: originPickerSubtitle,
+                startNotice: store.startNotice,
                 initialFloorID: originPickerFloorID,
                 onCancel: { store.send(.originPickerCancelled) },
                 onConfirm: { coordinate, floorOrdinal in
@@ -412,7 +440,7 @@ struct BookRoutePreviewView: View {
                     .font(.caption)
             }
             if let routeError {
-                Text(routeError).font(.caption).foregroundStyle(.red)
+                Text(routeError.message).font(.caption).foregroundStyle(.red)
                     .accessibilityIdentifier("preview-test-route-error")
                 Button("경로 다시 계산") { store.send(.retryTapped) }
                 .buttonStyle(.bordered)

@@ -7,6 +7,7 @@ final class MapUserLocationAnnotationView: MKAnnotationView {
     private let headingView = UIImageView(image: UIImage(named: "MapUserHeading")?.withRenderingMode(.alwaysOriginal))
     private let headingContainer = UIView()
     private let haloView = UIView()
+    private let blueDotView = UIView()
 
     private static let dotArtworkDiameter: CGFloat = 15
     private static let headingSize = CGSize(width: 15.89314, height: 12.36133)
@@ -34,6 +35,12 @@ final class MapUserLocationAnnotationView: MKAnnotationView {
         isAccessibilityElement = true
         dotView.contentMode = .scaleAspectFit
         dotView.accessibilityIdentifier = "user-location-dot-image"
+        blueDotView.backgroundColor = .systemBlue
+        blueDotView.layer.borderColor = UIColor.white.cgColor
+        blueDotView.layer.borderWidth = 2
+        blueDotView.layer.cornerRadius = Self.dotArtworkDiameter / 2
+        blueDotView.isHidden = true
+        blueDotView.isUserInteractionEnabled = false
         haloView.backgroundColor = .clear
         haloView.layer.shadowColor = UIColor(red: 0.87, green: 0.96, blue: 0.24, alpha: 1).cgColor
         haloView.layer.shadowOpacity = 0.3
@@ -53,6 +60,7 @@ final class MapUserLocationAnnotationView: MKAnnotationView {
         addSubview(headingContainer)
         headingContainer.addSubview(headingView)
         addSubview(dotView)
+        addSubview(blueDotView)
     }
 
     override func layoutSubviews() {
@@ -62,13 +70,16 @@ final class MapUserLocationAnnotationView: MKAnnotationView {
         haloView.layer.shadowPath = UIBezierPath(ovalIn: haloView.bounds).cgPath
         dotView.bounds = CGRect(x: 0, y: 0, width: Self.dotArtworkDiameter, height: Self.dotArtworkDiameter)
         dotView.center = center
+        blueDotView.frame = dotView.frame
         headingContainer.bounds = bounds
         headingContainer.center = center
         let distance = Self.dotArtworkDiameter / 2 + Self.headingGap + Self.headingSize.height / 2
         headingView.center = CGPoint(x: center.x, y: center.y - distance)
     }
 
-    func configure(headingDegrees: Double?, mapHeading: Double) {
+    func configure(headingDegrees: Double?, mapHeading: Double, showsBlueDot: Bool = false) {
+        dotView.isHidden = showsBlueDot
+        blueDotView.isHidden = !showsBlueDot
         guard let headingDegrees, headingDegrees.isFinite, (0..<360).contains(headingDegrees),
               mapHeading.isFinite else {
             headingContainer.isHidden = true

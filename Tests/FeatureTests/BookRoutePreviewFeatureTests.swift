@@ -17,13 +17,13 @@ struct BookRoutePreviewFeatureTests {
         }
         store.exhaustivity = .off
 
-        await store.send(.routeFailed(requestID: 1, "이전 요청 실패"))
+        await store.send(.routeFailed(requestID: 1, .unexpected("이전 요청 실패")))
         #expect(store.state.isLoadingRoute)
         #expect(store.state.routeError == nil)
 
-        await store.send(.routeFailed(requestID: 2, "최신 요청 실패"))
+        await store.send(.routeFailed(requestID: 2, .unexpected("최신 요청 실패")))
         #expect(!store.state.isLoadingRoute)
-        #expect(store.state.routeError == "최신 요청 실패")
+        #expect(store.state.routeError == .unexpected("최신 요청 실패"))
     }
 
     @Test func 지금_안내할_수_없을_때_책을_책바구니에_담고_닫는다() async {
