@@ -5,6 +5,8 @@ import Foundation
 // 기록이 꺼져 있으면 안내 상태를 바꾸지 않고, 기록 중일 때만 진단 상태와 기록을 갱신한다.
 extension BookNavigationFeature {
     struct Diagnostics: Equatable {
+        /// 검색창 `/test`로 켠 자동 측정 모드. 안내 화면이 열릴 때의 값을 쓴다.
+        var isAutoMode = false
         var isPanelPresented = false
         var posture: LocationDiagnosticsPosture = .handViewing
         var includesScreenRecording = true
@@ -39,6 +41,8 @@ extension BookNavigationFeature {
         case microphoneToggled(Bool)
         case screenAvailabilityLoaded(Bool)
         case startTapped
+        case autoStartRequested
+        case autoModeTurnedOff
         case sessionStarted(LocationDiagnosticsSessionInfo)
         case sessionStartFailed(String)
         case screenStatusChanged(ScreenRecordingStatus)
@@ -89,34 +93,21 @@ extension BookNavigationFeature {
             return .none
 
         case .startTapped:
-            guard !state.diagnostics.isRecording, !state.diagnostics.isStarting else { return .none }
-            state.diagnostics.isStarting = true
-            state.diagnostics.errorMessage = nil
             let includesScreen = state.diagnostics.includesScreenRecording && state.diagnostics.isScreenRecordingAvailable
-            let meta = LocationDiagnosticsSessionMeta(
-                startedAt: now, posture: state.diagnostics.posture,
-                includesScreenRecording: includesScreen,
-                includesMicrophone: includesScreen && state.diagnostics.includesMicrophone,
-                routePlanID: state.routePlan.id.uuidString, bookCount: state.routePlan.stops.count,
-                startsAtEntrance: state.startsAtEntrance, usesManualOrigin: state.usesManualOrigin,
-                guidanceThresholds: [
-                    "maximumAccuracyMeters": GuidanceEngine.maximumAccuracyMeters,
-                    "matchingRadiusMeters": GuidanceEngine.matchingRadiusMeters,
-                    "maximumPositionAgeSeconds": GuidanceEngine.maximumPositionAge,
-                    "offRouteRerouteDelaySeconds": Self.offRouteRerouteDelay,
-                    "jumpWalkingSpeedLimit": LocationJump.walkingSpeedLimit,
-                    "jumpMinimumMeters": LocationJump.minimumJumpMeters
-                ])
-            return .run { [diagnosticsClient] send in
-                do {
-                    let info = try await diagnosticsClient.startSession(meta)
-                    await send(.diagnostics(.sessionStarted(info)))
-                    guard meta.includesScreenRecording else { return }
-                    await diagnosticsClient.startScreenRecording(meta.includesMicrophone)
-                } catch {
-                    await send(.diagnostics(.sessionStartFailed(error.localizedDescription)))
-                }
-            }
+            return startSession(&state, includesScreen: includesScreen,
+                                includesMicrophone: includesScreen && state.diagnostics.includesMicrophone,
+                                isAutomatic: false)
+
+        case .autoStartRequested:
+            // 자동 측정은 승인 창 없이 진행해야 하므로 화면 녹화는 하지 않는다.
+            return startSession(&state, includesScreen: false, includesMicrophone: false, isAutomatic: true)
+
+        case .autoModeTurnedOff:
+            @Shared(.locationDiagnosticsAutoRecord) var isAutoRecording
+            $isAutoRecording.withLock { $0 = false }
+            state.diagnostics.isAutoMode = false
+            state.diagnostics.isPanelPresented = false
+            return finishDiagnostics(&state)
 
         case let .sessionStarted(info):
             state.diagnostics.isStarting = false
@@ -222,6 +213,41 @@ extension BookNavigationFeature {
         }
     }
 
+    private func startSession(_ state: inout State, includesScreen: Bool, includesMicrophone: Bool,
+                              isAutomatic: Bool) -> Effect<Action> {
+        guard !state.diagnostics.isRecording, !state.diagnostics.isStarting else { return .none }
+        state.diagnostics.isStarting = true
+        state.diagnostics.errorMessage = nil
+        var meta = LocationDiagnosticsSessionMeta(
+            startedAt: now, posture: state.diagnostics.posture,
+            includesScreenRecording: includesScreen, includesMicrophone: includesMicrophone,
+            routePlanID: state.routePlan.id.uuidString, bookCount: state.routePlan.stops.count,
+            startsAtEntrance: state.startsAtEntrance, usesManualOrigin: state.usesManualOrigin,
+            guidanceThresholds: [
+                "goodAccuracyMeters": GuidanceTracker.Configuration().goodAccuracy,
+                "unusableAccuracyMeters": GuidanceTracker.Configuration().unusableAccuracy,
+                "lostAfterSeconds": GuidanceTracker.Configuration().lostAfterSeconds,
+                "matchingRadiusMeters": GuidanceEngine.matchingRadiusMeters,
+                "maximumPositionAgeSeconds": GuidanceEngine.maximumPositionAge,
+                "offRouteRerouteDelaySeconds": Self.offRouteRerouteDelay,
+                "jumpWalkingSpeedLimit": LocationJump.walkingSpeedLimit,
+                "jumpMinimumMeters": LocationJump.minimumJumpMeters
+            ])
+        meta.isAutomatic = isAutomatic
+        let info: LocationDiagnosticsSessionInfo
+        do {
+            info = try diagnosticsClient.startSession(meta)
+        } catch {
+            return reduceDiagnostics(&state, .sessionStartFailed(error.localizedDescription))
+        }
+        // 안내 화면의 작업(.task)이 다시 시작되며 취소돼도 기록 상태를 잃지 않도록 바로 반영한다.
+        let started = reduceDiagnostics(&state, .sessionStarted(info))
+        guard includesScreen else { return started }
+        return .merge(started, .run { [diagnosticsClient] _ in
+            await diagnosticsClient.startScreenRecording(includesMicrophone)
+        })
+    }
+
     func finishDiagnostics(_ state: inout State) -> Effect<Action> {
         guard state.diagnostics.isRecording, !state.diagnostics.isFinishing else { return .none }
         state.diagnostics.isFinishing = true
@@ -238,12 +264,12 @@ extension BookNavigationFeature {
 
     /// 안내 종료·화면 닫힘처럼 이 Feature가 곧 사라질 때 쓴다. 정리 작업은 Feature 수명과 무관하게 끝난다.
     func finishDiagnosticsOnExit(_ state: inout State) -> Effect<Action> {
-        guard state.diagnostics.isRecording else { return .none }
+        guard let session = state.diagnostics.session else { return .none }
         recordDiagnosticsEvent(state, "navigation_exit", ["outcome": state.exitReason.map { "\($0)" } ?? "closed"])
         state.diagnostics.session = nil
         state.diagnostics.startedAt = nil
         state.diagnostics.isPlacingCheckpoint = false
-        diagnosticsClient.finishSessionInBackground()
+        diagnosticsClient.finishSessionInBackground(session.id)
         return .cancel(id: CancelID.diagnosticsScreenStatus)
     }
 

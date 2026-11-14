@@ -27,6 +27,14 @@ struct BookSearchView: View {
             onCart: onShowCart,
             onProfile: { onShowProfile?() }
         )
+        .alert(store.commandNotice?.title ?? "",
+               isPresented: Binding(get: { store.commandNotice != nil },
+                                    set: { if !$0 { store.send(.commandNoticeDismissed) } }),
+               presenting: store.commandNotice) { _ in
+            Button("확인", role: .cancel) {}
+        } message: { notice in
+            Text(notice.message)
+        }
     }
 
     private var categoryPicker: some View {

@@ -5,11 +5,13 @@ import UIKit
 /// 실시간 안내 위치 품질 진단 기록(실험 브랜치 전용). 기록은 기기 Documents에만 남고 밖으로 보내지 않는다.
 nonisolated struct LocationDiagnosticsClient: Sendable {
     var isScreenRecordingAvailable: @Sendable () async -> Bool
-    var startSession: @Sendable (LocationDiagnosticsSessionMeta) async throws -> LocationDiagnosticsSessionInfo
+    /// 기록 파일을 바로 열고 세션 정보를 돌려준다. 화면 작업이 취소돼도 결과를 잃지 않도록 동기로 처리한다.
+    var startSession: @Sendable (LocationDiagnosticsSessionMeta) throws -> LocationDiagnosticsSessionInfo
     var startScreenRecording: @Sendable (_ includesMicrophone: Bool) async -> Void
     var finishSession: @Sendable () async -> LocationDiagnosticsSessionInfo?
     /// 안내 화면이 닫히며 Feature 작업이 취소돼도 기록을 끝까지 정리한다.
-    var finishSessionInBackground: @Sendable () -> Void
+    /// 해당 세션이 아직 열려 있을 때만 닫는다.
+    var finishSessionInBackground: @Sendable (_ sessionID: String) -> Void
     var record: @Sendable (LocationDiagnosticsRecord) -> Void
     var flush: @Sendable () -> Void
     var sessions: @Sendable () async -> [LocationDiagnosticsSessionInfo]
@@ -29,11 +31,8 @@ extension LocationDiagnosticsClient: DependencyKey {
         },
         startSession: { meta in
             var meta = meta
-            await MainActor.run {
-                let device = UIDevice.current
-                meta.deviceModel = Self.hardwareModel()
-                meta.systemVersion = "\(device.systemName) \(device.systemVersion)"
-            }
+            meta.deviceModel = Self.hardwareModel()
+            meta.systemVersion = ProcessInfo.processInfo.operatingSystemVersionString
             let bundle = Bundle.main.infoDictionary
             meta.appVersion = bundle?["CFBundleShortVersionString"] as? String
             meta.appBuild = bundle?["CFBundleVersion"] as? String
@@ -61,9 +60,9 @@ extension LocationDiagnosticsClient: DependencyKey {
             #endif
         },
         finishSession: { await finishLive() },
-        finishSessionInBackground: {
-            guard LocationDiagnosticsRecorder.shared.isRecording else { return }
-            Task.detached { _ = await finishLive() }
+        finishSessionInBackground: { sessionID in
+            guard LocationDiagnosticsRecorder.shared.activeSessionID == sessionID else { return }
+            Task.detached { _ = await finishLive(sessionID: sessionID) }
         },
         record: { LocationDiagnosticsRecorder.shared.append($0) },
         flush: { LocationDiagnosticsRecorder.shared.flush() },
@@ -84,7 +83,7 @@ extension LocationDiagnosticsClient: DependencyKey {
         },
         startScreenRecording: { _ in },
         finishSession: { nil },
-        finishSessionInBackground: {},
+        finishSessionInBackground: { _ in },
         record: { _ in },
         flush: {},
         sessions: { [] },
@@ -92,12 +91,14 @@ extension LocationDiagnosticsClient: DependencyKey {
         screenRecordingStatus: { AsyncStream { $0.finish() } }
     )
 
-    private static func finishLive() async -> LocationDiagnosticsSessionInfo? {
+    private static func finishLive(sessionID: String? = nil) async -> LocationDiagnosticsSessionInfo? {
+        let recorder = LocationDiagnosticsRecorder.shared
+        if let sessionID, recorder.activeSessionID != sessionID { return nil }
         #if canImport(ScreenCaptureKit)
         if #available(iOS 27.0, *) { await ScreenRecordingProvider.shared.stop() }
         #endif
         MotionDiagnosticsProvider.shared.stop()
-        return LocationDiagnosticsRecorder.shared.finish()
+        return sessionID.map { recorder.finish(sessionID: $0) } ?? recorder.finish()
     }
 
     private static func hardwareModel() -> String {

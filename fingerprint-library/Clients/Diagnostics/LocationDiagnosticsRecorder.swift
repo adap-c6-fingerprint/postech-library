@@ -27,6 +27,7 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
     static let summaryFileName = "summary.json"
     static let geoJSONFileName = "track.geojson"
     static let screenFileName = "screen.mp4"
+    static let minimumAutomaticSessionSeconds = 3.0
 
     private struct ActiveSession {
         var meta: LocationDiagnosticsSessionMeta
@@ -55,13 +56,20 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
     }
 
     var activeFolderURL: URL? { queue.sync { active?.folderURL } }
+    var activeSessionID: String? { queue.sync { active?.meta.sessionID } }
 
     // MARK: - 세션
 
     func start(meta: LocationDiagnosticsSessionMeta) throws -> LocationDiagnosticsSessionInfo {
         try queue.sync {
             if active != nil { _ = finishLocked() }
-            let id = Self.sessionID(for: meta.startedAt)
+            // 같은 초에 두 번 시작해도 이전 기록을 덮어쓰지 않도록 이름이 겹치면 번호를 붙인다.
+            var id = Self.sessionID(for: meta.startedAt)
+            var suffix = 2
+            while FileManager.default.fileExists(atPath: rootURL.appending(path: id, directoryHint: .isDirectory).path()) {
+                id = Self.sessionID(for: meta.startedAt) + "-\(suffix)"
+                suffix += 1
+            }
             let folder = rootURL.appending(path: id, directoryHint: .isDirectory)
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
             let recordsURL = folder.appending(path: Self.recordsFileName)
@@ -92,6 +100,11 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
         queue.sync { finishLocked() }
     }
 
+    /// 지금 열린 기록이 `id`일 때만 닫는다. 늦게 도착한 종료 요청이 새 기록을 닫지 않게 한다.
+    func finish(sessionID id: String) -> LocationDiagnosticsSessionInfo? {
+        queue.sync { active?.meta.sessionID == id ? finishLocked() : nil }
+    }
+
     private func finishLocked() -> LocationDiagnosticsSessionInfo? {
         guard active != nil else { return nil }
         // 마지막 줄을 버퍼에 넣은 뒤의 상태를 꺼내야 함께 저장된다.
@@ -101,7 +114,14 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
         try? session.handle.close()
         active = nil
         activeFlag.withLock { $0 = false }
-        session.meta.endedAt = Date()
+        let endedAt = Date()
+        session.meta.endedAt = endedAt
+        // 자동 측정은 안내 화면이 잠깐 사라졌다 다시 나타날 때도 시작·종료된다. 이런 순간 기록은 남기지 않는다.
+        if session.meta.isAutomatic == true,
+           endedAt.timeIntervalSince(session.meta.startedAt) < Self.minimumAutomaticSessionSeconds {
+            try? FileManager.default.removeItem(at: session.folderURL)
+            return nil
+        }
         try? writeJSON(session.meta, to: session.folderURL.appending(path: Self.metaFileName))
         Self.writeDerivedFiles(in: session.folderURL)
         return Self.info(folder: session.folderURL)

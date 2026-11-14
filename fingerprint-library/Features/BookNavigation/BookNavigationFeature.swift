@@ -252,7 +252,10 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil, !state.isActive else { return .none }
                 let stopIndices = state.routePlan.stops.indices
                 let spines = loadArrivalSpines(&state, stopIndices: stopIndices)
-                return .merge(spines, start(&state))
+                @Shared(.locationDiagnosticsAutoRecord) var isAutoRecording
+                state.diagnostics.isAutoMode = isAutoRecording
+                let autoRecord: Effect<Action> = isAutoRecording ? reduceDiagnostics(&state, .autoStartRequested) : .none
+                return .merge(spines, start(&state), autoRecord)
 
             case let .sceneActiveChanged(active):
                 recordDiagnosticsEvent(state, active ? "scene_active" : "scene_inactive")

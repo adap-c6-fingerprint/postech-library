@@ -2,6 +2,7 @@ import ComposableArchitecture
 import SwiftUI
 
 /// 기록 중 안내 화면 위에 띄우는 실시간 수치. 영상과 시점을 맞추도록 밀리초 시계를 함께 보여 준다.
+/// - Note: 디자인 시안 없이 실험용으로 만든 화면이다(디자이너 미합의). 실험 브랜치 전용이며 출시 화면이 아니다.
 struct BookNavigationDiagnosticsHUD: View {
     let store: StoreOf<BookNavigationFeature>
     @State private var isFlashing = false
@@ -13,7 +14,7 @@ struct BookNavigationDiagnosticsHUD: View {
             TimelineView(.periodic(from: .now, by: 0.1)) { context in
                 HStack(spacing: 6) {
                     Circle().fill(.red).frame(width: 8, height: 8).accessibilityHidden(true)
-                    Text("REC \(elapsed(at: context.date))")
+                    Text("\(diagnostics.isAutoMode ? "AUTO REC" : "REC") \(elapsed(at: context.date))")
                     Text(context.date.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute().second()
                         .secondFraction(.fractional(3))))
                     if let screen = screenLabel { Text(screen) }
@@ -21,6 +22,7 @@ struct BookNavigationDiagnosticsHUD: View {
             }
             Text(positionLine)
             Text(guidanceLine)
+            if let tracking = trackingLine { Text(tracking) }
             HStack(spacing: 8) {
                 Button { store.send(.diagnostics(.jumpMarkerTapped)) } label: {
                     Label("튐! \(diagnostics.jumpMarkerCount)", systemImage: "bolt.fill")
@@ -55,7 +57,7 @@ struct BookNavigationDiagnosticsHUD: View {
             }
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("위치 진단 기록 중")
+        .accessibilityLabel(diagnostics.isAutoMode ? "위치 자동 측정 중" : "위치 진단 기록 중")
         .accessibilityIdentifier("diagnostics-hud")
     }
 
@@ -97,6 +99,18 @@ struct BookNavigationDiagnosticsHUD: View {
         if let distance = diagnostics.lastDistanceToRoute { parts.append("경로까지 \(Self.format(distance))m") }
         if let remaining = store.displayedProgress?.remainingMeters { parts.append("남은 \(Self.format(remaining))m") }
         return parts.joined(separator: " · ")
+    }
+
+    /// 위치 추정기 상태: 측정 오차가 커서 추정에 기대는 중인지, 위치를 잃었는지
+    private var trackingLine: String? {
+        guard let status = store.trackingStatus else { return nil }
+        let label = switch status {
+        case .tracking: "추적 중"
+        case .degraded: "불안정(추정 유지)"
+        case .lost: "위치 잃음"
+        }
+        let uncertainty = store.tracker?.uncertaintyMeters.map { " · 추정 ±\(Self.format($0))m" } ?? ""
+        return label + uncertainty
     }
 
     private static func format(_ value: Double) -> String {

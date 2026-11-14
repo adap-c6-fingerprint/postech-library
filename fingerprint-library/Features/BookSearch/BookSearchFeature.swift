@@ -28,6 +28,13 @@ struct BookSearchFeature {
         var isLoading: Bool = false
         var errorMessage: String? = nil
         var hasSearched: Bool = false
+        /// 검색창 명령(`/test` 등)의 결과 안내
+        var commandNotice: CommandNotice?
+    }
+
+    struct CommandNotice: Equatable {
+        let title: String
+        let message: String
     }
     
     enum RecentBookInfoState: Equatable {
@@ -48,6 +55,7 @@ struct BookSearchFeature {
         case categoryChanged(BookSearchCategory)
         case searchCancelled
         case searchButtonTapped
+        case commandNoticeDismissed
         case refreshButtonTapped
         case searchSucceeded(generation: Int, books: [Book])
         case searchFailed(generation: Int, message: String)
@@ -210,6 +218,17 @@ struct BookSearchFeature {
                     delegate = .recommendationLayoutRequested(isExpanded: command == "/ver2")
                 case "/kulumi":
                     delegate = .kulumiCoversRequested
+                case "/test":
+                    // 실험 브랜치 전용: 위치 측정 모드를 켜고 끈다. 검색은 하지 않는다.
+                    @Shared(.locationDiagnosticsAutoRecord) var isAutoRecording
+                    let isOn = !isAutoRecording
+                    $isAutoRecording.withLock { $0 = isOn }
+                    state.query = ""
+                    state.commandNotice = isOn
+                        ? .init(title: "측정 모드를 켰어요",
+                                message: "이제 길안내를 시작하면 위치 기록이 자동으로 시작되고, 안내를 끝내면 저장돼요. 다시 /test를 입력하면 꺼져요.")
+                        : .init(title: "측정 모드를 껐어요", message: "다음 길안내부터는 위치를 기록하지 않아요.")
+                    return .none
                 default:
                     guard !state.isLoading else { return .none }
                     return search(state: &state)
@@ -223,6 +242,10 @@ struct BookSearchFeature {
                 state.errorMessage = nil
                 state.hasSearched = false
                 return .merge(.cancel(id: CancelID.search), .send(.delegate(delegate)))
+
+            case .commandNoticeDismissed:
+                state.commandNotice = nil
+                return .none
 
             case .delegate:
                 return .none

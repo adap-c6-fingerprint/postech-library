@@ -137,6 +137,12 @@ struct BookNavigationView: View {
         .analyticsScreen(.navigation)
     }
 
+    #if DEBUG
+    private static let isDiagnosticsMenuAvailable = true
+    #else
+    private static let isDiagnosticsMenuAvailable = false
+    #endif
+
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
@@ -152,16 +158,17 @@ struct BookNavigationView: View {
                 }
             }
             Spacer(minLength: 0)
-            #if DEBUG
-            Button { store.send(.diagnostics(.panelButtonTapped)) } label: {
-                Image(systemName: store.diagnostics.isRecording ? "record.circle" : "waveform.path.ecg")
-                    .foregroundStyle(store.diagnostics.isRecording ? .red : .white)
-                    .frame(width: 44, height: 44)
-                    .glassEffect(.regular, in: .circle)
+            // 진단 메뉴는 Debug 빌드 또는 검색창 /test 측정 모드에서만 보인다.
+            if Self.isDiagnosticsMenuAvailable || store.diagnostics.isAutoMode {
+                Button { store.send(.diagnostics(.panelButtonTapped)) } label: {
+                    Image(systemName: store.diagnostics.isRecording ? "record.circle" : "waveform.path.ecg")
+                        .foregroundStyle(store.diagnostics.isRecording ? .red : .white)
+                        .frame(width: 44, height: 44)
+                        .glassEffect(.regular, in: .circle)
+                }
+                .accessibilityLabel(store.diagnostics.isRecording ? "위치 진단 기록 중, 진단 메뉴 열기" : "위치 진단")
+                .accessibilityIdentifier("book-navigation-diagnostics")
             }
-            .accessibilityLabel(store.diagnostics.isRecording ? "위치 진단 기록 중, 진단 메뉴 열기" : "위치 진단")
-            .accessibilityIdentifier("book-navigation-diagnostics")
-            #endif
             Button { store.send(.cancelTapped) } label: {
                 Image(systemName: "xmark").frame(width: 44, height: 44)
                     .glassEffect(.regular, in: .circle)

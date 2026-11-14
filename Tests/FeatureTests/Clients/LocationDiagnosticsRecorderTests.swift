@@ -61,4 +61,32 @@ struct LocationDiagnosticsRecorderTests {
         #expect(sessions.first?.summary != nil)
         _ = recorder.finish()
     }
+
+    @Test func 늦게_온_종료_요청은_새로_시작한_기록을_닫지_않고_같은_초에_시작해도_폴더가_겹치지_않는다() throws {
+        let (recorder, root) = makeRecorder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let start = Date(timeIntervalSinceReferenceDate: 3_000)
+        let first = try recorder.start(meta: meta(start))
+        // 화면이 다시 나타나며 같은 초에 새 기록이 시작된 상황
+        let second = try recorder.start(meta: meta(start.addingTimeInterval(0.07)))
+        #expect(first.id != second.id)
+        #expect(recorder.activeSessionID == second.id)
+
+        // 첫 화면이 사라질 때 보낸 종료 요청이 늦게 도착해도 새 기록은 열려 있다.
+        #expect(recorder.finish(sessionID: first.id) == nil)
+        #expect(recorder.isRecording)
+        #expect(recorder.finish(sessionID: second.id)?.id == second.id)
+        #expect(!recorder.isRecording)
+    }
+
+    @Test func 자동으로_시작해_3초도_안_돼_끝난_기록은_남기지_않는다() throws {
+        let (recorder, root) = makeRecorder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        var automatic = meta(Date())
+        automatic.isAutomatic = true
+        let info = try recorder.start(meta: automatic)
+        #expect(recorder.finish(sessionID: info.id) == nil)
+        #expect(!FileManager.default.fileExists(atPath: info.folderURL.path()))
+        #expect(recorder.sessions().isEmpty)
+    }
 }

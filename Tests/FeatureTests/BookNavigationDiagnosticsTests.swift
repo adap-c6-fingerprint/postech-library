@@ -31,7 +31,7 @@ struct BookNavigationDiagnosticsTests {
             $0.continuousClock = TestClock()
             $0.analyticsClient = .testValue
             $0.locationDiagnosticsClient.record = { record in records.withValue { $0.append(record) } }
-            $0.locationDiagnosticsClient.finishSessionInBackground = { finishCount.withValue { $0 += 1 } }
+            $0.locationDiagnosticsClient.finishSessionInBackground = { _ in finishCount.withValue { $0 += 1 } }
         }
         store.exhaustivity = .off
         return store
