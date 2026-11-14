@@ -94,7 +94,6 @@ struct BookNavigationFeature {
             return arrows.filter { Double($0.stepIndex) >= Double(progress.stepIndex) + progress.fraction - 0.000_001 }
         }
         var remainingMetrics: BookNavigationMetrics? { remainingMeters.flatMap(BookNavigationMetrics.init) }
-        var navigationBearing: Double? { displayedProgress.flatMap { currentPlan?.bearing(at: $0) } }
         var isApproachingShelf: Bool {
             guard let progress, let meters = progress.remainingMeters, meters <= 8,
                   let floor = latestPosition?.floorOrdinal else { return false }
