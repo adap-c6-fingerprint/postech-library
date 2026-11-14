@@ -222,7 +222,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 16) {
             if store.isProfileComplete {
                 Button { store.send(.departmentRecommendationsButtonTapped) } label: {
-                    popularBooksHeader(store.departmentName.isEmpty ? "많이 빌린 도서" : "'\(store.departmentName)'에서 많이 빌린")
+                    popularBooksHeader(store.popularBooksTitle)
                 }
                 .buttonStyle(.plain)
                 .padding(.horizontal, 16)
