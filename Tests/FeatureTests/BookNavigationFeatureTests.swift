@@ -54,6 +54,54 @@ struct BookNavigationFeatureTests {
         #expect(recorded.value == [[books[0]], [books[1]]])
     }
 
+    @Test func 층_이동을_확인하면_센서가_출발_층을_보고해도_도착_층에_현재_위치를_표시한다() async throws {
+        let base = try await Self.makePlan()
+        let floorOrdinals = Set(base.map.floors.map(\.ordinal))
+        let nodes = Dictionary(uniqueKeysWithValues: base.graph.nodes.map { ($0.id, $0) })
+        let elevatorStart = try #require(base.graph.edges.lazy
+            .filter { $0.category == .elevator }
+            .compactMap { edge -> RouteNode? in
+                guard let from = nodes[edge.fromNodeID], let to = nodes[edge.toNodeID] else { return nil }
+                let pair = [from, to]
+                return pair.first { $0.level != 2 && floorOrdinals.contains($0.level) && pair.contains { $0.level == 2 } }
+            }
+            .first)
+        let now = Date(timeIntervalSinceReferenceDate: 0)
+        let start = IndoorPosition(coordinate: elevatorStart.coordinate, floorOrdinal: elevatorStart.level,
+            horizontalAccuracy: 3, timestamp: now, source: .manual)
+        let stop = RouteCandidateStop(book: base.stops[0].book, holdings: [], candidateShelves: [base.stops[0].shelf])
+        let plan = try await RoutePlanningLoader().load(on: base.map, labels: base.shelfLabels, start: start, stops: [stop])
+
+        var state = BookNavigationFeature.State(routePlan: plan)
+        state.isActive = true
+        state.authorization = .authorized(precise: true)
+        let clock = TestClock()
+        let store = TestStore(initialState: state) { BookNavigationFeature() } withDependencies: {
+            $0.date.now = now
+            $0.continuousClock = clock
+            $0.analyticsClient = .testValue
+        }
+        store.exhaustivity = .off
+
+        let transition = try #require(store.state.nextFloorTransition)
+        #expect(transition.from.level == elevatorStart.level)
+        let lagging = IndoorPosition(coordinate: elevatorStart.coordinate, floorOrdinal: transition.from.level,
+            horizontalAccuracy: 3, timestamp: now, source: .sensor)
+        await store.send(.locationEvent(subscriptionID: 0, .position(lagging)))
+
+        await store.send(.floorTransitionTapped(stopIndex: 0, stepIndex: transition.id))
+        #expect(store.state.currentFloor?.ordinal == transition.to.level)
+        #expect(store.state.latestPosition?.floorOrdinal == transition.to.level)
+        #expect(store.state.showsNativeUserLocation)
+
+        let laterLagging = IndoorPosition(coordinate: elevatorStart.coordinate, floorOrdinal: transition.from.level,
+            horizontalAccuracy: 3, timestamp: now.addingTimeInterval(0.5), source: .sensor)
+        await store.send(.locationEvent(subscriptionID: 0, .position(laterLagging)))
+        #expect(store.state.currentFloor?.ordinal == transition.to.level)
+        #expect(store.state.latestPosition?.floorOrdinal == transition.to.level)
+        await store.skipInFlightEffects()
+    }
+
     @Test func 못_찾고_안내를_마치면_기록하지_않는다() async throws {
         let recorded = LockIsolated<[[Book]]>([])
         let store = try await Self.makeStore(recorded: recorded)
