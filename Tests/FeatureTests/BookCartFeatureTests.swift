@@ -11,24 +11,19 @@ struct BookCartFeatureTests {
         return TestStore(initialState: BookCartFeature.State()) { BookCartFeature() }
     }
 
-    @Test func 네_번째_책을_고르면_한도_알림을_한_번만_띄운다() async {
-        let store = makeStore(cart: [1, 2, 3, 4, 5])
-        for number in 1...3 {
+    @Test func 서른_권까지_선택하면_한도_알림_없이_안내를_요청한다() async {
+        let numbers = Array(1...BookCartItem.maxStoredCount)
+        let store = makeStore(cart: numbers)
+        #expect(!store.state.canStartGuidance)
+        for number in numbers {
             await store.send(.selectionToggled(makeBook(number).id)) {
                 $0.selectedIDs.append(makeBook(number).id)
             }
+            #expect(store.state.canStartGuidance)
+            #expect(!store.state.isGuidanceLimitAlertPresented)
         }
-        await store.send(.selectionToggled(makeBook(4).id)) {
-            $0.selectedIDs.append(makeBook(4).id)
-            $0.$hasShownGuidanceLimitAlert.withLock { $0 = true }
-            $0.isGuidanceLimitAlertPresented = true
-        }
-        #expect(!store.state.canStartGuidance)
-        await store.send(.guidanceLimitAlertDismissed) { $0.isGuidanceLimitAlertPresented = false }
-        await store.send(.selectionToggled(makeBook(4).id)) { $0.selectedIDs.removeLast() }
-        await store.send(.selectionToggled(makeBook(5).id)) {
-            $0.selectedIDs.append(makeBook(5).id)
-        }
+        await store.send(.guidanceLinkTapped)
+        await store.receive(\.delegate.startGuidance, numbers.map { makeBook($0) })
     }
 
     @Test func 고른_책을_지우면_책바구니에서_빼고_선택을_비운다() async {
@@ -42,7 +37,7 @@ struct BookCartFeatureTests {
         }
     }
 
-    @Test func 안내_시작은_고른_순서대로_한_권에서_세_권까지만_요청한다() async {
+    @Test func 안내_시작은_고른_순서대로_요청한다() async {
         let store = makeStore(cart: [1, 2])
         await store.send(.guidanceLinkTapped)
 
