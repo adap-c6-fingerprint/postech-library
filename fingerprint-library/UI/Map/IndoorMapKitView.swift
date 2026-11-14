@@ -138,7 +138,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.overrideUserInterfaceStyle = .dark
             view.showsUserLocation = parent.showsUserLocation && !parent.appearance.usesHomeStyle
             updatePosition(in: view)
-            updatePositionMarkerBearing(in: view)
+            updatePositionMarkerBearing(in: view, animated: true)
             homeAnnotations.update(parent.appearance.usesHomeStyle
                 ? parent.homeMarkers.filter { $0.floorID == parent.floor.id } : [], in: view)
             updateShelfLabels(in: view)
@@ -464,15 +464,18 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let annotation = positionAnnotation { view.addAnnotation(annotation) }
         }
 
-        private func updatePositionMarkerBearing(in map: MKMapView) {
+        private func updatePositionMarkerBearing(in map: MKMapView, animated: Bool = false) {
             guard let annotation = positionAnnotation,
                   let view = map.view(for: annotation) as? MapUserLocationAnnotationView else { return }
-            configurePositionBearing(view, position: annotation.position, in: map)
+            configurePositionBearing(view, position: annotation.position, in: map, animated: animated)
         }
+        // 기기 방향이 바뀐 갱신(update)만 애니메이션한다. 지도 회전 콜백은 지도와 어긋나지 않게 즉시 맞춘다.
 
         private func configurePositionBearing(_ view: MapUserLocationAnnotationView,
-                                              position: IndoorPosition, in map: MKMapView) {
-            view.configure(headingDegrees: position.headingDegrees, mapHeading: map.camera.heading)
+                                              position: IndoorPosition, in map: MKMapView,
+                                              animated: Bool = false) {
+            view.configure(headingDegrees: position.headingDegrees, mapHeading: map.camera.heading,
+                           animated: animated)
         }
 
         private var floorFitPadding: UIEdgeInsets {

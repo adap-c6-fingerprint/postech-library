@@ -34,6 +34,9 @@ struct BookNavigationFeature {
         var progress: RouteGuidanceProgress?
         var manuallyCompletedFloorTransition: BookNavigationFloorTransition?
         var rawPosition: IndoorPosition?
+        var deviceHeadingDegrees: Double?
+        // 지도에 표시할 기기 방향. 나침반만 바뀔 때 rawPosition·latestPosition을 교체하지 않아 안내 화면 전체 재계산을 막는다.
+        // TCA 경로와 별도로 계산하여 지도 뷰가 방향값을 직접 받아와서 바늘만 돌리도록 함
         var latestPosition: IndoorPosition?
         var lastReceivedTimestamp: Date?
         var confirmedFloorOrdinal: Int?
@@ -116,9 +119,12 @@ struct BookNavigationFeature {
         var entranceApproach: LibraryEntranceApproach? {
             guard startsAtEntrance, !usesManualOrigin, currentStopIndex == 0,
                   let rawPosition else { return nil }
-            return .init(position: rawPosition, entrance: routePlan.start, map: routePlan.map)
+            return .init(position: rawPosition.replacingHeading(deviceHeadingDegrees),
+                         entrance: routePlan.start, map: routePlan.map)
         }
-        var mapPosition: IndoorPosition? { entranceApproach?.position ?? latestPosition }
+        var mapPosition: IndoorPosition? {
+            entranceApproach?.position ?? latestPosition?.replacingHeading(deviceHeadingDegrees)
+        }
         var effectiveFloorOrdinal: Int? {
             guard let rawPosition else { return confirmedFloorOrdinal }
             // 사용자가 층 이동을 확인했는데 센서가 아직 출발 층을 보고하면 센서 층 반영 지연으로 보고 도착 층을 쓴다.
@@ -318,16 +324,11 @@ struct BookNavigationFeature {
                               position.floorOrdinal == current.floorOrdinal,
                               position.horizontalAccuracy == current.horizontalAccuracy,
                               position.source == current.source,
-                              position.headingDegrees != current.headingDegrees,
+                              position.headingDegrees != state.deviceHeadingDegrees,
                               (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp))
                         else { return .none }
                         // A compass update keeps the GPS timestamp and its existing expiry.
-                        state.rawPosition = position
-                        if let latest = state.latestPosition {
-                            state.latestPosition = .init(coordinate: latest.coordinate, floorOrdinal: latest.floorOrdinal,
-                                horizontalAccuracy: latest.horizontalAccuracy, timestamp: latest.timestamp,
-                                source: latest.source, headingDegrees: position.headingDegrees)
-                        }
+                        state.deviceHeadingDegrees = position.headingDegrees
                         return .none
                     }
                     guard position.source != .manual, position.coordinate.isValid,
@@ -343,6 +344,7 @@ struct BookNavigationFeature {
                     }
                     let previousTimestamp = state.rawPosition?.timestamp
                     state.rawPosition = position
+                    state.deviceHeadingDegrees = position.headingDegrees
                     updateGuidance(&state, previousTimestamp: previousTimestamp)
                     let delay = GuidanceEngine.maximumPositionAge - now.timeIntervalSince(position.timestamp)
                     let timestamp = position.timestamp
@@ -687,6 +689,7 @@ struct BookNavigationFeature {
     private func invalidate(_ state: inout State, message: String) {
         state.offRouteSince = nil
         state.rawPosition = nil
+        state.deviceHeadingDegrees = nil
         state.latestPosition = nil
         state.progress = nil
         state.statusMessage = message

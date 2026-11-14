@@ -28,6 +28,11 @@ nonisolated struct IndoorPosition: Equatable, Sendable {
         guard let horizontalAccuracy, horizontalAccuracy.isFinite, horizontalAccuracy >= 0 else { return false }
         return (-5...30).contains(date.timeIntervalSince(timestamp))
     }
+
+    func replacingHeading(_ headingDegrees: Double?) -> IndoorPosition {
+        IndoorPosition(coordinate: coordinate, floorOrdinal: floorOrdinal, horizontalAccuracy: horizontalAccuracy,
+                       timestamp: timestamp, source: source, headingDegrees: headingDegrees)
+    }
 }
 
 nonisolated enum IndoorLocationAuthorization: Equatable, Sendable {

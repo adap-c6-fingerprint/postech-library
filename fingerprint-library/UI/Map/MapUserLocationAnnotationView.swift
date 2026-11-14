@@ -11,6 +11,9 @@ final class MapUserLocationAnnotationView: MKAnnotationView {
     private static let dotArtworkDiameter: CGFloat = 15
     private static let headingSize = CGSize(width: 15.89314, height: 12.36133)
     private static let headingGap: CGFloat = 2
+    private static let headingAnimationDuration: CFTimeInterval = 0.15
+    private static let headingAnimationKey = "headingRotation"
+    private var headingAngle: CGFloat?
 
     override init(annotation: (any MKAnnotation)?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -68,14 +71,45 @@ final class MapUserLocationAnnotationView: MKAnnotationView {
         headingView.center = CGPoint(x: center.x, y: center.y - distance)
     }
 
-    func configure(headingDegrees: Double?, mapHeading: Double) {
+    func configure(headingDegrees: Double?, mapHeading: Double, animated: Bool = false) {
+        let layer = headingContainer.layer
         guard let headingDegrees, headingDegrees.isFinite, (0..<360).contains(headingDegrees),
               mapHeading.isFinite else {
             headingContainer.isHidden = true
+            layer.removeAnimation(forKey: Self.headingAnimationKey)
+            headingAngle = nil
             return
         }
+        let wasHidden = headingContainer.isHidden
         headingContainer.isHidden = false
-        let angle = (headingDegrees - mapHeading) * .pi / 180
-        headingContainer.transform = CGAffineTransform(rotationAngle: angle)
+        let target = CGFloat((headingDegrees - mapHeading) * .pi / 180)
+        let current = (layer.presentation()?.value(forKeyPath: "transform.rotation.z") as? CGFloat)
+            ?? headingAngle ?? target
+        let next = current + Self.shortestRotation(from: current, to: target)
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        headingContainer.transform = CGAffineTransform(rotationAngle: next)
+        CATransaction.commit()
+        let shouldAnimate = animated && !wasHidden && headingAngle != nil
+            && !UIAccessibility.isReduceMotionEnabled && abs(next - current) > 0.000_1
+        if shouldAnimate {
+            let animation = CABasicAnimation(keyPath: "transform.rotation.z")
+            animation.fromValue = current
+            animation.toValue = next
+            animation.duration = Self.headingAnimationDuration
+            animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            layer.add(animation, forKey: Self.headingAnimationKey)
+        } else {
+            layer.removeAnimation(forKey: Self.headingAnimationKey)
+        }
+        headingAngle = next
     }
+
+    private static func shortestRotation(from current: CGFloat, to target: CGFloat) -> CGFloat {
+        var delta = (target - current).truncatingRemainder(dividingBy: 2 * .pi)
+        if delta > .pi { delta -= 2 * .pi }
+        if delta < -.pi { delta += 2 * .pi }
+        return delta
+    }
+    // 359°→1°처럼 북쪽을 넘을 때 반대 방향으로 한 바퀴 돌지 않도록 −π~π 범위의 가장 짧은 회전량을 쓴다.
 }
