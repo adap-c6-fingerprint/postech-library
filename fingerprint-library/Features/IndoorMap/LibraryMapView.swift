@@ -51,15 +51,12 @@ struct LibraryMapView: View {
                 }
                 .overlay(alignment: .topLeading) { homeHeader }
                 .background(.black)
-                .safeAreaInset(edge: .top, spacing: LibraryTabIntroText.topBarSpacing) {
-                    LibraryTabTopBar(
-                        title: "홈",
-                        onFavorites: { searchStore.send(.favoritesButtonTapped) },
-                        onCart: { searchStore.send(.cartButtonTapped) },
-                        onProfile: { searchStore.send(.profileButtonTapped) }
-                    )
-                }
-                .toolbar(.hidden, for: .navigationBar)
+                .libraryTabToolbar(
+                    title: "홈",
+                    onFavorites: { searchStore.send(.favoritesButtonTapped) },
+                    onCart: { searchStore.send(.cartButtonTapped) },
+                    onProfile: { searchStore.send(.profileButtonTapped) }
+                )
     }
 
     private var mapContent: some View {
@@ -77,6 +74,7 @@ struct LibraryMapView: View {
 
     private var homeHeader: some View {
         LibraryTabIntroText(title: "오늘은 어떤 책을\n읽어볼까요?")
+            .padding(.top, LibraryTabIntroText.topBarSpacing)
             .frame(maxWidth: .infinity, minHeight: headerHeight, alignment: .topLeading)
             .allowsHitTesting(false)
             .accessibilityIdentifier("library-home-greeting")
