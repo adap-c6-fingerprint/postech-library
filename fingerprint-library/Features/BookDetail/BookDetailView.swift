@@ -304,7 +304,7 @@ struct BookDetailView: View {
         switch store.destinationRouteState {
         case .idle: Text("거리 확인 중")
         case .loading: ProgressView("거리 확인 중")
-        case .unavailable: Text("거리 확인 불가")
+        case .unavailable: EmptyView()
         case .loaded(let summary): Text(summary.text)
         }
     }
