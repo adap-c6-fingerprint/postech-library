@@ -11,13 +11,6 @@ import ComposableArchitecture
 
 @Reducer
 struct BookDetailFeature {
-    enum DestinationRouteState: Equatable {
-        case idle
-        case loading
-        case loaded(BookDetailRoutePresentation)
-        case unavailable
-    }
-
     enum CartNotice: Equatable {
         case added
         case alreadyAdded
@@ -41,8 +34,6 @@ struct BookDetailFeature {
         var holdingsState: BookHoldingsState = .idle
         var mapContext: BookDetailMapContext?
         var destinationPresentation: BookDetailDestinationPresentation?
-        var destinationRouteState: DestinationRouteState = .idle
-        var destinationRouteRequestID = 0
 
         var displayedHolding: BookHolding? {
             guard case let .loaded(holdings) = holdingsState else { return nil }
@@ -70,8 +61,6 @@ struct BookDetailFeature {
         case holdingsLoaded([BookHolding])
         case holdingsFailed
         case mapContextChanged(BookDetailMapContext)
-        case destinationRouteLoaded(requestID: Int, BookDetailRoutePresentation)
-        case destinationRouteFailed(requestID: Int)
         case loadFavorites
         case viewAppeared
         case favoriteButtonTapped
@@ -100,7 +89,6 @@ struct BookDetailFeature {
 
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
 
-    @Dependency(\.indoorRouteClient) var indoorRouteClient
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
     @Dependency(\.bookCoverClient) var bookCoverClient
     @Dependency(\.date.now) var now
@@ -137,30 +125,19 @@ struct BookDetailFeature {
                 MapPerformanceSignpost.signposter.emitEvent("HoldingsLoaded")
                 state.holdingsState = .loaded(holding)
                 bookLocationCacheClient.record(state.book, holding)
-                return state.mapContext == nil ? .none : refreshDestination(state: &state)
+                refreshDestination(state: &state)
+                return .none
 
             case .holdingsFailed:
                 state.holdingsState = .failed("소장 정보를 불러오지 못했어요.")
-                return state.mapContext == nil ? .none : refreshDestination(state: &state)
-
-            case let .mapContextChanged(context):
-                let previousContext = state.mapContext
-                guard previousContext != context else { return .none }
-                MapPerformanceSignpost.signposter.emitEvent("MapContextChanged")
-                state.mapContext = context
-                if previousContext?.map != context.map || previousContext?.labels != context.labels {
-                    return refreshDestination(state: &state)
-                }
-                return refreshDestinationRoute(state: &state)
-
-            case let .destinationRouteLoaded(requestID, summary):
-                guard requestID == state.destinationRouteRequestID else { return .none }
-                state.destinationRouteState = .loaded(summary)
+                refreshDestination(state: &state)
                 return .none
 
-            case let .destinationRouteFailed(requestID):
-                guard requestID == state.destinationRouteRequestID else { return .none }
-                state.destinationRouteState = .unavailable
+            case let .mapContextChanged(context):
+                guard state.mapContext != context else { return .none }
+                MapPerformanceSignpost.signposter.emitEvent("MapContextChanged")
+                state.mapContext = context
+                refreshDestination(state: &state)
                 return .none
 
             case .loadDescription:
@@ -243,91 +220,27 @@ struct BookDetailFeature {
     private nonisolated enum CancelID: Hashable, Sendable {
         case description
         case holdings
-        case destinationRoute
     }
 
-    private func refreshDestination(state: inout State) -> Effect<Action> {
-        if case let .loaded(holdings) = state.holdingsState {
-            state.destinationPresentation = BookDetailDestinationPresentation.resolve(
-                holdings: holdings, context: state.mapContext
-            )
-        } else {
+    private func refreshDestination(state: inout State) {
+        guard state.mapContext != nil, case let .loaded(holdings) = state.holdingsState else {
             state.destinationPresentation = nil
+            return
         }
-        return refreshDestinationRoute(state: &state)
-    }
-
-    private func refreshDestinationRoute(state: inout State) -> Effect<Action> {
-        state.destinationRouteRequestID += 1
-        let requestID = state.destinationRouteRequestID
-        let cancel: Effect<Action> = .cancel(id: CancelID.destinationRoute)
-        guard case .loaded = state.holdingsState else {
-            if case .failed = state.holdingsState {
-                state.destinationRouteState = .unavailable
-            } else {
-                state.destinationRouteState = .idle
-            }
-            return cancel
-        }
-        guard let destination = state.destinationPresentation,
-              ShelfOverlapPolicy().allows(destination.shelves),
-              let context = state.mapContext, let navigation = context.navigation,
-              navigation.shelves.mode == .library,
-              let position = context.position, position.isRecent(at: now) else {
-            state.destinationRouteState = .unavailable
-            return cancel
-        }
-        let targets = destination.shelves.compactMap { shelf in
-            navigation.shelves.destinations.first {
-                $0.key.value == shelf.fixtureNumber && $0.mapElementID == shelf.mapElementID && $0.floorID == shelf.floorID
-            }
-        }
-        guard targets.count == destination.shelves.count else {
-            state.destinationRouteState = .unavailable
-            return cancel
-        }
-        state.destinationRouteState = .loading
-        let requests = targets.map {
-            IndoorRouteRequest(navigation: navigation, start: position, destination: $0.key, preference: context.preference)
-        }
-        return .run { [indoorRouteClient] send in
-            let signpostState = MapPerformanceSignpost.signposter.beginInterval("DetailRouteSearch", "requests=\(requests.count, privacy: .public)")
-            defer { MapPerformanceSignpost.signposter.endInterval("DetailRouteSearch", signpostState) }
-            var best: BookDetailRoutePresentation?
-            var bestDistance = Double.infinity
-            for request in requests {
-                do {
-                    try Task.checkCancellation()
-                    guard case let .route(route) = try await indoorRouteClient.search(request),
-                          route.destination == request.destination,
-                          let summary = BookDetailRoutePresentation(route: route) else { continue }
-                    if route.distanceMeters < bestDistance {
-                        bestDistance = route.distanceMeters
-                        best = summary
-                    }
-                } catch {
-                    guard !Task.isCancelled else { return }
-                }
-            }
-            guard !Task.isCancelled else { return }
-            if let best { await send(.destinationRouteLoaded(requestID: requestID, best)) }
-            else { await send(.destinationRouteFailed(requestID: requestID)) }
-        }
-        .cancellable(id: CancelID.destinationRoute, cancelInFlight: true)
+        state.destinationPresentation = BookDetailDestinationPresentation.resolve(
+            holdings: holdings, context: state.mapContext
+        )
     }
 
     private func loadHoldings(state: inout State) -> Effect<Action> {
         guard state.holdingsState != .loading else { return .none }
         guard let recordID = BookHoldingsClient.recordID(for: state.book) else {
             state.holdingsState = .failed(BookHoldingsError.invalidRecordID.localizedDescription)
-            return state.mapContext == nil ? .none : refreshDestination(state: &state)
+            refreshDestination(state: &state)
+            return .none
         }
         state.holdingsState = .loading
-        if state.mapContext != nil {
-            state.destinationPresentation = nil
-            state.destinationRouteState = .idle
-            state.destinationRouteRequestID += 1
-        }
+        state.destinationPresentation = nil
         let effect: Effect<Action> = .run { [bookHoldingsClient] send in
             do {
                 let holding = try await bookHoldingsClient.fetch(recordID)
@@ -339,7 +252,7 @@ struct BookDetailFeature {
             }
         }
         .cancellable(id: CancelID.holdings, cancelInFlight: true)
-        return .merge(.cancel(id: CancelID.destinationRoute), effect)
+        return effect
     }
 
     private func loadDescription(
