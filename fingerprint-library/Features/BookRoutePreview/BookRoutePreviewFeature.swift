@@ -48,7 +48,6 @@ struct BookRoutePreviewFeature {
 
         let analyticsID: UUID = { @Dependency(\.uuid) var uuid; return uuid() }()
         var analyticsOperation: String { analyticsID.uuidString + ":" + String(requestID) }
-        var analyticsIsTest = false
         var analyticsRequestIsTest = false
         var previewPlan: RoutePlan?
         var isLoadingRoute = false
@@ -64,13 +63,7 @@ struct BookRoutePreviewFeature {
         }
 
         static func makeShelfState(for destination: BookRoutePreviewDestination) -> BookShelfMapFeature.State? {
-            guard var state = BookShelfMapFeature.State(books: destination.books) else { return nil }
-            if destination.isTestMode {
-                for item in BookRoutePreviewSample.testItems {
-                    state.holdings[item.book.id] = .loaded([item.holding])
-                }
-            }
-            return state
+            BookShelfMapFeature.State(books: destination.books)
         }
 
         var isAuthorized: Bool { location.authorization.isAuthorized }
@@ -165,7 +158,6 @@ struct BookRoutePreviewFeature {
         case routeMapAvailabilityChanged(Bool)
 
         case startTapped
-        case departTapped
         case retryTapped
         case directRetryTapped
         case setOriginManuallyTapped
@@ -179,15 +171,11 @@ struct BookRoutePreviewFeature {
         case preparingTimedOut(requestID: Int)
         case locatingTimedOut
 
-        case testModeTapped
-        case testModeApplied
         case addToCartTapped
         case goHomeTapped
         case delegate(Delegate)
-        case analyticsTestModeChanged(Bool)
         case routeLoaded(requestID: Int, RoutePlan)
         case routeFailed(requestID: Int, RouteFailure)
-        case reset
         case disappeared
 
         @CasePathable
@@ -246,11 +234,6 @@ struct BookRoutePreviewFeature {
 
             case .startTapped:
                 state.isStartRequested = true
-                state.refreshCurrentStart(at: now)
-                guard !state.needsStartLocationSetup else { return resolveStartAuthorization(&state) }
-                return loadRoute(.init(state: state.shelf, start: state.currentStart), startsNavigation: true, state: &state)
-
-            case .departTapped:
                 state.refreshCurrentStart(at: now)
                 guard !state.needsStartLocationSetup else { return resolveStartAuthorization(&state) }
                 return loadRoute(.init(state: state.shelf, start: state.currentStart), startsNavigation: true, state: &state)
@@ -333,22 +316,6 @@ struct BookRoutePreviewFeature {
                 endDirectRetry(&state)
                 return .none
 
-            case .testModeTapped:
-                state.previewStart = state.currentStart
-                return .concatenate(
-                    .send(.shelf(.map(.disappeared))),
-                    .send(.reset),
-                    .send(.analyticsTestModeChanged(true)),
-                    .send(.testModeApplied)
-                )
-
-            case .testModeApplied:
-                state.destination.useTestMode()
-                state.shelf = State.makeShelfState(for: state.destination)
-                state.hasRequestedHoldings = false
-                state.refreshCurrentStart(at: now)
-                return reconcile(&state)
-
             case .addToCartTapped:
                 @Shared(.bookCart) var cartItems
                 let books = state.destination.books
@@ -361,10 +328,6 @@ struct BookRoutePreviewFeature {
                 return .send(.delegate(.goHomeRequested))
 
             case .delegate:
-                return .none
-
-            case let .analyticsTestModeChanged(value):
-                state.analyticsIsTest = value
                 return .none
 
             case let .routeLoaded(requestID, routePlan):
@@ -400,7 +363,6 @@ struct BookRoutePreviewFeature {
                             routePlan: routePlan, usesManualOrigin: state.manualStart != nil || state.homeManualStart != nil,
                             startsAtEntrance: state.entranceApproach != nil)
                         if let notice = state.startNotice { navigation.startNotice = notice }
-                        navigation.analyticsIsTest = state.destination.isTestMode
                         state.navigation = navigation
                     }
                 }
@@ -422,17 +384,6 @@ struct BookRoutePreviewFeature {
                 ]))
                 state.startsNavigationWhenLoaded = false
                 return .merge(reconcile(&state), resolveStartAuthorization(&state))
-
-            case .reset:
-                recordCancellation(state)
-                state.requestID += 1
-                state.previewPlan = nil
-                state.isLoadingRoute = false
-                state.routeError = nil
-                state.startsNavigationWhenLoaded = false
-                state.lastRequest = nil
-                endDirectRetry(&state)
-                return .merge(.cancel(id: CancelID.route), restartPreparingTimeout(&state))
 
             case .disappeared:
                 recordCancellation(state)
@@ -598,7 +549,7 @@ struct BookRoutePreviewFeature {
                 return .merge(.cancel(id: CancelID.route), timeout, resolveStartAuthorization(&state))
             }
             state.isLoadingRoute = true
-            state.analyticsRequestIsTest = state.analyticsIsTest || start.source == .replay
+            state.analyticsRequestIsTest = start.source == .replay
             analytics.record(.init(.guidanceRequested, [
                 .operationID: .text(state.analyticsOperation), .bookCount: .integer(stops.count),
                 .isTest: .flag(state.analyticsRequestIsTest)

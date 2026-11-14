@@ -4,7 +4,6 @@ nonisolated struct RoutePreviewGuidance: Equatable, Sendable {
     let walkingSeconds: Double
     let groupTransitionNodes: [RouteNode]
 
-    var walkingMinutes: Double { walkingSeconds / 60 }
     var stepCount: Int { groupTransitionNodes.count + 1 }
 
     init(route: IndoorRoute, graph: RoutingGraph) throws {

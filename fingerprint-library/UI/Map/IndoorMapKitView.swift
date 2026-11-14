@@ -27,7 +27,6 @@ struct IndoorMapKitView: UIViewRepresentable {
     var onSelectShelf: (ShelfKey?) -> Void = { _ in }
     var route: IndoorRoute?
     var entranceApproach: LibraryEntranceApproach?
-    var groupTransitionNodes: [RouteNode] = []
     var viewportInsets: UIEdgeInsets = .zero
     var shelfLabels: [IndoorShelfLabel] = []
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
@@ -100,7 +99,6 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var renderedRoute: IndoorRoute?
         private var renderedEntranceApproach: LibraryEntranceApproach?
         private var entranceApproachOverlay: MKPolyline?
-        private var renderedGroupTransitionNodes: [RouteNode] = []
         private var renderedTurnArrows: [RouteTurnArrow] = []
         private var renderedNavigationAppearance = false
         private var renderedNavigationDestination: BookNavigationMapDestination?
@@ -109,7 +107,6 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var routeFloorID: UUID?
         private var routeOverlays: [any MKOverlay] = []
         private var routeOverlayIDs = Set<ObjectIdentifier>()
-        private var groupTransitionAnnotations: [MKPointAnnotation] = []
         private var routeTransitionAnnotations: [IndoorRouteTransitionAnnotation] = []
 
         init(parent: IndoorMapKitView) { self.parent = parent }
@@ -183,13 +180,11 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         private func updateRoute(in view: MKMapView) {
             guard renderedRoute != parent.route || routeFloorID != parent.floor.id
-                || renderedGroupTransitionNodes != parent.groupTransitionNodes
                 || renderedTurnArrows != parent.routeTurnArrows
                 || renderedNavigationDestination != parent.navigationDestination else { return }
             view.removeOverlays(routeOverlays)
             view.removeOverlays(turnArrowOverlays)
             view.removeAnnotations(routeTransitionAnnotations)
-            view.removeAnnotations(groupTransitionAnnotations)
             view.removeAnnotations(view.annotations.filter {
                 $0 is BookNavigationDestinationAnnotation || $0 is BookNavigationStartAnnotation
             })
@@ -197,10 +192,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             turnArrowOverlays.removeAll()
             turnArrowOverlayIDs.removeAll()
             routeOverlayIDs.removeAll()
-            groupTransitionAnnotations.removeAll()
             routeTransitionAnnotations.removeAll()
             renderedRoute = parent.route
-            renderedGroupTransitionNodes = parent.groupTransitionNodes
             renderedTurnArrows = parent.routeTurnArrows
             renderedNavigationDestination = parent.navigationDestination
             routeFloorID = parent.floor.id
@@ -214,13 +207,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             }
             if parent.navigationAppearance, route.start.floorID == parent.floor.id {
                 view.addAnnotation(BookNavigationStartAnnotation(coordinate: route.start.actualCoordinate))
-            }
-            for (index, node) in parent.groupTransitionNodes.enumerated() where node.floorID == parent.floor.id {
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = node.coordinate.clCoordinate
-                annotation.title = "\(index + 2)단계 시작 · 그룹 전환"
-                annotation.subtitle = node.id
-                groupTransitionAnnotations.append(annotation)
             }
             for change in route.floorChanges {
                 let from = parent.map.floors.first { $0.id == change.fromFloorID }?.ordinal
@@ -243,7 +229,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.addOverlays(routeOverlays, level: .aboveLabels)
             view.addOverlays(turnArrowOverlays, level: .aboveLabels)
             view.addAnnotations(routeTransitionAnnotations)
-            view.addAnnotations(groupTransitionAnnotations)
             if let destination = parent.navigationDestination, destination.floorID == parent.floor.id {
                 view.addAnnotation(BookNavigationDestinationAnnotation(destination))
             }
@@ -749,13 +734,8 @@ struct IndoorMapKitView: UIViewRepresentable {
                 }
                 IndoorMapPalette.apply(to: &style, feature: feature, floorOrdinal: parent.floor.ordinal)
                 if isHighlighted {
-                    if parent.appearance == .bookDetail {
-                        style.fillColor = BookNavigationPalette.uiAccent
-                        style.strokeColor = BookNavigationPalette.uiAccent
-                    } else {
-                        style.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
-                        style.strokeColor = .systemOrange
-                    }
+                    style.fillColor = BookNavigationPalette.uiAccent
+                    style.strokeColor = BookNavigationPalette.uiAccent
                     style.lineWidth = 3
                 }
                 return style
@@ -775,11 +755,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             default: style.fillColor = UIColor.systemGray6.withAlphaComponent(0.95)
             }
             IndoorMapPalette.apply(to: &style, feature: feature, floorOrdinal: parent.floor.ordinal)
-            if isHighlighted {
-                style.fillColor = UIColor.systemOrange.withAlphaComponent(0.65)
-                style.strokeColor = .systemOrange
-                style.lineWidth = 3
-            } else if isSelected {
+            if isSelected {
                 style.fillColor = UIColor.systemTeal.withAlphaComponent(0.35)
                 style.strokeColor = .systemTeal
                 style.lineWidth = 2
@@ -833,32 +809,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 let destinationTitle = (annotation.title ?? nil) ?? "도서"
                 view.accessibilityLabel = isStart ? "출발 위치" : "목적지: \(destinationTitle)"
                 view.accessibilityIdentifier = isStart ? "book-navigation-start" : "book-navigation-destination"
-                return view
-            }
-            if let annotation = annotation as? MKPointAnnotation,
-               groupTransitionAnnotations.contains(where: { $0 === annotation }) {
-                let view = mapView.dequeueReusableAnnotationView(withIdentifier: "route-group-transition")
-                    ?? MKAnnotationView(annotation: annotation, reuseIdentifier: "route-group-transition")
-                view.annotation = annotation
-                let size = MapAnnotationImage.size
-                view.image = UIGraphicsImageRenderer(size: size).image { _ in
-                    let circle = UIBezierPath(ovalIn: CGRect(origin: .zero, size: size).insetBy(dx: 2, dy: 2))
-                    UIColor.white.setFill()
-                    circle.fill()
-                    UIColor.systemOrange.setStroke()
-                    circle.lineWidth = 3
-                    circle.stroke()
-                }
-                view.centerOffset = .zero
-                view.zPriority = MapAnnotationPriority.route
-                view.selectedZPriority = MapAnnotationPriority.route
-                view.displayPriority = .required
-                view.collisionMode = .circle
-                view.clusteringIdentifier = nil
-                view.isEnabled = false
-                view.isAccessibilityElement = true
-                view.accessibilityLabel = annotation.title
-                view.accessibilityIdentifier = "route-group-transition-\(annotation.subtitle ?? "")"
                 return view
             }
             if let annotation = annotation as? IndoorShelfLabelAnnotation {

@@ -19,7 +19,6 @@ struct BookNavigationFeature {
         var routePlan: RoutePlan { navigation.routePlan }
         var currentStopIndex: Int { navigation.currentStopIndex }
         var exitReason: ExitReason? { navigation.outcome }
-        var analyticsIsTest = false
         var plans: [GuidanceEngine?]
         let bookInfos: [BookNavigationBookInfo?]
         var turnArrowsByStop: [[RouteTurnArrow]]
@@ -838,7 +837,7 @@ struct BookNavigationFeature {
     }
 
     private func isAnalyticsTest(_ state: State) -> Bool {
-        state.analyticsIsTest || state.routePlan.start.source == .replay
+        state.routePlan.start.source == .replay
     }
 
     private func recordQuality(_ state: State, code: String) {
