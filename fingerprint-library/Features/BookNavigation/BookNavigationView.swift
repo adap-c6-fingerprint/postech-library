@@ -42,12 +42,13 @@ struct BookNavigationView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             currentFloorIndicator
                             if store.diagnostics.isRecording { BookNavigationDiagnosticsHUD(store: store) }
-                            if store.diagnostics.isPlacingCheckpoint { BookNavigationCheckpointBar(store: store) }
                         }
                     }
                     .padding(.horizontal, 20).padding(.top, 20)
                     VStack(spacing: 16) {
                         Spacer()
+                        // 지도 중앙 십자선을 가리지 않도록 기준점 안내는 아래쪽에 둔다.
+                        if store.diagnostics.isPlacingCheckpoint { BookNavigationCheckpointBar(store: store) }
                         HStack(spacing: 8) {
                             if store.canReturnToPreviousStop { previousShelfButton }
                             if store.canMarkShelfFound { shelfFoundButton }
