@@ -4,6 +4,7 @@ struct BookRouteOriginPickerView: View {
     let map: IndoorMap
     let title: String
     let subtitle: String?
+    var startNotice: String? = nil
     var initialFloorID: UUID?
     let onCancel: () -> Void
     let onConfirm: (IndoorMapCoordinate, _ floorOrdinal: Int) -> Void
@@ -100,6 +101,12 @@ struct BookRouteOriginPickerView: View {
                         .typography(.title1)
                         .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
                         .accessibilityIdentifier("route-origin-picker-shelf")
+                }
+                if let startNotice {
+                    RouteStartNoticeView(notice: startNotice)
+                        .typography(.body2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityIdentifier("route-origin-picker-start-notice")
                 }
             }
             Spacer(minLength: 0)

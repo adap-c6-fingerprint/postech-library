@@ -22,6 +22,7 @@ struct IndoorMapFeature {
         var isLoadingShelfLabels = false
         var shelfLabelRequestID = 0
         var selectedFloorID: UUID?
+        var isFloorSelectedByUser = false
         var awaitsPositionFloor = true
         var lastSensedFloorOrdinal: Int?
         var selectedFeatureID: IndoorMapElement.ID?
@@ -58,14 +59,21 @@ struct IndoorMapFeature {
         var selectedFloor: IndoorMapFloor? { map?.floors.first { $0.id == selectedFloorID } }
         var selectedFeature: IndoorMapElement? { map?.features.first { $0.id == selectedFeatureID } }
         var currentPosition: IndoorPosition? { manualPosition ?? latestPosition }
+        var positionFloorOrdinal: Int? {
+            if let manualPosition { return manualPosition.floorOrdinal }
+            guard let latestPosition,
+                  map?.groundFootprint?.contains(latestPosition.coordinate) == true else { return nil }
+            return latestPosition.floorOrdinal
+        }
         var mockShelves: [ShelfDestination] {
             navigation?.shelves.mode == .mock ? navigation?.shelves.destinations ?? [] : []
         }
 
         var showsNativeUserLocation: Bool {
             guard isActive, manualPosition == nil, authorization.isAuthorized,
-                  latestPosition?.source == .sensor else { return false }
-            if let currentFloor = latestPosition?.floorOrdinal, let viewedFloor = selectedFloor?.ordinal {
+                  let latestPosition, latestPosition.source == .sensor,
+                  map?.groundFootprint?.contains(latestPosition.coordinate) == true else { return false }
+            if let currentFloor = latestPosition.floorOrdinal, let viewedFloor = selectedFloor?.ordinal {
                 return currentFloor == viewedFloor
             }
             return true
@@ -157,13 +165,14 @@ struct IndoorMapFeature {
                 state.isLoading = false
                 state.loadError = nil
                 state.map = map
-                let reportedFloor = state.currentPosition?.floorOrdinal
+                let reportedFloor = state.currentPosition?.isRecent(at: now) == true ? state.positionFloorOrdinal : nil
                 let positionFloor = map.floors.first { $0.ordinal == reportedFloor }
-                let floor = positionFloor
+                let selectedFloor = state.isFloorSelectedByUser ? state.selectedFloor : nil
+                let floor = selectedFloor ?? positionFloor
                     ?? map.floors.first { $0.ordinal == Self.defaultFloorOrdinal }
                     ?? map.floors.first
                 state.selectedFloorID = floor?.id
-                state.awaitsPositionFloor = positionFloor == nil
+                state.awaitsPositionFloor = !state.isFloorSelectedByUser && positionFloor == nil
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
                 if let floor { state.requestCamera(.initialFloor(floor.id)) }
@@ -234,6 +243,7 @@ struct IndoorMapFeature {
                 if !authorization.isAuthorized {
                     state.latestPosition = nil
                     if authorization != .notDetermined { state.wantsRecenter = false }
+                    guard state.manualPosition == nil else { return .none }
                     return invalidateRoute(&state)
                 }
                 return .none
@@ -253,16 +263,16 @@ struct IndoorMapFeature {
             case .locationEvent(.position(let position)):
                 guard position.isRecent(at: now), position.source != .manual else { return .none }
                 if let latest = state.latestPosition, position.timestamp < latest.timestamp { return .none }
-                let previousFloor = state.latestPosition?.floorOrdinal
+                let previousFloor = state.positionFloorOrdinal
                 state.latestPosition = position
                 if state.manualPosition == nil && !state.isPlacingOrigin {
                     state.locationMessage = nil
-                    let changedFloor = position.floorOrdinal != nil
-                        && position.floorOrdinal != state.lastSensedFloorOrdinal
-                    if let floorOrdinal = position.floorOrdinal { state.lastSensedFloorOrdinal = floorOrdinal }
-                    if changedFloor || state.awaitsPositionFloor,
-                       let floor = state.map?.floors.first(where: { $0.ordinal == position.floorOrdinal }) {
-                        state.awaitsPositionFloor = false
+                    let ordinal = state.positionFloorOrdinal
+                    let changedFloor = ordinal != state.lastSensedFloorOrdinal
+                    state.lastSensedFloorOrdinal = ordinal
+                    if !state.isFloorSelectedByUser, changedFloor || state.awaitsPositionFloor,
+                       let floor = state.map?.floors.first(where: { $0.ordinal == (ordinal ?? Self.defaultFloorOrdinal) }) {
+                        state.awaitsPositionFloor = ordinal == nil
                         if floor.id != state.selectedFloorID {
                             state.selectedFloorID = floor.id
                             state.selectedShelfKey = nil
@@ -270,7 +280,8 @@ struct IndoorMapFeature {
                     }
                     if state.wantsRecenter { recenter(&state, position: position) }
                 }
-                if previousFloor != position.floorOrdinal && (state.isRouting || state.requiresStairConfirmation) {
+                if state.manualPosition == nil, previousFloor != state.positionFloorOrdinal,
+                   state.isRouting || state.requiresStairConfirmation {
                     return invalidateRoute(&state)
                 }
                 return .none
@@ -280,6 +291,8 @@ struct IndoorMapFeature {
 
             case .currentLocationTapped:
                 state.manualPosition = nil
+                state.isFloorSelectedByUser = false
+                state.awaitsPositionFloor = true
                 state.isPlacingOrigin = false
                 state.selectedFeatureID = nil
                 state.locationMessage = nil
@@ -306,6 +319,8 @@ struct IndoorMapFeature {
             case .floorSelected(let id):
                 guard state.map?.floors.contains(where: { $0.id == id }) == true else { return .none }
                 state.awaitsPositionFloor = false
+                state.isFloorSelectedByUser = true
+                state.wantsRecenter = false
                 state.selectedFloorID = id
                 state.selectedFeatureID = nil
                 state.selectedShelfKey = nil
@@ -342,6 +357,7 @@ struct IndoorMapFeature {
             case .manualFloorSelected(let id):
                 guard let floor = state.map?.floors.first(where: { $0.id == id }) else { return .none }
                 state.selectedFloorID = id
+                state.isFloorSelectedByUser = true
                 state.selectedFeatureID = nil
                 state.wantsRecenter = false
                 if let position = state.currentPosition, position.isRecent(at: now),
@@ -539,13 +555,17 @@ struct IndoorMapFeature {
     }
 
     private func recenter(_ state: inout State, position: IndoorPosition) {
-        if let ordinal = position.floorOrdinal,
-           let floor = state.map?.floors.first(where: { $0.ordinal == ordinal }) {
+        let ordinal = state.positionFloorOrdinal ?? Self.defaultFloorOrdinal
+        if let floor = state.map?.floors.first(where: { $0.ordinal == ordinal }) {
             if state.selectedFloorID != floor.id { state.selectedShelfKey = nil }
             state.selectedFloorID = floor.id
             state.awaitsPositionFloor = false
         }
-        state.requestCamera(.position(position.coordinate, revealsShelfNumbers: true))
+        if state.map?.groundFootprint?.contains(position.coordinate) == true {
+            state.requestCamera(.position(position.coordinate, revealsShelfNumbers: true))
+        } else if let floorID = state.selectedFloorID {
+            state.requestCamera(.floor(floorID))
+        }
         state.wantsRecenter = false
         state.locationMessage = nil
     }
