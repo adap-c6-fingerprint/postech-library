@@ -499,6 +499,7 @@
 				INFOPLIST_FILE = "fingerprint-library/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Po:book";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "실내지도에 현재 위치와 층을 표시하고 책이 있는 곳까지 길을 안내하기 위해 위치를 사용합니다.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "도서관에서 층 이동을 감지하고 현재 층을 안정적으로 표시하기 위해 기압 센서를 사용합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -549,6 +550,7 @@
 				INFOPLIST_FILE = "fingerprint-library/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Po:book";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "실내지도에 현재 위치와 층을 표시하고 책이 있는 곳까지 길을 안내하기 위해 위치를 사용합니다.";
+				INFOPLIST_KEY_NSMotionUsageDescription = "도서관에서 층 이동을 감지하고 현재 층을 안정적으로 표시하기 위해 기압 센서를 사용합니다.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
