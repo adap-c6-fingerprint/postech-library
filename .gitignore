@@ -28,3 +28,6 @@ GoogleService-Info.plist
 
 # Keep project files, shared schemes, and Package.resolved tracked.
 fingerprint-library/GoogleService-Info.plist
+
+# 위치 진단 기록 내보내기 (실험 브랜치)
+LocationDiagnostics/
