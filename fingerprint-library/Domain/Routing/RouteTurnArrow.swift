@@ -56,24 +56,3 @@ nonisolated struct RouteTurnArrow: Identifiable, Equatable, Sendable {
         return result
     }
 }
-
-extension GuidanceEngine {
-    nonisolated func bearing(at progress: RouteGuidanceProgress) -> Double? {
-        guard steps.indices.contains(progress.stepIndex) else { return nil }
-        let step = steps[progress.stepIndex]
-        guard !step.changesFloor else { return nil }
-        let total = RoutingGeometry.polylineLengthMeters(step.coordinates)
-        var remaining = max(0, min(1, progress.fraction)) * total
-        let pairs = Array(zip(step.coordinates, step.coordinates.dropFirst()))
-        for (index, pair) in pairs.enumerated() {
-            let length = RoutingGeometry.distanceMeters(from: pair.0, to: pair.1)
-            if length <= 0 { continue }
-            if remaining <= length || index == pairs.count - 1 {
-                let east = (pair.1.longitude - pair.0.longitude) * cos((pair.0.latitude + pair.1.latitude) / 2 * .pi / 180)
-                return atan2(east, pair.1.latitude - pair.0.latitude)
-            }
-            remaining -= length
-        }
-        return nil
-    }
-}

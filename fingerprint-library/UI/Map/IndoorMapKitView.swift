@@ -32,7 +32,6 @@ struct IndoorMapKitView: UIViewRepresentable {
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
     var routeTurnArrows: [RouteTurnArrow] = []
     var navigationAppearance = false
-    var navigationBearingRadians: Double?
     var navigationDestination: BookNavigationMapDestination?
     var onUserCameraInteraction: () -> Void = {}
     var onCenterChanged: ((IndoorMapCoordinate, Bool) -> Void)?
@@ -503,18 +502,11 @@ struct IndoorMapKitView: UIViewRepresentable {
             configurePositionBearing(view, position: annotation.position, in: map)
         }
 
+        
+        // 문제의 나침반 바늘 방향 = 길안내 방향 함수 (길안내 중에도 나침반 되게 수정완)
         private func configurePositionBearing(_ view: MapUserLocationAnnotationView,
                                               position: IndoorPosition, in map: MKMapView) {
-            let headingDegrees: Double?
-            if parent.navigationAppearance {
-                headingDegrees = parent.navigationBearingRadians.map {
-                    let degrees = ($0 * 180 / .pi).truncatingRemainder(dividingBy: 360)
-                    return degrees < 0 ? degrees + 360 : degrees
-                }
-            } else {
-                headingDegrees = position.headingDegrees
-            }
-            view.configure(headingDegrees: headingDegrees, mapHeading: map.camera.heading)
+            view.configure(headingDegrees: position.headingDegrees, mapHeading: map.camera.heading)
         }
 
         private var floorFitPadding: UIEdgeInsets {
@@ -781,7 +773,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                     ?? MapUserLocationAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
                 view.annotation = annotation
                 view.accessibilityLabel = annotation.title
-                view.accessibilityValue = parent.navigationAppearance ? "경로 진행 방향" : nil
+                view.accessibilityValue = parent.navigationAppearance ? "기기 방향" : nil
                 view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position"
                     : "user-position"
                 configurePositionBearing(view, position: annotation.position, in: mapView)
