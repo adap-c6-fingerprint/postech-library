@@ -32,7 +32,6 @@ struct IndoorMapKitView: UIViewRepresentable {
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
     var routeTurnArrows: [RouteTurnArrow] = []
     var navigationAppearance = false
-    var navigationBearingRadians: Double?
     var navigationDestination: BookNavigationMapDestination?
     var onUserCameraInteraction: () -> Void = {}
     var onCenterChanged: ((IndoorMapCoordinate, Bool) -> Void)?
