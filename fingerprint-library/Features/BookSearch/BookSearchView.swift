@@ -21,16 +21,12 @@ struct BookSearchView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color(white: 17.0 / 255.0))
-        .safeAreaInset(edge: .top, spacing: 0) {
-            LibraryTabTopBar(
-                title: "검색",
-                onFavorites: { onShowFavorites?() },
-                onCart: onShowCart,
-                onProfile: { onShowProfile?() }
-            )
-            .padding(.bottom, 16)
-        }
-        .toolbar(.hidden, for: .navigationBar)
+        .libraryTabToolbar(
+            title: "검색",
+            onFavorites: { onShowFavorites?() },
+            onCart: onShowCart,
+            onProfile: { onShowProfile?() }
+        )
     }
 
     private var categoryPicker: some View {

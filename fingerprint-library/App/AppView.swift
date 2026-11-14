@@ -65,22 +65,22 @@ struct AppView: View {
                 NavigationStack(path: $store.scope(state: \.searchPath, action: \.searchPath)) {
                     BookSearchTabView(store: store.scope(state: \.bookSearch, action: \.bookSearch))
                 } destination: { pathDestination($0) }
+                .searchable(
+                    text: Binding(
+                        get: { store.bookSearch.query },
+                        set: { store.send(.bookSearch(.queryChanged($0))) }
+                    ),
+                    prompt: "책 제목이나 저자를 검색하세요"
+                )
+                .searchFocused($isBookSearchFocused)
+                .searchPresentationToolbarBehavior(.avoidHidingContent)
+                .onSubmit(of: .search, submitBookSearch)
                 .analyticsScreen(.search)
                 .tint(Color?.none)
             }
         }
         .tint(PobookUI.ColorToken.accent)
-        .searchable(
-            text: Binding(
-                get: { store.bookSearch.query },
-                set: { store.send(.bookSearch(.queryChanged($0))) }
-            ),
-            prompt: "책 제목이나 저자를 검색하세요"
-        )
-        .searchFocused($isBookSearchFocused)
-        .searchPresentationToolbarBehavior(.avoidHidingContent)
         .tabViewSearchActivation(.searchTabSelection)
-        .onSubmit(of: .search, submitBookSearch)
         .onChange(of: store.searchPath.isEmpty) { _, isEmpty in
             if !isEmpty { isBookSearchFocused = false }
         }

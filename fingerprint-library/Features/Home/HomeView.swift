@@ -10,7 +10,6 @@ struct HomeView: View {
     @State private var isAtRecommendationEnd = false
     @State private var isAtPopularBooksEnd = false
     @State private var homeScrollPosition = ScrollPosition(edge: .top)
-    @State private var isHomeAtTop = true
 
     private static let kulumiCoverNames = (1...6).map { "KulumiCover\($0)" }
 
@@ -48,12 +47,8 @@ struct HomeView: View {
                 recommendationSection
                 popularBooksSection
             }
+            .padding(.top, LibraryTabIntroText.topBarSpacing)
             .padding(.bottom, 24)
-        }
-        .onScrollGeometryChange(for: Bool.self) { geometry in
-            geometry.contentOffset.y + geometry.contentInsets.top <= 1
-        } action: { _, isAtTop in
-            isHomeAtTop = isAtTop
         }
         .scrollIndicators(.hidden)
         .scrollPosition($homeScrollPosition)
@@ -62,19 +57,13 @@ struct HomeView: View {
             homeScrollPosition.scrollTo(edge: .top)
             recommendationPosition.scrollTo(edge: .leading)
         }
-        .safeAreaBar(edge: .top, spacing: 0) {
-            LibraryTabTopBar(
-                title: "추천",
-                onFavorites: { store.send(.favoritesButtonTapped) },
-                onCart: { store.send(.cartButtonTapped) },
-                onProfile: { store.send(.profileButtonTapped) }
-            )
-            .padding(.bottom, LibraryTabIntroText.topBarSpacing)
-        }
-        .scrollEdgeEffectStyle(.hard, for: .top)
-        .scrollEdgeEffectHidden(isHomeAtTop, for: .top)
         .background(Color(uiColor: .systemBackground))
-        .toolbar(.hidden, for: .navigationBar)
+        .libraryTabToolbar(
+            title: "추천",
+            onFavorites: { store.send(.favoritesButtonTapped) },
+            onCart: { store.send(.cartButtonTapped) },
+            onProfile: { store.send(.profileButtonTapped) }
+        )
         .task(id: upcomingCoverURLs) {
             await store.send(.upcomingCoversChanged(upcomingCoverURLs)).finish()
         }
