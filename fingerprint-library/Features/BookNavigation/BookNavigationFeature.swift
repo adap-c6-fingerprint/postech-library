@@ -889,7 +889,8 @@ struct BookNavigationFeature {
               let progress = state.progress, let plan = state.currentPlan,
               let floor = state.currentFloor,
               let focus = state.cameraTracking.focus(position: position, progress: progress,
-                  plan: plan, floorID: floor.id, force: force) else { return false }
+                  plan: plan, floorID: floor.id, uncertaintyMeters: state.tracker?.uncertaintyMeters,
+                  now: now, force: force) else { return false }
         state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .navigation(focus))
         return true
     }

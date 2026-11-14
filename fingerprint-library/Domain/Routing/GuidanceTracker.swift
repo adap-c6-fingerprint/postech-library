@@ -43,6 +43,9 @@ nonisolated struct GuidanceTracker: Equatable, Sendable {
     private var lastUpdate: Date?
     private var lastMeasurement: Date?
 
+    /// 진행 거리 추정의 표준편차(m). 아직 추정이 없으면 nil
+    var uncertaintyMeters: Double? { filter?.uncertainty }
+
     init(engine: GuidanceEngine, configuration: Configuration = .init()) {
         self.engine = engine
         self.configuration = configuration
