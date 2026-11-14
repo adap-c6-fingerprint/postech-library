@@ -104,7 +104,6 @@ struct BookNavigationFeature {
             return arrows.filter { Double($0.stepIndex) >= Double(progress.stepIndex) + progress.fraction - 0.000_001 }
         }
         var remainingMetrics: BookNavigationMetrics? { remainingMeters.flatMap(BookNavigationMetrics.init) }
-        var navigationBearing: Double? { displayedProgress.flatMap { currentPlan?.bearing(at: $0) } }
         var isApproachingShelf: Bool {
             guard let progress, let meters = progress.remainingMeters, meters <= 8,
                   let floor = latestPosition?.floorOrdinal else { return false }
@@ -123,6 +122,11 @@ struct BookNavigationFeature {
         var mapPosition: IndoorPosition? { entranceApproach?.position ?? latestPosition }
         var effectiveFloorOrdinal: Int? {
             guard let rawPosition else { return confirmedFloorOrdinal }
+            // 사용자가 층 이동을 확인했는데 센서가 아직 출발 층을 보고하면 센서 층 반영 지연으로 보고 도착 층을 쓴다.
+            if let transition = manuallyCompletedFloorTransition, rawPosition.source == .sensor,
+               rawPosition.floorOrdinal == transition.from.level {
+                return transition.to.level
+            }
             if let reported = rawPosition.floorOrdinal,
                routePlan.map.floors.contains(where: { $0.ordinal == reported }) { return reported }
             return rawPosition.source == .sensor ? confirmedFloorOrdinal : rawPosition.floorOrdinal
@@ -383,6 +387,7 @@ struct BookNavigationFeature {
                 state.progress = nil
                 state.followsNavigationCamera = true
                 fitCurrentRoute(&state)
+                if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
                 return .none
 
             case .shelfFoundTapped:

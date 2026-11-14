@@ -5,7 +5,7 @@
 //  Created by 이시온 on 11/3/26.
 //
 //  마이페이지 화면 feature
-//  전역 상단 바(LibraryTabTopBar)의 마이페이지 버튼으로 들어온다.
+//  전역 상단 바(libraryTabToolbar)의 마이페이지 버튼으로 들어온다.
 //
 
 import ComposableArchitecture

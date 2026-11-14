@@ -27,3 +27,4 @@ GoogleService-Info.plist
 # Preserve its bundled Apple sample-data license; see Docs/IndoorMapData.md.
 
 # Keep project files, shared schemes, and Package.resolved tracked.
+fingerprint-library/GoogleService-Info.plist

@@ -2,10 +2,7 @@ import Foundation
 
 nonisolated struct BookDetailMapContext: Equatable, Sendable {
     let map: IndoorMap?
-    let navigation: IndoorNavigationData?
     let labels: [IndoorShelfLabel]
-    let position: IndoorPosition?
-    let preference: RoutePreference
 }
 
 nonisolated struct BookDetailDestinationPresentation: Equatable, Sendable {
@@ -43,23 +40,5 @@ nonisolated struct BookDetailDestinationPresentation: Equatable, Sendable {
         }
         let location = holding.locationName?.trimmingCharacters(in: .whitespacesAndNewlines)
         return location?.isEmpty == false ? location : nil
-    }
-}
-
-nonisolated struct BookDetailRoutePresentation: Equatable, Sendable {
-    let distanceMeters: Int
-    let floorChangeCount: Int
-    let isEstimated: Bool
-
-    init?(route: IndoorRoute) {
-        guard route.distanceMeters.isFinite, route.distanceMeters >= 0,
-              let meters = Int(exactly: route.distanceMeters.rounded()) else { return nil }
-        distanceMeters = meters
-        floorChangeCount = route.floorChanges.count
-        isEstimated = route.usesEstimatedDistances
-    }
-
-    var text: String {
-        "\(isEstimated ? "약 " : "")\(distanceMeters)m · 층 이동 \(floorChangeCount)회"
     }
 }

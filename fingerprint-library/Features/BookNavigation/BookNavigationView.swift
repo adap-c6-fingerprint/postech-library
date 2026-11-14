@@ -279,7 +279,7 @@ struct BookNavigationView: View {
             route: route, entranceApproach: store.entranceApproach, viewportInsets: .init(top: 140, left: 0,
                 bottom: sheetHeight + (store.nextFloorTransition == nil ? 0 : 50), right: 0),
             shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),
-            navigationAppearance: true, navigationBearingRadians: store.navigationBearing,
+            navigationAppearance: true,
             navigationDestination: store.currentPlan.map { .init(book: stop.book, coordinate: $0.destination.coordinate, floorID: stop.shelf.floorID) },
             onUserCameraInteraction: { store.send(.mapInteractionBegan) }
         )

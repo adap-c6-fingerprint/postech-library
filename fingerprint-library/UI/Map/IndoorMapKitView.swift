@@ -33,7 +33,6 @@ struct IndoorMapKitView: UIViewRepresentable {
     var highlightedFeatureIDs: Set<IndoorMapElement.ID> = []
     var routeTurnArrows: [RouteTurnArrow] = []
     var navigationAppearance = false
-    var navigationBearingRadians: Double?
     var navigationDestination: BookNavigationMapDestination?
     var onUserCameraInteraction: () -> Void = {}
     var onCenterChanged: ((IndoorMapCoordinate, Bool) -> Void)?
@@ -530,18 +529,7 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         private func configurePositionBearing(_ view: MapUserLocationAnnotationView,
                                               position: IndoorPosition, in map: MKMapView) {
-            let headingDegrees: Double?
-            if parent.visibleEntranceApproach != nil {
-                headingDegrees = position.headingDegrees
-            } else if parent.navigationAppearance {
-                headingDegrees = parent.navigationBearingRadians.map {
-                    let degrees = ($0 * 180 / .pi).truncatingRemainder(dividingBy: 360)
-                    return degrees < 0 ? degrees + 360 : degrees
-                }
-            } else {
-                headingDegrees = position.headingDegrees
-            }
-            view.configure(headingDegrees: headingDegrees, mapHeading: map.camera.heading)
+            view.configure(headingDegrees: position.headingDegrees, mapHeading: map.camera.heading)
         }
 
         private var floorFitPadding: UIEdgeInsets {
@@ -821,7 +809,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 view.accessibilityLabel = annotation.title
                 view.accessibilityValue = parent.visibleEntranceApproach != nil
                     ? "도서관 밖 현재 위치, 점선을 따라 주출입구로 이동"
-                    : (parent.navigationAppearance ? "경로 진행 방향" : nil)
+                    : (parent.navigationAppearance ? "기기 방향" : nil)
                 view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position"
                     : "user-position"
                 configurePositionBearing(view, position: annotation.position, in: mapView)
