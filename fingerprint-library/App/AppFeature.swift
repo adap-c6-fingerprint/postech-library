@@ -28,7 +28,6 @@ struct AppFeature {
         var searchPath = StackState<Path.State>()
         @Presents var modal: Modal.State?
         var guidanceOrigin: GuidanceOrigin?
-        var isRouteSettingsPresented = false
         var hasStartedRecommendationSession = false
         var hasEnteredBackground = false
         var hasCheckedProfile = false
@@ -48,7 +47,6 @@ struct AppFeature {
         case recommendationsPath(StackActionOf<Path>)
         case searchPath(StackActionOf<Path>)
         case modal(PresentationAction<Modal.Action>)
-        case routeSettingsPresentationChanged(Bool)
         case appStarted
         case analyticsObservationStarted
         case scenePhaseChanged(isActive: Bool)
@@ -87,7 +85,6 @@ struct AppFeature {
                 state.searchPath.removeAll()
                 state.modal = nil
                 state.guidanceOrigin = nil
-                state.isRouteSettingsPresented = false
                 state.selectedTab = .map
                 return .none
 
@@ -172,19 +169,6 @@ struct AppFeature {
                 guard state.hasStartedRecommendationSession, state.hasEnteredBackground else { return .none }
                 state.hasEnteredBackground = false
                 return .send(.home(.recommendationSessionStarted))
-            case .indoorMap(.delegate(.showRouteSettings)):
-                guard !state.isRouteSettingsPresented, state.indoorMap.routeDestination != nil
-                else {
-                    return .none
-                }
-                state.isRouteSettingsPresented = true
-                return .send(.indoorMap(.routeRequested))
-            case .routeSettingsPresentationChanged(let isPresented):
-                guard state.isRouteSettingsPresented != isPresented else { return .none }
-                guard !isPresented || state.indoorMap.routeDestination != nil else { return .none }
-                state.isRouteSettingsPresented = isPresented
-                return isPresented
-                    ? .send(.indoorMap(.routeRequested)) : .send(.indoorMap(.routeCleared))
             case .home:
                 return .none
             case .indoorMap, .locationSession:

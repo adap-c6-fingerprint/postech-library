@@ -153,7 +153,7 @@ struct BookRoutePreviewView: View {
         if !store.isAuthorized, store.manualStart == nil {
             parts.append("auth \(store.location.authorization)")
         }
-        if let position = store.manualStart ?? store.homeManualStart ?? store.location.position {
+        if let position = store.manualStart ?? store.location.position {
             parts.append(position.horizontalAccuracy.map { "±\(Int($0.rounded()))m" } ?? "±?m")
             parts.append(position.floorOrdinal.map { "floor \($0)" } ?? "floor nil")
             parts.append("\(Int(now.timeIntervalSince(position.timestamp)))s ago")

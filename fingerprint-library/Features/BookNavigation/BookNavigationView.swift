@@ -273,9 +273,9 @@ struct BookNavigationView: View {
 
     private func navigationMap(stop: RouteStop, route: IndoorRoute, floor: IndoorMapFloor) -> some View {
         IndoorMapKitView(
-            map: store.routePlan.map, floor: floor, selectedFeatureID: nil,
-            position: store.mapPosition, showsUserLocation: false, isPlacingOrigin: false,
-            cameraRequest: store.cameraRequest, onSelect: { _ in }, onPlaceOrigin: { _ in },
+            map: store.routePlan.map, floor: floor,
+            position: store.mapPosition, showsUserLocation: false,
+            cameraRequest: store.cameraRequest,
             route: route, entranceApproach: store.entranceApproach, viewportInsets: .init(top: 140, left: 0,
                 bottom: sheetHeight + (store.nextFloorTransition == nil ? 0 : 50), right: 0),
             shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),

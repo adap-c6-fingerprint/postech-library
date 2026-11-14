@@ -27,7 +27,7 @@ struct BookDetailShelfMapView: View {
     var body: some View {
         let target = focus.map { IndoorMapCameraRequest.Target.features($0.featureIDs) }
         IndoorMapView(
-            store: store, showsDestinationCard: false, showsRoute: false,
+            store: store,
             bottomContentInset: bottomContentInset,
             showsCurrentLocationButton: false, showsFloorPicker: false,
             bookDetail: .init(floor: floor, shelves: shelves,

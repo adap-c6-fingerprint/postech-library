@@ -10,8 +10,6 @@ struct IndoorMapView: View {
 
     let store: StoreOf<IndoorMapFeature>
     @State private var homeMarkerCache = HomeMapMarkerCache()
-    var showsDestinationCard = true
-    var showsRoute = true
     var bottomContentInset: CGFloat = 0
     var topContentInset: CGFloat = 0
     var appearance: IndoorMapKitView.Appearance = .standard
@@ -48,18 +46,10 @@ struct IndoorMapView: View {
     private func mapContent(map: IndoorMap, floor: IndoorMapFloor) -> some View {
         ZStack(alignment: .bottomTrailing) {
             IndoorMapKitView(
-                map: map, floor: floor, selectedFeatureID: nil,
+                map: map, floor: floor,
                 position: store.currentPosition,
                 showsUserLocation: store.showsNativeUserLocation,
-                isPlacingOrigin: false, cameraRequest: cameraRequest(for: floor),
-                onSelect: { _ in },
-                onPlaceOrigin: { _ in },
-                shelves: showsDestinationCard
-                    ? store.mockShelves : (showsRoute ? store.routeDestination.map { [$0] } ?? [] : []),
-                selectedShelfKey: showsDestinationCard
-                    ? store.selectedShelfKey : (showsRoute ? store.routeDestinationKey : nil),
-                onSelectShelf: { if showsDestinationCard { store.send(.shelfSelected($0)) } },
-                route: !showsDestinationCard && showsRoute ? store.route : nil,
+                cameraRequest: cameraRequest(for: floor),
                 viewportInsets: .init(top: 60 + topContentInset, left: appearance == .home ? 77 : 0,
                                       bottom: bottomContentInset, right: 0),
                 shelfLabels: store.shelfLabels,
@@ -109,15 +99,9 @@ struct IndoorMapView: View {
                             floorPicker(map: map, floor: floor)
                         }
                     }
-                    if appearance == .home, showsDestinationCard {
-                        IndoorRouteControls(store: store)
-                    }
                     Spacer(minLength: 0)
                 }
                 .padding(.trailing, appearance == .home && showsCurrentLocationButton ? 62 : 0)
-                if showsDestinationCard, appearance == .standard {
-                    IndoorRouteControls(store: store)
-                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding(.leading, 16)
@@ -173,13 +157,7 @@ struct IndoorMapView: View {
             MapRecenterButton { store.send(.currentLocationTapped) }
         } else {
             Button { store.send(.currentLocationTapped) } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "scope").font(.title3.weight(.medium))
-                    if !showsDestinationCard {
-                        Text(currentFloorLabel).font(.subheadline.weight(.medium)).lineLimit(1)
-                    }
-                }
-                .padding(.horizontal, showsDestinationCard ? 0 : 14)
+                Image(systemName: "scope").font(.title3.weight(.medium))
                 .frame(minWidth: 48, minHeight: 48)
                 .background(Color(uiColor: .systemBackground), in: Capsule())
                 .overlay(Capsule().strokeBorder(Color(uiColor: .separator).opacity(0.4)))
@@ -189,15 +167,6 @@ struct IndoorMapView: View {
             .accessibilityLabel("현재 위치로 지도 이동")
             .accessibilityIdentifier("recenter-location")
         }
-    }
-
-    private var currentFloorLabel: String {
-        guard let ordinal = store.currentPosition?.floorOrdinal,
-            let floor = store.map?.floors.first(where: { $0.ordinal == ordinal })
-        else {
-            return "현재 위치 확인"
-        }
-        return "현재위치 · \(floor.name)"
     }
 
     private func floorPicker(map: IndoorMap, floor: IndoorMapFloor) -> some View {

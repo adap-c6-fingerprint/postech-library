@@ -24,7 +24,6 @@ struct BookRoutePreviewFeature {
         var shelf: BookShelfMapFeature.State?
 
         @Shared(.indoorLocation) var location
-        let homeManualStart: IndoorPosition?
         var manualStart: IndoorPosition?
         var currentStart: IndoorPosition?
         var previewStart: IndoorPosition?
@@ -55,10 +54,9 @@ struct BookRoutePreviewFeature {
         var requestID = 0
         var startsNavigationWhenLoaded = false
 
-        init(books: [Book] = [], entryMode: EntryMode = .preview, homeManualStart: IndoorPosition? = nil) {
+        init(books: [Book] = [], entryMode: EntryMode = .preview) {
             destination = BookRoutePreviewDestination(books: books)
             self.entryMode = entryMode
-            self.homeManualStart = homeManualStart
             shelf = Self.makeShelfState(for: destination)
         }
 
@@ -69,7 +67,7 @@ struct BookRoutePreviewFeature {
         var isAuthorized: Bool { location.authorization.isAuthorized }
 
         var needsStartLocationSetup: Bool {
-            guard manualStart == nil, homeManualStart == nil else { return false }
+            guard manualStart == nil else { return false }
             switch startDecision {
             case .needsOrigin: return true
             case nil: return !isAuthorized
@@ -78,16 +76,16 @@ struct BookRoutePreviewFeature {
         }
 
         var startNotice: String? {
-            guard manualStart == nil, homeManualStart == nil else { return nil }
+            guard manualStart == nil else { return nil }
             return startDecision?.notice
         }
 
         var isPreviewFromEntrance: Bool {
-            manualStart == nil && homeManualStart == nil && previewStart?.source == .manual
+            manualStart == nil && previewStart?.source == .manual
         }
 
         var entranceApproach: LibraryEntranceApproach? {
-            guard manualStart == nil, homeManualStart == nil,
+            guard manualStart == nil,
                   case let .entrance(entrance, .outside) = startDecision,
                   let position = location.position, let map = shelf?.map.map else { return nil }
             return .init(position: position, entrance: entrance, map: map)
@@ -108,7 +106,7 @@ struct BookRoutePreviewFeature {
         var hidesRouteErrorWhileResolvingOrigin: Bool {
             if navigation != nil || returnsToOriginAfterNavigation { return true }
             if isPermissionAlertPresented || isOriginPickerPresented || isPreparingManualOrigin { return true }
-            if manualStart != nil || homeManualStart != nil { return false }
+            if manualStart != nil { return false }
             switch startDecision {
             case .needsOrigin, .locating: return true
             case .current, .entrance: return false
@@ -131,7 +129,7 @@ struct BookRoutePreviewFeature {
         }
 
         mutating func refreshCurrentStart(at now: Date) {
-            if let start = manualStart ?? homeManualStart {
+            if let start = manualStart {
                 currentStart = start
                 startDecision = nil
                 return
@@ -360,7 +358,7 @@ struct BookRoutePreviewFeature {
                     }
                     if state.navigation == nil, !state.returnsToOriginAfterNavigation {
                         var navigation = BookNavigationFeature.State(
-                            routePlan: routePlan, usesManualOrigin: state.manualStart != nil || state.homeManualStart != nil,
+                            routePlan: routePlan, usesManualOrigin: state.manualStart != nil,
                             startsAtEntrance: state.entranceApproach != nil)
                         if let notice = state.startNotice { navigation.startNotice = notice }
                         state.navigation = navigation
@@ -459,7 +457,7 @@ struct BookRoutePreviewFeature {
 
     private func resolveStartAuthorization(_ state: inout State) -> Effect<Action> {
         guard state.entryMode == .direct || state.isStartRequested,
-              state.manualStart == nil, state.homeManualStart == nil,
+              state.manualStart == nil,
               !state.isOriginPickerPresented, !state.isPermissionAlertPresented,
               !state.isPreparingManualOrigin, state.navigation == nil,
               !state.returnsToOriginAfterNavigation else { return .none }
