@@ -57,13 +57,16 @@ final class LiveIndoorLocationProvider: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let receivedAt = Date()
         for location in locations {
+            LocationDiagnosticsRecorder.shared.recordLocation(location, receivedAt: receivedAt)
             if lastLocation.map({ location.timestamp >= $0.timestamp }) ?? true { lastLocation = location }
             publish(.position(position(from: location)))
         }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        LocationDiagnosticsRecorder.shared.recordHeading(newHeading, receivedAt: Date())
         lastHeading = newHeading
         publishHeadingChange()
     }
