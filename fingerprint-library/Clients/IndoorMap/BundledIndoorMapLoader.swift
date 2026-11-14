@@ -20,18 +20,8 @@ nonisolated struct BundledIndoorMapLoader {
         )
     }
 
-    func loadC5(in bundle: Bundle = .main) async throws -> IndoorMap {
-        guard let root = bundle.url(forResource: "IndoorMaps", withExtension: nil) else {
-            throw IndoorMapLoadError.missingResource("IndoorMaps/C5/IMDFData")
-        }
-        return try await load(
-            directory: root.appending(path: "C5/IMDFData", directoryHint: .isDirectory),
-            policy: .c5Compatibility
-        )
-    }
-
     @concurrent
-    func load(directory: URL, policy: IMDFImportPolicy = .strict) async throws -> IndoorMap {
+    func load(directory: URL) async throws -> IndoorMap {
         try Task.checkCancellation()
         let manifest: IMDFManifestDTO = try decode("manifest.json", in: directory)
         guard manifest.version == "1.0.0" else {
@@ -45,7 +35,7 @@ nonisolated struct BundledIndoorMapLoader {
             let kind = String(file.dropLast(".geojson".count))
             collections[kind] = try decode(file, in: directory)
         }
-        return try IMDFMapper().map(version: manifest.version, collections: collections, policy: policy)
+        return try IMDFMapper().map(version: manifest.version, collections: collections)
     }
 
     private func decode<T: Decodable>(_ file: String, in directory: URL) throws -> T {

@@ -54,9 +54,8 @@ struct BookRouteOriginPickerView: View {
     private var mapLayer: some View {
         if let floor = selectedFloor {
             IndoorMapKitView(
-                map: map, floor: floor, selectedFeatureID: nil, position: nil,
-                showsUserLocation: false, isPlacingOrigin: false, cameraRequest: cameraRequest,
-                onSelect: { _ in }, onPlaceOrigin: { _ in },
+                map: map, floor: floor, position: nil,
+                showsUserLocation: false, cameraRequest: cameraRequest,
                 onCenterChanged: { coordinate, isSettled in
                     guard isSettled else {
                         if isMapSettled { isMapSettled = false }
