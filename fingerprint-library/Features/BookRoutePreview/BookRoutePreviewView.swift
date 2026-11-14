@@ -147,14 +147,19 @@ struct BookRoutePreviewView: View {
     @ViewBuilder
     private var directMapBackdrop: some View {
         if let destinationStore {
-            IndoorMapView(
-                store: destinationStore.scope(state: \.map, action: \.map),
-                showsDestinationCard: false,
-                highlightedFeatureIDs: destinationStore.highlightedFeatureIDs,
-                showsCurrentLocationButton: false,
-                showsFloorPicker: false,
-                extendsUnderBottomSafeArea: true
-            )
+            GeometryReader { geometry in
+                let shelves = destinationStore.shelves
+                let floor = shelves.first.flatMap { shelf in
+                    destinationStore.map.map?.floors.first { $0.id == shelf.floorID }
+                }
+                BookDetailShelfMapView(
+                    store: destinationStore.scope(state: \.map, action: \.map),
+                    floor: floor, shelves: shelves.filter { $0.floorID == floor?.id },
+                    mapSize: geometry.size, bottomContentInset: 0,
+                    isReadyToFocus: true, homeAnnotations: mapStore?.homeAnnotations,
+                    hiddenFavoriteMarkerIDs: Set([destinationStore.sourceFavoriteMarkerID].compactMap { $0 })
+                )
+            }
             .ignoresSafeArea()
             .accessibilityHidden(true)
             .accessibilityIdentifier("book-navigation-preparing-map")
