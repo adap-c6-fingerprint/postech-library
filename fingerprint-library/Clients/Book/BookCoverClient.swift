@@ -15,7 +15,6 @@ nonisolated struct BookCoverClient: Sendable {
     var spineImage: @Sendable (String) async throws -> UIImage
     var cachedSpineImage: @MainActor @Sendable (String) -> UIImage?
     var prefetchSpines: @MainActor @Sendable ([String]) -> Void
-    var preloadSavedSpines: @Sendable ([String]) async -> Void
 }
 
 extension BookCoverClient: DependencyKey {
@@ -38,9 +37,6 @@ extension BookCoverClient: DependencyKey {
         },
         prefetchSpines: { isbns in
             BookCoverPipeline.prefetchSpines(isbns: isbns)
-        },
-        preloadSavedSpines: { isbns in
-            await BookCoverPipeline.preloadSavedSpines(isbns: isbns)
         }
     )
     static let testValue = Self(
@@ -48,8 +44,7 @@ extension BookCoverClient: DependencyKey {
         pngData: { _ in throw RecommendationCacheStore.CacheError.invalidImage },
         spineImage: { _ in throw RecommendationCacheStore.CacheError.invalidImage },
         cachedSpineImage: { _ in nil },
-        prefetchSpines: { _ in },
-        preloadSavedSpines: { _ in }
+        prefetchSpines: { _ in }
     )
 }
 
