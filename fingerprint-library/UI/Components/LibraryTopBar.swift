@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// 홈·추천·검색 탭의 공용 상단 바.
-/// 시스템 내비게이션 바의 큰 제목을 툴바 아이템과 같은 줄(inlineLarge)에 둔다.
+/// 큰 제목을 leading 툴바 아이템으로 두어 스크롤해도 작아지지 않게 한다.
+/// 시스템 제목은 화면에서만 지우고, navigationTitle은 접근성·뒤로가기 이름으로 유지한다.
 struct LibraryTabToolbar: ViewModifier {
     let title: String
     let onFavorites: () -> Void
@@ -11,8 +12,18 @@ struct LibraryTabToolbar: ViewModifier {
     func body(content: Content) -> some View {
         content
             .navigationTitle(title)
-            .toolbarTitleDisplayMode(.inlineLarge)
+            .toolbarTitleDisplayMode(.inline)
+            .toolbar(removing: .title)
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Text(title)
+                        .font(.largeTitle.bold())
+                        .lineLimit(1)
+                        .fixedSize()
+                        .accessibilityAddTraits(.isHeader)
+                        .accessibilityIdentifier("library-top-bar-title")
+                }
+                .sharedBackgroundVisibility(.hidden)
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button("내가 읽고 싶은 책", systemImage: "bookmark.fill", action: onFavorites)
                         .accessibilityIdentifier("library-top-bar-favorites")
