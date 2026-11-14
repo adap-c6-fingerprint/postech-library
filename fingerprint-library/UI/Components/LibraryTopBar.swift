@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// 홈·추천·검색 탭의 공용 상단 바.
-/// 시스템 내비게이션 바의 큰 제목과 툴바 아이템을 그대로 사용한다.
+/// 시스템 내비게이션 바의 큰 제목을 툴바 아이템과 같은 줄(inlineLarge)에 둔다.
 struct LibraryTabToolbar: ViewModifier {
     let title: String
     let onFavorites: () -> Void
@@ -11,7 +11,7 @@ struct LibraryTabToolbar: ViewModifier {
     func body(content: Content) -> some View {
         content
             .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.large)
+            .toolbarTitleDisplayMode(.inlineLarge)
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button("내가 읽고 싶은 책", systemImage: "bookmark.fill", action: onFavorites)
