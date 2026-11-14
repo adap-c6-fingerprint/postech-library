@@ -27,12 +27,7 @@ struct MyPageView: View {
                     onTap: { store.send(.addButtonTapped) }
                 )
                 .padding(.bottom, 20)
-                SettingsSection(rows: [
-                    .init(title: "소속 및 학과 정보 변경") { store.send(.editAffiliationRowTapped) },
-                    .init(title: "관심 분야 변경하기") { store.send(.editInterestsRowTapped) },
-                    .init(title: "위치 권한 설정") { openAppSettings() },
-                    .init(title: "개인정보 처리방침") { openURL(MyPageView.privacyPolicyURL) }
-                ])
+                SettingsSection(rows: settingsRows)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 80)
             }
@@ -61,6 +56,25 @@ struct MyPageView: View {
         ) { setupStore in
             OnboardingView(store: setupStore)
         }
+        .navigationDestination(
+            item: $store.scope(state: \.diagnosticsSessions, action: \.diagnosticsSessions)
+        ) { sessionsStore in
+            LocationDiagnosticsSessionsView(store: sessionsStore)
+        }
+    }
+
+    private var settingsRows: [SettingsSection.Row] {
+        var rows: [SettingsSection.Row] = [
+            .init(title: "소속 및 학과 정보 변경") { store.send(.editAffiliationRowTapped) },
+            .init(title: "관심 분야 변경하기") { store.send(.editInterestsRowTapped) },
+            .init(title: "위치 권한 설정") { openAppSettings() },
+            .init(title: "개인정보 처리방침") { openURL(MyPageView.privacyPolicyURL) }
+        ]
+        // 실험 브랜치 전용: 검색창 /test 측정 모드가 켜져 있을 때만 보인다(디자인 시안 없이 추가한 항목).
+        if store.isLocationDiagnosticsMode {
+            rows.append(.init(title: "위치 측정 기록 내보내기") { store.send(.diagnosticsSessionsRowTapped) })
+        }
+        return rows
     }
 
     private func openAppSettings() {

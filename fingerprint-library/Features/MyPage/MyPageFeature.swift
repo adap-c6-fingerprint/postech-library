@@ -19,7 +19,10 @@ struct MyPageFeature {
         @Presents var editAffiliation: EditMyAffiliationFeature.State?
         @Presents var editInterests: OnboardingFeature.State?
         @Presents var setupProfile: OnboardingFeature.State?
+        /// 실험 브랜치 전용: 검색창 `/test` 측정 모드가 켜져 있을 때만 기록 목록을 연다.
+        @Presents var diagnosticsSessions: LocationDiagnosticsSessionsFeature.State?
         @Shared(.userProfile) var userProfile: UserProfile?
+        @Shared(.locationDiagnosticsAutoRecord) var isLocationDiagnosticsMode: Bool
     }
 
     enum Action {
@@ -30,6 +33,8 @@ struct MyPageFeature {
         case editAffiliation(PresentationAction<EditMyAffiliationFeature.Action>)
         case editInterests(PresentationAction<OnboardingFeature.Action>)
         case setupProfile(PresentationAction<OnboardingFeature.Action>)
+        case diagnosticsSessionsRowTapped
+        case diagnosticsSessions(PresentationAction<LocationDiagnosticsSessionsFeature.Action>)
         case delegate(Delegate)
 
         @CasePathable
@@ -73,12 +78,18 @@ struct MyPageFeature {
                 state.setupProfile = nil
                 return .none
 
-            case .shelf, .editAffiliation, .editInterests, .setupProfile, .delegate:
+            case .diagnosticsSessionsRowTapped:
+                guard state.isLocationDiagnosticsMode else { return .none }
+                state.diagnosticsSessions = LocationDiagnosticsSessionsFeature.State()
+                return .none
+
+            case .shelf, .editAffiliation, .editInterests, .setupProfile, .diagnosticsSessions, .delegate:
                 return .none
             }
         }
         .ifLet(\.$editAffiliation, action: \.editAffiliation) { EditMyAffiliationFeature() }
         .ifLet(\.$editInterests, action: \.editInterests) { OnboardingFeature() }
         .ifLet(\.$setupProfile, action: \.setupProfile) { OnboardingFeature() }
+        .ifLet(\.$diagnosticsSessions, action: \.diagnosticsSessions) { LocationDiagnosticsSessionsFeature() }
     }
 }

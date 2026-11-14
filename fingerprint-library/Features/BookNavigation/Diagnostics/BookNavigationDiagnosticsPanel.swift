@@ -138,52 +138,11 @@ struct BookNavigationDiagnosticsSessionList: View {
     let store: StoreOf<BookNavigationFeature>
 
     var body: some View {
-        List {
-            if store.diagnostics.isFinishing {
-                HStack { ProgressView(); Text("기록을 정리하고 있어요") }
-            }
-            ForEach(store.diagnostics.sessions) { session in
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack {
-                        Text(session.id).font(.headline.monospacedDigit())
-                        if session.id == store.diagnostics.session?.id { Text("기록 중").foregroundStyle(.red) }
-                    }
-                    Text(detail(session)).font(.footnote).foregroundStyle(.secondary)
-                    if let summary = session.summary { Text(summary.headline).font(.footnote) }
-                    if session.id != store.diagnostics.session?.id {
-                        ShareLink(items: session.fileURLs) {
-                            Label("내보내기 (\(session.fileURLs.count)개 파일)", systemImage: "square.and.arrow.up")
-                        }
-                        .font(.subheadline)
-                    }
-                }
-                .padding(.vertical, 4)
-                .swipeActions {
-                    if session.id != store.diagnostics.session?.id {
-                        Button("삭제", role: .destructive) { store.send(.diagnostics(.deleteSessionTapped(session.id))) }
-                    }
-                }
-            }
-            if store.diagnostics.sessions.isEmpty, !store.diagnostics.isFinishing {
-                ContentUnavailableView("기록이 없어요", systemImage: "waveform.path.ecg")
-            }
-        }
+        LocationDiagnosticsSessionListContent(
+            sessions: store.diagnostics.sessions, recordingSessionID: store.diagnostics.session?.id,
+            isBusy: store.diagnostics.isFinishing, busyMessage: "기록을 정리하고 있어요",
+            onDelete: { store.send(.diagnostics(.deleteSessionTapped($0))) })
         .navigationTitle("기록 목록")
         .onAppear { store.send(.diagnostics(.sessionListAppeared)) }
-    }
-
-    private func detail(_ session: LocationDiagnosticsSessionInfo) -> String {
-        var parts: [String] = []
-        if let summary = session.summary {
-            let seconds = Int(summary.durationSeconds)
-            parts.append(String(format: "%d분 %02d초", seconds / 60, seconds % 60))
-            parts.append("위치 \(summary.locationCount)건")
-        }
-        if let posture = session.meta?.posture { parts.append(posture.title) }
-        parts.append(ByteCountFormatter.string(fromByteCount: session.totalBytes, countStyle: .file))
-        if session.fileURLs.contains(where: { $0.lastPathComponent == LocationDiagnosticsRecorder.screenFileName }) {
-            parts.append("화면 녹화 포함")
-        }
-        return parts.joined(separator: " · ")
     }
 }
