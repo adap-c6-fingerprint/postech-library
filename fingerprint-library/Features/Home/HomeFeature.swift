@@ -17,6 +17,14 @@ struct HomeFeature {
                 && !userProfile.interests.isEmpty
         }
         var departmentName: String { userProfile?.departmentName ?? "" }
+        // 인기 도서 제목. 소속이 사람을 가리키는 경우(아카데미 러너)는 "~들이", 그 밖의 소속은 "'~'에서"로 쓴다.
+        var popularBooksTitle: String {
+            switch departmentName {
+            case "": "많이 빌린 도서"
+            case "아카데미 러너": "아카데미 러너들이 많이 빌린"
+            default: "'\(departmentName)'에서 많이 빌린"
+            }
+        }
         var isRecommendationExpanded = true
         var showsKulumiCovers = false
         var libraryInfo: [Book.ID: LibraryInfoState] = [:]
