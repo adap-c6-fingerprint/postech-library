@@ -26,6 +26,7 @@ struct IndoorMapKitView: UIViewRepresentable {
     var selectedShelfKey: ShelfKey?
     var onSelectShelf: (ShelfKey?) -> Void = { _ in }
     var route: IndoorRoute?
+    var entranceApproach: LibraryEntranceApproach?
     var groupTransitionNodes: [RouteNode] = []
     var viewportInsets: UIEdgeInsets = .zero
     var shelfLabels: [IndoorShelfLabel] = []
@@ -39,6 +40,10 @@ struct IndoorMapKitView: UIViewRepresentable {
     var homeMarkers: [HomeMapMarker] = []
     var onSelectFavoriteMarker: (HomeMapMarker) -> Void = { _ in }
     var detailShelfLabels: [IndoorShelfLabel] = []
+
+    var visibleEntranceApproach: LibraryEntranceApproach? {
+        entranceApproach?.entrance.floorOrdinal == floor.ordinal ? entranceApproach : nil
+    }
 
     func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
 
@@ -93,6 +98,8 @@ struct IndoorMapKitView: UIViewRepresentable {
         private var renderedDetailShelfLabels: [IndoorShelfLabel] = []
         private let homeAnnotations = HomeMapAnnotationController()
         private var renderedRoute: IndoorRoute?
+        private var renderedEntranceApproach: LibraryEntranceApproach?
+        private var entranceApproachOverlay: MKPolyline?
         private var renderedGroupTransitionNodes: [RouteNode] = []
         private var renderedTurnArrows: [RouteTurnArrow] = []
         private var renderedNavigationAppearance = false
@@ -159,6 +166,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             updateShelfLabels(in: view)
             updateDetailShelfBadges(in: view)
             updateRoute(in: view)
+            updateEntranceApproach(in: view)
             if selectedID != parent.selectedFeatureID || highlightedIDs != parent.highlightedFeatureIDs {
                 selectedID = parent.selectedFeatureID
                 highlightedIDs = parent.highlightedFeatureIDs
@@ -239,6 +247,19 @@ struct IndoorMapKitView: UIViewRepresentable {
             if let destination = parent.navigationDestination, destination.floorID == parent.floor.id {
                 view.addAnnotation(BookNavigationDestinationAnnotation(destination))
             }
+        }
+
+        private func updateEntranceApproach(in view: MKMapView) {
+            let approach = parent.visibleEntranceApproach
+            guard approach?.coordinates != renderedEntranceApproach?.coordinates else { return }
+            if let entranceApproachOverlay { view.removeOverlay(entranceApproachOverlay) }
+            renderedEntranceApproach = approach
+            entranceApproachOverlay = nil
+            guard let approach else { return }
+            let points = approach.coordinates.map(\.clCoordinate)
+            let line = MKPolyline(coordinates: points, count: points.count)
+            entranceApproachOverlay = line
+            view.addOverlay(line, level: .aboveLabels)
         }
 
         private func updateShelves(in view: MKMapView) {
@@ -377,6 +398,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             defer { MapPerformanceSignpost.signposter.endInterval("MapRender", signpostState, "overlays=\(view.overlays.count, privacy: .public)") }
             cancelOverlayRedraw()
             view.removeOverlays(view.overlays)
+            renderedEntranceApproach = nil
+            entranceApproachOverlay = nil
             view.removeAnnotations(routeTransitionAnnotations)
             routeTransitionAnnotations.removeAll()
             routeOverlays.removeAll()
@@ -475,8 +498,10 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func updatePosition(in view: MKMapView) {
             let visible = parent.position.flatMap { position -> IndoorPosition? in
-                guard (position.source != .sensor || parent.navigationAppearance || parent.appearance.usesHomeStyle),
+                let isApproachingEntrance = parent.visibleEntranceApproach?.position == position
+                guard (position.source != .sensor || parent.navigationAppearance || parent.appearance.usesHomeStyle || isApproachingEntrance),
                       position.floorOrdinal == parent.floor.ordinal
+                        || isApproachingEntrance
                         || (parent.appearance == .home && position.source == .sensor && position.floorOrdinal == nil)
                 else { return nil }
                 return position
@@ -502,8 +527,6 @@ struct IndoorMapKitView: UIViewRepresentable {
             configurePositionBearing(view, position: annotation.position, in: map)
         }
 
-        
-        // 문제의 나침반 바늘 방향 = 길안내 방향 함수 (길안내 중에도 나침반 되게 수정완)
         private func configurePositionBearing(_ view: MapUserLocationAnnotationView,
                                               position: IndoorPosition, in map: MKMapView) {
             view.configure(headingDegrees: position.headingDegrees, mapHeading: map.camera.heading)
@@ -602,6 +625,9 @@ struct IndoorMapKitView: UIViewRepresentable {
                 if route.start.floorID == parent.floor.id {
                     rect = rect.union(MapKitGeometry.mapRect(for: .point(route.start.actualCoordinate)))
                 }
+                if let approach = parent.visibleEntranceApproach {
+                    rect = rect.union(MapKitGeometry.mapRect(for: .lineString(approach.coordinates)))
+                }
                 guard !rect.isNull else { return false }
                 let padding = UIEdgeInsets(top: 32 + parent.viewportInsets.top, left: 32 + parent.viewportInsets.left,
                                            bottom: 32 + parent.viewportInsets.bottom, right: 32 + parent.viewportInsets.right)
@@ -643,7 +669,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             else if let polygons = overlay as? MKMultiPolygon { renderer = MKMultiPolygonRenderer(multiPolygon: polygons) }
             else if let lines = overlay as? MKMultiPolyline { renderer = MKMultiPolylineRenderer(multiPolyline: lines) }
             else if let line = overlay as? MKPolyline {
-                if parent.navigationAppearance, routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
+                if isEntranceApproachOverlay(overlay)
+                    || (parent.navigationAppearance && routeOverlayIDs.contains(ObjectIdentifier(overlay))) {
                     let dotted = NavigationDottedRouteRenderer(polyline: line)
                     dotted.shouldRasterize = true
                     renderer = dotted
@@ -657,6 +684,11 @@ struct IndoorMapKitView: UIViewRepresentable {
             return renderer
         }
 
+        private func isEntranceApproachOverlay(_ overlay: any MKOverlay) -> Bool {
+            guard let entranceApproachOverlay else { return false }
+            return overlay === entranceApproachOverlay
+        }
+
         func style(_ renderer: MKOverlayPathRenderer, overlay: any MKOverlay) {
             if turnArrowOverlayIDs.contains(ObjectIdentifier(overlay)) {
                 renderer.strokeColor = parent.navigationAppearance ? .white : .systemYellow
@@ -666,13 +698,14 @@ struct IndoorMapKitView: UIViewRepresentable {
                 renderer.lineJoin = .round
                 return
             }
-            if routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
-                renderer.strokeColor = parent.navigationAppearance ? BookNavigationPalette.uiAccent : .systemBlue
+            if routeOverlayIDs.contains(ObjectIdentifier(overlay)) || isEntranceApproachOverlay(overlay) {
+                let usesNavigationStyle = parent.navigationAppearance || isEntranceApproachOverlay(overlay)
+                renderer.strokeColor = usesNavigationStyle ? BookNavigationPalette.uiAccent : .systemBlue
                 renderer.fillColor = renderer.strokeColor?.withAlphaComponent(0.25)
-                renderer.lineWidth = overlay is MKPolyline ? (parent.navigationAppearance ? 7 : 5) : 2
+                renderer.lineWidth = overlay is MKPolyline ? (usesNavigationStyle ? 7 : 5) : 2
                 renderer.lineCap = .round
                 renderer.lineJoin = .round
-                if parent.navigationAppearance, overlay is MKPolyline {
+                if usesNavigationStyle, overlay is MKPolyline {
                     renderer.lineWidth = 5
                     renderer.lineDashPattern = [0, 9]
                 }
@@ -767,13 +800,16 @@ struct IndoorMapKitView: UIViewRepresentable {
                 return HomeMapAnnotationController.view(for: annotation, in: mapView)
             }
             if let annotation = annotation as? PositionAnnotation,
-               parent.navigationAppearance || (parent.appearance.usesHomeStyle && annotation.position.source != .manual) {
+               parent.navigationAppearance || parent.visibleEntranceApproach?.position == annotation.position
+                || (parent.appearance.usesHomeStyle && annotation.position.source != .manual) {
                 let reuseID = parent.navigationAppearance ? "navigation-position" : "home-user-position"
                 let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID) as? MapUserLocationAnnotationView
                     ?? MapUserLocationAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
                 view.annotation = annotation
                 view.accessibilityLabel = annotation.title
-                view.accessibilityValue = parent.navigationAppearance ? "기기 방향" : nil
+                view.accessibilityValue = parent.visibleEntranceApproach != nil
+                    ? "도서관 밖 현재 위치, 점선을 따라 주출입구로 이동"
+                    : (parent.navigationAppearance ? "기기 방향" : nil)
                 view.accessibilityIdentifier = parent.navigationAppearance ? "book-navigation-position"
                     : "user-position"
                 configurePositionBearing(view, position: annotation.position, in: mapView)

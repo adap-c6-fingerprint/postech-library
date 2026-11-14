@@ -38,6 +38,10 @@ struct BookNavigationFeature {
         var latestPosition: IndoorPosition?
         var lastReceivedTimestamp: Date?
         var confirmedFloorOrdinal: Int?
+        var libraryZone: LibraryZone?
+        var startNotice: String?
+        let usesManualOrigin: Bool
+        let startsAtEntrance: Bool
         var authorization: IndoorLocationAuthorization = .notDetermined
         var statusMessage: String? = "현재 위치를 확인하고 있어요."
         var isActive = false
@@ -50,7 +54,10 @@ struct BookNavigationFeature {
         var cameraTracking = BookNavigationCameraTracking()
         var arrivalSpines: [Int: SpinePhase] = [:]
 
-        init(routePlan: RoutePlan) {
+        init(routePlan: RoutePlan, usesManualOrigin: Bool = false, startsAtEntrance: Bool = false) {
+            self.usesManualOrigin = usesManualOrigin
+            self.startsAtEntrance = startsAtEntrance
+            if usesManualOrigin { startNotice = "직접 지정한 출발 위치에서 안내해요." }
             navigation = NavigationSession(routePlan: routePlan)
             let plans = routePlan.legs.map { try? GuidanceEngine(route: $0, graph: routePlan.graph) }
             self.plans = plans
@@ -59,6 +66,9 @@ struct BookNavigationFeature {
             turnArrowsByStop = plans.map { plan in plan.map { RouteTurnArrow.make(from: $0) } ?? [] }
             cameraRequest = .init(id: 0, target: .route(routePlan.legs.first ?? routePlan.route,
                 featureIDs: routePlan.stops.prefix(1).map { $0.shelf.mapElementID }))
+            if routePlan.start.source == .manual {
+                confirmedFloorOrdinal = routePlan.start.floorOrdinal
+            }
         }
 
         var canMarkShelfFound: Bool {
@@ -104,6 +114,12 @@ struct BookNavigationFeature {
             return routePlan.map.floors.first { $0.ordinal == floor }?.id == currentStop?.shelf.floorID
         }
         var hasNextStop: Bool { navigation.hasNextStop }
+        var entranceApproach: LibraryEntranceApproach? {
+            guard startsAtEntrance, !usesManualOrigin, currentStopIndex == 0,
+                  let rawPosition else { return nil }
+            return .init(position: rawPosition, entrance: routePlan.start, map: routePlan.map)
+        }
+        var mapPosition: IndoorPosition? { entranceApproach?.position ?? latestPosition }
         var effectiveFloorOrdinal: Int? {
             guard let rawPosition else { return confirmedFloorOrdinal }
             // 사용자가 층 이동을 확인했는데 센서가 아직 출발 층을 보고하면 센서 층 반영 지연으로 보고 도착 층을 쓴다.
@@ -180,6 +196,7 @@ struct BookNavigationFeature {
         case currentFloorConfirmed(Int)
         case floorTransitionTapped(stopIndex: Int, stepIndex: Int)
         case requestLocationPermission
+        case setOriginManuallyTapped
         case recenterTapped
         case mapInteractionBegan
         case viewportChanged
@@ -232,6 +249,10 @@ struct BookNavigationFeature {
             case .recenterTapped:
                 guard state.exitReason == nil else { return .none }
                 state.followsNavigationCamera = true
+                if state.usesManualOrigin {
+                    fitCurrentRoute(&state)
+                    return .none
+                }
                 if updateCamera(&state, force: true) { return .none }
                 if let position = state.latestPosition,
                    state.manuallyCompletedFloorTransition == nil || position.floorOrdinal == state.currentFloor?.ordinal {
@@ -263,8 +284,11 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil else { return .none }
                 return .run { _ in await locationClient.requestPermission() }
 
+            case .setOriginManuallyTapped:
+                return .none
+
             case let .locationEvent(subscriptionID, event):
-                guard state.isActive, subscriptionID == state.subscriptionID else { return .none }
+                guard !state.usesManualOrigin, state.isActive, subscriptionID == state.subscriptionID else { return .none }
                 switch event {
                 case let .authorization(authorization):
                     state.authorization = authorization
@@ -289,7 +313,24 @@ struct BookNavigationFeature {
 
                 case let .position(position):
                     guard state.authorization == .authorized(precise: true) else { return .none }
-                    if let last = state.lastReceivedTimestamp, position.timestamp <= last { return .none }
+                    if let last = state.lastReceivedTimestamp, position.timestamp <= last {
+                        guard position.timestamp == last, let current = state.rawPosition,
+                              position.coordinate == current.coordinate,
+                              position.floorOrdinal == current.floorOrdinal,
+                              position.horizontalAccuracy == current.horizontalAccuracy,
+                              position.source == current.source,
+                              position.headingDegrees != current.headingDegrees,
+                              (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp))
+                        else { return .none }
+                        // A compass update keeps the GPS timestamp and its existing expiry.
+                        state.rawPosition = position
+                        if let latest = state.latestPosition {
+                            state.latestPosition = .init(coordinate: latest.coordinate, floorOrdinal: latest.floorOrdinal,
+                                horizontalAccuracy: latest.horizontalAccuracy, timestamp: latest.timestamp,
+                                source: latest.source, headingDegrees: position.headingDegrees)
+                        }
+                        return .none
+                    }
                     guard position.source != .manual, position.coordinate.isValid,
                           let accuracy = position.horizontalAccuracy, accuracy.isFinite, accuracy >= 0,
                           (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
@@ -590,6 +631,10 @@ struct BookNavigationFeature {
         }
         state.isActive = true
         state.subscriptionID += 1
+        if state.usesManualOrigin {
+            state.statusMessage = nil
+            return .none
+        }
         invalidate(&state, message: "현재 위치를 확인하고 있어요.")
         let id = state.subscriptionID
         return .merge(
@@ -700,6 +745,22 @@ struct BookNavigationFeature {
 
     private func updateGuidance(_ state: inout State, previousTimestamp: Date?) {
         guard let raw = state.rawPosition else { return }
+        if raw.source == .sensor, let outline = state.routePlan.map.groundFootprint {
+            let previousZone = state.libraryZone
+            let zone = RouteStartPolicy().zone(of: raw, outline: outline)
+            state.libraryZone = zone
+            if zone != .inside {
+                state.latestPosition = nil
+                state.progress = nil
+                state.offRouteSince = nil
+                state.cameraTracking = .init()
+                state.statusMessage = zone == .nearOutside
+                    ? "점선을 따라 주출입구로 이동해 주세요."
+                    : "도서관에 도착하면 안내를 시작할게요."
+                if state.entranceApproach != nil, previousZone != .nearOutside { fitCurrentRoute(&state) }
+                return
+            }
+        }
         let ordinal = state.effectiveFloorOrdinal
         let effective = IndoorPosition(coordinate: raw.coordinate, floorOrdinal: ordinal,
             horizontalAccuracy: raw.horizontalAccuracy, timestamp: raw.timestamp, source: raw.source,
