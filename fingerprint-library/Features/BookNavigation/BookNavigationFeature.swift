@@ -53,6 +53,7 @@ struct BookNavigationFeature {
         var followsNavigationCamera = true
         var cameraTracking = BookNavigationCameraTracking()
         var arrivalSpines: [Int: SpinePhase] = [:]
+        var diagnostics = Diagnostics()
 
         init(routePlan: RoutePlan, usesManualOrigin: Bool = false, startsAtEntrance: Bool = false) {
             self.usesManualOrigin = usesManualOrigin
@@ -219,6 +220,7 @@ struct BookNavigationFeature {
         case nextBookRouteFailed(requestID: Int, String)
         case currentStopRerouted(requestID: Int, stopIndex: Int, IndoorRoute)
         case currentStopRerouteFailed(requestID: Int)
+        case diagnostics(DiagnosticsAction)
     }
 
     @Dependency(\.indoorLocationClient) var locationClient
@@ -228,7 +230,10 @@ struct BookNavigationFeature {
     @Dependency(\.routePlanningClient) var routePlanningClient
     @Dependency(\.analyticsClient) private var analytics
     @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
-    private nonisolated enum CancelID: Hashable, Sendable { case location, expiry, nextBookRoute, reroute, previousStopRoute }
+    @Dependency(\.locationDiagnosticsClient) var diagnosticsClient
+    nonisolated enum CancelID: Hashable, Sendable {
+        case location, expiry, nextBookRoute, reroute, previousStopRoute, diagnosticsScreenStatus
+    }
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -240,11 +245,16 @@ struct BookNavigationFeature {
                 return .merge(spines, start(&state))
 
             case let .sceneActiveChanged(active):
+                recordDiagnosticsEvent(state, active ? "scene_active" : "scene_inactive")
+                if !active { diagnosticsClient.flush() }
                 guard state.exitReason == nil, active != state.isActive else { return .none }
                 return active ? start(&state) : stop(&state)
 
             case .disappeared:
-                return stop(&state)
+                return .merge(stop(&state), finishDiagnostics(&state))
+
+            case let .diagnostics(action):
+                return reduceDiagnostics(&state, action)
 
             case .recenterTapped:
                 guard state.exitReason == nil else { return .none }
@@ -335,16 +345,19 @@ struct BookNavigationFeature {
                           let accuracy = position.horizontalAccuracy, accuracy.isFinite, accuracy >= 0,
                           (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
                         invalidate(&state, message: "새로운 위치 정보를 기다리고 있어요.")
+                        recordGuidanceDiagnostics(&state, position: position, quality: "stale")
                         return .cancel(id: CancelID.expiry)
                     }
                     state.lastReceivedTimestamp = position.timestamp
                     guard accuracy <= GuidanceEngine.maximumAccuracyMeters else {
                         invalidate(&state, message: "위치 오차가 커서 안내를 잠시 멈췄어요.")
+                        recordGuidanceDiagnostics(&state, position: position, quality: "inaccurate")
                         return .cancel(id: CancelID.expiry)
                     }
                     let previousTimestamp = state.rawPosition?.timestamp
                     state.rawPosition = position
-                    updateGuidance(&state, previousTimestamp: previousTimestamp)
+                    let quality = updateGuidance(&state, previousTimestamp: previousTimestamp)
+                    recordGuidanceDiagnostics(&state, position: position, quality: quality)
                     let delay = GuidanceEngine.maximumPositionAge - now.timeIntervalSince(position.timestamp)
                     let timestamp = position.timestamp
                     let expiry: Effect<Action> = .run { [clock] send in
@@ -370,6 +383,7 @@ struct BookNavigationFeature {
                       state.routePlan.map.floors.contains(where: { $0.ordinal == ordinal }) else { return .none }
                 state.confirmedFloorOrdinal = ordinal
                 state.manuallyCompletedFloorTransition = nil
+                recordDiagnosticsEvent(state, "floor_confirmed", ["ordinal": "\(ordinal)"])
                 if let floor = state.routePlan.map.floors.first(where: { $0.ordinal == ordinal }) {
                     state.cameraRequest = .init(id: state.cameraRequest.id + 1, target: .floor(floor.id))
                 }
@@ -384,6 +398,7 @@ struct BookNavigationFeature {
                       state.routePlan.map.floors.contains(where: { $0.id == transition.to.floorID }) else { return .none }
                 state.manuallyCompletedFloorTransition = transition
                 state.confirmedFloorOrdinal = transition.to.level
+                recordDiagnosticsEvent(state, "floor_transition_confirmed", ["toLevel": "\(transition.to.level)"])
                 state.progress = nil
                 state.followsNavigationCamera = true
                 fitCurrentRoute(&state)
@@ -392,6 +407,7 @@ struct BookNavigationFeature {
 
             case .shelfFoundTapped:
                 guard state.canMarkShelfFound else { return .none }
+                recordDiagnosticsEvent(state, "shelf_found_tapped", ["stopIndex": "\(state.currentStopIndex)"])
                 state.isArrivalPresented = true
                 state.navigation.markArrived()
                 return .none
@@ -414,6 +430,7 @@ struct BookNavigationFeature {
                       stopIndex == state.currentStopIndex, let stop = state.currentStop, state.hasNextStop else { return .none }
                 recentlyFoundBooksClient.record([stop.book])
                 state.navigation.advance()
+                recordDiagnosticsEvent(state, "stop_current", ["stopIndex": "\(state.currentStopIndex)"])
                 state.offRouteSince = nil
                 state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
@@ -470,6 +487,8 @@ struct BookNavigationFeature {
                 state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
                 state.timeline = .init(plans: state.plans, bookCount: state.routePlan.stops.count)
                 state.navigation.advance()
+                recordDiagnosticsRoute(state, stopIndex: stopIndex, reason: "next_book")
+                recordDiagnosticsEvent(state, "stop_current", ["stopIndex": "\(state.currentStopIndex)"])
                 state.offRouteSince = nil
                 state.manuallyCompletedFloorTransition = nil
                 state.followsNavigationCamera = true
@@ -526,6 +545,7 @@ struct BookNavigationFeature {
                     state.plans[stopIndex] = plan
                     state.turnArrowsByStop[stopIndex] = RouteTurnArrow.make(from: plan)
                     state.timeline = .init(plans: state.plans, bookCount: state.routePlan.stops.count)
+                    recordDiagnosticsRoute(state, stopIndex: stopIndex, reason: "previous_stop")
                 }
                 moveToStop(&state, stopIndex)
                 return .none
@@ -553,6 +573,7 @@ struct BookNavigationFeature {
                 state.followsNavigationCamera = true
                 state.progress = nil
                 fitCurrentRoute(&state)
+                recordDiagnosticsRoute(state, stopIndex: stopIndex, reason: "rerouted")
                 state.statusMessage = "현재 위치에서 경로를 다시 찾았어요."
                 recordQuality(state, code: "rerouted")
                 if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
@@ -708,6 +729,7 @@ struct BookNavigationFeature {
         state.rerouteRequestID += 1
         let requestID = state.rerouteRequestID
         state.isReroutingCurrentStop = true
+        recordDiagnosticsEvent(state, "reroute_requested", ["stopIndex": "\(stopIndex)"])
         state.statusMessage = "경로를 벗어나 현재 위치에서 경로를 다시 찾고 있어요."
         return .run { [routePlanningClient] send in
             do {
@@ -726,6 +748,7 @@ struct BookNavigationFeature {
     private func moveToStop(_ state: inout State, _ stopIndex: Int) {
         guard state.routePlan.stops.indices.contains(stopIndex) else { return }
         state.navigation.move(to: stopIndex)
+        recordDiagnosticsEvent(state, "stop_current", ["stopIndex": "\(state.currentStopIndex)"])
         state.offRouteSince = nil
         state.manuallyCompletedFloorTransition = nil
         state.followsNavigationCamera = true
@@ -736,15 +759,17 @@ struct BookNavigationFeature {
         if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
     }
 
-    private func fitCurrentRoute(_ state: inout State) {
+    func fitCurrentRoute(_ state: inout State) {
         state.cameraTracking = .init()
         guard let route = state.currentRoute, let stop = state.currentStop else { return }
         state.cameraRequest = .init(id: state.cameraRequest.id + 1,
             target: .route(route, featureIDs: stop.candidateShelves.map(\.mapElementID)))
     }
 
-    private func updateGuidance(_ state: inout State, previousTimestamp: Date?) {
-        guard let raw = state.rawPosition else { return }
+    /// 위치 1건을 안내에 반영하고 진단용 판정 코드를 돌려준다.
+    @discardableResult
+    private func updateGuidance(_ state: inout State, previousTimestamp: Date?) -> String {
+        guard let raw = state.rawPosition else { return "no_position" }
         if raw.source == .sensor, let outline = state.routePlan.map.groundFootprint {
             let previousZone = state.libraryZone
             let zone = RouteStartPolicy().zone(of: raw, outline: outline)
@@ -758,7 +783,7 @@ struct BookNavigationFeature {
                     ? "점선을 따라 주출입구로 이동해 주세요."
                     : "도서관에 도착하면 안내를 시작할게요."
                 if state.entranceApproach != nil, previousZone != .nearOutside { fitCurrentRoute(&state) }
-                return
+                return zone == .nearOutside ? "near_outside" : "outside"
             }
         }
         let ordinal = state.effectiveFloorOrdinal
@@ -770,21 +795,21 @@ struct BookNavigationFeature {
             state.progress = nil
             state.statusMessage = "현재 층을 선택해 주세요."
             state.cameraTracking = .init()
-            return
+            return "floor_unselected"
         }
         let previousFloor = state.currentFloor?.id
         state.latestPosition = effective
         if state.isReroutingToNextBook {
             state.progress = nil
             state.statusMessage = "현재 위치에서 다음 책까지의 경로를 계산하고 있어요."
-            return
+            return "rerouting"
         }
         if previousFloor != state.currentFloor?.id { fitCurrentRoute(&state) }
         guard let plan = state.currentPlan else {
             state.progress = nil
             state.statusMessage = "경로 안내 데이터를 확인해 주세요."
             state.cameraTracking = .init()
-            return
+            return "no_plan"
         }
         do {
             state.progress = try plan.progress(for: effective, at: now, previous: state.progress,
@@ -810,8 +835,10 @@ struct BookNavigationFeature {
                     .navigationID: .text(state.routePlan.id.uuidString),
                     .stopIndex: .integer(state.currentStopIndex), .isTest: .flag(isAnalyticsTest(state))
                 ]))
+                recordDiagnosticsEvent(state, "arrival_detected", ["stopIndex": "\(state.currentStopIndex)"])
             }
             updateCamera(&state)
+            return "on_route"
         } catch {
             state.progress = nil
             state.cameraTracking = .init()
@@ -834,6 +861,7 @@ struct BookNavigationFeature {
             default: "unusable_position"
             }
             recordQuality(state, code: code)
+            return code
         }
     }
 
@@ -849,7 +877,7 @@ struct BookNavigationFeature {
     }
 
     @discardableResult
-    private func updateCamera(_ state: inout State, force: Bool = false) -> Bool {
+    func updateCamera(_ state: inout State, force: Bool = false) -> Bool {
         guard state.followsNavigationCamera, state.isActive, state.exitReason == nil,
               !state.isArrivalPresented, let position = state.latestPosition,
               let progress = state.progress, let plan = state.currentPlan,
