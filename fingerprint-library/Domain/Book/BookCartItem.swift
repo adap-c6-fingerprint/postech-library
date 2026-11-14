@@ -11,8 +11,6 @@ nonisolated struct BookCartItem: Equatable, Identifiable, Sendable {
 
     var id: Book.ID { book.id }
 
-    nonisolated static let maxGuidanceCount = 3
-
     nonisolated static let maxStoredCount = 30
 }
 
