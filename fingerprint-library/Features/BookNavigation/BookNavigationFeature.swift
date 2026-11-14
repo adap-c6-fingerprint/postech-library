@@ -32,6 +32,10 @@ struct BookNavigationFeature {
         var nextBookRequestID = 0
         var nextBookRouteError: String?
         var progress: RouteGuidanceProgress?
+        /// 위치 측정값을 시간에 걸쳐 모아 진행을 추정한다. 구간·층이 바뀌면 새로 시작한다.
+        var tracker: GuidanceTracker?
+        /// 목적지 서가 앞을 확인한 순간의 측위 편향. 다음 책 구간 초반에만 쓴다.
+        var positionAnchor: PositionAnchor?
         var manuallyCompletedFloorTransition: BookNavigationFloorTransition?
         var rawPosition: IndoorPosition?
         var deviceHeadingDegrees: Double?
@@ -154,6 +158,7 @@ struct BookNavigationFeature {
                 && latestPosition?.floorOrdinal == currentFloor?.ordinal
         }
         var remainingMeters: Double? { displayedProgress?.remainingMeters }
+        var trackingStatus: GuidanceTracker.Status? { tracker?.status }
         var instructionText: String? {
             guard let progress = displayedProgress else { return nextFloorTransition?.instructionText }
             let prefix = progress.distanceToManeuver.flatMap { meters in
@@ -338,10 +343,7 @@ struct BookNavigationFeature {
                         return .cancel(id: CancelID.expiry)
                     }
                     state.lastReceivedTimestamp = position.timestamp
-                    guard accuracy <= GuidanceEngine.maximumAccuracyMeters else {
-                        invalidate(&state, message: "위치 오차가 커서 안내를 잠시 멈췄어요.")
-                        return .cancel(id: CancelID.expiry)
-                    }
+                    // 오차가 큰 위치도 버리지 않는다. 얼마나 믿을지는 GuidanceTracker가 오차로 정한다.
                     let previousTimestamp = state.rawPosition?.timestamp
                     state.rawPosition = position
                     state.deviceHeadingDegrees = position.headingDegrees
@@ -393,6 +395,7 @@ struct BookNavigationFeature {
 
             case .shelfFoundTapped:
                 guard state.canMarkShelfFound else { return .none }
+                anchorPositionAtDestination(&state)
                 state.isArrivalPresented = true
                 state.navigation.markArrived()
                 return .none
@@ -692,6 +695,7 @@ struct BookNavigationFeature {
         state.deviceHeadingDegrees = nil
         state.latestPosition = nil
         state.progress = nil
+        state.tracker = nil
         state.statusMessage = message
         state.cameraTracking = .init()
     }
@@ -754,6 +758,7 @@ struct BookNavigationFeature {
             if zone != .inside {
                 state.latestPosition = nil
                 state.progress = nil
+                state.tracker = nil
                 state.offRouteSince = nil
                 state.cameraTracking = .init()
                 state.statusMessage = zone == .nearOutside
@@ -788,9 +793,22 @@ struct BookNavigationFeature {
             state.cameraTracking = .init()
             return
         }
+        // 새로 시작하거나(층 확인·다음 책·재탐색 직후) 안내 구간이 바뀌면 이전 추정을 버린다.
+        if previousTimestamp == nil || state.tracker?.engine != plan {
+            state.tracker = GuidanceTracker(engine: plan)
+        }
+        var tracker = state.tracker ?? GuidanceTracker(engine: plan)
+        let estimate = tracker.update(position: effective, at: now, anchor: state.positionAnchor)
+        state.tracker = tracker
         do {
-            state.progress = try plan.progress(for: effective, at: now, previous: state.progress,
-                elapsed: previousTimestamp.map { effective.timestamp.timeIntervalSince($0) })
+            if let issue = estimate.issue { throw issue }
+            state.progress = estimate.progress
+            guard estimate.status != .lost else {
+                // 쓸 만한 위치가 오래 없을 때만 안내를 멈춘다. 마지막 추정과 점은 남겨 둔다.
+                state.statusMessage = "위치 오차가 커서 안내를 잠시 멈췄어요."
+                recordQuality(state, code: "inaccurate")
+                return
+            }
             if state.manuallyCompletedFloorTransition != nil, previousFloor != state.currentFloor?.id {
                 fitCurrentRoute(&state)
             }
@@ -825,6 +843,9 @@ struct BookNavigationFeature {
                 if !state.isReroutingCurrentStop {
                     state.statusMessage = "표시된 경로에서 벗어났어요. 위치와 층을 확인해 주세요."
                 }
+            case .inaccuratePosition:
+                state.latestPosition = nil
+                state.statusMessage = "위치 오차가 커서 안내를 잠시 멈췄어요."
             default:
                 state.latestPosition = nil
                 state.statusMessage = "현재 위치로 안내할 수 없어요. 새로운 위치 정보를 기다리고 있어요."
@@ -833,10 +854,21 @@ struct BookNavigationFeature {
             case .unknownFloor: "unknown_floor"
             case .ambiguousPosition: "ambiguous_position"
             case .offRoute: "off_route"
+            case .inaccuratePosition: "inaccurate"
             default: "unusable_position"
             }
             recordQuality(state, code: code)
         }
+    }
+
+    /// 사용자가 목적지 서가 앞이라고 확인한 순간, 측위 좌표와 실제 서가 위치의 차이를 기억한다.
+    /// 같은 구역의 일정한 편향을 다음 책 구간 초반에 보정한다. 층 판정 결과는 입력으로만 쓴다.
+    private func anchorPositionAtDestination(_ state: inout State) {
+        guard let raw = state.rawPosition, raw.source == .sensor, raw.isRecent(at: now),
+              let plan = state.currentPlan, let level = state.effectiveFloorOrdinal,
+              level == plan.destination.level else { return }
+        state.positionAnchor = PositionAnchor(actual: plan.destination.coordinate, measured: raw.coordinate,
+                                              floorOrdinal: level, at: now)
     }
 
     private func isAnalyticsTest(_ state: State) -> Bool {
