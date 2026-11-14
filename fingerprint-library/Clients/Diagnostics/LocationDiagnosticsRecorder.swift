@@ -20,7 +20,7 @@ nonisolated struct LocationDiagnosticsSessionInfo: Equatable, Identifiable, Send
 /// 진단 세션 폴더(Documents/LocationDiagnostics/<id>)에 JSONL을 이어 쓴다.
 /// 위치 Provider·모션·화면 녹화·안내 Feature가 여러 스레드에서 부르므로 내부 큐 하나로 직렬화한다.
 nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
-    static let shared = LocationDiagnosticsRecorder()
+    static let shared = LocationDiagnosticsRecorder(rootURL: defaultRootURL)
 
     static let recordsFileName = "session.jsonl"
     static let metaFileName = "meta.json"
@@ -43,10 +43,15 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
     private var active: ActiveSession?
     private let logger = Logger(subsystem: "fingerprint-library", category: "LocationDiagnostics")
 
+    let rootURL: URL
     var isRecording: Bool { activeFlag.withLock { $0 } }
 
-    static var rootURL: URL {
+    static var defaultRootURL: URL {
         URL.documentsDirectory.appending(path: "LocationDiagnostics", directoryHint: .isDirectory)
+    }
+
+    init(rootURL: URL) {
+        self.rootURL = rootURL
     }
 
     var activeFolderURL: URL? { queue.sync { active?.folderURL } }
@@ -57,7 +62,7 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
         try queue.sync {
             if active != nil { _ = finishLocked() }
             let id = Self.sessionID(for: meta.startedAt)
-            let folder = Self.rootURL.appending(path: id, directoryHint: .isDirectory)
+            let folder = rootURL.appending(path: id, directoryHint: .isDirectory)
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
             let recordsURL = folder.appending(path: Self.recordsFileName)
             FileManager.default.createFile(atPath: recordsURL.path(), contents: nil)
@@ -88,8 +93,10 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
     }
 
     private func finishLocked() -> LocationDiagnosticsSessionInfo? {
-        guard var session = active else { return nil }
+        guard active != nil else { return nil }
+        // 마지막 줄을 버퍼에 넣은 뒤의 상태를 꺼내야 함께 저장된다.
         appendLocked(.event(.init(at: Date(), name: "session_finished")))
+        guard var session = active else { return nil }
         flushLocked(&session)
         try? session.handle.close()
         active = nil
@@ -124,7 +131,7 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
     func sessions() -> [LocationDiagnosticsSessionInfo] {
         let activeID = queue.sync { active?.meta.sessionID }
         let folders = (try? FileManager.default.contentsOfDirectory(
-            at: Self.rootURL, includingPropertiesForKeys: [.isDirectoryKey])) ?? []
+            at: rootURL, includingPropertiesForKeys: [.isDirectoryKey])) ?? []
         return folders
             .filter { (try? $0.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true }
             .map { folder in
@@ -140,7 +147,7 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
 
     func delete(id: String) {
         guard queue.sync(execute: { active?.meta.sessionID != id }) else { return }
-        try? FileManager.default.removeItem(at: Self.rootURL.appending(path: id, directoryHint: .isDirectory))
+        try? FileManager.default.removeItem(at: rootURL.appending(path: id, directoryHint: .isDirectory))
     }
 
     // MARK: - 기록

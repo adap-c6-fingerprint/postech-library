@@ -236,6 +236,17 @@ extension BookNavigationFeature {
         )
     }
 
+    /// 안내 종료·화면 닫힘처럼 이 Feature가 곧 사라질 때 쓴다. 정리 작업은 Feature 수명과 무관하게 끝난다.
+    func finishDiagnosticsOnExit(_ state: inout State) -> Effect<Action> {
+        guard state.diagnostics.isRecording else { return .none }
+        recordDiagnosticsEvent(state, "navigation_exit", ["outcome": state.exitReason.map { "\($0)" } ?? "closed"])
+        state.diagnostics.session = nil
+        state.diagnostics.startedAt = nil
+        state.diagnostics.isPlacingCheckpoint = false
+        diagnosticsClient.finishSessionInBackground()
+        return .cancel(id: CancelID.diagnosticsScreenStatus)
+    }
+
     private func endCheckpointPlacement(_ state: inout State) -> Effect<Action> {
         state.diagnostics.isPlacingCheckpoint = false
         state.diagnostics.checkpointCenter = nil

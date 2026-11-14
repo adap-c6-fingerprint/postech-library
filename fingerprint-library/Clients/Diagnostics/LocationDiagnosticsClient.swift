@@ -8,6 +8,8 @@ nonisolated struct LocationDiagnosticsClient: Sendable {
     var startSession: @Sendable (LocationDiagnosticsSessionMeta) async throws -> LocationDiagnosticsSessionInfo
     var startScreenRecording: @Sendable (_ includesMicrophone: Bool) async -> Void
     var finishSession: @Sendable () async -> LocationDiagnosticsSessionInfo?
+    /// 안내 화면이 닫히며 Feature 작업이 취소돼도 기록을 끝까지 정리한다.
+    var finishSessionInBackground: @Sendable () -> Void
     var record: @Sendable (LocationDiagnosticsRecord) -> Void
     var flush: @Sendable () -> Void
     var sessions: @Sendable () async -> [LocationDiagnosticsSessionInfo]
@@ -58,12 +60,10 @@ extension LocationDiagnosticsClient: DependencyKey {
             recorder.append(.event(.init(at: Date(), name: "screen_recording_unsupported_platform")))
             #endif
         },
-        finishSession: {
-            #if canImport(ScreenCaptureKit)
-            if #available(iOS 27.0, *) { await ScreenRecordingProvider.shared.stop() }
-            #endif
-            MotionDiagnosticsProvider.shared.stop()
-            return LocationDiagnosticsRecorder.shared.finish()
+        finishSession: { await finishLive() },
+        finishSessionInBackground: {
+            guard LocationDiagnosticsRecorder.shared.isRecording else { return }
+            Task.detached { _ = await finishLive() }
         },
         record: { LocationDiagnosticsRecorder.shared.append($0) },
         flush: { LocationDiagnosticsRecorder.shared.flush() },
@@ -84,12 +84,21 @@ extension LocationDiagnosticsClient: DependencyKey {
         },
         startScreenRecording: { _ in },
         finishSession: { nil },
+        finishSessionInBackground: {},
         record: { _ in },
         flush: {},
         sessions: { [] },
         deleteSession: { _ in },
         screenRecordingStatus: { AsyncStream { $0.finish() } }
     )
+
+    private static func finishLive() async -> LocationDiagnosticsSessionInfo? {
+        #if canImport(ScreenCaptureKit)
+        if #available(iOS 27.0, *) { await ScreenRecordingProvider.shared.stop() }
+        #endif
+        MotionDiagnosticsProvider.shared.stop()
+        return LocationDiagnosticsRecorder.shared.finish()
+    }
 
     private static func hardwareModel() -> String {
         var system = utsname()

@@ -251,7 +251,7 @@ struct BookNavigationFeature {
                 return active ? start(&state) : stop(&state)
 
             case .disappeared:
-                return .merge(stop(&state), finishDiagnostics(&state))
+                return .merge(stop(&state), finishDiagnosticsOnExit(&state))
 
             case let .diagnostics(action):
                 return reduceDiagnostics(&state, action)
@@ -684,7 +684,7 @@ struct BookNavigationFeature {
         state.navigation.finish(reason)
         state.isArrivalPresented = false
         state.isCancelConfirmationPresented = false
-        return stop(&state)
+        return .merge(stop(&state), finishDiagnosticsOnExit(&state))
     }
 
     private func stop(_ state: inout State) -> Effect<Action> {

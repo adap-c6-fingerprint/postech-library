@@ -31,10 +31,7 @@ struct BookNavigationDiagnosticsTests {
             $0.continuousClock = TestClock()
             $0.analyticsClient = .testValue
             $0.locationDiagnosticsClient.record = { record in records.withValue { $0.append(record) } }
-            $0.locationDiagnosticsClient.finishSession = {
-                finishCount.withValue { $0 += 1 }
-                return nil
-            }
+            $0.locationDiagnosticsClient.finishSessionInBackground = { finishCount.withValue { $0 += 1 } }
         }
         store.exhaustivity = .off
         return store
@@ -82,9 +79,27 @@ struct BookNavigationDiagnosticsTests {
         #expect(records.value.contains { if case let .marker(marker) = $0 { marker.kind == .jump } else { false } })
 
         await store.send(.disappeared)
-        await store.receive(.diagnostics(.sessionFinished(nil)))
         #expect(finishCount.value == 1)
         #expect(!store.state.diagnostics.isRecording)
+    }
+
+    @Test func 안내를_종료하면_화면이_닫히기_전에_기록을_끝낸다() async throws {
+        let records = LockIsolated<[LocationDiagnosticsRecord]>([])
+        let finishCount = LockIsolated(0)
+        let store = try await Self.makeStore(records: records, finishCount: finishCount)
+        let info = LocationDiagnosticsSessionInfo(id: "test", folderURL: URL(filePath: "/dev/null"),
+                                                  meta: nil, summary: nil, fileURLs: [])
+        await store.send(.diagnostics(.sessionStarted(info)))
+
+        await store.send(.cancelTapped)
+        await store.send(.cancelConfirmed)
+        #expect(store.state.exitReason == .cancelled)
+        #expect(finishCount.value == 1)
+        #expect(records.value.contains { if case let .event(event) = $0 { event.name == "navigation_exit" } else { false } })
+
+        // 화면이 닫히며 다시 와도 두 번 끝내지 않는다.
+        await store.send(.disappeared)
+        #expect(finishCount.value == 1)
     }
 
     @Test func 기준점은_지도_중앙을_받은_뒤에만_남기고_카메라_따라가기를_되돌린다() async throws {
