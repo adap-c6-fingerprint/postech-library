@@ -45,6 +45,14 @@ final class SharedImageLoader<Image: Sendable> {
         return image
     }
 
+    func memoryImage(for url: URL) -> Image? {
+        cache.object(forKey: url as NSURL)?.image
+    }
+
+    func insert(_ image: Image, for url: URL) {
+        cache.setObject(CachedImage(image), forKey: url as NSURL, cost: cost(image))
+    }
+
     func image(for url: URL) async throws -> Image {
         try Task.checkCancellation()
         if let image = cachedImage(for: url) { return image }
