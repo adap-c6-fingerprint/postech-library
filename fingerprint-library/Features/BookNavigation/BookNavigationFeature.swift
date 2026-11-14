@@ -309,7 +309,24 @@ struct BookNavigationFeature {
 
                 case let .position(position):
                     guard state.authorization == .authorized(precise: true) else { return .none }
-                    if let last = state.lastReceivedTimestamp, position.timestamp <= last { return .none }
+                    if let last = state.lastReceivedTimestamp, position.timestamp <= last {
+                        guard position.timestamp == last, let current = state.rawPosition,
+                              position.coordinate == current.coordinate,
+                              position.floorOrdinal == current.floorOrdinal,
+                              position.horizontalAccuracy == current.horizontalAccuracy,
+                              position.source == current.source,
+                              position.headingDegrees != current.headingDegrees,
+                              (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp))
+                        else { return .none }
+                        // A compass update keeps the GPS timestamp and its existing expiry.
+                        state.rawPosition = position
+                        if let latest = state.latestPosition {
+                            state.latestPosition = .init(coordinate: latest.coordinate, floorOrdinal: latest.floorOrdinal,
+                                horizontalAccuracy: latest.horizontalAccuracy, timestamp: latest.timestamp,
+                                source: latest.source, headingDegrees: position.headingDegrees)
+                        }
+                        return .none
+                    }
                     guard position.source != .manual, position.coordinate.isValid,
                           let accuracy = position.horizontalAccuracy, accuracy.isFinite, accuracy >= 0,
                           (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {

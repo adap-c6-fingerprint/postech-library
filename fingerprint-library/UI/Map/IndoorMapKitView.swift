@@ -252,7 +252,7 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         private func updateEntranceApproach(in view: MKMapView) {
             let approach = parent.visibleEntranceApproach
-            guard approach != renderedEntranceApproach else { return }
+            guard approach?.coordinates != renderedEntranceApproach?.coordinates else { return }
             if let entranceApproachOverlay { view.removeOverlay(entranceApproachOverlay) }
             renderedEntranceApproach = approach
             entranceApproachOverlay = nil
@@ -532,7 +532,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                                               position: IndoorPosition, in map: MKMapView) {
             let headingDegrees: Double?
             if parent.visibleEntranceApproach != nil {
-                headingDegrees = nil
+                headingDegrees = position.headingDegrees
             } else if parent.navigationAppearance {
                 headingDegrees = parent.navigationBearingRadians.map {
                     let degrees = ($0 * 180 / .pi).truncatingRemainder(dividingBy: 360)
@@ -541,8 +541,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             } else {
                 headingDegrees = position.headingDegrees
             }
-            view.configure(headingDegrees: headingDegrees, mapHeading: map.camera.heading,
-                           showsBlueDot: parent.visibleEntranceApproach != nil)
+            view.configure(headingDegrees: headingDegrees, mapHeading: map.camera.heading)
         }
 
         private var floorFitPadding: UIEdgeInsets {
@@ -682,7 +681,8 @@ struct IndoorMapKitView: UIViewRepresentable {
             else if let polygons = overlay as? MKMultiPolygon { renderer = MKMultiPolygonRenderer(multiPolygon: polygons) }
             else if let lines = overlay as? MKMultiPolyline { renderer = MKMultiPolylineRenderer(multiPolyline: lines) }
             else if let line = overlay as? MKPolyline {
-                if parent.navigationAppearance, routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
+                if isEntranceApproachOverlay(overlay)
+                    || (parent.navigationAppearance && routeOverlayIDs.contains(ObjectIdentifier(overlay))) {
                     let dotted = NavigationDottedRouteRenderer(polyline: line)
                     dotted.shouldRasterize = true
                     renderer = dotted
@@ -696,14 +696,12 @@ struct IndoorMapKitView: UIViewRepresentable {
             return renderer
         }
 
+        private func isEntranceApproachOverlay(_ overlay: any MKOverlay) -> Bool {
+            guard let entranceApproachOverlay else { return false }
+            return overlay === entranceApproachOverlay
+        }
+
         func style(_ renderer: MKOverlayPathRenderer, overlay: any MKOverlay) {
-            if let entranceApproachOverlay, overlay === entranceApproachOverlay {
-                renderer.strokeColor = .systemBlue
-                renderer.lineWidth = 4
-                renderer.lineCap = .round
-                renderer.lineDashPattern = [5, 6]
-                return
-            }
             if turnArrowOverlayIDs.contains(ObjectIdentifier(overlay)) {
                 renderer.strokeColor = parent.navigationAppearance ? .white : .systemYellow
                 renderer.fillColor = .clear
@@ -712,13 +710,14 @@ struct IndoorMapKitView: UIViewRepresentable {
                 renderer.lineJoin = .round
                 return
             }
-            if routeOverlayIDs.contains(ObjectIdentifier(overlay)) {
-                renderer.strokeColor = parent.navigationAppearance ? BookNavigationPalette.uiAccent : .systemBlue
+            if routeOverlayIDs.contains(ObjectIdentifier(overlay)) || isEntranceApproachOverlay(overlay) {
+                let usesNavigationStyle = parent.navigationAppearance || isEntranceApproachOverlay(overlay)
+                renderer.strokeColor = usesNavigationStyle ? BookNavigationPalette.uiAccent : .systemBlue
                 renderer.fillColor = renderer.strokeColor?.withAlphaComponent(0.25)
-                renderer.lineWidth = overlay is MKPolyline ? (parent.navigationAppearance ? 7 : 5) : 2
+                renderer.lineWidth = overlay is MKPolyline ? (usesNavigationStyle ? 7 : 5) : 2
                 renderer.lineCap = .round
                 renderer.lineJoin = .round
-                if parent.navigationAppearance, overlay is MKPolyline {
+                if usesNavigationStyle, overlay is MKPolyline {
                     renderer.lineWidth = 5
                     renderer.lineDashPattern = [0, 9]
                 }

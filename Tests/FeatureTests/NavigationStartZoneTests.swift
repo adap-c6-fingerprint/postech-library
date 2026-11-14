@@ -5,6 +5,52 @@ import Testing
 
 @MainActor
 struct NavigationStartZoneTests {
+    @Test func 제자리에서_방향만_바뀌면_헤딩은_갱신하고_GPS_만료는_연장하지_않는다() async throws {
+        let now = Date(timeIntervalSinceReferenceDate: 1_000)
+        let map = try await BundledIndoorMapLoader().loadLibrary()
+        let labels = try await BundledShelfLabelLoader().loadLibrary(on: map)
+        let coordinate = IndoorMapCoordinate(latitude: 36.0129329, longitude: 129.3256179)
+        func position(heading: Double?, timestamp: Date = now) -> IndoorPosition {
+            .init(coordinate: coordinate, floorOrdinal: 99, horizontalAccuracy: 5,
+                timestamp: timestamp, source: .sensor, headingDegrees: heading)
+        }
+        let start = try #require(RouteStartPolicy().decide(position: position(heading: 45),
+            isAuthorized: true, map: map, now: now).startPosition)
+        let shelf = try #require(labels.first { label in
+            label.realNumber == "343" && label.side == .a
+                && map.floors.contains { $0.id == label.floorID && $0.ordinal == 2 }
+        })
+        let plan = try await RoutePlanningLoader().load(on: map, labels: labels, start: start,
+            stops: [.init(book: makeBook(1), holdings: [], candidateShelves: [shelf])])
+        var state = BookNavigationFeature.State(routePlan: plan, startsAtEntrance: true)
+        state.isActive = true
+        state.subscriptionID = 1
+        state.authorization = .authorized(precise: true)
+        let clock = TestClock()
+        let store = TestStore(initialState: state) { BookNavigationFeature() } withDependencies: {
+            $0.date.now = now
+            $0.continuousClock = clock
+        }
+        store.exhaustivity = .off
+        await store.send(.locationEvent(subscriptionID: 1, .position(position(heading: 45))))
+        await clock.advance(by: .seconds(8))
+        await store.send(.locationEvent(subscriptionID: 1, .position(position(heading: 135))))
+        #expect(store.state.entranceApproach?.position.headingDegrees == 135)
+        #expect(store.state.lastReceivedTimestamp == now)
+        #expect(store.state.currentRoute == plan.legs.first)
+        await store.send(.locationEvent(subscriptionID: 1,
+            .position(position(heading: 270, timestamp: now.addingTimeInterval(-1)))))
+        #expect(store.state.mapPosition?.headingDegrees == 135)
+        await store.send(.locationEvent(subscriptionID: 1, .position(position(heading: nil))))
+        #expect(store.state.mapPosition?.headingDegrees == nil)
+        await clock.advance(by: .seconds(2))
+        await store.receive(\.locationExpired)
+        #expect(store.state.rawPosition == nil)
+        #expect(store.state.entranceApproach == nil)
+        await store.send(.disappeared)
+        await store.finish()
+    }
+
     @Test func 수동_안내는_센서가_다른_위치와_층을_보내도_출발점과_경로를_유지한다() async throws {
         let now = Date(timeIntervalSinceReferenceDate: 1_000)
         let map = try await BundledIndoorMapLoader().loadLibrary()
