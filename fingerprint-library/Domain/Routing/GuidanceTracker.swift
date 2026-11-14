@@ -17,6 +17,8 @@ nonisolated struct GuidanceTracker: Equatable, Sendable {
         var recoveryCount = 2
         /// 측정값 없이 이 시간이 지나면 멈췄을 수도 있으므로 속도를 줄인다.
         var dampAfterSeconds = 2.0
+        /// 오차가 큰 측정값이 들어올 때마다 남기는 속도 비율
+        var degradedSpeedRetention = 0.6
         var filter = AlongRouteFilter.Configuration()
         var matcher = RouteMatcher.Configuration()
     }
@@ -85,6 +87,9 @@ nonisolated struct GuidanceTracker: Equatable, Sendable {
             filter.predict(dt: dt)
             if let lastMeasurement, position.timestamp.timeIntervalSince(lastMeasurement) > configuration.dampAfterSeconds {
                 filter.dampSpeed(0.5)
+            } else if accuracy >= configuration.goodAccuracy {
+                // 오차가 큰 동안 직전 속도로 계속 앞서 나가면, 멈춘 사람보다 점이 앞서 갔다가 되돌아온다.
+                filter.dampSpeed(configuration.degradedSpeedRetention)
             }
             if let range { filter.clamp(to: range) }
             self.filter = filter
