@@ -89,6 +89,14 @@ struct MyPageFeature {
                 state.editInterests = nil
                 return .none
 
+            case .editInterests(.dismiss):
+                if let edit = state.editInterests {
+                    analytics.record(.button(.back, on: .myPageInterests,
+                                             [.action: .text(edit.hasChangedInterests ? "changed" : "unchanged")]))
+                }
+                // 관심 분야 변경 화면에서 완료하지 않고 뒤로가기 (선택을 바꿨다가 나갔는지 함께 보낸다)
+                return .none
+
             case .setupProfile(.presented(.delegate(.completed))):
                 state.setupProfile = nil
                 return .none

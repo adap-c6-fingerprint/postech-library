@@ -74,6 +74,11 @@ struct OnboardingFeature {
         }
         // 지금 보이는 단계의 분석용 화면 이름
         
+        var hasChangedInterests: Bool {
+            Set(selectedPreferences) != Set(userProfile?.interests ?? [])
+        }
+        // 관심 분야 변경에서 처음 들어왔을 때와 선택이 달라졌는지 (순서는 보지 않는다)
+
         var isAffiliationComplete: Bool {
             selectedAffiliation != nil
         }
@@ -250,6 +255,7 @@ struct OnboardingFeature {
                 return .none
                 
             case .finishButtonTapped where state.entry == .changeInterests:
+                analytics.record(.button(.done, on: state.analyticsScreen))
                 guard state.canFinish, let current = state.userProfile else { return .none }
                 do {
                     let updated = try current.updatingInterests(state.selectedPreferences)
@@ -261,6 +267,8 @@ struct OnboardingFeature {
                 }
 
             case .finishButtonTapped:
+                analytics.record(.button(.done, on: state.analyticsScreen))
+                // 관심사 단계의 완료 버튼 (저장할 수 없는 상태에서 눌러도 누름은 기록)
                 guard state.canFinish, let affiliation = state.selectedAffiliation else { return .none }
                 do {
                     let profile = try UserProfile(
