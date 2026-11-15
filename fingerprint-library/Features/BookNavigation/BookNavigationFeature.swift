@@ -193,6 +193,8 @@ struct BookNavigationFeature {
 
     enum Action: Equatable {
         case task
+        case spineButtonTapped(AnalyticsEvent.ButtonID, screen: AnalyticsScreen)
+        // 책등으로 책 찾기·못 찾았어요 화면의 버튼 기록 (동작은 각 버튼의 기존 액션이 맡는다)
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(subscriptionID: Int, IndoorLocationEvent)
@@ -591,6 +593,10 @@ struct BookNavigationFeature {
                 guard state.exitReason == nil, state.isArrivalPresented,
                       stopIndex == state.currentStopIndex, state.currentStop != nil else { return .none }
                 return end(&state, reason: .cancelled)
+
+            case let .spineButtonTapped(id, screen):
+                analytics.record(navigationButton(id, state, on: screen))
+                return .none
 
             case .cancelTapped:
                 guard state.exitReason == nil else { return .none }
