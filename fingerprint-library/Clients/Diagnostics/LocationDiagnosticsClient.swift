@@ -101,7 +101,8 @@ extension LocationDiagnosticsClient: DependencyKey {
         return sessionID.map { recorder.finish(sessionID: $0) } ?? recorder.finish()
     }
 
-    private static func hardwareModel() -> String {
+    /// 기록 시작(`startSession`)이 동기·nonisolated 클로저에서 부르므로 메인 액터에 묶지 않는다.
+    private nonisolated static func hardwareModel() -> String {
         var system = utsname()
         uname(&system)
         return withUnsafeBytes(of: &system.machine) { buffer in
@@ -109,7 +110,7 @@ extension LocationDiagnosticsClient: DependencyKey {
         }
     }
 
-    private static func thermalStateName(_ state: ProcessInfo.ThermalState) -> String {
+    private nonisolated static func thermalStateName(_ state: ProcessInfo.ThermalState) -> String {
         switch state {
         case .nominal: "nominal"
         case .fair: "fair"
