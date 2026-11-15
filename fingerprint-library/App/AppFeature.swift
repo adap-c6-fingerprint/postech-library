@@ -131,6 +131,10 @@ struct AppFeature {
             case .analyticsObservationStarted:
                 return .run { [analytics] _ in
                     @Shared(.userProfile) var userProfile
+                    @Shared(.favoriteBookKeys) var favoriteBookKeys
+                    @Shared(.bookCart) var bookCart
+                    analytics.updateCollectionCounts(favoriteBookKeys.count, bookCart.count)
+                    // 시작 시점의 찜·장바구니 개수를 사용자 속성으로 설정한다
                     await withTaskGroup(of: Void.self) { group in
                         group.addTask {
                             for await profile in $userProfile.publisher.dropFirst().values {
@@ -138,8 +142,22 @@ struct AppFeature {
                             }
                         }
                         group.addTask {
+                            for await keys in $favoriteBookKeys.publisher.dropFirst().values {
+                                analytics.updateCollectionCounts(keys.count, bookCart.count)
+                            }
+                            // 찜 목록이 바뀔 때마다 개수를 다시 설정한다
+                        }
+                        group.addTask {
+                            for await items in $bookCart.publisher.dropFirst().values {
+                                analytics.updateCollectionCounts(favoriteBookKeys.count, items.count)
+                            }
+                            // 장바구니가 바뀔 때마다 개수를 다시 설정한다
+                        }
+                        group.addTask {
                             for await _ in analytics.consentChanges() {
                                 analytics.updateProfile(userProfile)
+                                analytics.updateCollectionCounts(favoriteBookKeys.count, bookCart.count)
+                                // 분석에 다시 동의하면 지워졌던 개수 속성을 다시 설정한다
                             }
                         }
                     }

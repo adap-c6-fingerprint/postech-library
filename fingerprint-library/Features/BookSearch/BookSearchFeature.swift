@@ -132,10 +132,9 @@ struct BookSearchFeature {
 
             case let .favoriteButtonTapped(book):
                 let isFavorite = BookFavorites().toggle(book, at: now)
-                analytics.record(.init(.bookFavoriteChanged, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(book)),
+                analytics.record(.init(.bookFavoriteChanged, AnalyticsEvent.bookFields(book).merging([
                     .action: .text(isFavorite ? "added" : "removed")
-                ]))
+                ]) { $1 }))
                 return .none
 
             case let .favoriteMarkerTapped(marker):
@@ -152,10 +151,9 @@ struct BookSearchFeature {
                 return .send(.delegate(.showFavoriteShelf(books, sourceFavoriteMarkerID: marker.id)))
 
             case let .bookSelected(book):
-                analytics.record(.init(.searchResultSelected, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(book)),
+                analytics.record(.init(.searchResultSelected, AnalyticsEvent.bookFields(book).merging([
                     .source: .text(state.hasSearched ? "results" : "recent")
-                ]))
+                ]) { $1 }))
                 recentSearchBooksClient.record(book)
                 state.recentBooks = recentSearchBooksClient.load()
                 return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: nil)))

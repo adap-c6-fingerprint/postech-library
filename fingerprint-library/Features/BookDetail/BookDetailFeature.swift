@@ -97,9 +97,7 @@ struct BookDetailFeature {
         Reduce { state, action in
             switch action {
             case .viewAppeared:
-                analytics.record(.init(.bookDetailViewed, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(state.book))
-                ]))
+                analytics.record(.init(.bookDetailViewed, AnalyticsEvent.bookFields(state.book)))
                 return .none
 
             case .loadFavorites:
@@ -108,10 +106,9 @@ struct BookDetailFeature {
 
             case .favoriteButtonTapped:
                 let isFavorite = BookFavorites().toggle(state.book, at: now)
-                analytics.record(.init(.bookFavoriteChanged, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(state.book)),
+                analytics.record(.init(.bookFavoriteChanged, AnalyticsEvent.bookFields(state.book).merging([
                     .action: .text(isFavorite ? "added" : "removed")
-                ]))
+                ]) { $1 }))
                 return .none
 
             case .loadHoldings:
@@ -170,9 +167,7 @@ struct BookDetailFeature {
                 switch $cartItems.withLock({ $0.add(state.book, at: now) }) {
                 case .added:
                     state.cartNotice = .added
-                    analytics.record(.init(.cartBookAdded, [
-                        .bookRecordID: .text(AnalyticsEvent.bookID(state.book))
-                    ]))
+                    analytics.record(.init(.cartBookAdded, AnalyticsEvent.bookFields(state.book)))
                 case .alreadyAdded:
                     state.cartNotice = .alreadyAdded
                 case .limitExceeded:

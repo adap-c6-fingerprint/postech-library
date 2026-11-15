@@ -112,7 +112,7 @@ struct BookFavoritesFeature {
                 }
                 for book in books {
                     if $cartItems.withLock({ $0.add(book, at: now) }) == .added {
-                        analytics.record(.init(.cartBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
+                        analytics.record(.init(.cartBookAdded, AnalyticsEvent.bookFields(book)))
                     }
                 }
                 state.selectedIDs = []

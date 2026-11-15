@@ -361,7 +361,7 @@ struct HomeFeature {
                 
 
             case let .bookSelected(book):
-                analytics.record(.init(.recommendationSelected, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
+                analytics.record(.init(.recommendationSelected, AnalyticsEvent.bookFields(book)))
                 let coverURL = state.recommendationCoverFiles[book.id]
                 state.openedDetailCoverURL = coverURL
                 return .send(.delegate(.showDetail(book, cachedCoverURL: coverURL)))
