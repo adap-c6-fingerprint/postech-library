@@ -130,6 +130,8 @@ struct HomeFeature {
         case favoritesButtonTapped
         case profileButtonTapped
         case departmentRecommendationsButtonTapped
+        case scrolled(area: String, direction: String)
+        // 손을 뗀 순간 스크롤 1회 (area = 스크롤한 영역, direction = up, down, left, right)
         case delegate(Delegate)
 
         case recommendationsFailed(UUID, String)
@@ -380,6 +382,14 @@ struct HomeFeature {
                 analytics.record(.button(.myPage, on: .recommendations))
                 // 추천 탭 마이페이지 버튼
                 return .send(.delegate(.showMyPage))
+
+            case let .scrolled(area, direction):
+                analytics.record(.init(.scrollPerformed, [
+                    .screenName: .text(AnalyticsScreen.recommendations.rawValue),
+                    .scrollArea: .text(area), .direction: .text(direction)
+                ]))
+                // 추천 탭의 스크롤 기록
+                return .none
 
             case .departmentRecommendationsButtonTapped:
                 return .send(.delegate(.showDepartmentRecommendations))

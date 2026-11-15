@@ -10,7 +10,8 @@ struct HomeView: View {
     @State private var isAtRecommendationEnd = false
     @State private var isAtPopularBooksEnd = false
     @State private var homeScrollPosition = ScrollPosition(edge: .top)
-
+    @State private var scrollStartY: CGFloat = 0
+    
     private static let kulumiCoverNames = (1...6).map { "KulumiCover\($0)" }
 
     private var recommendationLayout: RecommendationLayout {
@@ -49,6 +50,16 @@ struct HomeView: View {
             }
             .padding(.top, LibraryTabIntroText.topBarSpacing)
             .padding(.bottom, 24)
+        }
+        .onScrollPhaseChange { oldPhase, newPhase, context in
+            if newPhase == .interacting {
+                scrollStartY = context.geometry.contentOffset.y
+                // 손을 댄 순간의 위치
+            } else if oldPhase == .interacting {
+                let direction = context.geometry.contentOffset.y > scrollStartY ? "down" : "up"
+                store.send(.scrolled(area: "home", direction: direction))
+                // 손을 뗀 순간 스크롤 1회임
+            }
         }
         .scrollIndicators(.hidden)
         .scrollPosition($homeScrollPosition)
