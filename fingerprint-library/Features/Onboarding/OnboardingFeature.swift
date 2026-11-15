@@ -240,8 +240,12 @@ struct OnboardingFeature {
             case let .preferenceToggled(name):
                 if let index = state.selectedPreferences.firstIndex(of: name) {
                     state.selectedPreferences.remove(at: index)
+                    analytics.record(.button(.interestDeselect, on: state.analyticsScreen, [.kind: .text(name)]))
+                    // 관심사 선택 해제 (kind = 해제한 관심사)
                 } else if state.preferenceNames.contains(name) {
                     state.selectedPreferences.append(name)
+                    analytics.record(.button(.interestSelect, on: state.analyticsScreen, [.kind: .text(name)]))
+                    // 관심사 선택 (kind = 고른 관심사)
                 }
                 return .none
                 
