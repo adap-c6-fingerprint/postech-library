@@ -62,7 +62,11 @@ struct BookNavigationDiagnosticsPanel: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("방금 기록: \(session.id)").font(.subheadline.weight(.semibold))
                     if let summary = session.summary { Text(summary.headline).font(.footnote) }
-                    ShareLink(items: session.fileURLs) { Label("내보내기", systemImage: "square.and.arrow.up") }
+                    ShareLink(item: LocationDiagnosticsArchive(session: session),
+                              preview: SharePreview("\(session.id).zip")) {
+                        Label("내보내기 (ZIP)", systemImage: "square.and.arrow.up")
+                            .foregroundStyle(PobookUI.ColorToken.accent)
+                    }
                 }
             }
         } header: {

@@ -42,8 +42,11 @@ struct LocationDiagnosticsSessionListContent: View {
                     Text(Self.detail(session)).font(.footnote).foregroundStyle(.secondary)
                     if let summary = session.summary { Text(summary.headline).font(.footnote) }
                     if session.id != recordingSessionID {
-                        ShareLink(items: session.fileURLs) {
-                            Label("내보내기 (\(session.fileURLs.count)개 파일)", systemImage: "square.and.arrow.up")
+                        // 기록 폴더를 ZIP 하나로 묶어 내보낸다.
+                        ShareLink(item: LocationDiagnosticsArchive(session: session),
+                                  preview: SharePreview("\(session.id).zip")) {
+                            Label("내보내기 (ZIP · \(session.fileURLs.count)개 파일)", systemImage: "square.and.arrow.up")
+                                .foregroundStyle(PobookUI.ColorToken.accent)
                         }
                         .font(.subheadline)
                     }

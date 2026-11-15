@@ -65,6 +65,42 @@ struct LocationDiagnosticsRecorderTests {
         #expect(recorder.activeSessionID == second.id)
     }
 
+    @Test func 내보내기는_기록_폴더를_기록_ID_이름의_ZIP_하나로_묶는다() throws {
+        let (recorder, root) = makeRecorder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        _ = try recorder.start(meta: meta(Date(timeIntervalSinceReferenceDate: 3_000)))
+        let session = try #require(recorder.finish())
+
+        let zipURL = try LocationDiagnosticsArchive(session: session).makeZip(in: root)
+
+        #expect(zipURL.lastPathComponent == "\(session.id).zip")
+        let data = try Data(contentsOf: zipURL)
+        #expect(data.starts(with: [0x50, 0x4B, 0x03, 0x04]))  // ZIP 로컬 파일 헤더 "PK\u{3}\u{4}"
+        // ZIP 목록에는 파일 경로가 그대로 들어 있다. 기록 ID 폴더 아래에 기록 파일이 모두 있어야 한다.
+        for name in session.fileURLs.map(\.lastPathComponent) {
+            #expect(data.range(of: Data("\(session.id)/\(name)".utf8)) != nil, "\(name)이 ZIP에 없어요")
+        }
+    }
+
+    @Test func 내보내기는_공유_중일_수_있는_최근_ZIP은_남기고_오래된_ZIP만_정리한다() throws {
+        let (recorder, root) = makeRecorder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        _ = try recorder.start(meta: meta(Date(timeIntervalSinceReferenceDate: 4_000)))
+        let archive = LocationDiagnosticsArchive(session: try #require(recorder.finish()))
+        let exportDirectory = root.appending(path: "exports", directoryHint: .isDirectory)
+        let now = Date()
+
+        let first = try archive.makeZip(in: exportDirectory, now: now)
+        let second = try archive.makeZip(in: exportDirectory, now: now.addingTimeInterval(60))
+        #expect(FileManager.default.fileExists(atPath: first.path()))
+
+        let third = try archive.makeZip(
+            in: exportDirectory, now: now.addingTimeInterval(LocationDiagnosticsArchive.staleExportAge + 60))
+        #expect(!FileManager.default.fileExists(atPath: first.path()))
+        #expect(!FileManager.default.fileExists(atPath: second.path()))
+        #expect(FileManager.default.fileExists(atPath: third.path()))
+    }
+
     @Test func 기록하지_않을_때는_아무것도_쓰지_않고_중단된_세션은_목록에서_요약을_복구한다() throws {
         let (recorder, root) = makeRecorder()
         defer { try? FileManager.default.removeItem(at: root) }
