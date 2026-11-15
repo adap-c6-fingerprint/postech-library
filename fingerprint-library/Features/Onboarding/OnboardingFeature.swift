@@ -68,6 +68,11 @@ struct OnboardingFeature {
         }
 
         var preferenceNames: [String] { dataset.preferenceNames }
+
+        var analyticsScreen: AnalyticsScreen {
+            OnboardingFeature.analyticsScreen(for: step, entry: entry)
+        }
+        // 지금 보이는 단계의 분석용 화면 이름
         
         var isAffiliationComplete: Bool {
             selectedAffiliation != nil
@@ -126,6 +131,8 @@ struct OnboardingFeature {
         @CasePathable
         enum Alert: Equatable {
             case skipConfirmed
+            case continueSetupChosen
+            // 건너뛰기 알림에서 "설정하기"를 고름
         }
     }
     
@@ -167,10 +174,12 @@ struct OnboardingFeature {
                 return .run { _ in exit(0) }
                 
             case .skipButtonTapped:
+                analytics.record(.button(.later, on: state.analyticsScreen))
+                // "다음에 할래요"
                 state.alert = AlertState {
                     TextState("맞춤 정보 설정을 건너뛰시겠어요?")
                 } actions: {
-                    ButtonState(role: .cancel) {
+                    ButtonState(role: .cancel, action: .continueSetupChosen) {
                         TextState("설정하기")
                     }
                     ButtonState(role: .destructive, action: .skipConfirmed) {
@@ -182,7 +191,14 @@ struct OnboardingFeature {
                 return .none
 
             case .alert(.presented(.skipConfirmed)):
+                analytics.record(.button(.skipConfirmSkip, on: state.analyticsScreen))
+                // 건너뛰기 알림 → "건너뛰기"
                 state.isSkipNoticePresented = true
+                return .none
+
+            case .alert(.presented(.continueSetupChosen)):
+                analytics.record(.button(.skipConfirmSetup, on: state.analyticsScreen))
+                // 건너뛰기 알림 → "설정하기" (알림만 닫히고 소속 설정을 이어 간다)
                 return .none
 
             case .skipNoticeConfirmed:
@@ -193,6 +209,8 @@ struct OnboardingFeature {
                 return .none
 
             case let .parentSelected(parent):
+                analytics.record(.button(.affiliationSelect, on: state.analyticsScreen, [.kind: .text(parent)]))
+                // 소속 메뉴에서 고른 소속 (이미 고른 소속을 다시 골라도 기록)
                 guard state.selectedParent != parent else { return .none }
                 state.selectedParent = parent
                 state.selectedAffiliation = nil
@@ -200,16 +218,22 @@ struct OnboardingFeature {
                 
             case let .affiliationSelected(path):
                 guard state.affiliationChoices.contains(path) else { return .none }
+                analytics.record(.button(.departmentSelect, on: state.analyticsScreen, [.kind: .text(path.name)]))
+                // 학과 메뉴에서 고른 세부 소속
                 state.selectedAffiliation = path
                 return .none
                 
             case .nextButtonTapped:
                 guard state.isAffiliationComplete else { return .none }
+                analytics.record(.button(.next, on: state.analyticsScreen))
+                // 소속 선택이 끝난 뒤 "다음으로" 또는 왼쪽 스와이프
                 state.step = .interests
                 return .none
 
             case .backButtonTapped:
                 guard let previous = Step(rawValue: state.step.rawValue - 1) else { return .none }
+                analytics.record(.button(.back, on: state.analyticsScreen))
+                // 뒤로가기 (step을 바꾸기 전이라 떠나는 단계의 화면 이름으로 기록)
                 state.step = previous
                 return .none
 
