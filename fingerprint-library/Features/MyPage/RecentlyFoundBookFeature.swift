@@ -30,6 +30,8 @@ struct RecentlyFoundBookFeature {
         case task
         case spineLoaded(Book.ID, UIImage?)
         case bookSelected(Book)
+        case scrolled(direction: String)
+        // 책장을 좌우로 넘기고 손을 뗀 순간 1회 (direction = left, right)
         case delegate(Delegate)
 
         @CasePathable
@@ -40,6 +42,7 @@ struct RecentlyFoundBookFeature {
 
     @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
     @Dependency(\.bookCoverClient) var bookCoverClient
+    @Dependency(\.analyticsClient) private var analytics
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -74,7 +77,17 @@ struct RecentlyFoundBookFeature {
                 return .none
 
             case let .bookSelected(book):
+                analytics.record(.button(.book, on: .recentlyFoundBooks, book: book))
+                // 책을 고를 수 있는 곳은 최근 찾은 책 화면뿐이다 (마이페이지 카드는 카드 전체를 탭)
                 return .send(.delegate(.showDetail(book)))
+
+            case let .scrolled(direction):
+                analytics.record(.init(.scrollPerformed, [
+                    .screenName: .text(AnalyticsScreen.recentlyFoundBooks.rawValue),
+                    .direction: .text(direction)
+                ]))
+                // 좌우로 넘길 수 있는 책장은 최근 찾은 책 화면에만 있다
+                return .none
 
             case .delegate:
                 return .none
