@@ -126,6 +126,8 @@ struct HomeFeature {
         case upcomingCoversChanged( [URL] )
 
         case bookSelected(Book)
+        case departmentBookSelected(Book)
+        // 학과 추천 목록에서 책 선택 (기록 후 bookSelected로 이어짐)
         case cartButtonTapped
         case favoritesButtonTapped
         case profileButtonTapped
@@ -367,6 +369,10 @@ struct HomeFeature {
                 let coverURL = state.recommendationCoverFiles[book.id]
                 state.openedDetailCoverURL = coverURL
                 return .send(.delegate(.showDetail(book, cachedCoverURL: coverURL)))
+
+            case let .departmentBookSelected(book):
+                analytics.record(.button(.book, on: .departmentRecommendations, book: book))
+                return .send(.bookSelected(book))
 
             case .cartButtonTapped:
                 analytics.record(.button(.cart, on: .recommendations))
