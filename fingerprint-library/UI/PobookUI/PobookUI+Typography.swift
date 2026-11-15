@@ -92,6 +92,15 @@ extension PobookUI {
         static let caption2 = Self(style: .regular, size: FontSize._12,
             lineHeight: LineHeight._12, letterSpacing: LetterSpacing._12, relativeTo: .caption1)
 
+        @MainActor
+        static var guidance: Self {
+            let size: CGFloat = 8
+            let font = UIFont(name: "\(FontFamily.Pretendard)-\(FontStyle.semibold.rawValue)", size: size)
+                ?? .systemFont(ofSize: size, weight: .semibold)
+            return Self(style: .semibold, size: size, lineHeight: font.lineHeight,
+                        letterSpacing: 0, relativeTo: .body)
+        }
+
         static let button = bookTitle
         static let buttonSmall = body2
         static let shelfHeading = Self(style: .medium, size: FontSize._20,

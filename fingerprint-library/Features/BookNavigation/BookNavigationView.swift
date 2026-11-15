@@ -179,50 +179,40 @@ struct BookNavigationView: View {
     }
 
     private var guidanceSheet: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 20) {
             VStack(alignment: .leading, spacing: 12) {
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     Image(systemName: store.instructionSymbol)
                         .font(.system(size: 14, weight: .semibold))
                         .frame(width: 23, height: 23)
                         .background(.black, in: Circle())
                         .accessibilityHidden(true)
                     Text(store.nextBookRouteError ?? store.statusMessage ?? store.instructionText ?? "현재 위치를 확인하고 있어요.")
-                        .typography(.body1).lineLimit(2)
+                        .typography(.body2).lineLimit(2)
                         .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                     Spacer(minLength: 0)
                 }
                 .frame(minHeight: 28)
                 .accessibilityIdentifier("book-navigation-instruction")
-                if let notice = store.startNotice {
-                    RouteStartNoticeView(notice: notice)
-                        .typography(.caption1)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .accessibilityIdentifier("book-navigation-start-notice")
-                    Button("출발 위치 직접 설정") { store.send(.setOriginManuallyTapped) }
-                        .font(.caption.bold())
-                        .accessibilityIdentifier("book-navigation-set-origin")
-                }
+
                 BookNavigationProgressBar(timeline: store.timeline, stopIndex: store.currentStopIndex,
                     progress: store.displayedProgress, floors: store.routePlan.map.floors)
             }
-            .padding(.horizontal, 16)
             .fixedSize(horizontal: false, vertical: true)
             .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height in
                 if abs(height - sheetSummaryHeight) > 0.5 { sheetSummaryHeight = height }
             }
             if isSheetExpanded {
-                Rectangle().fill(.white.opacity(0.08)).frame(height: 1)
-                    .padding(.horizontal, 14).padding(.top, 20)
+                Rectangle().fill(PobookUI.ColorPrimitive.Grayscale._700).frame(height: 1)
                     .accessibilityHidden(true)
                 if let info = store.currentBookInfo, let route = store.currentRoute {
                     BookNavigationCurrentBookCard(info: info, route: route)
-                        .padding(.horizontal, 16).padding(.top, 24)
                         .id(store.currentStopIndex)
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding(.horizontal, 16)
         .tint(BookNavigationPalette.accent)
     }
 

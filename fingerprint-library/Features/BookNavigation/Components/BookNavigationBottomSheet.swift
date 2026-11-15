@@ -11,7 +11,7 @@ struct BookNavigationBottomSheet<Content: View>: View {
         VStack(spacing: 0) {
             Button { setExpanded(!isExpanded) } label: {
                 Capsule().fill(.white.opacity(0.3))
-                    .frame(width: 36, height: 5)
+                    .frame(width: 57, height: 4)
                     .frame(maxWidth: .infinity).frame(height: 24)
                     .contentShape(Rectangle())
             }
