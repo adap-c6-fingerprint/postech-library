@@ -46,6 +46,25 @@ struct LocationDiagnosticsRecorderTests {
         #expect(last.name == "session_finished")
     }
 
+    /// 안내 화면이 열리며 자동 기록이 같은 초에 두 번 시작되는 경우.
+    /// 첫 기록은 짧아서 폴더째 지워지고, 늦게 도착한 첫 기록의 종료 요청이 새 기록을 닫으면 안 된다.
+    @Test func 지워진_짧은_자동_기록의_늦은_종료_요청이_같은_초에_시작한_새_기록을_닫지_않는다() throws {
+        let (recorder, root) = makeRecorder()
+        defer { try? FileManager.default.removeItem(at: root) }
+        let startedAt = Date()
+        var automatic = meta(startedAt)
+        automatic.isAutomatic = true
+
+        let first = try recorder.start(meta: automatic)
+        let second = try recorder.start(meta: automatic)
+
+        #expect(second.id != first.id)
+        #expect(!FileManager.default.fileExists(atPath: first.folderURL.path()))
+        #expect(recorder.finish(sessionID: first.id) == nil)
+        #expect(recorder.isRecording)
+        #expect(recorder.activeSessionID == second.id)
+    }
+
     @Test func 기록하지_않을_때는_아무것도_쓰지_않고_중단된_세션은_목록에서_요약을_복구한다() throws {
         let (recorder, root) = makeRecorder()
         defer { try? FileManager.default.removeItem(at: root) }

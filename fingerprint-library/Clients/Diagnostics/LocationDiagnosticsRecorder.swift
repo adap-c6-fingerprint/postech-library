@@ -42,6 +42,9 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
     private let activeFlag = OSAllocatedUnfairLock(initialState: false)
     private let encoder = LocationDiagnosticsCoding.encoder()
     private var active: ActiveSession?
+    /// 이번 실행에서 내준 기록 ID. 짧은 자동 기록은 폴더째 지워지므로 폴더 존재만으로는 재사용을 막을 수 없다.
+    /// 같은 ID를 다시 내주면 늦게 도착한 이전 기록의 종료 요청이 새 기록을 닫아 버린다.
+    private var issuedSessionIDs: Set<String> = []
     private let logger = Logger(subsystem: "fingerprint-library", category: "LocationDiagnostics")
 
     let rootURL: URL
@@ -63,13 +66,15 @@ nonisolated final class LocationDiagnosticsRecorder: @unchecked Sendable {
     func start(meta: LocationDiagnosticsSessionMeta) throws -> LocationDiagnosticsSessionInfo {
         try queue.sync {
             if active != nil { _ = finishLocked() }
-            // 같은 초에 두 번 시작해도 이전 기록을 덮어쓰지 않도록 이름이 겹치면 번호를 붙인다.
+            // 같은 초에 두 번 시작해도 이전 기록과 겹치지 않도록 이름이 겹치면 번호를 붙인다.
             var id = Self.sessionID(for: meta.startedAt)
             var suffix = 2
-            while FileManager.default.fileExists(atPath: rootURL.appending(path: id, directoryHint: .isDirectory).path()) {
+            while issuedSessionIDs.contains(id)
+                    || FileManager.default.fileExists(atPath: rootURL.appending(path: id, directoryHint: .isDirectory).path()) {
                 id = Self.sessionID(for: meta.startedAt) + "-\(suffix)"
                 suffix += 1
             }
+            issuedSessionIDs.insert(id)
             let folder = rootURL.appending(path: id, directoryHint: .isDirectory)
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
             let recordsURL = folder.appending(path: Self.recordsFileName)
