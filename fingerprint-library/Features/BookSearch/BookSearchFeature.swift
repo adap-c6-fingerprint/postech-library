@@ -145,6 +145,10 @@ struct BookSearchFeature {
                 let books = (items.map(\.book) + state.books + state.recentBooks)
                     .filter { activeKeys.contains($0.recordKey) && seen.insert($0.recordKey).inserted }
                 guard let book = books.first else { return .none }
+                analytics.record(books.count == 1
+                    ? .button(.favoriteMarker, on: .map, book: book)
+                    : .button(.favoriteMarker, on: .map, [.bookCount: .integer(books.count)]))
+                // 지도의 찜한 책 아이콘. 한 권이면 책 ID, 같은 서가에 여러 권이면 권수를 보낸다
                 if books.count == 1 {
                     return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: marker.id)))
                 }

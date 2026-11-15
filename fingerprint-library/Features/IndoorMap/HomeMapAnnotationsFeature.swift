@@ -18,6 +18,7 @@ struct HomeMapAnnotationsFeature {
     }
 
     @Dependency(\.bookLocationCacheClient) var locations
+    @Dependency(\.analyticsClient) private var analytics
     nonisolated private enum CancelID { case updates }
 
     var body: some Reducer<State, Action> {
@@ -33,6 +34,9 @@ struct HomeMapAnnotationsFeature {
                 }.cancellable(id: CancelID.updates, cancelInFlight: true)
             case .amenitiesTapped:
                 state.showsAmenities.toggle()
+                analytics.record(.button(.amenityToggle, on: .map,
+                                         [.action: .text(state.showsAmenities ? "on" : "off")]))
+                // 편의시설 버튼은 지도 탭에만 있다. 토글한 뒤의 상태(on, off)를 보낸다
                 return .none
             case .favoritesChanged(let keys):
                 state.favoriteKeys = keys
@@ -47,3 +51,4 @@ struct HomeMapAnnotationsFeature {
         }
     }
 }
+

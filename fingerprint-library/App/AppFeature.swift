@@ -65,6 +65,15 @@ struct AppFeature {
 
     nonisolated static let analyticsCheckpointInterval: Duration = .seconds(60)
 
+    static func analyticsRootScreen(of tab: Tab) -> AnalyticsScreen {
+        // 탭의 첫 화면 이름 (탭 위에 다른 화면이 쌓여 있어도 탭 기준으로 고른다)
+        switch tab {
+        case .map: .map
+        case .recommendations: .recommendations
+        case .search: .search
+        }
+    }
+
     private nonisolated enum CancelID: Hashable, Sendable {
         case analyticsCheckpoint
         case analyticsObservation
@@ -78,6 +87,14 @@ struct AppFeature {
         Reduce { state, action in
             switch action {
             case let .tabSelected(tab):
+                let button: AnalyticsEvent.ButtonID = switch tab {
+                case .map: .tabHome
+                case .recommendations: .tabRecommendations
+                case .search: .search
+                }
+                // 누른 하단 탭
+                analytics.record(.button(button, on: Self.analyticsRootScreen(of: state.selectedTab)))
+                // screen_name은 떠나는 탭의 첫 화면 이름
                 state.selectedTab = tab
                 return .none
 
@@ -103,6 +120,21 @@ struct AppFeature {
             case let .bookSearch(.delegate(delegate)):
                 guard let destination = Self.destination(for: delegate) else { return .none }
                 push(destination, onto: state.selectedTab, state: &state)
+                return .none
+
+            case .bookSearch(.cartButtonTapped):
+                analytics.record(.button(.cart, on: Self.analyticsRootScreen(of: state.selectedTab)))
+                // 상단 장바구니 버튼 (지도 탭과 검색 탭이 같은 BookSearchFeature를 쓰므로 탭으로 화면을 구분)
+                return .none
+
+            case .bookSearch(.favoritesButtonTapped):
+                analytics.record(.button(.bookmark, on: Self.analyticsRootScreen(of: state.selectedTab)))
+                // 상단 북마크 버튼
+                return .none
+
+            case .bookSearch(.profileButtonTapped):
+                analytics.record(.button(.myPage, on: Self.analyticsRootScreen(of: state.selectedTab)))
+                // 상단 마이페이지 버튼
                 return .none
 
             case .bookSearch:

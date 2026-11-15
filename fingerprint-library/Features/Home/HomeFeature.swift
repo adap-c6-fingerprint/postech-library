@@ -367,12 +367,18 @@ struct HomeFeature {
                 return .send(.delegate(.showDetail(book, cachedCoverURL: coverURL)))
 
             case .cartButtonTapped:
+                analytics.record(.button(.cart, on: .recommendations))
+                // 추천 탭 상단 장바구니 버튼
                 return .send(.delegate(.showCart))
 
             case .favoritesButtonTapped:
+                analytics.record(.button(.bookmark, on: .recommendations))
+                // 추천 탭 상단 북마크 버튼
                 return .send(.delegate(.showFavorites))
 
             case .profileButtonTapped:
+                analytics.record(.button(.myPage, on: .recommendations))
+                // 추천 탭 마이페이지 버튼
                 return .send(.delegate(.showMyPage))
 
             case .departmentRecommendationsButtonTapped:
