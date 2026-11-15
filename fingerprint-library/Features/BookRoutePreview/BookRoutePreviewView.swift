@@ -13,7 +13,7 @@ struct BookRoutePreviewView: View {
     }
 
     @Environment(\.indoorRouteMapStore) private var mapStore
-    @Environment(\.openURL) private var openURL
+    @Environment(\.openURL) pri .analyticsScreen(.search)vate var openURL
     @State private var isProblemReportPresented = false
     @State private var isProblemReportFallbackPresented = false
     @Environment(\.dismiss) private var dismiss

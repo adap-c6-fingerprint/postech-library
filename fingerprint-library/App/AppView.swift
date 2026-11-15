@@ -74,7 +74,6 @@ struct AppView: View {
                 .searchFocused($isBookSearchFocused)
                 .searchPresentationToolbarBehavior(.avoidHidingContent)
                 .onSubmit(of: .search, submitBookSearch)
-                .analyticsScreen(.search)
                 .tint(Color?.none)
             }
         }

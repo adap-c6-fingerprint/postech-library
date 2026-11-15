@@ -77,6 +77,15 @@ struct BookSearchFeature {
     var bookSearchClient: BookSearchClient
     @Dependency(\.analyticsClient) private var analytics
 
+    static func analyticsFilterButton(_ category: BookSearchCategory) -> AnalyticsEvent.ButtonID {
+        switch category {
+        case .all: .filterAll
+        case .monograph: .filterBook
+        case .journal: .filterJournal
+        }
+    }
+    // 자료 유형 탭(전체·단행본·학술지)의 버튼 이름
+
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
 
@@ -191,6 +200,8 @@ struct BookSearchFeature {
 
             case let .categoryChanged(category):
                 guard state.category != category else { return .none }
+                analytics.record(.button(Self.analyticsFilterButton(category),
+                                         on: state.hasSearched ? .searchResults : .search))
                 state.category = category
                 return .none
 

@@ -43,14 +43,28 @@ struct BookSearchView: View {
         .padding(.bottom, 16)
     }
 
+    private var showsRecentItems: Bool {
+        !(store.isLoading && store.books.isEmpty)
+            && (!store.hasSearched || store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+    }
+
     @ViewBuilder
     private var searchContent: some View {
+        if showsRecentItems {
+            recentItems
+                .analyticsScreen(.search)
+        } else {
+            searchResultContent
+                .analyticsScreen(.searchResults)
+            // 검색 중·실패·결과 없음·결과 목록을 모두 검색 결과 화면으로 본다
+        }
+    }
+
+    @ViewBuilder
+    private var searchResultContent: some View {
         Group {
             if store.isLoading && store.books.isEmpty {
                 ProgressView("책을 찾고 있어요")
-            } else if !store.hasSearched
-                        || store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                recentItems
             } else if store.errorMessage != nil {
                 searchStatus(
                     title: "검색 실패",
