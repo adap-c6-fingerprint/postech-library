@@ -22,10 +22,6 @@
 	<string>$(POBOOK_RELAY_TOKEN_PRODUCTION)</string>
 	<key>POBOOK_RELAY_TOKEN_TESTFLIGHT</key>
 	<string>$(POBOOK_RELAY_TOKEN_TESTFLIGHT)</string>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<true/>
-	<key>UIFileSharingEnabled</key>
-	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Regular.otf</string>
@@ -33,5 +29,7 @@
 		<string>Pretendard-SemiBold.otf</string>
 		<string>Pretendard-Bold.otf</string>
 	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>

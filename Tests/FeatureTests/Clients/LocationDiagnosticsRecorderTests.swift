@@ -10,7 +10,7 @@ struct LocationDiagnosticsRecorderTests {
     }
 
     private func meta(_ startedAt: Date) -> LocationDiagnosticsSessionMeta {
-        .init(startedAt: startedAt, posture: .handViewing, includesScreenRecording: false, includesMicrophone: false,
+        .init(startedAt: startedAt, posture: .handViewing, includesScreenRecording: false,
               routePlanID: "plan", bookCount: 1, startsAtEntrance: false, usesManualOrigin: false,
               guidanceThresholds: [:])
     }

@@ -7,7 +7,7 @@ nonisolated struct LocationDiagnosticsClient: Sendable {
     var isScreenRecordingAvailable: @Sendable () async -> Bool
     /// 기록 파일을 바로 열고 세션 정보를 돌려준다. 화면 작업이 취소돼도 결과를 잃지 않도록 동기로 처리한다.
     var startSession: @Sendable (LocationDiagnosticsSessionMeta) throws -> LocationDiagnosticsSessionInfo
-    var startScreenRecording: @Sendable (_ includesMicrophone: Bool) async -> Void
+    var startScreenRecording: @Sendable () async -> Void
     var finishSession: @Sendable () async -> LocationDiagnosticsSessionInfo?
     /// 안내 화면이 닫히며 Feature 작업이 취소돼도 기록을 끝까지 정리한다.
     /// 해당 세션이 아직 열려 있을 때만 닫는다.
@@ -44,7 +44,7 @@ extension LocationDiagnosticsClient: DependencyKey {
             MotionDiagnosticsProvider.shared.start(recorder: recorder, from: meta.startedAt)
             return info
         },
-        startScreenRecording: { includesMicrophone in
+        startScreenRecording: {
             let recorder = LocationDiagnosticsRecorder.shared
             guard let folder = recorder.activeFolderURL else { return }
             #if canImport(ScreenCaptureKit)
@@ -54,7 +54,7 @@ extension LocationDiagnosticsClient: DependencyKey {
             }
             await ScreenRecordingProvider.shared.start(
                 outputURL: folder.appending(path: LocationDiagnosticsRecorder.screenFileName),
-                includesMicrophone: includesMicrophone, recorder: recorder)
+                recorder: recorder)
             #else
             recorder.append(.event(.init(at: Date(), name: "screen_recording_unsupported_platform")))
             #endif
@@ -81,7 +81,7 @@ extension LocationDiagnosticsClient: DependencyKey {
         startSession: { meta in
             .init(id: "test", folderURL: URL(filePath: "/dev/null"), meta: meta, summary: nil, fileURLs: [])
         },
-        startScreenRecording: { _ in },
+        startScreenRecording: {},
         finishSession: { nil },
         finishSessionInBackground: { _ in },
         record: { _ in },

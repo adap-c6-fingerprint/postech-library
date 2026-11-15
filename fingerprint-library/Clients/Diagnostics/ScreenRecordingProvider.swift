@@ -49,7 +49,7 @@ final class ScreenRecordingProvider: NSObject {
         return stream
     }
 
-    func start(outputURL: URL, includesMicrophone: Bool, recorder: LocationDiagnosticsRecorder) {
+    func start(outputURL: URL, recorder: LocationDiagnosticsRecorder) {
         let picker = SCContentSharingPicker.shared
         guard picker.isAvailable else {
             status = .unavailable
@@ -62,7 +62,8 @@ final class ScreenRecordingProvider: NSObject {
             isObserving = true
         }
         var configuration = SCContentSharingPickerConfiguration()
-        configuration.showsMicrophoneControl = includesMicrophone
+        // 진단 녹화는 화면만 남기고 마이크는 쓰지 않는다.
+        configuration.showsMicrophoneControl = false
         picker.defaultConfiguration = configuration
         picker.isActive = true
         status = .requesting

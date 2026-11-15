@@ -22,7 +22,6 @@ nonisolated struct LocationDiagnosticsSessionMeta: Codable, Equatable, Sendable 
     var endedAt: Date?
     var posture: LocationDiagnosticsPosture
     var includesScreenRecording: Bool
-    var includesMicrophone: Bool
     /// 검색창 `/test` 측정 모드로 자동 시작한 기록인지
     var isAutomatic: Bool? = nil
     var screenRecordingStartedAt: Date?

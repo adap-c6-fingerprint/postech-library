@@ -10,7 +10,6 @@ extension BookNavigationFeature {
         var isPanelPresented = false
         var posture: LocationDiagnosticsPosture = .handViewing
         var includesScreenRecording = true
-        var includesMicrophone = false
         var isScreenRecordingAvailable = false
         var session: LocationDiagnosticsSessionInfo?
         var startedAt: Date?
@@ -38,7 +37,6 @@ extension BookNavigationFeature {
         case panelPresentationChanged(Bool)
         case postureChanged(LocationDiagnosticsPosture)
         case screenRecordingToggled(Bool)
-        case microphoneToggled(Bool)
         case screenAvailabilityLoaded(Bool)
         case startTapped
         case autoStartRequested
@@ -77,30 +75,22 @@ extension BookNavigationFeature {
 
         case let .screenRecordingToggled(isOn):
             state.diagnostics.includesScreenRecording = isOn
-            if !isOn { state.diagnostics.includesMicrophone = false }
-            return .none
-
-        case let .microphoneToggled(isOn):
-            state.diagnostics.includesMicrophone = isOn && state.diagnostics.includesScreenRecording
             return .none
 
         case let .screenAvailabilityLoaded(isAvailable):
             state.diagnostics.isScreenRecordingAvailable = isAvailable
             if !isAvailable {
                 state.diagnostics.includesScreenRecording = false
-                state.diagnostics.includesMicrophone = false
             }
             return .none
 
         case .startTapped:
             let includesScreen = state.diagnostics.includesScreenRecording && state.diagnostics.isScreenRecordingAvailable
-            return startSession(&state, includesScreen: includesScreen,
-                                includesMicrophone: includesScreen && state.diagnostics.includesMicrophone,
-                                isAutomatic: false)
+            return startSession(&state, includesScreen: includesScreen, isAutomatic: false)
 
         case .autoStartRequested:
             // 자동 측정은 승인 창 없이 진행해야 하므로 화면 녹화는 하지 않는다.
-            return startSession(&state, includesScreen: false, includesMicrophone: false, isAutomatic: true)
+            return startSession(&state, includesScreen: false, isAutomatic: true)
 
         case .autoModeTurnedOff:
             @Shared(.locationDiagnosticsAutoRecord) var isAutoRecording
@@ -213,14 +203,13 @@ extension BookNavigationFeature {
         }
     }
 
-    private func startSession(_ state: inout State, includesScreen: Bool, includesMicrophone: Bool,
-                              isAutomatic: Bool) -> Effect<Action> {
+    private func startSession(_ state: inout State, includesScreen: Bool, isAutomatic: Bool) -> Effect<Action> {
         guard !state.diagnostics.isRecording, !state.diagnostics.isStarting else { return .none }
         state.diagnostics.isStarting = true
         state.diagnostics.errorMessage = nil
         var meta = LocationDiagnosticsSessionMeta(
             startedAt: now, posture: state.diagnostics.posture,
-            includesScreenRecording: includesScreen, includesMicrophone: includesMicrophone,
+            includesScreenRecording: includesScreen,
             routePlanID: state.routePlan.id.uuidString, bookCount: state.routePlan.stops.count,
             startsAtEntrance: state.startsAtEntrance, usesManualOrigin: state.usesManualOrigin,
             guidanceThresholds: [
@@ -244,7 +233,7 @@ extension BookNavigationFeature {
         let started = reduceDiagnostics(&state, .sessionStarted(info))
         guard includesScreen else { return started }
         return .merge(started, .run { [diagnosticsClient] _ in
-            await diagnosticsClient.startScreenRecording(includesMicrophone)
+            await diagnosticsClient.startScreenRecording()
         })
     }
 

@@ -48,10 +48,6 @@ struct BookNavigationDiagnosticsPanel: View {
             Toggle("화면 녹화", isOn: Binding(get: { diagnostics.includesScreenRecording },
                                           set: { store.send(.diagnostics(.screenRecordingToggled($0))) }))
                 .disabled(!diagnostics.isScreenRecordingAvailable)
-            if diagnostics.includesScreenRecording {
-                Toggle("음성 메모(마이크)", isOn: Binding(get: { diagnostics.includesMicrophone },
-                                                     set: { store.send(.diagnostics(.microphoneToggled($0))) }))
-            }
             Button {
                 store.send(.diagnostics(.startTapped))
             } label: {
@@ -73,7 +69,7 @@ struct BookNavigationDiagnosticsPanel: View {
             Text("새 기록")
         } footer: {
             Text(diagnostics.isScreenRecordingAvailable
-                 ? "화면 녹화를 켜면 시작할 때 시스템 화면에서 앱 화면 녹화를 허용해 주세요. 음성 메모는 주변 사람 목소리가 함께 녹음될 수 있어요."
+                 ? "화면 녹화를 켜면 시작할 때 시스템 화면에서 앱 화면 녹화를 허용해 주세요."
                  : "이 기기에서는 앱 화면 녹화를 쓸 수 없어요(iOS 27 실제 기기 필요). 제어 센터의 화면 기록을 대신 쓸 수 있어요.")
         }
     }
