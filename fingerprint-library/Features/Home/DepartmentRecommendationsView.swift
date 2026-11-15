@@ -66,7 +66,7 @@ struct DepartmentRecommendationsView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(books) { book in
                         BookListRow(book: book, libraryInfo: infoByID[book.id]) {
-                            store.send(.departmentBookSelected(book))
+                            store.send(.bookSelected(book, list: .department, screen: .departmentRecommendations))
                         }
 
                         if book.id != books.last?.id {

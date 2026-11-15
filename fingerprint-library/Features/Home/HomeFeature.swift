@@ -3,6 +3,13 @@ import ComposableArchitecture
 
 @Reducer
 struct HomeFeature {
+    enum RecommendationList: String, Equatable, Sendable {
+        case personal
+        // 상단 개인 추천 (6선)
+        case department
+        // 소속 학과에서 많이 빌린 책
+    }
+
     @ObservableState
     struct State: Equatable {
         var recommendedBooks: [Book] = []
@@ -125,9 +132,8 @@ struct HomeFeature {
         case libraryInfoCancelled
         case upcomingCoversChanged( [URL] )
 
-        case bookSelected(Book)
-        case departmentBookSelected(Book)
-        // 학과 추천 목록에서 책 선택 (기록 후 bookSelected로 이어짐)
+        case bookSelected(Book, list: RecommendationList, screen: AnalyticsScreen = .recommendations)
+        // 추천 책 선택 (list = 누른 목록, screen = 누른 화면. 학과 추천 목록 화면도 같은 액션을 쓴다)
         case cartButtonTapped
         case favoritesButtonTapped
         case profileButtonTapped
@@ -364,15 +370,13 @@ struct HomeFeature {
                 }
                 
 
-            case let .bookSelected(book):
-                analytics.record(.init(.recommendationSelected, AnalyticsEvent.bookFields(book)))
+            case let .bookSelected(book, list, screen):
+                analytics.record(.init(.recommendationSelected, AnalyticsEvent.bookFields(book).merging([
+                    .kind: .text(list.rawValue), .screenName: .text(screen.rawValue)
+                ]) { $1 }))
                 let coverURL = state.recommendationCoverFiles[book.id]
                 state.openedDetailCoverURL = coverURL
                 return .send(.delegate(.showDetail(book, cachedCoverURL: coverURL)))
-
-            case let .departmentBookSelected(book):
-                analytics.record(.button(.book, on: .departmentRecommendations, book: book))
-                return .send(.bookSelected(book))
 
             case .cartButtonTapped:
                 analytics.record(.button(.cart, on: .recommendations))

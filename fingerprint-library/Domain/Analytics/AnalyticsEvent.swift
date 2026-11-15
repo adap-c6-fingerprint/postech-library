@@ -35,7 +35,7 @@ nonisolated struct AnalyticsEvent: Equatable, Sendable {
         case cartBookAdded = "cart_book_added"
         // 장바구니에 책이 실제로 담김 (book_record_id)
         case recommendationSelected = "recommendation_selected"
-        // 추천 탭에서 책 선택 (book_record_id)
+        // 추천 책 선택 (book_record_id, kind = personal 또는 department, screen_name)
         case cartBookRemoved = "cart_book_removed"
         // 장바구니 삭제 확정 시 삭제한 책마다 한 줄 (operation_id로 cart_books_removed와 연결)
         case favoriteBookRemoved = "favorite_book_removed"

@@ -218,7 +218,7 @@ struct HomeView: View {
 
         if let book {
             Button {
-                store.send(.bookSelected(book))
+                store.send(.bookSelected(book, list: .personal))
             } label: {
                 cover.accessibilityHidden(true)
             }
@@ -312,7 +312,7 @@ struct HomeView: View {
                         let book = books[index]
                         ZStack {
                             Button {
-                                store.send(.bookSelected(book))
+                                store.send(.bookSelected(book, list: .department))
                             } label: {
                                 HomePopularBookCard(book: book, libraryInfo: store.libraryInfo[book.id])
                             }
