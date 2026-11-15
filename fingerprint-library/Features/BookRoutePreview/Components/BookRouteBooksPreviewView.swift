@@ -15,6 +15,8 @@ struct BookRouteBooksPreviewView: View {
     var onSetOriginManually: (() -> Void)?
     var guidesSelectedBook = false
     var homeAnnotations: HomeMapAnnotationsFeature.State?
+    var onBookTabTapped: (Book.ID) -> Void = { _ in }
+    var onCardSwiped: (Book.ID, _ direction: String) -> Void = { _, _ in }
 
     @State private var bookSelection = BookRoutePreviewSelection()
     @State private var panelHeight: CGFloat = 0
@@ -29,6 +31,21 @@ struct BookRouteBooksPreviewView: View {
             set: { bookSelection.select($0, in: books) }
         )
     }
+
+    private var pageSelection: Binding<Book.ID?> {
+        Binding(
+            get: { selection.wrappedValue },
+            set: { id in
+                let old = selection.wrappedValue
+                selection.wrappedValue = id
+                guard let id, id != old,
+                      let from = books.firstIndex(where: { $0.id == old }),
+                      let to = books.firstIndex(where: { $0.id == id }) else { return }
+                onCardSwiped(id, to > from ? "right" : "left")
+            }
+        )
+    }
+    // 카드를 손으로 넘길 때 쓰는 선택값. 넘긴 방향을 알린다 (다음 카드 = right)
 
     private var selectedBook: Book? {
         books.first { $0.id == selection.wrappedValue }
@@ -129,7 +146,7 @@ struct BookRouteBooksPreviewView: View {
         let contentTop = expandedScrollOrigin.globalMinY + expandedScrollOrigin.safeAreaTop
         return ScrollView {
             BookExpandedDetailView(
-                style: .carousel, books: books, selectedBookID: selection,
+                style: .carousel, books: books, selectedBookID: pageSelection,
                 coverTopPadding: max(0, coverTopGlobalY - contentTop),
                 identifierPrefix: "multiBookPreview"
             ) { book in
@@ -241,6 +258,7 @@ struct BookRouteBooksPreviewView: View {
     private func bookTab(_ book: Book) -> some View {
         let isSelected = selection.wrappedValue == book.id
         return Button {
+            if !isSelected { onBookTabTapped(book.id) }
             withAnimation(.easeInOut(duration: 0.25)) { selection.wrappedValue = book.id }
         } label: {
             Text(BookText.plainText(book.title))
@@ -260,7 +278,7 @@ struct BookRouteBooksPreviewView: View {
     }
 
     private var bookPages: some View {
-        TabView(selection: selection) {
+        TabView(selection: pageSelection) {
             ForEach(books) { book in
                 if let detailStore = detailStore(for: book) {
                 BookRoutePreviewBookCard(

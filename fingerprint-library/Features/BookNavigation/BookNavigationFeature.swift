@@ -193,6 +193,8 @@ struct BookNavigationFeature {
 
     enum Action: Equatable {
         case task
+        case spineButtonTapped(AnalyticsEvent.ButtonID, screen: AnalyticsScreen)
+        // 책등으로 책 찾기·못 찾았어요 화면의 버튼 기록 (동작은 각 버튼의 기존 액션이 맡는다)
         case sceneActiveChanged(Bool)
         case disappeared
         case locationEvent(subscriptionID: Int, IndoorLocationEvent)
@@ -282,6 +284,14 @@ struct BookNavigationFeature {
 
             case let .sheetExpansionChanged(expanded):
                 guard state.exitReason == nil, !state.isArrivalPresented else { return .none }
+                if state.isSheetExpanded != expanded {
+                    analytics.record(.init(.scrollPerformed, [
+                        .screenName: .text(AnalyticsScreen.navigation.rawValue),
+                        .scrollArea: .text("bottom_sheet"), .direction: .text(expanded ? "up" : "down"),
+                        .navigationID: .text(state.routePlan.id.uuidString)
+                    ].merging(currentBookFields(state)) { $1 }))
+                }
+                // 바텀시트를 위로 펼치거나 아래로 접음
                 state.isSheetExpanded = expanded
                 return .none
 
@@ -383,6 +393,7 @@ struct BookNavigationFeature {
                       state.currentStopIndex == stopIndex, let transition = state.nextFloorTransition,
                       transition.id == stepIndex,
                       state.routePlan.map.floors.contains(where: { $0.id == transition.to.floorID }) else { return .none }
+                analytics.record(navigationButton(.floorMove, state))
                 state.manuallyCompletedFloorTransition = transition
                 state.confirmedFloorOrdinal = transition.to.level
                 state.progress = nil
@@ -393,6 +404,7 @@ struct BookNavigationFeature {
 
             case .shelfFoundTapped:
                 guard state.canMarkShelfFound else { return .none }
+                analytics.record(navigationButton(.shelfFound, state))
                 state.isArrivalPresented = true
                 state.navigation.markArrived()
                 return .none
@@ -428,6 +440,8 @@ struct BookNavigationFeature {
             case .nextBookTapped:
                 guard state.exitReason == nil, state.hasNextStop, !state.isReroutingToNextBook,
                       !state.isReturningToPreviousStop else { return .none }
+                analytics.record(navigationButton(.exitAlertNextBook, state))
+                // 종료 알림의 "다음 책 찾기"
                 state.isCancelConfirmationPresented = false
                 state.nextBookRouteError = nil
                 guard let position = state.latestPosition, position.isRecent(at: now),
@@ -489,6 +503,8 @@ struct BookNavigationFeature {
 
             case .previousStopTapped:
                 guard state.canReturnToPreviousStop else { return .none }
+                analytics.record(navigationButton(.previousShelf, state))
+                // 이전 책으로 바뀌기 전에 기록해야 누른 시점의 책이 남는다
                 state.isCancelConfirmationPresented = false
                 let previousIndex = state.currentStopIndex - 1
                 guard let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
@@ -578,18 +594,28 @@ struct BookNavigationFeature {
                       stopIndex == state.currentStopIndex, state.currentStop != nil else { return .none }
                 return end(&state, reason: .cancelled)
 
+            case let .spineButtonTapped(id, screen):
+                analytics.record(navigationButton(id, state, on: screen))
+                return .none
+
             case .cancelTapped:
                 guard state.exitReason == nil else { return .none }
+                analytics.record(navigationButton(.close, state, on: state.isArrivalPresented ? .spineFinding : .navigation))
+                // X 버튼. 도착 후 책등 찾기 화면에서도 같은 액션이 온다
                 state.nextBookRouteError = nil
                 state.isCancelConfirmationPresented = true
                 return .none
 
             case .cancelDismissed:
+                analytics.record(navigationButton(.exitAlertReturn, state))
+                // 종료 알림의 "돌아가기"
                 state.isCancelConfirmationPresented = false
                 return .none
 
             case .cancelConfirmed:
                 guard state.exitReason == nil else { return .none }
+                analytics.record(navigationButton(.exitAlertEnd, state))
+                // 종료 알림의 "안내 종료하기"
                 return end(&state, reason: .cancelled)
             }
         }
@@ -660,7 +686,7 @@ struct BookNavigationFeature {
         analytics.record(.init(reason == .completed ? .navigationCompleted : .navigationCancelled, [
             .navigationID: .text(state.routePlan.id.uuidString),
             .stopIndex: .integer(state.currentStopIndex), .isTest: .flag(isAnalyticsTest(state))
-        ]))
+        ].merging(currentBookFields(state)) { $1 }))
         state.navigation.finish(reason)
         state.isArrivalPresented = false
         state.isCancelConfirmationPresented = false
@@ -802,7 +828,7 @@ struct BookNavigationFeature {
                     .navigationID: .text(state.routePlan.id.uuidString),
                     .stepIndex: .integer(progress.stepIndex), .stopIndex: .integer(state.currentStopIndex),
                     .isTest: .flag(isAnalyticsTest(state))
-                ]))
+                ].merging(currentBookFields(state)) { $1 }))
             }
             if state.isActive, state.exitReason == nil,
                state.progress?.maneuver == .nearDestination,
@@ -811,7 +837,7 @@ struct BookNavigationFeature {
                 analytics.record(.init(.destinationArrivalDetected, [
                     .navigationID: .text(state.routePlan.id.uuidString),
                     .stopIndex: .integer(state.currentStopIndex), .isTest: .flag(isAnalyticsTest(state))
-                ]))
+                ].merging(currentBookFields(state)) { $1 }))
             }
             updateCamera(&state)
         } catch {
@@ -838,6 +864,19 @@ struct BookNavigationFeature {
             recordQuality(state, code: code)
         }
     }
+
+    private func currentBookFields(_ state: State) -> [AnalyticsEvent.Field: AnalyticsEvent.Value] {
+        guard let book = state.currentStop?.book else { return [:] }
+        return AnalyticsEvent.bookFields(book)
+    }
+    // 지금 안내 중인 책의 ID 파라미터
+
+    private func navigationButton(_ id: AnalyticsEvent.ButtonID, _ state: State,
+                                  on screen: AnalyticsScreen = .navigation) -> AnalyticsEvent {
+        .button(id, on: screen, book: state.currentStop?.book,
+                [.navigationID: .text(state.routePlan.id.uuidString)])
+    }
+    // 길안내 화면 버튼 이벤트 (지금 안내 중인 책 ID와 navigation_id 포함)
 
     private func isAnalyticsTest(_ state: State) -> Bool {
         state.routePlan.start.source == .replay

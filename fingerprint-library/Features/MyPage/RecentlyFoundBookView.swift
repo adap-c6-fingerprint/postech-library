@@ -22,6 +22,7 @@ struct RecentlyFoundBookView: View {
             RecentlyFoundBookShelf(
                 books: store.books, spines: store.spines, isScrollable: true,
                 onSelect: { book in store.send(.bookSelected(book)) },
+                onScroll: { direction in store.send(.scrolled(direction: direction)) },
                 size: .large
             )
             Spacer()
@@ -30,6 +31,7 @@ struct RecentlyFoundBookView: View {
         .background { Color.backgroundDefault.ignoresSafeArea() }
         .navigationTitle("최근 찾은 책 목록")
         .navigationBarTitleDisplayMode(.inline)
+        .analyticsScreen(.recentlyFoundBooks)
         .toolbar(.visible, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
         .toolbarBackground(.hidden, for: .navigationBar)

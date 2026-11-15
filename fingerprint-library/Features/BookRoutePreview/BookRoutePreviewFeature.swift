@@ -48,6 +48,9 @@ struct BookRoutePreviewFeature {
         let analyticsID: UUID = { @Dependency(\.uuid) var uuid; return uuid() }()
         var analyticsOperation: String { analyticsID.uuidString + ":" + String(requestID) }
         var analyticsRequestIsTest = false
+        var viewedBookID: Book.ID?
+        // 카드에 보이는 책. 칩이나 스와이프로 바뀐다
+        var viewedBook: Book? { orderedBooks.first { $0.id == viewedBookID } ?? orderedBooks.first }
         var previewPlan: RoutePlan?
         var isLoadingRoute = false
         var routeError: RouteFailure?
@@ -156,6 +159,10 @@ struct BookRoutePreviewFeature {
         case routeMapAvailabilityChanged(Bool)
 
         case startTapped
+        case backTapped
+        case bookTabTapped(Book.ID)
+        case bookCardSwiped(Book.ID, direction: String)
+        // 카드를 좌우로 넘김 (direction = left, right)
         case retryTapped
         case directRetryTapped
         case setOriginManuallyTapped
@@ -231,6 +238,7 @@ struct BookRoutePreviewFeature {
                 return .none
 
             case .startTapped:
+                analytics.record(.button(.directGuidance, on: .routePreview, book: state.viewedBook))
                 state.isStartRequested = true
                 state.refreshCurrentStart(at: now)
                 guard !state.needsStartLocationSetup else { return resolveStartAuthorization(&state) }
@@ -251,18 +259,44 @@ struct BookRoutePreviewFeature {
                 presentOriginPicker(&state)
                 return .none
 
+            case .backTapped:
+                analytics.record(.button(.back, on: .routePreview, book: state.viewedBook))
+                return .none
+
+            case let .bookTabTapped(id):
+                state.viewedBookID = id
+                analytics.record(.button(.bookChip, on: .routePreview, book: state.viewedBook))
+                // 상단 책 칩으로 책 변경 (바꾼 책 ID)
+                return .none
+
+            case let .bookCardSwiped(id, direction):
+                state.viewedBookID = id
+                var fields: [AnalyticsEvent.Field: AnalyticsEvent.Value] = [
+                    .screenName: .text(AnalyticsScreen.routePreview.rawValue),
+                    .scrollArea: .text("book_card"), .direction: .text(direction)
+                ]
+                if let book = state.viewedBook {
+                    fields.merge(AnalyticsEvent.bookFields(book)) { $1 }
+                }
+                // 넘긴 뒤 보이는 책 ID
+                analytics.record(.init(.scrollPerformed, fields))
+                return .none
+
             case .permissionAlertSettingsTapped:
+                analytics.record(.button(.locationAlertSettings, on: .routePreview))
                 state.isPermissionAlertPresented = false
                 guard let url = URL(string: UIApplication.openSettingsURLString) else { return .none }
                 return .run { [openURL] _ in await openURL(url) }
 
             case .permissionAlertCancelTapped:
+                analytics.record(.button(.locationAlertDeny, on: .routePreview))
                 state.isPermissionAlertPresented = false
                 state.isPreparingManualOrigin = true
                 if state.isRouteMapReady { presentOriginPicker(&state) }
                 return .none
 
             case let .originConfirmed(coordinate, floorOrdinal):
+                analytics.record(.button(.originConfirm, on: .routeOriginPicker, [.floor: .integer(floorOrdinal)]))
                 let position = IndoorPosition(
                     coordinate: coordinate, floorOrdinal: floorOrdinal, horizontalAccuracy: nil,
                     timestamp: now, source: .manual)
@@ -274,6 +308,7 @@ struct BookRoutePreviewFeature {
                 return .merge(reconcile(&state), syncLocatingTimeout(&state))
 
             case .originPickerCancelled:
+                analytics.record(.button(.originCancel, on: .routeOriginPicker))
                 state.isOriginPickerPresented = false
                 return .run { _ in await dismiss() }
 
@@ -552,6 +587,13 @@ struct BookRoutePreviewFeature {
                 .operationID: .text(state.analyticsOperation), .bookCount: .integer(stops.count),
                 .isTest: .flag(state.analyticsRequestIsTest)
             ]))
+            for (index, stop) in stops.enumerated() {
+                analytics.record(.init(.routeBookIncluded, AnalyticsEvent.bookFields(stop.book).merging([
+                    .operationID: .text(state.analyticsOperation), .stopIndex: .integer(index),
+                    .isTest: .flag(state.analyticsRequestIsTest)
+                ]) { $1 }))
+            }
+            // 요청에 포함된 책마다 한 줄 (guidance_requested와 같은 operation_id)
             analytics.record(.init(.routeCalculationStarted, [
                 .operationID: .text(state.analyticsOperation),
                 .isTest: .flag(state.analyticsRequestIsTest)

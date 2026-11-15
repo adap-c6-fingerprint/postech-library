@@ -49,6 +49,7 @@ struct BookFavoritesFeature {
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.date.now) var now
+    @Dependency(\.uuid) var uuid
     @Dependency(\.analyticsClient) private var analytics
 
     private nonisolated enum CancelID: Hashable, Sendable {
@@ -79,22 +80,33 @@ struct BookFavoritesFeature {
                 return .none
 
             case let .selectionToggled(id):
-                guard state.items.contains(where: { $0.id == id }) else { return .none }
+                guard let book = state.items.first(where: { $0.id == id })?.book else { return .none }
                 if let index = state.selectedIDs.firstIndex(of: id) {
                     state.selectedIDs.remove(at: index)
+                    analytics.record(.button(.bookDeselect, on: .favorites, book: book))
                 } else {
                     state.selectedIDs.append(id)
+                    analytics.record(.button(.bookSelect, on: .favorites, book: book))
                 }
                 return .none
 
             case .removeButtonTapped:
-                let removedKeys = Set(state.selectedBooks.map(\.recordKey))
+                let removedBooks = state.selectedBooks
+                let removedKeys = Set(removedBooks.map(\.recordKey))
                 guard !removedKeys.isEmpty else { return .none }
                 let removedCount = BookFavorites().remove(removedKeys)
                 if removedCount > 0 {
+                    let operation = uuid().uuidString
+                    // 이번 삭제 한 번에서 나온 줄들을 묶는 ID
                     analytics.record(.init(.bookFavoriteChanged, [
-                        .action: .text("removed"), .bookCount: .integer(removedCount)
+                        .action: .text("removed"), .bookCount: .integer(removedCount),
+                        .operationID: .text(operation)
                     ]))
+                    for book in removedBooks {
+                        analytics.record(.init(.favoriteBookRemoved, AnalyticsEvent.bookFields(book)
+                            .merging([.operationID: .text(operation)]) { $1 }))
+                    }
+                    // 삭제한 책마다 한 줄
                 }
                 state.selectedIDs = []
                 return .none
@@ -110,9 +122,14 @@ struct BookFavoritesFeature {
                     analytics.record(.init(.cartLimitBlocked, [.kind: .text("capacity")]))
                     return .none
                 }
+                let operation = uuid().uuidString
+                // 이번 담기 한 번에서 나온 줄들을 묶는 ID
                 for book in books {
                     if $cartItems.withLock({ $0.add(book, at: now) }) == .added {
-                        analytics.record(.init(.cartBookAdded, [.bookRecordID: .text(AnalyticsEvent.bookID(book))]))
+                        analytics.record(.init(.cartBookAdded, AnalyticsEvent.bookFields(book).merging([
+                            .source: .text(AnalyticsScreen.favorites.rawValue),
+                            .operationID: .text(operation)
+                        ]) { $1 }))
                     }
                 }
                 state.selectedIDs = []

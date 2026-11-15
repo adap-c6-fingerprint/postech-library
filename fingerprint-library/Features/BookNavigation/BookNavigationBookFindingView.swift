@@ -9,6 +9,8 @@ struct BookNavigationBookFindingView: View {
     private let onContinue: () -> Void
     private let onFinish: () -> Void
     private let onDefer: () -> Void
+    private let onAnalyticsButton: (AnalyticsEvent.ButtonID, AnalyticsScreen) -> Void
+    // 버튼 기록. 찾았어요·이전 화면 등 여러 버튼이 같은 동작 클로저를 써서, 기록은 버튼마다 따로 알린다
     private var callNumberScreen: CallNumberScreen?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -28,10 +30,12 @@ struct BookNavigationBookFindingView: View {
          onTask: @escaping () -> Void = {},
          onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {},
          onDefer: @escaping () -> Void = {},
-         onCancel: @escaping () -> Void = {}) {
+         onCancel: @escaping () -> Void = {},
+         onAnalyticsButton: @escaping (AnalyticsEvent.ButtonID, AnalyticsScreen) -> Void = { _, _ in }) {
         self.init(bookInformation: bookInformation ?? BookNavigationBookInfo(routePlan: routePlan, stopIndex: currentStopIndex),
                   isIntermediateStop: currentStopIndex < routePlan.stops.count - 1,
-                  spine: spine, onTask: onTask, onContinue: onContinue, onFinish: onFinish, onDefer: onDefer)
+                  spine: spine, onTask: onTask, onContinue: onContinue, onFinish: onFinish, onDefer: onDefer,
+                  onAnalyticsButton: onAnalyticsButton)
         callNumberScreen = CallNumberScreen(routePlan: routePlan, currentStopIndex: currentStopIndex, onCancel: onCancel)
     }
 
@@ -39,7 +43,8 @@ struct BookNavigationBookFindingView: View {
          spine: BookNavigationFeature.SpinePhase?,
          onTask: @escaping () -> Void = {},
          onContinue: @escaping () -> Void = {}, onFinish: @escaping () -> Void = {},
-         onDefer: @escaping () -> Void = {}) {
+         onDefer: @escaping () -> Void = {},
+         onAnalyticsButton: @escaping (AnalyticsEvent.ButtonID, AnalyticsScreen) -> Void = { _, _ in }) {
         self.bookInformation = bookInformation
         self.isIntermediateStop = isIntermediateStop
         self.spine = spine
@@ -47,6 +52,7 @@ struct BookNavigationBookFindingView: View {
         self.onContinue = onContinue
         self.onFinish = onFinish
         self.onDefer = onDefer
+        self.onAnalyticsButton = onAnalyticsButton
     }
 
     var body: some View {
@@ -95,7 +101,8 @@ struct BookNavigationBookFindingView: View {
             if let info = bookInformation {
                 BookNavigationBookHelpView(
                     info: info, hasNextStop: isIntermediateStop,
-                    onContinue: onContinue, onDefer: onDefer
+                    onContinue: onContinue, onDefer: onDefer,
+                    onAnalyticsButton: { onAnalyticsButton($0, .spineHelp) }
                 )
             }
         }
@@ -103,6 +110,7 @@ struct BookNavigationBookFindingView: View {
         .toolbar(.hidden, for: .navigationBar)
         .preferredColorScheme(.dark)
         .task { onTask() }
+        .analyticsScreen(.spineFinding)
         .accessibilityIdentifier("book-navigation-arrival")
     }
 
@@ -111,7 +119,10 @@ struct BookNavigationBookFindingView: View {
             BookNavigationTopBar(
                 backLabel: "길안내로 돌아가기",
                 backIdentifier: "book-navigation-arrival-back",
-                onBack: { dismiss() }
+                onBack: {
+                    onAnalyticsButton(.back, .spineFinding)
+                    dismiss()
+                }
             )
             if let info = bookInformation {
                 heading(info)
@@ -294,6 +305,7 @@ struct BookNavigationBookFindingView: View {
         VStack(spacing: Design.findingActionSpacing) {
             findButton
             LibraryUnderlinedButton(title: "못 찾았어요.") {
+                onAnalyticsButton(.spineNotFound, .spineFinding)
                 cancelPullHold()
                 isBookHelpPresented = true
             }
@@ -303,7 +315,10 @@ struct BookNavigationBookFindingView: View {
     }
 
     private var findButton: some View {
-        Button(action: isIntermediateStop ? onContinue : onFinish) {
+        Button {
+            onAnalyticsButton(.spineFound, .spineFinding)
+            isIntermediateStop ? onContinue() : onFinish()
+        } label: {
             Text("찾았어요!")
                 .typography(.button)
                 .foregroundStyle(Color.backgroundDefault)

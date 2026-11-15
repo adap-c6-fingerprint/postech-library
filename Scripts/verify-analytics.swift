@@ -58,9 +58,27 @@ enum AnalyticsProof {
                         "almaprimo:123", "alma" + String(repeating: "1", count: 60)] {
             assert(AnalyticsEvent.bookID(book(invalid)) == "unknown")
         }
+        assert(AnalyticsEvent.bookIDStatus(book("primo:alma1234")) == "ok")
+        assert(AnalyticsEvent.bookIDStatus(book("invalid", controlNumber: "primo:alma5678")) == "ok")
+        assert(AnalyticsEvent.bookIDStatus(book("title:개인 입력")) == "invalid_format")
+        assert(AnalyticsEvent.bookIDStatus(book("", controlNumber: "invalid")) == "invalid_format")
+        assert(AnalyticsEvent.bookIDStatus(book("")) == "missing")
+        assert(AnalyticsEvent.bookIDStatus(book("", controlNumber: "")) == "missing")
+        assert(AnalyticsEvent.bookFields(book("primo:alma1234"))
+            == [.bookRecordID: .text("alma1234"), .bookIDStatus: .text("ok")])
+        assert(AnalyticsEvent.bookFields(book(""))
+            == [.bookRecordID: .text("unknown"), .bookIDStatus: .text("missing")])
+        assert(AnalyticsEvent.button(.back, on: .detail)
+            == AnalyticsEvent(.buttonTapped, [.buttonID: .text("back"), .screenName: .text("detail")]))
+        assert(AnalyticsEvent.button(.directGuidance, on: .detail, book: book("primo:alma1234"), [.bookCount: .integer(1)])
+            == AnalyticsEvent(.buttonTapped, [
+                .buttonID: .text("direct_guidance"), .screenName: .text("detail"),
+                .bookRecordID: .text("alma1234"), .bookIDStatus: .text("ok"), .bookCount: .integer(1)
+            ]))
+        assert(AnalyticsEvent.button(.back, on: .detail, [.screenName: .text("cart")]).fields[.screenName] == .text("cart"))
         let codes = AnalyticsEvent.Code.allCases.map(\.rawValue)
         assert(Set(codes).count == codes.count)
         assert(codes.allSatisfy { $0.count <= 40 && !$0.hasPrefix("firebase_") })
-        print("Analytics consent matrix, report eligibility, request timing/cancellation, bounded storage and book-ID checks passed")
+        print("Analytics consent matrix, report eligibility, request timing/cancellation, bounded storage, book-ID, book-ID status and button event checks passed")
     }
 }
