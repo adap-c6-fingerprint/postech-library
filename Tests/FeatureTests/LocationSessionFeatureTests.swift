@@ -66,7 +66,7 @@ struct LocationSessionFeatureTests {
         let missing = position(at: 11, floor: nil, heading: 90)
         await store.send(.locationEvent(.position(missing)))
         #expect(store.state.location.position == missing.replacingFloor(2))
-        #expect(store.state.floorEstimator.estimate(at: missing.timestamp).basis == .held)
+        #expect(store.state.floorEstimator.estimate(at: missing.timestamp).basis == .unconfirmed)
         await store.send(.locationEvent(.position(position(at: 21, floor: nil))))
         #expect(store.state.location.position?.floorOrdinal == nil)
     }
@@ -88,17 +88,17 @@ struct LocationSessionFeatureTests {
         store.exhaustivity = .off
         await store.send(.started)
         await store.send(.locationEvent(.authorization(.authorized(precise: true))))
-        for second in 0..<120 {
+        for second in 0..<240 {
             let time = Double(second) + 0.4
-            let height = 18 - 4.5 * min(1, max(0, (time - 25) / 10))
+            let height = 4.26 * (3 - min(1, max(0, (time - 100) / 14)))
             let sample = BarometerSample(kilopascals: 101.325 * pow(1 - (60 + height) / 44_330.8, 1 / 0.190263),
                                          timestamp: Date(timeIntervalSinceReferenceDate: time))
             let previousPosition = store.state.location.position
             await store.send(.barometerSample(sample))
             #expect(store.state.location.position == previousPosition)
-            let raw = position(at: Double(second) + 0.6, floor: second < 54 ? 4 : 3, heading: 90)
+            let raw = position(at: Double(second) + 0.6, floor: second < 134 ? 3 : 2, heading: 90)
             await store.send(.locationEvent(.position(raw)))
-            #expect(store.state.location.position == raw.replacingFloor(second < 33 ? 4 : 3))
+            #expect(store.state.location.position == raw.replacingFloor(second < 111 ? 3 : 2))
         }
         await store.send(.sceneActiveChanged(false))
         await store.finish()
@@ -116,6 +116,66 @@ struct LocationSessionFeatureTests {
         await store.send(.locationEvent(.position(position(at: 9, floor: 4))))
         #expect(store.state.floorEstimator == estimator)
         #expect(store.state.location.position == headingUpdate)
+    }
+
+    @Test func 중앙_공간_윤곽은_한번_읽고_앱_복귀시_재사용한다() async throws {
+        let map = try await BundledIndoorMapLoader().loadLibrary()
+        let calls = LockIsolated(0)
+        let store = TestStore(initialState: isolatedState()) { LocationSessionFeature() } withDependencies: {
+            $0.indoorMapClient.load = {
+                calls.withValue { $0 += 1 }
+                return map
+            }
+        }
+        store.exhaustivity = .off
+        await store.send(.started)
+        await store.receive(\.atriumZoneLoaded, AtriumZone(map: map))
+        #expect(calls.value == 1)
+        await store.send(.sceneActiveChanged(false))
+        await store.send(.sceneActiveChanged(true))
+        await store.finish()
+        #expect(calls.value == 1)
+        #expect(store.state.atriumZone?.outlines.count == 3)
+    }
+
+    @Test func 중앙_공간_가중치를_전달하고_기압은_추정기만_갱신한다() async throws {
+        let map = try await BundledIndoorMapLoader().loadLibrary()
+        let store = TestStore(initialState: isolatedState()) { LocationSessionFeature() }
+        store.exhaustivity = .off
+        await store.send(.started)
+        await store.send(.locationEvent(.authorization(.authorized(precise: true))))
+        await store.send(.atriumZoneLoaded(AtriumZone(map: map)))
+        let location = IndoorPosition(coordinate: .init(latitude: 36.0128124, longitude: 129.3250992),
+            floorOrdinal: 2, horizontalAccuracy: 3, timestamp: Date(timeIntervalSinceReferenceDate: 10.6), source: .sensor)
+        await store.send(.barometerSample(.init(kilopascals: 101.2, timestamp: Date(timeIntervalSinceReferenceDate: 10.4))))
+        await store.send(.locationEvent(.position(location)))
+        #expect(abs((store.state.floorEstimator.votes[2] ?? 0) - 0.01) < 1e-9)
+        let snapshot = store.state.location
+        let estimator = store.state.floorEstimator
+        let barometerTime = Date(timeIntervalSinceReferenceDate: 11.4)
+        await store.send(.barometerSample(.init(kilopascals: 101.2, timestamp: barometerTime)))
+        #expect(store.state.location == snapshot)
+        #expect(store.state.floorEstimator != estimator)
+        #expect(store.state.floorEstimator.votes == estimator.votes)
+        #expect(store.state.floorEstimator.estimate(at: barometerTime).ordinal == 2)
+        await store.send(.sceneActiveChanged(false))
+        await store.finish()
+    }
+
+    @Test func 기압이_일정하면_먼_곳의_60초_잘못된_층도_유지한다() async {
+        let store = TestStore(initialState: isolatedState()) { LocationSessionFeature() }
+        store.exhaustivity = .off
+        await store.send(.started)
+        await store.send(.locationEvent(.authorization(.authorized(precise: true))))
+        for second in 0..<400 {
+            await store.send(.barometerSample(.init(kilopascals: 101.2,
+                timestamp: Date(timeIntervalSinceReferenceDate: Double(second) + 0.4))))
+            await store.send(.locationEvent(.position(position(at: Double(second) + 0.6,
+                floor: (200..<260).contains(second) ? 3 : 2))))
+            #expect(store.state.location.position?.floorOrdinal == 2)
+        }
+        await store.send(.sceneActiveChanged(false))
+        await store.finish()
     }
 
     @Test(arguments: [false, true])

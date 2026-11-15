@@ -60,6 +60,8 @@ struct AppFeature {
     @Dependency(\.legacyUserProfileClient) var legacyUserProfileClient
     @Dependency(\.analyticsClient) var analytics
     @Dependency(\.continuousClock) var clock
+    @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
+    @Dependency(\.bookCoverClient) var bookCoverClient
 
     nonisolated static let analyticsCheckpointInterval: Duration = .seconds(60)
 
@@ -160,8 +162,11 @@ struct AppFeature {
             case .appStarted:
                 guard !state.hasStartedRecommendationSession else { return .none }
                 state.hasStartedRecommendationSession = true
-                guard state.home.recommendationSessionID == nil else { return .none }
-                return .send(.home(.recommendationSessionStarted))
+                let preloadSpines: Effect<Action> = .run { [recentlyFoundBooksClient, bookCoverClient] _ in
+                    await bookCoverClient.preloadSavedSpines(recentlyFoundBooksClient.load().compactMap(\.isbn))
+                }
+                guard state.home.recommendationSessionID == nil else { return preloadSpines }
+                return .merge(preloadSpines, .send(.home(.recommendationSessionStarted)))
             case .appEnteredBackground:
                 state.hasEnteredBackground = true
                 return .none

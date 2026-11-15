@@ -10,7 +10,9 @@ final class LiveBarometerProvider {
     private var sessionID: UUID?
 
     func samples() -> AsyncStream<BarometerSample> {
-        guard CMAltimeter.isRelativeAltitudeAvailable() else { return AsyncStream { $0.finish() } }
+        guard CMAltimeter.isRelativeAltitudeAvailable() else {
+            return AsyncStream { $0.finish() }
+        }
         switch CMAltimeter.authorizationStatus() {
         case .denied, .restricted:
             return AsyncStream { $0.finish() }

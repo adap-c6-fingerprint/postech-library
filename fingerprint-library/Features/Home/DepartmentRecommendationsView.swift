@@ -5,10 +5,7 @@ struct DepartmentRecommendationsView: View {
     let store: StoreOf<HomeFeature>
     @State private var sortOrder = DepartmentBookSort.recommended
 
-    private var title: String {
-        let name = store.departmentName
-        return name.isEmpty ? "많이 빌린 도서" : "'\(name)'에서 많이 빌린"
-    }
+    private var title: String { store.popularBooksTitle }
 
     var body: some View {
         VStack(spacing: 20) {
