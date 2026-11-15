@@ -43,6 +43,8 @@ struct BookCartFeature {
         case removeButtonTapped
         case removeConfirmed
         case removeAlertDismissed
+        case removeCancelled
+        // 삭제 알림의 "취소" 버튼
         case delegate(Delegate)
 
         @CasePathable
@@ -56,6 +58,7 @@ struct BookCartFeature {
     @Dependency(\.bookHoldingsClient) var bookHoldingsClient
     @Dependency(\.bookLocationCacheClient) var bookLocationCacheClient
     @Dependency(\.bookCoverClient) var bookCoverClient
+    @Dependency(\.uuid) var uuid
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case libraryInfo
@@ -85,11 +88,13 @@ struct BookCartFeature {
                 return .none
 
             case let .selectionToggled(id):
-                guard state.items.contains(where: { $0.id == id }) else { return .none }
+                guard let book = state.items.first(where: { $0.id == id })?.book else { return .none }
                 if let index = state.selectedIDs.firstIndex(of: id) {
                     state.selectedIDs.remove(at: index)
+                    analytics.record(.button(.bookDeselect, on: .cart, book: book))
                 } else {
                     state.selectedIDs.append(id)
+                    analytics.record(.button(.bookSelect, on: .cart, book: book))
                     if state.selectedCount == BookCartItem.maxStoredCount + 1,
                        !state.hasShownGuidanceLimitAlert {
                         state.$hasShownGuidanceLimitAlert.withLock { $0 = true }
@@ -103,26 +108,46 @@ struct BookCartFeature {
                 return .none
 
             case .guidanceLinkTapped:
+                analytics.record(.button(.startGuidance, on: .cart, [.bookCount: .integer(state.selectedCount)]))
+                // 책별 기록은 경로 미리보기의 route_book_included가 맡는다
                 guard state.canStartGuidance else { return .none }
                 bookCoverClient.prefetchSpines(state.selectedBooks.compactMap(\.isbn))
                 return .send(.delegate(.startGuidance(state.selectedBooks)))
 
             case .removeButtonTapped:
+                analytics.record(.button(.delete, on: .cart, [.bookCount: .integer(state.selectedCount)]))
+                // 휴지통. 여러 권이라 책 ID 대신 권수를 보낸다
                 guard !state.selectedBooks.isEmpty else { return .none }
                 state.isRemoveAlertPresented = true
                 return .none
 
             case .removeConfirmed:
                 state.isRemoveAlertPresented = false
-                let removedKeys = Set(state.selectedBooks.map(\.recordKey))
+                let removedBooks = state.selectedBooks
+                analytics.record(.button(.deleteConfirm, on: .cart, [.bookCount: .integer(removedBooks.count)]))
+                let removedKeys = Set(removedBooks.map(\.recordKey))
                 let removedCount = state.$items.withLock { $0.remove(recordKeys: removedKeys) }
                 state.selectedIDs = []
                 if removedCount > 0 {
-                    analytics.record(.init(.cartBooksRemoved, [.removedCount: .integer(removedCount)]))
+                    let operation = uuid().uuidString
+                    // 이번 삭제 한 번에서 나온 줄들을 묶는 ID
+                    analytics.record(.init(.cartBooksRemoved, [
+                        .operationID: .text(operation), .removedCount: .integer(removedCount)
+                    ]))
+                    for book in removedBooks {
+                        analytics.record(.init(.cartBookRemoved, AnalyticsEvent.bookFields(book)
+                            .merging([.operationID: .text(operation)]) { $1 }))
+                    }
+                    // 삭제한 책마다 한 줄
                 }
                 return .none
 
             case .removeAlertDismissed:
+                state.isRemoveAlertPresented = false
+                return .none
+
+            case .removeCancelled:
+                analytics.record(.button(.deleteCancel, on: .cart, [.bookCount: .integer(state.selectedCount)]))
                 state.isRemoveAlertPresented = false
                 return .none
 

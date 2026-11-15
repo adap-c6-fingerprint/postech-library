@@ -75,7 +75,7 @@ struct BookCartView: View {
             Button("삭제", role: .destructive) {
                 store.send(.removeConfirmed)
             }
-            Button("취소", role: .cancel) {}
+            Button("취소", role: .cancel) { store.send(.removeCancelled) }
         } message: {
             Text("이 책은 책바구니에서만 삭제돼요.\n다시 검색하여 찾아 추가할 수 있어요.")
         }

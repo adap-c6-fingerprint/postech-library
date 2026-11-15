@@ -208,6 +208,11 @@ struct BookDetailFeature {
                 state.isGuidancePresented = true
                 return .send(.delegate(.startGuidance(books)))
 
+            case .cart(.dismiss):
+                analytics.record(.button(.back, on: .cart))
+                // 상세에서 띄운 장바구니를 닫음
+                return .none
+
             case .cart, .delegate:
                 return .none
 

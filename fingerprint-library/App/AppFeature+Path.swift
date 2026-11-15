@@ -57,6 +57,7 @@ extension AppFeature {
         case let .detail(detail): .button(.back, on: .detail, book: detail.book)
         case .departmentRecommendations: .button(.back, on: .departmentRecommendations)
         case .favorites: .button(.back, on: .favorites)
+        case .cart: .button(.back, on: .cart)
         default: nil
         }
     }
