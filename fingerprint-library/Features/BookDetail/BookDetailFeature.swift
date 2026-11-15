@@ -25,6 +25,8 @@ struct BookDetailFeature {
         var isGuidancePresented = false
         var isFavorite: Bool { favoriteBookKeys.contains(book.recordKey) }
         var sourceFavoriteMarkerID: String?
+        var analyticsSource: AnalyticsScreen?
+        // 상세를 연 화면. 상세를 쌓는 쪽이 넣는다
 
         var description: BookDescription? = nil
         var isLoading = false
@@ -66,6 +68,7 @@ struct BookDetailFeature {
         case favoriteButtonTapped
         case addToCartButtonTapped
         case cartNoticeDismissed
+        case cartNoticeLaterTapped
         case cartShortcutTapped
         case cart(PresentationAction<BookCartFeature.Action>)
         case cartLimitAlertDismissed
@@ -97,7 +100,11 @@ struct BookDetailFeature {
         Reduce { state, action in
             switch action {
             case .viewAppeared:
-                analytics.record(.init(.bookDetailViewed, AnalyticsEvent.bookFields(state.book)))
+                var fields = AnalyticsEvent.bookFields(state.book)
+                if let source = state.analyticsSource {
+                    fields[.source] = .text(source.rawValue)
+                }
+                analytics.record(.init(.bookDetailViewed, fields))
                 return .none
 
             case .loadFavorites:
@@ -167,7 +174,9 @@ struct BookDetailFeature {
                 switch $cartItems.withLock({ $0.add(state.book, at: now) }) {
                 case .added:
                     state.cartNotice = .added
-                    analytics.record(.init(.cartBookAdded, AnalyticsEvent.bookFields(state.book)))
+                    analytics.record(.init(.cartBookAdded, AnalyticsEvent.bookFields(state.book).merging([
+                        .source: .text(AnalyticsScreen.detail.rawValue)
+                    ]) { $1 }))
                 case .alreadyAdded:
                     state.cartNotice = .alreadyAdded
                 case .limitExceeded:
@@ -180,8 +189,16 @@ struct BookDetailFeature {
                 state.cartNotice = nil
                 return .none
 
+            case .cartNoticeLaterTapped:
+                analytics.record(.button(.cartNoticeLater, on: .detail, book: state.book))
+                // 담은 뒤 알림의 "나중에" 버튼
+                state.cartNotice = nil
+                return .none
+
             case .cartShortcutTapped:
                 guard state.cart == nil else { return .none }
+                analytics.record(.button(.cartNoticeGo, on: .detail, book: state.book))
+                // 담은 뒤 알림의 "바로가기" 버튼
                 state.cartNotice = nil
                 state.cart = BookCartFeature.State()
                 return .none
@@ -204,6 +221,8 @@ struct BookDetailFeature {
                 return .none
 
             case .guidanceStarted:
+                analytics.record(.button(.directGuidance, on: .detail, book: state.book))
+                // 바로 안내 시작 버튼
                 state.isGuidancePresented = true
                 bookCoverClient.prefetchSpines([state.book.isbn].compactMap { $0 })
                 return .send(.delegate(.startGuidance([state.book])))

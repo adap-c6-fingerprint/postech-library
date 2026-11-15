@@ -118,7 +118,9 @@ struct AppFeature {
                 return .none
 
             case let .bookSearch(.delegate(delegate)):
-                guard let destination = Self.destination(for: delegate) else { return .none }
+                let source: AnalyticsScreen = state.bookSearch.hasSearched ? .searchResults : Self.analyticsRootScreen(of: state.selectedTab)
+                // 책을 고른 화면 (검색 결과 또는 탭의 첫 화면)
+                guard let destination = Self.destination(for: delegate, from: source) else { return .none }
                 push(destination, onto: state.selectedTab, state: &state)
                 return .none
 
@@ -141,7 +143,9 @@ struct AppFeature {
                 return .none
 
             case let .home(.delegate(delegate)):
-                push(Self.destination(for: delegate), onto: .recommendations, state: &state)
+                let source: AnalyticsScreen = state.recommendationsPath.last == .departmentRecommendations ? .departmentRecommendations : .recommendations
+                // 학과 추천 화면과 추천 탭이 같은 HomeFeature를 쓰므로, 맨 위 화면으로 구분
+                push(Self.destination(for: delegate, from: source), onto: .recommendations, state: &state)
                 return .none
 
             case let .mapPath(action):

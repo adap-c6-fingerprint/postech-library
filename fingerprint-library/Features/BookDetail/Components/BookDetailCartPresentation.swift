@@ -27,7 +27,7 @@ private struct BookDetailCartPresentation: ViewModifier {
                 }
             }
             .alert(cartNoticeTitle, item: cartNotice) { _ in
-                Button("나중에", role: .cancel) {}
+                Button("나중에", role: .cancel) { store.send(.cartNoticeLaterTapped) }
                 Button("바로가기") { store.send(.cartShortcutTapped) }
                     .keyboardShortcut(.defaultAction)
             } message: { _ in

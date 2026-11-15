@@ -49,11 +49,12 @@ extension AppFeature {
         ))
     }
 
-    func backAnalyticsScreen(_ element: Path.State?) -> AnalyticsScreen? {
-        // 뒤로가기를 기록하는 화면과 그 화면 이름
+    func backAnalyticsEvent(_ element: Path.State?) -> AnalyticsEvent? {
+        // 뒤로가기를 기록하는 화면과 보낼 이벤트 (책 상세는 책 ID 포함)
         switch element {
-        case .myPage: .myPage
-        case .recentlyFound: .recentlyFoundBooks
+        case .myPage: .button(.back, on: .myPage)
+        case .recentlyFound: .button(.back, on: .recentlyFoundBooks)
+        case let .detail(detail): .button(.back, on: .detail, book: detail.book)
         default: nil
         }
     }
@@ -76,8 +77,8 @@ extension AppFeature {
     }
 
     func handlePath(_ action: StackActionOf<Path>, on tab: Tab, state: inout State) -> Effect<Action> {
-        if case let .popFrom(id) = action, let screen = backAnalyticsScreen(stack(of: tab, in: state)[id: id]) {
-            analytics.record(.button(.back, on: screen))
+        if case let .popFrom(id) = action, let event = backAnalyticsEvent(stack(of: tab, in: state)[id: id]) {
+            analytics.record(event)
         }
         // 시스템 뒤로가기로 화면을 닫음 (스택에서 빠지기 전이라 닫히는 화면을 확인할 수 있다)
         guard case let .element(elementID, action) = action else { return .none }
@@ -87,7 +88,9 @@ extension AppFeature {
         case let .myPage(.delegate(.showRecentlyFound(shelf))):
             push(.recentlyFound(shelf), onto: tab, state: &state)
         case let .recentlyFound(.delegate(.showDetail(book))):
-            push(.detail(BookDetailFeature.State(book: book)), onto: tab, state: &state)
+            var detail = BookDetailFeature.State(book: book)
+            detail.analyticsSource = .recentlyFoundBooks
+            push(.detail(detail), onto: tab, state: &state)
         case let .detail(.delegate(.startGuidance(books))):
             presentGuidance(for: books, state: &state)
             state.guidanceOrigin = GuidanceOrigin(tab: tab, elementID: elementID)
@@ -100,26 +103,30 @@ extension AppFeature {
         return .none
     }
 
-    static func destination(for delegate: HomeFeature.Action.Delegate) -> Path.State {
+    static func destination(for delegate: HomeFeature.Action.Delegate, from source: AnalyticsScreen) -> Path.State {
         switch delegate {
         case let .showDetail(book, cachedCoverURL):
-            .detail(BookDetailFeature.State(book: book, cachedCoverURL: cachedCoverURL))
+            var detail = BookDetailFeature.State(book: book, cachedCoverURL: cachedCoverURL)
+            detail.analyticsSource = source
+            return .detail(detail)
         case .showCart:
-            .cart(BookCartFeature.State())
+            return .cart(BookCartFeature.State())
         case .showFavorites:
-            .favorites(BookFavoritesFeature.State())
+            return .favorites(BookFavoritesFeature.State())
         case .showMyPage:
-            .myPage(MyPageFeature.State())
+            return .myPage(MyPageFeature.State())
         case .showDepartmentRecommendations:
-            .departmentRecommendations
+            return .departmentRecommendations
         }
     }
 
-    static func destination(for delegate: BookSearchFeature.Action.Delegate) -> Path.State? {
+    static func destination(for delegate: BookSearchFeature.Action.Delegate, from source: AnalyticsScreen) -> Path.State? {
         switch delegate {
         case let .showDetail(book, markerID):
             var detail = BookDetailFeature.State(book: book)
             detail.sourceFavoriteMarkerID = markerID
+            detail.analyticsSource = markerID == nil ? source : .map
+            // 지도의 찜한 책 아이콘으로 열면 지도
             return .detail(detail)
         case let .showFavoriteShelf(books, markerID):
             guard var shelf = BookShelfMapFeature.State(previewing: books) else { return nil }
