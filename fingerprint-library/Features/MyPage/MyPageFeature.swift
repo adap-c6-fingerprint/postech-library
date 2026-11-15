@@ -67,6 +67,14 @@ struct MyPageFeature {
                 state.editAffiliation = nil
                 return .none
 
+            case .editAffiliation(.dismiss):
+                if let edit = state.editAffiliation {
+                    analytics.record(.button(.back, on: .editAffiliation,
+                                             [.action: .text(edit.hasChangedSelection ? "changed" : "unchanged")]))
+                }
+                // 소속 변경 화면에서 저장하지 않고 뒤로가기 (선택을 바꿨다가 나갔는지 함께 보낸다)
+                return .none
+
             case .editInterestsRowTapped:
                 analytics.record(.button(.editInterests, on: .myPage))
                 // "관심 분야 변경하기" (프로필이 없으면 프로필 설정으로 이어진다)
