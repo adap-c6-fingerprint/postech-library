@@ -127,6 +127,8 @@ struct OnboardingView: View {
         .simultaneousGesture(step == .affiliation ? nextSwipeGesture : nil)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(!isBackButtonVisible(step))
+        .analyticsScreen(OnboardingFeature.analyticsScreen(for: step, entry: store.entry))
+        // 단계마다 다른 페이지가 나타나므로 단계가 바뀔 때마다 그 단계 이름으로 screen_view가 기록된다
     }
 
     private var nextSwipeGesture: some Gesture {

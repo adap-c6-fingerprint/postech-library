@@ -401,28 +401,53 @@ nonisolated struct AnalyticsEvent: Equatable, Sendable {
 }
 
 nonisolated enum AnalyticsScreen: String, Sendable {
-    case map, recommendations, search, onboarding, detail, cart, favorites, myPage = "my_page"
-    case routePreview = "route_preview", navigation, analyticsSettings = "analytics_settings"
-
-    // [issue540 추가 화면]
+    // [온보딩]
     case onboardingWelcome = "onboarding_welcome"
     // 온보딩 시작하기 화면
     case onboardingAffiliation = "onboarding_affiliation"
     // 온보딩 소속·학과 설정 화면
     case onboardingInterests = "onboarding_interests"
     // 온보딩 관심사 설정 화면
+
+    // [탭]
+    case map
+    // 지도 탭
+    case recommendations
+    // 추천 탭
+    case search
+    // 검색 탭 (검색 전 최근 항목)
+
+    // [검색·추천 > 하위 화면]
+    case searchResults = "search_results"
+    // 검색 결과
+    case departmentRecommendations = "department_recommendations"
+    // '000'에서 많이 빌린 책 (DepartmentRecommendationsView)
+
+    // [책 목록·상세]
+    case detail
+    // 책 상세
+    case cart
+    // 장바구니
+    case favorites
+    // 내가 읽고 싶은 책
+
+    // [마이페이지]
+    case myPage = "my_page"
+    // 마이페이지
     case myPageInterests = "my_page_interests"
     // 마이페이지 → 관심 분야 변경 화면 (OnboardingView 재사용)
     case editAffiliation = "edit_affiliation"
     // 마이페이지 → 소속 및 학과 변경 화면 (EditMyAffiliationView)
     case recentlyFoundBooks = "recently_found_books"
     // 마이페이지 → 최근 찾은 책 목록 (RecentlyFoundBookView)
-    case departmentRecommendations = "department_recommendations"
-    // '000'에서 많이 빌린 책 (DepartmentRecommendationsView)
-    case searchResults = "search_results"
-    // 검색 결과 (검색 전 최근 항목은 기존 search)
+
+    // [길안내]
+    case routePreview = "route_preview"
+    // 길안내 미리보기
     case routeOriginPicker = "route_origin_picker"
     // 위치 정하기 (BookRouteOriginPickerView)
+    case navigation
+    // 실시간 길안내
     case spineFinding = "spine_finding"
     // 책등으로 책 찾기 (BookNavigationBookFindingView)
     case spineHelp = "spine_help"

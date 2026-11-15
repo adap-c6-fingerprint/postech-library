@@ -21,6 +21,20 @@ struct OnboardingFeature {
     }
 
     typealias AffiliationPath = RecommendationDataset.AffiliationPath
+
+    static func analyticsScreen(for step: Step, entry: Entry) -> AnalyticsScreen {
+        // 단계와 진입 경로로 분석용 화면 이름을 고른다
+        switch (entry, step) {
+        case (.changeInterests, _): .myPageInterests
+        // 마이페이지 → 관심 분야 변경에서 재사용할 때
+        case (_, .welcome): .onboardingWelcome
+        // 시작하기
+        case (_, .affiliation): .onboardingAffiliation
+        // 소속·학과 설정 (마이페이지에서 프로필 설정을 시작한 경우 포함)
+        case (_, .interests): .onboardingInterests
+        // 관심사 설정 (마이페이지에서 프로필 설정을 시작한 경우 포함)
+        }
+    }
     
     @ObservableState
     struct State: Equatable {

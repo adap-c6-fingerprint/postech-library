@@ -18,7 +18,6 @@ struct AppView: View {
         Group {
             if let onboardingStore = store.scope(state: \.onboarding, action: \.onboarding) {
                 OnboardingView(store: onboardingStore)
-                    .analyticsScreen(.onboarding)
             } else if store.hasCheckedProfile {
                 tabs
             } else {
