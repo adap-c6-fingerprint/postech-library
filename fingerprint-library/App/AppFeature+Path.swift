@@ -49,6 +49,15 @@ extension AppFeature {
         ))
     }
 
+    func stack(of tab: Tab, in state: State) -> StackState<Path.State> {
+        // 탭의 push 화면 스택
+        switch tab {
+        case .map: state.mapPath
+        case .recommendations: state.recommendationsPath
+        case .search: state.searchPath
+        }
+    }
+
     func push(_ destination: Path.State, onto tab: Tab, state: inout State) {
         switch tab {
         case .map: state.mapPath.append(destination)
@@ -58,6 +67,10 @@ extension AppFeature {
     }
 
     func handlePath(_ action: StackActionOf<Path>, on tab: Tab, state: inout State) -> Effect<Action> {
+        if case let .popFrom(id) = action, case .myPage? = stack(of: tab, in: state)[id: id] {
+            analytics.record(.button(.back, on: .myPage))
+        }
+        // 시스템 뒤로가기로 마이페이지를 닫음 (스택에서 빠지기 전이라 닫히는 화면을 확인할 수 있다)
         guard case let .element(elementID, action) = action else { return .none }
         switch action {
         case .favorites(.delegate(.showCart)):

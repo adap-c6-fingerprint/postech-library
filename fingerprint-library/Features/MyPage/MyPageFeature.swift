@@ -27,6 +27,10 @@ struct MyPageFeature {
         case addButtonTapped
         case editAffiliationRowTapped
         case editInterestsRowTapped
+        case locationPermissionRowTapped
+        // "위치 권한 설정" (설정 앱 열기는 View가 한다)
+        case privacyPolicyRowTapped
+        // "개인정보 처리방침" (링크 열기는 View가 한다)
         case editAffiliation(PresentationAction<EditMyAffiliationFeature.Action>)
         case editInterests(PresentationAction<OnboardingFeature.Action>)
         case setupProfile(PresentationAction<OnboardingFeature.Action>)
@@ -38,14 +42,20 @@ struct MyPageFeature {
         }
     }
 
+    @Dependency(\.analyticsClient) private var analytics
+
     var body: some Reducer<State, Action> {
         Scope(state: \.shelf, action: \.shelf) { RecentlyFoundBookFeature() }
         Reduce { state, action in
             switch action {
             case .addButtonTapped:
+                analytics.record(.button(.recentMore, on: .myPage))
+                // 최근 찾은 책 "더보기"
                 return .send(.delegate(.showRecentlyFound(state.shelf)))
 
             case .editAffiliationRowTapped:
+                analytics.record(.button(.editAffiliation, on: .myPage))
+                // "소속 및 학과 정보 변경" (프로필이 없으면 프로필 설정으로 이어진다)
                 guard state.userProfile != nil else {
                     state.setupProfile = .settingUpProfile()
                     return .none
@@ -58,6 +68,8 @@ struct MyPageFeature {
                 return .none
 
             case .editInterestsRowTapped:
+                analytics.record(.button(.editInterests, on: .myPage))
+                // "관심 분야 변경하기" (프로필이 없으면 프로필 설정으로 이어진다)
                 guard state.userProfile != nil else {
                     state.setupProfile = .settingUpProfile()
                     return .none
@@ -71,6 +83,16 @@ struct MyPageFeature {
 
             case .setupProfile(.presented(.delegate(.completed))):
                 state.setupProfile = nil
+                return .none
+
+            case .locationPermissionRowTapped:
+                analytics.record(.button(.locationPermission, on: .myPage))
+                // "위치 권한 설정"
+                return .none
+
+            case .privacyPolicyRowTapped:
+                analytics.record(.button(.privacyPolicy, on: .myPage))
+                // "개인정보 처리방침"
                 return .none
 
             case .shelf, .editAffiliation, .editInterests, .setupProfile, .delegate:

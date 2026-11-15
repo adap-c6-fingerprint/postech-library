@@ -30,8 +30,14 @@ struct MyPageView: View {
                 SettingsSection(rows: [
                     .init(title: "소속 및 학과 정보 변경") { store.send(.editAffiliationRowTapped) },
                     .init(title: "관심 분야 변경하기") { store.send(.editInterestsRowTapped) },
-                    .init(title: "위치 권한 설정") { openAppSettings() },
-                    .init(title: "개인정보 처리방침") { openURL(MyPageView.privacyPolicyURL) }
+                    .init(title: "위치 권한 설정") {
+                        store.send(.locationPermissionRowTapped)
+                        openAppSettings()
+                    },
+                    .init(title: "개인정보 처리방침") {
+                        store.send(.privacyPolicyRowTapped)
+                        openURL(MyPageView.privacyPolicyURL)
+                    }
                 ])
                 .padding(.horizontal, 16)
                 .padding(.bottom, 80)
