@@ -142,7 +142,7 @@ struct BookSearchView: View {
 
             Text(message)
                 .font(.callout)
-                .foregroundStyle(.white.opacity(0.8))
+                .foregroundStyle(Color.textTertiary)
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -156,10 +156,9 @@ struct BookSearchView: View {
     @ViewBuilder
     private var recentItems: some View {
         if store.recentBooks.isEmpty {
-            ContentUnavailableView(
-                "최근 항목이 없어요",
-                systemImage: "book",
-                description: Text("검색 결과에서 선택한 책이 여기에 표시돼요.")
+            searchStatus(
+                title: "최근 항목이 없어요",
+                message: "검색 결과에서 선택한 책이 여기에 표시돼요."
             )
         } else {
             List {
