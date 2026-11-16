@@ -128,7 +128,24 @@ struct BookNavigationFeature {
                          entrance: routePlan.start, map: routePlan.map)
         }
         var mapPosition: IndoorPosition? {
-            entranceApproach?.position ?? latestPosition?.replacingHeading(deviceHeadingDegrees)
+            if let entranceApproach { return entranceApproach.position }
+            guard let latestPosition else { return nil }
+            return (routeMatchedPosition(of: latestPosition) ?? latestPosition).replacingHeading(deviceHeadingDegrees)
+        }
+
+        /// 경로 매칭에 성공한 동안에는 점을 경로 위 추정 위치에 붙여, 안내 문구·진행과 점의 위치를 맞춘다.
+        /// 위치를 잃었거나(`lost`) 매칭 결과가 없거나(경로 이탈·위치 모호 등) 층이 맞지 않으면 측정 위치를 그대로 둔다.
+        /// 오차값과 측정 시각은 원래 측정의 것을 유지해, 붙인 점이 실제보다 정확해 보이지 않게 한다.
+        private func routeMatchedPosition(of measured: IndoorPosition) -> IndoorPosition? {
+            guard measured.source != .manual, let progress, progress.coordinate.isValid,
+                  let status = trackingStatus, status != .lost,
+                  let plan = currentPlan, plan.steps.indices.contains(progress.stepIndex),
+                  let level = measured.floorOrdinal else { return nil }
+            let step = plan.steps[progress.stepIndex]
+            guard step.from.level == level || step.to.level == level else { return nil }
+            return IndoorPosition(coordinate: progress.coordinate, floorOrdinal: measured.floorOrdinal,
+                                  horizontalAccuracy: measured.horizontalAccuracy, timestamp: measured.timestamp,
+                                  source: measured.source, headingDegrees: measured.headingDegrees)
         }
         var effectiveFloorOrdinal: Int? {
             guard let rawPosition else { return confirmedFloorOrdinal }

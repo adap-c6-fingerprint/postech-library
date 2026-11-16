@@ -71,6 +71,54 @@ struct BookNavigationPositionStabilityTests {
         await store.skipInFlightEffects()
     }
 
+    /// 출발점에서 북쪽·동쪽으로 미터 단위만큼 옮긴 좌표
+    private func offset(_ coordinate: IndoorMapCoordinate, northMeters: Double, eastMeters: Double)
+        -> IndoorMapCoordinate {
+        IndoorMapCoordinate(
+            latitude: coordinate.latitude + northMeters / 111_195,
+            longitude: coordinate.longitude + eastMeters / (111_195 * cos(coordinate.latitude * .pi / 180)))
+    }
+
+    @Test func 경로에_매칭되면_지도_점을_경로_위_추정_위치에_붙인다() async throws {
+        let (store, onRoute) = try await Self.makeStore()
+        let measured = offset(onRoute, northMeters: 1.5, eastMeters: 1.5)
+        await store.send(.locationEvent(subscriptionID: 0, .position(position(measured, accuracy: 5, secondsBeforeNow: 1))))
+        let progress = try #require(store.state.progress)
+        let shown = try #require(store.state.mapPosition)
+        #expect(shown.coordinate == progress.coordinate)
+        #expect(store.state.latestPosition?.coordinate == measured)
+        // 붙인 점이 실제보다 정확해 보이지 않도록 측정 오차·시각을 유지한다.
+        #expect(shown.horizontalAccuracy == 5)
+        #expect(shown.timestamp == store.state.latestPosition?.timestamp)
+        #expect(shown.floorOrdinal == 2)
+        await store.skipInFlightEffects()
+    }
+
+    @Test func 위치를_잃으면_지도_점을_경로에_붙이지_않고_측정_위치로_둔다() async throws {
+        let (store, onRoute) = try await Self.makeStore()
+        await store.send(.locationEvent(subscriptionID: 0, .position(position(onRoute, accuracy: 5, secondsBeforeNow: 8))))
+        let measured = offset(onRoute, northMeters: 2, eastMeters: 2)
+        for seconds in [7.0, 6, 5, 4] {
+            await store.send(.locationEvent(subscriptionID: 0, .position(position(measured, accuracy: 20, secondsBeforeNow: seconds))))
+        }
+        #expect(store.state.trackingStatus == .lost)
+        #expect(store.state.progress != nil)
+        #expect(store.state.mapPosition == store.state.latestPosition)
+        #expect(store.state.mapPosition?.coordinate == measured)
+        await store.skipInFlightEffects()
+    }
+
+    @Test func 경로에서_벗어나면_지도_점을_측정_위치로_둔다() async throws {
+        let (store, onRoute) = try await Self.makeStore()
+        await store.send(.locationEvent(subscriptionID: 0, .position(position(onRoute, accuracy: 5, secondsBeforeNow: 2))))
+        let far = offset(onRoute, northMeters: 7, eastMeters: 7)
+        await store.send(.locationEvent(subscriptionID: 0, .position(position(far, accuracy: 5, secondsBeforeNow: 1))))
+        #expect(store.state.progress == nil)
+        #expect(store.state.mapPosition == store.state.latestPosition)
+        #expect(store.state.mapPosition?.coordinate == far)
+        await store.skipInFlightEffects()
+    }
+
     @Test func 서가를_찾았다고_하면_그때의_측위_편향을_기억한다() async throws {
         let (store, _) = try await Self.makeStore()
         let destination = try #require(store.state.currentPlan).destination.coordinate
