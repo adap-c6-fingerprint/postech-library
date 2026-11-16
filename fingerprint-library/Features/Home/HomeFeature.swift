@@ -24,14 +24,18 @@ struct HomeFeature {
                 && !userProfile.interests.isEmpty
         }
         var departmentName: String { userProfile?.departmentName ?? "" }
-        // 인기 도서 제목. 소속이 사람을 가리키는 경우(아카데미 러너)는 "~들이", 그 밖의 소속은 "'~'에서"로 쓴다.
+        // 인기 도서 제목. 아카데미·학부·대학원 소속만 소속 이름을 넣고, 그 밖의 소속은 공통 문구를 쓴다.
+        // 소속이 사람을 가리키는 경우(아카데미 러너)는 "~들이", 그 밖의 소속은 "'~'에서"로 쓴다.
         var popularBooksTitle: String {
-            switch departmentName {
-            case "": "많이 빌린 도서"
-            case "아카데미 러너": "아카데미 러너들이 많이 빌린"
-            default: "'\(departmentName)'에서 많이 빌린"
-            }
+            guard !departmentName.isEmpty else { return "많이 빌린 도서" }
+            guard let path = userProfile.flatMap({ RecommendationDataset.AffiliationPath(key: $0.affiliationKey) }),
+                  Self.namedAffiliationParents.contains(path.parent)
+                    || path.group == Self.academyAffiliationGroup
+            else { return "사람들이 많이 찾고 있어요" }
+            return departmentName == "아카데미 러너" ? "아카데미 러너들이 많이 빌린" : "'\(departmentName)'에서 많이 빌린"
         }
+        private static let namedAffiliationParents: Set<String> = ["POSTECH 학부", "POSTECH 대학원"]
+        private static let academyAffiliationGroup = "Apple Developer Academy @ POSTECH"
         var isRecommendationExpanded = true
         var showsKulumiCovers = false
         var libraryInfo: [Book.ID: LibraryInfoState] = [:]
