@@ -12,7 +12,7 @@ struct BookRouteOriginPickerView: View {
     @State private var selectedFloorID: UUID?
     @State private var center: IndoorMapCoordinate?
     @State private var isMapSettled = false
-    @State private var hasSettledOnce = false
+    @State private var hasAdjustedOrigin = false
     @State private var cameraRequest: IndoorMapCameraRequest?
 
     private var selectedFloor: IndoorMapFloor? {
@@ -24,7 +24,7 @@ struct BookRouteOriginPickerView: View {
         return floor.geometry.contains(center)
     }
 
-    private var canConfirm: Bool { isMapSettled && isCenterOnFloor }
+    private var canConfirm: Bool { hasAdjustedOrigin && isMapSettled && isCenterOnFloor }
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -56,17 +56,17 @@ struct BookRouteOriginPickerView: View {
             IndoorMapKitView(
                 map: map, floor: floor, position: nil,
                 showsUserLocation: false, cameraRequest: cameraRequest,
+                onUserCameraInteraction: {
+                    hasAdjustedOrigin = true
+                    isMapSettled = false
+                },
                 onCenterChanged: { coordinate, isSettled in
                     guard isSettled else {
                         if isMapSettled { isMapSettled = false }
                         return
                     }
                     center = coordinate
-                    if hasSettledOnce {
-                        isMapSettled = true
-                    } else {
-                        hasSettledOnce = true
-                    }
+                    isMapSettled = true
                 },
                 appearance: .home
             )
@@ -89,26 +89,25 @@ struct BookRouteOriginPickerView: View {
     }
 
     private var header: some View {
-        HStack(alignment: .top, spacing: 16) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(title)
+        VStack(alignment: .leading, spacing: 4) {
+            Text(title)
+                .typography(.title1)
+                .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
+                .lineLimit(2)
+                .padding(.trailing, 60)
+                .accessibilityIdentifier("route-origin-picker-title")
+            if let subtitle {
+                Text(subtitle)
                     .typography(.title1)
-                    .lineLimit(2)
-                    .accessibilityIdentifier("route-origin-picker-title")
-                if let subtitle {
-                    Text(subtitle)
-                        .typography(.title1)
-                        .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
-                        .accessibilityIdentifier("route-origin-picker-shelf")
-                }
-                if let startNotice {
-                    RouteStartNoticeView(notice: startNotice)
-                        .typography(.body2)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .accessibilityIdentifier("route-origin-picker-start-notice")
-                }
+                    .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("route-origin-picker-shelf")
             }
-            Spacer(minLength: 0)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityHint(startNotice ?? "")
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .topLeading)
+        .overlay(alignment: .topTrailing) {
             Button(action: onCancel) {
                 Image(systemName: "xmark")
                     .font(.system(size: 17, weight: .semibold))
@@ -162,6 +161,7 @@ struct BookRouteOriginPickerView: View {
                 marksSelectionAsCurrent: true,
                 onSelect: { id in
                     guard id != selectedFloorID else { return }
+                    hasAdjustedOrigin = true
                     selectedFloorID = id
                 })
                 .padding(.trailing, 17)
@@ -184,7 +184,7 @@ struct BookRouteOriginPickerView: View {
 
     private var guidanceMessage: some View {
         Text("층을 선택한 후,\n지도를 움직여 출발 위치를 직접 설정해주세요")
-            .typography(.caption1)
+            .typography(.body2)
             .multilineTextAlignment(.center)
             .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
             .padding(.vertical, 10)
@@ -196,22 +196,22 @@ struct BookRouteOriginPickerView: View {
 
     private var confirmButton: some View {
         Button {
-            guard let center, let floor = selectedFloor, isCenterOnFloor else { return }
+            guard canConfirm, let center, let floor = selectedFloor else { return }
             onConfirm(center, floor.ordinal)
         } label: {
             Text("위치 확정하고 안내 받기")
-                .typography(.button)
+                .font(PobookUI.SystemFont.button)
                 .multilineTextAlignment(.center)
-                .frame(width: 290, height: 20)
-                .padding(.vertical, 16)
-                .padding(.horizontal, 20)
+                .padding(.horizontal, PobookUI.Spacing._20)
+                .padding(.vertical, PobookUI.Spacing._16)
+                .frame(width: 330, height: 52, alignment: .center)
+                .contentShape(.rect(cornerRadius: PobookUI.Radius.button))
+                .glassEffect(
+                    .regular.tint(Color(white: 0.08).opacity(0.6)).interactive(),
+                    in: .rect(cornerRadius: PobookUI.Radius.button))
         }
-        .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
-        .buttonBorderShape(.capsule)
-        .padding(.vertical, 16)
-        .padding(.horizontal, 20)
-        .frame(width: 330, height: 52)
-        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
+        .buttonStyle(.plain)
+        .foregroundStyle(PobookUI.ColorToken.Button.neutralText)
         .accessibilityHint("선택한 위치를 출발지로 삼아 길안내를 시작해요")
         .accessibilityIdentifier("route-origin-picker-confirm")
     }
@@ -235,3 +235,44 @@ struct BookRouteOriginCrosshair: View {
         }
     }
 }
+
+#if DEBUG
+private struct BookRouteOriginPickerPreview: View {
+    let isMultiple: Bool
+    @State private var map: IndoorMap?
+
+    var body: some View {
+        Group {
+            if let map {
+                BookRouteOriginPickerView(
+                    map: map,
+                    title: isMultiple ? "출발지 직접 설정하기" : "푸울에 풍덩푸울에 풍덩푸울에 풍덩",
+                    subtitle: isMultiple
+                        ? "층을 선택하고 지도를 움직여\n출발지를 직접 설정해주세요"
+                        : "4층 337번 서가",
+                    initialFloorID: map.floors.first { $0.ordinal == 3 }?.id,
+                    onCancel: { }, onConfirm: { _, _ in })
+            } else {
+                ProgressView()
+            }
+        }
+        .task {
+            let loaded = try? await BundledIndoorMapLoader().loadLibrary()
+            guard !Task.isCancelled else { return }
+            map = loaded
+        }
+    }
+}
+
+#Preview("출발 위치 · 단권") {
+    BookRouteOriginPickerPreview(isMultiple: false)
+}
+
+#Preview("출발 위치 · 다권") {
+    BookRouteOriginPickerPreview(isMultiple: true)
+}
+
+#Preview("출발 위치 · 큰 글자") {
+    BookRouteOriginPickerPreview(isMultiple: true).dynamicTypeSize(.accessibility3)
+}
+#endif

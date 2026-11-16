@@ -61,6 +61,11 @@ extension PobookUI {
         static let _12: CGFloat = -0.24
     }
 
+    enum SystemFont {
+        /// SF Pro 17pt Medium을 기준으로 Dynamic Type을 지원한다.
+        static let button = Font.system(.body, design: .default, weight: .medium)
+    }
+
     struct Typography {
         enum Scaling {
             case dynamic

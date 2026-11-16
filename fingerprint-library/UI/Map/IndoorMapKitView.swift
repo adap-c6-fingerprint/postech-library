@@ -274,10 +274,12 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-            guard parent.navigationAppearance, !isApplyingCamera,
+            guard !isApplyingCamera,
                   Self.hasActiveGesture(in: mapView) else { return }
-            lastCameraRequest = parent.cameraRequest
-            pendingCameraRequest = nil
+            if parent.navigationAppearance {
+                lastCameraRequest = parent.cameraRequest
+                pendingCameraRequest = nil
+            }
             parent.onUserCameraInteraction()
         }
 

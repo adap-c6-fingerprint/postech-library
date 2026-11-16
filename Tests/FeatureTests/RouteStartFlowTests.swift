@@ -73,6 +73,31 @@ struct RouteStartFlowTests {
         #expect(store.state.currentStart?.source == .manual)
     }
 
+    @Test func 단권_출발지_화면은_API_요청_없이_기존_소장정보_캐시를_읽는다() async throws {
+        let state = try await makeState(position: position(latitude: 36.0130858, longitude: 129.3259576))
+        let book = BookRoutePreviewSample.book
+        let holding = BookRoutePreviewSample.holding
+        let calls = LockIsolated(0)
+        let clock = TestClock()
+        let store = TestStore(initialState: state) { BookRoutePreviewFeature() } withDependencies: {
+            $0.uuid = .incrementing
+            $0.date.now = now
+            $0.continuousClock = clock
+            $0.bookLocationCacheClient.load = { keys in
+                #expect(keys == [book.recordKey])
+                return [book.recordKey: [holding]]
+            }
+            $0.bookHoldingsClient.fetch = { _ in calls.withValue { $0 += 1 }; return [] }
+        }
+        store.exhaustivity = .off
+        await store.send(.task)
+        #expect(store.state.originBookHoldings == [holding])
+        #expect(store.state.startDecision == .needsOrigin(.farOutside))
+        #expect(calls.value == 0)
+        await store.send(.disappeared)
+        await store.finish()
+    }
+
     @Test(arguments: [BookRoutePreviewFeature.EntryMode.direct, .preview])
     func 내부_층_미확인은_API_호출_전_출발점_선택으로_이어지고_선택_후_안내한다(mode: BookRoutePreviewFeature.EntryMode) async throws {
         var state = try await makeState(

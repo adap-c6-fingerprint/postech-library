@@ -49,6 +49,7 @@ struct BookRoutePreviewFeature {
         var analyticsOperation: String { analyticsID.uuidString + ":" + String(requestID) }
         var analyticsRequestIsTest = false
         var viewedBookID: Book.ID?
+        var originBookHoldings: [BookHolding] = []
         // 카드에 보이는 책. 칩이나 스와이프로 바뀐다
         var viewedBook: Book? { orderedBooks.first { $0.id == viewedBookID } ?? orderedBooks.first }
         var previewPlan: RoutePlan?
@@ -195,6 +196,7 @@ struct BookRoutePreviewFeature {
     @Dependency(\.date.now) private var now
     @Dependency(\.continuousClock) private var clock
     @Dependency(\.analyticsClient) private var analytics
+    @Dependency(\.bookLocationCacheClient) private var bookLocationCacheClient
     @Dependency(\.dismiss) private var dismiss
     @Dependency(\.openURL) private var openURL
 
@@ -214,6 +216,9 @@ struct BookRoutePreviewFeature {
 
             case .task:
                 guard !state.returnsToOriginAfterNavigation else { return .none }
+                if state.destination.books.count == 1, let book = state.destination.books.first {
+                    state.originBookHoldings = bookLocationCacheClient.load([book.recordKey])[book.recordKey] ?? []
+                }
                 state.refreshCurrentStart(at: now)
                 return .merge(
                     observeLocation(),

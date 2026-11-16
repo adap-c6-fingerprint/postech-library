@@ -323,21 +323,36 @@ struct BookRoutePreviewView: View {
     }
 
     private var originPickerTitle: String {
-        orderedBooks.first.map { BookText.plainText($0.title) } ?? "도서 길안내"
+        if orderedBooks.count > 1 { return "출발지 직접 설정하기" }
+        return orderedBooks.first.map { BookText.plainText($0.title) } ?? "도서 길안내"
     }
 
     private var originPickerSubtitle: String? {
-        guard let book = orderedBooks.first,
-              let shelf = destinationStore?.state.shelves(for: book.id).first else { return nil }
-        let floorName = routeMap?.floors.first { $0.id == shelf.floorID }?.name
+        if orderedBooks.count > 1 {
+            return "층을 선택하고 지도를 움직여\n출발지를 직접 설정해주세요"
+        }
+        guard let book = orderedBooks.first else { return nil }
+        guard let shelf = destinationStore?.state.shelves(for: book.id).first else {
+            return originPickerCachedDestination?.locationText
+        }
+        let floorName = routeMap?.floors.first { $0.id == shelf.floorID }.map { "\($0.ordinal + 1)층" }
         return [floorName, shelf.shelfTitle].compactMap { $0 }.joined(separator: " ")
     }
 
     private var originPickerFloorID: UUID? {
         guard let book = orderedBooks.first,
               let shelf = destinationStore?.state.shelves(for: book.id).first else {
-            return mapStore?.selectedFloorID
+            return originPickerCachedDestination?.shelves.first?.floorID ?? mapStore?.selectedFloorID
         }
         return shelf.floorID
+    }
+
+    private var originPickerCachedDestination: BookDetailDestinationPresentation? {
+        guard orderedBooks.count == 1 else { return nil }
+        let labels = destinationStore?.state.map.shelfLabels ?? []
+        return BookDetailDestinationPresentation.resolve(
+            holdings: store.originBookHoldings, map: routeMap,
+            labels: labels.isEmpty ? mapStore?.shelfLabels ?? [] : labels
+        )
     }
 }
