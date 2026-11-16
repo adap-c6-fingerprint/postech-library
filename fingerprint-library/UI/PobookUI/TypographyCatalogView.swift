@@ -11,6 +11,7 @@ struct TypographyCatalogView: View {
         ("body2 · 일반 본문", .body2),
         ("caption1 · 보조 설명", .caption1),
         ("caption2 · 짧은 메타데이터", .caption2),
+        ("guidance · 경로 구간 안내", .guidance),
         ("shelfHeading · 서가 안내", .shelfHeading)
     ]
 

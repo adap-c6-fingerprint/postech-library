@@ -15,31 +15,39 @@ struct BookNavigationCurrentBookCard: View {
                 )
                     .frame(width: coverWidth, height: coverHeight)
                     .accessibilityIdentifier("book-navigation-current-cover")
-                VStack(alignment: .leading, spacing: 0) {
+
+                Spacer()
+
+                VStack(alignment: .leading, spacing: 7) {
                     Text("현재 책")
                         .typography(.body2)
-                        .foregroundStyle(BookNavigationPalette.accent)
-                        .padding(.bottom, 12)
+                        .foregroundStyle(PobookUI.ColorToken.primaryLight)
                     Text(BookText.plainText(info.book.title))
                         .typography(.bookTitle).lineLimit(2)
                         .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                         .accessibilityIdentifier("book-navigation-current-title")
-                        .padding(.bottom, 12)
-                    Text("\(info.floorName ?? "층 확인 필요") \(info.shelf.shelfTitle)")
-                        .typography(.body2.weight(.medium)).lineLimit(2)
-                        .accessibilityIdentifier("book-navigation-current-shelf")
-                    Text(info.callNumbers.isEmpty ? "청구기호 확인 필요" : info.callNumbers.joined(separator: " · "))
-                        .typography(.body2.weight(.medium)).lineLimit(2)
-                        .accessibilityIdentifier("book-navigation-current-call-number")
-                    Text("\(route.distanceMeters.formatted(.number.precision(.fractionLength(0))))m · 층 이동 \(route.floorChanges.count)회")
-                        .typography(.caption1).foregroundStyle(.white.opacity(0.8))
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.top, 16)
-                        .accessibilityIdentifier("book-navigation-route-metrics")
+                    VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("\(info.floorName ?? "층 확인 필요") \(info.shelf.shelfTitle)")
+                                .typography(.body2).lineLimit(2)
+                                .foregroundStyle(PobookUI.ColorToken.BookDetails.textPlace)
+                                .accessibilityIdentifier("book-navigation-current-shelf")
+                            Text(info.callNumbers.isEmpty ? "청구기호 확인 필요" : info.callNumbers.joined(separator: " · "))
+                                .typography(.body2).lineLimit(2)
+                                .foregroundStyle(PobookUI.ColorToken.BookDetails.textPlace)
+                                .accessibilityIdentifier("book-navigation-current-call-number")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .topLeading)
+                        Text("\(route.distanceMeters.formatted(.number.precision(.fractionLength(0))))m · 층 이동 \(route.floorChanges.count)회")
+                            .typography(.caption1).foregroundStyle(PobookUI.ColorToken.BookDetails.textDistance)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .accessibilityIdentifier("book-navigation-route-metrics")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .topLeading)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: 216, alignment: .topLeading)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .frame(width: 370, alignment: .top)
         }
         .foregroundStyle(.white)
         .accessibilityIdentifier("book-navigation-current-book")

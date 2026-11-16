@@ -7,7 +7,6 @@ struct BookRouteBooksPreviewView: View {
     let routePlan: RoutePlan?
     let isLoadingRoute: Bool
     let routeError: String?
-    var startNotice: String? = nil
     let canStart: Bool
     let onBack: () -> Void
     let onStart: (Book) -> Void
@@ -307,25 +306,11 @@ struct BookRouteBooksPreviewView: View {
 
     private var startControls: some View {
         VStack(spacing: 8) {
-            if let startNotice {
-                VStack(alignment: .leading, spacing: 8) {
-                    RouteStartNoticeView(notice: startNotice)
-                        .font(.caption)
-                        .fixedSize(horizontal: false, vertical: true)
-                    if let onSetOriginManually {
-                        Button("출발 위치 직접 설정", action: onSetOriginManually)
-                            .font(.caption.bold())
-                            .accessibilityIdentifier("multiBookPreview.setOrigin")
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityIdentifier("multiBookPreview.startNotice")
-            }
             if let routeError {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(routeError).font(.caption)
                     Button("다시 시도", action: onRetry).font(.caption.bold())
-                    if startNotice == nil, let onSetOriginManually {
+                    if let onSetOriginManually {
                         Button("출발 위치 직접 설정", action: onSetOriginManually)
                             .font(.caption.bold())
                             .accessibilityIdentifier("multiBookPreview.setOrigin")

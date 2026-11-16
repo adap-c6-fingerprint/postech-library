@@ -46,7 +46,7 @@ struct BookNavigationFeature {
         var confirmedFloorOrdinal: Int?
         var libraryZone: LibraryZone?
         var startNotice: String?
-        let usesManualOrigin: Bool
+        var usesManualOrigin: Bool
         let startsAtEntrance: Bool
         var authorization: IndoorLocationAuthorization = .notDetermined
         var statusMessage: String? = "현재 위치를 확인하고 있어요."
@@ -55,6 +55,7 @@ struct BookNavigationFeature {
         var isArrivalPresented = false
         var isSheetExpanded = false
         var isCancelConfirmationPresented = false
+        var isNextBookOriginPickerPresented = false
         var cameraRequest: IndoorMapCameraRequest
         var followsNavigationCamera = true
         var cameraTracking = BookNavigationCameraTracking()
@@ -80,11 +81,11 @@ struct BookNavigationFeature {
 
         var canMarkShelfFound: Bool {
             exitReason == nil && !isArrivalPresented && !isReroutingToNextBook && !isReturningToPreviousStop
-                && currentStop != nil && currentRoute != nil
+                && !isNextBookOriginPickerPresented && currentStop != nil && currentRoute != nil
         }
         var canReturnToPreviousStop: Bool {
             exitReason == nil && !isArrivalPresented && !isReroutingToNextBook && !isReturningToPreviousStop
-                && navigation.hasPreviousStop
+                && !isNextBookOriginPickerPresented && navigation.hasPreviousStop
         }
         var currentStop: RouteStop? { navigation.currentStop }
         var currentRoute: IndoorRoute? { navigation.currentLeg }
@@ -245,6 +246,8 @@ struct BookNavigationFeature {
         case cancelDismissed
         case cancelConfirmed
         case nextBookTapped
+        case nextBookOriginPickerDismissed
+        case nextBookOriginConfirmed(IndoorMapCoordinate, floorOrdinal: Int)
         case nextBookRouteLoaded(requestID: Int, stopIndex: Int, IndoorRoute)
         case nextBookRouteFailed(requestID: Int, String)
         case currentStopRerouted(requestID: Int, stopIndex: Int, IndoorRoute)
@@ -482,38 +485,46 @@ struct BookNavigationFeature {
 
             case .nextBookTapped:
                 guard state.exitReason == nil, state.hasNextStop, !state.isReroutingToNextBook,
-                      !state.isReturningToPreviousStop else { return .none }
+                      !state.isReturningToPreviousStop, !state.isNextBookOriginPickerPresented else { return .none }
                 analytics.record(navigationButton(.exitAlertNextBook, state))
                 // 종료 알림의 "다음 책 찾기"
                 state.isCancelConfirmationPresented = false
                 state.nextBookRouteError = nil
-                guard let position = state.latestPosition, position.isRecent(at: now),
+                guard !state.usesManualOrigin, let position = state.latestPosition, position.isRecent(at: now),
                       (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
-                    state.nextBookRouteError = "현재 위치를 확인한 뒤 다시 시도해 주세요."
-                    return .none
+                    state.isNextBookOriginPickerPresented = true
+                    state.isReroutingCurrentStop = false
+                    state.rerouteRequestID += 1
+                    return .cancel(id: CancelID.reroute)
                 }
-                let nextIndex = state.currentStopIndex + 1
-                let nextStop = state.routePlan.stops[nextIndex]
-                let destination = RouteCandidateStop(book: nextStop.book, holdings: nextStop.holdings,
-                    candidateShelves: [nextStop.shelf])
-                let map = state.routePlan.map, labels = state.routePlan.shelfLabels
-                state.nextBookRequestID += 1
-                let requestID = state.nextBookRequestID
-                state.isReroutingToNextBook = true
+                return routeToNextBook(&state, from: position)
+
+            case .nextBookOriginPickerDismissed:
+                state.isNextBookOriginPickerPresented = false
+                return .none
+
+            case let .nextBookOriginConfirmed(coordinate, floorOrdinal):
+                guard state.exitReason == nil, state.isNextBookOriginPickerPresented,
+                      state.hasNextStop, !state.isReroutingToNextBook,
+                      coordinate.isValid,
+                      state.routePlan.map.floors.contains(where: {
+                          $0.ordinal == floorOrdinal && $0.geometry.contains(coordinate)
+                      }) else { return .none }
+                state.isNextBookOriginPickerPresented = false
+                state.isArrivalPresented = false
+                state.usesManualOrigin = true
+                state.rawPosition = nil
+                state.latestPosition = nil
+                state.deviceHeadingDegrees = nil
                 state.progress = nil
-                state.statusMessage = "현재 위치에서 다음 책까지의 경로를 계산하고 있어요."
-                return .run { [routePlanningClient] send in
-                    do {
-                        let routePlan = try await routePlanningClient.plan(map, labels, position, [destination])
-                        try Task.checkCancellation()
-                        guard let route = routePlan.legs.first else { throw IndoorRoutingError.noRoute }
-                        await send(.nextBookRouteLoaded(requestID: requestID, stopIndex: nextIndex, route))
-                    } catch is CancellationError {
-                        return
-                    } catch {
-                        await send(.nextBookRouteFailed(requestID: requestID, error.localizedDescription))
-                    }
-                }.cancellable(id: CancelID.nextBookRoute, cancelInFlight: true)
+                state.tracker = nil
+                state.positionAnchor = nil
+                state.manuallyCompletedFloorTransition = nil
+                state.confirmedFloorOrdinal = floorOrdinal
+                let position = IndoorPosition(coordinate: coordinate, floorOrdinal: floorOrdinal,
+                    horizontalAccuracy: nil, timestamp: now, source: .manual)
+                return .merge(.cancel(id: CancelID.location), .cancel(id: CancelID.expiry),
+                              routeToNextBook(&state, from: position))
 
             case let .nextBookRouteLoaded(requestID, stopIndex, route):
                 guard state.isReroutingToNextBook, state.exitReason == nil,
@@ -536,7 +547,7 @@ struct BookNavigationFeature {
                 state.isArrivalPresented = false
                 state.progress = nil
                 fitCurrentRoute(&state)
-                state.statusMessage = "다음 책까지의 위치를 확인하고 있어요."
+                state.statusMessage = state.usesManualOrigin ? nil : "다음 책까지의 위치를 확인하고 있어요."
                 if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
                 return .none
 
@@ -668,6 +679,37 @@ struct BookNavigationFeature {
         }
     }
 
+    private func routeToNextBook(_ state: inout State, from position: IndoorPosition) -> Effect<Action> {
+        guard state.exitReason == nil, state.hasNextStop else { return .none }
+        let nextIndex = state.currentStopIndex + 1
+        let nextStop = state.routePlan.stops[nextIndex]
+        let destination = RouteCandidateStop(book: nextStop.book, holdings: nextStop.holdings,
+                                             candidateShelves: [nextStop.shelf])
+        let map = state.routePlan.map, labels = state.routePlan.shelfLabels
+        state.isReroutingCurrentStop = false
+        state.rerouteRequestID += 1
+        state.nextBookRequestID += 1
+        let requestID = state.nextBookRequestID
+        state.nextBookRouteError = nil
+        state.isReroutingToNextBook = true
+        state.progress = nil
+        state.statusMessage = "현재 위치에서 다음 책까지의 경로를 계산하고 있어요."
+        return .merge(.cancel(id: CancelID.reroute), .run { [routePlanningClient] send in
+            do {
+                try Task.checkCancellation()
+                let routePlan = try await routePlanningClient.plan(map, labels, position, [destination])
+                try Task.checkCancellation()
+                guard let route = routePlan.legs.first else { throw IndoorRoutingError.noRoute }
+                await send(.nextBookRouteLoaded(requestID: requestID, stopIndex: nextIndex, route))
+            } catch is CancellationError {
+                return
+            } catch {
+                guard !Task.isCancelled else { return }
+                await send(.nextBookRouteFailed(requestID: requestID, error.localizedDescription))
+            }
+        }.cancellable(id: CancelID.nextBookRoute, cancelInFlight: true))
+    }
+
     private func loadArrivalSpines(_ state: inout State, stopIndices: some Sequence<Int>) -> Effect<Action> {
         var requests: [(stopIndex: Int, isbn: String)] = []
         for stopIndex in stopIndices where state.arrivalSpines[stopIndex] == nil {
@@ -737,6 +779,7 @@ struct BookNavigationFeature {
         state.navigation.finish(reason)
         state.isArrivalPresented = false
         state.isCancelConfirmationPresented = false
+        state.isNextBookOriginPickerPresented = false
         return .merge(stop(&state), finishDiagnosticsOnExit(&state))
     }
 
@@ -773,7 +816,7 @@ struct BookNavigationFeature {
     private func rerouteIfOffRoute(_ state: inout State) -> Effect<Action> {
         guard let since = state.offRouteSince, state.exitReason == nil, state.isActive,
               !state.isReroutingCurrentStop, !state.isReroutingToNextBook, !state.isReturningToPreviousStop,
-              !state.isArrivalPresented,
+              !state.isArrivalPresented, !state.isNextBookOriginPickerPresented,
               let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
               position.timestamp.timeIntervalSince(since) >= Self.offRouteRerouteDelay,
               let stop = state.currentStop else { return .none }
@@ -800,17 +843,21 @@ struct BookNavigationFeature {
         }.cancellable(id: CancelID.reroute, cancelInFlight: true)
     }
 
-    private func moveToStop(_ state: inout State, _ stopIndex: Int) {
+    private func moveToStop(_ state: inout State, _ stopIndex: Int,
+                            statusMessage: String = "이전 서가까지의 위치를 확인하고 있어요.") {
         guard state.routePlan.stops.indices.contains(stopIndex) else { return }
+        let previousStopIndex = state.currentStopIndex
         state.navigation.move(to: stopIndex)
-        recordDiagnosticsEvent(state, "stop_current", ["stopIndex": "\(state.currentStopIndex)"])
+        if previousStopIndex != state.currentStopIndex {
+            recordDiagnosticsEvent(state, "stop_current", ["stopIndex": "\(state.currentStopIndex)"])
+        }
         state.offRouteSince = nil
         state.manuallyCompletedFloorTransition = nil
         state.followsNavigationCamera = true
         state.isArrivalPresented = false
         state.progress = nil
         fitCurrentRoute(&state)
-        state.statusMessage = "이전 서가까지의 위치를 확인하고 있어요."
+        state.statusMessage = state.usesManualOrigin ? nil : statusMessage
         if state.rawPosition != nil { updateGuidance(&state, previousTimestamp: nil) }
     }
 
