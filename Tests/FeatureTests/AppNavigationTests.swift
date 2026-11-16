@@ -46,13 +46,20 @@ struct AppNavigationTests {
         #expect(store.state.searchPath.isEmpty)
     }
 
-    @Test func 상세의_안내_요청은_Modal로_띄우고_닫히면_그_상세에_알린다() async {
+    @Test func 상세의_안내_요청은_Modal로_띄우고_닫히면_그_상세에_알린다() async throws {
         let store = makeStore(makeState { state in
             state.recommendationsPath.append(.detail(BookDetailFeature.State(book: makeBook(1))))
         })
         let detailID = store.state.recommendationsPath.ids[0]
 
         await store.send(.recommendationsPath(.element(id: detailID, action: .detail(.guidanceStarted))))
+        #expect(store.state.modal == nil, "상세 시트가 닫히기 전에는 모달을 열지 않는다")
+        guard case let .detail(waiting)? = store.state.recommendationsPath[id: detailID] else { return }
+        #expect(waiting.isGuidancePresented)
+        #expect(waiting.pendingGuidanceRequest?.books == [makeBook(1)])
+        let requestID = try #require(waiting.pendingGuidanceRequest?.id)
+
+        await store.send(.recommendationsPath(.element(id: detailID, action: .detail(.guidanceSheetDismissed(requestID: requestID)))))
         await store.receive(\.recommendationsPath)
         guard case let .routePreview(preview)? = store.state.modal else {
             Issue.record("경로 미리보기가 뜨지 않았다")
@@ -63,6 +70,10 @@ struct AppNavigationTests {
         #expect(store.state.guidanceOrigin == .init(tab: .recommendations, elementID: detailID))
         guard case let .detail(detail)? = store.state.recommendationsPath[id: detailID] else { return }
         #expect(detail.isGuidancePresented)
+        #expect(detail.pendingGuidanceRequest == nil)
+
+        await store.send(.recommendationsPath(.element(id: detailID, action: .detail(.guidanceSheetDismissed(requestID: requestID)))))
+        #expect(store.state.guidanceOrigin == .init(tab: .recommendations, elementID: detailID))
 
         await store.send(.modal(.dismiss))
         await store.receive(\.recommendationsPath)

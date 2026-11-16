@@ -11,6 +11,11 @@ import ComposableArchitecture
 
 @Reducer
 struct BookDetailFeature {
+    struct GuidanceRequest: Equatable {
+        let id: UUID
+        let books: [Book]
+    }
+
     enum CartNotice: Equatable {
         case added
         case alreadyAdded
@@ -23,6 +28,7 @@ struct BookDetailFeature {
         var cachedCoverURL: URL?
         @Shared(.favoriteBookKeys) var favoriteBookKeys
         var isGuidancePresented = false
+        var pendingGuidanceRequest: GuidanceRequest?
         var isFavorite: Bool { favoriteBookKeys.contains(book.recordKey) }
         var sourceFavoriteMarkerID: String?
         var analyticsSource: AnalyticsScreen?
@@ -71,8 +77,10 @@ struct BookDetailFeature {
         case cartNoticeLaterTapped
         case cartShortcutTapped
         case cart(PresentationAction<BookCartFeature.Action>)
+        case cartCoverDismissed
         case cartLimitAlertDismissed
         case guidanceStarted
+        case guidanceSheetDismissed(requestID: UUID)
         case guidanceDismissed
         case delegate(Delegate)
 
@@ -95,6 +103,7 @@ struct BookDetailFeature {
     @Dependency(\.recentlyViewedBooksClient) var recentlyViewedBooksClient
     @Dependency(\.bookCoverClient) var bookCoverClient
     @Dependency(\.date.now) var now
+    @Dependency(\.uuid) private var uuid
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -204,9 +213,16 @@ struct BookDetailFeature {
                 return .none
 
             case let .cart(.presented(.delegate(.startGuidance(books)))):
+                guard !books.isEmpty, state.pendingGuidanceRequest == nil,
+                      !state.isGuidancePresented else { return .none }
+                state.pendingGuidanceRequest = .init(id: uuid(), books: books)
                 state.cart = nil
+                return .none
+
+            case .cartCoverDismissed:
+                guard state.pendingGuidanceRequest != nil, !state.isGuidancePresented else { return .none }
                 state.isGuidancePresented = true
-                return .send(.delegate(.startGuidance(books)))
+                return .none
 
             case .cart(.dismiss):
                 analytics.record(.button(.back, on: .cart))
@@ -223,14 +239,24 @@ struct BookDetailFeature {
 
             case .guidanceDismissed:
                 state.isGuidancePresented = false
+                state.pendingGuidanceRequest = nil
                 return .none
 
             case .guidanceStarted:
+                guard state.cart == nil, state.pendingGuidanceRequest == nil,
+                      !state.isGuidancePresented else { return .none }
                 analytics.record(.button(.directGuidance, on: .detail, book: state.book))
                 // 바로 안내 시작 버튼
+                state.pendingGuidanceRequest = .init(id: uuid(), books: [state.book])
                 state.isGuidancePresented = true
                 bookCoverClient.prefetchSpines([state.book.isbn].compactMap { $0 })
-                return .send(.delegate(.startGuidance([state.book])))
+                return .none
+
+            case let .guidanceSheetDismissed(requestID):
+                guard state.isGuidancePresented, let request = state.pendingGuidanceRequest,
+                      request.id == requestID else { return .none }
+                state.pendingGuidanceRequest = nil
+                return .send(.delegate(.startGuidance(request.books)))
             }
         }
         .ifLet(\.$cart, action: \.cart) { BookCartFeature() }
