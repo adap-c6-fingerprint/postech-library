@@ -211,6 +211,7 @@ struct BookRoutePreviewView: View {
                     routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError?.message,
                     canStart: !isLoadingRoute && (needsStartLocationSetup
                         || (readySession != nil && currentStart != nil && routeError == nil)),
+                    isResolvingStart: store.startDecision == .locating,
                     onBack: { back() },
                     onStart: { _ in store.send(.startTapped) },
                     onRetry: { store.send(.retryTapped) },
