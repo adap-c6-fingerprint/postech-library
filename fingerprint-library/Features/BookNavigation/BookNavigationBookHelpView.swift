@@ -80,10 +80,11 @@ struct BookNavigationBookHelpView: View {
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
             : AnyLayout(HStackLayout(alignment: .top, spacing: 20))
         return layout {
-            BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
+            BookCoverView(
+                url: info.book.imageURL, isbn: info.book.isbn, fitAlignment: .topLeading,
+                coverModifier: BookCoverClipStyle(cornerRadius: 8, fill: HierarchicalShapeStyle.quaternary)
+            )
                 .frame(width: 78, height: 112)
-                .background(.quaternary, in: .rect(cornerRadius: 8))
-                .clipShape(.rect(cornerRadius: 8))
                 .accessibilityIdentifier("book-navigation-book-help-cover")
             VStack(alignment: .leading, spacing: 3) {
                 Text(BookText.plainText(info.book.title))

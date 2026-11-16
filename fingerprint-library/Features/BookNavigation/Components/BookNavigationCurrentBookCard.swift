@@ -6,12 +6,14 @@ struct BookNavigationCurrentBookCard: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let coverHeight = 186.0 /*min(186, geometry.size.height)*/
-            let coverWidth = 140.0 /*min(140, geometry.size.width * 0.38, coverHeight * 0.75)*/
-            HStack(alignment: .top) {
-                BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
+            let coverHeight = min(186, geometry.size.height)
+            let coverWidth = min(140, geometry.size.width * 0.38, coverHeight * 0.75)
+            HStack(alignment: .top, spacing: 14) {
+                BookCoverView(
+                    url: info.book.imageURL, isbn: info.book.isbn, fitAlignment: .topLeading,
+                    coverModifier: BookCoverClipStyle(cornerRadius: 8, fill: Color.clear)
+                )
                     .frame(width: coverWidth, height: coverHeight)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
                     .accessibilityIdentifier("book-navigation-current-cover")
 
                 Spacer()

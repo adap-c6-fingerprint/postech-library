@@ -26,6 +26,18 @@ nonisolated enum BookCoverFailure: Error, Equatable, Sendable {
         return false
     }
 
+    static func isConnectionProblem(_ error: any Error) -> Bool {
+        guard let error = error as? URLError else { return false }
+        return connectionProblemCodes.contains(error.code)
+    }
+    // 서버 응답·이미지 문제는 제외하고, 기기가 서버에 닿지 못한 경우만 연결 문제로 본다.
+
+    private static let connectionProblemCodes: Set<URLError.Code> = [
+        .notConnectedToInternet, .networkConnectionLost, .timedOut, .cannotFindHost,
+        .cannotConnectToHost, .dnsLookupFailed, .dataNotAllowed, .internationalRoamingOff,
+        .callIsActive
+    ]
+
     struct Diagnostic: Equatable, Sendable {
         let reason: String
         let httpStatus: Int

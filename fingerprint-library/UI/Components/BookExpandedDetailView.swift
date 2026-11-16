@@ -48,18 +48,22 @@ struct BookExpandedDetailView<Details: View>: View {
 
     @ViewBuilder
     private func cover(_ book: Book) -> some View {
-        let cover = BookCoverView(
-            url: book.imageURL, isbn: book.isbn, cachedURL: isMultiple ? nil : cachedCoverURL,
-            imageCornerRadius: isMultiple ? BookExpandedDetailLayout.carouselCoverCornerRadius : 0)
-            .frame(width: BookExpandedDetailLayout.coverSize.width,
-                   height: BookExpandedDetailLayout.coverSize.height)
         if isMultiple {
-            cover.shadow(color: .black.opacity(0.3), radius: 18, y: 8)
-        } else {
-            cover
-                .background(.quaternary)
-                .clipShape(RoundedRectangle(cornerRadius: 3))
+            BookCoverView(
+                url: book.imageURL, isbn: book.isbn,
+                imageCornerRadius: BookExpandedDetailLayout.carouselCoverCornerRadius)
+                .frame(width: BookExpandedDetailLayout.coverSize.width,
+                       height: BookExpandedDetailLayout.coverSize.height)
                 .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
+        } else {
+            BookCoverView(
+                url: book.imageURL, isbn: book.isbn, cachedURL: cachedCoverURL,
+                fitAlignment: .top, placeholderAspectRatio: BookExpandedDetailLayout.coverAspectRatio,
+                coverModifier: BookCoverClipStyle(cornerRadius: PobookUI.Radius.bookCover, fill: HierarchicalShapeStyle.quaternary)
+            )
+            .frame(width: BookExpandedDetailLayout.coverSize.width)
+            .fixedSize(horizontal: false, vertical: true)
+            .shadow(color: .black.opacity(0.3), radius: 18, y: 8)
         }
     }
 
@@ -180,6 +184,7 @@ struct BookExpandedRouteSummary: View {
 
 nonisolated enum BookExpandedDetailLayout {
     static let coverSize = CGSize(width: 218, height: 310)
+    static let coverAspectRatio = coverSize.width / coverSize.height
     static let coverTopPadding: CGFloat = 30
     static let detailsTopPadding: CGFloat = 24
     static let carouselSpacing: CGFloat = 8

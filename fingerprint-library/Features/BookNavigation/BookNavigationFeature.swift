@@ -360,8 +360,12 @@ struct BookNavigationFeature {
                     }
                     return .cancel(id: CancelID.expiry)
 
-                case let .unavailable(message), let .temporarilyUnavailable(message):
+                case let .unavailable(message):
                     invalidate(&state, message: message)
+                    return .cancel(id: CancelID.expiry)
+
+                case .temporarilyUnavailable:
+                    invalidate(&state, message: nil)
                     return .cancel(id: CancelID.expiry)
 
                 case let .position(position):
@@ -798,7 +802,7 @@ struct BookNavigationFeature {
                       .cancel(id: CancelID.reroute), .cancel(id: CancelID.previousStopRoute))
     }
 
-    private func invalidate(_ state: inout State, message: String) {
+    private func invalidate(_ state: inout State, message: String?) {
         state.offRouteSince = nil
         state.rawPosition = nil
         state.deviceHeadingDegrees = nil

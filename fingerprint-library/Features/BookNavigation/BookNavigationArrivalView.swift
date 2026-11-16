@@ -39,12 +39,13 @@ struct BookNavigationArrivalView: View {
                                     .padding(.top, 44 * spacingScale)
                                 searchInstruction(info)
                                     .padding(.top, 36 * spacingScale)
-                                BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
+                                BookCoverView(
+                                    url: info.book.imageURL, isbn: info.book.isbn, fitAlignment: .center,
+                                    coverModifier: BookCoverClipStyle(cornerRadius: 10, fill: Color.white.opacity(0.06))
+                                )
                                     .id(info.book.imageURL)
                                     .frame(width: min(230, geometry.size.width * 0.58),
                                            height: min(330, geometry.size.height * 0.42))
-                                    .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 10))
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
                                     .rotationEffect(.degrees(5))
                                     .shadow(color: .black.opacity(0.25), radius: 16, y: 8)
                                     .accessibilityLabel("\(title(info)) 책 표지")

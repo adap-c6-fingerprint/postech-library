@@ -8,6 +8,7 @@ final class BookCoverModel<Image: Sendable> {
         case loading
         case loaded(Image)
         case failed
+        case offline
         case unavailable
     }
 
@@ -64,8 +65,14 @@ final class BookCoverModel<Image: Sendable> {
             if url?.isFileURL == true, !result.1.isFileURL { onCoverRecovered?(result.1) }
         } catch {
             guard !Task.isCancelled, requestID == id else { return }
-            currentPhase = BookCoverFailure.isUnavailable(error) ? .unavailable : .failed
+            currentPhase = Self.failurePhase(for: error)
         }
+    }
+
+    private static func failurePhase(for error: any Error) -> Phase {
+        if BookCoverFailure.isUnavailable(error) { return .unavailable }
+        if BookCoverFailure.isConnectionProblem(error) { return .offline }
+        return .failed
     }
 
     private static func initialPhase(

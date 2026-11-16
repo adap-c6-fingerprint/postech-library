@@ -103,7 +103,7 @@ struct BookCartView: View {
             } label: {
                 Text(store.selectedCount == 0 ? "안내 시작하기" : "안내 시작하기 (\(store.selectedCount)권)")
                     .font(.body.weight(.medium))
-                    .foregroundStyle(store.canStartGuidance ? Color.black : Color.cartTextSecondary)
+                    .foregroundStyle(store.canStartGuidance ? Color.black : Color.cartTextSecondary.opacity(0.55))
                     .padding(.horizontal, 14)
                     .frame(minHeight: 48)
                     .contentShape(.capsule)
@@ -111,7 +111,7 @@ struct BookCartView: View {
             .buttonStyle(.plain)
             .glassEffect(
                 .regular
-                    .tint(store.canStartGuidance ? Color.cartPrimary.opacity(0.7) : nil)
+                    .tint(Color.cartPrimary.opacity(store.canStartGuidance ? 0.7 : 0.5))
                     .interactive(store.canStartGuidance),
                 in: .capsule
             )
