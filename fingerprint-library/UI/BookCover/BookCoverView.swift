@@ -42,7 +42,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         Group {
             if case .failed = model.phase(for: url, isbn: isbn, cachedURL: cachedURL), allowsRetry {
                 Button { retryID += 1 } label: {
-                    placeholder("arrow.clockwise", text: "다시 시도")
+                    fallbackCover
                 }
                 .accessibilityLabel("표지 다시 불러오기")
             } else if let onOpen {
@@ -71,23 +71,16 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
                 .clipShape(.rect(cornerRadius: imageCornerRadius))
         case .loading:
             ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
-        case .failed:
-            placeholder("exclamationmark.triangle", text: "로딩 실패")
-        case .unavailable:
-            Image(.bookCover).resizable().scaledToFit()
-                .clipShape(.rect(cornerRadius: imageCornerRadius))
-                .accessibilityLabel("기본 책 표지")
+        case .failed, .unavailable:
+            fallbackCover
         }
     }
 
-    private func placeholder(_ symbol: String, text: String) -> some View {
-        VStack(spacing: 4) {
-            Image(systemName: symbol).font(.title2).accessibilityHidden(true)
-            Text(text).font(.caption2)
-        }
-        .foregroundStyle(.secondary)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .contentShape(Rectangle())
+    /// 표지가 없거나 불러오지 못했을 때 보여주는 기본 표지.
+    private var fallbackCover: some View {
+        Image(.bookCover).resizable().scaledToFit()
+            .clipShape(.rect(cornerRadius: imageCornerRadius))
+            .accessibilityLabel("기본 책 표지")
     }
 
     private struct LoadID: Equatable {
