@@ -74,7 +74,9 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         case .failed:
             placeholder("exclamationmark.triangle", text: "로딩 실패")
         case .unavailable:
-            placeholder("book.closed", text: "표지 없음")
+            Image(.bookCover).resizable().scaledToFit()
+                .clipShape(.rect(cornerRadius: imageCornerRadius))
+                .accessibilityLabel("기본 책 표지")
         }
     }
 

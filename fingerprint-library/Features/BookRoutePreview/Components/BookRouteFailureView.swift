@@ -35,18 +35,18 @@ struct BookRouteFailureView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .top) {
-            Color(uiColor: .systemBackground).ignoresSafeArea()
+        // 안내 문구는 뒤로 가기 버튼과 하단 버튼 사이의 남은 공간 가운데에 둔다.
+        VStack(spacing: 0) {
             HStack {
                 LibraryBackButton(identifier: "route-failure-back", action: onBack)
                 Spacer(minLength: 0)
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             content
             actions
         }
+        .background(Color(uiColor: .systemBackground).ignoresSafeArea())
         .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .preferredColorScheme(.dark)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
@@ -88,7 +88,6 @@ struct BookRouteFailureView: View {
 
     private var actions: some View {
         VStack(spacing: 12) {
-            Spacer(minLength: 0)
             Button(action: onRetry) {
                 HStack(spacing: 8) {
                     if isRetrying { ProgressView().tint(PobookUI.ColorToken.neutralDark) }
@@ -117,7 +116,6 @@ struct BookRouteFailureView: View {
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 12)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
     }
 
     @ViewBuilder
