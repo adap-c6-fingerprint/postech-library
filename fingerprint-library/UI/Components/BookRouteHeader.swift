@@ -2,9 +2,18 @@ import SwiftUI
 
 /// 길안내와 출발 위치 선택 화면의 공통 헤더.
 struct BookRouteHeader: View {
+    struct Accessory {
+        let systemImage: String
+        let tint: Color
+        let accessibilityLabel: String
+        let accessibilityIdentifier: String
+        let action: () -> Void
+    }
+
     let title: String
     let subtitle: String?
     let closeLabel: String
+    var accessory: Accessory? = nil
     var accessibilityHint: String = ""
     var titleIdentifier: String = "book-route-header-title"
     var subtitleIdentifier: String = "book-route-header-subtitle"
@@ -13,13 +22,17 @@ struct BookRouteHeader: View {
 
     private let closeButtonSize: CGFloat = 44
 
+    private var trailingButtonsWidth: CGFloat {
+        accessory == nil ? closeButtonSize : closeButtonSize * 2 + PobookUI.Spacing._8
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: PobookUI.Spacing._4) {
             Text(title)
                 .typography(.title1)
                 .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
                 .lineLimit(2)
-                .padding(.trailing, closeButtonSize + PobookUI.Spacing._16)
+                .padding(.trailing, trailingButtonsWidth + PobookUI.Spacing._16)
                 .accessibilityIdentifier(titleIdentifier)
             if let subtitle {
                 Text(subtitle)
@@ -33,15 +46,28 @@ struct BookRouteHeader: View {
         .accessibilityHint(accessibilityHint)
         .frame(maxWidth: .infinity, minHeight: closeButtonSize, alignment: .topLeading)
         .overlay(alignment: .topTrailing) {
-            Button(action: onClose) {
-                Image(systemName: "xmark")
-                    .font(.system(size: 17, weight: .semibold))
-                    .frame(width: closeButtonSize, height: closeButtonSize)
-                    .glassEffect(.regular.interactive(), in: .circle)
+            HStack(spacing: PobookUI.Spacing._8) {
+                if let accessory {
+                    Button(action: accessory.action) {
+                        Image(systemName: accessory.systemImage)
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundStyle(accessory.tint)
+                            .frame(width: closeButtonSize, height: closeButtonSize)
+                            .glassEffect(.regular.interactive(), in: .circle)
+                    }
+                    .accessibilityLabel(accessory.accessibilityLabel)
+                    .accessibilityIdentifier(accessory.accessibilityIdentifier)
+                }
+                Button(action: onClose) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 17, weight: .semibold))
+                        .frame(width: closeButtonSize, height: closeButtonSize)
+                        .glassEffect(.regular.interactive(), in: .circle)
+                }
+                .accessibilityLabel(closeLabel)
+                .accessibilityIdentifier(closeIdentifier)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(closeLabel)
-            .accessibilityIdentifier(closeIdentifier)
         }
         .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .padding(.horizontal, PobookUI.Spacing._20)

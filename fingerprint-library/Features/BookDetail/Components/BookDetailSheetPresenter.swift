@@ -74,6 +74,12 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         override func viewDidAppear(_ animated: Bool) {
             super.viewDidAppear(animated)
             guard !hasPresented, !isInvalidated, view.window != nil else { return }
+            if isSuspended {
+                if let requestID = store.pendingGuidanceRequest?.id {
+                    reportGuidanceSheetDismissed(requestID: requestID)
+                }
+                return
+            }
             hasPresented = true
             presentation.detent = .medium
             let content = BookDetailSheet(store: store, mapStore: mapStore, presentation: presentation, onDismiss: { [weak self] in
@@ -110,12 +116,16 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             let signpostState = MapPerformanceSignpost.signposter.beginInterval("SheetPresent")
             present(hosting, animated: true) { [weak self, weak hosting] in
                 MapPerformanceSignpost.signposter.endInterval("SheetPresent", signpostState)
-                guard let self, !self.isInvalidated else {
+                guard let self, let hosting, !self.isInvalidated else {
                     hosting?.presentingViewController?.dismiss(animated: false)
                     return
                 }
                 self.didFinishPresentation = true
-                self.reportCompactFrame()
+                if self.isSuspended {
+                    self.suspendSheet(hosting)
+                } else {
+                    self.reportCompactFrame()
+                }
             }
         }
 
@@ -162,7 +172,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
         }
 
         func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-            guard !isInvalidated else { return }
+            guard !isInvalidated, !isSuspended else { return }
             isInvalidated = true
             hosting = nil
             onDismiss()
@@ -175,7 +185,7 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             guard hasPresented, !isInvalidated, let hosting else { return }
             if suspended {
                 compactFrameReportTask?.cancel()
-                hosting.presentingViewController?.dismiss(animated: false)
+                suspendSheet(hosting)
                 return
             }
             resumeTask = Task { [weak self, weak hosting] in
@@ -187,6 +197,29 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                     }
                     try? await Task.sleep(for: .milliseconds(50))
                 }
+            }
+        }
+
+        private func suspendSheet(_ hosting: UIHostingController<BookDetailSheet>) {
+            // 처음 시트가 열리는 중이면 present의 완료 콜백에서 다시 처리한다.
+            guard !isInvalidated, isSuspended, didFinishPresentation,
+                  let requestID = store.pendingGuidanceRequest?.id else { return }
+            guard let presenter = hosting.presentingViewController else {
+                reportGuidanceSheetDismissed(requestID: requestID)
+                return
+            }
+            presenter.dismiss(animated: false) { [weak self] in
+                self?.didFinishPresentation = false
+                self?.reportGuidanceSheetDismissed(requestID: requestID)
+            }
+        }
+
+        private func reportGuidanceSheetDismissed(requestID: UUID) {
+            // Representable 갱신 중 상태 변경을 피하고, UIKit 닫힘 완료 뒤에만 App의 모달을 연다.
+            Task { @MainActor [weak self] in
+                guard let self, !self.isInvalidated, self.isSuspended,
+                      self.store.pendingGuidanceRequest?.id == requestID else { return }
+                self.store.send(.guidanceSheetDismissed(requestID: requestID))
             }
         }
 

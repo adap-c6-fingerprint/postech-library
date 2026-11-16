@@ -22,6 +22,9 @@ struct BookNavigationView: View {
                 ZStack(alignment: .top) {
                     if let stop = store.currentStop, let route = store.currentRoute, let floor = store.currentFloor {
                         navigationMap(stop: stop, route: route, floor: floor)
+                            .overlay {
+                                if store.diagnostics.isPlacingCheckpoint { BookNavigationDiagnosticsCrosshair() }
+                            }
                             .ignoresSafeArea(.container, edges: [.top, .bottom])
                     } else {
                         ContentUnavailableView("안내 정보를 확인해 주세요", systemImage: "map")
@@ -36,11 +39,16 @@ struct BookNavigationView: View {
                     .allowsHitTesting(false)
                     VStack(alignment: .leading, spacing: 38) {
                         header
-                        currentFloorIndicator
-                            .padding(.horizontal, PobookUI.Spacing._20)
+                        VStack(alignment: .leading, spacing: 12) {
+                            currentFloorIndicator
+                            if store.diagnostics.isRecording { BookNavigationDiagnosticsHUD(store: store) }
+                        }
+                        .padding(.horizontal, PobookUI.Spacing._20)
                     }
                     VStack(spacing: 16) {
                         Spacer()
+                        // 지도 중앙 십자선을 가리지 않도록 기준점 안내는 아래쪽에 둔다.
+                        if store.diagnostics.isPlacingCheckpoint { BookNavigationCheckpointBar(store: store) }
                         HStack(spacing: 8) {
                             if store.canReturnToPreviousStop { previousShelfButton }
                             if store.canMarkShelfFound { shelfFoundButton }
@@ -98,6 +106,11 @@ struct BookNavigationView: View {
             }
         }
         .interactiveDismissDisabled()
+        .sheet(isPresented: Binding(get: { store.diagnostics.isPanelPresented },
+                                    set: { store.send(.diagnostics(.panelPresentationChanged($0))) })) {
+            BookNavigationDiagnosticsPanel(store: store)
+                .presentationDetents([.medium, .large])
+        }
         .overlay {
             if store.isCancelConfirmationPresented {
                 BookNavigationPauseAlert(
@@ -125,15 +138,32 @@ struct BookNavigationView: View {
         .analyticsScreen(.navigation)
     }
 
+    #if DEBUG
+    private static let isDiagnosticsMenuAvailable = true
+    #else
+    private static let isDiagnosticsMenuAvailable = false
+    #endif
+
     private var header: some View {
         BookRouteHeader(
             title: store.currentBookInfo.map { BookText.plainText($0.book.title) } ?? "도서 길안내",
             subtitle: store.currentBookInfo.map { "\($0.floorName ?? "") \($0.shelf.shelfTitle)" },
             closeLabel: "안내 종료",
+            accessory: diagnosticsHeaderAccessory,
             titleIdentifier: "book-navigation-book-title",
             subtitleIdentifier: "book-navigation-shelf",
             closeIdentifier: "book-navigation-cancel",
             onClose: { store.send(.cancelTapped) })
+    }
+
+    private var diagnosticsHeaderAccessory: BookRouteHeader.Accessory? {
+        guard Self.isDiagnosticsMenuAvailable || store.diagnostics.isAutoMode else { return nil }
+        return .init(
+            systemImage: store.diagnostics.isRecording ? "record.circle" : "waveform.path.ecg",
+            tint: store.diagnostics.isRecording ? .red : .white,
+            accessibilityLabel: store.diagnostics.isRecording ? "위치 진단 기록 중, 진단 메뉴 열기" : "위치 진단",
+            accessibilityIdentifier: "book-navigation-diagnostics",
+            action: { store.send(.diagnostics(.panelButtonTapped)) })
     }
 
     private var previousShelfButton: some View {
@@ -270,7 +300,9 @@ private struct BookNavigationMap: View {
             shelfLabels: stop.candidateShelves, highlightedFeatureIDs: Set(stop.candidateShelves.map(\.mapElementID)),
             navigationAppearance: true,
             navigationDestination: store.currentPlan.map { .init(book: stop.book, coordinate: $0.destination.coordinate, floorID: stop.shelf.floorID) },
-            onUserCameraInteraction: { store.send(.mapInteractionBegan) }
+            onUserCameraInteraction: { store.send(.mapInteractionBegan) },
+            onCenterChanged: store.diagnostics.isPlacingCheckpoint
+                ? { coordinate, _ in store.send(.diagnostics(.checkpointCenterChanged(coordinate))) } : nil
         )
         .accessibilityIdentifier("book-navigation-map")
     }

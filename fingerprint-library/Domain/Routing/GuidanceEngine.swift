@@ -35,6 +35,15 @@ nonisolated struct GuidanceEngine: Equatable, Sendable {
         var changesFloor: Bool { from.floorID != to.floorID }
     }
 
+    /// 측정 위치를 경로 구간에 투영한 후보. `offset`은 경로 시작부터의 진행 거리, `distance`는 측정 위치와의 거리다.
+    struct Candidate: Equatable, Sendable {
+        let index: Int
+        let fraction: Double
+        let coordinate: IndoorMapCoordinate
+        let offset: Double
+        let distance: Double
+    }
+
     struct Instruction: Equatable, Sendable {
         let stepIndex: Int
         let maneuver: RouteManeuver
@@ -132,27 +141,7 @@ nonisolated struct GuidanceEngine: Equatable, Sendable {
             return .init(stepIndex: 0, fraction: 1, distanceAlongRoute: 0, coordinate: destination.coordinate,
                          maneuver: .nearDestination, distanceToManeuver: 0, remainingMeters: 0)
         }
-        struct Candidate {
-            let index: Int
-            let fraction: Double
-            let coordinate: IndoorMapCoordinate
-            let offset: Double
-            let distance: Double
-        }
-        var candidates: [Candidate] = []
-        for (index, step) in steps.enumerated() {
-            if step.changesFloor {
-                for (node, fraction) in [(step.from, 0.0), (step.to, 1.0)] where node.level == level {
-                    candidates.append(.init(index: index, fraction: fraction, coordinate: node.coordinate,
-                        offset: step.startDistance + fraction * (step.meters ?? 0),
-                        distance: RoutingGeometry.distanceMeters(from: position.coordinate, to: node.coordinate)))
-                }
-            } else if step.from.level == level {
-                let projection = Self.projection(position.coordinate, onto: step.coordinates)
-                candidates.append(.init(index: index, fraction: projection.fraction, coordinate: projection.point,
-                    offset: step.startDistance + projection.fraction * (step.meters ?? 0), distance: projection.distance))
-            }
-        }
+        var candidates = self.candidates(near: position.coordinate, level: level)
         guard let closest = candidates.map(\.distance).min() else { throw RouteGuidanceError.unknownFloor }
         guard closest <= Self.matchingRadiusMeters else { throw RouteGuidanceError.offRoute }
         candidates = candidates.filter { $0.distance <= min(Self.matchingRadiusMeters, closest + max(0.25, min(accuracy, 1))) }
@@ -172,6 +161,11 @@ nonisolated struct GuidanceEngine: Equatable, Sendable {
             }) { throw RouteGuidanceError.ambiguousPosition }
         }
         guard let match = candidates.first else { throw RouteGuidanceError.offRoute }
+        return progress(at: match)
+    }
+
+    /// 경로 위 한 점(후보)에 대한 진행 상태. `distance`는 측정 위치에서 그 점까지의 거리로 도착 판정에 쓴다.
+    func progress(at match: Candidate) -> RouteGuidanceProgress {
         let step = steps[match.index]
         let remaining: Double? = steps.indices.dropFirst(match.index).reduce(Optional(0.0)) { result, index in
             if index == match.index, match.fraction >= 1 { return result }
@@ -201,6 +195,59 @@ nonisolated struct GuidanceEngine: Equatable, Sendable {
         }
         return .init(stepIndex: match.index, fraction: match.fraction, distanceAlongRoute: match.offset,
             coordinate: match.coordinate, maneuver: maneuver, distanceToManeuver: toManeuver, remainingMeters: remaining)
+    }
+
+    /// 해당 층의 경로 구간마다 측정 위치를 투영한 후보. 층 이동 구간은 이 층 쪽 끝 노드만 후보가 된다.
+    func candidates(near coordinate: IndoorMapCoordinate, level: Int) -> [Candidate] {
+        var candidates: [Candidate] = []
+        for (index, step) in steps.enumerated() {
+            if step.changesFloor {
+                for (node, fraction) in [(step.from, 0.0), (step.to, 1.0)] where node.level == level {
+                    candidates.append(.init(index: index, fraction: fraction, coordinate: node.coordinate,
+                        offset: step.startDistance + fraction * (step.meters ?? 0),
+                        distance: RoutingGeometry.distanceMeters(from: coordinate, to: node.coordinate)))
+                }
+            } else if step.from.level == level {
+                let projection = Self.projection(coordinate, onto: step.coordinates)
+                candidates.append(.init(index: index, fraction: projection.fraction, coordinate: projection.point,
+                    offset: step.startDistance + projection.fraction * (step.meters ?? 0), distance: projection.distance))
+            }
+        }
+        return candidates
+    }
+
+    /// 진행 거리 `offset`에 해당하는 같은 층 경로 위 점. 층 이동 구간 안의 거리는 다루지 않는다.
+    func candidate(atDistance offset: Double, level: Int, measuredFrom coordinate: IndoorMapCoordinate) -> Candidate? {
+        let walkable = steps.indices.filter { !steps[$0].changesFloor && steps[$0].from.level == level }
+        guard let index = walkable.first(where: { index in
+            let step = steps[index]
+            return offset <= step.startDistance + (step.meters ?? 0) + 0.000_001
+        }) ?? walkable.last else { return nil }
+        let step = steps[index]
+        let meters = step.meters ?? RoutingGeometry.polylineLengthMeters(step.coordinates)
+        let fraction = meters > 0 ? min(1, max(0, (offset - step.startDistance) / meters)) : 0
+        let point = Self.point(on: step.coordinates, fraction: fraction)
+        return .init(index: index, fraction: fraction, coordinate: point, offset: step.startDistance + fraction * meters,
+                     distance: RoutingGeometry.distanceMeters(from: coordinate, to: point))
+    }
+
+    /// 후보가 속한, 층 이동 없이 이어지는 같은 층 경로의 진행 거리 범위
+    func walkableRange(around candidate: Candidate, level: Int) -> ClosedRange<Double> {
+        func isWalkable(_ index: Int) -> Bool {
+            steps.indices.contains(index) && !steps[index].changesFloor && steps[index].from.level == level
+        }
+        var lower = candidate.index, upper = candidate.index
+        if steps[candidate.index].changesFloor {
+            let neighbor = candidate.fraction >= 1 ? candidate.index + 1 : candidate.index - 1
+            guard isWalkable(neighbor) else { return candidate.offset...candidate.offset }
+            lower = neighbor
+            upper = neighbor
+        }
+        while isWalkable(lower - 1) { lower -= 1 }
+        while isWalkable(upper + 1) { upper += 1 }
+        let start = min(steps[lower].startDistance, candidate.offset)
+        let end = max(steps[upper].startDistance + (steps[upper].meters ?? 0), candidate.offset)
+        return start...end
     }
 
     private func continuesFloorChange(after index: Int) -> Bool {
@@ -284,6 +331,22 @@ nonisolated struct GuidanceEngine: Equatable, Sendable {
             walked += length
         }
         return best
+    }
+
+    private static func point(on coordinates: [IndoorMapCoordinate], fraction: Double) -> IndoorMapCoordinate {
+        guard let first = coordinates.first else { return .init(latitude: 0, longitude: 0) }
+        let target = RoutingGeometry.polylineLengthMeters(coordinates) * fraction
+        var walked = 0.0
+        for (a, b) in zip(coordinates, coordinates.dropFirst()) {
+            let length = RoutingGeometry.distanceMeters(from: a, to: b)
+            if walked + length >= target, length > 0 {
+                let t = (target - walked) / length
+                return .init(latitude: a.latitude + (b.latitude - a.latitude) * t,
+                             longitude: a.longitude + (b.longitude - a.longitude) * t)
+            }
+            walked += length
+        }
+        return coordinates.last ?? first
     }
 
     private static func clipped(_ coordinates: [IndoorMapCoordinate], at start: IndoorMapCoordinate) throws -> [IndoorMapCoordinate] {
