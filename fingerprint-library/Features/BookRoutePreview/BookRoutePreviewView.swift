@@ -209,7 +209,6 @@ struct BookRoutePreviewView: View {
                     routePlan: readySession,
                     isLoadingRoute: isLoadingRoute,
                     routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError?.message,
-                    startNotice: store.startNotice,
                     canStart: !isLoadingRoute && (needsStartLocationSetup
                         || (readySession != nil && currentStart != nil && routeError == nil)),
                     onBack: { back() },

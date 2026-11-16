@@ -20,7 +20,7 @@ struct BookRoutePreviewFeature {
     @ObservableState
     struct State: Equatable {
         var destination: BookRoutePreviewDestination
-        let entryMode: EntryMode
+        var entryMode: EntryMode
         var shelf: BookShelfMapFeature.State?
 
         @Shared(.indoorLocation) var location
@@ -305,12 +305,17 @@ struct BookRoutePreviewFeature {
                 let position = IndoorPosition(
                     coordinate: coordinate, floorOrdinal: floorOrdinal, horizontalAccuracy: nil,
                     timestamp: now, source: .manual)
-                if state.entryMode == .preview, state.isStartRequested { state.startsAfterOriginSelected = true }
+                state.entryMode = .preview
+                state.isStartRequested = false
+                state.startsAfterOriginSelected = false
+                state.startsNavigationWhenLoaded = false
+                state.preparingTimedOut = false
                 state.manualStart = position
                 state.isOriginPickerPresented = false
                 state.previewStart = position
                 state.refreshCurrentStart(at: now)
-                return .merge(reconcile(&state), syncLocatingTimeout(&state))
+                return .merge(.cancel(id: CancelID.preparingTimeout),
+                              reconcile(&state), syncLocatingTimeout(&state))
 
             case .originPickerCancelled:
                 analytics.record(.button(.originCancel, on: .routeOriginPicker))
