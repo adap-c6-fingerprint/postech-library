@@ -9,9 +9,11 @@ struct BookNavigationCurrentBookCard: View {
             let coverHeight = min(186, geometry.size.height)
             let coverWidth = min(140, geometry.size.width * 0.38, coverHeight * 0.75)
             HStack(alignment: .top, spacing: 14) {
-                BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
+                BookCoverView(
+                    url: info.book.imageURL, isbn: info.book.isbn, fitAlignment: .topLeading,
+                    coverModifier: BookCoverClipStyle(cornerRadius: 8, fill: Color.clear)
+                )
                     .frame(width: coverWidth, height: coverHeight)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
                     .accessibilityIdentifier("book-navigation-current-cover")
                 VStack(alignment: .leading, spacing: 0) {
                     Text("현재 책")

@@ -44,7 +44,7 @@ final class ScreenRecordingProvider: NSObject {
         continuations[id] = continuation
         continuation.yield(status)
         continuation.onTermination = { [weak self] _ in
-            Task { @MainActor in self?.continuations.removeValue(forKey: id) }
+            Task { @MainActor [weak self] in self?.continuations.removeValue(forKey: id) }
         }
         return stream
     }

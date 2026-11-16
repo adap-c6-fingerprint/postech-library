@@ -11,6 +11,13 @@ nonisolated enum DatasetRecommendation {
     static let displayCount = 6
     static let maxHistorySources = 3
     static let fallbackListCount = 20
+    static let coverCheckSpareCount = 4
+    // 6선 표지 확인에 실패한 책을 대신할 여분 후보 수
+
+    static func coveredCandidates(from pool: [Book]) -> [Book] {
+        pool.filter { $0.imageURL != nil }
+    }
+    // 6선 후보는 표지 URL이 있는 책만 쓴다. 학과별 추천·전체 보기에는 쓰지 않는다.
 
     static func randomPicks<G: RandomNumberGenerator>(
         from pool: [Book], count: Int = displayCount, using generator: inout G

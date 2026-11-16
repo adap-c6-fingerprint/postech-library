@@ -20,15 +20,14 @@ struct BookSelectionRow: View {
 
                 HStack(alignment: .top, spacing: 20) {
                     BookCoverView(
-                        url: book.imageURL, isbn: book.isbn, allowsRetry: false,
+                        url: book.imageURL, isbn: book.isbn, allowsRetry: false, fitAlignment: .topLeading,
                         lookupLegacyOriginal: { try await BookCoverPipeline.originalCoverURL(for: book) },
                         onCoverRecovered: { remoteURL in
                             if let oldURL = book.imageURL { onCoverRecovered?(oldURL, remoteURL) }
-                        }
+                        },
+                        coverModifier: BookCoverClipStyle(cornerRadius: 8, fill: Color.white.opacity(0.06))
                     )
                         .frame(width: 78, height: 111)
-                        .background(.white.opacity(0.06))
-                        .clipShape(.rect(cornerRadius: 8))
                         .accessibilityHidden(true)
 
                     VStack(alignment: .leading, spacing: 0) {

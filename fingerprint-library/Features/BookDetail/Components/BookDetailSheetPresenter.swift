@@ -7,6 +7,7 @@ import UIKit
 @MainActor @Observable
 final class BookDetailSheetPresentation {
     var detent: BookDetailSheetDetent = .medium
+    var compactCoverHeight = BookDetailCompactLayout.coverSize.height
     var isExpanded: Bool { detent == .large }
 }
 
@@ -84,9 +85,11 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             presentation.detent = .medium
             let content = BookDetailSheet(store: store, mapStore: mapStore, presentation: presentation, onDismiss: { [weak self] in
                 self?.dismissDetail()
-            }) { [weak self] in
+            }, onLayoutChange: { [weak self] in
                 self?.scheduleCompactFrameReport()
-            }
+            }, onCompactCoverHeightChange: { [weak self] in
+                self?.compactCoverHeightDidChange()
+            })
             let hosting = UIHostingController(rootView: content)
             hosting.modalPresentationStyle = .pageSheet
             hosting.view.backgroundColor = .clear
@@ -99,9 +102,11 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
             didFinishPresentation = false
             presentation.detent = .medium
             if let sheet = hosting.sheetPresentationController {
+                let presentation = presentation
                 sheet.detents = [.custom(identifier: Self.compactID) { context in
+                    let coverHeight = MainActor.assumeIsolated { presentation.compactCoverHeight }
                     let height = UIFontMetrics(forTextStyle: .body).scaledValue(
-                        for: BookDetailCompactLayout.height,
+                        for: BookDetailCompactLayout.height(coverHeight: coverHeight),
                         compatibleWith: context.containerTraitCollection)
                     guard let medium = UISheetPresentationController.Detent.medium().resolvedValue(in: context),
                           height < medium else { return nil }
@@ -127,6 +132,12 @@ struct BookDetailSheetPresenter: UIViewControllerRepresentable {
                     self.reportCompactFrame()
                 }
             }
+        }
+
+        private func compactCoverHeightDidChange() {
+            guard !isInvalidated, let sheet = hosting?.sheetPresentationController else { return }
+            sheet.animateChanges { sheet.invalidateDetents() }
+            scheduleCompactFrameReport()
         }
 
         private func scheduleCompactFrameReport() {

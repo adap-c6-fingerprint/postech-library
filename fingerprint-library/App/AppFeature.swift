@@ -77,6 +77,7 @@ struct AppFeature {
     private nonisolated enum CancelID: Hashable, Sendable {
         case analyticsCheckpoint
         case analyticsObservation
+        case profileObservation
     }
 
     var body: some Reducer<State, Action> {
@@ -219,8 +220,16 @@ struct AppFeature {
                 let preloadSpines: Effect<Action> = .run { [recentlyFoundBooksClient, bookCoverClient] _ in
                     await bookCoverClient.preloadSavedSpines(recentlyFoundBooksClient.load().compactMap(\.isbn))
                 }
-                guard state.home.recommendationSessionID == nil else { return preloadSpines }
-                return .merge(preloadSpines, .send(.home(.recommendationSessionStarted)))
+                let observeProfile: Effect<Action> = .run { send in
+                    @Shared(.userProfile) var userProfile
+                    for await _ in $userProfile.publisher.dropFirst().values {
+                        await send(.home(.userProfileChanged))
+                    }
+                }
+                .cancellable(id: CancelID.profileObservation, cancelInFlight: true)
+                // 마이페이지에서 관심사를 바꾼 순간 추천 탭이 보이지 않아도 다음 6선을 준비하게 한다.
+                guard state.home.recommendationSessionID == nil else { return .merge(preloadSpines, observeProfile) }
+                return .merge(preloadSpines, observeProfile, .send(.home(.recommendationSessionStarted)))
             case .appEnteredBackground:
                 state.hasEnteredBackground = true
                 return .none

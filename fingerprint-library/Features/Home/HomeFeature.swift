@@ -24,14 +24,18 @@ struct HomeFeature {
                 && !userProfile.interests.isEmpty
         }
         var departmentName: String { userProfile?.departmentName ?? "" }
-        // 인기 도서 제목. 소속이 사람을 가리키는 경우(아카데미 러너)는 "~들이", 그 밖의 소속은 "'~'에서"로 쓴다.
+        // 인기 도서 제목. 아카데미·학부·대학원 소속만 소속 이름을 넣고, 그 밖의 소속은 공통 문구를 쓴다.
+        // 소속이 사람을 가리키는 경우(아카데미 러너)는 "~들이", 그 밖의 소속은 "'~'에서"로 쓴다.
         var popularBooksTitle: String {
-            switch departmentName {
-            case "": "많이 빌린 도서"
-            case "아카데미 러너": "아카데미 러너들이 많이 빌린"
-            default: "'\(departmentName)'에서 많이 빌린"
-            }
+            guard !departmentName.isEmpty else { return "많이 빌린 도서" }
+            guard let path = userProfile.flatMap({ RecommendationDataset.AffiliationPath(key: $0.affiliationKey) }),
+                  Self.namedAffiliationParents.contains(path.parent)
+                    || path.group == Self.academyAffiliationGroup
+            else { return "사람들이 많이 찾고 있어요" }
+            return departmentName == "아카데미 러너" ? "아카데미 러너들이 많이 빌린" : "'\(departmentName)'에서 많이 빌린"
         }
+        private static let namedAffiliationParents: Set<String> = ["POSTECH 학부", "POSTECH 대학원"]
+        private static let academyAffiliationGroup = "Apple Developer Academy @ POSTECH"
         var isRecommendationExpanded = true
         var showsKulumiCovers = false
         var libraryInfo: [Book.ID: LibraryInfoState] = [:]
@@ -44,8 +48,10 @@ struct HomeFeature {
 
         var recommendationCount: Int {
             let count = DatasetRecommendation.displayCount
+            guard !isStreamingRecommendations else { return count }
             return recommendedBooks.isEmpty ? count : min(recommendedBooks.count, count)
         }
+        // 책이 하나씩 붙는 동안에는 제목 숫자를 6으로 고정한다.
 
         var booksForLibraryInfo: [Book] {
             guard case let .loaded(books) = departmentRecommendations else { return popularBooks }
@@ -65,6 +71,8 @@ struct HomeFeature {
         var recommendationSessionID: UUID?
         var isLoadingRecommendations = false
         var isPreparingRecommendations = false
+        var isStreamingRecommendations = false
+        // 빈 캐러셀에 표지 확인된 책을 하나씩 채우는 중
         var recommendationLoadMode: RecommendationLoadMode = .restore
         var carouselPreparation: CarouselPreparation = .idle
         var isRefreshingRecommendations: Bool {
@@ -112,6 +120,8 @@ struct HomeFeature {
 
     enum Action {
         case task
+        case userProfileChanged
+        // 화면이 보이지 않아도 프로필이 바뀐 순간 App이 알려 준다.
         case recommendationSessionStarted
         case recommendationNearEnd
         case recommendationEndReached
@@ -119,6 +129,8 @@ struct HomeFeature {
         case retryRecommendationsButtonTapped
         case recommendationsRestored(UUID, CachedRecommendations?)
         case recommendationsLoaded(UUID, CachedRecommendations)
+        case recommendationBookPrepared(UUID, Book, coverFile: URL)
+        case recommendationsOfflineFallback(UUID, [Book])
         case popularBooksLoaded([Book])
         case popularBooksNearEnd
         case popularBooksRefreshRequested
@@ -193,16 +205,20 @@ struct HomeFeature {
 
                 return .concatenate(sync.cancel, .merge(effects))
 
+            case .userProfileChanged:
+                let sync = syncWithProfile(state: &state)
+                return .concatenate(sync.cancel, sync.reload)
+
             case .recommendationSessionStarted:
                 return startRecommendationSession(state: &state, mode: .restore)
 
             case .recommendationNearEnd:
-                guard !state.showsKulumiCovers, !state.recommendedBooks.isEmpty,
+                guard !state.showsKulumiCovers, !state.recommendedBooks.isEmpty, !state.isStreamingRecommendations,
                       state.carouselPreparation == .idle else { return .none }
                 return prepareCarouselReplacement(state: &state)
 
             case .recommendationEndReached:
-                guard !state.showsKulumiCovers, !state.recommendedBooks.isEmpty,
+                guard !state.showsKulumiCovers, !state.recommendedBooks.isEmpty, !state.isStreamingRecommendations,
                       !state.isRefreshingRecommendations else { return .none }
                 let sessionID = beginRecommendationSession(state: &state, mode: .carouselRefresh)
                 if case let .finished(result) = state.carouselPreparation {
@@ -253,16 +269,55 @@ struct HomeFeature {
                 state.isLoadingRecommendations = false
                 state.isPreparingRecommendations = false
                 state.nextRecommendationsSavedAt = prepared.savedAt
-                if isCarouselRefresh || state.recommendedBooks.isEmpty {
+                if isCarouselRefresh || state.recommendedBooks.isEmpty || state.isStreamingRecommendations {
                     state.recommendedBooks = prepared.books
                     state.recommendationCoverFiles = prepared.coverFiles
                 }
+                state.isStreamingRecommendations = false
                 if isCarouselRefresh { state.carouselPreparation = .idle }
                 state.recommendationErrorMessage = nil
                 return .none
 
+            case let .recommendationBookPrepared(sessionID, book, coverFile):
+                guard state.recommendationSessionID == sessionID,
+                      state.recommendationLoadMode != .carouselRefresh,
+                      state.isStreamingRecommendations || state.recommendedBooks.isEmpty else { return .none }
+                // 이미 보이는 추천이 있으면 한 권씩 섞지 않고 완료 때 한 번에 바꾼다.
+                state.isStreamingRecommendations = true
+                state.isLoadingRecommendations = false
+                guard state.recommendedBooks.count < DatasetRecommendation.displayCount,
+                      !state.recommendedBooks.contains(where: { $0.id == book.id }) else { return .none }
+                state.recommendedBooks.append(book)
+                state.recommendationCoverFiles[book.id] = coverFile
+                return .none
+
+            case let .recommendationsOfflineFallback(sessionID, fallback):
+                guard state.recommendationSessionID == sessionID else { return .none }
+                let fillsCarousel = state.isStreamingRecommendations || state.recommendedBooks.isEmpty
+                state.isStreamingRecommendations = false
+                state.isLoadingRecommendations = false
+                state.isPreparingRecommendations = false
+                if fillsCarousel {
+                    let shownKeys = Set(state.recommendedBooks.flatMap { DatasetRecommendation.identityKeys(of: $0) })
+                    let fill = DatasetRecommendation.assemble(
+                        candidatesPerSource: [], fallback: fallback,
+                        count: DatasetRecommendation.displayCount - state.recommendedBooks.count,
+                        excluding: shownKeys
+                    )
+                    state.recommendedBooks += fill
+                }
+                // 오프라인이면 보이는 추천을 유지하고, 빈 칸만 하드데이터 책으로 채운다.
+                analytics.record(.init(.recommendationLoadCompleted, [
+                    .kind: .text("offline_fallback"), .bookCount: .integer(state.recommendedBooks.count)
+                ]))
+                state.recommendationErrorMessage = state.recommendedBooks.isEmpty
+                    ? "추천 도서를 준비하지 못했어요. 다시 시도해 주세요."
+                    : nil
+                return .none
+
             case let .recommendationsFailed(sessionID, message):
                 guard state.recommendationSessionID == sessionID else { return .none }
+                state.isStreamingRecommendations = false
                 analytics.record(.init(.recommendationFailed, [.errorCode: .text("preparation_failed")]))
                 state.isLoadingRecommendations = false
                 state.isPreparingRecommendations = false
@@ -499,11 +554,35 @@ struct HomeFeature {
         }
 
         if current.interests != previous?.interests {
-            state.recommendedBooks = []
-            state.recommendationCoverFiles = [:]
-            reload = startRecommendationSession(state: &state, mode: .profileChanged)
+            let keepsShownBooks = previous != nil && !state.recommendedBooks.isEmpty
+                && !state.isStreamingRecommendations && !state.showsKulumiCovers
+            if keepsShownBooks {
+                reload = prepareNextBatchForChangedInterests(state: &state)
+            } else {
+                state.recommendedBooks = []
+                state.recommendationCoverFiles = [:]
+                reload = startRecommendationSession(state: &state, mode: .profileChanged)
+            }
         }
+        // 처음 관심사를 정했거나 보이는 6권이 없으면 바로 새 6권을 채운다.
+        // 이미 6권이 보이면 그대로 두고, 새 관심사로 다음 묶음을 미리 준비해 다음 새로고침에서 보여 준다.
         return (.merge(cancels), reload)
+    }
+
+    private func prepareNextBatchForChangedInterests(state: inout State) -> Effect<Action> {
+        var cancelSession: Effect<Action> = .none
+        if state.isPreparingRecommendations, state.recommendationLoadMode != .carouselRefresh {
+            state.isPreparingRecommendations = false
+            state.isLoadingRecommendations = false
+            state.recommendationErrorMessage = nil
+            cancelSession = .cancel(id: CancelID.recommendationSession)
+        }
+        // 이전 관심사로 준비하던 다음 방문용 6권은 쓰지 않으므로 멈춘다.
+        state.carouselPreparation = .idle
+        return .concatenate(
+            .merge(cancelSession, .cancel(id: CancelID.carouselPreparation)),
+            prepareCarouselReplacement(state: &state)
+        )
     }
 
     private func startRecommendationSession(state: inout State, mode: RecommendationLoadMode) -> Effect<Action> {
@@ -521,6 +600,7 @@ struct HomeFeature {
         state.recommendationLoadMode = mode
         state.isLoadingRecommendations = mode != .carouselRefresh
         state.isPreparingRecommendations = true
+        state.isStreamingRecommendations = false
         state.nextRecommendationsSavedAt = nil
         state.recommendationErrorMessage = nil
         return sessionID
@@ -539,11 +619,18 @@ struct HomeFeature {
                     try Task.checkCancellation()
                     await send(.recommendationsRestored(sessionID, cached))
                 }
-                let prepared = try await homeRecommendationForYouClient.refresh(
-                    DatasetRecommendation.displayCount, covers
-                )
-                try Task.checkCancellation()
-                await send(.recommendationsLoaded(sessionID, prepared))
+                let events = homeRecommendationForYouClient.refresh(DatasetRecommendation.displayCount, covers)
+                for try await event in events {
+                    try Task.checkCancellation()
+                    switch event {
+                    case let .book(book, coverFile):
+                        await send(.recommendationBookPrepared(sessionID, book, coverFile: coverFile))
+                    case let .completed(prepared):
+                        await send(.recommendationsLoaded(sessionID, prepared))
+                    case let .offline(fallback):
+                        await send(.recommendationsOfflineFallback(sessionID, fallback))
+                    }
+                }
             } catch is CancellationError {
                 return
             } catch HomeRecommendationForYouError.empty {
