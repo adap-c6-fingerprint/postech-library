@@ -85,6 +85,15 @@ struct BookSearchFeature {
     var bookSearchClient: BookSearchClient
     @Dependency(\.analyticsClient) private var analytics
 
+    static func analyticsFilterButton(_ category: BookSearchCategory) -> AnalyticsEvent.ButtonID {
+        switch category {
+        case .all: .filterAll
+        case .monograph: .filterBook
+        case .journal: .filterJournal
+        }
+    }
+    // 자료 유형 탭(전체·단행본·학술지)의 버튼 이름
+
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
 
@@ -140,10 +149,9 @@ struct BookSearchFeature {
 
             case let .favoriteButtonTapped(book):
                 let isFavorite = BookFavorites().toggle(book, at: now)
-                analytics.record(.init(.bookFavoriteChanged, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(book)),
+                analytics.record(.init(.bookFavoriteChanged, AnalyticsEvent.bookFields(book).merging([
                     .action: .text(isFavorite ? "added" : "removed")
-                ]))
+                ]) { $1 }))
                 return .none
 
             case let .favoriteMarkerTapped(marker):
@@ -154,16 +162,19 @@ struct BookSearchFeature {
                 let books = (items.map(\.book) + state.books + state.recentBooks)
                     .filter { activeKeys.contains($0.recordKey) && seen.insert($0.recordKey).inserted }
                 guard let book = books.first else { return .none }
+                analytics.record(books.count == 1
+                    ? .button(.favoriteMarker, on: .map, book: book)
+                    : .button(.favoriteMarker, on: .map, [.bookCount: .integer(books.count)]))
+                // 지도의 찜한 책 아이콘. 한 권이면 책 ID, 같은 서가에 여러 권이면 권수를 보낸다
                 if books.count == 1 {
                     return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: marker.id)))
                 }
                 return .send(.delegate(.showFavoriteShelf(books, sourceFavoriteMarkerID: marker.id)))
 
             case let .bookSelected(book):
-                analytics.record(.init(.searchResultSelected, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(book)),
+                analytics.record(.init(.searchResultSelected, AnalyticsEvent.bookFields(book).merging([
                     .source: .text(state.hasSearched ? "results" : "recent")
-                ]))
+                ]) { $1 }))
                 recentSearchBooksClient.record(book)
                 state.recentBooks = recentSearchBooksClient.load()
                 return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: nil)))
@@ -197,6 +208,8 @@ struct BookSearchFeature {
 
             case let .categoryChanged(category):
                 guard state.category != category else { return .none }
+                analytics.record(.button(Self.analyticsFilterButton(category),
+                                         on: state.hasSearched ? .searchResults : .search))
                 state.category = category
                 return .none
 

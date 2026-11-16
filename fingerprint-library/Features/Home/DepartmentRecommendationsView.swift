@@ -46,6 +46,7 @@ struct DepartmentRecommendationsView: View {
         .toolbarBackground(Color.backgroundDefault, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .analyticsScreen(.departmentRecommendations)
         .task(id: store.userProfile) { await store.send(.departmentRecommendationsRequested).finish() }
     }
 
@@ -65,7 +66,7 @@ struct DepartmentRecommendationsView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(books) { book in
                         BookListRow(book: book, libraryInfo: infoByID[book.id]) {
-                            store.send(.bookSelected(book))
+                            store.send(.bookSelected(book, list: .department, screen: .departmentRecommendations))
                         }
 
                         if book.id != books.last?.id {

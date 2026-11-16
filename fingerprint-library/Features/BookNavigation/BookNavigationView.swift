@@ -99,7 +99,8 @@ struct BookNavigationView: View {
                     onContinue: { store.send(.continueFromArrival(stopIndex: index)) },
                     onFinish: { store.send(.finishFromArrival(stopIndex: index)) },
                     onDefer: { store.send(.deferFromArrival(stopIndex: index)) },
-                    onCancel: { store.send(.cancelTapped) }
+                    onCancel: { store.send(.cancelTapped) },
+                    onAnalyticsButton: { id, screen in store.send(.spineButtonTapped(id, screen: screen)) }
                 )
                 .id(index)
             }

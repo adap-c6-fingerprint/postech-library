@@ -40,7 +40,7 @@ struct BookRoutePreviewView: View {
                 directHeader
                 directStatus
             } else {
-                BookRoutePreparingView(onBack: { dismiss() }, onGoHome: { returnHome() })
+                BookRoutePreparingView(onBack: { back() }, onGoHome: { returnHome() })
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -139,7 +139,7 @@ struct BookRoutePreviewView: View {
             kind: .init(failure: store.failureMessage),
             diagnostic: failureDiagnostic,
             isRetrying: store.isRetryingDirectNavigation,
-            onBack: { dismiss() },
+            onBack: { back() },
             onRetry: { retryDirectNavigation() },
             onGoHome: { returnHome() },
             onAddToCart: destination.books.isEmpty ? nil : { addBooksToCart() },
@@ -225,11 +225,13 @@ struct BookRoutePreviewView: View {
                     startNotice: store.startNotice,
                     canStart: !isLoadingRoute && (needsStartLocationSetup
                         || (readySession != nil && currentStart != nil && routeError == nil)),
-                    onBack: { dismiss() },
+                    onBack: { back() },
                     onStart: { _ in store.send(.startTapped) },
                     onRetry: { store.send(.retryTapped) },
                     onSetOriginManually: { store.send(.setOriginManuallyTapped) },
-                    homeAnnotations: mapStore?.homeAnnotations
+                    homeAnnotations: mapStore?.homeAnnotations,
+                    onBookTabTapped: { id in store.send(.bookTabTapped(id)) },
+                    onCardSwiped: { id, direction in store.send(.bookCardSwiped(id, direction: direction)) }
                 )
             }
         }
@@ -287,6 +289,11 @@ struct BookRoutePreviewView: View {
         }
     }
 
+    private func back() {
+        store.send(.backTapped)
+        dismiss()
+    }
+
     private var routeMap: IndoorMap? {
         mapStore?.map ?? destinationStore?.state.map.map
     }
@@ -302,6 +309,7 @@ struct BookRoutePreviewView: View {
                 onConfirm: { coordinate, floorOrdinal in
                     store.send(.originConfirmed(coordinate, floorOrdinal: floorOrdinal))
                 })
+                .analyticsScreen(.routeOriginPicker)
         } else {
             VStack(spacing: 20) {
                 ContentUnavailableView("지도를 불러오지 못했어요", systemImage: "map",

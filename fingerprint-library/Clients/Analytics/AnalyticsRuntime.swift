@@ -5,6 +5,8 @@ import FirebaseCrashlytics
 import Foundation
 import StoreKit
 
+// 동의 확인, 공통 이벤트 파라미터 부여, Analytics.logEvent 호출, 사용자 속성 설정
+
 nonisolated final class AnalyticsRuntime: @unchecked Sendable {
     static let shared = AnalyticsRuntime()
     static let consentChanged = Notification.Name("pobook.analytics.consent.changed")
@@ -89,7 +91,9 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
                 Analytics.setAnalyticsCollectionEnabled(false)
                 Analytics.setUserID(nil)
                 Analytics.resetAnalyticsData()
-                for key in ["affiliation_id", "interest_count"] { Analytics.setUserProperty(nil, forName: key) }
+                for key in ["affiliation_id", "interest_count", "affiliation_group", "affiliation_detail",
+                            "favorite_count", "cart_count"] { Analytics.setUserProperty(nil, forName: key) }
+                // 분석 거부 시 사용자 속성 6개를 모두 지운다
             }
             if !choice.analytics {
                 subjectID = nil
@@ -194,7 +198,8 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
         }
         guard let revision else { return }
         Task {
-            let affiliation = await AnalyticsAffiliationLookup.shared.id(for: profile?.affiliationKey)
+            let affiliation = await AnalyticsAffiliationLookup.shared.entry(for: profile?.affiliationKey)
+            // 소속 카탈로그에서 ID·대분류·세부분류를 찾는다 (없으면 nil)
             synchronized {
                 guard storedConsent.analytics, profileRevision == revision else { return }
                 let canonical = [profile?.affiliationKey.joined(separator: "\u{1f}") ?? "",
@@ -207,10 +212,27 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
                 defaults.set(hash, forKey: "pobook.analytics.profile_hash")
                 defaults.set(version, forKey: "pobook.analytics.profile_version")
                 profileVersion = version
-                Analytics.setUserProperty(affiliation ?? "unknown", forName: "affiliation_id")
+                Analytics.setUserProperty(affiliation?.id ?? "unknown", forName: "affiliation_id")
+                Analytics.setUserProperty(affiliation.map { String($0.parent.prefix(36)) } ?? "unknown",
+                                          forName: "affiliation_group")
+                // 소속 대분류 (예: POSTECH 대학원). 사용자 속성 값 36자 제한에 맞춰 자른다
+                Analytics.setUserProperty(affiliation.map { String($0.group.prefix(36)) } ?? "unknown",
+                                          forName: "affiliation_detail")
+                // 소속 세부분류 (예: 일반대학원 학과). 가장 세부인 소속은 affiliation_id로 구분한다
                 Analytics.setUserProperty(String(profile?.interests.count ?? 0), forName: "interest_count")
                 if changed, active { emit("profile_updated", ["interest_count": profile?.interests.count ?? 0]) }
             }
+        }
+    }
+
+    func updateCollectionCounts(favorites: Int, cart: Int) {
+        synchronized {
+            guard configured, storedConsent.analytics else { return }
+            // Firebase가 켜져 있고 분석에 동의한 경우에만 설정한다
+            Analytics.setUserProperty(String(favorites), forName: "favorite_count")
+            // 찜한 책 개수 (숫자 그대로)
+            Analytics.setUserProperty(String(cart), forName: "cart_count")
+            // 장바구니 책 개수 (숫자 그대로)
         }
     }
 
@@ -294,15 +316,24 @@ nonisolated final class AnalyticsRuntime: @unchecked Sendable {
 
 private actor AnalyticsAffiliationLookup {
     static let shared = AnalyticsAffiliationLookup()
-    private var values: [[String]: String]?
-    func id(for key: [String]?) -> String? {
+    nonisolated struct Entry: Sendable {
+        let id: String
+        // 소속 카탈로그 ID (affiliation_id)
+        let parent: String
+        // 소속 대분류 (affiliation_group)
+        let group: String
+        // 소속 세부분류 (affiliation_detail)
+    }
+    private var values: [[String]: Entry]?
+    func entry(for key: [String]?) -> Entry? {
         guard let key else { return nil }
         if values == nil {
             nonisolated struct Catalog: Decodable { let affiliations: [Item] }
-            nonisolated struct Item: Decodable { let id: String; let selectionKey: [String] }
+            nonisolated struct Item: Decodable { let id: String; let parent: String; let group: String; let selectionKey: [String] }
             if let url = Bundle.main.url(forResource: "RecommendationDataset", withExtension: "json"),
                let data = try? Data(contentsOf: url), let catalog = try? JSONDecoder().decode(Catalog.self, from: data) {
-                values = Dictionary(catalog.affiliations.map { ($0.selectionKey, $0.id) }, uniquingKeysWith: { first, _ in first })
+                values = Dictionary(catalog.affiliations.map { ($0.selectionKey, Entry(id: $0.id, parent: $0.parent, group: $0.group)) },
+                                    uniquingKeysWith: { first, _ in first })
             }
         }
         return values?[key]

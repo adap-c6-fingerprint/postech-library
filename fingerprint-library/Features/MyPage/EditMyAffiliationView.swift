@@ -31,6 +31,7 @@ struct EditMyAffiliationView: View {
         .padding(.horizontal, 16)
         .background { Color.backgroundDefault.ignoresSafeArea() }
         .navigationBarTitleDisplayMode(.inline)
+        .analyticsScreen(.editAffiliation)
         .toolbar(.visible, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
         .toolbarBackground(.hidden, for: .navigationBar)

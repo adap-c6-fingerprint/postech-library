@@ -71,6 +71,7 @@ struct IndoorMapFeature {
     @Dependency(\.indoorShelfLabelClient) var shelfLabelClient
     @Dependency(\.indoorLocationClient) var locationClient
     @Dependency(\.date.now) var now
+    @Dependency(\.analyticsClient) private var analytics
 
     nonisolated private struct CancelID: Hashable, Sendable {
         enum Kind: Hashable, Sendable { case map, shelfLabels, location }
@@ -182,6 +183,8 @@ struct IndoorMapFeature {
                 return .run { [locationClient] _ in await locationClient.requestPermission() }
 
             case .currentLocationTapped:
+                analytics.record(.button(.myLocation, on: .map))
+                // 내 위치 버튼은 지도 탭 지도에만 보인다 (상세 지도는 버튼을 숨김)
                 state.isFloorSelectedByUser = false
                 state.awaitsPositionFloor = true
                 state.locationMessage = nil
@@ -206,7 +209,9 @@ struct IndoorMapFeature {
                 return .none
 
             case .floorSelected(let id):
-                guard state.map?.floors.contains(where: { $0.id == id }) == true else { return .none }
+                guard let floor = state.map?.floors.first(where: { $0.id == id }) else { return .none }
+                analytics.record(.button(.floorSwitch, on: .map, [.floor: .integer(floor.ordinal)]))
+                // 층 선택기는 지도 탭 지도에만 보인다. floor = 고른 층의 ordinal
                 state.awaitsPositionFloor = false
                 state.isFloorSelectedByUser = true
                 state.wantsRecenter = false
