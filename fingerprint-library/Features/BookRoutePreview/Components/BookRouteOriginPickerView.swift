@@ -89,39 +89,15 @@ struct BookRouteOriginPickerView: View {
     }
 
     private var header: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .typography(.title1)
-                .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
-                .lineLimit(2)
-                .padding(.trailing, 60)
-                .accessibilityIdentifier("route-origin-picker-title")
-            if let subtitle {
-                Text(subtitle)
-                    .typography(.title1)
-                    .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .accessibilityIdentifier("route-origin-picker-shelf")
-            }
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityHint(startNotice ?? "")
-        .frame(maxWidth: .infinity, minHeight: 44, alignment: .topLeading)
-        .overlay(alignment: .topTrailing) {
-            Button(action: onCancel) {
-                Image(systemName: "xmark")
-                    .font(.system(size: 17, weight: .semibold))
-                    .frame(width: 44, height: 44)
-                    .glassEffect(.regular.interactive(), in: .circle)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("출발 위치 직접 설정 그만두기")
-            .accessibilityIdentifier("route-origin-picker-cancel")
-        }
-        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        BookRouteHeader(
+            title: title, subtitle: subtitle,
+            closeLabel: "출발 위치 직접 설정 그만두기",
+            accessibilityHint: startNotice ?? "",
+            titleIdentifier: "route-origin-picker-title",
+            subtitleIdentifier: "route-origin-picker-shelf",
+            closeIdentifier: "route-origin-picker-cancel",
+            onClose: onCancel)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 
     private var originMarker: some View {
@@ -191,6 +167,7 @@ struct BookRouteOriginPickerView: View {
             .padding(.horizontal, 16)
             .frame(width: 307, height: 65)
             .glassEffect(.regular, in: .rect(cornerRadius: 12))
+            .padding(.bottom, 15)
             .accessibilityIdentifier("route-origin-picker-hint")
     }
 

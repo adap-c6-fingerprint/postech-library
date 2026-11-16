@@ -37,8 +37,8 @@ struct BookNavigationView: View {
                     VStack(alignment: .leading, spacing: 38) {
                         header
                         currentFloorIndicator
+                            .padding(.horizontal, PobookUI.Spacing._20)
                     }
-                    .padding(.horizontal, 20).padding(.top, 20)
                     VStack(spacing: 16) {
                         Spacer()
                         HStack(spacing: 8) {
@@ -126,28 +126,14 @@ struct BookNavigationView: View {
     }
 
     private var header: some View {
-        HStack(alignment: .top, spacing: 16) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(store.currentBookInfo.map { BookText.plainText($0.book.title) } ?? "도서 길안내")
-                    .typography(.title1)
-                    .lineLimit(2)
-                    .accessibilityIdentifier("book-navigation-book-title")
-                if let info = store.currentBookInfo {
-                    Text("\(info.floorName ?? "") \(info.shelf.shelfTitle)")
-                        .typography(.title1)
-                        .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
-                        .accessibilityIdentifier("book-navigation-shelf")
-                }
-            }
-            Spacer(minLength: 0)
-            Button { store.send(.cancelTapped) } label: {
-                Image(systemName: "xmark").frame(width: 44, height: 44)
-                    .glassEffect(.regular, in: .circle)
-            }
-            .accessibilityLabel("안내 종료")
-            .accessibilityIdentifier("book-navigation-cancel")
-        }
-        .foregroundStyle(.white)
+        BookRouteHeader(
+            title: store.currentBookInfo.map { BookText.plainText($0.book.title) } ?? "도서 길안내",
+            subtitle: store.currentBookInfo.map { "\($0.floorName ?? "") \($0.shelf.shelfTitle)" },
+            closeLabel: "안내 종료",
+            titleIdentifier: "book-navigation-book-title",
+            subtitleIdentifier: "book-navigation-shelf",
+            closeIdentifier: "book-navigation-cancel",
+            onClose: { store.send(.cancelTapped) })
     }
 
     private var previousShelfButton: some View {

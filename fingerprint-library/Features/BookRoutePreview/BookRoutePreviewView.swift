@@ -52,17 +52,12 @@ struct BookRoutePreviewView: View {
     private var showsRouteFailure: Bool { store.showsRouteFailure }
 
     private var directLoadingBackdrop: some View {
-        ZStack {
-            Color(uiColor: .systemBackground)
-            directMapBackdrop
-            Rectangle()
-                .fill(.regularMaterial)
-                .overlay(Color.black.opacity(0.25))
-        }
-        .ignoresSafeArea()
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
-        .accessibilityIdentifier("book-navigation-preparing-background")
+        directMapBackdrop
+            .overlay(Color.black.opacity(0.32))
+            .ignoresSafeArea()
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+            .accessibilityIdentifier("book-navigation-preparing-background")
     }
 
     @ViewBuilder
@@ -113,21 +108,13 @@ struct BookRoutePreviewView: View {
 
     private var directStatus: some View {
         VStack(spacing: 10) {
-            Text(store.isPreparingManualOrigin ? "서가까지\n수동안내를 시작합니다" : "서가까지\n길안내를 준비합니다")
-                .typography(.body1)
+            Text("서가까지\n수동안내를 시작합니다")
+                .typography(.body2)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
+                .foregroundStyle(PobookUI.ColorToken.neutralSecondary)
             ProgressView()
+                .frame(width: 20, height: 20)
                 .tint(PobookUI.ColorToken.neutralPrimary)
-            if let notice = store.startNotice {
-                RouteStartNoticeView(notice: notice)
-                    .typography(.caption1)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                Button("출발 위치 직접 설정") { store.send(.setOriginManuallyTapped) }
-                    .font(.caption.bold())
-                    .accessibilityIdentifier("book-navigation-preparing-set-origin")
-            }
         }
         .padding(.horizontal, 20)
         .accessibilityElement(children: .contain)
