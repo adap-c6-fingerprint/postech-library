@@ -22,6 +22,8 @@ actor RecommendationCacheStore {
     private let directory: URL
     private var displayedFiles: Set<String> = []
     private var retainedDisplayFiles: Set<String> = []
+    private var pendingFiles: Set<String> = []
+    // 스냅샷 저장 전에 미리 써 둔 표지 파일. 화면에 먼저 띄운 표지가 정리 단계에서 지워지지 않게 한다.
     private var preparationID: UUID?
     private var manifestURL: URL { directory.appendingPathComponent("recommendations.json") }
     private var imagesDirectory: URL { directory.appendingPathComponent("covers", isDirectory: true) }
@@ -34,6 +36,20 @@ actor RecommendationCacheStore {
         let id = UUID()
         preparationID = id
         return id
+    }
+
+    func writeCover(_ cover: PreparedCover, preparationID expectedID: UUID) throws -> URL {
+        try Task.checkCancellation()
+        guard preparationID == expectedID else { throw CancellationError() }
+        let name = try coverName(for: cover.sourceURL)
+        try Self.validateImage(cover.data)
+        try prepareDirectories()
+        let file = imagesDirectory.appendingPathComponent(name)
+        if (try? Data(contentsOf: file)) != cover.data {
+            try cover.data.write(to: file, options: .atomic)
+        }
+        pendingFiles.insert(name)
+        return file
     }
 
     func retainDisplayedCovers(_ files: [URL]) {
@@ -107,11 +123,7 @@ actor RecommendationCacheStore {
             records.append(StoredBook(book, coverFile: name, coverSourceURL: cover.sourceURL))
         }
 
-        try FileManager.default.createDirectory(at: imagesDirectory, withIntermediateDirectories: true)
-        var root = directory
-        var values = URLResourceValues()
-        values.isExcludedFromBackup = true
-        try root.setResourceValues(values)
+        try prepareDirectories()
         for (file, data) in imagesToWrite {
             try Task.checkCancellation()
             if (try? Data(contentsOf: file)) != data {
@@ -123,7 +135,9 @@ actor RecommendationCacheStore {
         let data = try JSONEncoder().encode(manifest)
         try data.write(to: manifestURL, options: .atomic)
 
-        let retained = displayedFiles.union(retainedDisplayFiles).union(files.values.map(\.lastPathComponent))
+        let retained = displayedFiles.union(retainedDisplayFiles).union(pendingFiles)
+            .union(files.values.map(\.lastPathComponent))
+        if expectedID != nil { pendingFiles = [] }
         if let contents = try? FileManager.default.contentsOfDirectory(
             at: imagesDirectory, includingPropertiesForKeys: nil
         ) {
@@ -132,6 +146,14 @@ actor RecommendationCacheStore {
             }
         }
         return CachedRecommendations(books: books, savedAt: savedAt, coverFiles: files)
+    }
+
+    private func prepareDirectories() throws {
+        try FileManager.default.createDirectory(at: imagesDirectory, withIntermediateDirectories: true)
+        var root = directory
+        var values = URLResourceValues()
+        values.isExcludedFromBackup = true
+        try root.setResourceValues(values)
     }
 
     private func coverName(for url: URL) throws -> String {

@@ -73,7 +73,7 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
 
     private var interactiveContent: some View {
         Group {
-            if case .failed = model.phase(for: url, isbn: isbn, cachedURL: cachedURL), allowsRetry {
+            if isRetryable(model.phase(for: url, isbn: isbn, cachedURL: cachedURL)), allowsRetry {
                 Button { retryID += 1 } label: {
                     placeholder("arrow.clockwise", text: "다시 시도")
                 }
@@ -98,14 +98,25 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
             ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
         case .failed:
             placeholder("exclamationmark.triangle", text: "로딩 실패")
+        case .offline:
+            placeholder(nil, text: "연결 없음")
         case .unavailable:
             placeholder("book.closed", text: "표지 없음")
         }
     }
 
-    private func placeholder(_ symbol: String, text: String) -> some View {
+    private func isRetryable(_ phase: BookCoverModel<UIImage>.Phase) -> Bool {
+        switch phase {
+        case .failed, .offline: true
+        case .loaded, .loading, .unavailable: false
+        }
+    }
+
+    private func placeholder(_ symbol: String?, text: String) -> some View {
         VStack(spacing: 4) {
-            Image(systemName: symbol).font(.title2).accessibilityHidden(true)
+            if let symbol {
+                Image(systemName: symbol).font(.title2).accessibilityHidden(true)
+            }
             Text(text).font(.caption2)
         }
         .foregroundStyle(.secondary)

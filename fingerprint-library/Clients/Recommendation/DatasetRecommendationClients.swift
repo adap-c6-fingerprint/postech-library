@@ -42,9 +42,13 @@ extension BookRecommendationClient {
         let sources = DatasetRecommendation.personalSources(
             recent: history, pool: pool, count: count, using: &generator
         )
+        let coveredRelated = HeldRelatedBooksClient { source, limit in
+            DatasetRecommendation.coveredCandidates(from: await related.candidates(source, limit))
+        }
+        // 6선에서만 표지 없는 연관도서를 뺀다. 학과별 추천은 원래 related를 그대로 쓴다.
         return await RelatedRecommendationAssembler.assemble(
             sources: sources.history + sources.pool, fallback: fallback,
-            count: count, related: related, excluding: excludedKeys,
+            count: count, related: coveredRelated, excluding: excludedKeys,
             includesRemainingRelatedBooks: isCarouselRefresh
         )
     }
@@ -63,10 +67,17 @@ extension BookRecommendationClient {
         @Shared(.userProfile) var userProfile: UserProfile?
         let preferences = userProfile?.interests ?? []
         let data = try await dataset.load()
-        if !preferences.isEmpty { return data.books(forPreferences: preferences) }
-        if let anchors { return data.books(inSamePreferencesAs: anchors) }
-        return data.allBooks
+        let pool: [Book]
+        if !preferences.isEmpty {
+            pool = data.books(forPreferences: preferences)
+        } else if let anchors {
+            pool = data.books(inSamePreferencesAs: anchors)
+        } else {
+            pool = data.allBooks
+        }
+        return DatasetRecommendation.coveredCandidates(from: pool)
     }
+    // 선호 분류는 원본 데이터로 찾고, 6선 후보에서만 표지 URL이 없는 책을 뺀다.
 }
 
 extension DepartmentPopularBooksClient {
