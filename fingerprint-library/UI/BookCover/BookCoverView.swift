@@ -8,6 +8,8 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
     let onOpen: (() -> Void)?
     let allowsRetry: Bool
     let imageCornerRadius: CGFloat
+    let fitAlignment: Alignment?
+    let placeholderAspectRatio: CGFloat?
     private let coverModifier: CoverModifier
     private let lookupLegacyOriginal: (() async throws -> URL?)?
     private let onCoverRecovered: ((URL) -> Void)?
@@ -21,6 +23,8 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         onOpen: (() -> Void)? = nil,
         allowsRetry: Bool = true,
         imageCornerRadius: CGFloat = 0,
+        fitAlignment: Alignment? = nil,
+        placeholderAspectRatio: CGFloat? = nil,
         lookupLegacyOriginal: (() async throws -> URL?)? = nil,
         onCoverRecovered: ((URL) -> Void)? = nil,
         coverModifier: CoverModifier
@@ -31,6 +35,8 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
         self.onOpen = onOpen
         self.allowsRetry = allowsRetry
         self.imageCornerRadius = imageCornerRadius
+        self.fitAlignment = fitAlignment
+        self.placeholderAspectRatio = placeholderAspectRatio
         self.coverModifier = coverModifier
         self.lookupLegacyOriginal = lookupLegacyOriginal
         self.onCoverRecovered = onCoverRecovered
@@ -39,6 +45,33 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
     }
 
     var body: some View {
+        Group {
+            if let fitAlignment {
+                BookCoverFitLayout(aspectRatio: fitAspectRatio, alignment: fitAlignment) {
+                    interactiveContent.modifier(coverModifier)
+                }
+            } else {
+                interactiveContent
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .modifier(coverModifier)
+            }
+        }
+        .task(id: LoadID(url: url, isbn13: BookISBN.isbn13(from: isbn), cachedURL: cachedURL, retry: retryID)) {
+            await model.load(
+                url, isbn: isbn, cachedURL: cachedURL,
+                lookupLegacyOriginal: lookupLegacyOriginal, onCoverRecovered: onCoverRecovered
+            )
+        }
+    }
+
+    private var fitAspectRatio: CGFloat? {
+        if case let .loaded(image) = model.phase(for: url, isbn: isbn, cachedURL: cachedURL) {
+            return BookCoverFit.aspectRatio(of: image.size) ?? placeholderAspectRatio
+        }
+        return placeholderAspectRatio
+    }
+
+    private var interactiveContent: some View {
         Group {
             if case .failed = model.phase(for: url, isbn: isbn, cachedURL: cachedURL), allowsRetry {
                 Button { retryID += 1 } label: {
@@ -53,14 +86,6 @@ struct BookCoverView<CoverModifier: ViewModifier>: View {
             }
         }
         .buttonStyle(.plain)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .modifier(coverModifier)
-        .task(id: LoadID(url: url, isbn13: BookISBN.isbn13(from: isbn), cachedURL: cachedURL, retry: retryID)) {
-            await model.load(
-                url, isbn: isbn, cachedURL: cachedURL,
-                lookupLegacyOriginal: lookupLegacyOriginal, onCoverRecovered: onCoverRecovered
-            )
-        }
     }
 
     @ViewBuilder
@@ -100,12 +125,14 @@ extension BookCoverView where CoverModifier == EmptyModifier {
     init(
         url: URL?, isbn: String? = nil, cachedURL: URL? = nil, onOpen: (() -> Void)? = nil,
         allowsRetry: Bool = true, imageCornerRadius: CGFloat = 0,
+        fitAlignment: Alignment? = nil, placeholderAspectRatio: CGFloat? = nil,
         lookupLegacyOriginal: (() async throws -> URL?)? = nil,
         onCoverRecovered: ((URL) -> Void)? = nil
     ) {
         self.init(
             url: url, isbn: isbn, cachedURL: cachedURL, onOpen: onOpen, allowsRetry: allowsRetry,
-            imageCornerRadius: imageCornerRadius, lookupLegacyOriginal: lookupLegacyOriginal, onCoverRecovered: onCoverRecovered, coverModifier: EmptyModifier()
+            imageCornerRadius: imageCornerRadius, fitAlignment: fitAlignment,
+            placeholderAspectRatio: placeholderAspectRatio, lookupLegacyOriginal: lookupLegacyOriginal, onCoverRecovered: onCoverRecovered, coverModifier: EmptyModifier()
         )
     }
 }

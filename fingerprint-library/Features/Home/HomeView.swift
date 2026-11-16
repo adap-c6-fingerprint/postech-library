@@ -384,6 +384,7 @@ private struct HomeBookCover: View {
                     isbn: book?.isbn,
                     cachedURL: cachedURL,
                     allowsRetry: false,
+                    fitAlignment: .bottom,
                     coverModifier: style
                 )
             }

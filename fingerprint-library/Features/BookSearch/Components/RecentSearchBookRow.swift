@@ -8,10 +8,11 @@ struct RecentSearchBookRow: View {
     var body: some View {
         Button(action: onSelect) {
             HStack(alignment: .top, spacing: 20) {
-                BookCoverView(url: book.imageURL, isbn: book.isbn, allowsRetry: false)
+                BookCoverView(
+                    url: book.imageURL, isbn: book.isbn, allowsRetry: false, fitAlignment: .topLeading,
+                    coverModifier: BookCoverClipStyle(cornerRadius: 6, fill: Color.primary.opacity(0.04))
+                )
                     .frame(width: 72, height: 110)
-                    .background(Color.primary.opacity(0.04))
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
                     .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: 6) {

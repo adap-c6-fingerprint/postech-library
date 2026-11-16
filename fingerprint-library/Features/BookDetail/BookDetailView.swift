@@ -104,10 +104,15 @@ struct BookDetailSheet: View {
     let presentation: BookDetailSheetPresentation
     var onDismiss: () -> Void
     var onLayoutChange: () -> Void = { }
+    var onCompactCoverHeightChange: () -> Void = { }
 
     var body: some View {
         NavigationStack {
-            BookDetailView(store: store, detent: presentation.detent, onDismiss: onDismiss)
+            BookDetailView(store: store, detent: presentation.detent, onDismiss: onDismiss, onCoverHeightChange: { height in
+                guard presentation.compactCoverHeight != height else { return }
+                presentation.compactCoverHeight = height
+                onCompactCoverHeightChange()
+            })
                 .containerBackground(.clear, for: .navigation)
                 .toolbar(.hidden, for: .navigationBar)
         }
@@ -126,6 +131,7 @@ struct BookDetailView: View {
     private var isExpanded: Bool { detent == .large }
     private var usesAccessibleLayout: Bool { dynamicTypeSize.isAccessibilitySize || isVoiceOverEnabled }
     var onDismiss: () -> Void = { }
+    var onCoverHeightChange: (CGFloat) -> Void = { _ in }
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
 
@@ -233,12 +239,15 @@ struct BookDetailView: View {
     }
 
     private var cover: some View {
-        BookCoverView(url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL)
-            .frame(width: BookDetailCompactLayout.coverSize.width,
-                   height: BookDetailCompactLayout.coverSize.height)
-            .background(.quaternary)
-            .clipShape(RoundedRectangle(cornerRadius: 6))
-            .accessibilityIdentifier("bookDetail.cover")
+        BookCoverView(
+            url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL,
+            fitAlignment: .top, placeholderAspectRatio: BookDetailCompactLayout.coverAspectRatio,
+            coverModifier: BookCoverClipStyle(cornerRadius: PobookUI.Radius.bookCover, fill: HierarchicalShapeStyle.quaternary)
+        )
+        .frame(width: BookDetailCompactLayout.coverSize.width)
+        .fixedSize(horizontal: false, vertical: true)
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { onCoverHeightChange($0) }
+        .accessibilityIdentifier("bookDetail.cover")
     }
 
     private var bibliography: some View {

@@ -50,9 +50,11 @@ struct BookRoutePreviewBookCard: View {
                     : AnyLayout(HStackLayout(alignment: .top, spacing: 14))
                 layout {
                     BookCoverView(
-                        url: book.imageURL, isbn: book.isbn,
-                        imageCornerRadius: BookExpandedDetailLayout.carouselCoverCornerRadius)
-                        .frame(width: 140, height: 186)
+                        url: book.imageURL, isbn: book.isbn, fitAlignment: .top,
+                        placeholderAspectRatio: 140.0 / 186.0,
+                        coverModifier: BookCoverClipStyle(cornerRadius: PobookUI.Radius.bookCover, fill: Color.clear))
+                        .frame(width: 140)
+                        .fixedSize(horizontal: false, vertical: true)
                     bibliography
                 }
                 description
