@@ -1950,7 +1950,7 @@
         "address_id" : null,
         "alt_name" : {
           "en" : "Restroom Female",
-          "ko" : "남자 화장실"
+          "ko" : "여자 화장실"
         },
         "category" : "restroom.female",
         "correlation_id" : null,
@@ -1959,7 +1959,7 @@
         "level_id" : "c5af3abb-8aa1-4285-9b1e-273da20e9ec3",
         "name" : {
           "en" : "Restroom Female",
-          "ko" : "남자 화장실"
+          "ko" : "여자 화장실"
         },
         "phone" : null,
         "unit_ids" : [
