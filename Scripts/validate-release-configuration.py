@@ -5,7 +5,7 @@ import os
 import sys
 
 
-def validate(configuration: str, channel: str, development: str = "", testflight: str = "", production: str = "",
+def validate(configuration: str, channel: str, development: str = "", production: str = "",
              action: str = "build") -> None:
     if channel not in ("automatic", "internal"):
         raise ValueError("POBOOK_BUILD_CHANNEL must be automatic or internal.")
@@ -15,7 +15,7 @@ def validate(configuration: str, channel: str, development: str = "", testflight
     if configuration != "Release":
         return
     required = {"DEVELOPMENT": development} if channel == "internal" else {
-        "DEVELOPMENT": development, "TESTFLIGHT": testflight, "PRODUCTION": production
+        "DEVELOPMENT": development, "PRODUCTION": production
     }
     for name, value in required.items():
         if len(value) < 32 or value.startswith("$(") or any(not 0x21 <= ord(character) <= 0x7e for character in value):
@@ -27,7 +27,7 @@ def validate(configuration: str, channel: str, development: str = "", testflight
 if __name__ == "__main__":
     try:
         validate(os.environ.get("CONFIGURATION", ""), os.environ.get("POBOOK_BUILD_CHANNEL", "automatic"),
-                 os.environ.get("POBOOK_RELAY_TOKEN_DEVELOPMENT", ""), os.environ.get("POBOOK_RELAY_TOKEN_TESTFLIGHT", ""),
+                 os.environ.get("POBOOK_RELAY_TOKEN_DEVELOPMENT", ""),
                  os.environ.get("POBOOK_RELAY_TOKEN_PRODUCTION", ""), action=os.environ.get("ACTION", "build"))
     except ValueError as error:
         print(f"error: {error}", file=sys.stderr)

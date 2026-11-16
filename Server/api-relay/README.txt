@@ -1,6 +1,7 @@
 PLI-144 / GitHub #182 — 단순 API 중계
 
-현재 상태 (2026-10-31 후속 배포)
+현재 상태
+- TestFlight와 App Store 앱은 운영 중계 서버를 함께 사용한다. 앱의 배포 환경 선택은 맨 아래에 기록했다.
 - 개발·TestFlight·운영 세 호스트의 HTTPS, 독립 접근 토큰, 실제 4개 API 경로 검증 완료.
 - 단일 컨테이너 pobook-api-dev:2711afb가 세 호스트를 처리하며 제공사 호출 예산을 공유·파일 보존한다.
 - 캐싱/응답 통합/이미지 중계는 하지 않는다. 배포 내역·미검증 항목은 맨 아래에 기록했다.
@@ -185,8 +186,8 @@ Nginx/인증서
     sudo docker exec -i -e RELAY_ENVIRONMENT=production pobook-api-dev node --input-type=module < deploy/smoke.mjs
   각 실행은 실제 제공사 요청 4건(Primo 1 / Yes24 1 / 정보나루 2)을 사용하므로 필요할 때만 실행한다.
 
-- state와 private은 Git/build context에서 제외한다. 앱에는 제공사 키가 아닌 세 접근 토큰만 비공개 로컬/CI 설정으로 전달한다.
-- Scripts/verify-api-relay.swift 검증 바이너리는 DEVELOPMENT / TESTFLIGHT / PRODUCTION 인자로 각 호스트를 확인할 수 있다.
+- state와 private은 Git/build context에서 제외한다. 앱 빌드에는 개발·운영 중계 토큰을 비공개 로컬/CI 설정으로 전달한다.
+- Scripts/verify-api-relay.swift 검증 바이너리는 DEVELOPMENT / PRODUCTION 인자로 앱이 사용하는 호스트를 확인한다.
 - 제공사 실제 할당량/IP 등록은 확인 전까지 1500/1000/400의 보수적 합산 예산을 유지한다. 이 서버 밖에서 같은 키로 호출한 양은 집계하지 못한다.
 
 후속 배포·검증 결과 (2026-10-31)
@@ -222,7 +223,7 @@ Nginx/인증서
 - 기존 john-baek.com 200 / blog.fpmaps.com 200 / set-link.fpmaps.com 302 유지, 기존 서비스 컨테이너 재시작 없음.
 
 운영 전 남은 확인
-- 실제 TestFlight 내부/외부 및 App Store 설치본의 StoreKit 분기·연결 확인. 업로드/게시/심사는 수행하지 않았다.
+- 실제 TestFlight 내부/외부 및 App Store 설치본의 운영 중계 연결 확인.
 - 기존 SDK 호환 및 별도 테스트 오류는 이 이슈 범위에서 변경하지 않았다. 정상 개발 환경에서 전체 빌드/테스트 재확인 필요.
 - 첫 추천 오류와 일부 표지 실패의 재현·분석, 전 UI 시나리오 회귀와 장기 실제 트래픽 점검 필요.
 - Primo 한 응답의 X-Exl-Api-Remaining=96260을 관측했으나 계약상 총한도/초기화 시각을 뜻한다고 단정하지 않는다.
@@ -251,3 +252,9 @@ Yes24 자체 제한 제거 (사용자 후속 요청)
 - 기존 코드/Compose/.env 백업: /home/ubuntu/pobook-api-dev/backup-before-yes24-27b4607.
 - 비밀값·Nginx·기존 사용량 파일은 변경하지 않았다. 세 환경의 실제 Yes24 요청은 모두 200이고 Yes24 과거 예산 항목은 요청 전후 동일했다.
 - 세 API 건강 응답 200, 기존 블로그 200/200·링크 서비스 302 유지. 앱/추천 로직은 수정하지 않았다.
+
+앱 배포 환경 선택 (2026-11-12 수정 반영)
+- TestFlight 1.0 (31)에서 StoreKit 설치 정보 조회 오류(500328)로 도서 요청이 중계 서버에 닿기 전에 실패했다. 같은 빌드 토큰으로 중계 서버에 직접 호출한 검색·Yes24 요청은 200이었다.
+- TestFlight에서 검증한 앱을 App Store에 제출한다. 두 배포판은 StoreKit 조회 없이 운영 중계 서버(pobook-api.fpmaps.com)에 연결한다.
+- Debug, 시뮬레이터, 내부 Release는 개발 중계 서버(pobook-api-dev.fpmaps.com)를 사용한다.
+- 배포용 Release 아카이브는 개발·운영 토큰을 검증한다. TestFlight 전용 호스트와 토큰은 기존 배포본 호환에 사용한다.

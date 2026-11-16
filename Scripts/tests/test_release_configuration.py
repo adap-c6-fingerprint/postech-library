@@ -17,15 +17,15 @@ class ReleaseConfigurationTests(unittest.TestCase):
         configuration.validate("Debug", "automatic")
 
     def test_release_rejects_missing_or_unexpanded_setting(self):
-        for name in ["development", "testflight", "production"]:
+        for name in ["development", "production"]:
             for value in ["", "  ", f"$(POBOOK_RELAY_TOKEN_{name.upper()})", "short", "x" * 32 + "\n"]:
-                tokens = dict(development="d" * 32, testflight="t" * 32, production="p" * 32)
+                tokens = dict(development="d" * 32, production="p" * 32)
                 tokens[name] = value
                 with self.subTest(name=name, value=value), self.assertRaisesRegex(ValueError, name.upper()):
                     configuration.validate("Release", "automatic", **tokens)
 
-    def test_automatic_release_needs_all_environment_tokens(self):
-        tokens = dict(development="d" * 32, testflight="t" * 32, production="p" * 32)
+    def test_automatic_release_needs_development_and_production_tokens(self):
+        tokens = dict(development="d" * 32, production="p" * 32)
         configuration.validate("Release", "automatic", **tokens)
         for name in tokens:
             incomplete = {key: value for key, value in tokens.items() if key != name}
@@ -38,15 +38,13 @@ class ReleaseConfigurationTests(unittest.TestCase):
             configuration.validate("Release", "internal", production="p" * 32)
 
     def test_automatic_release_rejects_duplicate_tokens(self):
-        for values in [("d", "d", "p"), ("d", "t", "d"), ("d", "t", "t"), ("d", "d", "d")]:
-            tokens = dict(zip(["development", "testflight", "production"], [value * 32 for value in values]))
-            with self.subTest(values=values), self.assertRaisesRegex(ValueError, "distinct") as result:
-                configuration.validate("Release", "automatic", **tokens)
-            for token in tokens.values():
-                self.assertNotIn(token, str(result.exception))
+        token = "d" * 32
+        with self.assertRaisesRegex(ValueError, "distinct") as result:
+            configuration.validate("Release", "automatic", development=token, production=token)
+        self.assertNotIn(token, str(result.exception))
 
     def test_archive_requires_automatic_release(self):
-        tokens = dict(development="d" * 32, testflight="t" * 32, production="p" * 32)
+        tokens = dict(development="d" * 32, production="p" * 32)
         for action in ["install", "archive"]:
             configuration.validate("Release", "automatic", action=action, **tokens)
             for build, channel in [("Release", "internal"), ("Debug", "internal"), ("Debug", "automatic")]:
@@ -65,6 +63,10 @@ class ReleaseConfigurationTests(unittest.TestCase):
         settings["ACTION"] = "build"
         local = subprocess.run(command, env=settings, capture_output=True, text=True)
         self.assertEqual(local.returncode, 0, local.stderr)
+        settings.update(ACTION="install", POBOOK_BUILD_CHANNEL="automatic",
+                        POBOOK_RELAY_TOKEN_PRODUCTION="p" * 32)
+        archive = subprocess.run(command, env=settings, capture_output=True, text=True)
+        self.assertEqual(archive.returncode, 0, archive.stderr)
 
     def test_invalid_channel_and_errors_do_not_print_tokens(self):
         with self.assertRaises(ValueError):
