@@ -43,8 +43,8 @@ struct BookNavigationView: View {
                             currentFloorIndicator
                             if store.diagnostics.isRecording { BookNavigationDiagnosticsHUD(store: store) }
                         }
-                        .padding(.horizontal, PobookUI.Spacing._20)
                     }
+                    .padding(.horizontal, 20).padding(.top, 20)
                     VStack(spacing: 16) {
                         Spacer()
                         // 지도 중앙 십자선을 가리지 않도록 기준점 안내는 아래쪽에 둔다.
@@ -124,6 +124,14 @@ struct BookNavigationView: View {
             }
         }
         .animation(.easeOut(duration: 0.2), value: store.isCancelConfirmationPresented)
+        .allowsHitTesting(!store.isNextBookOriginPickerPresented)
+        .accessibilityHidden(store.isNextBookOriginPickerPresented)
+        .overlay {
+            if store.isNextBookOriginPickerPresented {
+                nextBookOriginPicker
+                    .accessibilityAddTraits(.isModal)
+            }
+        }
         .onChange(of: store.exitReason) { _, reason in
             guard let reason else { return }
             if let onExit { onExit(reason) } else { dismiss() }
@@ -138,6 +146,25 @@ struct BookNavigationView: View {
         .analyticsScreen(.navigation)
     }
 
+    @ViewBuilder
+    private var nextBookOriginPicker: some View {
+        let nextIndex = store.currentStopIndex + 1
+        if store.routePlan.stops.indices.contains(nextIndex) {
+            let stop = store.routePlan.stops[nextIndex]
+            let floorName = store.routePlan.map.floors.first { $0.id == stop.shelf.floorID }
+                .map { "\($0.ordinal + 1)층" }
+            BookRouteOriginPickerView(
+                map: store.routePlan.map,
+                title: BookText.plainText(stop.book.title),
+                subtitle: [floorName, stop.shelf.shelfTitle].compactMap { $0 }.joined(separator: " "),
+                initialFloorID: store.currentFloor?.id ?? stop.shelf.floorID,
+                onCancel: { store.send(.nextBookOriginPickerDismissed) },
+                onConfirm: { coordinate, floorOrdinal in
+                    store.send(.nextBookOriginConfirmed(coordinate, floorOrdinal: floorOrdinal))
+                })
+        }
+    }
+
     #if DEBUG
     private static let isDiagnosticsMenuAvailable = true
     #else
@@ -145,25 +172,39 @@ struct BookNavigationView: View {
     #endif
 
     private var header: some View {
-        BookRouteHeader(
-            title: store.currentBookInfo.map { BookText.plainText($0.book.title) } ?? "도서 길안내",
-            subtitle: store.currentBookInfo.map { "\($0.floorName ?? "") \($0.shelf.shelfTitle)" },
-            closeLabel: "안내 종료",
-            accessory: diagnosticsHeaderAccessory,
-            titleIdentifier: "book-navigation-book-title",
-            subtitleIdentifier: "book-navigation-shelf",
-            closeIdentifier: "book-navigation-cancel",
-            onClose: { store.send(.cancelTapped) })
-    }
-
-    private var diagnosticsHeaderAccessory: BookRouteHeader.Accessory? {
-        guard Self.isDiagnosticsMenuAvailable || store.diagnostics.isAutoMode else { return nil }
-        return .init(
-            systemImage: store.diagnostics.isRecording ? "record.circle" : "waveform.path.ecg",
-            tint: store.diagnostics.isRecording ? .red : .white,
-            accessibilityLabel: store.diagnostics.isRecording ? "위치 진단 기록 중, 진단 메뉴 열기" : "위치 진단",
-            accessibilityIdentifier: "book-navigation-diagnostics",
-            action: { store.send(.diagnostics(.panelButtonTapped)) })
+        HStack(alignment: .top, spacing: 16) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(store.currentBookInfo.map { BookText.plainText($0.book.title) } ?? "도서 길안내")
+                    .typography(.title1)
+                    .lineLimit(2)
+                    .accessibilityIdentifier("book-navigation-book-title")
+                if let info = store.currentBookInfo {
+                    Text("\(info.floorName ?? "") \(info.shelf.shelfTitle)")
+                        .typography(.title1)
+                        .foregroundStyle(PobookUI.ColorToken.neutralTertiary)
+                        .accessibilityIdentifier("book-navigation-shelf")
+                }
+            }
+            Spacer(minLength: 0)
+            // 진단 메뉴는 Debug 빌드 또는 검색창 /test 측정 모드에서만 보인다.
+            if Self.isDiagnosticsMenuAvailable || store.diagnostics.isAutoMode {
+                Button { store.send(.diagnostics(.panelButtonTapped)) } label: {
+                    Image(systemName: store.diagnostics.isRecording ? "record.circle" : "waveform.path.ecg")
+                        .foregroundStyle(store.diagnostics.isRecording ? .red : .white)
+                        .frame(width: 44, height: 44)
+                        .glassEffect(.regular, in: .circle)
+                }
+                .accessibilityLabel(store.diagnostics.isRecording ? "위치 진단 기록 중, 진단 메뉴 열기" : "위치 진단")
+                .accessibilityIdentifier("book-navigation-diagnostics")
+            }
+            Button { store.send(.cancelTapped) } label: {
+                Image(systemName: "xmark").frame(width: 44, height: 44)
+                    .glassEffect(.regular, in: .circle)
+            }
+            .accessibilityLabel("안내 종료")
+            .accessibilityIdentifier("book-navigation-cancel")
+        }
+        .foregroundStyle(.white)
     }
 
     private var previousShelfButton: some View {
