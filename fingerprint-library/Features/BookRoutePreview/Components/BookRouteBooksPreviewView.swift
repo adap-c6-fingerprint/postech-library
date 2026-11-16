@@ -8,6 +8,7 @@ struct BookRouteBooksPreviewView: View {
     let isLoadingRoute: Bool
     let routeError: String?
     let canStart: Bool
+    var isResolvingStart = false
     let onBack: () -> Void
     let onStart: (Book) -> Void
     let onRetry: () -> Void
@@ -48,6 +49,14 @@ struct BookRouteBooksPreviewView: View {
 
     private var selectedBook: Book? {
         books.first { $0.id == selection.wrappedValue }
+    }
+
+    private var isPreparingGuidance: Bool {
+        if isResolvingStart || isLoadingRoute || shelfStore.map.isLoading || shelfStore.map.isLoadingShelfLabels {
+            return true
+        }
+        let guidanceBooks = guidesSelectedBook ? selectedBook.map { [$0] } ?? [] : books
+        return guidanceBooks.contains { shelfStore.holdings[$0.id] == .loading }
     }
 
     private var isShowingExpandedDetail: Bool { panelPresentation.isExpanded }
@@ -325,16 +334,21 @@ struct BookRouteBooksPreviewView: View {
                     guard let book = books.first(where: { $0.id == selection.wrappedValue }) else { return }
                     onStart(book)
                 } label: {
-                    HStack(spacing: 8) {
-                        if isLoadingRoute { ProgressView().tint(Color.textPrimary) }
-                        Text(isLoadingRoute ? "경로 확인 중" : "바로 안내 시작")
+                    HStack(spacing: PobookUI.Spacing._8) {
+                        if isPreparingGuidance {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                                .tint(PobookUI.ColorToken.neutralPrimary)
+                                .accessibilityHidden(true)
+                        }
+                        Text(isPreparingGuidance ? "소장 위치 확인 중" : "바로 안내 시작")
                             .typography(.button)
                     }
                     .frame(maxWidth: .infinity, minHeight: 50)
                 }
                 .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
                 .buttonBorderShape(.capsule)
-                .disabled(!canStart || selection.wrappedValue == nil)
+                .disabled(isPreparingGuidance || !canStart || selection.wrappedValue == nil)
                 .accessibilityHint(guidesSelectedBook
                     ? "현재 보고 있는 책의 서가로 안내해요"
                     : "선택한 전체 \(books.count)권을 최적 경로 순서로 안내해요")

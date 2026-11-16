@@ -143,8 +143,6 @@ struct IndoorMapKitView: UIViewRepresentable {
                 ? parent.homeMarkers.filter { $0.floorID == parent.floor.id } : [], in: view)
             updateShelfLabels(in: view)
             updateDetailShelfBadges(in: view)
-            updateRoute(in: view)
-            updateEntranceApproach(in: view)
             if highlightedIDs != parent.highlightedFeatureIDs {
                 highlightedIDs = parent.highlightedFeatureIDs
                 if baseExcludedIDs.isSubset(of: emphasizedIDs) {
@@ -154,6 +152,9 @@ struct IndoorMapKitView: UIViewRepresentable {
                 }
                 layoutShelfLabels(in: view)
             }
+            // 서가 강조 변경이 지도 전체를 다시 그릴 수 있으므로, 경로는 그 뒤에 추가한다.
+            updateRoute(in: view)
+            updateEntranceApproach(in: view)
             pendingCameraRequest = parent.cameraRequest == lastCameraRequest ? nil : parent.cameraRequest
             if pendingCameraRequest != nil { view.setNeedsLayout() }
         }

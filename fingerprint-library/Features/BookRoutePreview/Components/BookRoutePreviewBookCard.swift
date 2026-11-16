@@ -87,7 +87,7 @@ struct BookRoutePreviewBookCard: View {
         return VStack(alignment: .leading, spacing: 8) {
             switch holdings {
             case nil, .idle, .loading:
-                ProgressView("소장 위치 확인 중").font(.caption)
+                EmptyView()
             case .failed:
                 Text("소장 위치 확인 실패").font(.caption)
                 Button("다시 시도", action: onRetryHoldings).font(.caption)

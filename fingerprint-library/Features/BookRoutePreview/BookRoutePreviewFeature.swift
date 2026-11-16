@@ -487,10 +487,12 @@ struct BookRoutePreviewFeature {
     }
 
     private func requestHoldingsIfReady(_ state: inout State) -> Effect<Action> {
-        guard let start = state.currentStart, start.isRecent(at: now),
-              let map = state.shelf?.map.map, state.shelf?.map.loadError == nil,
-              map.floors.contains(where: { $0.ordinal == start.floorOrdinal }),
+        guard let map = state.shelf?.map.map, state.shelf?.map.loadError == nil,
               !state.hasRequestedHoldings else { return .none }
+        if state.entryMode == .direct {
+            guard let start = state.currentStart, start.isRecent(at: now),
+                  map.floors.contains(where: { $0.ordinal == start.floorOrdinal }) else { return .none }
+        }
         state.hasRequestedHoldings = true
         return .send(.shelf(.loadMissingHoldings))
     }

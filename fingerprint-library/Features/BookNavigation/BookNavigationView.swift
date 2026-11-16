@@ -45,24 +45,38 @@ struct BookNavigationView: View {
                         }
                     }
                     .padding(.horizontal, 20).padding(.top, 20)
-                    VStack(spacing: 16) {
+                    VStack(spacing: PobookUI.Spacing._16) {
                         Spacer()
                         // 지도 중앙 십자선을 가리지 않도록 기준점 안내는 아래쪽에 둔다.
                         if store.diagnostics.isPlacingCheckpoint { BookNavigationCheckpointBar(store: store) }
-                        HStack(spacing: 8) {
-                            if store.canReturnToPreviousStop { previousShelfButton }
-                            if store.canMarkShelfFound { shelfFoundButton }
+                        HStack {
                             Spacer(minLength: 0)
                             MapRecenterButton(accessibilityIdentifier: "book-navigation-recenter") {
                                 store.send(.recenterTapped)
                             }
                         }
-                        if let transition = store.nextFloorTransition {
-                            floorTransitionButton(transition, stopIndex: store.currentStopIndex)
+                        HStack(alignment: .bottom, spacing: PobookUI.Spacing._8) {
+                            if store.canReturnToPreviousRoute {
+                                previousRouteButton
+                                Spacer(minLength: 0)
+                            } else if store.currentStopIndex > 0 {
+                                if store.canReturnToPreviousStop { previousShelfButton }
+                                Spacer(minLength: 0)
+                            } else {
+                                Spacer(minLength: 0)
+                            }
+                            if let transition = store.nextFloorTransition {
+                                floorTransitionButton(transition, stopIndex: store.currentStopIndex)
+                            } else if store.canMarkShelfFound {
+                                shelfFoundButton
+                            }
+                            if store.currentStopIndex == 0, !store.canReturnToPreviousRoute {
+                                Spacer(minLength: 0)
+                            }
                         }
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, sheetHeight + 16)
+                    .padding(.horizontal, PobookUI.Spacing._16)
+                    .padding(.bottom, sheetHeight + PobookUI.Spacing._16)
                 }
                 .overlay(alignment: .bottom) {
                     if !store.isArrivalPresented, store.exitReason == nil {
@@ -210,27 +224,47 @@ struct BookNavigationView: View {
     private var previousShelfButton: some View {
         Button { store.send(.previousStopTapped) } label: {
             Label("이전 서가", systemImage: "chevron.backward")
-                .typography(.body2.weight(.semibold))
-                .padding(.horizontal, 16)
-                .frame(height: 48)
-                .glassEffect(.regular.interactive(), in: .capsule)
+                .typography(.body2)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, PobookUI.Spacing._16)
+                .padding(.vertical, PobookUI.Spacing._10)
+                .glassEffect(.regular.interactive(), in: .rect(cornerRadius: PobookUI.Radius.mapActionButton))
         }
         .buttonStyle(.plain)
-        .foregroundStyle(.white)
+        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .accessibilityHint("이전 책의 서가로 다시 안내해요")
         .accessibilityIdentifier("book-navigation-previous-shelf")
     }
 
-    private var shelfFoundButton: some View {
-        Button { store.send(.shelfFoundTapped) } label: {
-            Label("서가를 찾았어요", systemImage: "checkmark")
-                .typography(.body2.weight(.semibold))
-                .padding(.horizontal, 18)
-                .frame(height: 48)
-                .glassEffect(.regular.interactive(), in: .capsule)
+    private var previousRouteButton: some View {
+        Button { store.send(.previousRouteTapped) } label: {
+            Label("이전 경로", systemImage: "chevron.backward")
+                .typography(.body2)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, PobookUI.Spacing._16)
+                .padding(.vertical, PobookUI.Spacing._10)
+                .glassEffect(.regular.interactive(), in: .rect(cornerRadius: PobookUI.Radius.mapActionButton))
         }
         .buttonStyle(.plain)
-        .foregroundStyle(.white)
+        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
+        .accessibilityHint("층 이동 전 경로를 다시 표시해요")
+        .accessibilityIdentifier("book-navigation-previous-route")
+    }
+
+    private var shelfFoundButton: some View {
+        Button { store.send(.shelfFoundTapped) } label: {
+            Text("\(store.currentStop?.shelf.shelfTitle ?? "서가") 도착 시 눌러주세요")
+                .typography(.body2)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, PobookUI.Spacing._16)
+                .padding(.vertical, PobookUI.Spacing._10)
+                .glassEffect(.regular.interactive(), in: .rect(cornerRadius: PobookUI.Radius.mapActionButton))
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
         .accessibilityHint("책장 앞 책등 찾기 화면으로 이동해요")
         .accessibilityIdentifier("book-navigation-shelf-found")
     }
@@ -307,12 +341,14 @@ struct BookNavigationView: View {
             store.send(.floorTransitionTapped(stopIndex: stopIndex, stepIndex: transition.id))
         } label: {
             Text(transition.buttonTitle)
-                .typography(.caption2.weight(.medium))
+                .typography(.body2)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
-                .padding(.horizontal, 16)
-                .frame(minHeight: 34)
-                .glassEffect(.regular.tint(.black.opacity(0.2)), in: .rect(cornerRadius: 12))
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, PobookUI.Spacing._16)
+                .padding(.vertical, PobookUI.Spacing._10)
+                .glassEffect(.regular.tint(.black.opacity(0.2)).interactive(),
+                    in: .rect(cornerRadius: PobookUI.Radius.mapActionButton))
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("book-navigation-floor-transition")
