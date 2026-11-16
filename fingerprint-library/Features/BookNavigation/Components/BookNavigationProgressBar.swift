@@ -102,7 +102,8 @@ struct BookNavigationProgressBar: View {
             markerView(kind)
         case .transition(let segment):
             HStack(spacing: layout.iconSpacing) {
-                Image(segment.kind == .stairs ? "annotation_stairs" : "annotation_elevator")
+                Image(asset(for: segment.kind == .stairs ? .stairs : .elevator))
+                    .renderingMode(.original)
                     .resizable().scaledToFit().frame(width: markerDiameter, height: markerDiameter)
                 Text(item.text ?? "").typography(typography).fixedSize()
                     .foregroundStyle(PobookUI.ColorToken.RouteBar.elevatorGuideText)
@@ -133,17 +134,17 @@ struct BookNavigationProgressBar: View {
                 .frame(width: markerDiameter, height: markerDiameter)
                 .background(BookNavigationPalette.accent, in: Capsule())
         default:
-            Image(asset(for: kind)).resizable().scaledToFit()
+            Image(asset(for: kind)).renderingMode(.original).resizable().scaledToFit()
                 .frame(width: markerDiameter, height: markerDiameter)
         }
     }
 
     private func asset(for kind: BookNavigationTimeline.MarkerKind) -> String {
         switch kind {
-        case .walk: "annotation_walk"
-        case .elevator: "annotation_elevator"
-        case .stairs: "annotation_stairs"
-        case .book, .waypoint, .waypoints: "annotation_book"
+        case .walk: "navigationAnnotations/walk"
+        case .elevator: "navigationAnnotations/elevator"
+        case .stairs: "navigationAnnotations/stairs"
+        case .book, .waypoint, .waypoints: "navigationAnnotations/book"
         }
     }
 }
