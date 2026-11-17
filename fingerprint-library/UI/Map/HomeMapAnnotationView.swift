@@ -16,7 +16,8 @@ final class HomeMapAnnotationView: MKAnnotationView {
         centerOffset = .zero
         clipsToBounds = false
         backgroundColor = .clear
-        canShowCallout = true
+        canShowCallout = false
+        isEnabled = false
         displayPriority = .required
         zPriority = MapAnnotationPriority.marker
         selectedZPriority = MapAnnotationPriority.marker
@@ -79,7 +80,7 @@ final class HomeMapAnnotationView: MKAnnotationView {
         nameLabel.isHidden = marker.kind == .favorite || marker.title.isEmpty
         countBadge.text = String(marker.bookKeys.count)
         countBadge.isHidden = marker.kind != .favorite || marker.bookKeys.count < 2
-        canShowCallout = marker.kind != .favorite
+        isEnabled = marker.kind == .favorite
         accessibilityTraits = marker.kind == .favorite ? .button : []
         accessibilityHint = marker.kind == .favorite ? "찜한 도서 상세 보기" : nil
         accessibilityLabel = annotation.title

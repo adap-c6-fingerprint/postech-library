@@ -249,6 +249,8 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
             for view in views where view.annotation is MKUserLocation {
+                view.canShowCallout = false
+                view.isEnabled = false
                 view.zPriority = MapAnnotationPriority.user
                 view.selectedZPriority = MapAnnotationPriority.user
             }
@@ -802,6 +804,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "indoor-marker")
             view.annotation = annotation
             view.canShowCallout = false
+            view.isEnabled = false
             view.titleVisibility = .hidden
             view.displayPriority = .defaultLow
             view.zPriority = MapAnnotationPriority.marker
