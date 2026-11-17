@@ -7,6 +7,7 @@ struct MapRecenterButton: View {
     var body: some View {
         Button(action: action) {
             Image(systemName: "scope").font(.title3)
+                .foregroundStyle(PobookUI.ColorToken.Button.neutralText)
                 .frame(width: 48, height: 48).glassEffect(.regular, in: .circle)
         }
         .accessibilityLabel("현재 위치로 지도 이동")

@@ -53,7 +53,7 @@ struct BookNavigationProgressBar: View {
                 .offset(x: layout.trackStart)
 
             ZStack(alignment: .leading) {
-                Rectangle().fill(BookNavigationPalette.accent)
+                Capsule().fill(BookNavigationPalette.accent)
                     .frame(width: layout.completedWidth(timeline: timeline, stopIndex: stopIndex, progress: progress),
                            height: trackHeight)
                     .offset(x: layout.trackStart)
