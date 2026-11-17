@@ -225,7 +225,7 @@ struct BookRouteBooksPreviewView: View {
 
     private func cartButton(_ store: StoreOf<BookDetailFeature>) -> some View {
         Button { store.send(.addToCartButtonTapped) } label: {
-            Image(systemName: "cart.fill").font(.system(size: 23, weight: .semibold))
+            Image(systemName: "basket.fill").font(.system(size: 23, weight: .semibold))
         }
         .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
         .buttonBorderShape(.circle)

@@ -352,7 +352,7 @@ struct BookDetailView: View {
             .accessibilityIdentifier("bookDetail.startGuidance")
             Button {
                 store.send(.addToCartButtonTapped)
-            } label: { Image(systemName: "cart.fill").font(.system(size: 23, weight: .semibold)) }
+            } label: { Image(systemName: "basket.fill").font(.system(size: 23, weight: .semibold)) }
             .buttonBorderShape(.circle)
             .controlSize(.large)
             .frame(width: 50, height: 50)
