@@ -6,6 +6,8 @@ nonisolated struct AnalyticsClient: Sendable {
     var setActive: @Sendable (Bool) async -> Void = { _ in }
     var checkpoint: @Sendable () -> Void = {}
     var updateProfile: @Sendable (UserProfile?) -> Void = { _ in }
+    var updateCollectionCounts: @Sendable (_ favorites: Int, _ cart: Int) -> Void = { _, _ in }
+    // 찜한 책 개수와 장바구니 책 개수를 사용자 속성으로 설정한다
     var consentChanges: @Sendable () -> AsyncStream<Void> = { AsyncStream { $0.finish() } }
 }
 
@@ -18,6 +20,7 @@ extension AnalyticsClient: DependencyKey {
         },
         checkpoint: { AnalyticsRuntime.shared.checkpoint() },
         updateProfile: { AnalyticsRuntime.shared.updateProfile($0) },
+        updateCollectionCounts: { AnalyticsRuntime.shared.updateCollectionCounts(favorites: $0, cart: $1) },
         consentChanges: {
             AsyncStream { continuation in
                 let task = Task {

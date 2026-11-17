@@ -5,10 +5,7 @@ struct DepartmentRecommendationsView: View {
     let store: StoreOf<HomeFeature>
     @State private var sortOrder = DepartmentBookSort.recommended
 
-    private var title: String {
-        let name = store.departmentName
-        return name.isEmpty ? "많이 빌린 도서" : "'\(name)'에서 많이 빌린"
-    }
+    private var title: String { store.popularBooksTitle }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -49,6 +46,7 @@ struct DepartmentRecommendationsView: View {
         .toolbarBackground(Color.backgroundDefault, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .analyticsScreen(.departmentRecommendations)
         .task(id: store.userProfile) { await store.send(.departmentRecommendationsRequested).finish() }
     }
 
@@ -68,7 +66,7 @@ struct DepartmentRecommendationsView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(books) { book in
                         BookListRow(book: book, libraryInfo: infoByID[book.id]) {
-                            store.send(.bookSelected(book))
+                            store.send(.bookSelected(book, list: .department, screen: .departmentRecommendations))
                         }
 
                         if book.id != books.last?.id {

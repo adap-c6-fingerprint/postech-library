@@ -40,7 +40,7 @@ struct BookRoutePreviewView: View {
                 directHeader
                 directStatus
             } else {
-                BookRoutePreparingView(onBack: { dismiss() }, onGoHome: { returnHome() })
+                BookRoutePreparingView(onBack: { back() }, onGoHome: { returnHome() })
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -52,17 +52,12 @@ struct BookRoutePreviewView: View {
     private var showsRouteFailure: Bool { store.showsRouteFailure }
 
     private var directLoadingBackdrop: some View {
-        ZStack {
-            Color(uiColor: .systemBackground)
-            directMapBackdrop
-            Rectangle()
-                .fill(.regularMaterial)
-                .overlay(Color.black.opacity(0.25))
-        }
-        .ignoresSafeArea()
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
-        .accessibilityIdentifier("book-navigation-preparing-background")
+        directMapBackdrop
+            .overlay(Color.black.opacity(0.32))
+            .ignoresSafeArea()
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+            .accessibilityIdentifier("book-navigation-preparing-background")
     }
 
     @ViewBuilder
@@ -113,21 +108,13 @@ struct BookRoutePreviewView: View {
 
     private var directStatus: some View {
         VStack(spacing: 10) {
-            Text(store.isPreparingManualOrigin ? "서가까지\n수동안내를 시작합니다" : "서가까지\n길안내를 준비합니다")
-                .typography(.body1)
+            Text("서가까지\n수동안내를 시작합니다")
+                .typography(.body2)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(PobookUI.ColorToken.neutralPrimary)
+                .foregroundStyle(PobookUI.ColorToken.neutralSecondary)
             ProgressView()
+                .frame(width: 20, height: 20)
                 .tint(PobookUI.ColorToken.neutralPrimary)
-            if let notice = store.startNotice {
-                RouteStartNoticeView(notice: notice)
-                    .typography(.caption1)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-                Button("출발 위치 직접 설정") { store.send(.setOriginManuallyTapped) }
-                    .font(.caption.bold())
-                    .accessibilityIdentifier("book-navigation-preparing-set-origin")
-            }
         }
         .padding(.horizontal, 20)
         .accessibilityElement(children: .contain)
@@ -139,7 +126,7 @@ struct BookRoutePreviewView: View {
             kind: .init(failure: store.failureMessage),
             diagnostic: failureDiagnostic,
             isRetrying: store.isRetryingDirectNavigation,
-            onBack: { dismiss() },
+            onBack: { back() },
             onRetry: { retryDirectNavigation() },
             onGoHome: { returnHome() },
             onAddToCart: destination.books.isEmpty ? nil : { addBooksToCart() },
@@ -213,7 +200,7 @@ struct BookRoutePreviewView: View {
 
     var body: some View {
         Group {
-            if entryMode == .direct {
+            if entryMode == .direct && !store.hasUnavailableBooks {
                 directContent
             } else if let destinationStore {
                 BookRouteBooksPreviewView(
@@ -222,14 +209,16 @@ struct BookRoutePreviewView: View {
                     routePlan: readySession,
                     isLoadingRoute: isLoadingRoute,
                     routeError: hidesRouteErrorWhileResolvingOrigin ? nil : routeError?.message,
-                    startNotice: store.startNotice,
                     canStart: !isLoadingRoute && (needsStartLocationSetup
                         || (readySession != nil && currentStart != nil && routeError == nil)),
-                    onBack: { dismiss() },
+                    isResolvingStart: store.startDecision == .locating,
+                    onBack: { back() },
                     onStart: { _ in store.send(.startTapped) },
                     onRetry: { store.send(.retryTapped) },
                     onSetOriginManually: { store.send(.setOriginManuallyTapped) },
-                    homeAnnotations: mapStore?.homeAnnotations
+                    homeAnnotations: mapStore?.homeAnnotations,
+                    onBookTabTapped: { id in store.send(.bookTabTapped(id)) },
+                    onCardSwiped: { id, direction in store.send(.bookCardSwiped(id, direction: direction)) }
                 )
             }
         }
@@ -287,6 +276,11 @@ struct BookRoutePreviewView: View {
         }
     }
 
+    private func back() {
+        store.send(.backTapped)
+        dismiss()
+    }
+
     private var routeMap: IndoorMap? {
         mapStore?.map ?? destinationStore?.state.map.map
     }
@@ -302,6 +296,7 @@ struct BookRoutePreviewView: View {
                 onConfirm: { coordinate, floorOrdinal in
                     store.send(.originConfirmed(coordinate, floorOrdinal: floorOrdinal))
                 })
+                .analyticsScreen(.routeOriginPicker)
         } else {
             VStack(spacing: 20) {
                 ContentUnavailableView("지도를 불러오지 못했어요", systemImage: "map",
@@ -315,21 +310,36 @@ struct BookRoutePreviewView: View {
     }
 
     private var originPickerTitle: String {
-        orderedBooks.first.map { BookText.plainText($0.title) } ?? "도서 길안내"
+        if orderedBooks.count > 1 { return "출발지 직접 설정하기" }
+        return orderedBooks.first.map { BookText.plainText($0.title) } ?? "도서 길안내"
     }
 
     private var originPickerSubtitle: String? {
-        guard let book = orderedBooks.first,
-              let shelf = destinationStore?.state.shelves(for: book.id).first else { return nil }
-        let floorName = routeMap?.floors.first { $0.id == shelf.floorID }?.name
+        if orderedBooks.count > 1 {
+            return "층을 선택하고 지도를 움직여\n출발지를 직접 설정해주세요"
+        }
+        guard let book = orderedBooks.first else { return nil }
+        guard let shelf = destinationStore?.state.shelves(for: book.id).first else {
+            return originPickerCachedDestination?.locationText
+        }
+        let floorName = routeMap?.floors.first { $0.id == shelf.floorID }.map { "\($0.ordinal + 1)층" }
         return [floorName, shelf.shelfTitle].compactMap { $0 }.joined(separator: " ")
     }
 
     private var originPickerFloorID: UUID? {
         guard let book = orderedBooks.first,
               let shelf = destinationStore?.state.shelves(for: book.id).first else {
-            return mapStore?.selectedFloorID
+            return originPickerCachedDestination?.shelves.first?.floorID ?? mapStore?.selectedFloorID
         }
         return shelf.floorID
+    }
+
+    private var originPickerCachedDestination: BookDetailDestinationPresentation? {
+        guard orderedBooks.count == 1 else { return nil }
+        let labels = destinationStore?.state.map.shelfLabels ?? []
+        return BookDetailDestinationPresentation.resolve(
+            holdings: store.originBookHoldings, map: routeMap,
+            labels: labels.isEmpty ? mapStore?.shelfLabels ?? [] : labels
+        )
     }
 }

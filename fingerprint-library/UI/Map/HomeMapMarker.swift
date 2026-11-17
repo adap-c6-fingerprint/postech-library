@@ -3,7 +3,7 @@ import Foundation
 nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     enum Kind: String, CaseIterable, Sendable {
         case favorite, stairs, elevator, toilet, shop, printer, media
-        case cafe, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone
+        case cafe, plora, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone
         case waterDispenser, entranceDesk, circulationDesk, computer, nursingRoom
         case other
 
@@ -24,6 +24,7 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
             case .printer: "annotation_printer"
             case .media: "annotation_tv"
             case .cafe: "annotation_cafe"
+            case .plora: "annotation_plora"
             case .conferenceRoom: "annotation_conferenceRoom"
             case .gamingRoom: "annotation_gamingRoom"
             case .groupStudyRoom: "annotation_groupStudyRoom"
@@ -49,7 +50,7 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
 
 nonisolated enum HomeMapMarkerBuilder {
     static func amenities(on map: IndoorMap) -> [HomeMapMarker] {
-        let markers: [HomeMapMarker] = map.features.compactMap { feature in
+        let markers: [(marker: HomeMapMarker, mergeCategory: String?)] = map.features.compactMap { feature in
             guard let floor = feature.floorID, let kind = amenityKind(feature),
                   let coordinate = anchor(for: feature.geometry) else { return nil }
             let fallback: String = switch kind {
@@ -60,6 +61,7 @@ nonisolated enum HomeMapMarkerBuilder {
             case .printer: "프린터·복사기"
             case .media: "영상 자료실"
             case .cafe: "카페 니어미"
+            case .plora: "Plora"
             case .conferenceRoom: "미팅룸"
             case .gamingRoom: "게임룸"
             case .groupStudyRoom: feature.category?.lowercased() == "classroom" ? "강의실" : "그룹 스터디룸"
@@ -71,10 +73,19 @@ nonisolated enum HomeMapMarkerBuilder {
             case .nursingRoom: "수유실"
             default: "기타 시설"
             }
-            return HomeMapMarker(id: "amenity-\(feature.kind.rawValue)-\(feature.sourceID)", kind: kind,
+            let marker = HomeMapMarker(id: "amenity-\(feature.kind.rawValue)-\(feature.sourceID)", kind: kind,
                 floorID: floor, coordinate: coordinate, title: feature.name ?? fallback)
-        }.sorted { $0.id < $1.id }
+            return (marker, mergeCategory(for: feature))
+        }.sorted { $0.marker.id < $1.marker.id }
         return merging(markers)
+    }
+
+    /// 나란히 놓인 엘리베이터처럼 같은 IMDF 분류의 점 시설만 합친다.
+    /// 방(unit) 마커와 분류가 다른 시설(남자·여자·장애인 화장실 등)은 각자 자리에 남긴다.
+    private static func mergeCategory(for feature: IndoorMapElement) -> String? {
+        guard feature.kind == .amenity, case .point = feature.geometry,
+              let category = feature.category?.lowercased(), !category.isEmpty else { return nil }
+        return category
     }
 
     private static let overlapMeters = 6.0
@@ -87,19 +98,23 @@ nonisolated enum HomeMapMarkerBuilder {
         return lhs < rhs
     }
 
-    private static func merging(_ markers: [HomeMapMarker]) -> [HomeMapMarker] {
-        var clusters: [[HomeMapMarker]] = []
-        for marker in markers {
-            let index = clusters.firstIndex { cluster in
-                guard let first = cluster.first, first.kind == marker.kind, first.floorID == marker.floorID,
-                      first.bookKeys.isEmpty, marker.bookKeys.isEmpty else { return false }
-                return cluster.contains {
+    private static func merging(_ markers: [(marker: HomeMapMarker, mergeCategory: String?)]) -> [HomeMapMarker] {
+        var clusters: [(category: String?, markers: [HomeMapMarker])] = []
+        for (marker, category) in markers {
+            let index = category == nil ? nil : clusters.firstIndex { cluster in
+                guard cluster.category == category, let first = cluster.markers.first,
+                      first.floorID == marker.floorID else { return false }
+                return cluster.markers.contains {
                     RoutingGeometry.distanceMeters(from: $0.coordinate, to: marker.coordinate) <= overlapMeters
                 }
             }
-            if let index { clusters[index].append(marker) } else { clusters.append([marker]) }
+            if let index {
+                clusters[index].markers.append(marker)
+            } else {
+                clusters.append((category, [marker]))
+            }
         }
-        return clusters.map { cluster in
+        return clusters.map(\.markers).map { cluster in
             guard cluster.count > 1, var representative = cluster.first else { return cluster[0] }
             representative.title = cluster.map(\.title).min(by: isPlainer) ?? representative.title
             representative.coordinate = IndoorMapCoordinate(
@@ -164,6 +179,7 @@ nonisolated enum HomeMapMarkerBuilder {
         if let owned = Self.ownedKind(forCategory: category) {
             return feature.kind == .amenity ? owned : nil
         }
+        if compactName.contains("plora") || compactName.contains("플로라") { return .plora }
         if compactName.contains("pc존") || compactName.contains("pczone") { return .computer }
         if name.contains("편의점") || name.contains("convenience") || name.contains("gs25") { return .shop }
         if name.contains("프린터") || name.contains("복사기") || name.contains("printer") || name.contains("copier") {
@@ -180,7 +196,6 @@ nonisolated enum HomeMapMarkerBuilder {
             || compactName.contains("회의실") || compactName.contains("미팅룸")
             || compactName.contains("meetingroom") || compactName.contains("conferenceroom")
             || compactName.contains("콜라보") || compactName.contains("collaboration")
-            || compactName.contains("plora") || compactName.contains("플로라")
             || compactName.contains("postech1986") || compactName.contains("isss")
             || compactName.contains("국제협력팀") || compactName.contains("internationalrelations") {
             return .groupStudyRoom

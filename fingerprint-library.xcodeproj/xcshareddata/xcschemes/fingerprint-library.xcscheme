@@ -30,7 +30,8 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
       <Testables>
-         <TestableReference skipped = "NO">
+         <TestableReference
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C50000000000000000000006"
@@ -39,7 +40,8 @@
                ReferencedContainer = "container:fingerprint-library.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference skipped = "NO">
+         <TestableReference
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B40000000000000000000006"
@@ -71,6 +73,16 @@
             ReferencedContainer = "container:fingerprint-library.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-FIRAnalyticsDebugEnabled"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-FIRDebugEnabled"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

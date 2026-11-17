@@ -18,6 +18,10 @@ struct RecentlyFoundBookShelf: View {
     var isScrollable = false
     var onTap: (() -> Void)?
     var onSelect: ((Book) -> Void)?
+    var onScroll: ((_ direction: String) -> Void)?
+    // 좌우로 넘기고 손을 뗀 순간 방향(left, right)을 알린다
+    @State private var scrollStartX: CGFloat = 0
+    // 손을 댄 순간의 가로 위치
 
     var size: Size = .card
 
@@ -72,6 +76,15 @@ struct RecentlyFoundBookShelf: View {
             .contentMargins(.leading, size.bookLeadingInset, for: .scrollContent)
             .contentMargins(.trailing, RecommendationShelfView.leadingInset, for: .scrollContent)
             .scrollIndicators(.hidden)
+            .onScrollPhaseChange { oldPhase, newPhase, context in
+                if newPhase == .interacting {
+                    scrollStartX = context.geometry.contentOffset.x
+                    // 손을 댄 순간의 위치
+                } else if oldPhase == .interacting {
+                    onScroll?(context.geometry.contentOffset.x > scrollStartX ? "right" : "left")
+                    // 손을 뗀 순간 1회. 내용이 왼쪽으로 밀리면(오프셋 증가) 오른쪽으로 넘긴 것이다
+                }
+            }
         } else {
             spineRow
                 .fixedSize(horizontal: true, vertical: false)

@@ -37,7 +37,7 @@ struct BookDetailMapView: View {
                 if !sheetPresentation.isExpanded, compactSheetFrame != nil, let floor {
                     destinationFloorBadge(floor)
                         .padding(.trailing, 16)
-                        .padding(.bottom, coveredHeight + 16)
+                        .padding(.bottom, coveredHeight + 13)
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -104,10 +104,15 @@ struct BookDetailSheet: View {
     let presentation: BookDetailSheetPresentation
     var onDismiss: () -> Void
     var onLayoutChange: () -> Void = { }
+    var onCompactCoverHeightChange: () -> Void = { }
 
     var body: some View {
         NavigationStack {
-            BookDetailView(store: store, detent: presentation.detent, onDismiss: onDismiss)
+            BookDetailView(store: store, detent: presentation.detent, onDismiss: onDismiss, onCoverHeightChange: { height in
+                guard presentation.compactCoverHeight != height else { return }
+                presentation.compactCoverHeight = height
+                onCompactCoverHeightChange()
+            })
                 .containerBackground(.clear, for: .navigation)
                 .toolbar(.hidden, for: .navigationBar)
         }
@@ -126,6 +131,7 @@ struct BookDetailView: View {
     private var isExpanded: Bool { detent == .large }
     private var usesAccessibleLayout: Bool { dynamicTypeSize.isAccessibilitySize || isVoiceOverEnabled }
     var onDismiss: () -> Void = { }
+    var onCoverHeightChange: (CGFloat) -> Void = { _ in }
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
 
@@ -233,12 +239,15 @@ struct BookDetailView: View {
     }
 
     private var cover: some View {
-        BookCoverView(url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL)
-            .frame(width: BookDetailCompactLayout.coverSize.width,
-                   height: BookDetailCompactLayout.coverSize.height)
-            .background(.quaternary)
-            .clipShape(RoundedRectangle(cornerRadius: 6))
-            .accessibilityIdentifier("bookDetail.cover")
+        BookCoverView(
+            url: store.book.imageURL, isbn: store.book.isbn, cachedURL: store.cachedCoverURL,
+            fitAlignment: .top, placeholderAspectRatio: BookDetailCompactLayout.coverAspectRatio,
+            coverModifier: BookCoverClipStyle(cornerRadius: PobookUI.Radius.bookCover, fill: HierarchicalShapeStyle.quaternary)
+        )
+        .frame(width: BookDetailCompactLayout.coverSize.width)
+        .fixedSize(horizontal: false, vertical: true)
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { onCoverHeightChange($0) }
+        .accessibilityIdentifier("bookDetail.cover")
     }
 
     private var bibliography: some View {
@@ -295,14 +304,23 @@ struct BookDetailView: View {
     }
 
     private var descriptionSection: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: PobookUI.Spacing._4) {
             let author = BookText.plainText(store.book.author).trimmingCharacters(in: .whitespacesAndNewlines)
             if !author.isEmpty {
-                Text("\(author) 저자").typography(.body2)
+                Text("\(author) 저자")
+                    .typography(.body2)
+                    .foregroundStyle(PobookUI.ColorToken.BookDetails.textAuthor)
+            }
+            let publisher = BookText.plainText(store.book.publisher ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if !publisher.isEmpty {
+                Text("\(publisher) 출판")
+                    .typography(.caption1)
+                    .foregroundStyle(PobookUI.ColorToken.BookDetails.textAuthor)
+                    .accessibilityIdentifier("bookDetail.publisher")
             }
             descriptionContent
-                .typography(.caption1)
-                .foregroundStyle(Color.textTertiary)
+                .typography(.caption2)
+                .foregroundStyle(PobookUI.ColorToken.BookDetails.textStory)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityIdentifier("bookDetail.description")
@@ -334,16 +352,24 @@ struct BookDetailView: View {
             Button {
                 store.send(.guidanceStarted)
             } label: {
-                Text("바로 안내 시작").typography(.button).frame(maxWidth: .infinity)
+                Text(store.holdingsState.isUnavailableForGuidance ? "대출 중인 책" : "바로 안내 시작")
+                    .typography(.button)
+                    .foregroundStyle(store.holdingsState.isUnavailableForGuidance
+                        ? PobookUI.ColorToken.Button.disabledText : PobookUI.ColorToken.Button.neutralText)
+                    .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.glass(.regular.tint(store.holdingsState.isUnavailableForGuidance
+                ? PobookUI.ColorToken.Button.disabledBackground.opacity(0.6)
+                : Color(white: 32.0 / 255).opacity(0.45))))
             .buttonBorderShape(.capsule)
             .buttonSizing(.flexible)
             .controlSize(.large)
             .frame(maxWidth: .infinity, minHeight: 50)
+            .disabled(!store.canStartGuidance)
             .accessibilityIdentifier("bookDetail.startGuidance")
             Button {
                 store.send(.addToCartButtonTapped)
-            } label: { Image(systemName: "cart.fill").font(.system(size: 23, weight: .semibold)) }
+            } label: { Image(systemName: "basket.fill").font(.system(size: 23, weight: .semibold)) }
             .buttonBorderShape(.circle)
             .controlSize(.large)
             .frame(width: 50, height: 50)

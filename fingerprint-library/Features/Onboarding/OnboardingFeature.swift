@@ -21,6 +21,20 @@ struct OnboardingFeature {
     }
 
     typealias AffiliationPath = RecommendationDataset.AffiliationPath
+
+    static func analyticsScreen(for step: Step, entry: Entry) -> AnalyticsScreen {
+        // 단계와 진입 경로로 분석용 화면 이름을 고른다
+        switch (entry, step) {
+        case (.changeInterests, _): .myPageInterests
+        // 마이페이지 → 관심 분야 변경에서 재사용할 때
+        case (_, .welcome): .onboardingWelcome
+        // 시작하기
+        case (_, .affiliation): .onboardingAffiliation
+        // 소속·학과 설정 (마이페이지에서 프로필 설정을 시작한 경우 포함)
+        case (_, .interests): .onboardingInterests
+        // 관심사 설정 (마이페이지에서 프로필 설정을 시작한 경우 포함)
+        }
+    }
     
     @ObservableState
     struct State: Equatable {
@@ -54,7 +68,17 @@ struct OnboardingFeature {
         }
 
         var preferenceNames: [String] { dataset.preferenceNames }
+
+        var analyticsScreen: AnalyticsScreen {
+            OnboardingFeature.analyticsScreen(for: step, entry: entry)
+        }
+        // 지금 보이는 단계의 분석용 화면 이름
         
+        var hasChangedInterests: Bool {
+            Set(selectedPreferences) != Set(userProfile?.interests ?? [])
+        }
+        // 관심 분야 변경에서 처음 들어왔을 때와 선택이 달라졌는지 (순서는 보지 않는다)
+
         var isAffiliationComplete: Bool {
             selectedAffiliation != nil
         }
@@ -112,6 +136,8 @@ struct OnboardingFeature {
         @CasePathable
         enum Alert: Equatable {
             case skipConfirmed
+            case continueSetupChosen
+            // 건너뛰기 알림에서 "설정하기"를 고름
         }
     }
     
@@ -153,10 +179,12 @@ struct OnboardingFeature {
                 return .run { _ in exit(0) }
                 
             case .skipButtonTapped:
+                analytics.record(.button(.later, on: state.analyticsScreen))
+                // "다음에 할래요"
                 state.alert = AlertState {
                     TextState("맞춤 정보 설정을 건너뛰시겠어요?")
                 } actions: {
-                    ButtonState(role: .cancel) {
+                    ButtonState(role: .cancel, action: .continueSetupChosen) {
                         TextState("설정하기")
                     }
                     ButtonState(role: .destructive, action: .skipConfirmed) {
@@ -168,7 +196,14 @@ struct OnboardingFeature {
                 return .none
 
             case .alert(.presented(.skipConfirmed)):
+                analytics.record(.button(.skipConfirmSkip, on: state.analyticsScreen))
+                // 건너뛰기 알림 → "건너뛰기"
                 state.isSkipNoticePresented = true
+                return .none
+
+            case .alert(.presented(.continueSetupChosen)):
+                analytics.record(.button(.skipConfirmSetup, on: state.analyticsScreen))
+                // 건너뛰기 알림 → "설정하기" (알림만 닫히고 소속 설정을 이어 간다)
                 return .none
 
             case .skipNoticeConfirmed:
@@ -179,6 +214,8 @@ struct OnboardingFeature {
                 return .none
 
             case let .parentSelected(parent):
+                analytics.record(.button(.affiliationSelect, on: state.analyticsScreen, [.kind: .text(parent)]))
+                // 소속 메뉴에서 고른 소속 (이미 고른 소속을 다시 골라도 기록)
                 guard state.selectedParent != parent else { return .none }
                 state.selectedParent = parent
                 state.selectedAffiliation = nil
@@ -186,28 +223,39 @@ struct OnboardingFeature {
                 
             case let .affiliationSelected(path):
                 guard state.affiliationChoices.contains(path) else { return .none }
+                analytics.record(.button(.departmentSelect, on: state.analyticsScreen, [.kind: .text(path.name)]))
+                // 학과 메뉴에서 고른 세부 소속
                 state.selectedAffiliation = path
                 return .none
                 
             case .nextButtonTapped:
                 guard state.isAffiliationComplete else { return .none }
+                analytics.record(.button(.next, on: state.analyticsScreen))
+                // 소속 선택이 끝난 뒤 "다음으로" 또는 왼쪽 스와이프
                 state.step = .interests
                 return .none
 
             case .backButtonTapped:
                 guard let previous = Step(rawValue: state.step.rawValue - 1) else { return .none }
+                analytics.record(.button(.back, on: state.analyticsScreen))
+                // 뒤로가기 (step을 바꾸기 전이라 떠나는 단계의 화면 이름으로 기록)
                 state.step = previous
                 return .none
 
             case let .preferenceToggled(name):
                 if let index = state.selectedPreferences.firstIndex(of: name) {
                     state.selectedPreferences.remove(at: index)
+                    analytics.record(.button(.interestDeselect, on: state.analyticsScreen, [.kind: .text(name)]))
+                    // 관심사 선택 해제 (kind = 해제한 관심사)
                 } else if state.preferenceNames.contains(name) {
                     state.selectedPreferences.append(name)
+                    analytics.record(.button(.interestSelect, on: state.analyticsScreen, [.kind: .text(name)]))
+                    // 관심사 선택 (kind = 고른 관심사)
                 }
                 return .none
                 
             case .finishButtonTapped where state.entry == .changeInterests:
+                analytics.record(.button(.done, on: state.analyticsScreen))
                 guard state.canFinish, let current = state.userProfile else { return .none }
                 do {
                     let updated = try current.updatingInterests(state.selectedPreferences)
@@ -219,6 +267,8 @@ struct OnboardingFeature {
                 }
 
             case .finishButtonTapped:
+                analytics.record(.button(.done, on: state.analyticsScreen))
+                // 관심사 단계의 완료 버튼 (저장할 수 없는 상태에서 눌러도 누름은 기록)
                 guard state.canFinish, let affiliation = state.selectedAffiliation else { return .none }
                 do {
                     let profile = try UserProfile(

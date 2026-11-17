@@ -28,6 +28,13 @@ struct BookSearchFeature {
         var isLoading: Bool = false
         var errorMessage: String? = nil
         var hasSearched: Bool = false
+        /// 검색창 명령(`/test` 등)의 결과 안내
+        var commandNotice: CommandNotice?
+    }
+
+    struct CommandNotice: Equatable {
+        let title: String
+        let message: String
     }
     
     enum RecentBookInfoState: Equatable {
@@ -48,6 +55,7 @@ struct BookSearchFeature {
         case categoryChanged(BookSearchCategory)
         case searchCancelled
         case searchButtonTapped
+        case commandNoticeDismissed
         case refreshButtonTapped
         case searchSucceeded(generation: Int, books: [Book])
         case searchFailed(generation: Int, message: String)
@@ -76,6 +84,15 @@ struct BookSearchFeature {
     @Dependency(\.bookSearchClient)
     var bookSearchClient: BookSearchClient
     @Dependency(\.analyticsClient) private var analytics
+
+    static func analyticsFilterButton(_ category: BookSearchCategory) -> AnalyticsEvent.ButtonID {
+        switch category {
+        case .all: .filterAll
+        case .monograph: .filterBook
+        case .journal: .filterJournal
+        }
+    }
+    // 자료 유형 탭(전체·단행본·학술지)의 버튼 이름
 
     @Dependency(\.searchHistoryClient)
     var searchHistoryClient: SearchHistoryClient
@@ -132,10 +149,9 @@ struct BookSearchFeature {
 
             case let .favoriteButtonTapped(book):
                 let isFavorite = BookFavorites().toggle(book, at: now)
-                analytics.record(.init(.bookFavoriteChanged, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(book)),
+                analytics.record(.init(.bookFavoriteChanged, AnalyticsEvent.bookFields(book).merging([
                     .action: .text(isFavorite ? "added" : "removed")
-                ]))
+                ]) { $1 }))
                 return .none
 
             case let .favoriteMarkerTapped(marker):
@@ -146,16 +162,19 @@ struct BookSearchFeature {
                 let books = (items.map(\.book) + state.books + state.recentBooks)
                     .filter { activeKeys.contains($0.recordKey) && seen.insert($0.recordKey).inserted }
                 guard let book = books.first else { return .none }
+                analytics.record(books.count == 1
+                    ? .button(.favoriteMarker, on: .map, book: book)
+                    : .button(.favoriteMarker, on: .map, [.bookCount: .integer(books.count)]))
+                // 지도의 찜한 책 아이콘. 한 권이면 책 ID, 같은 서가에 여러 권이면 권수를 보낸다
                 if books.count == 1 {
                     return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: marker.id)))
                 }
                 return .send(.delegate(.showFavoriteShelf(books, sourceFavoriteMarkerID: marker.id)))
 
             case let .bookSelected(book):
-                analytics.record(.init(.searchResultSelected, [
-                    .bookRecordID: .text(AnalyticsEvent.bookID(book)),
+                analytics.record(.init(.searchResultSelected, AnalyticsEvent.bookFields(book).merging([
                     .source: .text(state.hasSearched ? "results" : "recent")
-                ]))
+                ]) { $1 }))
                 recentSearchBooksClient.record(book)
                 state.recentBooks = recentSearchBooksClient.load()
                 return .send(.delegate(.showDetail(book, sourceFavoriteMarkerID: nil)))
@@ -189,6 +208,8 @@ struct BookSearchFeature {
 
             case let .categoryChanged(category):
                 guard state.category != category else { return .none }
+                analytics.record(.button(Self.analyticsFilterButton(category),
+                                         on: state.hasSearched ? .searchResults : .search))
                 state.category = category
                 return .none
 
@@ -210,6 +231,17 @@ struct BookSearchFeature {
                     delegate = .recommendationLayoutRequested(isExpanded: command == "/ver2")
                 case "/kulumi":
                     delegate = .kulumiCoversRequested
+                case "/test":
+                    // 실험 브랜치 전용: 위치 측정 모드를 켜고 끈다. 검색은 하지 않는다.
+                    @Shared(.locationDiagnosticsAutoRecord) var isAutoRecording
+                    let isOn = !isAutoRecording
+                    $isAutoRecording.withLock { $0 = isOn }
+                    state.query = ""
+                    state.commandNotice = isOn
+                        ? .init(title: "측정 모드를 켰어요",
+                                message: "이제 길안내를 시작하면 위치 기록이 자동으로 시작되고, 안내를 끝내면 저장돼요. 다시 /test를 입력하면 꺼져요.")
+                        : .init(title: "측정 모드를 껐어요", message: "다음 길안내부터는 위치를 기록하지 않아요.")
+                    return .none
                 default:
                     guard !state.isLoading else { return .none }
                     return search(state: &state)
@@ -223,6 +255,10 @@ struct BookSearchFeature {
                 state.errorMessage = nil
                 state.hasSearched = false
                 return .merge(.cancel(id: CancelID.search), .send(.delegate(delegate)))
+
+            case .commandNoticeDismissed:
+                state.commandNotice = nil
+                return .none
 
             case .delegate:
                 return .none

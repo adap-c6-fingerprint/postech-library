@@ -54,6 +54,16 @@ extension PobookUI {
         static let textAvailable = SwiftUI.Color(hex: 0x34C759)
         static let textUnavailable = SwiftUI.Color(hex: 0xFF383C)
 
+        enum RouteBar {
+            static let background = Gray._500
+            static let walkIconText = Gray._200
+            static let elevatorIconText = Gray._0
+            static let walkIconFill = Gray._600
+            static let walkIconStroke = Gray._700
+            static let walkGuideText = Gray._300
+            static let elevatorGuideText = SwiftUI.Color(hex: 0x005207)
+        }
+
         enum Tabbar {
             static let pressedBackground = ColorToken.neutralDark
             static let darkOverlay = Gray.black
@@ -79,6 +89,8 @@ extension PobookUI {
             static let neutralText = ColorToken.neutralPrimary
             static let neutralBacking = ColorToken.neutralSecondary
             static let neutralShadow = Gray._400.opacity(0.17)
+            static let disabledBackground = Gray._700
+            static let disabledText = Gray._500
             static let effectDark = Gray._900
             static let effectLight = Gray._100
         }
@@ -92,6 +104,14 @@ extension PobookUI {
 
         enum Chip {
             static let neutralBackground = Gray._900
+        }
+
+        enum BookSticker {
+            static let bottomColor = SwiftUI.Color(hex: 0x4D71FF)
+            static let background = Gray._200
+            static let textTop = Gray.black
+            static let textMiddle = Gray._700
+            static let textLarge = Gray._0
         }
 
         enum Pin {

@@ -7,11 +7,11 @@ struct BookNavigationProgressBar: View {
     let progress: RouteGuidanceProgress?
     var floors: [IndoorMapFloor] = []
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .caption) private var markerDiameter = 22.7
+    private let markerDiameter = BookNavigationProgressLayout.defaultMarkerDiameter
     @ScaledMetric(relativeTo: .caption) private var trackHeight = 20
     @ScaledMetric(relativeTo: .caption) private var rowHeight = 28
 
-    private let typography = PobookUI.Typography.caption2.weight(.semibold)
+    private let typography = PobookUI.Typography.guidance
 
     var body: some View {
         Group {
@@ -48,12 +48,12 @@ struct BookNavigationProgressBar: View {
 
     private func track(_ layout: BookNavigationProgressLayout) -> some View {
         ZStack(alignment: .leading) {
-            Rectangle().fill(.white.opacity(0.16))
+            Rectangle().fill(PobookUI.ColorToken.RouteBar.background)
                 .frame(width: layout.trackWidth, height: trackHeight)
                 .offset(x: layout.trackStart)
 
             ZStack(alignment: .leading) {
-                Rectangle().fill(BookNavigationPalette.accent)
+                Capsule().fill(BookNavigationPalette.accent)
                     .frame(width: layout.completedWidth(timeline: timeline, stopIndex: stopIndex, progress: progress),
                            height: trackHeight)
                     .offset(x: layout.trackStart)
@@ -81,18 +81,14 @@ struct BookNavigationProgressBar: View {
     private func segmentLabel(_ item: BookNavigationProgressLayout.Item) -> some View {
         switch item.content {
         case .walk(let segment):
-            let completion = timeline.completion(of: segment, stopIndex: stopIndex, progress: progress)
             if let text = item.text {
                 Text(text).typography(typography).fixedSize()
-                    .foregroundStyle(completion > 0.5 ? Color.black : .white.opacity(0.85))
+                    .foregroundStyle(PobookUI.ColorToken.RouteBar.walkGuideText)
                     .accessibilityIdentifier("navigation-progress.walk.\(segment.id)")
             }
-        case .approach(let kind):
-            let completion = timeline.segments.first { $0.kind == kind }.map {
-                timeline.completion(of: $0, stopIndex: stopIndex, progress: progress)
-            } ?? 0
+        case .approach:
             Text(item.text ?? "").typography(typography).fixedSize()
-                .foregroundStyle(completion > 0.5 ? Color.black : .white.opacity(0.85))
+                .foregroundStyle(PobookUI.ColorToken.RouteBar.walkGuideText)
                 .accessibilityIdentifier("navigation-progress.approach.\(item.id)")
         default:
             EmptyView()
@@ -103,17 +99,18 @@ struct BookNavigationProgressBar: View {
     private func markerItem(_ item: BookNavigationProgressLayout.Item, layout: BookNavigationProgressLayout) -> some View {
         switch item.content {
         case .marker(let kind):
-            markerView(kind, width: item.width)
+            markerView(kind)
         case .transition(let segment):
             HStack(spacing: layout.iconSpacing) {
-                Image(segment.kind == .stairs ? "annotation_stairs" : "annotation_elevator")
+                Image(asset(for: segment.kind == .stairs ? .stairs : .elevator))
+                    .renderingMode(.original)
                     .resizable().scaledToFit().frame(width: markerDiameter, height: markerDiameter)
                 Text(item.text ?? "").typography(typography).fixedSize()
+                    .foregroundStyle(PobookUI.ColorToken.RouteBar.elevatorGuideText)
                     .frame(maxWidth: .infinity)
             }
             .padding(.trailing, layout.textPadding * 2)
             .frame(width: item.width, height: markerDiameter)
-            .foregroundStyle(.black)
             .background {
                 Capsule().fill(BookNavigationPalette.floorTransition)
                     .frame(height: trackHeight)
@@ -124,28 +121,30 @@ struct BookNavigationProgressBar: View {
         }
     }
 
-    @ViewBuilder private func markerView(_ kind: BookNavigationTimeline.MarkerKind, width: CGFloat) -> some View {
+    @ViewBuilder private func markerView(_ kind: BookNavigationTimeline.MarkerKind) -> some View {
         switch kind {
         case let .waypoint(number):
             Text(String(number)).typography(.caption2.weight(.bold)).foregroundStyle(.black)
-                .frame(width: width, height: markerDiameter).background(BookNavigationPalette.accent, in: Circle())
+                .lineLimit(1).minimumScaleFactor(0.5)
+                .frame(width: markerDiameter, height: markerDiameter).background(BookNavigationPalette.accent, in: Circle())
         case let .waypoints(numbers):
             Text(numbers.map(String.init).joined(separator: "·"))
-                .typography(.caption2.weight(.bold)).foregroundStyle(.black).fixedSize()
-                .frame(width: width, height: markerDiameter)
+                .typography(.caption2.weight(.bold)).foregroundStyle(.black)
+                .lineLimit(1).minimumScaleFactor(0.5)
+                .frame(width: markerDiameter, height: markerDiameter)
                 .background(BookNavigationPalette.accent, in: Capsule())
         default:
-            Image(asset(for: kind)).resizable().scaledToFit()
+            Image(asset(for: kind)).renderingMode(.original).resizable().scaledToFit()
                 .frame(width: markerDiameter, height: markerDiameter)
         }
     }
 
     private func asset(for kind: BookNavigationTimeline.MarkerKind) -> String {
         switch kind {
-        case .walk: "annotation_walk"
-        case .elevator: "annotation_elevator"
-        case .stairs: "annotation_stairs"
-        case .book, .waypoint, .waypoints: "annotation_book"
+        case .walk: "navigationAnnotations/walk"
+        case .elevator: "navigationAnnotations/elevator"
+        case .stairs: "navigationAnnotations/stairs"
+        case .book, .waypoint, .waypoints: "navigationAnnotations/book"
         }
     }
 }

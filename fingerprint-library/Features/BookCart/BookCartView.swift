@@ -33,7 +33,7 @@ struct BookCartView: View {
             if store.items.isEmpty {
                 ContentUnavailableView(
                     "책바구니가 비어 있어요",
-                    systemImage: "cart",
+                    systemImage: "basket.fill",
                     description: Text("찾고 싶은 책을 책바구니에 저장해두면\n빠르게 책의 위치를 찾을 수 있어요.")
                 )
                 .multilineTextAlignment(.center)
@@ -55,6 +55,17 @@ struct BookCartView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
         .alert(
+            "대출 중인 책은 안내할 수 없어요",
+            isPresented: Binding(
+                get: { store.unavailableBookTitle != nil },
+                set: { if !$0 { store.send(.unavailableBookAlertDismissed) } }
+            )
+        ) {
+            Button("확인") { store.send(.unavailableBookAlertDismissed) }
+        } message: {
+            Text("‘\(store.unavailableBookTitle ?? "")’의 선택을 취소했어요. 대출 가능한 책을 선택해 주세요.")
+        }
+        .alert(
             "아이고 무거워! 책이 너무 많아서 안내를 시작할 수 없어요.",
             isPresented: Binding(
                 get: { store.isGuidanceLimitAlertPresented },
@@ -75,7 +86,7 @@ struct BookCartView: View {
             Button("삭제", role: .destructive) {
                 store.send(.removeConfirmed)
             }
-            Button("취소", role: .cancel) {}
+            Button("취소", role: .cancel) { store.send(.removeCancelled) }
         } message: {
             Text("이 책은 책바구니에서만 삭제돼요.\n다시 검색하여 찾아 추가할 수 있어요.")
         }
@@ -103,7 +114,7 @@ struct BookCartView: View {
             } label: {
                 Text(store.selectedCount == 0 ? "안내 시작하기" : "안내 시작하기 (\(store.selectedCount)권)")
                     .font(.body.weight(.medium))
-                    .foregroundStyle(store.canStartGuidance ? Color.black : Color.cartTextSecondary)
+                    .foregroundStyle(store.canStartGuidance ? Color.black : Color.cartTextSecondary.opacity(0.55))
                     .padding(.horizontal, 14)
                     .frame(minHeight: 48)
                     .contentShape(.capsule)
@@ -111,7 +122,7 @@ struct BookCartView: View {
             .buttonStyle(.plain)
             .glassEffect(
                 .regular
-                    .tint(store.canStartGuidance ? Color.cartPrimary.opacity(0.7) : nil)
+                    .tint(Color.cartPrimary.opacity(store.canStartGuidance ? 0.7 : 0.5))
                     .interactive(store.canStartGuidance),
                 in: .capsule
             )

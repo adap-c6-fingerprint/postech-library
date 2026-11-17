@@ -16,10 +16,11 @@ struct BookListRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 20) {
-            BookCoverView(url: book.imageURL, isbn: book.isbn, onOpen: onShowDetail)
+            BookCoverView(
+                url: book.imageURL, isbn: book.isbn, onOpen: onShowDetail, fitAlignment: .topLeading,
+                coverModifier: BookCoverClipStyle(cornerRadius: 8, fill: Color.white.opacity(0.06))
+            )
                 .frame(width: 78, height: coverHeight)
-                .background(.white.opacity(0.06))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
 
             Button(action: onShowDetail) {
                 VStack(alignment: .leading, spacing: 0) {

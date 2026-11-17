@@ -5,6 +5,7 @@ struct BookNavigationBookHelpView: View {
     let hasNextStop: Bool
     let onContinue: () -> Void
     let onDefer: () -> Void
+    var onAnalyticsButton: (AnalyticsEvent.ButtonID) -> Void = { _ in }
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -16,7 +17,10 @@ struct BookNavigationBookHelpView: View {
             BookNavigationTopBar(
                 backLabel: "책 찾기 화면으로 돌아가기",
                 backIdentifier: "book-navigation-book-help-back",
-                onBack: { dismiss() }
+                onBack: {
+                    onAnalyticsButton(.back)
+                    dismiss()
+                }
             )
             .padding(.horizontal, 16)
             .padding(.top, 8)
@@ -38,6 +42,7 @@ struct BookNavigationBookHelpView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) { actions }
         .background { Color.backgroundDefault.ignoresSafeArea() }
+        .analyticsScreen(.spineHelp)
         .foregroundStyle(Color.textPrimary)
         .toolbar(.hidden, for: .navigationBar, .tabBar)
         .preferredColorScheme(.dark)
@@ -75,10 +80,11 @@ struct BookNavigationBookHelpView: View {
             ? AnyLayout(VStackLayout(alignment: .leading, spacing: 16))
             : AnyLayout(HStackLayout(alignment: .top, spacing: 20))
         return layout {
-            BookCoverView(url: info.book.imageURL, isbn: info.book.isbn)
+            BookCoverView(
+                url: info.book.imageURL, isbn: info.book.isbn, fitAlignment: .topLeading,
+                coverModifier: BookCoverClipStyle(cornerRadius: 8, fill: HierarchicalShapeStyle.quaternary)
+            )
                 .frame(width: 78, height: 112)
-                .background(.quaternary, in: .rect(cornerRadius: 8))
-                .clipShape(.rect(cornerRadius: 8))
                 .accessibilityIdentifier("book-navigation-book-help-cover")
             VStack(alignment: .leading, spacing: 3) {
                 Text(BookText.plainText(info.book.title))
@@ -112,6 +118,7 @@ struct BookNavigationBookHelpView: View {
     private var actions: some View {
         VStack(spacing: 12) {
             Button {
+                onAnalyticsButton(.helpNextAndDesk)
                 if hasNextStop {
                     onContinue()
                 } else {
@@ -132,7 +139,10 @@ struct BookNavigationBookHelpView: View {
             .glassEffect(.regular.tint(Color.limeBase).interactive(), in: .capsule)
             .accessibilityHint(hasNextStop ? "다음 책의 경로로 안내해요" : "전체 경로 안내를 종료해요")
             .accessibilityIdentifier("book-navigation-book-help-continue")
-            LibraryUnderlinedButton(title: hasNextStop ? "안내 종료하기" : "다음에 찾기.", action: onDefer)
+            LibraryUnderlinedButton(title: hasNextStop ? "안내 종료하기" : "다음에 찾기.") {
+                onAnalyticsButton(.helpLater)
+                onDefer()
+            }
             .accessibilityHint("전체 경로 안내를 종료해요")
             .accessibilityIdentifier("book-navigation-book-help-defer")
         }

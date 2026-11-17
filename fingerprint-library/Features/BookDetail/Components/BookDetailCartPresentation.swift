@@ -21,13 +21,15 @@ private struct BookDetailCartPresentation: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .fullScreenCover(item: $store.scope(state: \.cart, action: \.cart)) { cartStore in
+            .fullScreenCover(item: $store.scope(state: \.cart, action: \.cart), onDismiss: {
+                store.send(.cartCoverDismissed)
+            }) { cartStore in
                 NavigationStack {
                     BookCartView(store: cartStore, onClose: { store.send(.cart(.dismiss)) })
                 }
             }
             .alert(cartNoticeTitle, item: cartNotice) { _ in
-                Button("나중에", role: .cancel) {}
+                Button("나중에", role: .cancel) { store.send(.cartNoticeLaterTapped) }
                 Button("바로가기") { store.send(.cartShortcutTapped) }
                     .keyboardShortcut(.defaultAction)
             } message: { _ in

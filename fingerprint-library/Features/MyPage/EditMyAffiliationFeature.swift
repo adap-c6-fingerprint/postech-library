@@ -41,6 +41,11 @@ struct EditMyAffiliationFeature {
             groups.flatMap(affiliationChoices(in:))
         }
 
+        var hasChangedSelection: Bool {
+            selectedAffiliation?.key != savedAffiliationKey
+        }
+        // 화면의 선택값이 저장된 소속과 다른지 (뒤로가기 기록의 changed, unchanged 구분)
+
         var canSave: Bool {
             guard let selectedAffiliation, userProfile != nil else { return false }
             return selectedAffiliation.key != savedAffiliationKey
@@ -64,6 +69,7 @@ struct EditMyAffiliationFeature {
     }
 
     @Dependency(\.recommendationDatasetClient) var recommendationDatasetClient
+    @Dependency(\.analyticsClient) private var analytics
 
     var body: some Reducer<State, Action> {
         Reduce { state, action in
@@ -93,6 +99,8 @@ struct EditMyAffiliationFeature {
                 return .none
 
             case let .parentSelected(parent):
+                analytics.record(.button(.affiliationChange, on: .editAffiliation, [.kind: .text(parent)]))
+                // 소속 메뉴에서 고른 소속 (이미 고른 소속을 다시 골라도 기록)
                 guard state.selectedParent != parent else { return .none }
                 state.selectedParent = parent
                 state.selectedAffiliation = nil
@@ -100,10 +108,14 @@ struct EditMyAffiliationFeature {
 
             case let .affiliationSelected(path):
                 guard state.affiliationChoices.contains(path) else { return .none }
+                analytics.record(.button(.departmentChange, on: .editAffiliation, [.kind: .text(path.name)]))
+                // 학과 메뉴에서 고른 세부 소속
                 state.selectedAffiliation = path
                 return .none
 
             case .changeButtonTapped:
+                analytics.record(.button(.applyChange, on: .editAffiliation))
+                // "변경하기" (저장에 성공하면 profile_updated가 따로 전송된다)
                 guard state.canSave, let affiliation = state.selectedAffiliation,
                       let current = state.userProfile else { return .none }
                 do {

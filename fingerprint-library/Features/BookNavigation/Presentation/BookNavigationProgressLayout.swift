@@ -1,6 +1,8 @@
 import Foundation
 
 struct BookNavigationProgressLayout {
+    static let defaultMarkerDiameter: CGFloat = 24
+
     enum Content: Equatable {
         case marker(BookNavigationTimeline.MarkerKind)
         case walk(BookNavigationTimeline.Segment)
@@ -76,8 +78,8 @@ struct BookNavigationProgressLayout {
     }
 
     init(timeline: BookNavigationTimeline, floors: [IndoorMapFloor], availableWidth: CGFloat,
-         markerDiameter: CGFloat = 22.7, measureText: (String) -> CGFloat) {
-        let scale = markerDiameter / 22.7
+         markerDiameter: CGFloat = BookNavigationProgressLayout.defaultMarkerDiameter, measureText: (String) -> CGFloat) {
+        let scale = markerDiameter / Self.defaultMarkerDiameter
         let padding: CGFloat = 4 * scale
         self.markerDiameter = markerDiameter
         textPadding = padding
@@ -95,10 +97,6 @@ struct BookNavigationProgressLayout {
             return .init(content: .walk(segment), minimumWidth: label.isRequired
                 ? measureText(label.compactText) + padding * 2 : padding,
                 meters: segment.meters, label: label)
-        }
-        func markerWidth(_ kind: BookNavigationTimeline.MarkerKind) -> CGFloat {
-            guard case let .waypoints(numbers) = kind else { return markerDiameter }
-            return max(markerDiameter, measureText(numbers.map(String.init).joined(separator: "·")) + padding * 2)
         }
         func lastStop(_ kind: BookNavigationTimeline.MarkerKind) -> Int? {
             switch kind {
@@ -136,7 +134,7 @@ struct BookNavigationProgressLayout {
                 }
             }
             for marker in bookMarkers where lastStop(marker.kind) == stop {
-                entries.append(.init(content: .marker(marker.kind), minimumWidth: markerWidth(marker.kind)))
+                entries.append(.init(content: .marker(marker.kind), minimumWidth: markerDiameter))
             }
         }
         let minimumWidth = entries.reduce(0) { $0 + $1.minimumWidth }

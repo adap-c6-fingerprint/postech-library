@@ -27,7 +27,7 @@ struct LibraryTabToolbar: ViewModifier {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button("내가 읽고 싶은 책", systemImage: "bookmark.fill", action: onFavorites)
                         .accessibilityIdentifier("library-top-bar-favorites")
-                    Button("책바구니", systemImage: "cart.fill", action: onCart)
+                    Button("책바구니", systemImage: "basket.fill", action: onCart)
                         .accessibilityIdentifier("library-top-bar-cart")
                 }
                 ToolbarSpacer(.fixed, placement: .topBarTrailing)

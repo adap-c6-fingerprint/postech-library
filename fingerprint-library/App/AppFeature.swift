@@ -60,12 +60,24 @@ struct AppFeature {
     @Dependency(\.legacyUserProfileClient) var legacyUserProfileClient
     @Dependency(\.analyticsClient) var analytics
     @Dependency(\.continuousClock) var clock
+    @Dependency(\.recentlyFoundBooksClient) var recentlyFoundBooksClient
+    @Dependency(\.bookCoverClient) var bookCoverClient
 
     nonisolated static let analyticsCheckpointInterval: Duration = .seconds(60)
+
+    static func analyticsRootScreen(of tab: Tab) -> AnalyticsScreen {
+        // 탭의 첫 화면 이름 (탭 위에 다른 화면이 쌓여 있어도 탭 기준으로 고른다)
+        switch tab {
+        case .map: .map
+        case .recommendations: .recommendations
+        case .search: .search
+        }
+    }
 
     private nonisolated enum CancelID: Hashable, Sendable {
         case analyticsCheckpoint
         case analyticsObservation
+        case profileObservation
     }
 
     var body: some Reducer<State, Action> {
@@ -76,6 +88,14 @@ struct AppFeature {
         Reduce { state, action in
             switch action {
             case let .tabSelected(tab):
+                let button: AnalyticsEvent.ButtonID = switch tab {
+                case .map: .tabHome
+                case .recommendations: .tabRecommendations
+                case .search: .search
+                }
+                // 누른 하단 탭
+                analytics.record(.button(button, on: Self.analyticsRootScreen(of: state.selectedTab)))
+                // screen_name은 떠나는 탭의 첫 화면 이름
                 state.selectedTab = tab
                 return .none
 
@@ -99,15 +119,34 @@ struct AppFeature {
                 return .none
 
             case let .bookSearch(.delegate(delegate)):
-                guard let destination = Self.destination(for: delegate) else { return .none }
+                let source: AnalyticsScreen = state.bookSearch.hasSearched ? .searchResults : Self.analyticsRootScreen(of: state.selectedTab)
+                // 책을 고른 화면 (검색 결과 또는 탭의 첫 화면)
+                guard let destination = Self.destination(for: delegate, from: source) else { return .none }
                 push(destination, onto: state.selectedTab, state: &state)
+                return .none
+
+            case .bookSearch(.cartButtonTapped):
+                analytics.record(.button(.cart, on: Self.analyticsRootScreen(of: state.selectedTab)))
+                // 상단 장바구니 버튼 (지도 탭과 검색 탭이 같은 BookSearchFeature를 쓰므로 탭으로 화면을 구분)
+                return .none
+
+            case .bookSearch(.favoritesButtonTapped):
+                analytics.record(.button(.bookmark, on: Self.analyticsRootScreen(of: state.selectedTab)))
+                // 상단 북마크 버튼
+                return .none
+
+            case .bookSearch(.profileButtonTapped):
+                analytics.record(.button(.myPage, on: Self.analyticsRootScreen(of: state.selectedTab)))
+                // 상단 마이페이지 버튼
                 return .none
 
             case .bookSearch:
                 return .none
 
             case let .home(.delegate(delegate)):
-                push(Self.destination(for: delegate), onto: .recommendations, state: &state)
+                let source: AnalyticsScreen = state.recommendationsPath.last == .departmentRecommendations ? .departmentRecommendations : .recommendations
+                // 학과 추천 화면과 추천 탭이 같은 HomeFeature를 쓰므로, 맨 위 화면으로 구분
+                push(Self.destination(for: delegate, from: source), onto: .recommendations, state: &state)
                 return .none
 
             case let .mapPath(action):
@@ -129,6 +168,10 @@ struct AppFeature {
             case .analyticsObservationStarted:
                 return .run { [analytics] _ in
                     @Shared(.userProfile) var userProfile
+                    @Shared(.favoriteBookKeys) var favoriteBookKeys
+                    @Shared(.bookCart) var bookCart
+                    analytics.updateCollectionCounts(favoriteBookKeys.count, bookCart.count)
+                    // 시작 시점의 찜·장바구니 개수를 사용자 속성으로 설정한다
                     await withTaskGroup(of: Void.self) { group in
                         group.addTask {
                             for await profile in $userProfile.publisher.dropFirst().values {
@@ -136,8 +179,22 @@ struct AppFeature {
                             }
                         }
                         group.addTask {
+                            for await keys in $favoriteBookKeys.publisher.dropFirst().values {
+                                analytics.updateCollectionCounts(keys.count, bookCart.count)
+                            }
+                            // 찜 목록이 바뀔 때마다 개수를 다시 설정한다
+                        }
+                        group.addTask {
+                            for await items in $bookCart.publisher.dropFirst().values {
+                                analytics.updateCollectionCounts(favoriteBookKeys.count, items.count)
+                            }
+                            // 장바구니가 바뀔 때마다 개수를 다시 설정한다
+                        }
+                        group.addTask {
                             for await _ in analytics.consentChanges() {
                                 analytics.updateProfile(userProfile)
+                                analytics.updateCollectionCounts(favoriteBookKeys.count, bookCart.count)
+                                // 분석에 다시 동의하면 지워졌던 개수 속성을 다시 설정한다
                             }
                         }
                     }
@@ -160,8 +217,19 @@ struct AppFeature {
             case .appStarted:
                 guard !state.hasStartedRecommendationSession else { return .none }
                 state.hasStartedRecommendationSession = true
-                guard state.home.recommendationSessionID == nil else { return .none }
-                return .send(.home(.recommendationSessionStarted))
+                let preloadSpines: Effect<Action> = .run { [recentlyFoundBooksClient, bookCoverClient] _ in
+                    await bookCoverClient.preloadSavedSpines(recentlyFoundBooksClient.load().compactMap(\.isbn))
+                }
+                let observeProfile: Effect<Action> = .run { send in
+                    @Shared(.userProfile) var userProfile
+                    for await _ in $userProfile.publisher.dropFirst().values {
+                        await send(.home(.userProfileChanged))
+                    }
+                }
+                .cancellable(id: CancelID.profileObservation, cancelInFlight: true)
+                // 마이페이지에서 관심사를 바꾼 순간 추천 탭이 보이지 않아도 다음 6선을 준비하게 한다.
+                guard state.home.recommendationSessionID == nil else { return .merge(preloadSpines, observeProfile) }
+                return .merge(preloadSpines, observeProfile, .send(.home(.recommendationSessionStarted)))
             case .appEnteredBackground:
                 state.hasEnteredBackground = true
                 return .none

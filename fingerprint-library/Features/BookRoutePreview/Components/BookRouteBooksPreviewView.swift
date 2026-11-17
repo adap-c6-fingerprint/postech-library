@@ -7,14 +7,16 @@ struct BookRouteBooksPreviewView: View {
     let routePlan: RoutePlan?
     let isLoadingRoute: Bool
     let routeError: String?
-    var startNotice: String? = nil
     let canStart: Bool
+    var isResolvingStart = false
     let onBack: () -> Void
     let onStart: (Book) -> Void
     let onRetry: () -> Void
     var onSetOriginManually: (() -> Void)?
     var guidesSelectedBook = false
     var homeAnnotations: HomeMapAnnotationsFeature.State?
+    var onBookTabTapped: (Book.ID) -> Void = { _ in }
+    var onCardSwiped: (Book.ID, _ direction: String) -> Void = { _, _ in }
 
     @State private var bookSelection = BookRoutePreviewSelection()
     @State private var panelHeight: CGFloat = 0
@@ -30,8 +32,54 @@ struct BookRouteBooksPreviewView: View {
         )
     }
 
+    private var pageSelection: Binding<Book.ID?> {
+        Binding(
+            get: { selection.wrappedValue },
+            set: { id in
+                let old = selection.wrappedValue
+                selection.wrappedValue = id
+                guard let id, id != old,
+                      let from = books.firstIndex(where: { $0.id == old }),
+                      let to = books.firstIndex(where: { $0.id == id }) else { return }
+                onCardSwiped(id, to > from ? "right" : "left")
+            }
+        )
+    }
+    // 카드를 손으로 넘길 때 쓰는 선택값. 넘긴 방향을 알린다 (다음 카드 = right)
+
     private var selectedBook: Book? {
         books.first { $0.id == selection.wrappedValue }
+    }
+
+    private var guidanceBooks: [Book] {
+        guidesSelectedBook ? selectedBook.map { [$0] } ?? [] : books
+    }
+
+    private var hasUnavailableBooks: Bool {
+        guidanceBooks.contains { shelfStore.holdings[$0.id]?.isUnavailableForGuidance == true }
+    }
+
+    private var startButtonTitle: String {
+        if hasUnavailableBooks { return "대출 중인 책" }
+        return isPreparingGuidance ? "소장 위치 확인 중" : "바로 안내 시작"
+    }
+
+    private var startButtonHint: String {
+        if hasUnavailableBooks { return "대출 중인 책은 안내할 수 없어요" }
+        if guidesSelectedBook { return "현재 보고 있는 책의 서가로 안내해요" }
+        return "선택한 전체 \(books.count)권을 최적 경로 순서로 안내해요"
+    }
+
+    private var isPreparingGuidance: Bool {
+        if isResolvingStart || isLoadingRoute || shelfStore.map.isLoading || shelfStore.map.isLoadingShelfLabels {
+            return true
+        }
+        return guidanceBooks.contains {
+            switch shelfStore.holdings[$0.id] {
+            case nil, .idle, .loading: true
+            case .loaded, .failed: false
+            }
+        }
     }
 
     private var isShowingExpandedDetail: Bool { panelPresentation.isExpanded }
@@ -129,7 +177,7 @@ struct BookRouteBooksPreviewView: View {
         let contentTop = expandedScrollOrigin.globalMinY + expandedScrollOrigin.safeAreaTop
         return ScrollView {
             BookExpandedDetailView(
-                style: .carousel, books: books, selectedBookID: selection,
+                style: .carousel, books: books, selectedBookID: pageSelection,
                 coverTopPadding: max(0, coverTopGlobalY - contentTop),
                 identifierPrefix: "multiBookPreview"
             ) { book in
@@ -200,7 +248,7 @@ struct BookRouteBooksPreviewView: View {
 
     private func cartButton(_ store: StoreOf<BookDetailFeature>) -> some View {
         Button { store.send(.addToCartButtonTapped) } label: {
-            Image(systemName: "cart.fill").font(.system(size: 23, weight: .semibold))
+            Image(systemName: "basket.fill").font(.system(size: 23, weight: .semibold))
         }
         .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
         .buttonBorderShape(.circle)
@@ -241,6 +289,7 @@ struct BookRouteBooksPreviewView: View {
     private func bookTab(_ book: Book) -> some View {
         let isSelected = selection.wrappedValue == book.id
         return Button {
+            if !isSelected { onBookTabTapped(book.id) }
             withAnimation(.easeInOut(duration: 0.25)) { selection.wrappedValue = book.id }
         } label: {
             Text(BookText.plainText(book.title))
@@ -260,7 +309,7 @@ struct BookRouteBooksPreviewView: View {
     }
 
     private var bookPages: some View {
-        TabView(selection: selection) {
+        TabView(selection: pageSelection) {
             ForEach(books) { book in
                 if let detailStore = detailStore(for: book) {
                 BookRoutePreviewBookCard(
@@ -289,25 +338,11 @@ struct BookRouteBooksPreviewView: View {
 
     private var startControls: some View {
         VStack(spacing: 8) {
-            if let startNotice {
-                VStack(alignment: .leading, spacing: 8) {
-                    RouteStartNoticeView(notice: startNotice)
-                        .font(.caption)
-                        .fixedSize(horizontal: false, vertical: true)
-                    if let onSetOriginManually {
-                        Button("출발 위치 직접 설정", action: onSetOriginManually)
-                            .font(.caption.bold())
-                            .accessibilityIdentifier("multiBookPreview.setOrigin")
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .accessibilityIdentifier("multiBookPreview.startNotice")
-            }
             if let routeError {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                     Text(routeError).font(.caption)
                     Button("다시 시도", action: onRetry).font(.caption.bold())
-                    if startNotice == nil, let onSetOriginManually {
+                    if let onSetOriginManually {
                         Button("출발 위치 직접 설정", action: onSetOriginManually)
                             .font(.caption.bold())
                             .accessibilityIdentifier("multiBookPreview.setOrigin")
@@ -319,22 +354,29 @@ struct BookRouteBooksPreviewView: View {
             }
             HStack(spacing: 12) {
                 Button {
-                    guard let book = books.first(where: { $0.id == selection.wrappedValue }) else { return }
+                    guard !hasUnavailableBooks, let book = selectedBook else { return }
                     onStart(book)
                 } label: {
-                    HStack(spacing: 8) {
-                        if isLoadingRoute { ProgressView().tint(Color.textPrimary) }
-                        Text(isLoadingRoute ? "경로 확인 중" : "바로 안내 시작")
+                    HStack(spacing: PobookUI.Spacing._8) {
+                        if isPreparingGuidance && !hasUnavailableBooks {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                                .tint(PobookUI.ColorToken.neutralPrimary)
+                                .accessibilityHidden(true)
+                        }
+                        Text(startButtonTitle)
                             .typography(.button)
+                            .foregroundStyle(hasUnavailableBooks
+                                ? PobookUI.ColorToken.Button.disabledText : PobookUI.ColorToken.Button.neutralText)
                     }
                     .frame(maxWidth: .infinity, minHeight: 50)
                 }
-                .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
+                .buttonStyle(.glass(.regular.tint(hasUnavailableBooks
+                    ? PobookUI.ColorToken.Button.disabledBackground.opacity(0.6)
+                    : Color(white: 0.08).opacity(0.6))))
                 .buttonBorderShape(.capsule)
-                .disabled(!canStart || selection.wrappedValue == nil)
-                .accessibilityHint(guidesSelectedBook
-                    ? "현재 보고 있는 책의 서가로 안내해요"
-                    : "선택한 전체 \(books.count)권을 최적 경로 순서로 안내해요")
+                .disabled(hasUnavailableBooks || isPreparingGuidance || !canStart || selection.wrappedValue == nil)
+                .accessibilityHint(startButtonHint)
                 .accessibilityIdentifier("multiBookPreview.start")
                 if isShowingExpandedDetail, let book = selectedBook, let store = detailStore(for: book) {
                     cartButton(store)

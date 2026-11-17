@@ -69,17 +69,6 @@ struct IndoorMapView: View {
                     }
                 }
 
-                if let message = store.locationMessage {
-                    Text(message)
-                        .font(.caption)
-                        .padding(10)
-                        .background(
-                            Color(uiColor: .systemBackground),
-                            in: RoundedRectangle(cornerRadius: 12)
-                        )
-                        .accessibilityIdentifier("map-location-status")
-                }
-
                 if let message = store.shelfLabelError {
                     HStack {
                         Text(message)
@@ -122,7 +111,7 @@ struct IndoorMapView: View {
         Button { store.send(.homeAnnotations(.amenitiesTapped)) } label: {
             HStack(alignment: .center, spacing: 10) {
                 Text("편의시설")
-                    .typography(.caption2)
+                    .typography(store.homeAnnotations.showsAmenities ? .caption2.weight(.bold) : .caption2)
                     .foregroundStyle(store.homeAnnotations.showsAmenities
                                      ? PobookUI.ColorToken.primaryLight : PobookUI.ColorToken.neutralPrimary)
                     .lineLimit(1)
@@ -148,7 +137,8 @@ struct IndoorMapView: View {
         guard appearance == .home || bookDetail != nil else { return [] }
         let annotations = homeAnnotations ?? store.homeAnnotations
         return homeMarkerCache.markers(on: map, labels: store.shelfLabels,
-            holdings: annotations.holdings, showsAmenities: annotations.showsAmenities,
+            holdings: annotations.holdings,
+            showsAmenities: appearance == .home && bookDetail == nil && annotations.showsAmenities,
             hidingFavoritesFor: bookDetail?.shelves ?? [], hiddenFavoriteMarkerIDs: hiddenFavoriteMarkerIDs)
     }
 

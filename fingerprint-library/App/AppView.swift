@@ -18,7 +18,6 @@ struct AppView: View {
         Group {
             if let onboardingStore = store.scope(state: \.onboarding, action: \.onboarding) {
                 OnboardingView(store: onboardingStore)
-                    .analyticsScreen(.onboarding)
             } else if store.hasCheckedProfile {
                 tabs
             } else {
@@ -75,7 +74,6 @@ struct AppView: View {
                 .searchFocused($isBookSearchFocused)
                 .searchPresentationToolbarBehavior(.avoidHidingContent)
                 .onSubmit(of: .search, submitBookSearch)
-                .analyticsScreen(.search)
                 .tint(Color?.none)
             }
         }
@@ -97,7 +95,14 @@ struct AppView: View {
             store.send(.locationSession(.started))
             await store.send(.indoorMap(.task)).finish()
         }
-        .onDisappear { store.send(.indoorMap(.disappeared)) }
+        .task(id: store.bookSearch.favoriteBookKeys) {
+            store.send(.indoorMap(.homeAnnotations(.favoritesChanged(store.bookSearch.favoriteBookKeys))))
+        }
+        .task { await store.send(.indoorMap(.homeAnnotations(.task))).finish() }
+        .onDisappear {
+            store.send(.indoorMap(.homeAnnotations(.disappeared)))
+            store.send(.indoorMap(.disappeared))
+        }
         .onChange(of: scenePhase) { _, phase in
             store.send(.locationSession(.sceneActiveChanged(phase == .active)))
             store.send(.indoorMap(.sceneActiveChanged(phase == .active)))

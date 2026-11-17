@@ -12,6 +12,7 @@ extension PobookUI {
         static let _0: CGFloat = 0
         static let bookCover: CGFloat = 8
         static let floorAmenitiesToggle: CGFloat = 12
+        static let mapActionButton: CGFloat = 12
         static let shelfChip: CGFloat = 20
         static let bookSearch: CGFloat = 20
         static let selectionField: CGFloat = 20

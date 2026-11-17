@@ -139,12 +139,10 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.showsUserLocation = parent.showsUserLocation && !parent.appearance.usesHomeStyle
             updatePosition(in: view)
             updatePositionMarkerBearing(in: view, animated: true)
-            homeAnnotations.update(parent.appearance.usesHomeStyle
+            homeAnnotations.update(parent.appearance.usesHomeStyle || parent.navigationAppearance
                 ? parent.homeMarkers.filter { $0.floorID == parent.floor.id } : [], in: view)
             updateShelfLabels(in: view)
             updateDetailShelfBadges(in: view)
-            updateRoute(in: view)
-            updateEntranceApproach(in: view)
             if highlightedIDs != parent.highlightedFeatureIDs {
                 highlightedIDs = parent.highlightedFeatureIDs
                 if baseExcludedIDs.isSubset(of: emphasizedIDs) {
@@ -154,6 +152,9 @@ struct IndoorMapKitView: UIViewRepresentable {
                 }
                 layoutShelfLabels(in: view)
             }
+            // 서가 강조 변경이 지도 전체를 다시 그릴 수 있으므로, 경로는 그 뒤에 추가한다.
+            updateRoute(in: view)
+            updateEntranceApproach(in: view)
             pendingCameraRequest = parent.cameraRequest == lastCameraRequest ? nil : parent.cameraRequest
             if pendingCameraRequest != nil { view.setNeedsLayout() }
         }
@@ -248,6 +249,8 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
             for view in views where view.annotation is MKUserLocation {
+                view.canShowCallout = false
+                view.isEnabled = false
                 view.zPriority = MapAnnotationPriority.user
                 view.selectedZPriority = MapAnnotationPriority.user
             }
@@ -274,10 +277,12 @@ struct IndoorMapKitView: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-            guard parent.navigationAppearance, !isApplyingCamera,
+            guard !isApplyingCamera,
                   Self.hasActiveGesture(in: mapView) else { return }
-            lastCameraRequest = parent.cameraRequest
-            pendingCameraRequest = nil
+            if parent.navigationAppearance {
+                lastCameraRequest = parent.cameraRequest
+                pendingCameraRequest = nil
+            }
             parent.onUserCameraInteraction()
         }
 
@@ -374,7 +379,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.addOverlays(overlays, level: .aboveRoads)
             updateHighlightOverlays(in: view)
             view.addAnnotations(features.compactMap { feature in
-                guard !parent.appearance.usesHomeStyle, feature.kind == .amenity,
+                guard !parent.appearance.usesHomeStyle, !parent.navigationAppearance, feature.kind == .amenity,
                       case .point(let coordinate) = feature.geometry else { return nil }
                 return FeatureAnnotation(feature: feature, coordinate: coordinate.clCoordinate)
             })
@@ -799,6 +804,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "indoor-marker")
             view.annotation = annotation
             view.canShowCallout = false
+            view.isEnabled = false
             view.titleVisibility = .hidden
             view.displayPriority = .defaultLow
             view.zPriority = MapAnnotationPriority.marker

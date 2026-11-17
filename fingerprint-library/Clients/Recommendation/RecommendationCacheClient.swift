@@ -9,6 +9,19 @@ nonisolated struct RecommendationCacheClient: Sendable {
     var saveBooks: @Sendable ([Book]) async throws -> CachedRecommendations = { books in
         CachedRecommendations(books: books, savedAt: .distantPast, coverFiles: [:])
     }
+    var prepareStream: @Sendable (_ candidates: [Book], _ count: Int)
+        -> AsyncThrowingStream<RecommendationPreparationEvent, Error> = { books, count in
+        AsyncThrowingStream { continuation in
+            let prefix = Array(books.prefix(count))
+            if !prefix.isEmpty {
+                continuation.yield(.completed(CachedRecommendations(books: prefix, savedAt: .distantPast, coverFiles: [:])))
+            }
+            continuation.finish()
+        }
+    }
+    var verifyCovers: @Sendable (_ candidates: [Book], _ count: Int) async throws -> [Book] = { books, count in
+        Array(books.prefix(count))
+    }
 }
 
 extension RecommendationCacheClient: DependencyKey {
@@ -18,7 +31,9 @@ extension RecommendationCacheClient: DependencyKey {
         retainDisplayedCovers: { await store.retainDisplayedCovers($0) },
         saveBooks: { books in
             try await store.save(books: books, covers: [:], savedAt: Date())
-        }
+        },
+        prepareStream: { preparer.prepareStream($0, count: $1) },
+        verifyCovers: { try await preparer.verifyCovers($0, count: $1) }
     )
     static let testValue = Self(
         restore: { nil },

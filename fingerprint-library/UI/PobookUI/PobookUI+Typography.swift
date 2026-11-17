@@ -61,6 +61,11 @@ extension PobookUI {
         static let _12: CGFloat = -0.24
     }
 
+    enum SystemFont {
+        /// SF Pro 17pt Medium을 기준으로 Dynamic Type을 지원한다.
+        static let button = Font.system(.body, design: .default, weight: .medium)
+    }
+
     struct Typography {
         enum Scaling {
             case dynamic
@@ -91,6 +96,15 @@ extension PobookUI {
             lineHeight: LineHeight._14, letterSpacing: LetterSpacing._14, relativeTo: .footnote)
         static let caption2 = Self(style: .regular, size: FontSize._12,
             lineHeight: LineHeight._12, letterSpacing: LetterSpacing._12, relativeTo: .caption1)
+
+        @MainActor
+        static var guidance: Self {
+            let size: CGFloat = 8
+            let font = UIFont(name: "\(FontFamily.Pretendard)-\(FontStyle.semibold.rawValue)", size: size)
+                ?? .systemFont(ofSize: size, weight: .semibold)
+            return Self(style: .semibold, size: size, lineHeight: font.lineHeight,
+                        letterSpacing: 0, relativeTo: .body)
+        }
 
         static let button = bookTitle
         static let buttonSmall = body2

@@ -70,6 +70,102 @@ nonisolated struct RecommendationCachePreparer: Sendable {
         )
     }
 
+    func prepareStream(_ candidates: [Book], count: Int) -> AsyncThrowingStream<RecommendationPreparationEvent, Error> {
+        AsyncThrowingStream { continuation in
+            let task = Task {
+                do {
+                    try Task.checkCancellation()
+                    let preparationID = await store.beginPreparation()
+                    var books: [Book] = []
+                    var covers: [Book.ID: Cover] = [:]
+                    let sawConnectionProblem = try await forEachCoveredBook(in: candidates, count: count) { book, cover in
+                        let file = try await store.writeCover(cover, preparationID: preparationID)
+                        books.append(book)
+                        covers[book.id] = cover
+                        continuation.yield(.book(book, coverFile: file))
+                    }
+                    if sawConnectionProblem, books.count < count { throw RecommendationPreparationError.offline }
+                    guard !books.isEmpty else { throw RecommendationPreparationError.noCoveredBooks }
+                    let saved = try await store.save(
+                        books: books, covers: covers, savedAt: now(), preparationID: preparationID
+                    )
+                    continuation.yield(.completed(saved))
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+    // 표지 확인이 끝난 책부터 바로 내보낸다. 6권이 차면 스냅샷을 저장하고 끝낸다.
+    // 연결 문제로 6권을 못 채우면 스냅샷을 저장하지 않고 offline 오류로 끝낸다.
+
+    func verifyCovers(_ candidates: [Book], count: Int) async throws -> [Book] {
+        var books: [Book] = []
+        let sawConnectionProblem = try await forEachCoveredBook(in: candidates, count: count) { book, _ in
+            books.append(book)
+        }
+        if sawConnectionProblem, books.count < count { throw RecommendationPreparationError.offline }
+        return books
+    }
+    // 다음 묶음용. 화면 뒤에서 준비하므로 한 번에 돌려준다.
+
+    private func forEachCoveredBook(
+        in candidates: [Book], count: Int,
+        _ body: (Book, Cover) async throws -> Void
+    ) async throws -> Bool {
+        guard count > 0, !candidates.isEmpty else { return false }
+        return try await withThrowingTaskGroup(of: CoverResult.self) { group in
+            var remaining = candidates.makeIterator()
+            func addNext() {
+                guard let book = remaining.next() else { return }
+                group.addTask { await coverResult(for: book) }
+            }
+            for _ in 0..<min(candidates.count, Self.concurrentCoverLoads) { addNext() }
+
+            var found = 0
+            var sawConnectionProblem = false
+            while let result = try await group.next() {
+                try Task.checkCancellation()
+                switch result {
+                case let .covered(book, cover):
+                    try await body(book, cover)
+                    found += 1
+                    if found == count {
+                        group.cancelAll()
+                        return sawConnectionProblem
+                    }
+                case .connectionProblem:
+                    sawConnectionProblem = true
+                case .skipped:
+                    break
+                }
+                addNext()
+            }
+            return sawConnectionProblem
+        }
+    }
+
+    private static let concurrentCoverLoads = 2
+
+    nonisolated private enum CoverResult: Sendable {
+        case covered(Book, Cover)
+        case connectionProblem
+        case skipped
+    }
+
+    private func coverResult(for book: Book) async -> CoverResult {
+        do {
+            guard let cover = try await prepareCover(for: book) else { return .skipped }
+            let covered = book.imageURL == nil ? book.replacingImageURL(cover.sourceURL) : book
+            return .covered(covered, cover)
+        } catch {
+            return BookCoverFailure.isConnectionProblem(error) ? .connectionProblem : .skipped
+        }
+    }
+    // 표지가 없거나 서버·이미지 문제로 실패한 책은 건너뛰고 다음 후보를 쓴다.
+
     private func prepareCover(for book: Book) async throws -> Cover? {
         do {
             return try await BookCoverSource.load(
@@ -83,8 +179,20 @@ nonisolated struct RecommendationCachePreparer: Sendable {
             }
         } catch {
             try Task.checkCancellation()
+            guard !BookCoverFailure.isConnectionProblem(error) else { throw error }
             guard book.imageURL == nil || BookCoverFailure.isUnavailable(error) else { throw error }
             return nil
         }
     }
+}
+
+nonisolated enum RecommendationPreparationEvent: Sendable {
+    case book(Book, coverFile: URL)
+    case completed(CachedRecommendations)
+    case offline(fallback: [Book])
+}
+
+nonisolated enum RecommendationPreparationError: Error, Equatable {
+    case offline
+    case noCoveredBooks
 }

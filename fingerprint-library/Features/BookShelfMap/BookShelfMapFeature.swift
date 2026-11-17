@@ -13,6 +13,10 @@ struct BookShelfMapFeature {
         var resolutions: [Book.ID: [ShelfResolution]] = [:]
         var details: IdentifiedArrayOf<BookDetailFeature.State>
 
+        var hasUnavailableBooks: Bool {
+            books.contains { holdings[$0.id]?.isUnavailableForGuidance == true }
+        }
+
         init(book: Book) {
             books = [book]
             details = [BookDetailFeature.State(book: book)]
@@ -149,6 +153,9 @@ struct BookShelfMapFeature {
                 return .none
 
             case let .guidanceRequested(book):
+                guard state.books.contains(where: { $0.id == book.id }),
+                      case let .loaded(holdings) = state.holdings[book.id],
+                      !BookHoldingsState.loaded(holdings).isUnavailableForGuidance else { return .none }
                 return .send(.delegate(.startGuidance([book])))
 
             case .delegate:

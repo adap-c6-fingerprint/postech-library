@@ -10,7 +10,8 @@ struct HomeView: View {
     @State private var isAtRecommendationEnd = false
     @State private var isAtPopularBooksEnd = false
     @State private var homeScrollPosition = ScrollPosition(edge: .top)
-
+    @State private var scrollStartY: CGFloat = 0
+    
     private static let kulumiCoverNames = (1...6).map { "KulumiCover\($0)" }
 
     private var recommendationLayout: RecommendationLayout {
@@ -49,6 +50,16 @@ struct HomeView: View {
             }
             .padding(.top, LibraryTabIntroText.topBarSpacing)
             .padding(.bottom, 24)
+        }
+        .onScrollPhaseChange { oldPhase, newPhase, context in
+            if newPhase == .interacting {
+                scrollStartY = context.geometry.contentOffset.y
+                // 손을 댄 순간의 위치
+            } else if oldPhase == .interacting {
+                let direction = context.geometry.contentOffset.y > scrollStartY ? "down" : "up"
+                store.send(.scrolled(area: "home", direction: direction))
+                // 손을 뗀 순간 스크롤 1회임
+            }
         }
         .scrollIndicators(.hidden)
         .scrollPosition($homeScrollPosition)
@@ -124,6 +135,8 @@ struct HomeView: View {
 
     private var recommendationCarousel: some View {
         let books = store.recommendedBooks.prefix(DatasetRecommendation.displayCount)
+        let slotCount = store.isStreamingRecommendations ? DatasetRecommendation.displayCount : books.count
+        // 하나씩 채우는 동안에는 6칸을 고정해 두고, 준비 안 된 칸은 로딩 표시로 둔다.
         let refreshID = store.recommendationLoadMode == .carouselRefresh ? store.recommendationSessionID : nil
         let cardStride = recommendationLayout.coverWidth + recommendationLayout.spacing
 
@@ -136,14 +149,19 @@ struct HomeView: View {
                             .id(index)
                     }
                 } else {
-                    ForEach(books.indices, id: \.self) { index in
-                        let book = books[index]
+                    ForEach(0..<slotCount, id: \.self) { index in
+                        let book = books.indices.contains(index) ? books[books.startIndex + index] : nil
                         ZStack {
-                            recommendationCard(book)
-                                .id(book.id)
-                                .transition(.opacity)
+                            if let book {
+                                recommendationCard(book)
+                                    .id(book.id)
+                                    .transition(.opacity)
+                            } else {
+                                recommendationLoadingSlot
+                                    .transition(.opacity)
+                            }
                         }
-                        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: book.id)
+                        .animation(reduceMotion ? nil : .easeOut(duration: 0.18), value: book?.id)
                         .id(index)
                     }
                 }
@@ -156,7 +174,7 @@ struct HomeView: View {
         .scrollTargetBehavior(.viewAligned)
         .scrollPosition($recommendationPosition, anchor: .leading)
         .modifier(HorizontalBookPullToRefresh(
-            isEnabled: !store.showsKulumiCovers && !books.isEmpty,
+            isEnabled: !store.showsKulumiCovers && !books.isEmpty && !store.isStreamingRecommendations,
             cardStride: cardStride,
             coverHeight: recommendationLayout.coverHeight,
             refreshID: refreshID,
@@ -171,12 +189,27 @@ struct HomeView: View {
             .padding(.leading, RecommendationShelfView.leadingInset)
         }
         .coordinateSpace(.named(RecommendationShelfView.carouselSpace))
-        .onChange(of: store.recommendedBooks.map(\.id)) { _, _ in
+        .onChange(of: store.recommendedBooks.first?.id) { _, _ in
             guard !store.showsKulumiCovers else { return }
+            // 첫 책이 바뀔 때(새 묶음)만 맨 앞으로 돌린다. 한 권씩 붙을 때는 보던 위치를 유지한다.
             var transaction = Transaction(animation: nil)
             transaction.disablesAnimations = true
             withTransaction(transaction) { recommendationPosition.scrollTo(edge: .leading) }
         }
+        .onChange(of: store.isStreamingRecommendations) { wasStreaming, isStreaming in
+            guard wasStreaming, !isStreaming, !store.recommendedBooks.isEmpty else { return }
+            AccessibilityNotification.Announcement("추천 도서 \(store.recommendationCount)권이 준비됐어요").post()
+        }
+    }
+
+    private var recommendationLoadingSlot: some View {
+        ProgressView()
+            .controlSize(.regular)
+            .tint(.secondary)
+            .frame(width: recommendationLayout.coverWidth, height: recommendationLayout.coverHeight)
+            .background(Color.primary.opacity(0.04), in: .rect(cornerRadius: recommendationLayout.coverCornerRadius))
+            .accessibilityElement()
+            .accessibilityLabel("추천 도서 준비 중")
     }
 
     private func refreshError(_ message: String, retry: @escaping () -> Void) -> some View {
@@ -207,7 +240,7 @@ struct HomeView: View {
 
         if let book {
             Button {
-                store.send(.bookSelected(book))
+                store.send(.bookSelected(book, list: .personal))
             } label: {
                 cover.accessibilityHidden(true)
             }
@@ -222,7 +255,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 16) {
             if store.isProfileComplete {
                 Button { store.send(.departmentRecommendationsButtonTapped) } label: {
-                    popularBooksHeader(store.departmentName.isEmpty ? "많이 빌린 도서" : "'\(store.departmentName)'에서 많이 빌린")
+                    popularBooksHeader(store.popularBooksTitle)
                 }
                 .buttonStyle(.plain)
                 .padding(.horizontal, 16)
@@ -301,7 +334,7 @@ struct HomeView: View {
                         let book = books[index]
                         ZStack {
                             Button {
-                                store.send(.bookSelected(book))
+                                store.send(.bookSelected(book, list: .department))
                             } label: {
                                 HomePopularBookCard(book: book, libraryInfo: store.libraryInfo[book.id])
                             }
@@ -373,6 +406,7 @@ private struct HomeBookCover: View {
                     isbn: book?.isbn,
                     cachedURL: cachedURL,
                     allowsRetry: false,
+                    fitAlignment: .bottom,
                     coverModifier: style
                 )
             }

@@ -42,7 +42,7 @@ struct BookRoutePreviewExpandedDetails: View {
     private var holdingStatus: some View {
         switch holdings {
         case nil, .idle, .loading:
-            ProgressView("소장 위치 확인 중").typography(.caption2)
+            EmptyView()
         case .failed:
             HStack(spacing: 8) {
                 Text("소장 위치 확인 실패")

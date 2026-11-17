@@ -50,9 +50,11 @@ struct BookRoutePreviewBookCard: View {
                     : AnyLayout(HStackLayout(alignment: .top, spacing: 14))
                 layout {
                     BookCoverView(
-                        url: book.imageURL, isbn: book.isbn,
-                        imageCornerRadius: BookExpandedDetailLayout.carouselCoverCornerRadius)
-                        .frame(width: 140, height: 186)
+                        url: book.imageURL, isbn: book.isbn, fitAlignment: .top,
+                        placeholderAspectRatio: 140.0 / 186.0,
+                        coverModifier: BookCoverClipStyle(cornerRadius: PobookUI.Radius.bookCover, fill: Color.clear))
+                        .frame(width: 140)
+                        .fixedSize(horizontal: false, vertical: true)
                     bibliography
                 }
                 description
@@ -85,7 +87,7 @@ struct BookRoutePreviewBookCard: View {
         return VStack(alignment: .leading, spacing: 8) {
             switch holdings {
             case nil, .idle, .loading:
-                ProgressView("소장 위치 확인 중").font(.caption)
+                EmptyView()
             case .failed:
                 Text("소장 위치 확인 실패").font(.caption)
                 Button("다시 시도", action: onRetryHoldings).font(.caption)
@@ -141,9 +143,16 @@ struct BookRoutePreviewDescription: View {
     private var bodyTypography: PobookUI.Typography { style == .expanded ? .caption1 : .caption2 }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: style == .expanded ? 4 : 6) {
+        VStack(alignment: .leading, spacing: PobookUI.Spacing._4) {
             let author = BookText.plainText(book.author).trimmingCharacters(in: .whitespacesAndNewlines)
             if !author.isEmpty { Text("\(author) 저자").typography(.body2) }
+            let publisher = BookText.plainText(book.publisher ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if !publisher.isEmpty {
+                Text("\(publisher) 출판")
+                    .typography(bodyTypography)
+                    .foregroundStyle(PobookUI.ColorToken.BookDetails.textAuthor)
+                    .accessibilityIdentifier("multiBookPreview.publisher.\(book.id)")
+            }
             Group {
                 if let summary = book.description, !summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     descriptionText(BookText.plainText(summary))

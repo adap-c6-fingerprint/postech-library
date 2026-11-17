@@ -27,6 +27,14 @@ struct BookSearchView: View {
             onCart: onShowCart,
             onProfile: { onShowProfile?() }
         )
+        .alert(store.commandNotice?.title ?? "",
+               isPresented: Binding(get: { store.commandNotice != nil },
+                                    set: { if !$0 { store.send(.commandNoticeDismissed) } }),
+               presenting: store.commandNotice) { _ in
+            Button("확인", role: .cancel) {}
+        } message: { notice in
+            Text(notice.message)
+        }
     }
 
     private var categoryPicker: some View {
@@ -43,14 +51,28 @@ struct BookSearchView: View {
         .padding(.bottom, 16)
     }
 
+    private var showsRecentItems: Bool {
+        !(store.isLoading && store.books.isEmpty)
+            && (!store.hasSearched || store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+    }
+
     @ViewBuilder
     private var searchContent: some View {
+        if showsRecentItems {
+            recentItems
+                .analyticsScreen(.search)
+        } else {
+            searchResultContent
+                .analyticsScreen(.searchResults)
+            // 검색 중·실패·결과 없음·결과 목록을 모두 검색 결과 화면으로 본다
+        }
+    }
+
+    @ViewBuilder
+    private var searchResultContent: some View {
         Group {
             if store.isLoading && store.books.isEmpty {
                 ProgressView("책을 찾고 있어요")
-            } else if !store.hasSearched
-                        || store.query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                recentItems
             } else if store.errorMessage != nil {
                 searchStatus(
                     title: "검색 실패",
@@ -120,7 +142,7 @@ struct BookSearchView: View {
 
             Text(message)
                 .font(.callout)
-                .foregroundStyle(.white.opacity(0.8))
+                .foregroundStyle(Color.textTertiary)
                 .lineSpacing(3)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -134,10 +156,9 @@ struct BookSearchView: View {
     @ViewBuilder
     private var recentItems: some View {
         if store.recentBooks.isEmpty {
-            ContentUnavailableView(
-                "최근 항목이 없어요",
-                systemImage: "book",
-                description: Text("검색 결과에서 선택한 책이 여기에 표시돼요.")
+            searchStatus(
+                title: "최근 항목이 없어요",
+                message: "검색 결과에서 선택한 책이 여기에 표시돼요."
             )
         } else {
             List {
