@@ -89,6 +89,8 @@ extension PobookUI {
             static let neutralText = ColorToken.neutralPrimary
             static let neutralBacking = ColorToken.neutralSecondary
             static let neutralShadow = Gray._400.opacity(0.17)
+            static let disabledBackground = Gray._700
+            static let disabledText = Gray._500
             static let effectDark = Gray._900
             static let effectLight = Gray._100
         }

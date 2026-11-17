@@ -55,6 +55,17 @@ struct BookCartView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) { bottomActions }
         .alert(
+            "대출 중인 책은 안내할 수 없어요",
+            isPresented: Binding(
+                get: { store.unavailableBookTitle != nil },
+                set: { if !$0 { store.send(.unavailableBookAlertDismissed) } }
+            )
+        ) {
+            Button("확인") { store.send(.unavailableBookAlertDismissed) }
+        } message: {
+            Text("‘\(store.unavailableBookTitle ?? "")’의 선택을 취소했어요. 대출 가능한 책을 선택해 주세요.")
+        }
+        .alert(
             "아이고 무거워! 책이 너무 많아서 안내를 시작할 수 없어요.",
             isPresented: Binding(
                 get: { store.isGuidanceLimitAlertPresented },

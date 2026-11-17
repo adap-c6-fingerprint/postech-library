@@ -143,9 +143,16 @@ struct BookRoutePreviewDescription: View {
     private var bodyTypography: PobookUI.Typography { style == .expanded ? .caption1 : .caption2 }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: style == .expanded ? 4 : 6) {
+        VStack(alignment: .leading, spacing: PobookUI.Spacing._4) {
             let author = BookText.plainText(book.author).trimmingCharacters(in: .whitespacesAndNewlines)
             if !author.isEmpty { Text("\(author) 저자").typography(.body2) }
+            let publisher = BookText.plainText(book.publisher ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if !publisher.isEmpty {
+                Text("\(publisher) 출판")
+                    .typography(bodyTypography)
+                    .foregroundStyle(PobookUI.ColorToken.BookDetails.textAuthor)
+                    .accessibilityIdentifier("multiBookPreview.publisher.\(book.id)")
+            }
             Group {
                 if let summary = book.description, !summary.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                     descriptionText(BookText.plainText(summary))

@@ -36,11 +36,15 @@ nonisolated enum RouteFailure: Equatable, Sendable {
 
 enum BookRoutePreviewRequest: Equatable {
     case waiting
+    case unavailableBooks
     case failed(RouteFailure)
     case ready(map: IndoorMap, labels: [IndoorShelfLabel], start: IndoorPosition, stops: [RouteCandidateStop])
 
     init(state: BookShelfMapFeature.State?, start: IndoorPosition? = nil) {
         guard let state else { self = .waiting; return }
+        guard !state.hasUnavailableBooks else {
+            self = .unavailableBooks; return
+        }
         if let error = state.map.loadError ?? state.map.shelfLabelError {
             self = .failed(.mapUnavailable(error)); return
         }
@@ -52,12 +56,15 @@ enum BookRoutePreviewRequest: Equatable {
             case .loaded(let holdings):
                 guard state.map.map != nil, !state.map.isLoading, !state.map.isLoadingShelfLabels,
                       state.resolutions[book.id] != nil else { self = .waiting; return }
-                let shelves = state.shelves(for: book.id)
+                let shelves = (state.resolutions[book.id] ?? [])
+                    .filter { !$0.holding.isUnavailableForGuidance }
+                    .preferredRouteShelves
                 guard ShelfOverlapPolicy().allows(shelves) else {
                     self = .failed(.ambiguousShelf(bookTitle: BookText.plainText(book.title)))
                     return
                 }
-                stops.append(.init(book: book, holdings: holdings, candidateShelves: shelves))
+                stops.append(.init(book: book, holdings: holdings.filter { !$0.isUnavailableForGuidance },
+                                   candidateShelves: shelves))
             }
         }
         guard let map = state.map.map, !stops.isEmpty else { self = .waiting; return }

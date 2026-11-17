@@ -37,7 +37,7 @@ struct BookDetailMapView: View {
                 if !sheetPresentation.isExpanded, compactSheetFrame != nil, let floor {
                     destinationFloorBadge(floor)
                         .padding(.trailing, 16)
-                        .padding(.bottom, coveredHeight + 16)
+                        .padding(.bottom, coveredHeight + 13)
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -304,14 +304,23 @@ struct BookDetailView: View {
     }
 
     private var descriptionSection: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: PobookUI.Spacing._4) {
             let author = BookText.plainText(store.book.author).trimmingCharacters(in: .whitespacesAndNewlines)
             if !author.isEmpty {
-                Text("\(author) 저자").typography(.body2)
+                Text("\(author) 저자")
+                    .typography(.body2)
+                    .foregroundStyle(PobookUI.ColorToken.BookDetails.textAuthor)
+            }
+            let publisher = BookText.plainText(store.book.publisher ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if !publisher.isEmpty {
+                Text("\(publisher) 출판")
+                    .typography(.caption1)
+                    .foregroundStyle(PobookUI.ColorToken.BookDetails.textAuthor)
+                    .accessibilityIdentifier("bookDetail.publisher")
             }
             descriptionContent
-                .typography(.caption1)
-                .foregroundStyle(Color.textTertiary)
+                .typography(.caption2)
+                .foregroundStyle(PobookUI.ColorToken.BookDetails.textStory)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityIdentifier("bookDetail.description")
@@ -343,12 +352,20 @@ struct BookDetailView: View {
             Button {
                 store.send(.guidanceStarted)
             } label: {
-                Text("바로 안내 시작").typography(.button).frame(maxWidth: .infinity)
+                Text(store.holdingsState.isUnavailableForGuidance ? "대출 중인 책" : "바로 안내 시작")
+                    .typography(.button)
+                    .foregroundStyle(store.holdingsState.isUnavailableForGuidance
+                        ? PobookUI.ColorToken.Button.disabledText : PobookUI.ColorToken.Button.neutralText)
+                    .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.glass(.regular.tint(store.holdingsState.isUnavailableForGuidance
+                ? PobookUI.ColorToken.Button.disabledBackground.opacity(0.6)
+                : Color(white: 32.0 / 255).opacity(0.45))))
             .buttonBorderShape(.capsule)
             .buttonSizing(.flexible)
             .controlSize(.large)
             .frame(maxWidth: .infinity, minHeight: 50)
+            .disabled(!store.canStartGuidance)
             .accessibilityIdentifier("bookDetail.startGuidance")
             Button {
                 store.send(.addToCartButtonTapped)

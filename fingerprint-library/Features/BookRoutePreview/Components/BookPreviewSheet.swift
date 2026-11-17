@@ -33,7 +33,7 @@ struct BookPreviewSheet<Content: View, Actions: View, ExpandedBackground: View>:
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .accessibilityLabel("책 위치 \(floor.name)")
                     .accessibilityIdentifier("\(identifierPrefix).floor")
-                    .padding(.bottom, 4)
+                    .padding(.bottom, 1)
                     .padding(.leading, 16 + safeAreaInsets.leading)
                     .padding(.trailing, 16 + safeAreaInsets.trailing)
             }

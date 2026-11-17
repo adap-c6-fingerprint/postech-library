@@ -51,12 +51,35 @@ struct BookRouteBooksPreviewView: View {
         books.first { $0.id == selection.wrappedValue }
     }
 
+    private var guidanceBooks: [Book] {
+        guidesSelectedBook ? selectedBook.map { [$0] } ?? [] : books
+    }
+
+    private var hasUnavailableBooks: Bool {
+        guidanceBooks.contains { shelfStore.holdings[$0.id]?.isUnavailableForGuidance == true }
+    }
+
+    private var startButtonTitle: String {
+        if hasUnavailableBooks { return "대출 중인 책" }
+        return isPreparingGuidance ? "소장 위치 확인 중" : "바로 안내 시작"
+    }
+
+    private var startButtonHint: String {
+        if hasUnavailableBooks { return "대출 중인 책은 안내할 수 없어요" }
+        if guidesSelectedBook { return "현재 보고 있는 책의 서가로 안내해요" }
+        return "선택한 전체 \(books.count)권을 최적 경로 순서로 안내해요"
+    }
+
     private var isPreparingGuidance: Bool {
         if isResolvingStart || isLoadingRoute || shelfStore.map.isLoading || shelfStore.map.isLoadingShelfLabels {
             return true
         }
-        let guidanceBooks = guidesSelectedBook ? selectedBook.map { [$0] } ?? [] : books
-        return guidanceBooks.contains { shelfStore.holdings[$0.id] == .loading }
+        return guidanceBooks.contains {
+            switch shelfStore.holdings[$0.id] {
+            case nil, .idle, .loading: true
+            case .loaded, .failed: false
+            }
+        }
     }
 
     private var isShowingExpandedDetail: Bool { panelPresentation.isExpanded }
@@ -331,27 +354,29 @@ struct BookRouteBooksPreviewView: View {
             }
             HStack(spacing: 12) {
                 Button {
-                    guard let book = books.first(where: { $0.id == selection.wrappedValue }) else { return }
+                    guard !hasUnavailableBooks, let book = selectedBook else { return }
                     onStart(book)
                 } label: {
                     HStack(spacing: PobookUI.Spacing._8) {
-                        if isPreparingGuidance {
+                        if isPreparingGuidance && !hasUnavailableBooks {
                             ProgressView()
                                 .progressViewStyle(.circular)
                                 .tint(PobookUI.ColorToken.neutralPrimary)
                                 .accessibilityHidden(true)
                         }
-                        Text(isPreparingGuidance ? "소장 위치 확인 중" : "바로 안내 시작")
+                        Text(startButtonTitle)
                             .typography(.button)
+                            .foregroundStyle(hasUnavailableBooks
+                                ? PobookUI.ColorToken.Button.disabledText : PobookUI.ColorToken.Button.neutralText)
                     }
                     .frame(maxWidth: .infinity, minHeight: 50)
                 }
-                .buttonStyle(.glass(.regular.tint(Color(white: 0.08).opacity(0.6))))
+                .buttonStyle(.glass(.regular.tint(hasUnavailableBooks
+                    ? PobookUI.ColorToken.Button.disabledBackground.opacity(0.6)
+                    : Color(white: 0.08).opacity(0.6))))
                 .buttonBorderShape(.capsule)
-                .disabled(isPreparingGuidance || !canStart || selection.wrappedValue == nil)
-                .accessibilityHint(guidesSelectedBook
-                    ? "현재 보고 있는 책의 서가로 안내해요"
-                    : "선택한 전체 \(books.count)권을 최적 경로 순서로 안내해요")
+                .disabled(hasUnavailableBooks || isPreparingGuidance || !canStart || selection.wrappedValue == nil)
+                .accessibilityHint(startButtonHint)
                 .accessibilityIdentifier("multiBookPreview.start")
                 if isShowingExpandedDetail, let book = selectedBook, let store = detailStore(for: book) {
                     cartButton(store)

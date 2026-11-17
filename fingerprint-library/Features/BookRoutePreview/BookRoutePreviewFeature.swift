@@ -97,6 +97,8 @@ struct BookRoutePreviewFeature {
 
         var routeRequest: BookRoutePreviewRequest { .init(state: shelf, start: previewStart) }
 
+        var hasUnavailableBooks: Bool { shelf?.hasUnavailableBooks == true }
+
         var readySession: RoutePlan? {
             guard let previewPlan, case let .ready(map, labels, start, stops) = routeRequest,
                   previewPlan.map == map, previewPlan.shelfLabels == labels,
@@ -243,6 +245,7 @@ struct BookRoutePreviewFeature {
                 return .none
 
             case .startTapped:
+                guard !state.hasUnavailableBooks else { return .none }
                 analytics.record(.button(.directGuidance, on: .routePreview, book: state.viewedBook))
                 state.isStartRequested = true
                 state.refreshCurrentStart(at: now)
@@ -301,6 +304,7 @@ struct BookRoutePreviewFeature {
                 return .none
 
             case let .originConfirmed(coordinate, floorOrdinal):
+                guard !state.hasUnavailableBooks else { return .none }
                 analytics.record(.button(.originConfirm, on: .routeOriginPicker, [.floor: .integer(floorOrdinal)]))
                 let position = IndoorPosition(
                     coordinate: coordinate, floorOrdinal: floorOrdinal, horizontalAccuracy: nil,
@@ -372,6 +376,9 @@ struct BookRoutePreviewFeature {
                 guard state.isLoadingRoute,
                       state.requestID == requestID else {
                     return .none
+                }
+                guard !state.hasUnavailableBooks else {
+                    return loadRoute(.unavailableBooks, startsNavigation: false, state: &state)
                 }
 
                 state.isLoadingRoute = false
@@ -453,8 +460,13 @@ struct BookRoutePreviewFeature {
     }
 
     private func reconcile(_ state: inout State) -> Effect<Action> {
-        guard state.navigation == nil, !state.returnsToOriginAfterNavigation,
-              !state.isPreparingManualOrigin, !state.isOriginPickerPresented else { return .none }
+        guard state.navigation == nil, !state.returnsToOriginAfterNavigation else { return .none }
+        if state.hasUnavailableBooks {
+            guard state.lastRequest != .unavailableBooks else { return .none }
+            state.lastRequest = .unavailableBooks
+            return loadRoute(.unavailableBooks, startsNavigation: false, state: &state)
+        }
+        guard !state.isPreparingManualOrigin, !state.isOriginPickerPresented else { return .none }
         let holdings = requestHoldingsIfReady(&state)
         if state.isPreviewFromEntrance,
            case let .current(position) = state.startDecision {
@@ -498,7 +510,8 @@ struct BookRoutePreviewFeature {
     }
 
     private func resolveStartAuthorization(_ state: inout State) -> Effect<Action> {
-        guard state.entryMode == .direct || state.isStartRequested,
+        guard !state.hasUnavailableBooks,
+              state.entryMode == .direct || state.isStartRequested,
               state.manualStart == nil,
               !state.isOriginPickerPresented, !state.isPermissionAlertPresented,
               !state.isPreparingManualOrigin, state.navigation == nil,
@@ -571,6 +584,21 @@ struct BookRoutePreviewFeature {
         let timeout = restartPreparingTimeout(&state)
 
         switch request {
+        case .unavailableBooks:
+            state.startsNavigationWhenLoaded = false
+            state.isStartRequested = false
+            state.startsAfterOriginSelected = false
+            state.isPermissionAlertPresented = false
+            state.isPreparingManualOrigin = false
+            state.isOriginPickerPresented = false
+            state.isLocatingTimerRunning = false
+            endDirectRetry(&state)
+            return .merge(
+                .cancel(id: CancelID.route),
+                .cancel(id: CancelID.preparingTimeout),
+                .cancel(id: CancelID.locatingTimeout)
+            )
+
         case .waiting:
             state.startsNavigationWhenLoaded = false
             return .merge(.cancel(id: CancelID.route), timeout)
@@ -626,7 +654,7 @@ struct BookRoutePreviewFeature {
     }
 
     private func syncLocatingTimeout(_ state: inout State) -> Effect<Action> {
-        guard state.startDecision == .locating, state.navigation == nil,
+        guard !state.hasUnavailableBooks, state.startDecision == .locating, state.navigation == nil,
               !state.returnsToOriginAfterNavigation else {
             guard state.isLocatingTimerRunning else { return .none }
             state.isLocatingTimerRunning = false

@@ -21,6 +21,9 @@ nonisolated struct BookHolding: Codable, Equatable, Identifiable, Sendable {
         default: "대출 상태 확인 필요"
         }
     }
+
+    // Primo의 unavailable은 대출 중과 기타 이용 불가 사유를 함께 나타낸다.
+    var isUnavailableForGuidance: Bool { availability == "unavailable" }
 }
 
 nonisolated extension BookHolding {
