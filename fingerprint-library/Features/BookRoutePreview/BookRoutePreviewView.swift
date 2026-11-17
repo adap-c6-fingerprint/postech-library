@@ -200,7 +200,7 @@ struct BookRoutePreviewView: View {
 
     var body: some View {
         Group {
-            if entryMode == .direct {
+            if entryMode == .direct && !store.hasUnavailableBooks {
                 directContent
             } else if let destinationStore {
                 BookRouteBooksPreviewView(

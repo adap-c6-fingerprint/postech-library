@@ -343,12 +343,20 @@ struct BookDetailView: View {
             Button {
                 store.send(.guidanceStarted)
             } label: {
-                Text("바로 안내 시작").typography(.button).frame(maxWidth: .infinity)
+                Text(store.holdingsState.isUnavailableForGuidance ? "대출 중인 책" : "바로 안내 시작")
+                    .typography(.button)
+                    .foregroundStyle(store.holdingsState.isUnavailableForGuidance
+                        ? PobookUI.ColorToken.Button.disabledText : PobookUI.ColorToken.Button.neutralText)
+                    .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.glass(.regular.tint(store.holdingsState.isUnavailableForGuidance
+                ? PobookUI.ColorToken.Button.disabledBackground.opacity(0.6)
+                : Color(white: 32.0 / 255).opacity(0.45))))
             .buttonBorderShape(.capsule)
             .buttonSizing(.flexible)
             .controlSize(.large)
             .frame(maxWidth: .infinity, minHeight: 50)
+            .disabled(!store.canStartGuidance)
             .accessibilityIdentifier("bookDetail.startGuidance")
             Button {
                 store.send(.addToCartButtonTapped)

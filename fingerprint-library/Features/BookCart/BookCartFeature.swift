@@ -16,6 +16,7 @@ struct BookCartFeature {
         @Shared(.hasShownCartGuidanceLimitAlert) var hasShownGuidanceLimitAlert
         var isGuidanceLimitAlertPresented = false
         var isRemoveAlertPresented = false
+        var unavailableBookTitle: String?
 
         var sections: [BookCartSection] {
             BookCartSection.grouped(items, calendar: .current)
@@ -25,6 +26,7 @@ struct BookCartFeature {
 
         var canStartGuidance: Bool {
             (1...BookCartItem.maxStoredCount).contains(selectedCount)
+                && !selectedIDs.contains { libraryInfo[$0]?.availability == .unavailable }
         }
 
         var selectedBooks: [Book] {
@@ -39,6 +41,7 @@ struct BookCartFeature {
         case coverRecovered(Book.ID, URL, URL)
         case selectionToggled(Book.ID)
         case guidanceLimitAlertDismissed
+        case unavailableBookAlertDismissed
         case guidanceLinkTapped
         case removeButtonTapped
         case removeConfirmed
@@ -81,6 +84,7 @@ struct BookCartFeature {
                 let info = BookCardLibraryInfo(holdings: holdings)
                 state.libraryInfo[id] = BookLocationStatus(location: info.location, availability: info.availability)
                 bookLocationCacheClient.record(book, holdings)
+                removeUnavailableSelections(state: &state)
                 return .none
 
             case let .coverRecovered(id, oldURL, newURL):
@@ -93,6 +97,10 @@ struct BookCartFeature {
                     state.selectedIDs.remove(at: index)
                     analytics.record(.button(.bookDeselect, on: .cart, book: book))
                 } else {
+                    guard state.libraryInfo[id]?.availability != .unavailable else {
+                        state.unavailableBookTitle = BookText.plainText(book.title)
+                        return .none
+                    }
                     state.selectedIDs.append(id)
                     analytics.record(.button(.bookSelect, on: .cart, book: book))
                     if state.selectedCount == BookCartItem.maxStoredCount + 1,
@@ -107,7 +115,12 @@ struct BookCartFeature {
                 state.isGuidanceLimitAlertPresented = false
                 return .none
 
+            case .unavailableBookAlertDismissed:
+                state.unavailableBookTitle = nil
+                return .none
+
             case .guidanceLinkTapped:
+                guard !removeUnavailableSelections(state: &state) else { return .none }
                 analytics.record(.button(.startGuidance, on: .cart, [.bookCount: .integer(state.selectedCount)]))
                 // 책별 기록은 경로 미리보기의 route_book_included가 맡는다
                 guard state.canStartGuidance else { return .none }
@@ -157,6 +170,15 @@ struct BookCartFeature {
         }
     }
 
+    @discardableResult
+    private func removeUnavailableSelections(state: inout State) -> Bool {
+        let unavailableIDs = Set(state.selectedIDs.filter { state.libraryInfo[$0]?.availability == .unavailable })
+        guard let book = state.selectedBooks.first(where: { unavailableIDs.contains($0.id) }) else { return false }
+        state.selectedIDs.removeAll { unavailableIDs.contains($0) }
+        state.unavailableBookTitle = BookText.plainText(book.title)
+        return true
+    }
+
     private func loadLibraryInfo(state: inout State) -> Effect<Action> {
         let books = state.items.map(\.book)
         let keys = Set(books.map(\.recordKey))
@@ -179,6 +201,8 @@ struct BookCartFeature {
                 }
             }
         }
+
+        removeUnavailableSelections(state: &state)
 
         return .run { [bookHoldingsClient, requests] send in
             for start in stride(from: 0, to: requests.count, by: 3) {

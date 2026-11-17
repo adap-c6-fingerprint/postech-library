@@ -48,6 +48,11 @@ struct BookDetailFeature {
             return BookHolding.preferred(in: holdings)
         }
 
+        var canStartGuidance: Bool {
+            guard case .loaded = holdingsState else { return false }
+            return !holdingsState.isUnavailableForGuidance
+        }
+
         var cartNotice: CartNotice?
         @Presents var cart: BookCartFeature.State?
         var isCartLimitAlertPresented = false
@@ -243,7 +248,7 @@ struct BookDetailFeature {
                 return .none
 
             case .guidanceStarted:
-                guard state.cart == nil, state.pendingGuidanceRequest == nil,
+                guard state.canStartGuidance, state.cart == nil, state.pendingGuidanceRequest == nil,
                       !state.isGuidancePresented else { return .none }
                 analytics.record(.button(.directGuidance, on: .detail, book: state.book))
                 // 바로 안내 시작 버튼
