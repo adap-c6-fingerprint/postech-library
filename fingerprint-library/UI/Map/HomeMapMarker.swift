@@ -3,7 +3,7 @@ import Foundation
 nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
     enum Kind: String, CaseIterable, Sendable {
         case favorite, stairs, elevator, toilet, shop, printer, media
-        case cafe, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone
+        case cafe, plora, conferenceRoom, gamingRoom, groupStudyRoom, relaxZone
         case waterDispenser, entranceDesk, circulationDesk, computer, nursingRoom
         case other
 
@@ -24,6 +24,7 @@ nonisolated struct HomeMapMarker: Equatable, Identifiable, Sendable {
             case .printer: "annotation_printer"
             case .media: "annotation_tv"
             case .cafe: "annotation_cafe"
+            case .plora: "annotation_plora"
             case .conferenceRoom: "annotation_conferenceRoom"
             case .gamingRoom: "annotation_gamingRoom"
             case .groupStudyRoom: "annotation_groupStudyRoom"
@@ -60,6 +61,7 @@ nonisolated enum HomeMapMarkerBuilder {
             case .printer: "프린터·복사기"
             case .media: "영상 자료실"
             case .cafe: "카페 니어미"
+            case .plora: "Plora"
             case .conferenceRoom: "미팅룸"
             case .gamingRoom: "게임룸"
             case .groupStudyRoom: feature.category?.lowercased() == "classroom" ? "강의실" : "그룹 스터디룸"
@@ -177,6 +179,7 @@ nonisolated enum HomeMapMarkerBuilder {
         if let owned = Self.ownedKind(forCategory: category) {
             return feature.kind == .amenity ? owned : nil
         }
+        if compactName.contains("plora") || compactName.contains("플로라") { return .plora }
         if compactName.contains("pc존") || compactName.contains("pczone") { return .computer }
         if name.contains("편의점") || name.contains("convenience") || name.contains("gs25") { return .shop }
         if name.contains("프린터") || name.contains("복사기") || name.contains("printer") || name.contains("copier") {
@@ -193,7 +196,6 @@ nonisolated enum HomeMapMarkerBuilder {
             || compactName.contains("회의실") || compactName.contains("미팅룸")
             || compactName.contains("meetingroom") || compactName.contains("conferenceroom")
             || compactName.contains("콜라보") || compactName.contains("collaboration")
-            || compactName.contains("plora") || compactName.contains("플로라")
             || compactName.contains("postech1986") || compactName.contains("isss")
             || compactName.contains("국제협력팀") || compactName.contains("internationalrelations") {
             return .groupStudyRoom

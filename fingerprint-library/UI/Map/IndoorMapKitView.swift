@@ -139,7 +139,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.showsUserLocation = parent.showsUserLocation && !parent.appearance.usesHomeStyle
             updatePosition(in: view)
             updatePositionMarkerBearing(in: view, animated: true)
-            homeAnnotations.update(parent.appearance.usesHomeStyle
+            homeAnnotations.update(parent.appearance.usesHomeStyle || parent.navigationAppearance
                 ? parent.homeMarkers.filter { $0.floorID == parent.floor.id } : [], in: view)
             updateShelfLabels(in: view)
             updateDetailShelfBadges(in: view)
@@ -249,6 +249,8 @@ struct IndoorMapKitView: UIViewRepresentable {
 
         func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
             for view in views where view.annotation is MKUserLocation {
+                view.canShowCallout = false
+                view.isEnabled = false
                 view.zPriority = MapAnnotationPriority.user
                 view.selectedZPriority = MapAnnotationPriority.user
             }
@@ -377,7 +379,7 @@ struct IndoorMapKitView: UIViewRepresentable {
             view.addOverlays(overlays, level: .aboveRoads)
             updateHighlightOverlays(in: view)
             view.addAnnotations(features.compactMap { feature in
-                guard !parent.appearance.usesHomeStyle, feature.kind == .amenity,
+                guard !parent.appearance.usesHomeStyle, !parent.navigationAppearance, feature.kind == .amenity,
                       case .point(let coordinate) = feature.geometry else { return nil }
                 return FeatureAnnotation(feature: feature, coordinate: coordinate.clCoordinate)
             })
@@ -802,6 +804,7 @@ struct IndoorMapKitView: UIViewRepresentable {
                 ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "indoor-marker")
             view.annotation = annotation
             view.canShowCallout = false
+            view.isEnabled = false
             view.titleVisibility = .hidden
             view.displayPriority = .defaultLow
             view.zPriority = MapAnnotationPriority.marker

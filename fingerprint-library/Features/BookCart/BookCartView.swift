@@ -33,7 +33,7 @@ struct BookCartView: View {
             if store.items.isEmpty {
                 ContentUnavailableView(
                     "책바구니가 비어 있어요",
-                    systemImage: "cart",
+                    systemImage: "basket.fill",
                     description: Text("찾고 싶은 책을 책바구니에 저장해두면\n빠르게 책의 위치를 찾을 수 있어요.")
                 )
                 .multilineTextAlignment(.center)

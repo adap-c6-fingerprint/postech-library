@@ -57,11 +57,6 @@ struct LibraryMapView: View {
             .task {
                 searchStore.send(.task)
             }
-            .task(id: searchStore.favoriteBookKeys) {
-                mapStore.send(.homeAnnotations(.favoritesChanged(searchStore.favoriteBookKeys)))
-            }
-            .task { await mapStore.send(.homeAnnotations(.task)).finish() }
-            .onDisappear { mapStore.send(.homeAnnotations(.disappeared)) }
     }
 
     private var homeHeader: some View {

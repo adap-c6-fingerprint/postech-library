@@ -1,3 +1,4 @@
+import ComposableArchitecture
 import SwiftUI
 
 struct BookRouteOriginPickerView: View {
@@ -14,6 +15,13 @@ struct BookRouteOriginPickerView: View {
     @State private var isMapSettled = false
     @State private var hasAdjustedOrigin = false
     @State private var cameraRequest: IndoorMapCameraRequest?
+    @State private var homeMarkerCache = HomeMapMarkerCache()
+    @Environment(\.indoorRouteMapStore) private var mapStore
+
+    private var homeMarkers: [HomeMapMarker] {
+        homeMarkerCache.markers(on: map, labels: mapStore?.shelfLabels ?? [],
+            holdings: mapStore?.homeAnnotations.holdings ?? [:], showsAmenities: false)
+    }
 
     private var selectedFloor: IndoorMapFloor? {
         map.floors.first { $0.id == selectedFloorID } ?? map.floors.first
@@ -68,7 +76,8 @@ struct BookRouteOriginPickerView: View {
                     center = coordinate
                     isMapSettled = true
                 },
-                appearance: .home
+                appearance: .home,
+                homeMarkers: homeMarkers
             )
             .ignoresSafeArea()
             .accessibilityIdentifier("route-origin-picker-map")
