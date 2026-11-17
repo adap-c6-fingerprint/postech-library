@@ -37,7 +37,7 @@ struct BookDetailMapView: View {
                 if !sheetPresentation.isExpanded, compactSheetFrame != nil, let floor {
                     destinationFloorBadge(floor)
                         .padding(.trailing, 16)
-                        .padding(.bottom, coveredHeight + 16)
+                        .padding(.bottom, coveredHeight + 13)
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)

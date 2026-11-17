@@ -192,7 +192,7 @@ nonisolated enum BookExpandedDetailLayout {
     static let sideCoverScale: CGFloat = 0.82
     static let indicatorTopPadding: CGFloat = 16
     static let indicatorHorizontalPadding: CGFloat = 16
-    static let carouselCoverTopPadding: CGFloat = 21
+    static let carouselCoverTopPadding: CGFloat = 20
     static let carouselCoverCornerRadius: CGFloat = 8
     static let carouselActionsBottomPadding: CGFloat = 1
 
