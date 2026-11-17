@@ -304,14 +304,23 @@ struct BookDetailView: View {
     }
 
     private var descriptionSection: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: PobookUI.Spacing._4) {
             let author = BookText.plainText(store.book.author).trimmingCharacters(in: .whitespacesAndNewlines)
             if !author.isEmpty {
-                Text("\(author) 저자").typography(.body2)
+                Text("\(author) 저자")
+                    .typography(.body2)
+                    .foregroundStyle(PobookUI.ColorToken.BookDetails.textAuthor)
+            }
+            let publisher = BookText.plainText(store.book.publisher ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            if !publisher.isEmpty {
+                Text("\(publisher) 출판")
+                    .typography(.caption1)
+                    .foregroundStyle(PobookUI.ColorToken.BookDetails.textAuthor)
+                    .accessibilityIdentifier("bookDetail.publisher")
             }
             descriptionContent
-                .typography(.caption1)
-                .foregroundStyle(Color.textTertiary)
+                .typography(.caption2)
+                .foregroundStyle(PobookUI.ColorToken.BookDetails.textStory)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityIdentifier("bookDetail.description")
