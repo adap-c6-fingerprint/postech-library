@@ -8,7 +8,7 @@ nonisolated struct RecommendationCoverResolver: Sendable {
         httpClient: HTTPClient,
         minimumImageBytes: Int,
         configuration: @escaping @Sendable () async throws -> APIRelayConfiguration = {
-            try await AppConfiguration.relayConfiguration()
+            try AppConfiguration.relayConfiguration()
         }
     ) -> Self {
         let api = Data4LibraryAPIClient(relay: .init(httpClient: httpClient, configuration: configuration))

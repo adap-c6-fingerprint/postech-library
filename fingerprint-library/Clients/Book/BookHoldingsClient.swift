@@ -19,7 +19,7 @@ extension BookHoldingsClient: DependencyKey {
     static let liveValue = Self(fetch: { recordID in
         @Dependency(\.httpClient) var httpClient
         var relay = BookAPIClient(httpClient: httpClient)
-        let configuration = try await AppConfiguration.relayConfiguration()
+        let configuration = try AppConfiguration.relayConfiguration()
         relay.configuration = { configuration }
         let namespace = configuration.environment.baseURL.absoluteString
         let service = PrimoBookHoldingsService(relay: relay)
