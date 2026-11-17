@@ -137,7 +137,8 @@ struct IndoorMapView: View {
         guard appearance == .home || bookDetail != nil else { return [] }
         let annotations = homeAnnotations ?? store.homeAnnotations
         return homeMarkerCache.markers(on: map, labels: store.shelfLabels,
-            holdings: annotations.holdings, showsAmenities: annotations.showsAmenities,
+            holdings: annotations.holdings,
+            showsAmenities: appearance == .home && bookDetail == nil && annotations.showsAmenities,
             hidingFavoritesFor: bookDetail?.shelves ?? [], hiddenFavoriteMarkerIDs: hiddenFavoriteMarkerIDs)
     }
 

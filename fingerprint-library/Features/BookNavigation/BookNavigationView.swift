@@ -366,6 +366,13 @@ private struct BookNavigationMap: View {
     let route: IndoorRoute
     let floor: IndoorMapFloor
     let sheetHeight: CGFloat
+    @State private var homeMarkerCache = HomeMapMarkerCache()
+    @Environment(\.indoorRouteMapStore) private var mapStore
+
+    private var homeMarkers: [HomeMapMarker] {
+        homeMarkerCache.markers(on: store.routePlan.map, labels: store.routePlan.shelfLabels,
+            holdings: mapStore?.homeAnnotations.holdings ?? [:], showsAmenities: false)
+    }
 
     var body: some View {
         IndoorMapKitView(
@@ -379,7 +386,8 @@ private struct BookNavigationMap: View {
             navigationDestination: store.currentPlan.map { .init(book: stop.book, coordinate: $0.destination.coordinate, floorID: stop.shelf.floorID) },
             onUserCameraInteraction: { store.send(.mapInteractionBegan) },
             onCenterChanged: store.diagnostics.isPlacingCheckpoint
-                ? { coordinate, _ in store.send(.diagnostics(.checkpointCenterChanged(coordinate))) } : nil
+                ? { coordinate, _ in store.send(.diagnostics(.checkpointCenterChanged(coordinate))) } : nil,
+            homeMarkers: homeMarkers
         )
         .accessibilityIdentifier("book-navigation-map")
     }
