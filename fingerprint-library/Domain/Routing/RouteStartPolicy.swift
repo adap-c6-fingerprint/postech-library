@@ -90,7 +90,7 @@ nonisolated struct LibraryEntranceApproach: Equatable, Sendable {
     let entrance: IndoorPosition
 
     init?(position: IndoorPosition, entrance: IndoorPosition, map: IndoorMap) {
-        guard position.source == .sensor, position.coordinate.isValid,
+        guard position.source.isLive, position.coordinate.isValid,
               entrance.coordinate.isValid, entrance.floorOrdinal != nil,
               let outline = map.groundFootprint,
               RouteStartPolicy().zone(of: position, outline: outline) == .nearOutside else { return nil }

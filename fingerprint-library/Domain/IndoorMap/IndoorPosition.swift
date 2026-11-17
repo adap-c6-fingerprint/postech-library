@@ -1,7 +1,27 @@
 import Foundation
 
 nonisolated struct IndoorPosition: Equatable, Sendable {
-    enum Source: Equatable, Sendable { case sensor, manual, replay }
+    enum Source: Equatable, Sendable {
+        case sensor, manual, replay
+        #if DEBUG
+        case simulation
+        #endif
+
+        /// 연속 측위 입력. Debug에서는 좌표·층만 Mac에서 공급한다.
+        var isLive: Bool {
+            #if DEBUG
+            if self == .simulation { return true }
+            #endif
+            return self == .sensor
+        }
+
+        var isTest: Bool {
+            #if DEBUG
+            if self == .simulation { return true }
+            #endif
+            return self == .replay
+        }
+    }
 
     let coordinate: IndoorMapCoordinate
     let floorOrdinal: Int?

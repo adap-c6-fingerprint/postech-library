@@ -617,7 +617,7 @@ struct BookRoutePreviewFeature {
                 return .merge(.cancel(id: CancelID.route), timeout, resolveStartAuthorization(&state))
             }
             state.isLoadingRoute = true
-            state.analyticsRequestIsTest = start.source == .replay
+            state.analyticsRequestIsTest = start.source.isTest
             analytics.record(.init(.guidanceRequested, [
                 .operationID: .text(state.analyticsOperation), .bookCount: .integer(stops.count),
                 .isTest: .flag(state.analyticsRequestIsTest)

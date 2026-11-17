@@ -15,6 +15,9 @@ struct LocationSessionFeature {
 
     enum Action: Equatable {
         case started
+        #if DEBUG
+        case simulationConnectionChanged
+        #endif
         case sceneActiveChanged(Bool)
         case locationEvent(IndoorLocationEvent)
         case atriumZoneLoaded(AtriumZone)
@@ -32,6 +35,14 @@ struct LocationSessionFeature {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            #if DEBUG
+            case .simulationConnectionChanged:
+                state.$location.withLock { $0 = IndoorLocationSnapshot() }
+                state.floorEstimator = FloorEstimator()
+                guard state.isActive else { return .none }
+                return start(&state)
+            #endif
+
             case .started:
                 guard !state.isActive else { return .none }
                 state.isActive = true
@@ -95,7 +106,10 @@ struct LocationSessionFeature {
     }
 
     private func updateBarometerSubscription(_ state: inout State) -> Effect<Action> {
-        let shouldSubscribe = state.isActive && state.location.authorization.isAuthorized
+        var shouldSubscribe = state.isActive && state.location.authorization.isAuthorized
+        #if DEBUG
+        shouldSubscribe = shouldSubscribe && !IndoorLocationClient.usesSimulation
+        #endif
         guard state.isBarometerActive != shouldSubscribe else { return .none }
         state.isBarometerActive = shouldSubscribe
         guard shouldSubscribe else { return .cancel(id: CancelID.barometer) }

@@ -8,7 +8,12 @@ nonisolated struct IndoorLocationClient: Sendable {
 
 extension IndoorLocationClient: DependencyKey {
     static let liveValue = Self(
-        events: { await LiveIndoorLocationProvider.shared.events() },
+        events: {
+            #if DEBUG
+            if usesSimulation { return await IndoorSimulationDeviceLocationProvider.events() }
+            #endif
+            return await LiveIndoorLocationProvider.shared.events()
+        },
         requestPermission: {
             await LiveIndoorLocationProvider.shared.requestPermission()
         }
@@ -22,3 +27,11 @@ nonisolated extension DependencyValues {
         set { self[IndoorLocationClient.self] = newValue }
     }
 }
+
+#if DEBUG
+nonisolated extension IndoorLocationClient {
+    static var usesSimulation: Bool {
+        IndoorSimulationSettings.load().usesSimulation(environment: ProcessInfo.processInfo.environment)
+    }
+}
+#endif

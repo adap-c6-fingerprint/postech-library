@@ -163,17 +163,17 @@ struct BookNavigationFeature {
         var effectiveFloorOrdinal: Int? {
             guard let rawPosition else { return confirmedFloorOrdinal }
             // 사용자가 층 이동을 확인했는데 센서가 아직 출발 층을 보고하면 센서 층 반영 지연으로 보고 도착 층을 쓴다.
-            if let transition = manuallyCompletedFloorTransition, rawPosition.source == .sensor,
+            if let transition = manuallyCompletedFloorTransition, rawPosition.source.isLive,
                rawPosition.floorOrdinal == transition.from.level {
                 return transition.to.level
             }
             if let reported = rawPosition.floorOrdinal,
                routePlan.map.floors.contains(where: { $0.ordinal == reported }) { return reported }
-            return rawPosition.source == .sensor ? confirmedFloorOrdinal : rawPosition.floorOrdinal
+            return rawPosition.source.isLive ? confirmedFloorOrdinal : rawPosition.floorOrdinal
         }
         var canConfirmCurrentFloor: Bool {
             guard let rawPosition else { return true }
-            return rawPosition.source == .sensor && !routePlan.map.floors.contains { $0.ordinal == rawPosition.floorOrdinal }
+            return rawPosition.source.isLive && !routePlan.map.floors.contains { $0.ordinal == rawPosition.floorOrdinal }
         }
         var currentFloor: IndoorMapFloor? {
             if let reviewedFloorTransition {
@@ -606,7 +606,7 @@ struct BookNavigationFeature {
                 // 이전 책으로 바뀌기 전에 기록해야 누른 시점의 책이 남는다
                 state.isCancelConfirmationPresented = false
                 let previousIndex = state.currentStopIndex - 1
-                guard let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
+                guard let position = state.latestPosition, position.source.isLive, position.isRecent(at: now),
                       (-2...GuidanceEngine.maximumPositionAge).contains(now.timeIntervalSince(position.timestamp)) else {
                     moveToStop(&state, previousIndex)
                     return .cancel(id: CancelID.reroute)
@@ -862,7 +862,7 @@ struct BookNavigationFeature {
               !state.isReroutingCurrentStop, !state.isReroutingToNextBook, !state.isReturningToPreviousStop,
               !state.isArrivalPresented, !state.isNextBookOriginPickerPresented,
               state.reviewedFloorTransition == nil,
-              let position = state.latestPosition, position.source == .sensor, position.isRecent(at: now),
+              let position = state.latestPosition, position.source.isLive, position.isRecent(at: now),
               position.timestamp.timeIntervalSince(since) >= Self.offRouteRerouteDelay,
               let stop = state.currentStop else { return .none }
         let stopIndex = state.currentStopIndex
@@ -917,7 +917,7 @@ struct BookNavigationFeature {
     @discardableResult
     private func updateGuidance(_ state: inout State, previousTimestamp: Date?) -> String {
         guard let raw = state.rawPosition else { return "no_position" }
-        if raw.source == .sensor, let outline = state.routePlan.map.groundFootprint {
+        if raw.source.isLive, let outline = state.routePlan.map.groundFootprint {
             let previousZone = state.libraryZone
             let zone = RouteStartPolicy().zone(of: raw, outline: outline)
             state.libraryZone = zone
@@ -1039,7 +1039,7 @@ struct BookNavigationFeature {
     /// 사용자가 목적지 서가 앞이라고 확인한 순간, 측위 좌표와 실제 서가 위치의 차이를 기억한다.
     /// 같은 구역의 일정한 편향을 다음 책 구간 초반에 보정한다. 층 판정 결과는 입력으로만 쓴다.
     private func anchorPositionAtDestination(_ state: inout State) {
-        guard let raw = state.rawPosition, raw.source == .sensor, raw.isRecent(at: now),
+        guard let raw = state.rawPosition, raw.source.isLive, raw.isRecent(at: now),
               let plan = state.currentPlan, let level = state.effectiveFloorOrdinal,
               level == plan.destination.level else { return }
         state.positionAnchor = PositionAnchor(actual: plan.destination.coordinate, measured: raw.coordinate,
@@ -1060,7 +1060,7 @@ struct BookNavigationFeature {
     // 길안내 화면 버튼 이벤트 (지금 안내 중인 책 ID와 navigation_id 포함)
 
     private func isAnalyticsTest(_ state: State) -> Bool {
-        state.routePlan.start.source == .replay
+        state.routePlan.start.source.isTest
     }
 
     private func recordQuality(_ state: State, code: String) {

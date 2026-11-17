@@ -447,10 +447,10 @@ struct IndoorMapKitView: UIViewRepresentable {
         func updatePosition(in view: MKMapView) {
             let visible = parent.position.flatMap { position -> IndoorPosition? in
                 let isApproachingEntrance = parent.visibleEntranceApproach?.position == position
-                guard (position.source != .sensor || parent.navigationAppearance || parent.appearance.usesHomeStyle || isApproachingEntrance),
+                guard (!position.source.isLive || parent.navigationAppearance || parent.appearance.usesHomeStyle || isApproachingEntrance),
                       position.floorOrdinal == parent.floor.ordinal
                         || isApproachingEntrance
-                        || (parent.appearance == .home && position.source == .sensor && position.floorOrdinal == nil)
+                        || (parent.appearance == .home && position.source.isLive && position.floorOrdinal == nil)
                 else { return nil }
                 return position
             }
@@ -896,6 +896,9 @@ private final class PositionAnnotation: NSObject, MKAnnotation {
         switch position.source {
         case .sensor: "현재 위치"
         case .replay: "테스트 재생 위치"
+        #if DEBUG
+        case .simulation: "시뮬레이터 위치"
+        #endif
         default: "수동 출발점"
         }
     }

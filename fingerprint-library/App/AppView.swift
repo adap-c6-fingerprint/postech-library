@@ -14,6 +14,10 @@ struct AppView: View {
     @Environment(\.scenePhase) private var scenePhase
     @FocusState private var isBookSearchFocused: Bool
 
+    #if DEBUG
+    @State private var showsSimulationSettings = false
+    #endif
+
     var body: some View {
         Group {
             if let onboardingStore = store.scope(state: \.onboarding, action: \.onboarding) {
@@ -77,6 +81,31 @@ struct AppView: View {
                 .tint(Color?.none)
             }
         }
+        #if DEBUG
+        .background {
+            HomeTabDebugTrigger(
+                isEnabled: scenePhase == .active && store.modal == nil && !showsSimulationSettings,
+                isHomeSelected: { store.selectedTab == .map && store.mapPath.isEmpty }
+            ) {
+                guard store.selectedTab == .map, !showsSimulationSettings else { return }
+                showsSimulationSettings = true
+            }
+            .frame(width: 0, height: 0)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+        }
+        .sheet(isPresented: $showsSimulationSettings) {
+            SimulationConnectionSheet(
+                position: store.indoorMap.latestPosition,
+                floorName: store.indoorMap.map?.floors.first {
+                    $0.ordinal == store.indoorMap.latestPosition?.floorOrdinal
+                }?.name,
+                message: store.indoorMap.locationMessage,
+                onReconnect: { store.send(.locationSession(.simulationConnectionChanged)) }
+            )
+            .clarityMask()
+        }
+        #endif
         .tint(PobookUI.ColorToken.accent)
         .tabViewSearchActivation(.searchTabSelection)
         .onChange(of: store.searchPath.isEmpty) { _, isEmpty in
