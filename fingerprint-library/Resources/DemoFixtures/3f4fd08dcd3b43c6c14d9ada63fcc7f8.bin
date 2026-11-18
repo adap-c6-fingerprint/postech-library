@@ -1,0 +1,3752 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1281,
+    "totalResultsPC" : -1,
+    "total" : 1281,
+    "first" : 1,
+    "last" : 20
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003530974303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "나는 LINE 개발자입니다 : 라인의 개발 고수 12인의 도전과 기회, 성장의 개발 라이프 " ],
+        "format" : [ "250 p : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791162242162" ],
+        "creationdate" : [ "2019" ],
+        "creator" : [ "라인플러스 주식회사$$Q라인플러스 주식회사" ],
+        "publisher" : [ "서울 : 한빛미디어" ],
+        "mms" : [ "991003530974303286" ],
+        "contributor" : [ "강윤신$$Q강윤신", "김영환$$Q김영환", "김재석$$Q김재석", "김정엽$$Q김정엽", "김택주$$Q김택주", "노승헌$$Q노승헌", "박민우$$Q박민우", "배권한$$Q배권한", "이서연$$Q이서연", "이승진$$Q이승진", "이홍규$$Q이홍규", "하태호$$Q하태호", "LINE Developer Relations 팀$$QLINE Developer Relations 팀" ],
+        "addtitle" : [ "글로벌 개발자로 입문하고 개발하고 성장하는 12가지 방법", "나는 라인 개발자입니다" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "개발자", "수기(글)", "개발자 개발과정 라인플러스" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003530974303286" ],
+        "recordid" : [ "alma991003530974303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000047499310" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.0136902" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr2004000420", "n84148761" ],
+        "aulast" : [ "강윤신", "김영환", "김재석", "김정엽", "김택주", "노승헌", "박민우", "배권한", "이서연", "이승진", "이홍규", "하태호" ],
+        "aucorp" : [ "라인플러스 주식회사" ],
+        "addau" : [ "강윤신", "김영환", "김재석", "김정엽", "김택주", "노승헌", "박민우", "배권한", "이서연", "이승진", "이홍규", "하태호", "LINE Developer Relations 팀" ],
+        "contributorfull" : [ "$$N강윤신$$L강윤신$$F$$Rcontributor", "$$N김영환$$Rcontributor", "$$N김재석$$Rcontributor", "$$N김정엽$$Rcontributor", "$$N김택주$$Rcontributor", "$$N노승헌$$Rcontributor", "$$N박민우$$Rcontributor", "$$N배권한$$Rcontributor", "$$N이서연$$Rcontributor", "$$N이승진$$Rcontributor", "$$N이홍규$$Rcontributor", "$$N하태호$$Rcontributor" ],
+        "addtitle" : [ "글로벌 개발자로 입문하고 개발하고 성장하는 12가지 방법" ],
+        "date" : [ "2019" ],
+        "isbn" : [ "9791162242162" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한빛미디어" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "나는 LINE 개발자입니다 : 라인의 개발 고수 12인의 도전과 기회, 성장의 개발 라이프" ]
+      },
+      "sort" : {
+        "title" : [ "나는 LINE 개발자입니다 : 라인의 개발 고수 12인의 도전과 기회, 성장의 개발 라이프 / 강윤신, 김영환, 김재석, 김정엽, 김택주, 노승헌, 박민우, 배권한, 이서연, 이승진, 이홍규, 하태호, 라인플러스 주식회사 지음 ; LINE Developer Relations 팀 엮음" ],
+        "author" : [ "라인플러스 주식회사" ],
+        "creationdate" : [ "2019" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.758 .라68 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003530974303286",
+        "holdId" : "22218981360003286",
+        "holKey" : "HoldingResultKey [mid=22218981360003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.758 .라68 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.758+.%EB%9D%BC68+2019&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.758 .라68 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003530974303286",
+        "holdId" : "22218981360003286",
+        "holKey" : "HoldingResultKey [mid=22218981360003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.758 .라68 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.758+.%EB%9D%BC68+2019&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003530974303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791162242162,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791162242162&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.758 .라68 2019",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.102",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000796199703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "아시아 개발도상국가와의 교육협력에 관한 연구. 1, 아시아 개발도상국가의 교육실태 분석 " ],
+        "format" : [ "xix, 472 p. : 삽도 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788961131803" ],
+        "creationdate" : [ "2007" ],
+        "publisher" : [ "서울 : 한국교육개발원" ],
+        "mms" : [ "991000796199703286" ],
+        "contributor" : [ "이석희$$Q이석희", "윤종혁$$Q윤종혁", "이찬희$$Q이찬희", "정광희$$Q정광희", "유성상$$Q유성상", "신효숙$$Q신효숙", "정기오$$Q정기오", "김선태$$Q김선태", "정영근$$Q정영근", "이경자$$Q이경자", "한국교육개발원$$Q한국교육개발원" ],
+        "series" : [ "연구보고 ; RR 2007-28$$Q연구보고 ", "연구보고(한국교육개발원) ; RR 2007-28$$Q연구보고(한국교육개발원) " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000796199703286" ],
+        "recordid" : [ "alma991000796199703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13420999-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.0086854" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n81107855", "n2008007475", "nr2005014514", "n2008007573", "nr95005418", "n81151857", "n2004054311", "n2006094736" ],
+        "aulast" : [ "이석희", "윤종혁", "이찬희", "정광희", "유성상", "신효숙", "정기오", "김선태", "정영근", "이경자" ],
+        "addau" : [ "이석희", "윤종혁", "이찬희", "정광희", "유성상", "신효숙", "정기오", "김선태", "정영근", "이경자", "한국교육개발원" ],
+        "contributorfull" : [ "$$N이석희$$L이석희$$F$$Rcontributor", "$$N윤종혁$$Rcontributor", "$$N이찬희$$Rcontributor", "$$N정광희$$Rcontributor", "$$N유성상$$Rcontributor", "$$N신효숙$$Rcontributor", "$$N정기오$$Rcontributor", "$$N김선태$$Rcontributor", "$$N정영근$$Rcontributor", "$$N이경자$$Rcontributor" ],
+        "date" : [ "2007" ],
+        "isbn" : [ "9788961131803" ],
+        "notes" : [ "참고문헌 : p. 435-459" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국교육개발원" ],
+        "oclcid" : [ "(ptech)b13420999-82postech_inst" ],
+        "seriestitle" : [ "연구보고 ; RR 2007-28" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "아시아 개발도상국가와의 교육협력에 관한 연구. 1, 아시아 개발도상국가의 교육실태 분석" ]
+      },
+      "sort" : {
+        "title" : [ "아시아 개발도상국가와의 교육협력에 관한 연구. 1, 아시아 개발도상국가의 교육실태 분석 / 이석희 책임연구" ],
+        "author" : [ "이석희" ],
+        "creationdate" : [ "2007" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "DS901 .아52 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000796199703286",
+        "holdId" : "2294556240003286",
+        "holKey" : "HoldingResultKey [mid=2294556240003286, libraryId=117046190003286, locationCode=c3b, callNumber=DS901 .아52 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)DS901+.%EC%95%8452+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "DS901 .아52 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000796199703286",
+        "holdId" : "2294556240003286",
+        "holKey" : "HoldingResultKey [mid=2294556240003286, libraryId=117046190003286, locationCode=c3b, callNumber=DS901 .아52 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)DS901+.%EC%95%8452+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000796199703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788961131803,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788961131803&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "DS901 .아52 2007",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "370.95",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003557979303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "인문학도 개발자되다 " ],
+        "format" : [ "350 p : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788931459593" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "마르코$$Q마르코" ],
+        "publisher" : [ "서울 : 영진닷컴" ],
+        "mms" : [ "991003557979303286" ],
+        "contributor" : [ "곽민수$$Q곽민수" ],
+        "addtitle" : [ "How a historian became a developer from the stone age to apps", "비전공자가 IT 개발자가 되기까지의 모든 것!", "비전공자가 아이티 개발자가 되기까지의 모든 것!" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "소프트웨어 개발" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003557979303286" ],
+        "recordid" : [ "alma991003557979303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014986786" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.84204996" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "곽민수" ],
+        "au" : [ "마르코" ],
+        "addau" : [ "곽민수" ],
+        "creatorfull" : [ "$$N마르코$$Rauthor" ],
+        "contributorfull" : [ "$$N곽민수$$L곽민수$$F$$Rcontributor" ],
+        "addtitle" : [ "How a historian became a developer from the stone age to apps", "비전공자가 IT 개발자가 되기까지의 모든 것!" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9788931459593" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "영진닷컴" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "인문학도 개발자되다" ]
+      },
+      "sort" : {
+        "title" : [ "인문학도 개발자되다 / 마르코 저" ],
+        "author" : [ "마르코" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.758 .마297 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003557979303286",
+        "holdId" : "22228422820003286",
+        "holKey" : "HoldingResultKey [mid=22228422820003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.758 .마297 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.758+.%EB%A7%88297+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.758 .마297 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003557979303286",
+        "holdId" : "22228422820003286",
+        "holKey" : "HoldingResultKey [mid=22228422820003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.758 .마297 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.758+.%EB%A7%88297+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003557979303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788931459593,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788931459593&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.758 .마297 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.102",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000411799703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "위성통신용 송수신기 MMIC칩 개발(III) 연구 " ],
+        "format" : [ "면수복잡 ;  삽도 ;   26 cm." ],
+        "creationdate" : [ "1994" ],
+        "creator" : [ "한국통신연구개발원$$Q한국통신연구개발원" ],
+        "publisher" : [ "서울 : 한국통신연구개발원" ],
+        "mms" : [ "991000411799703286" ],
+        "contributor" : [ "한국통신. 연구개발원$$Q한국통신. 연구개발원", "포항공과대학교$$Q포항공과대학교" ],
+        "series" : [ "협약서 ;  94-61$$Q협약서 ; " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000411799703286" ],
+        "recordid" : [ "alma991000411799703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10683963-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.79518753" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no96035533" ],
+        "aucorp" : [ "한국통신연구개발원" ],
+        "addau" : [ "한국통신. 연구개발원", "포항공과대학교" ],
+        "date" : [ "1994" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국통신연구개발원," ],
+        "oclcid" : [ "(ptech)b10683963-82postech_inst", "ocm176448" ],
+        "seriestitle" : [ "협약서 ;  94-61" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "위성통신용 송수신기 MMIC칩 개발(III) 연구" ]
+      },
+      "sort" : {
+        "title" : [ "위성통신용 송수신기 MMIC칩 개발(III) 연구 = A Study on Development of MMIC Chip for Statellite Communication Transceiver(III) / 한국통신연구개발원." ],
+        "author" : [ "한국통신연구개발원" ],
+        "creationdate" : [ "1994" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK5103.59 .협631",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000411799703286",
+        "holdId" : "2293497580003286",
+        "holKey" : "HoldingResultKey [mid=2293497580003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK5103.59 .협631]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK5103.59+.%ED%98%91631&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK5103.59 .협631",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000411799703286",
+        "holdId" : "2293497580003286",
+        "holKey" : "HoldingResultKey [mid=2293497580003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK5103.59 .협631]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK5103.59+.%ED%98%91631&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000411799703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TK5103.59 .협631",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tk000000005103.000000000059.협000000000631",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000411789703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "위성통신용 송수신기 MMIC칩 개발(III) 연구 " ],
+        "format" : [ "면수복잡 ;  삽도 ;   26 cm." ],
+        "creationdate" : [ "1994" ],
+        "creator" : [ "한국통신연구개발원$$Q한국통신연구개발원" ],
+        "publisher" : [ "서울 : 한국통신연구개발원" ],
+        "mms" : [ "991000411789703286" ],
+        "contributor" : [ "한국통신. 연구개발원$$Q한국통신. 연구개발원", "포항공과대학교$$Q포항공과대학교" ],
+        "series" : [ "협약서 ;  94-61$$Q협약서 ; " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000411789703286" ],
+        "recordid" : [ "alma991000411789703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10683951-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.79518753" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no96035533" ],
+        "aucorp" : [ "한국통신연구개발원" ],
+        "addau" : [ "한국통신. 연구개발원", "포항공과대학교" ],
+        "date" : [ "1994" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국통신연구개발원," ],
+        "oclcid" : [ "(ptech)b10683951-82postech_inst", "ocm176447" ],
+        "seriestitle" : [ "협약서 ;  94-61" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "위성통신용 송수신기 MMIC칩 개발(III) 연구" ]
+      },
+      "sort" : {
+        "title" : [ "위성통신용 송수신기 MMIC칩 개발(III) 연구 = A Study on Development of MMIC Chip for Statellite Communication Transceiver(III) / 한국통신연구개발원." ],
+        "author" : [ "한국통신연구개발원" ],
+        "creationdate" : [ "1994" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000411789703286",
+        "holdId" : "2293495870003286",
+        "holKey" : "HoldingResultKey [mid=2293495870003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK5103.59 .협63]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK5103.59+.%ED%98%9163&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000411789703286",
+        "holdId" : "2293495870003286",
+        "holKey" : "HoldingResultKey [mid=2293495870003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK5103.59 .협63]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK5103.59+.%ED%98%9163&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000411789703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tk000000005103.000000000059.협000000000063",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000411819703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "광 통신망 최적설계 및 성능평가 시스템 개발연구 " ],
+        "format" : [ "면수복잡  ;  삽도 ;   26 cm." ],
+        "creationdate" : [ "1995" ],
+        "creator" : [ "한국통신연구개발원$$Q한국통신연구개발원" ],
+        "publisher" : [ "서울 : 한국통신연구개발원" ],
+        "mms" : [ "991000411819703286" ],
+        "contributor" : [ "한국통신. 연구개발원$$Q한국통신. 연구개발원", "포항공과대학교$$Q포항공과대학교" ],
+        "series" : [ "협약서 ;  95-56$$Q협약서 ; " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000411819703286" ],
+        "recordid" : [ "alma991000411819703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10683987-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.74233115" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no96035533" ],
+        "aucorp" : [ "한국통신연구개발원" ],
+        "addau" : [ "한국통신. 연구개발원", "포항공과대학교" ],
+        "date" : [ "1995" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국통신연구개발원," ],
+        "oclcid" : [ "(ptech)b10683987-82postech_inst", "ocm176450" ],
+        "seriestitle" : [ "협약서 ;  95-56" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "광 통신망 최적설계 및 성능평가 시스템 개발연구" ]
+      },
+      "sort" : {
+        "title" : [ "광 통신망 최적설계 및 성능평가 시스템 개발연구 = A Decision Support System for Optical Fiber Telecommunication Network Design / 한국통신연구개발원." ],
+        "author" : [ "한국통신연구개발원" ],
+        "creationdate" : [ "1995" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000411819703286",
+        "holdId" : "2293494400003286",
+        "holKey" : "HoldingResultKey [mid=2293494400003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK5103.59 .협63]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK5103.59+.%ED%98%9163&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000411819703286",
+        "holdId" : "2293494400003286",
+        "holKey" : "HoldingResultKey [mid=2293494400003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK5103.59 .협63]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK5103.59+.%ED%98%9163&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000411819703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tk000000005103.000000000059.협000000000063",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000411809703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "광 통신망 최적설계 및 성능평가 시스템 개발연구 " ],
+        "format" : [ "55 p. ;  삽도 ;   26 cm." ],
+        "creationdate" : [ "1994" ],
+        "creator" : [ "한국통신연구개발원$$Q한국통신연구개발원" ],
+        "publisher" : [ "서울 : 한국통신연구개발원" ],
+        "mms" : [ "991000411809703286" ],
+        "contributor" : [ "한국통신. 연구개발원$$Q한국통신. 연구개발원", "포항공과대학교$$Q포항공과대학교" ],
+        "series" : [ "협약서 ;  94-62$$Q협약서 ; " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000411809703286" ],
+        "recordid" : [ "alma991000411809703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10683975-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.74233115" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no96035533" ],
+        "aucorp" : [ "한국통신연구개발원" ],
+        "addau" : [ "한국통신. 연구개발원", "포항공과대학교" ],
+        "date" : [ "1994" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국통신연구개발원," ],
+        "oclcid" : [ "(ptech)b10683975-82postech_inst", "ocm176449" ],
+        "seriestitle" : [ "협약서 ;  94-62" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "광 통신망 최적설계 및 성능평가 시스템 개발연구" ]
+      },
+      "sort" : {
+        "title" : [ "광 통신망 최적설계 및 성능평가 시스템 개발연구 = A Decision Support System for Optical Fiber Telecommunication Network Design / 한국통신연구개발원." ],
+        "author" : [ "한국통신연구개발원" ],
+        "creationdate" : [ "1994" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000411809703286",
+        "holdId" : "2293511180003286",
+        "holKey" : "HoldingResultKey [mid=2293511180003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK5103.59 .협63]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK5103.59+.%ED%98%9163&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000411809703286",
+        "holdId" : "2293511180003286",
+        "holKey" : "HoldingResultKey [mid=2293511180003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK5103.59 .협63]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK5103.59+.%ED%98%9163&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000411809703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TK5103.59 .협63",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tk000000005103.000000000059.협000000000063",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003581476703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "역·도시일체개발 : TOD 46의 매력 [Recipe] " ],
+        "format" : [ "207 p : 삽화(일부천연색), 지도, 설계도; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788962852455" ],
+        "creationdate" : [ "2020" ],
+        "creator" : [ "니켄세케이 역·도시일체개발연구회$$Q니켄세케이 역·도시일체개발연구회" ],
+        "publisher" : [ "고양 : 대가" ],
+        "mms" : [ "991003581476703286" ],
+        "contributor" : [ "정병균, 역$$Q정병균", "김미화, 역$$Q김미화", "日建設計駅まち一体開発研究会$$Q日建設計駅まち一体開発研究会", "일건설계역마치일분개발연구회$$Q일건설계역마치일분개발연구회" ],
+        "addtitle" : [ "Tranist oriented development", "駅まち一体開発 : TOD46の魅力[recipe]", "토드 사십육의 매력" ],
+        "place" : [ "고양 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "도시계획 도시개발 도시디자인" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003581476703286" ],
+        "recordid" : [ "alma991003581476703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015515682" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.74160326" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "정병균", "김미화" ],
+        "aucorp" : [ "니켄세케이 역·도시일체개발연구회" ],
+        "addau" : [ "정병균", "김미화", "日建設計駅まち一体開発研究会", "일건설계역마치일분개발연구회" ],
+        "contributorfull" : [ "$$N정병균$$L정병균$$F$$Rcontributor", "$$N김미화$$Rcontributor" ],
+        "addtitle" : [ "Tranist oriented development", "駅まち一体開発 : TOD46の魅力[recipe]" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9788962852455" ],
+        "notes" : [ "참고문헌 : p. 206" ],
+        "cop" : [ "고양" ],
+        "pub" : [ "대가" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "역·도시일체개발 : TOD 46의 매력 [Recipe]" ]
+      },
+      "sort" : {
+        "title" : [ "역·도시일체개발 : TOD 46의 매력 [Recipe] / 니켄세케이역·도시일체개발연구회 편저 ; 정병균, 김미화 역" ],
+        "author" : [ "니켄세케이 역·도시일체개발연구회" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "NA9031 .니874 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003581476703286",
+        "holdId" : "22235471970003286",
+        "holKey" : "HoldingResultKey [mid=22235471970003286, libraryId=117046190003286, locationCode=c3b, callNumber=NA9031 .니874 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)NA9031+.%EB%8B%88874+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "NA9031 .니874 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003581476703286",
+        "holdId" : "22235471970003286",
+        "holKey" : "HoldingResultKey [mid=22235471970003286, libraryId=117046190003286, locationCode=c3b, callNumber=NA9031 .니874 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)NA9031+.%EB%8B%88874+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003581476703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788962852455,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788962852455&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "NA9031 .니874 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "711.4",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000710479703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(글로벌시대의)국토개발과 미래의 환경산업 " ],
+        "format" : [ "2책 : 삽도 ; 27 cm." ],
+        "identifier" : [ "$$CISBN$$V9788995258262(v.1);$$CISBN$$V9788995258279(v.2);$$CISBN$$V9788995258255(전2권) :" ],
+        "creationdate" : [ "2007" ],
+        "creator" : [ "한양대학교. 건설연구소.$$Q한양대학교. 건설연구소." ],
+        "publisher" : [ "서울 : 한양대학교 건설연구소 : 서울언론인클럽 출판부" ],
+        "mms" : [ "991000710479703286" ],
+        "addtitle" : [ "국토개발과 첨단건설기술.", "미래의 환경산업." ],
+        "contents" : [ "v.1,국토개발과 첨단건설기술. - v.2,미래의 환경산업." ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "글로벌시대 국토개발 환경산업" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000710479703286" ],
+        "recordid" : [ "alma991000710479703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b1277988x-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.7072583" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aucorp" : [ "한양대학교. 건설연구소." ],
+        "date" : [ "2007" ],
+        "isbn" : [ "9788995258262", "9788995258279", "9788995258255" ],
+        "notes" : [ "참고문헌수록." ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한양대학교 건설연구소" ],
+        "oclcid" : [ "(ptech)b1277988x-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(글로벌시대의)국토개발과 미래의 환경산업" ],
+        "url" : [ "http://www.riss4u.net/keris_abstoc.jsp?no=10839718" ]
+      },
+      "sort" : {
+        "title" : [ "(글로벌시대의)국토개발과 미래의 환경산업 / 한양대학교 건설연구소 편저." ],
+        "author" : [ "한양대학교. 건설연구소." ],
+        "creationdate" : [ "2007" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "Reference Collection(4F)",
+        "subLocationCode" : "c4r",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TD157.5 .한63 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000710479703286",
+        "holdId" : "22267471480003286",
+        "holKey" : "HoldingResultKey [mid=22267471480003286, libraryId=117046190003286, locationCode=c4r, callNumber=TD157.5 .한63 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TD157.5+.%ED%95%9C63+2007&loc=Reference+Collection%284F%29",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "Reference Collection(4F)",
+        "subLocationCode" : "c4r",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TD157.5 .한63 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000710479703286",
+        "holdId" : "22267471480003286",
+        "holKey" : "HoldingResultKey [mid=22267471480003286, libraryId=117046190003286, locationCode=c4r, callNumber=TD157.5 .한63 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TD157.5+.%ED%95%9C63+2007&loc=Reference+Collection%284F%29",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000710479703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788995258262(v.1),OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788995258262(v.1)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "linktorsrc",
+        "linkURL" : "http://www.riss4u.net/keris_abstoc.jsp?no=10839718",
+        "displayLabel" : "Table of Contents"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TD157.5 .한63 2007",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "td000000000157.000000000005.한000000000063000000002007",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000603419703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "북한 교육 체제의 특성과 기능 연구 " ],
+        "format" : [ "113 p. : 삽도 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V8983888172" ],
+        "creationdate" : [ "2003" ],
+        "publisher" : [ "서울 : 한국교육개발원" ],
+        "mms" : [ "991000603419703286" ],
+        "contributor" : [ "이종재$$Q이종재", "한국교육개발원$$Q한국교육개발원" ],
+        "series" : [ "기본연구보고서 (한국교육개발원) ; 2003-13$$Q기본연구보고서 (한국교육개발원) ", "연구보고 RR ; 2003-13$$Q연구보고 RR " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000603419703286" ],
+        "recordid" : [ "alma991000603419703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12082703-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.6948403" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n81107855", "n81148264" ],
+        "aulast" : [ "이종재" ],
+        "addau" : [ "이종재", "한국교육개발원" ],
+        "contributorfull" : [ "$$N이종재$$L이종재$$F$$Rcontributor" ],
+        "date" : [ "2003" ],
+        "isbn" : [ "8983888172" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국교육개발원" ],
+        "oclcid" : [ "(ptech)b12082703-82postech_inst" ],
+        "seriestitle" : [ "연구보고 RR ; 2003-13" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "북한 교육 체제의 특성과 기능 연구" ]
+      },
+      "sort" : {
+        "title" : [ "북한 교육 체제의 특성과 기능 연구 = (A)Study on the characteristics and functions of education in DPRK / 이종재 ... [등]공동연구 ; 한국교육개발원 [편]" ],
+        "author" : [ "이종재" ],
+        "creationdate" : [ "2003" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LC94.K7 .북92 2003",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000603419703286",
+        "holdId" : "2294386320003286",
+        "holKey" : "HoldingResultKey [mid=2294386320003286, libraryId=117046190003286, locationCode=c3b, callNumber=LC94.K7 .북92 2003]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LC94.K7+.%EB%B6%8192+2003&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LC94.K7 .북92 2003",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000603419703286",
+        "holdId" : "2294386320003286",
+        "holKey" : "HoldingResultKey [mid=2294386320003286, libraryId=117046190003286, locationCode=c3b, callNumber=LC94.K7 .북92 2003]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LC94.K7+.%EB%B6%8192+2003&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000603419703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8983888172,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8983888172&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "LC94.K7 .북92 2003",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "370.95193",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000703889703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(新)인사.조직개발 : 참고자료 모음집 " ],
+        "format" : [ "211 p. : 삽도 ; 27 cm" ],
+        "creationdate" : [ "2002" ],
+        "publisher" : [ "서울 : 戰略企業컨설팅" ],
+        "mms" : [ "991000703889703286" ],
+        "contributor" : [ "전략기업컨설팅$$Q전략기업컨설팅" ],
+        "addtitle" : [ "신인사조직개발" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "인사개발 조직개발" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000703889703286" ],
+        "recordid" : [ "alma991000703889703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12719882-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.601312" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "addau" : [ "전략기업컨설팅" ],
+        "date" : [ "2002" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "戰略企業컨설팅" ],
+        "oclcid" : [ "(ptech)b12719882-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(新)인사.조직개발 : 참고자료 모음집" ],
+        "url" : [ "http://www.riss4u.net/keris_abstoc.jsp?no=07328170" ]
+      },
+      "sort" : {
+        "title" : [ "(新)인사.조직개발 : 참고자료 모음집 / 전략기업컨설팅 編" ],
+        "author" : [ "전략기업컨설팅" ],
+        "creationdate" : [ "2002" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5549.15 .장56 2002",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000703889703286",
+        "holdId" : "2295985960003286",
+        "holKey" : "HoldingResultKey [mid=2295985960003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5549.15 .장56 2002]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5549.15+.%EC%9E%A556+2002&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5549.15 .장56 2002",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000703889703286",
+        "holdId" : "2295985960003286",
+        "holKey" : "HoldingResultKey [mid=2295985960003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5549.15 .장56 2002]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5549.15+.%EC%9E%A556+2002&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000703889703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "linktorsrc",
+        "linkURL" : "http://www.riss4u.net/keris_abstoc.jsp?no=07328170",
+        "displayLabel" : "Table of Contents"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HF5549.15 .장56 2002",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "325.3",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000777029703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "ASTD 인적자원개발 트렌드 " ],
+        "format" : [ "397 p. : 삽도 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788963301594" ],
+        "creationdate" : [ "2010" ],
+        "creator" : [ "오헌석$$Q오헌석" ],
+        "publisher" : [ "서울 : 학지사" ],
+        "mms" : [ "991000777029703286" ],
+        "contributor" : [ "American Society for Training and Development$$QAmerican Society for Training and Development" ],
+        "addtitle" : [ "인적자원개발 트렌드" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "인적자원개발 경영전략 인사관리" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000777029703286" ],
+        "recordid" : [ "alma991000777029703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13214056-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.5363863" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n79102782" ],
+        "aulast" : [ "오헌석" ],
+        "au" : [ "오헌석" ],
+        "addau" : [ "American Society for Training and Development" ],
+        "creatorfull" : [ "$$N오헌석$$L오헌석$$F$$Rauthor" ],
+        "date" : [ "2010" ],
+        "isbn" : [ "9788963301594" ],
+        "notes" : [ "참고문헌: p. 321-339" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "학지사" ],
+        "oclcid" : [ "(ptech)b13214056-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "ASTD 인적자원개발 트렌드" ]
+      },
+      "sort" : {
+        "title" : [ "ASTD 인적자원개발 트렌드 / 오헌석 저" ],
+        "author" : [ "오헌석" ],
+        "creationdate" : [ "2010" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD4904.7 .오94 2010",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000777029703286",
+        "holdId" : "2291990380003286",
+        "holKey" : "HoldingResultKey [mid=2291990380003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD4904.7 .오94 2010]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD4904.7+.%EC%98%A494+2010&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD4904.7 .오94 2010",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000777029703286",
+        "holdId" : "2291990380003286",
+        "holKey" : "HoldingResultKey [mid=2291990380003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD4904.7 .오94 2010]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD4904.7+.%EC%98%A494+2010&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000777029703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788963301594,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788963301594&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HD4904.7 .오94 2010",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "658.3124",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003807954303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "HRD 관점에서 본 경력개발 " ],
+        "format" : [ "viii, 313 p. ; 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791190151979" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "McDonald, kimberly$$QMcDonald, kimberly" ],
+        "publisher" : [ "서울 : 박영story : 피와이메이트" ],
+        "mms" : [ "991003807954303286" ],
+        "contributor" : [ "Hite, Linda$$QHite, Linda", "박용호$$Q박용호", "맥도널드, 킴벌리$$Q맥도널드, 킴벌리", "하이트, 린다$$Q하이트, 린다" ],
+        "addtitle" : [ "Career development : a human resource development perspective", "에이치알디 관점에서 본 경력개발" ],
+        "edition" : [ "중판[실은 2판]" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "인력양성 인적자원개발" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003807954303286" ],
+        "recordid" : [ "alma991003807954303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016690559" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.520861" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n2015036019" ],
+        "originatingSystemIDContributor" : [ "n80057707", "n2015036052" ],
+        "aulast" : [ "McDonald" ],
+        "aufirst" : [ "kimberly" ],
+        "auinit" : [ "k" ],
+        "au" : [ "McDonald, kimberly" ],
+        "addau" : [ "Hite, Linda", "박용호", "맥도널드, 킴벌리", "하이트, 린다" ],
+        "creatorfull" : [ "$$NMcDonald, kimberly$$LMcDonald$$Fkimberly$$Rauthor" ],
+        "contributorfull" : [ "$$NHite, Linda$$LHite$$FLinda$$Rcontributor", "$$N박용호$$Rcontributor", "$$N맥도널드, 킴벌리$$Rcontributor", "$$N하이트, 린다$$Rcontributor" ],
+        "addtitle" : [ "Career development : a human resource development perspective" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791190151979" ],
+        "notes" : [ "각 장마다 참고문헌과 찾아보기(p. 310-313)수록", "서지적 각주 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "박영story" ],
+        "edition" : [ "중판[실은 2판]" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "HRD 관점에서 본 경력개발" ]
+      },
+      "sort" : {
+        "title" : [ "HRD 관점에서 본 경력개발 / Kimberly McDonald, Linda Hite 저 ; 박용호 역" ],
+        "author" : [ "McDonald, kimberly" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5549.5.T7 .M33 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003807954303286",
+        "holdId" : "22293060850003286",
+        "holKey" : "HoldingResultKey [mid=22293060850003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5549.5.T7 .M33 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5549.5.T7+.M33+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5549.5.T7 .M33 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003807954303286",
+        "holdId" : "22293060850003286",
+        "holKey" : "HoldingResultKey [mid=22293060850003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5549.5.T7 .M33 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5549.5.T7+.M33+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003807954303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791190151979,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791190151979&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HF5549.5.T7 .M33 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "658.3124",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003769158203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(풀스택 개발이 쉬워지는) 다트&플러터 : 시작하는 개발자를 위한 코딩 부트갬프 " ],
+        "format" : [ "718 p. : 삽화 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788931467970" ],
+        "creationdate" : [ "2023" ],
+        "creator" : [ "이성원$$Q이성원" ],
+        "publisher" : [ "서울 : 영진닷컴" ],
+        "mms" : [ "991003769158203286" ],
+        "addtitle" : [ "다트 앤 플러터", "풀스택 개발이 쉬워지는 다트 앤 플러터", "풀스택 개발이 쉬워지는 다트 앤드 플러터" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "개발자", "소프트웨어 개발" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003769158203286" ],
+        "recordid" : [ "alma991003769158203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016768889" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.51863444" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "nr97032286" ],
+        "aulast" : [ "이성원" ],
+        "au" : [ "이성원" ],
+        "creatorfull" : [ "$$N이성원$$L이성원$$F$$Rauthor" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9788931467970" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "영진닷컴" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(풀스택 개발이 쉬워지는) 다트&플러터 : 시작하는 개발자를 위한 코딩 부트갬프" ]
+      },
+      "sort" : {
+        "title" : [ "(풀스택 개발이 쉬워지는) 다트&플러터 : 시작하는 개발자를 위한 코딩 부트갬프 / 이성원" ],
+        "author" : [ "이성원" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.76.A65 .이54 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003769158203286",
+        "holdId" : "22284301900003286",
+        "holKey" : "HoldingResultKey [mid=22284301900003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.76.A65 .이54 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.76.A65+.%EC%9D%B454+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.76.A65 .이54 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003769158203286",
+        "holdId" : "22284301900003286",
+        "holKey" : "HoldingResultKey [mid=22284301900003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.76.A65 .이54 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.76.A65+.%EC%9D%B454+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003769158203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788931467970,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788931467970&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.76.A65 .이54 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.268",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000662939703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(Easy starat!)웹 개발 2.0 루비 온 레일스 " ],
+        "format" : [ "429 p. : 삽도 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9788960770003" ],
+        "creationdate" : [ "2007" ],
+        "creator" : [ "황대산$$Q황대산" ],
+        "publisher" : [ "서울 : 에이콘" ],
+        "mms" : [ "991000662939703286" ],
+        "contributor" : [ "박수만$$Q박수만" ],
+        "addtitle" : [ "Web 개발 2.0 루비 온 레일스", "웹 개발 2.0 루비 온 레일스" ],
+        "series" : [ "에이콘 웹 프로페셔널 시리즈 ; 6$$Q에이콘 웹 프로페셔널 시리즈 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "웹개발 루비 Ruby 레일스 Rails" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000662939703286" ],
+        "recordid" : [ "alma991000662939703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12348478-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.51482093" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "황대산" ],
+        "au" : [ "황대산" ],
+        "addau" : [ "박수만" ],
+        "creatorfull" : [ "$$N황대산$$L황대산$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N박수만$$L박수만$$F$$Rcontributor" ],
+        "date" : [ "2007" ],
+        "isbn" : [ "9788960770003" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "에이콘" ],
+        "oclcid" : [ "(ptech)b12348478-82postech_inst" ],
+        "seriestitle" : [ "에이콘 웹 프로페셔널 시리즈 ; 6" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(Easy starat!)웹 개발 2.0 루비 온 레일스" ]
+      },
+      "sort" : {
+        "title" : [ "(Easy starat!)웹 개발 2.0 루비 온 레일스 / 황대산 지음" ],
+        "author" : [ "황대산" ],
+        "creationdate" : [ "2007" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.64 .황23 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000662939703286",
+        "holdId" : "2297144250003286",
+        "holKey" : "HoldingResultKey [mid=2297144250003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.64 .황23 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.64+.%ED%99%A923+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.64 .황23 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000662939703286",
+        "holdId" : "2297144250003286",
+        "holKey" : "HoldingResultKey [mid=2297144250003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.64 .황23 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.64+.%ED%99%A923+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000662939703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788960770003,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788960770003&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.64 .황23 2007",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.133",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000796209703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "미래사회에 대비한 학제 개편 방안 = 2 " ],
+        "format" : [ "xvi, 278 p. : 삽도 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788961131520" ],
+        "creationdate" : [ "2007" ],
+        "creator" : [ "박재윤$$Q박재윤" ],
+        "publisher" : [ "서울 : 한국교육개발원" ],
+        "mms" : [ "991000796209703286" ],
+        "contributor" : [ "김영철$$Q김영철", "양승실$$Q양승실", "윤종혁$$Q윤종혁", "김태은$$Q김태은", "김성기$$Q김성기", "김용$$Q김용", "황준성$$Q황준성", "한국교육개발원$$Q한국교육개발원" ],
+        "addtitle" : [ "Reform Directions of school system for the future society" ],
+        "series" : [ "연구보고 RR ; 2007-3$$Q연구보고 RR ", "연구보고(한국교육개발원) RR ; 2007-3$$Q연구보고(한국교육개발원) RR " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "학제개편 학제개혁 미래사회" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000796209703286" ],
+        "recordid" : [ "alma991000796209703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13421001-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.5079226" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "nr98018109" ],
+        "originatingSystemIDContributor" : [ "n81107855", "nr2005014514", "nr92037839", "n2005050086", "n82216299", "nr92001837", "nr94036444" ],
+        "aulast" : [ "박재윤" ],
+        "au" : [ "박재윤" ],
+        "addau" : [ "김영철", "양승실", "윤종혁", "김태은", "김성기", "김용", "황준성", "한국교육개발원" ],
+        "creatorfull" : [ "$$N박재윤$$L박재윤$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N김영철$$L김영철$$F$$Rcontributor", "$$N양승실$$Rcontributor", "$$N윤종혁$$Rcontributor", "$$N김태은$$Rcontributor", "$$N김성기$$Rcontributor", "$$N김용$$Rcontributor", "$$N황준성$$Rcontributor" ],
+        "date" : [ "2007" ],
+        "isbn" : [ "9788961131520" ],
+        "notes" : [ "참고문헌(p. 265-272) 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국교육개발원" ],
+        "oclcid" : [ "(ptech)b13421001-82postech_inst" ],
+        "seriestitle" : [ "연구보고 RR ; 2007-3" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "미래사회에 대비한 학제 개편 방안 = 2" ]
+      },
+      "sort" : {
+        "title" : [ "미래사회에 대비한 학제 개편 방안 = Reform Directions of school system for the future society. 2 / 박재윤 연구책임 ; 김영철...[등]연구 ; 한국교육개발원 [편]" ],
+        "author" : [ "박재윤" ],
+        "creationdate" : [ "2007" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB41.5 .박73 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000796209703286",
+        "holdId" : "2296158340003286",
+        "holKey" : "HoldingResultKey [mid=2296158340003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB41.5 .박73 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB41.5+.%EB%B0%9573+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB41.5 .박73 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000796209703286",
+        "holdId" : "2296158340003286",
+        "holKey" : "HoldingResultKey [mid=2296158340003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB41.5 .박73 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB41.5+.%EB%B0%9573+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000796209703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788961131520,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788961131520&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "LB41.5 .박73 2007",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "370.4",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003338676403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "북한 개발협력의 이해 : 이론과 실제 " ],
+        "format" : [ "408 p : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788977784802" ],
+        "creationdate" : [ "2017" ],
+        "publisher" : [ "서울 : 오름" ],
+        "mms" : [ "991003338676403286" ],
+        "contributor" : [ "손혁상$$Q손혁상", "유웅조$$Q유웅조", "김지영$$Q김지영", "박지연$$Q박지연", "권율$$Q권율", "김상기$$Q김상기", "김태균$$Q김태균", "문경연$$Q문경연", "정구연$$Q정구연", "황지환$$Q황지환", "대한민국학술원$$Q대한민국학술원" ],
+        "addtitle" : [ "Understanding Development Cooperation in North Korea : Theory and Practice" ],
+        "series" : [ "국제개발협력학회 연구총서 ; 1$$Q국제개발협력학회 연구총서 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "북한개발협력" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003338676403286" ],
+        "recordid" : [ "alma991003338676403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000317689" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.50089765" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2008017492", "nr97003004", "nr99009536", "n79127104" ],
+        "aulast" : [ "손혁상", "유웅조", "김지영", "박지연", "권율", "김상기", "김태균", "문경연", "정구연", "황지환" ],
+        "addau" : [ "손혁상", "유웅조", "김지영", "박지연", "권율", "김상기", "김태균", "문경연", "정구연", "황지환", "대한민국학술원" ],
+        "contributorfull" : [ "$$N손혁상$$L손혁상$$F$$Rcontributor", "$$N유웅조$$Rcontributor", "$$N김지영$$Rcontributor", "$$N박지연$$Rcontributor", "$$N권율$$Rcontributor", "$$N김상기$$Rcontributor", "$$N김태균$$Rcontributor", "$$N문경연$$Rcontributor", "$$N정구연$$Rcontributor", "$$N황지환$$Rcontributor" ],
+        "addtitle" : [ "Understanding Development Cooperation in North Korea : Theory and Practice" ],
+        "date" : [ "2017" ],
+        "isbn" : [ "9788977784802" ],
+        "notes" : [ "참고문헌은 각 장 다음에 수록됨" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "오름" ],
+        "seriestitle" : [ "국제개발협력학회 연구총서 ; 1" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "북한 개발협력의 이해 : 이론과 실제" ]
+      },
+      "sort" : {
+        "title" : [ "북한 개발협력의 이해 : 이론과 실제 / 손혁상, 유웅조, 김지영, 박지연, 권율, 김상기, 김태균, 문경연, 정구연, 황지환" ],
+        "author" : [ "손혁상" ],
+        "creationdate" : [ "2017" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HC470.2.Z65 .북92 2017",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003338676403286",
+        "holdId" : "22154052010003286",
+        "holKey" : "HoldingResultKey [mid=22154052010003286, libraryId=117046190003286, locationCode=c3b, callNumber=HC470.2.Z65 .북92 2017]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HC470.2.Z65+.%EB%B6%8192+2017&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HC470.2.Z65 .북92 2017",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003338676403286",
+        "holdId" : "22154052010003286",
+        "holKey" : "HoldingResultKey [mid=22154052010003286, libraryId=117046190003286, locationCode=c3b, callNumber=HC470.2.Z65 .북92 2017]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HC470.2.Z65+.%EB%B6%8192+2017&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003338676403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788977784802,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788977784802&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HC470.2.Z65 .북92 2017",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "hc000000000470.000000000002.z000000000065.북000000000092000000002017",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000747659703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "창의적 인재정책의 방향과 과제 : 2008 한국교육평론 " ],
+        "format" : [ "vi, 223 p. : 삽도 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788961133609" ],
+        "creationdate" : [ "2008" ],
+        "publisher" : [ "서울 : 한국교육개발원" ],
+        "mms" : [ "991000747659703286" ],
+        "contributor" : [ "김미숙$$Q김미숙", "김성천$$Q김성천", "김영철$$Q김영철", "김이경$$Q김이경", "류장수$$Q류장수", "이영호$$Q이영호", "이정선$$Q이정선", "조진일$$Q조진일", "하연섭$$Q하연섭", "홍영란$$Q홍영란", "홍후조$$Q홍후조", "유장수$$Q유장수", "한국교육개발원$$Q한국교육개발원" ],
+        "addtitle" : [ "2008 한국교육평론", "한국교육평론. 2008" ],
+        "series" : [ "OR(한국교육개발원) ; 2008-7$$QOR(한국교육개발원) ", "OR; 2008-7$$QOR" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "교육정책 교육행정" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000747659703286" ],
+        "recordid" : [ "alma991000747659703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12991776-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.49228978" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n81107855", "nr93009371", "nr97013084", "n2005051694", "nr97007732", "n78055858", "n82216299" ],
+        "aulast" : [ "김미숙", "김성천", "김영철", "김이경", "류장수", "이영호", "이정선", "조진일", "하연섭", "홍영란", "홍후조", "유장수" ],
+        "addau" : [ "김미숙", "김성천", "김영철", "김이경", "류장수", "이영호", "이정선", "조진일", "하연섭", "홍영란", "홍후조", "유장수", "한국교육개발원" ],
+        "contributorfull" : [ "$$N김미숙$$L김미숙$$F$$Rcontributor", "$$N김성천$$Rcontributor", "$$N김영철$$Rcontributor", "$$N김이경$$Rcontributor", "$$N류장수$$Rcontributor", "$$N이영호$$Rcontributor", "$$N이정선$$Rcontributor", "$$N조진일$$Rcontributor", "$$N하연섭$$Rcontributor", "$$N홍영란$$Rcontributor", "$$N홍후조$$Rcontributor", "$$N유장수$$Rcontributor" ],
+        "date" : [ "2008" ],
+        "isbn" : [ "9788961133609" ],
+        "notes" : [ "각 장마다 참고문헌 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국교육개발원" ],
+        "oclcid" : [ "(ptech)b12991776-82postech_inst" ],
+        "seriestitle" : [ "OR; 2008-7" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "창의적 인재정책의 방향과 과제 : 2008 한국교육평론" ]
+      },
+      "sort" : {
+        "title" : [ "창의적 인재정책의 방향과 과제 : 2008 한국교육평론 / 한국교육개발원 편" ],
+        "author" : [ "김미숙" ],
+        "creationdate" : [ "2008" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB1062 .창67 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000747659703286",
+        "holdId" : "2289479800003286",
+        "holKey" : "HoldingResultKey [mid=2289479800003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB1062 .창67 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB1062+.%EC%B0%BD67+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB1062 .창67 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000747659703286",
+        "holdId" : "2289479800003286",
+        "holKey" : "HoldingResultKey [mid=2289479800003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB1062 .창67 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB1062+.%EC%B0%BD67+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000747659703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788961133609,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788961133609&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "LB1062 .창67 2008",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "lb000000001062.창000000000067000000002008",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003751658003286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "필독! 개발자 온보딩 가이드 " ],
+        "format" : [ "375 p. ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791189909529" ],
+        "creationdate" : [ "2023" ],
+        "publisher" : [ "안양 : 책만" ],
+        "mms" : [ "991003751658003286" ],
+        "contributor" : [ "Riccomini, Chris$$QRiccomini, Chris", "Ryaboy, Dmitriy$$QRyaboy, Dmitriy", "장현희$$Q장현희", "리코미니, 크리스$$Q리코미니, 크리스", "리아보이, 드미트리$$Q리아보이, 드미트리" ],
+        "addtitle" : [ "표제관련정보 지속 가능한 소프트웨어와 원활한 협업 문화를 이해하는 프로페셔널 개발자의 탄생", "(The) missing readme a guide for the new software engineer" ],
+        "place" : [ "안양 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "개발자 코딩 프로그래밍 소프트웨어" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003751658003286" ],
+        "recordid" : [ "alma991003751658003286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000059212289" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.47091544" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no2026025377" ],
+        "aulast" : [ "Riccomini", "Ryaboy", "장현희", "리코미니", "리아보이" ],
+        "aufirst" : [ "Chris", "Dmitriy", "크리스", "드미트리" ],
+        "auinit" : [ "C", "D", "크", "드" ],
+        "addau" : [ "Riccomini, Chris", "Ryaboy, Dmitriy", "장현희", "리코미니, 크리스", "리아보이, 드미트리" ],
+        "contributorfull" : [ "$$NRiccomini, Chris$$LRiccomini$$FChris$$Rcontributor", "$$NRyaboy, Dmitriy$$Rcontributor", "$$N장현희$$Rcontributor", "$$N리코미니, 크리스$$Rcontributor", "$$N리아보이, 드미트리$$Rcontributor" ],
+        "addtitle" : [ "지속 가능한 소프트웨어와 원활한 협업 문화를 이해하는 프로페셔널 개발자의 탄생", "(The) missing readme a guide for the new software engineer" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9791189909529" ],
+        "cop" : [ "안양" ],
+        "pub" : [ "책만" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "필독! 개발자 온보딩 가이드" ]
+      },
+      "sort" : {
+        "title" : [ "필독! 개발자 온보딩 가이드 / 크리스 리코미니 , 드미트리 리아보이 [공]지음 , 장현희 옮김" ],
+        "author" : [ "Riccomini, Chris" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.758 .R53 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003751658003286",
+        "holdId" : "22280181880003286",
+        "holKey" : "HoldingResultKey [mid=22280181880003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.758 .R53 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.758+.R53+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.758 .R53 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003751658003286",
+        "holdId" : "22280181880003286",
+        "holKey" : "HoldingResultKey [mid=22280181880003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.758 .R53 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.758+.R53+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003751658003286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791189909529,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791189909529&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.758 .R53 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa000000000076.000000000758.r000000000053000000002023",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003804851603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "요즘 우아한 개발 : 기획하고 개발하고 회고하라 " ],
+        "format" : [ "359p. : 삽화, 도표 ; 21cm" ],
+        "identifier" : [ "$$CISBN$$V9791191905458" ],
+        "creationdate" : [ "2023" ],
+        "publisher" : [ "서울 : 우아한테크 : 골든래빗" ],
+        "mms" : [ "991003804851603286" ],
+        "contributor" : [ "홍지현$$Q홍지현", "채슬기$$Q채슬기", "진예령$$Q진예령", "김하루$$Q김하루", "이주호$$Q이주호", "권기석$$Q권기석", "이준수$$Q이준수", "이제현$$Q이제현", "안필호$$Q안필호", "장정환$$Q장정환", "조성범$$Q조성범", "박주희$$Q박주희", "이찬호$$Q이찬호", "임선진$$Q임선진", "유영경$$Q유영경", "우아한형제들$$Q우아한형제들" ],
+        "addtitle" : [ "배달의민족을 만든 우아한형제들의 조직문화, 온보딩, 기획, 개발, 인프라 구축이야기" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "요즘 우아한 개발 기획 조직문화 온보딩 인프라구축" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003804851603286" ],
+        "recordid" : [ "alma991003804851603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016880664" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.46762878" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr93044905", "n79025764" ],
+        "aulast" : [ "홍지현", "채슬기", "진예령", "김하루", "이주호", "권기석", "이준수", "이제현", "안필호", "장정환", "조성범", "박주희", "이찬호", "임선진", "유영경" ],
+        "addau" : [ "홍지현", "채슬기", "진예령", "김하루", "이주호", "권기석", "이준수", "이제현", "안필호", "장정환", "조성범", "박주희", "이찬호", "임선진", "유영경", "우아한형제들" ],
+        "contributorfull" : [ "$$N홍지현$$L홍지현$$F$$Rcontributor", "$$N채슬기$$Rcontributor", "$$N진예령$$Rcontributor", "$$N김하루$$Rcontributor", "$$N이주호$$Rcontributor", "$$N권기석$$Rcontributor", "$$N이준수$$Rcontributor", "$$N이제현$$Rcontributor", "$$N안필호$$Rcontributor", "$$N장정환$$Rcontributor", "$$N조성범$$Rcontributor", "$$N박주희$$Rcontributor", "$$N이찬호$$Rcontributor", "$$N임선진$$Rcontributor", "$$N유영경$$Rcontributor" ],
+        "addtitle" : [ "배달의민족을 만든 우아한형제들의 조직문화, 온보딩, 기획, 개발, 인프라 구축이야기" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9791191905458" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "우아한테크" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "요즘 우아한 개발 : 기획하고 개발하고 회고하라" ]
+      },
+      "sort" : {
+        "title" : [ "요즘 우아한 개발 : 기획하고 개발하고 회고하라 / 우아한형제들 지음" ],
+        "author" : [ "홍지현" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5386 .우62 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003804851603286",
+        "holdId" : "22292360230003286",
+        "holKey" : "HoldingResultKey [mid=22292360230003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5386 .우62 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5386+.%EC%9A%B062+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5386 .우62 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003804851603286",
+        "holdId" : "22292360230003286",
+        "holKey" : "HoldingResultKey [mid=22292360230003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5386 .우62 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5386+.%EC%9A%B062+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003804851603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791191905458,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791191905458&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HF5386 .우62 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "hf000000005386.우000000000062000000002023",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "78",
+    "CALL_SOLR_GET_IDS_LIST" : "74",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "462",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "40",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "27",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "386",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "76",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "184",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "803",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 862,
+    "COMBINED_SEARCH_TIME" : 872,
+    "PROCESS_COMBINED_RESULTS" : 0,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1236"
+    }, {
+      "value" : "eng",
+      "count" : "52"
+    }, {
+      "value" : "jpn",
+      "count" : "9"
+    }, {
+      "value" : "chi",
+      "count" : "2"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "1962",
+      "count" : "2"
+    }, {
+      "value" : "2026",
+      "count" : "11"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1074"
+    }, {
+      "value" : "books",
+      "count" : "107"
+    }, {
+      "value" : "journals",
+      "count" : "100"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Regional Planning Korea South",
+      "count" : "12"
+    }, {
+      "value" : "Community Development Korea South",
+      "count" : "11"
+    }, {
+      "value" : "Local Government Korea South",
+      "count" : "11"
+    }, {
+      "value" : "소프트웨어 개발",
+      "count" : "9"
+    }, {
+      "value" : "Application Software Development",
+      "count" : "8"
+    }, {
+      "value" : "Computer Software Development",
+      "count" : "8"
+    }, {
+      "value" : "Python Computer Program Language",
+      "count" : "7"
+    }, {
+      "value" : "Arts And Humanities Human Rights Womens Studies Child Welfare",
+      "count" : "6"
+    }, {
+      "value" : "Business Economy And Management General And Others",
+      "count" : "6"
+    }, {
+      "value" : "Social Sciences Public Policy Administration",
+      "count" : "5"
+    }, {
+      "value" : "컴퓨터 프로그래밍",
+      "count" : "5"
+    }, {
+      "value" : "컴퓨터 프로그래밍 Computer Programming",
+      "count" : "5"
+    }, {
+      "value" : "Arts And Humanities Education Careers",
+      "count" : "4"
+    }, {
+      "value" : "Land Use Korea South Planning",
+      "count" : "4"
+    }, {
+      "value" : "Local Officials And Employees Korea South",
+      "count" : "4"
+    }, {
+      "value" : "Mobile Computing",
+      "count" : "4"
+    }, {
+      "value" : "Rural Development Korea South",
+      "count" : "4"
+    }, {
+      "value" : "개발자",
+      "count" : "4"
+    }, {
+      "value" : "신약 개발",
+      "count" : "4"
+    }, {
+      "value" : "인공 지능",
+      "count" : "4"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "포항공과대학교",
+      "count" : "98"
+    }, {
+      "value" : "Hanguk Chibang Haengjŏng Yŏnguwŏn",
+      "count" : "22"
+    }, {
+      "value" : "한국 과학기술부",
+      "count" : "21"
+    }, {
+      "value" : "포항공과대학",
+      "count" : "18"
+    }, {
+      "value" : "과학기술부",
+      "count" : "14"
+    }, {
+      "value" : "대한민국학술원",
+      "count" : "12"
+    }, {
+      "value" : "한국개발연구원",
+      "count" : "10"
+    }, {
+      "value" : "한국교육개발원",
+      "count" : "8"
+    }, {
+      "value" : "한국직업능력개발원",
+      "count" : "8"
+    }, {
+      "value" : "박재호",
+      "count" : "7"
+    }, {
+      "value" : "통신개발연구원",
+      "count" : "7"
+    }, {
+      "value" : "한국통신 연구개발원",
+      "count" : "7"
+    }, {
+      "value" : "한국통신연구개발원",
+      "count" : "7"
+    }, {
+      "value" : "김영철",
+      "count" : "6"
+    }, {
+      "value" : "박홍준",
+      "count" : "6"
+    }, {
+      "value" : "오현석",
+      "count" : "6"
+    }, {
+      "value" : "일본능률협회",
+      "count" : "6"
+    }, {
+      "value" : "한국공업표준협회",
+      "count" : "6"
+    }, {
+      "value" : "김무환",
+      "count" : "5"
+    }, {
+      "value" : "원상철",
+      "count" : "5"
+    } ]
+  }, {
+    "name" : "newrecords",
+    "values" : [ {
+      "value" : "90 days back",
+      "count" : "10"
+    }, {
+      "value" : "30 days back",
+      "count" : "8"
+    }, {
+      "value" : "07 days back",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1076"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "760"
+    }, {
+      "value" : "3286–117046190003286–c3sb",
+      "count" : "275"
+    }, {
+      "value" : "3286–117046190003286–c3a",
+      "count" : "40"
+    }, {
+      "value" : "3286–117046190003286–c3k",
+      "count" : "8"
+    }, {
+      "value" : "3286–117046190003286–c2sb2",
+      "count" : "5"
+    }, {
+      "value" : "3286–117046190003286–c4y",
+      "count" : "5"
+    }, {
+      "value" : "3286–117046190003286–c4d",
+      "count" : "3"
+    }, {
+      "value" : "3286–117046190003286–rrrr",
+      "count" : "3"
+    }, {
+      "value" : "3286–117046190003286–c2n",
+      "count" : "2"
+    }, {
+      "value" : "3286–117046190003286–c2sb1",
+      "count" : "1"
+    }, {
+      "value" : "3286–117046190003286–c4r",
+      "count" : "1"
+    }, {
+      "value" : "3286–117046190003286–phistory",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1076"
+    }, {
+      "value" : "open_access",
+      "count" : "2"
+    }, {
+      "value" : "peer_reviewed",
+      "count" : "4"
+    }, {
+      "value" : "online_resources",
+      "count" : "191"
+    } ]
+  } ],
+  "facetsCacheKey" : 1188452218
+}

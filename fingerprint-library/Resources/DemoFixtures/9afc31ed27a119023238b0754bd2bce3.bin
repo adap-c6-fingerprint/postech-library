@@ -1,0 +1,279 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003361572103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(디자인을 위한) System Verilog " ],
+        "format" : [ "396p : 삽도 ; 26cm" ],
+        "identifier" : [ "$$CISBN$$V9788972837718" ],
+        "creationdate" : [ "2009" ],
+        "creator" : [ "Suterland, Stuart$$QSuterland, Stuart" ],
+        "publisher" : [ "서울 : 홍릉과학출판사" ],
+        "mms" : [ "991003361572103286" ],
+        "contributor" : [ "Davidmann, Simon$$QDavidmann, Simon", "Flake, Peter$$QFlake, Peter", "남상규$$Q남상규", "서덜랜드, 스튜어트$$Q서덜랜드, 스튜어트", "데이비드맨, 시몬$$Q데이비드맨, 시몬", "플라케, 피터$$Q플라케, 피터" ],
+        "addtitle" : [ "(디자인을 위한) 시스템 베리로그" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "HDL 디자인작업 디자인프로그램" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003361572103286" ],
+        "recordid" : [ "alma991003361572103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000011881551" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270189E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no2004071540", "no2004071541" ],
+        "aulast" : [ "Suterland" ],
+        "aufirst" : [ "Stuart" ],
+        "auinit" : [ "S" ],
+        "au" : [ "Suterland, Stuart" ],
+        "addau" : [ "Davidmann, Simon", "Flake, Peter", "남상규", "서덜랜드, 스튜어트", "데이비드맨, 시몬", "플라케, 피터" ],
+        "creatorfull" : [ "$$NSuterland, Stuart$$LSuterland$$FStuart$$Rauthor" ],
+        "contributorfull" : [ "$$NDavidmann, Simon$$LDavidmann$$FSimon$$Rcontributor", "$$NFlake, Peter$$Rcontributor", "$$N남상규$$Rcontributor", "$$N서덜랜드, 스튜어트$$Rcontributor", "$$N데이비드맨, 시몬$$Rcontributor", "$$N플라케, 피터$$Rcontributor" ],
+        "date" : [ "2009" ],
+        "isbn" : [ "9788972837718" ],
+        "notes" : [ "찾아보기 : p 395-396" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "홍릉과학출판사" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(디자인을 위한) System Verilog" ]
+      },
+      "sort" : {
+        "title" : [ "(디자인을 위한) System Verilog / Stuart Sutherland, Simon Davidmann, Peter Flake [공]저; 남상규 역" ],
+        "author" : [ "Suterland, Stuart" ],
+        "creationdate" : [ "2009" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TX7885.7 .S875 2009",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003361572103286",
+        "holdId" : "22163070620003286",
+        "holKey" : "HoldingResultKey [mid=22163070620003286, libraryId=117046190003286, locationCode=c3b, callNumber=TX7885.7 .S875 2009]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TX7885.7+.S875+2009&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TX7885.7 .S875 2009",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003361572103286",
+        "holdId" : "22163070620003286",
+        "holKey" : "HoldingResultKey [mid=22163070620003286, libraryId=117046190003286, locationCode=c3b, callNumber=TX7885.7 .S875 2009]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TX7885.7+.S875+2009&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003361572103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788972837718,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788972837718&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TX7885.7 .S875 2009",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "621.392",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "33",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "29",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "4",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "7",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "80",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 90,
+    "COMBINED_SEARCH_TIME" : 97,
+    "PROCESS_COMBINED_RESULTS" : 0,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2009",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Hdl 디자인작업 디자인프로그램",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Davidmann Simon",
+      "count" : "1"
+    }, {
+      "value" : "Flake Peter",
+      "count" : "1"
+    }, {
+      "value" : "Suterland Stuart",
+      "count" : "1"
+    }, {
+      "value" : "남상규",
+      "count" : "1"
+    }, {
+      "value" : "데이비드맨 시몬",
+      "count" : "1"
+    }, {
+      "value" : "서덜랜드 스튜어트",
+      "count" : "1"
+    }, {
+      "value" : "플라케 피터",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 937312728
+}

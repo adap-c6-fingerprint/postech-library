@@ -1,0 +1,3757 @@
+{
+  "info" : {
+    "totalResultsLocal" : 9234,
+    "totalResultsPC" : -1,
+    "total" : 9234,
+    "first" : 1,
+    "last" : 20
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003239277703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "조승연의 이야기 인문학 " ],
+        "format" : [ "2책 ; 21cm" ],
+        "identifier" : [ "$$CISBN$$V9788934976417" ],
+        "creationdate" : [ "2016" ],
+        "creator" : [ "조승연$$Q조승연" ],
+        "publisher" : [ "파주 : 김영사" ],
+        "mms" : [ "991003239277703286" ],
+        "addtitle" : [ "비즈니스 인문학" ],
+        "contents" : [ "1. 이야기 인문학 -- 2. 비즈니스 인문학" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "이야기 인문학 비즈니스" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003239277703286" ],
+        "recordid" : [ "alma991003239277703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "991003239277703286" ],
+        "sourcesystem" : [ "KERIS (KORMARC)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.83638716" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "조승연" ],
+        "au" : [ "조승연" ],
+        "creatorfull" : [ "$$N조승연$$L조승연$$F$$Rauthor" ],
+        "date" : [ "2016" ],
+        "isbn" : [ "9788934976417" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "김영사" ],
+        "oclcid" : [ "k605" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "조승연의 이야기 인문학" ]
+      },
+      "sort" : {
+        "title" : [ "조승연의 이야기 인문학 / 조승연 지음" ],
+        "author" : [ "조승연" ],
+        "creationdate" : [ "2016" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "AZ103 .조57 2016",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003239277703286",
+        "holdId" : "22112052950003286",
+        "holKey" : "HoldingResultKey [mid=22112052950003286, libraryId=117046190003286, locationCode=c3b, callNumber=AZ103 .조57 2016]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)AZ103+.%EC%A1%B057+2016&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "AZ103 .조57 2016",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003239277703286",
+        "holdId" : "22112052950003286",
+        "holKey" : "HoldingResultKey [mid=22112052950003286, libraryId=117046190003286, locationCode=c3b, callNumber=AZ103 .조57 2016]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)AZ103+.%EC%A1%B057+2016&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003239277703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788934976417,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788934976417&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "AZ103 .조57 2016",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "az000000000103.조000000000057000000002016",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003338677003286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(2018) 김유정 문학상 : 제12회 수상 작품집 " ],
+        "format" : [ "223 p. : 삽화 ; 22 cm." ],
+        "identifier" : [ "$$CISBN$$V9791188810666" ],
+        "creationdate" : [ "2018" ],
+        "publisher" : [ "서울 : 은행나무" ],
+        "mms" : [ "991003338677003286" ],
+        "contributor" : [ "한강 韓江, 1970-.$$Q한강", "강화길, 1986-.$$Q강화길", "권여선 權汝宣, 1965-.$$Q권여선", "김혜진, 1983-.$$Q김혜진", "이승우 李承雨, 1959-.$$Q이승우", "정이현 鄭梨賢, 1972-.$$Q정이현", "정지돈, 1983-.$$Q정지돈" ],
+        "addtitle" : [ "작별", "판권기표제: 제12회 김유정문학상 수상작품집", "(이천십팔) 김유정 문학상 : 제 십이회 수상 작품집", "제십이회 김유정문학상 수상작품집" ],
+        "contents" : [ "작별 / 한강 -- 손 / 강화길 -- 희박한 마음 / 권여선 -- 동네 사람 / 김혜진 -- 소돔의 하룻밤 / 이승우 -- 언니 / 정이현 -- Light from anywhere(빛은 어디에서나 온다) / 정지돈" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "김유정(金裕貞) 문학상(文學賞) 수상 작품집 literary award" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003338677003286" ],
+        "recordid" : [ "alma991003338677003286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014951549" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.77287614" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "한강", "강화길", "권여선", "김혜진", "이승우", "정이현", "정지돈" ],
+        "addau" : [ "한강", "강화길", "권여선", "김혜진", "이승우", "정이현", "정지돈" ],
+        "contributorfull" : [ "$$N한강$$L한강$$F$$Rcontributor", "$$N강화길$$Rcontributor", "$$N권여선$$Rcontributor", "$$N김혜진$$Rcontributor", "$$N이승우$$Rcontributor", "$$N정이현$$Rcontributor", "$$N정지돈$$Rcontributor" ],
+        "addtitle" : [ "작별", "제12회 김유정문학상 수상작품집" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9791188810666" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "은행나무" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(2018) 김유정 문학상 : 제12회 수상 작품집" ]
+      },
+      "sort" : {
+        "title" : [ "(2018) 김유정 문학상 : 제12회 수상 작품집 / 한강 [외]지음" ],
+        "author" : [ "한강 韓江, 1970-." ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .김66 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003338677003286",
+        "holdId" : "22153142050003286",
+        "holKey" : "HoldingResultKey [mid=22153142050003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .김66 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EA%B9%8066+2018&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .김66 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003338677003286",
+        "holdId" : "22153142050003286",
+        "holKey" : "HoldingResultKey [mid=22153142050003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .김66 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EA%B9%8066+2018&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003338677003286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791188810666,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791188810666&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL958.66 .김66 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "895.73408",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003749658103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(2022) 김유정문학상 제16회 수상작품집 " ],
+        "format" : [ "279 p. ; 20 cm" ],
+        "identifier" : [ "$$CISBN$$V9788982183089" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 강" ],
+        "mms" : [ "991003749658103286" ],
+        "contributor" : [ "구병모$$Q구병모", "김혜진$$Q김혜진", "박지영$$Q박지영", "백수린$$Q백수린", "심아진$$Q심아진", "이기호$$Q이기호", "장혜령$$Q장혜령" ],
+        "addtitle" : [ "(2022)  제16회 김유정문학상 수상작품집", "니니코라치우푼타", "축복을 비는 마음", "쿠쿠, 나의 반려밥솥에게", "봄밤의 우리", "신의 한수", "어두운 골목길을 배회하는 자, 누구인가?", "당신의 히로시마", "이천이십이 김유정문학상 제십육회 수상작품집" ],
+        "contents" : [ "니니코라치우푼타 / 구병모. -- 축복을 비는 마음 / 김혜진. -- 쿠쿠, 나의 반려밥솥에게 / 박지영. -- 봄밤의 우리 / 백수린. -- 신의 한수 / 심아진. -- 어두운 골목길을 배회하는 자, 누구인가? / 이기호. -- 당신의 히로시마 / 장혜령" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "한국문학 한국소설 단편소설" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003749658103286" ],
+        "recordid" : [ "alma991003749658103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016614096" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.7624166" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr94036590", "no2023041127" ],
+        "aulast" : [ "구병모", "김혜진", "박지영", "백수린", "심아진", "이기호", "장혜령" ],
+        "addau" : [ "구병모", "김혜진", "박지영", "백수린", "심아진", "이기호", "장혜령" ],
+        "contributorfull" : [ "$$N구병모$$L구병모$$F$$Rcontributor", "$$N김혜진$$Rcontributor", "$$N박지영$$Rcontributor", "$$N백수린$$Rcontributor", "$$N심아진$$Rcontributor", "$$N이기호$$Rcontributor", "$$N장혜령$$Rcontributor" ],
+        "addtitle" : [ "(2022)  제16회 김유정문학상 수상작품집" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9788982183089" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "강" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(2022) 김유정문학상 제16회 수상작품집" ]
+      },
+      "sort" : {
+        "title" : [ "(2022) 김유정문학상 제16회 수상작품집 / 구병모 [외]지음" ],
+        "author" : [ "구병모" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .김66 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003749658103286",
+        "holdId" : "22279751910003286",
+        "holKey" : "HoldingResultKey [mid=22279751910003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL958.66 .김66 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EA%B9%8066+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .김66 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003749658103286",
+        "holdId" : "22279751910003286",
+        "holKey" : "HoldingResultKey [mid=22279751910003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL958.66 .김66 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EA%B9%8066+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003749658103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788982183089,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788982183089&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL958.66 .김66 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "895.735",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000095369703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "한문학연구 /  " ],
+        "format" : [ "501 p. ;   22 cm." ],
+        "creationdate" : [ "1981" ],
+        "publisher" : [ "서울 : 정음사 " ],
+        "mms" : [ "991000095369703286" ],
+        "contributor" : [ "국어국문학회.$$Q국어국문학회." ],
+        "series" : [ "국문학연구총서 ;   7$$Q국문학연구총서 ;  " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000095369703286" ],
+        "recordid" : [ "alma991000095369703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10118299-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.7564982" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n81020052" ],
+        "addau" : [ "국어국문학회." ],
+        "date" : [ "1981" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "정음사 ," ],
+        "oclcid" : [ "(ptech)b10118299-82postech_inst", "ocm22995" ],
+        "seriestitle" : [ "국문학연구총서 ;   7" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "한문학연구 /" ]
+      },
+      "sort" : {
+        "title" : [ "한문학연구 /   국어국문학회 편." ],
+        "author" : [ "국어국문학회." ],
+        "creationdate" : [ "1981" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL950.2 국36",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000095369703286",
+        "holdId" : "2288697020003286",
+        "holKey" : "HoldingResultKey [mid=2288697020003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL950.2 국36]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL950.2+%EA%B5%AD36&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL950.2 국36",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000095369703286",
+        "holdId" : "2288697020003286",
+        "holKey" : "HoldingResultKey [mid=2288697020003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL950.2 국36]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL950.2+%EA%B5%AD36&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000095369703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL950.2 국36",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000000950.000000000002국000000000036",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000601539703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "문학으로 보는 성 / 성과 문학 이론편" ],
+        "format" : [ "352p. : 삽도 ; 23cm" ],
+        "identifier" : [ "$$CISBN$$V8934907703" ],
+        "creationdate" : [ "2001" ],
+        "publisher" : [ "서울 : 김영사" ],
+        "mms" : [ "991000601539703286" ],
+        "contributor" : [ "김종회, 공편$$Q김종회", "최혜실, 공편$$Q최혜실", "서강여성문학연구회, 공저$$Q서강여성문학연구회" ],
+        "addtitle" : [ "성과 문학 이론편" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "문학 성" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000601539703286" ],
+        "recordid" : [ "alma991000601539703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12076211-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.7551551" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr97009468" ],
+        "aulast" : [ "김종회", "최혜실" ],
+        "addau" : [ "김종회", "최혜실", "서강여성문학연구회, 공저" ],
+        "contributorfull" : [ "$$N김종회$$L김종회$$F$$Rcontributor", "$$N최혜실$$Rcontributor" ],
+        "date" : [ "2001" ],
+        "isbn" : [ "8934907703" ],
+        "notes" : [ "참고문헌 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "김영사" ],
+        "oclcid" : [ "(ptech)b12076211-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "문학으로 보는 성 / 성과 문학 이론편" ]
+      },
+      "sort" : {
+        "title" : [ "문학으로 보는 성 / 김종회 ; 최혜실 [공편] : 성과 문학 이론편" ],
+        "author" : [ "김종회, 공편" ],
+        "creationdate" : [ "2001" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HQ1154 .김75 2001",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000601539703286",
+        "holdId" : "2290421050003286",
+        "holKey" : "HoldingResultKey [mid=2290421050003286, libraryId=117046190003286, locationCode=c3b, callNumber=HQ1154 .김75 2001]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HQ1154+.%EA%B9%8075+2001&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HQ1154 .김75 2001",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000601539703286",
+        "holdId" : "2290421050003286",
+        "holKey" : "HoldingResultKey [mid=2290421050003286, libraryId=117046190003286, locationCode=c3b, callNumber=HQ1154 .김75 2001]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HQ1154+.%EA%B9%8075+2001&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000601539703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8934907703,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8934907703&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HQ1154 .김75 2001",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "hq000000001154.김000000000075000000002001",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000371699703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "기픈시문학회 사화집 : " ],
+        "format" : [ "133 p. ;  22 cm." ],
+        "creationdate" : [ "1999" ],
+        "creator" : [ "기픈시문학회$$Q기픈시문학회" ],
+        "publisher" : [ "서울 : 시문학사" ],
+        "mms" : [ "991000371699703286" ],
+        "series" : [ "시문학시인선 ;  135$$Q시문학시인선 ; " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "시  -- 한국" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000371699703286" ],
+        "recordid" : [ "alma991000371699703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10620667-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.69563115" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aucorp" : [ "기픈시문학회" ],
+        "date" : [ "1999" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "시문학사," ],
+        "oclcid" : [ "(ptech)b10620667-82postech_inst", "ocm157680" ],
+        "seriestitle" : [ "시문학시인선 ;  135" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "기픈시문학회 사화집 :" ]
+      },
+      "sort" : {
+        "title" : [ "기픈시문학회 사화집 :  기픈시문학회 [저]" ],
+        "author" : [ "기픈시문학회" ],
+        "creationdate" : [ "1999" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL974. 기897 .기897 1999",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000371699703286",
+        "holdId" : "2296500410003286",
+        "holKey" : "HoldingResultKey [mid=2296500410003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL974. 기897 .기897 1999]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL974.+%EA%B8%B0897+.%EA%B8%B0897+1999&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL974. 기897 .기897 1999",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000371699703286",
+        "holdId" : "2296500410003286",
+        "holKey" : "HoldingResultKey [mid=2296500410003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL974. 기897 .기897 1999]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL974.+%EA%B8%B0897+.%EA%B8%B0897+1999&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000371699703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL974. 기897 .기897 1999",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000000974.기000000000897.기000000000897000000001999",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000153349703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "조선후기의 언어와 문학 /  " ],
+        "format" : [ "245 p. ;   23 cm." ],
+        "creationdate" : [ "1982" ],
+        "publisher" : [ "대구 : 한국어문학회 " ],
+        "mms" : [ "991000153349703286" ],
+        "contributor" : [ "한국.  어문학회$$Q한국.  어문학회" ],
+        "series" : [ "한국어문학대계 ;   IV$$Q한국어문학대계 ;  " ],
+        "place" : [ "대구 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000153349703286" ],
+        "recordid" : [ "alma991000153349703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10190922-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.686275" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "addau" : [ "한국.  어문학회" ],
+        "date" : [ "1982" ],
+        "cop" : [ "대구" ],
+        "pub" : [ "한국어문학회 ," ],
+        "oclcid" : [ "(ptech)b10190922-82postech_inst", "ocm43051" ],
+        "seriestitle" : [ "한국어문학대계 ;   IV" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "조선후기의 언어와 문학 /" ]
+      },
+      "sort" : {
+        "title" : [ "조선후기의 언어와 문학 /   한국어문학회 편" ],
+        "author" : [ "한국.  어문학회" ],
+        "creationdate" : [ "1982" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL951.43 .조54 1982",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000153349703286",
+        "holdId" : "2291087970003286",
+        "holKey" : "HoldingResultKey [mid=2291087970003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL951.43 .조54 1982]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL951.43+.%EC%A1%B054+1982&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL951.43 .조54 1982",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000153349703286",
+        "holdId" : "2291087970003286",
+        "holKey" : "HoldingResultKey [mid=2291087970003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL951.43 .조54 1982]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL951.43+.%EC%A1%B054+1982&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000153349703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL951.43 .조54 1982",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl\"951.43",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000849489703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "전쟁의 기억, 역사와 문학 " ],
+        "format" : [ "2책 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V8984772585(v.1) :;$$CISBN$$V8984772593(v.2) :;$$CISBN$$V8984772577 (세트)" ],
+        "creationdate" : [ "2005" ],
+        "creator" : [ "동국대학교. 한국문학연구소, 편$$Q동국대학교. 한국문학연구소" ],
+        "publisher" : [ "서울 : 월인" ],
+        "mms" : [ "991000849489703286" ],
+        "series" : [ "한국문학연구신서 ; 13$$Q한국문학연구신서 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "전쟁 기억 역사 문학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000849489703286" ],
+        "recordid" : [ "alma991000849489703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13643885-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.68602765" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aucorp" : [ "동국대학교. 한국문학연구소, 편" ],
+        "date" : [ "2005" ],
+        "isbn" : [ "8984772585", "8984772593", "8984772577" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "월인" ],
+        "oclcid" : [ "(ptech)b13643885-82postech_inst" ],
+        "seriestitle" : [ "한국문학연구신서 ; 13" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "전쟁의 기억, 역사와 문학" ]
+      },
+      "sort" : {
+        "title" : [ "전쟁의 기억, 역사와 문학 / 동국대학교한국문학연구소 編." ],
+        "author" : [ "동국대학교. 한국문학연구소, 편" ],
+        "creationdate" : [ "2005" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL957.5.W37 .전73 2005",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000849489703286",
+        "holdId" : "2292226870003286",
+        "holKey" : "HoldingResultKey [mid=2292226870003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL957.5.W37 .전73 2005]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL957.5.W37+.%EC%A0%8473+2005&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL957.5.W37 .전73 2005",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000849489703286",
+        "holdId" : "2292226870003286",
+        "holKey" : "HoldingResultKey [mid=2292226870003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL957.5.W37 .전73 2005]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL957.5.W37+.%EC%A0%8473+2005&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000849489703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8984772585(v.1),OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8984772585(v.1) :&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL957.5.W37 .전73 2005",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000000957.000000000005.w000000000037.전000000000073000000002005",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000052019703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "문학적 진실과 역사적 진실 /  " ],
+        "format" : [ "258 p. ;   23 cm." ],
+        "creationdate" : [ "1992" ],
+        "publisher" : [ "서울 : 백문사" ],
+        "mms" : [ "991000052019703286" ],
+        "contributor" : [ "한국문학평론가협회.  편$$Q한국문학평론가협회. " ],
+        "series" : [ "한국문학비평선집 ;   12$$Q한국문학비평선집 ;  " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000052019703286" ],
+        "recordid" : [ "alma991000052019703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10060790-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.67074174" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n83054052" ],
+        "addau" : [ "한국문학평론가협회.  편" ],
+        "date" : [ "1992" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "백문사," ],
+        "oclcid" : [ "(ptech)b10060790-82postech_inst", "ocm8998" ],
+        "seriestitle" : [ "한국문학비평선집 ;   12" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "문학적 진실과 역사적 진실 /" ]
+      },
+      "sort" : {
+        "title" : [ "문학적 진실과 역사적 진실 /   한국문학평론가협회 편." ],
+        "author" : [ "한국문학평론가협회.  편" ],
+        "creationdate" : [ "1992" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL950.35 .한16 1992",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000052019703286",
+        "holdId" : "2296383290003286",
+        "holKey" : "HoldingResultKey [mid=2296383290003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL950.35 .한16 1992]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL950.35+.%ED%95%9C16+1992&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL950.35 .한16 1992",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000052019703286",
+        "holdId" : "2296383290003286",
+        "holKey" : "HoldingResultKey [mid=2296383290003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL950.35 .한16 1992]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL950.35+.%ED%95%9C16+1992&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000052019703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL950.35 .한16 1992",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000000950.000000000035.한000000000016000000001992",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003589276103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "하루 10분 인문학 " ],
+        "format" : [ "375 p : 삽화 ; 21 cm" ],
+        "identifier" : [ "$$CISBN$$V9791158511876" ],
+        "creationdate" : [ "2020" ],
+        "creator" : [ "이준형$$Q이준형" ],
+        "publisher" : [ "서울 : 나무의철학" ],
+        "mms" : [ "991003589276103286" ],
+        "contributor" : [ "지일주$$Q지일주", "인문학 유치원$$Q인문학 유치원" ],
+        "addtitle" : [ "50가지 질문으로 알아보는 나와 세계에 대한 짧은 교양", "인문학의 상징 바칼로레아 문제로 플라톤에서 공자까지 세상을 이해하는 데 꼭 필요한 필수 지식 십분 만에 마스터하기", "하루 십분 인문학", "오십가지 질문으로 알아보는 나와 세계에 대한 짧은 교양" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "인문학 철학 인문교양" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003589276103286" ],
+        "recordid" : [ "alma991003589276103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015677054" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.64312243" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "nr91043503" ],
+        "aulast" : [ "이준형" ],
+        "au" : [ "이준형" ],
+        "addau" : [ "지일주", "인문학 유치원" ],
+        "creatorfull" : [ "$$N이준형$$L이준형$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N지일주$$L지일주$$F$$Rcontributor" ],
+        "addtitle" : [ "50가지 질문으로 알아보는 나와 세계에 대한 짧은 교양" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9791158511876" ],
+        "notes" : [ "참고문헌: p. 372-373" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "나무의철학" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "하루 10분 인문학" ]
+      },
+      "sort" : {
+        "title" : [ "하루 10분 인문학 / 이준형, 지일주 지음 ; 인문학 유치원 해설" ],
+        "author" : [ "이준형" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "AZ103 .이76 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003589276103286",
+        "holdId" : "22237421900003286",
+        "holKey" : "HoldingResultKey [mid=22237421900003286, libraryId=117046190003286, locationCode=c3b, callNumber=AZ103 .이76 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)AZ103+.%EC%9D%B476+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "AZ103 .이76 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003589276103286",
+        "holdId" : "22237421900003286",
+        "holKey" : "HoldingResultKey [mid=22237421900003286, libraryId=117046190003286, locationCode=c3b, callNumber=AZ103 .이76 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)AZ103+.%EC%9D%B476+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003589276103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791158511876,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791158511876&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "AZ103 .이76 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "001.3",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003542579403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "2019 김승옥 문학상 수상작품집 " ],
+        "format" : [ "282 p : 삽화 ; 21 cm" ],
+        "identifier" : [ "$$CISBN$$V9788954657952" ],
+        "creationdate" : [ "2019" ],
+        "publisher" : [ "파주 : 문학동네" ],
+        "mms" : [ "991003542579403286" ],
+        "contributor" : [ "윤성희$$Q윤성희", "김금희$$Q김금희", "권여선$$Q권여선", "편혜영$$Q편혜영", "조해진$$Q조해진", "황정은$$Q황정은", "최은미$$Q최은미" ],
+        "addtitle" : [ "김승옥 문학상 작품집", "이천십구 김승옥 문학상 수상작품집", "이공일구 김승옥 문학상 수상작품집" ],
+        "contents" : [ "어느 밤 / 윤성희 -- 하늘 높이 아름답게 / 권여선 -- 어쩌면 스무 번 / 편혜영 -- 환한 나무 꼭대기 / 조해진 -- 파묘 / 황정은 -- 운내 / 최은미 -- 마지막 이기성 / 김금희" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003542579403286" ],
+        "recordid" : [ "alma991003542579403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015401715" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.6431121" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n88012406" ],
+        "aulast" : [ "윤성희", "김금희", "권여선", "편혜영", "조해진", "황정은", "최은미" ],
+        "addau" : [ "윤성희", "김금희", "권여선", "편혜영", "조해진", "황정은", "최은미" ],
+        "contributorfull" : [ "$$N윤성희$$L윤성희$$F$$Rcontributor", "$$N김금희$$Rcontributor", "$$N권여선$$Rcontributor", "$$N편혜영$$Rcontributor", "$$N조해진$$Rcontributor", "$$N황정은$$Rcontributor", "$$N최은미$$Rcontributor" ],
+        "addtitle" : [ "김승옥 문학상 작품집" ],
+        "date" : [ "2019" ],
+        "isbn" : [ "9788954657952" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "문학동네" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "2019 김승옥 문학상 수상작품집" ]
+      },
+      "sort" : {
+        "title" : [ "2019 김승옥 문학상 수상작품집 / 윤성희 [외] 지음" ],
+        "author" : [ "윤성희" ],
+        "creationdate" : [ "2019" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .김57 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003542579403286",
+        "holdId" : "22222892890003286",
+        "holKey" : "HoldingResultKey [mid=22222892890003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .김57 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EA%B9%8057+2019&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .김57 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003542579403286",
+        "holdId" : "22222892890003286",
+        "holKey" : "HoldingResultKey [mid=22222892890003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .김57 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EA%B9%8057+2019&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003542579403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788954657952,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788954657952&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL958.66 .김57 2019",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "811.3608",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000472059703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "영미문학의 길잡이 " ],
+        "format" : [ "521 p. ;  23 cm." ],
+        "identifier" : [ "$$CISBN$$V8936483099 ;$$CISBN$$V8936483102 ;$$CISBN$$V893647992X (전2권)" ],
+        "creationdate" : [ "2001" ],
+        "creator" : [ "영미문학연구회$$Q영미문학연구회" ],
+        "publisher" : [ "서울 : 창작과비평사 " ],
+        "mms" : [ "991000472059703286" ],
+        "contents" : [ "v.1, 영국문학. - v.2, 미국문학과 비평이론" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000472059703286" ],
+        "recordid" : [ "alma991000472059703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10774075-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.6308099" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no00046554" ],
+        "aucorp" : [ "영미문학연구회" ],
+        "date" : [ "2001" ],
+        "isbn" : [ "8936483099", "8936483102", "893647992X" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "창작과비평사" ],
+        "oclcid" : [ "(ptech)b10774075-82postech_inst", "ocm195558" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "영미문학의 길잡이" ]
+      },
+      "sort" : {
+        "title" : [ "영미문학의 길잡이 / 영미문학연구회 엮음." ],
+        "author" : [ "영미문학연구회" ],
+        "creationdate" : [ "2001" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PN86 .영38 2001",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000472059703286",
+        "holdId" : "2293991480003286",
+        "holKey" : "HoldingResultKey [mid=2293991480003286, libraryId=117046190003286, locationCode=c3b, callNumber=PN86 .영38 2001]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PN86+.%EC%98%8138+2001&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PN86 .영38 2001",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000472059703286",
+        "holdId" : "2293991480003286",
+        "holKey" : "HoldingResultKey [mid=2293991480003286, libraryId=117046190003286, locationCode=c3b, callNumber=PN86 .영38 2001]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PN86+.%EC%98%8138+2001&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000472059703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8936483099,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8936483099&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PN86 .영38 2001",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pn000000000086.영000000000038000000002001",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003530955303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "인문학적 자유 vs 과학적 자유 " ],
+        "format" : [ "205 p ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788989824572" ],
+        "creationdate" : [ "2012" ],
+        "creator" : [ "이승범$$Q이승범" ],
+        "publisher" : [ "서울 : 우물이있는집" ],
+        "mms" : [ "991003530955303286" ],
+        "addtitle" : [ "의료현장에서 살펴본 과학과 인문학의 소통 불가능한 구조에 대한 탐구", "인문학적 자유 브이에스 과학적 자유", "인문학적 자유 대 과학적 자유" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "인문학 과학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003530955303286" ],
+        "recordid" : [ "alma991003530955303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000012699951" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.61061215" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "이승범" ],
+        "au" : [ "이승범" ],
+        "creatorfull" : [ "$$N이승범$$L이승범$$F$$Rauthor" ],
+        "addtitle" : [ "의료현장에서 살펴본 과학과 인문학의 소통 불가능한 구조에 대한 탐구" ],
+        "date" : [ "2012" ],
+        "isbn" : [ "9788989824572" ],
+        "notes" : [ "참고서적 : p. 199-202" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "우물이있는집" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "인문학적 자유 vs 과학적 자유" ]
+      },
+      "sort" : {
+        "title" : [ "인문학적 자유 vs 과학적 자유 / 이승범 지음" ],
+        "author" : [ "이승범" ],
+        "creationdate" : [ "2012" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "AZ103 .이57 2012",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003530955303286",
+        "holdId" : "22218975400003286",
+        "holKey" : "HoldingResultKey [mid=22218975400003286, libraryId=117046190003286, locationCode=c3b, callNumber=AZ103 .이57 2012]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)AZ103+.%EC%9D%B457+2012&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "AZ103 .이57 2012",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003530955303286",
+        "holdId" : "22218975400003286",
+        "holKey" : "HoldingResultKey [mid=22218975400003286, libraryId=117046190003286, locationCode=c3b, callNumber=AZ103 .이57 2012]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)AZ103+.%EC%9D%B457+2012&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003530955303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788989824572,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788989824572&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "AZ103 .이57 2012",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "001.3",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000027049703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "1977년 국어국문학연감 /  " ],
+        "format" : [ "440 p. ;   23 cm" ],
+        "creationdate" : [ "1980" ],
+        "publisher" : [ "서울 : 이우출판사 " ],
+        "mms" : [ "991000027049703286" ],
+        "contributor" : [ "국어국문학회$$Q국어국문학회" ],
+        "addtitle" : [ "천구백칠십칠년" ],
+        "contents" : [ "1,고전문학편. 2,현대문학편." ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000027049703286" ],
+        "recordid" : [ "alma991000027049703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10027889-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.59387755" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "국어국문학회" ],
+        "addau" : [ "국어국문학회" ],
+        "contributorfull" : [ "$$N국어국문학회$$L국어국문학회$$F$$Rcontributor" ],
+        "date" : [ "1980" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "이우출판사 ," ],
+        "oclcid" : [ "(ptech)b10027889-82postech_inst", "ocm3127" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "1977년 국어국문학연감 /" ]
+      },
+      "sort" : {
+        "title" : [ "1977년 국어국문학연감 /   국어국문학회 엮음." ],
+        "author" : [ "국어국문학회" ],
+        "creationdate" : [ "1980" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL950.12 국64 1980",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000027049703286",
+        "holdId" : "2293774210003286",
+        "holKey" : "HoldingResultKey [mid=2293774210003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL950.12 국64 1980]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL950.12+%EA%B5%AD64+1980&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL950.12 국64 1980",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000027049703286",
+        "holdId" : "2293774210003286",
+        "holKey" : "HoldingResultKey [mid=2293774210003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL950.12 국64 1980]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL950.12+%EA%B5%AD64+1980&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000027049703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL950.12 국64 1980",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl\"950.12",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003944037403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "이상문학상 작품집. 2026(제49회), 눈과 돌멩이 외 5편 " ],
+        "format" : [ "368 p. : 삽화 ; 22 cm" ],
+        "identifier" : [ "$$CISBN$$V9791130674643" ],
+        "creationdate" : [ "2026" ],
+        "publisher" : [ "파주 : 다산책방 : 다산북스" ],
+        "mms" : [ "991003944037403286" ],
+        "contributor" : [ "위수정, [공]저$$Q위수정", "김혜진, [공]저$$Q김혜진", "성혜령, [공]저$$Q성혜령", "이민진, [공]저$$Q이민진", "정이현, [공]저$$Q정이현", "함윤이, [공]저$$Q함윤이" ],
+        "addtitle" : [ "2026 제49회 이상문학상 작품집", "눈과 돌멩이", "관종들", "대부호", "겨울의 윤리", "실패담 크루", "우리의 적들이 산을 오를 때" ],
+        "contents" : [ "눈과 돌멩이/ 위수정 -- 관종들/ 김혜진 -- 대부호/ 성혜령 -- 겨울의 윤리/ 이민진 -- 실패담 크루/ 정이현 -- 우리의 적들이 산을 오를 때/ 함윤이" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "한국소설 이상문학상 수상작품집 한국문학 작품집 소설 문학 단편소설" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003944037403286" ],
+        "recordid" : [ "alma991003944037403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000065859956" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.5712656" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "위수정", "김혜진", "성혜령", "이민진", "정이현", "함윤이" ],
+        "addau" : [ "위수정", "김혜진", "성혜령", "이민진", "정이현", "함윤이" ],
+        "contributorfull" : [ "$$N위수정$$L위수정$$F$$Rcontributor", "$$N김혜진$$Rcontributor", "$$N성혜령$$Rcontributor", "$$N이민진$$Rcontributor", "$$N정이현$$Rcontributor", "$$N함윤이$$Rcontributor" ],
+        "addtitle" : [ "2026 제49회 이상문학상 작품집" ],
+        "date" : [ "2026" ],
+        "isbn" : [ "9791130674643" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "다산책방" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "이상문학상 작품집. 2026(제49회), 눈과 돌멩이 외 5편" ]
+      },
+      "sort" : {
+        "title" : [ "이상문학상 작품집. 2026(제49회), 눈과 돌멩이 외 5편 / 위수정 [외] 지음" ],
+        "author" : [ "위수정, [공]저" ],
+        "creationdate" : [ "2026" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .이52 2026",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003944037403286",
+        "holdId" : "22324374640003286",
+        "holKey" : "HoldingResultKey [mid=22324374640003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .이52 2026]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EC%9D%B452+2026&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .이52 2026",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003944037403286",
+        "holdId" : "22324374640003286",
+        "holKey" : "HoldingResultKey [mid=22324374640003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .이52 2026]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EC%9D%B452+2026&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003944037403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791130674643,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791130674643&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL958.66 .이52 2026",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000000958.000000000066.이000000000052000000002026",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000948319703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(기본) 천문학 " ],
+        "format" : [ "xv, 588, 20 p. : 삽화 ; 26 cm." ],
+        "identifier" : [ "$$CISBN$$V9788958325369" ],
+        "creationdate" : [ "2008" ],
+        "publisher" : [ "서울 : 시그마프레스" ],
+        "mms" : [ "991000948319703286" ],
+        "contributor" : [ "Karttunen, Hannu$$QKarttunen, Hannu", "강혜성$$Q강혜성" ],
+        "addtitle" : [ "Fundamental astronomy", "천문학" ],
+        "edition" : [ "제5판" ],
+        "series" : [ "GEO series ; 12$$QGEO series " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "천문학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000948319703286" ],
+        "recordid" : [ "alma991000948319703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b14692144-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.56948256" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n84219222" ],
+        "aulast" : [ "Karttunen", "강혜성" ],
+        "aufirst" : [ "Hannu" ],
+        "auinit" : [ "H" ],
+        "addau" : [ "Karttunen, Hannu", "강혜성" ],
+        "contributorfull" : [ "$$NKarttunen, Hannu$$LKarttunen$$FHannu$$Rcontributor", "$$N강혜성$$Rcontributor" ],
+        "date" : [ "2008" ],
+        "isbn" : [ "9788958325369" ],
+        "notes" : [ "참고문헌(p. [567]-570)과 색인(p. 573-588) 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "시그마프레스" ],
+        "oclcid" : [ "(ptech)b14692144-82postech_inst" ],
+        "edition" : [ "제5판" ],
+        "seriestitle" : [ "GEO series ; 12" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(기본) 천문학" ]
+      },
+      "sort" : {
+        "title" : [ "(기본) 천문학 / Hannu Karttunen [외]지음; 강혜성 [외]옮김." ],
+        "author" : [ "Karttunen, Hannu" ],
+        "creationdate" : [ "2008" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB43.2 .T2613 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000948319703286",
+        "holdId" : "2294733580003286",
+        "holKey" : "HoldingResultKey [mid=2294733580003286, libraryId=117046190003286, locationCode=c3b, callNumber=QB43.2 .T2613 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB43.2+.T2613+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB43.2 .T2613 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000948319703286",
+        "holdId" : "2294733580003286",
+        "holKey" : "HoldingResultKey [mid=2294733580003286, libraryId=117046190003286, locationCode=c3b, callNumber=QB43.2 .T2613 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB43.2+.T2613+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000948319703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788958325369,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788958325369&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QB43.2 .T2613 2008",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "520",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000912449703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "한국 아동청소년문학 장르론 " ],
+        "format" : [ "480 p. ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788957491522;$$CISBN$$V9788957491416(세트)" ],
+        "creationdate" : [ "2013" ],
+        "publisher" : [ "파주 : 청동거울" ],
+        "mms" : [ "991000912449703286" ],
+        "contributor" : [ "김상욱$$Q김상욱", "한국아동청소년문학학회$$Q한국아동청소년문학학회" ],
+        "series" : [ "아동청소년문학총서 ; 02$$Q아동청소년문학총서 " ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "한국 아동청소년문학 장르론" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000912449703286" ],
+        "recordid" : [ "alma991000912449703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b14536717-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.563672" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr92011107" ],
+        "aulast" : [ "김상욱" ],
+        "addau" : [ "김상욱", "한국아동청소년문학학회" ],
+        "contributorfull" : [ "$$N김상욱$$L김상욱$$F$$Rcontributor" ],
+        "date" : [ "2013" ],
+        "isbn" : [ "9788957491522", "9788957491416" ],
+        "notes" : [ "참고문헌 : p. 464-466" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "청동거울" ],
+        "oclcid" : [ "(ptech)b14536717-82postech_inst" ],
+        "seriestitle" : [ "아동청소년문학총서 ; 02" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "한국 아동청소년문학 장르론" ]
+      },
+      "sort" : {
+        "title" : [ "한국 아동청소년문학 장르론 / 김상욱 [외]지음 ; 한국아동청소년문학학회 엮음" ],
+        "author" : [ "김상욱" ],
+        "creationdate" : [ "2013" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL969.5 .한161 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000912449703286",
+        "holdId" : "2295119320003286",
+        "holKey" : "HoldingResultKey [mid=2295119320003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL969.5 .한161 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL969.5+.%ED%95%9C161+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL969.5 .한161 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000912449703286",
+        "holdId" : "2295119320003286",
+        "holKey" : "HoldingResultKey [mid=2295119320003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL969.5 .한161 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL969.5+.%ED%95%9C161+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000912449703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788957491522,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788957491522&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL969.5 .한161 2013",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "895.709",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000449449703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "한국문학과 근대성의 형성" ],
+        "format" : [ "413 p.; 23 cm." ],
+        "identifier" : [ "$$CISBN$$V8942815642" ],
+        "creationdate" : [ "2001" ],
+        "creator" : [ "동국대학교.  한국문학연구소$$Q동국대학교.  한국문학연구소" ],
+        "publisher" : [ "서울 : 아세아문화사" ],
+        "mms" : [ "991000449449703286" ],
+        "contributor" : [ "고재석$$Q고재석", "송희복$$Q송희복", "유임하$$Q유임하", "김춘식$$Q김춘식", "오학영$$Q오학영", "홍신선$$Q홍신선", "임기중$$Q임기중", "백전풍$$Q백전풍", "김태준$$Q김태준", "황종연$$Q황종연", "신상성$$Q신상성" ],
+        "series" : [ "한국문학연구신서 ; 4$$Q한국문학연구신서 " ],
+        "contents" : [ "신구문학사상의 대립과 교체/고재석. - 근대성:우리 비평사의 한 쟁점/송희복. -문학연구와 근대/근대성/유임하. - 장르의 소멸과 근대적 장르 인식/김춘식. - 개화기 희곡에 나타난 사회사상/오학영. - 개화기 시론연구/홍신선. - 19세기 한 중 외교 화답시의 현대적 의미/임기중. - 한국근대문학 초창기 문인들의 일본 유학 체험고/시라카와 유타카. - 이광수의 첫번째 유학시대와 그 저작들/김태준. - 1930년대 고전부흥운동의 문학사적 의의/황종연. - 1930년대 한국 여성들의 사회의식 연구/신상성." ],
+        "relatedwork" : [ "고재석/ 신구문학사상의 대립과 교체$$Q고재석/ 신구문학사상의 대립과 교체", "송희복/ 우리 비평사의 한 쟁점 근대성$$Q송희복/ 우리 비평사의 한 쟁점 근대성", "김춘식/ 장르의 소멸과 근대적 장르 인식$$Q김춘식/ 장르의 소멸과 근대적 장르 인식", "오학영/ 개화기 희곡에 나타난 사회사상$$Q오학영/ 개화기 희곡에 나타난 사회사상", "홍신선/ 개화기 시론연구$$Q홍신선/ 개화기 시론연구", "임기중/ 19세기 한 중 외교 화답시의 현대적 의미$$Q임기중/ 19세기 한 중 외교 화답시의 현대적 의미", "백전풍/ 한국근대문학 초창기 문인들의 일본 유학 체험고$$Q백전풍/ 한국근대문학 초창기 문인들의 일본 유학 체험고", "김태준/ 이광수의 첫번째 유학시대와 그 저작들$$Q김태준/ 이광수의 첫번째 유학시대와 그 저작들", "황종연/ 1930년대 고전부흥운동의 문학사적 의의$$Q황종연/ 1930년대 고전부흥운동의 문학사적 의의", "신상성/ 1930년대 한국 여성들의 사회의식 연구$$Q신상성/ 1930년대 한국 여성들의 사회의식 연구" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000449449703286" ],
+        "recordid" : [ "alma991000449449703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10739877-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.5592437" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "고재석", "송희복", "유임하" ],
+        "aucorp" : [ "동국대학교.  한국문학연구소" ],
+        "addau" : [ "고재석", "송희복", "유임하", "김춘식", "오학영", "홍신선", "임기중", "백전풍", "김태준", "황종연", "신상성" ],
+        "contributorfull" : [ "$$N고재석$$L고재석/$$F$$Rcontributor", "$$N송희복$$Rcontributor", "$$N유임하$$Rcontributor", "$$N김춘식$$Rcontributor", "$$N오학영$$Rcontributor", "$$N홍신선$$Rcontributor", "$$N임기중$$Rcontributor", "$$N백전풍$$Rcontributor", "$$N김태준$$Rcontributor", "$$N황종연$$Rcontributor", "$$N신상성$$Rcontributor" ],
+        "date" : [ "2001" ],
+        "isbn" : [ "8942815642" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "아세아문화사" ],
+        "oclcid" : [ "(ptech)b10739877-82postech_inst", "ocm188181" ],
+        "seriestitle" : [ "한국문학연구신서 ; 4" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "한국문학과 근대성의 형성" ]
+      },
+      "sort" : {
+        "title" : [ "한국문학과 근대성의 형성/ 동국대학교 한국문학연구소 엮음; [고재석...등저]." ],
+        "author" : [ "동국대학교.  한국문학연구소" ],
+        "creationdate" : [ "2001" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL950.35 .한16 2001",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000449449703286",
+        "holdId" : "2291975450003286",
+        "holKey" : "HoldingResultKey [mid=2291975450003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL950.35 .한16 2001]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL950.35+.%ED%95%9C16+2001&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL950.35 .한16 2001",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000449449703286",
+        "holdId" : "2291975450003286",
+        "holKey" : "HoldingResultKey [mid=2291975450003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL950.35 .한16 2001]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL950.35+.%ED%95%9C16+2001&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000449449703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8942815642,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8942815642&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL950.35 .한16 2001",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "811.09",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003618979103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "이상문학상 작품집. 제44회(2021) " ],
+        "format" : [ "367 p. : 초상 ; 22 cm" ],
+        "identifier" : [ "$$CISBN$$V9788970124841" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "파주 : 문학사상" ],
+        "mms" : [ "991003618979103286" ],
+        "contributor" : [ "이승우, 1959-$$Q이승우", "박형서, 1972-$$Q박형서", "윤성희, 1973-$$Q윤성희", "장은진, 1976-$$Q장은진", "천운영, 1971-$$Q천운영", "한지수, 1967-$$Q한지수" ],
+        "series" : [ "이상문학상 작품집 ; 제44회(2021)$$Q이상문학상 작품집 " ],
+        "contents" : [ "마음의 부력 / 이승우 -- 97의 세계 / 박형서 -- 블랙홀 / 윤성희 -- 나의 루마니아어 수업 / 장은진 -- 아버지가 되어주오 / 천운영 -- 야(夜)심한 연극반 / 한지수" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "한국 현대 소설", "이상 문학상", "이상문학상 작품집 한국현대소설 한국문학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003618979103286" ],
+        "recordid" : [ "alma991003618979103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015825678" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.5388962" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "이승우", "박형서", "윤성희", "장은진", "천운영", "한지수" ],
+        "addau" : [ "이승우", "박형서", "윤성희", "장은진", "천운영", "한지수" ],
+        "contributorfull" : [ "$$N이승우$$L이승우$$F$$Rcontributor", "$$N박형서$$Rcontributor", "$$N윤성희$$Rcontributor", "$$N장은진$$Rcontributor", "$$N천운영$$Rcontributor", "$$N한지수$$Rcontributor" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9788970124841" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "문학사상" ],
+        "seriestitle" : [ "이상문학상 작품집 ; 제44회(2021)" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "이상문학상 작품집. 제44회(2021)" ]
+      },
+      "sort" : {
+        "title" : [ "이상문학상 작품집. 제44회(2021) / 이승우, 박형서, 윤성희, 장은진, 천운영, 한지수 지음" ],
+        "author" : [ "이승우, 1959-" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .이52 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003618979103286",
+        "holdId" : "22245882770003286",
+        "holKey" : "HoldingResultKey [mid=22245882770003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .이52 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EC%9D%B452+2021&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .이52 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003618979103286",
+        "holdId" : "22245882770003286",
+        "holKey" : "HoldingResultKey [mid=22245882770003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .이52 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EC%9D%B452+2021&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003618979103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788970124841,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788970124841&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL958.66 .이52 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "895.735",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000671259703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "title" : [ "문학사료전집 " ],
+        "format" : [ "책 : 삽도 ; 21 cm" ],
+        "identifier" : [ "$$CISBN$$V7806484477" ],
+        "creationdate" : [ "2001-" ],
+        "publisher" : [ "연길 : 연변인민출판사" ],
+        "mms" : [ "991000671259703286" ],
+        "contributor" : [ "정판룡$$Q정판룡" ],
+        "addtitle" : [ "20세기 중국조선족 문학사료전집" ],
+        "contents" : [ "v.22, 정판룡문학편" ],
+        "place" : [ "연길 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000671259703286" ],
+        "recordid" : [ "alma991000671259703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12456214-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.53733814" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n83169022" ],
+        "aulast" : [ "정판룡" ],
+        "addau" : [ "정판룡" ],
+        "contributorfull" : [ "$$N정판룡$$L정판룡$$F$$Rcontributor" ],
+        "date" : [ "2001", "2001-" ],
+        "isbn" : [ "7806484477" ],
+        "cop" : [ "연길" ],
+        "pub" : [ "연변인민출판사" ],
+        "oclcid" : [ "(ptech)b12456214-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "문학사료전집" ]
+      },
+      "sort" : {
+        "title" : [ "문학사료전집 / 연변인민출판사 [편]" ],
+        "author" : [ "정판룡" ],
+        "creationdate" : [ "2001" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL2515.5.M56 .문921",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000671259703286",
+        "holdId" : "2291705280003286",
+        "holKey" : "HoldingResultKey [mid=2291705280003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL2515.5.M56 .문921]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL2515.5.M56+.%EB%AC%B8921&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL2515.5.M56 .문921",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000671259703286",
+        "holdId" : "2291705280003286",
+        "holKey" : "HoldingResultKey [mid=2291705280003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL2515.5.M56 .문921]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL2515.5.M56+.%EB%AC%B8921&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000671259703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:7806484477,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=7806484477&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL2515.5.M56 .문921",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000002515.000000000005.m000000000056.문000000000921",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "63",
+    "CALL_SOLR_GET_IDS_LIST" : "140",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "429",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "18",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "32",
+    "RETRIVE_FROM_DB_RELATIONS" : "3",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "341",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "88",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "198",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "835",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 1591,
+    "COMBINED_SEARCH_TIME" : 1601,
+    "PROCESS_COMBINED_RESULTS" : 1,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "8746"
+    }, {
+      "value" : "eng",
+      "count" : "425"
+    }, {
+      "value" : "jpn",
+      "count" : "93"
+    }, {
+      "value" : "chi",
+      "count" : "23"
+    }, {
+      "value" : "ger",
+      "count" : "11"
+    }, {
+      "value" : "fre",
+      "count" : "5"
+    }, {
+      "value" : "spa",
+      "count" : "2"
+    }, {
+      "value" : "grc",
+      "count" : "1"
+    }, {
+      "value" : "hin",
+      "count" : "1"
+    }, {
+      "value" : "ita",
+      "count" : "1"
+    }, {
+      "value" : "por",
+      "count" : "1"
+    }, {
+      "value" : "rus",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "0",
+      "count" : "2"
+    }, {
+      "value" : "2026",
+      "count" : "120"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "8656"
+    }, {
+      "value" : "books",
+      "count" : "409"
+    }, {
+      "value" : "journals",
+      "count" : "169"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "한국문학 한국소설",
+      "count" : "137"
+    }, {
+      "value" : "한국 현대 소설",
+      "count" : "129"
+    }, {
+      "value" : "한국 현대시",
+      "count" : "81"
+    }, {
+      "value" : "한국 현대 문학",
+      "count" : "77"
+    }, {
+      "value" : "한국문학 한국에세이",
+      "count" : "76"
+    }, {
+      "value" : "한국문학 한국소설 장편소설",
+      "count" : "69"
+    }, {
+      "value" : "일본문학 일본소설",
+      "count" : "68"
+    }, {
+      "value" : "영미문학 영미소설",
+      "count" : "53"
+    }, {
+      "value" : "수기 글",
+      "count" : "46"
+    }, {
+      "value" : "미국문학 미국소설",
+      "count" : "44"
+    }, {
+      "value" : "시 한국",
+      "count" : "43"
+    }, {
+      "value" : "프랑스문학 프랑스소설",
+      "count" : "43"
+    }, {
+      "value" : "한국문학 한국소설 단편소설",
+      "count" : "42"
+    }, {
+      "value" : "한국문학 한국시 현대시",
+      "count" : "30"
+    }, {
+      "value" : "일본 현대 소설",
+      "count" : "28"
+    }, {
+      "value" : "한국문학 에세이",
+      "count" : "28"
+    }, {
+      "value" : "일본 문학",
+      "count" : "27"
+    }, {
+      "value" : "한국 문학",
+      "count" : "27"
+    }, {
+      "value" : "한국문학",
+      "count" : "27"
+    }, {
+      "value" : "문학 평론",
+      "count" : "24"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "무라카미 하루키",
+      "count" : "45"
+    }, {
+      "value" : "양윤옥",
+      "count" : "45"
+    }, {
+      "value" : "히가시노 게이고",
+      "count" : "43"
+    }, {
+      "value" : "동야규오",
+      "count" : "41"
+    }, {
+      "value" : "촌상춘수",
+      "count" : "38"
+    }, {
+      "value" : "대한민국학술원",
+      "count" : "37"
+    }, {
+      "value" : "김연수",
+      "count" : "32"
+    }, {
+      "value" : "Higashino Keigo",
+      "count" : "31"
+    }, {
+      "value" : "박완서",
+      "count" : "29"
+    }, {
+      "value" : "김난주",
+      "count" : "26"
+    }, {
+      "value" : "김윤식",
+      "count" : "26"
+    }, {
+      "value" : "김현",
+      "count" : "26"
+    }, {
+      "value" : "정영목",
+      "count" : "26"
+    }, {
+      "value" : "김욱동",
+      "count" : "25"
+    }, {
+      "value" : "김화영",
+      "count" : "25"
+    }, {
+      "value" : "김승욱",
+      "count" : "24"
+    }, {
+      "value" : "김영하",
+      "count" : "24"
+    }, {
+      "value" : "東野圭吾",
+      "count" : "23"
+    }, {
+      "value" : "권영주",
+      "count" : "23"
+    }, {
+      "value" : "편혜영",
+      "count" : "23"
+    } ]
+  }, {
+    "name" : "newrecords",
+    "values" : [ {
+      "value" : "90 days back",
+      "count" : "110"
+    }, {
+      "value" : "30 days back",
+      "count" : "71"
+    }, {
+      "value" : "07 days back",
+      "count" : "3"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "8655"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "7321"
+    }, {
+      "value" : "3286–117046190003286–c2sb1",
+      "count" : "807"
+    }, {
+      "value" : "3286–117046190003286–c4y",
+      "count" : "235"
+    }, {
+      "value" : "3286–117046190003286–c2n",
+      "count" : "170"
+    }, {
+      "value" : "3286–117046190003286–c2sb2",
+      "count" : "129"
+    }, {
+      "value" : "3286–117046190003286–smart",
+      "count" : "71"
+    }, {
+      "value" : "3286–117046190003286–c3k",
+      "count" : "27"
+    }, {
+      "value" : "3286–117046190003286–onebookph",
+      "count" : "15"
+    }, {
+      "value" : "3286–117046190003286–rec100",
+      "count" : "15"
+    }, {
+      "value" : "3286–117046190003286–c3a",
+      "count" : "14"
+    }, {
+      "value" : "3286–117046190003286–recby",
+      "count" : "11"
+    }, {
+      "value" : "3286–117046190003286–theme1",
+      "count" : "7"
+    }, {
+      "value" : "3286–117046190003286–c2ex",
+      "count" : "5"
+    }, {
+      "value" : "3286–117046190003286–c2z",
+      "count" : "4"
+    }, {
+      "value" : "3286–117046190003286–faculty",
+      "count" : "2"
+    }, {
+      "value" : "3286–117046190003286–c2a",
+      "count" : "1"
+    }, {
+      "value" : "3286–117046190003286–c2m",
+      "count" : "1"
+    }, {
+      "value" : "3286–117046190003286–c3sb",
+      "count" : "1"
+    }, {
+      "value" : "3286–117046190003286–c4r",
+      "count" : "1"
+    }, {
+      "value" : "3286–117046190003286–phistory",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "8655"
+    }, {
+      "value" : "open_access",
+      "count" : "1"
+    }, {
+      "value" : "peer_reviewed",
+      "count" : "1"
+    }, {
+      "value" : "online_resources",
+      "count" : "476"
+    } ]
+  } ],
+  "facetsCacheKey" : 573760283
+}

@@ -2,6 +2,10 @@ import Foundation
 
 nonisolated enum AppConfiguration {
     static func relayConfiguration() throws -> APIRelayConfiguration {
+        #if DEMO
+        // Demo 빌드에는 중계 토큰을 넣지 않는다. 요청은 번들 응답 재생기(HTTPClient.demoReplay)에서 끝난다.
+        return APIRelayConfiguration(environment: .production, token: "offline-demo-replay-placeholder-token")
+        #else
         let channel = value(for: "POBOOK_BUILD_CHANNEL") ?? "automatic"
         guard ["automatic", "internal"].contains(channel) else { throw APIRelayError.invalidBuildChannel }
         let environment: APIRelayEnvironment
@@ -15,6 +19,7 @@ nonisolated enum AppConfiguration {
             throw APIRelayError.missingAccessToken
         }
         return APIRelayConfiguration(environment: environment, token: token)
+        #endif
     }
 
     private static func value(for key: String) -> String? {

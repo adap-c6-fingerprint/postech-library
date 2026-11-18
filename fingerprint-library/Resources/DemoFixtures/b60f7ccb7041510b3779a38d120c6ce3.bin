@@ -1,0 +1,301 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003804851603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "요즘 우아한 개발 : 기획하고 개발하고 회고하라 " ],
+        "format" : [ "359p. : 삽화, 도표 ; 21cm" ],
+        "identifier" : [ "$$CISBN$$V9791191905458" ],
+        "creationdate" : [ "2023" ],
+        "publisher" : [ "서울 : 우아한테크 : 골든래빗" ],
+        "mms" : [ "991003804851603286" ],
+        "contributor" : [ "홍지현$$Q홍지현", "채슬기$$Q채슬기", "진예령$$Q진예령", "김하루$$Q김하루", "이주호$$Q이주호", "권기석$$Q권기석", "이준수$$Q이준수", "이제현$$Q이제현", "안필호$$Q안필호", "장정환$$Q장정환", "조성범$$Q조성범", "박주희$$Q박주희", "이찬호$$Q이찬호", "임선진$$Q임선진", "유영경$$Q유영경", "우아한형제들$$Q우아한형제들" ],
+        "addtitle" : [ "배달의민족을 만든 우아한형제들의 조직문화, 온보딩, 기획, 개발, 인프라 구축이야기" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "요즘 우아한 개발 기획 조직문화 온보딩 인프라구축" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003804851603286" ],
+        "recordid" : [ "alma991003804851603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016880664" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269725E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr93044905", "n79025764" ],
+        "aulast" : [ "홍지현", "채슬기", "진예령", "김하루", "이주호", "권기석", "이준수", "이제현", "안필호", "장정환", "조성범", "박주희", "이찬호", "임선진", "유영경" ],
+        "addau" : [ "홍지현", "채슬기", "진예령", "김하루", "이주호", "권기석", "이준수", "이제현", "안필호", "장정환", "조성범", "박주희", "이찬호", "임선진", "유영경", "우아한형제들" ],
+        "contributorfull" : [ "$$N홍지현$$L홍지현$$F$$Rcontributor", "$$N채슬기$$Rcontributor", "$$N진예령$$Rcontributor", "$$N김하루$$Rcontributor", "$$N이주호$$Rcontributor", "$$N권기석$$Rcontributor", "$$N이준수$$Rcontributor", "$$N이제현$$Rcontributor", "$$N안필호$$Rcontributor", "$$N장정환$$Rcontributor", "$$N조성범$$Rcontributor", "$$N박주희$$Rcontributor", "$$N이찬호$$Rcontributor", "$$N임선진$$Rcontributor", "$$N유영경$$Rcontributor" ],
+        "addtitle" : [ "배달의민족을 만든 우아한형제들의 조직문화, 온보딩, 기획, 개발, 인프라 구축이야기" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9791191905458" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "우아한테크" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "요즘 우아한 개발 : 기획하고 개발하고 회고하라" ]
+      },
+      "sort" : {
+        "title" : [ "요즘 우아한 개발 : 기획하고 개발하고 회고하라 / 우아한형제들 지음" ],
+        "author" : [ "홍지현" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5386 .우62 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003804851603286",
+        "holdId" : "22292360230003286",
+        "holKey" : "HoldingResultKey [mid=22292360230003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5386 .우62 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5386+.%EC%9A%B062+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5386 .우62 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003804851603286",
+        "holdId" : "22292360230003286",
+        "holKey" : "HoldingResultKey [mid=22292360230003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5386 .우62 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5386+.%EC%9A%B062+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003804851603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791191905458,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791191905458&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HF5386 .우62 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "hf000000005386.우000000000062000000002023",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "434",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "140",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "135",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "798",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 808,
+    "COMBINED_SEARCH_TIME" : 816,
+    "PROCESS_COMBINED_RESULTS" : 0,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2023",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "요즘 우아한 개발 기획 조직문화 온보딩 인프라구축",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "권기석",
+      "count" : "1"
+    }, {
+      "value" : "김하루",
+      "count" : "1"
+    }, {
+      "value" : "박주희",
+      "count" : "1"
+    }, {
+      "value" : "안필호",
+      "count" : "1"
+    }, {
+      "value" : "우아한형제들",
+      "count" : "1"
+    }, {
+      "value" : "유영경",
+      "count" : "1"
+    }, {
+      "value" : "이제현",
+      "count" : "1"
+    }, {
+      "value" : "이주호",
+      "count" : "1"
+    }, {
+      "value" : "이준수",
+      "count" : "1"
+    }, {
+      "value" : "이찬호",
+      "count" : "1"
+    }, {
+      "value" : "임선진",
+      "count" : "1"
+    }, {
+      "value" : "장정환",
+      "count" : "1"
+    }, {
+      "value" : "조성범",
+      "count" : "1"
+    }, {
+      "value" : "진예령",
+      "count" : "1"
+    }, {
+      "value" : "채슬기",
+      "count" : "1"
+    }, {
+      "value" : "홍지현",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -2070818647
+}

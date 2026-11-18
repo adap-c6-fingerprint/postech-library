@@ -1,0 +1,267 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000697409703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "모던 리코딩 테크닉 " ],
+        "format" : [ "774 p. : 삽화 ; 24 cm", "Huber, David Miles", "Runstein, Robert E.", "Modern Recording Techniques" ],
+        "identifier" : [ "$$CISBN$$V9788984997356" ],
+        "creationdate" : [ "2008" ],
+        "publisher" : [ "서울 : 커뮤니케이션북스" ],
+        "description" : [ "음향업계 종사자들이 가장 많이 찾는 음향학의 바이블. 음향 제작에 필요한 녹음, 믹싱, 마스터링 작업의 구체적인 방법을 소개한다. 음향학 개론, 스튜디오 설계, 아날로그와 디지털 음향장비 그리고 미디, 스피커, 앰프, 멀티미디어와 웹에 이르기까지… 이 책은 방대하고 유용한 내용을 다룬다. 특히 6판에서는 디지털 음향기술과 서라운드 사운드, 마스터링에 관한 신기술을 알기 쉽고 명쾌하게 설명한다. 음향용어 사전을 실은 웹 사이트도 소개한다. 독자들이 아이디어를 공유하고, 조언을 구하고, 언제 어디서나 정보를 찾아볼 수 있는 것도 최신판인 6판의 자랑거리다." ],
+        "mms" : [ "991000697409703286" ],
+        "contributor" : [ "허버, 데이빗 마일즈$$Q허버, 데이빗 마일즈", "런스타인, 로버트$$Q런스타인, 로버트", "김철웅$$Q김철웅" ],
+        "addtitle" : [ "Modern Recording Techniques" ],
+        "edition" : [ "제6판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "모던 리코딩 리코딩테크닉" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000697409703286" ],
+        "recordid" : [ "alma991000697409703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12557730-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270189E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "허버", "런스타인", "김철웅" ],
+        "aufirst" : [ "데이빗 마일즈", "로버트" ],
+        "auinit" : [ "데", "로" ],
+        "addau" : [ "허버, 데이빗 마일즈", "런스타인, 로버트", "김철웅" ],
+        "contributorfull" : [ "$$N허버, 데이빗 마일즈$$L허버$$F데이빗 마일즈$$Rcontributor", "$$N런스타인, 로버트$$Rcontributor", "$$N김철웅$$Rcontributor" ],
+        "date" : [ "2008" ],
+        "isbn" : [ "9788984997356" ],
+        "abstract" : [ "음향업계 종사자들이 가장 많이 찾는 음향학의 바이블. 음향 제작에 필요한 녹음, 믹싱, 마스터링 작업의 구체적인 방법을 소개한다. 음향학 개론, 스튜디오 설계, 아날로그와 디지털 음향장비 그리고 미디, 스피커, 앰프, 멀티미디어와 웹에 이르기까지… 이 책은 방대하고 유용한 내용을 다룬다. 특히 6판에서는 디지털 음향기술과 서라운드 사운드, 마스터링에 관한 신기술을 알기 쉽고 명쾌하게 설명한다. 음향용어 사전을 실은 웹 사이트도 소개한다. 독자들이 아이디어를 공유하고, 조언을 구하고, 언제 어디서나 정보를 찾아볼 수 있는 것도 최신판인 6판의 자랑거리다." ],
+        "cop" : [ "서울" ],
+        "pub" : [ "커뮤니케이션북스" ],
+        "oclcid" : [ "(ptech)b12557730-82postech_inst" ],
+        "edition" : [ "제6판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "모던 리코딩 테크닉" ]
+      },
+      "sort" : {
+        "title" : [ "모던 리코딩 테크닉 / 데이빗 마일즈 허버 ; 로버트 런스타인 [공]지음 ; 김철웅 옮김" ],
+        "author" : [ "허버, 데이빗 마일즈" ],
+        "creationdate" : [ "2008" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK7881.6 .H85 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000697409703286",
+        "holdId" : "2291514190003286",
+        "holKey" : "HoldingResultKey [mid=2291514190003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK7881.6 .H85 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK7881.6+.H85+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK7881.6 .H85 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000697409703286",
+        "holdId" : "2291514190003286",
+        "holKey" : "HoldingResultKey [mid=2291514190003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK7881.6 .H85 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK7881.6+.H85+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000697409703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788984997356,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788984997356&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TK7881.6 .H85 2008",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tk000000007881.000000000006.h000000000085000000002008",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "16",
+    "CALL_SOLR_GET_IDS_LIST" : "23",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "58",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "13",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "52",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "8",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "109",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 120,
+    "COMBINED_SEARCH_TIME" : 127,
+    "PROCESS_COMBINED_RESULTS" : 706,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2008",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "모던 리코딩 리코딩테크닉",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김철웅",
+      "count" : "1"
+    }, {
+      "value" : "런스타인 로버트",
+      "count" : "1"
+    }, {
+      "value" : "허버 데이빗 마일즈",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 196029142
+}

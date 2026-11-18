@@ -1,0 +1,295 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000747659703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "창의적 인재정책의 방향과 과제 : 2008 한국교육평론 " ],
+        "format" : [ "vi, 223 p. : 삽도 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788961133609" ],
+        "creationdate" : [ "2008" ],
+        "publisher" : [ "서울 : 한국교육개발원" ],
+        "mms" : [ "991000747659703286" ],
+        "contributor" : [ "김미숙$$Q김미숙", "김성천$$Q김성천", "김영철$$Q김영철", "김이경$$Q김이경", "류장수$$Q류장수", "이영호$$Q이영호", "이정선$$Q이정선", "조진일$$Q조진일", "하연섭$$Q하연섭", "홍영란$$Q홍영란", "홍후조$$Q홍후조", "유장수$$Q유장수", "한국교육개발원$$Q한국교육개발원" ],
+        "addtitle" : [ "2008 한국교육평론", "한국교육평론. 2008" ],
+        "series" : [ "OR(한국교육개발원) ; 2008-7$$QOR(한국교육개발원) ", "OR; 2008-7$$QOR" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "교육정책 교육행정" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000747659703286" ],
+        "recordid" : [ "alma991000747659703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12991776-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270189E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n81107855", "nr93009371", "nr97013084", "n2005051694", "nr97007732", "n78055858", "n82216299" ],
+        "aulast" : [ "김미숙", "김성천", "김영철", "김이경", "류장수", "이영호", "이정선", "조진일", "하연섭", "홍영란", "홍후조", "유장수" ],
+        "addau" : [ "김미숙", "김성천", "김영철", "김이경", "류장수", "이영호", "이정선", "조진일", "하연섭", "홍영란", "홍후조", "유장수", "한국교육개발원" ],
+        "contributorfull" : [ "$$N김미숙$$L김미숙$$F$$Rcontributor", "$$N김성천$$Rcontributor", "$$N김영철$$Rcontributor", "$$N김이경$$Rcontributor", "$$N류장수$$Rcontributor", "$$N이영호$$Rcontributor", "$$N이정선$$Rcontributor", "$$N조진일$$Rcontributor", "$$N하연섭$$Rcontributor", "$$N홍영란$$Rcontributor", "$$N홍후조$$Rcontributor", "$$N유장수$$Rcontributor" ],
+        "date" : [ "2008" ],
+        "isbn" : [ "9788961133609" ],
+        "notes" : [ "각 장마다 참고문헌 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국교육개발원" ],
+        "oclcid" : [ "(ptech)b12991776-82postech_inst" ],
+        "seriestitle" : [ "OR; 2008-7" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "창의적 인재정책의 방향과 과제 : 2008 한국교육평론" ]
+      },
+      "sort" : {
+        "title" : [ "창의적 인재정책의 방향과 과제 : 2008 한국교육평론 / 한국교육개발원 편" ],
+        "author" : [ "김미숙" ],
+        "creationdate" : [ "2008" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB1062 .창67 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000747659703286",
+        "holdId" : "2289479800003286",
+        "holKey" : "HoldingResultKey [mid=2289479800003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB1062 .창67 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB1062+.%EC%B0%BD67+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB1062 .창67 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000747659703286",
+        "holdId" : "2289479800003286",
+        "holKey" : "HoldingResultKey [mid=2289479800003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB1062 .창67 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB1062+.%EC%B0%BD67+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000747659703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788961133609,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788961133609&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "LB1062 .창67 2008",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "lb000000001062.창000000000067000000002008",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "23",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "85",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "79",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "130",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 141,
+    "COMBINED_SEARCH_TIME" : 149,
+    "PROCESS_COMBINED_RESULTS" : 928,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2008",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "교육정책 교육행정",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김미숙",
+      "count" : "1"
+    }, {
+      "value" : "김성천",
+      "count" : "1"
+    }, {
+      "value" : "김영철",
+      "count" : "1"
+    }, {
+      "value" : "김이경",
+      "count" : "1"
+    }, {
+      "value" : "류장수",
+      "count" : "1"
+    }, {
+      "value" : "유장수",
+      "count" : "1"
+    }, {
+      "value" : "이영호",
+      "count" : "1"
+    }, {
+      "value" : "이정선",
+      "count" : "1"
+    }, {
+      "value" : "조진일",
+      "count" : "1"
+    }, {
+      "value" : "하연섭",
+      "count" : "1"
+    }, {
+      "value" : "한국교육개발원",
+      "count" : "1"
+    }, {
+      "value" : "홍영란",
+      "count" : "1"
+    }, {
+      "value" : "홍후조",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -766295347
+}

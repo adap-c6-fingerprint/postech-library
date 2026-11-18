@@ -1,0 +1,282 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003810756603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "AI & UX : 인공지능에 사용자 경험이 필요한 이유 " ],
+        "format" : [ "217 p. : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791161756097" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 에이콘에이콘출판주식회사" ],
+        "mms" : [ "991003810756603286" ],
+        "contributor" : [ "Lew, Gavin$$QLew, Gavin", "Schumacher, Robert M.$$QSchumacher, Robert M.", "송유미$$Q송유미", "루, 개빈$$Q루, 개빈", "슈마허, 로버트 M.$$Q슈마허, 로버트 M.", "Schumacher, Robert$$QSchumacher, Robert", "슈마허, 로버트$$Q슈마허, 로버트" ],
+        "addtitle" : [ "AI and UX : why artificial intelligence needs user experience" ],
+        "series" : [ "에이콘 UX 프로페셔널 시리즈$$Q에이콘 UX 프로페셔널 시리즈" ],
+        "unititle" : [ "AI and UX. 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "인공 지능", "사용자 경험" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003810756603286" ],
+        "recordid" : [ "alma991003810756603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016066263" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270189E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2009043366", "no2009187013" ],
+        "aulast" : [ "Lew", "송유미", "루", "Schumacher", "슈마허" ],
+        "aufirst" : [ "Gavin", "Robert M.", "개빈", "로버트 M.", "Robert", "로버트" ],
+        "auinit" : [ "G", "개", "R", "로" ],
+        "addau" : [ "Lew, Gavin", "Schumacher, Robert M.", "송유미", "루, 개빈", "슈마허, 로버트 M.", "Schumacher, Robert", "슈마허, 로버트" ],
+        "contributorfull" : [ "$$NLew, Gavin$$LLew$$FGavin$$Rcontributor", "$$NSchumacher, Robert M.$$Rcontributor", "$$N송유미$$Rcontributor", "$$N루, 개빈$$Rcontributor", "$$N슈마허, 로버트 M.$$Rcontributor", "$$NSchumacher, Robert$$Rcontributor", "$$N슈마허, 로버트$$Rcontributor" ],
+        "addtitle" : [ "AI and UX : why artificial intelligence needs user experience" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791161756097" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "에이콘에이콘출판주식회사" ],
+        "seriestitle" : [ "에이콘 UX 프로페셔널 시리즈" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "AI & UX : 인공지능에 사용자 경험이 필요한 이유" ]
+      },
+      "sort" : {
+        "title" : [ "AI & UX : 인공지능에 사용자 경험이 필요한 이유 / 개빈 루, 로버트 슈마허 주니어 지음 ; 송유미 옮김" ],
+        "author" : [ "Lew, Gavin" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .L49 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003810756603286",
+        "holdId" : "22293791510003286",
+        "holKey" : "HoldingResultKey [mid=22293791510003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .L49 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.L49+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .L49 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003810756603286",
+        "holdId" : "22293791510003286",
+        "holKey" : "HoldingResultKey [mid=22293791510003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .L49 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.L49+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003810756603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791161756097,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791161756097&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .L49 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.437",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "30",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "38",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "31",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "7",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "87",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 110,
+    "COMBINED_SEARCH_TIME" : 119,
+    "PROCESS_COMBINED_RESULTS" : 735,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "사용자 경험",
+      "count" : "1"
+    }, {
+      "value" : "인공 지능",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Lew Gavin",
+      "count" : "1"
+    }, {
+      "value" : "Schumacher Robert",
+      "count" : "1"
+    }, {
+      "value" : "Schumacher Robert M",
+      "count" : "1"
+    }, {
+      "value" : "루 개빈",
+      "count" : "1"
+    }, {
+      "value" : "송유미",
+      "count" : "1"
+    }, {
+      "value" : "슈마허 로버트",
+      "count" : "1"
+    }, {
+      "value" : "슈마허 로버트 M",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1522186702
+}

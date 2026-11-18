@@ -1,0 +1,272 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003240978303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "디자인 웍스 " ],
+        "format" : [ "166, 173-352 p. : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788997453825" ],
+        "creationdate" : [ "2017" ],
+        "creator" : [ "Fraser, Heather M. A.$$QFraser, Heather M. A." ],
+        "publisher" : [ "파주 : 이콘" ],
+        "mms" : [ "991003240978303286" ],
+        "contributor" : [ "주재우, 역$$Q주재우", "윤영란, 역$$Q윤영란" ],
+        "addtitle" : [ "새로움을 원한다면 분석이 아니라 디자인하라!", "도구가 바뀌면 생각도 바뀌고, 안 보이던 것이 보이기 시작한다", "Design works : how to tackle your toughest innovation challenges through business design" ],
+        "contents" : [ "Part Ⅰ. 비즈니스 디자인 -- Part Ⅱ. 비즈니스 디자인을 위한 도구와 팁" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Organizational change", "Business planning" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003240978303286" ],
+        "recordid" : [ "alma991003240978303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "991003240978303286" ],
+        "sourcesystem" : [ "KERIS (KORMARC)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270189E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr2004030271", "n2008042013" ],
+        "aulast" : [ "Fraser" ],
+        "aufirst" : [ "Heather M. A." ],
+        "auinit" : [ "H" ],
+        "au" : [ "Fraser, Heather M. A." ],
+        "addau" : [ "주재우", "윤영란" ],
+        "creatorfull" : [ "$$NFraser, Heather M. A.$$LFraser$$FHeather M. A.$$Rauthor" ],
+        "contributorfull" : [ "$$N주재우$$L주재우$$F$$Rcontributor", "$$N윤영란$$Rcontributor" ],
+        "addtitle" : [ "새로움을 원한다면 분석이 아니라 디자인하라!", "도구가 바뀌면 생각도 바뀌고, 안 보이던 것이 보이기 시작한다", "Design works : how to tackle your toughest innovation challenges through business design" ],
+        "date" : [ "2017" ],
+        "isbn" : [ "9788997453825" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "이콘" ],
+        "oclcid" : [ "k848" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "디자인 웍스" ]
+      },
+      "sort" : {
+        "title" : [ "디자인 웍스 / 헤더 프레이저 지음 ; 주재우, 윤영란 옮김" ],
+        "author" : [ "Fraser, Heather M. A." ],
+        "creationdate" : [ "2017" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD58.8 .F72 2017",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003240978303286",
+        "holdId" : "22109542350003286",
+        "holKey" : "HoldingResultKey [mid=22109542350003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD58.8 .F72 2017]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD58.8+.F72+2017&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD58.8 .F72 2017",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003240978303286",
+        "holdId" : "22109542350003286",
+        "holKey" : "HoldingResultKey [mid=22109542350003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD58.8 .F72 2017]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD58.8+.F72+2017&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003240978303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788997453825,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788997453825&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HD58.8 .F72 2017",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "658.406",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "23",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "40",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "34",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "8",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "81",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 88,
+    "COMBINED_SEARCH_TIME" : 95,
+    "PROCESS_COMBINED_RESULTS" : 555,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2017",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Business Planning",
+      "count" : "1"
+    }, {
+      "value" : "Organizational Change",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Fraser Heather M A",
+      "count" : "1"
+    }, {
+      "value" : "윤영란",
+      "count" : "1"
+    }, {
+      "value" : "주재우",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1383594336
+}

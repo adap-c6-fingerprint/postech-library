@@ -1,0 +1,270 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000802659703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "스티브 잡스 " ],
+        "format" : [ "925 p. : 삽도 ; 24 cm.", "Steve Jobs" ],
+        "identifier" : [ "$$CISBN$$V9788937483943" ],
+        "creationdate" : [ "2011" ],
+        "creator" : [ "Isaacson, Walter, 1952-$$QIsaacson, Walter" ],
+        "publisher" : [ "서울 : 민음사" ],
+        "mms" : [ "991000802659703286" ],
+        "contributor" : [ "Isaacson, Walter$$QIsaacson, Walter", "안진환, 1963-$$Q안진환", "잡스, 스티브$$Q잡스, 스티브" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Jobs, Steve, 1955-2011", "미국기업가 최고경영자 잡스전기 애플사" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000802659703286" ],
+        "recordid" : [ "alma991000802659703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13430671-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270189E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n83038709" ],
+        "aulast" : [ "Isaacson" ],
+        "aufirst" : [ "Walter" ],
+        "auinit" : [ "W" ],
+        "au" : [ "Isaacson, Walter" ],
+        "addau" : [ "Isaacson, Walter", "안진환", "잡스, 스티브" ],
+        "creatorfull" : [ "$$NIsaacson, Walter$$LIsaacson$$FWalter$$Rauthor" ],
+        "contributorfull" : [ "$$NIsaacson, Walter$$LIsaacson$$FWalter$$Rcontributor", "$$N안진환$$Rcontributor", "$$N잡스, 스티브$$Rcontributor" ],
+        "date" : [ "2011" ],
+        "isbn" : [ "9788937483943" ],
+        "notes" : [ "참고문헌(p. 891-892) 포함" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "민음사" ],
+        "oclcid" : [ "(ptech)b13430671-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "스티브 잡스" ]
+      },
+      "sort" : {
+        "title" : [ "스티브 잡스 / 월터 아이작슨 지음 ; 안진환 옮김." ],
+        "author" : [ "Isaacson, Walter, 1952-" ],
+        "creationdate" : [ "2011" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.2.J63 .I833 2011",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000802659703286",
+        "holdId" : "2296919920003286",
+        "holKey" : "HoldingResultKey [mid=2296919920003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.2.J63 .I833 2011]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.2.J63+.I833+2011&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.2.J63 .I833 2011",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000802659703286",
+        "holdId" : "2296919920003286",
+        "holKey" : "HoldingResultKey [mid=2296919920003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.2.J63 .I833 2011]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.2.J63+.I833+2011&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000802659703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788937483943,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788937483943&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.2.J63 .I833 2011",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "658.0092",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "22",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "33",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "28",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "7",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "73",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 83,
+    "COMBINED_SEARCH_TIME" : 89,
+    "PROCESS_COMBINED_RESULTS" : 425,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2011",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Jobs Steve 1955 2011",
+      "count" : "1"
+    }, {
+      "value" : "미국기업가 최고경영자 잡스전기 애플사",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Isaacson Walter",
+      "count" : "1"
+    }, {
+      "value" : "안진환",
+      "count" : "1"
+    }, {
+      "value" : "잡스 스티브",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -727619699
+}

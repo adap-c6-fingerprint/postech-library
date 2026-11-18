@@ -1,0 +1,3398 @@
+{
+  "info" : {
+    "totalResultsLocal" : 863,
+    "totalResultsPC" : -1,
+    "total" : 863,
+    "first" : 1,
+    "last" : 20
+  },
+  "highlights" : {
+    "general" : [ "UX" ],
+    "series" : [ "UX" ],
+    "subject" : [ "UX" ],
+    "toc" : [ "UX" ],
+    "description" : [ "UX" ],
+    "title" : [ "UX" ],
+    "addtitle" : [ "UX" ],
+    "termsUnion" : [ "UX" ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003239279703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "UX 평가 및 분석의 이해 " ],
+        "format" : [ "175 p. : 삽화, 표 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788963643090" ],
+        "creationdate" : [ "2017" ],
+        "creator" : [ "박재현$$Q박재현" ],
+        "publisher" : [ "파주 : 청문각" ],
+        "mms" : [ "991003239279703286" ],
+        "addtitle" : [ "유엑스 평가 및 분석의 이해" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "UX" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003239279703286" ],
+        "recordid" : [ "alma991003239279703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "991003239279703286" ],
+        "sourcesystem" : [ "KERIS (KORMARC)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0030402732" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "박재현" ],
+        "au" : [ "박재현" ],
+        "creatorfull" : [ "$$N박재현$$L박재현$$F$$Rauthor" ],
+        "date" : [ "2017" ],
+        "isbn" : [ "9788963643090" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "청문각" ],
+        "oclcid" : [ "k585" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "UX 평가 및 분석의 이해" ]
+      },
+      "sort" : {
+        "title" : [ "UX 평가 및 분석의 이해 / 박재현 지음" ],
+        "author" : [ "박재현" ],
+        "creationdate" : [ "2017" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .박73 2017",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003239279703286",
+        "holdId" : "22109142720003286",
+        "holKey" : "HoldingResultKey [mid=22109142720003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .박73 2017]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%EB%B0%9573+2017&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .박73 2017",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003239279703286",
+        "holdId" : "22109142720003286",
+        "holKey" : "HoldingResultKey [mid=22109142720003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .박73 2017]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%EB%B0%9573+2017&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003239279703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788963643090,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788963643090&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .박73 2017",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.437",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003946842603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "실전 UI/UX " ],
+        "format" : [ "334 p. : 삽화(주로천연색), 도표 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791158395537" ],
+        "creationdate" : [ "2024" ],
+        "publisher" : [ "파주 : 위키북스" ],
+        "mms" : [ "991003946842603286" ],
+        "contributor" : [ "서점직원$$Q서점직원" ],
+        "addtitle" : [ "관제 실전 예제로 알아보는 서점직원의", "표제관련정보 토스의 계좌 개설은 왜 쉽고 간편할까?" ],
+        "series" : [ "위키북스 UX 시리즈 ; 25$$Q위키북스 UX 시리즈 " ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "UX UI 컴퓨터프로그래밍" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003946842603286" ],
+        "recordid" : [ "alma991003946842603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000017114949" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0025899867" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "addau" : [ "서점직원" ],
+        "contributorfull" : [ "$$N서점직원$$Rcontributor" ],
+        "addtitle" : [ "실전 예제로 알아보는 서점직원의", "토스의 계좌 개설은 왜 쉽고 간편할까?" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9791158395537" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "위키북스" ],
+        "seriestitle" : [ "위키북스 UX 시리즈 ; 25" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "실전 UI/UX" ],
+        "url" : [ "http://www.riss.kr/Keris_abstoc.do?no=17114949" ]
+      },
+      "sort" : {
+        "title" : [ "실전 UI/UX / 서점직원 지음" ],
+        "author" : [ "서점직원" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .서74 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003946842603286",
+        "holdId" : "22325186160003286",
+        "holKey" : "HoldingResultKey [mid=22325186160003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .서74 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%EC%84%9C74+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .서74 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003946842603286",
+        "holdId" : "22325186160003286",
+        "holKey" : "HoldingResultKey [mid=22325186160003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .서74 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%EC%84%9C74+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003946842603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791158395537,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791158395537&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "linktorsrc",
+        "linkURL" : "http://www.riss.kr/Keris_abstoc.do?no=17114949",
+        "displayLabel" : "Table of Contents"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .서74 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa000000000076.000000000009.u000000000083.서000000000074000000002024",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003788255403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "Data-driven UX : 데이터가 두려운 실무자를 위한 입문서 " ],
+        "format" : [ "295 p. : 천연색삽화 ; 22 cm." ],
+        "identifier" : [ "$$CISBN$$V9791196342807" ],
+        "creationdate" : [ "2023" ],
+        "creator" : [ "포그리트$$Q포그리트" ],
+        "publisher" : [ "성남 : 포그리트" ],
+        "mms" : [ "991003788255403286" ],
+        "contributor" : [ "Four grit$$QFour grit", "4grit$$Q4grit" ],
+        "addtitle" : [ "(A) hands-on guide to data-driven UX design for newbies" ],
+        "edition" : [ "제4판." ],
+        "place" : [ "성남 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "UX UX디자인 사용자경험 데이터분석" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003788255403286" ],
+        "recordid" : [ "alma991003788255403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016874593" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0020180354" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aucorp" : [ "포그리트" ],
+        "addau" : [ "Four grit", "4grit" ],
+        "addtitle" : [ "(A) hands-on guide to data-driven UX design for newbies" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9791196342807" ],
+        "cop" : [ "성남" ],
+        "pub" : [ "포그리트" ],
+        "edition" : [ "제4판." ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Data-driven UX : 데이터가 두려운 실무자를 위한 입문서" ]
+      },
+      "sort" : {
+        "title" : [ "Data-driven UX : 데이터가 두려운 실무자를 위한 입문서 / 포그리트 [지음]." ],
+        "author" : [ "포그리트" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .포17 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003788255403286",
+        "holdId" : "22288320220003286",
+        "holKey" : "HoldingResultKey [mid=22288320220003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .포17 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%ED%8F%AC17+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .포17 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003788255403286",
+        "holdId" : "22288320220003286",
+        "holKey" : "HoldingResultKey [mid=22288320220003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .포17 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%ED%8F%AC17+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003788255403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791196342807,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791196342807&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .포17 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.74",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003741743303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "일단 해보라구요? UX " ],
+        "format" : [ "223 p. : 삽화 ; 19 cm" ],
+        "identifier" : [ "$$CISBN$$V9788970594057" ],
+        "creationdate" : [ "2020" ],
+        "creator" : [ "이경민$$Q이경민" ],
+        "publisher" : [ "파주 : 안그라픽스" ],
+        "mms" : [ "991003741743303286" ],
+        "addtitle" : [ "일단 해보라구요? 유엑스", "User experience" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "UX 디자인" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003741743303286" ],
+        "recordid" : [ "alma991003741743303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015657292" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0018072008" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n2005092804" ],
+        "aulast" : [ "이경민" ],
+        "au" : [ "이경민" ],
+        "creatorfull" : [ "$$N이경민$$L이경민$$F$$Rauthor" ],
+        "addtitle" : [ "일단 해보라구요? 유엑스", "User experience" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9788970594057" ],
+        "notes" : [ "권말 참고문헌 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "안그라픽스" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "일단 해보라구요? UX" ]
+      },
+      "sort" : {
+        "title" : [ "일단 해보라구요? UX / 이경민 지음" ],
+        "author" : [ "이경민" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .이14 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003741743303286",
+        "holdId" : "22277889310003286",
+        "holKey" : "HoldingResultKey [mid=22277889310003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .이14 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%EC%9D%B414+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .이14 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003741743303286",
+        "holdId" : "22277889310003286",
+        "holKey" : "HoldingResultKey [mid=22277889310003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .이14 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%EC%9D%B414+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003741743303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788970594057,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788970594057&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .이14 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.437",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003350079503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(도널드 노먼의) UX 디자인 특강 : 복잡한 세상의 디자인 " ],
+        "format" : [ "403 p. : 삽화 ; 21 cm" ],
+        "identifier" : [ "$$CISBN$$V9791188314027" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "Norman, Donald A.$$QNorman, Donald A." ],
+        "publisher" : [ "부산 : UX review : 유엑스리뷰" ],
+        "mms" : [ "991003350079503286" ],
+        "contributor" : [ "범어디자인연구소, 역$$Q범어디자인연구소", "노먼, 도널드$$Q노먼, 도널드" ],
+        "addtitle" : [ "Living with complexity", "복잡한 세상의 디자인", "도널드 노먼의 유엑스 디자인 특강" ],
+        "place" : [ "부산 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Technology -- Social aspects", "Complexity (Philosophy)", "UX디자인 디자인철학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003350079503286" ],
+        "recordid" : [ "alma991003350079503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014803570" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0017782004" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n50006033" ],
+        "aulast" : [ "Norman" ],
+        "aufirst" : [ "Donald A." ],
+        "auinit" : [ "D" ],
+        "au" : [ "Norman, Donald A." ],
+        "addau" : [ "범어디자인연구소, 역", "노먼, 도널드" ],
+        "creatorfull" : [ "$$NNorman, Donald A.$$LNorman$$FDonald A.$$Rauthor" ],
+        "contributorfull" : [ "$$N노먼, 도널드$$L노먼$$F도널드$$Rcontributor" ],
+        "addtitle" : [ "Living with complexity" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9791188314027" ],
+        "cop" : [ "부산" ],
+        "pub" : [ "UX review" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(도널드 노먼의) UX 디자인 특강 : 복잡한 세상의 디자인" ]
+      },
+      "sort" : {
+        "title" : [ "(도널드 노먼의) UX 디자인 특강 : 복잡한 세상의 디자인 / 도널드 노먼 지음 ; 범어디자인연구소 옮김" ],
+        "author" : [ "Norman, Donald A." ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "T14 .N673 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003350079503286",
+        "holdId" : "22157192910003286",
+        "holKey" : "HoldingResultKey [mid=22157192910003286, libraryId=117046190003286, locationCode=c3b, callNumber=T14 .N673 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)T14+.N673+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "T14 .N673 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003350079503286",
+        "holdId" : "22157192910003286",
+        "holKey" : "HoldingResultKey [mid=22157192910003286, libraryId=117046190003286, locationCode=c3b, callNumber=T14 .N673 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)T14+.N673+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003350079503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791188314027,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791188314027&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "T14 .N673 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "745.2",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003546278203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "알기 쉬운 UX 디자인 평가 : " ],
+        "format" : [ "400 p : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788993827606" ],
+        "creationdate" : [ "2013" ],
+        "creator" : [ "Albert, Bill$$QAlbert, Bill" ],
+        "publisher" : [ "고양 : 지앤선" ],
+        "mms" : [ "991003546278203286" ],
+        "contributor" : [ "알버트, 빌$$Q알버트, 빌", "툴리스, 톰$$Q툴리스, 톰", "테데스코, 도나$$Q테데스코, 도나", "유호석$$Q유호석", "이지훈$$Q이지훈", "김도균$$Q김도균", "Tullis, Tom$$QTullis, Tom", "Tedesco, Donna$$QTedesco, Donna" ],
+        "addtitle" : [ "대규모 온라인 사용성 조사 가이드", "Beyond the usability lab", "알기 쉬운 유엑스 디자인 평가" ],
+        "place" : [ "고양 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "웹디자인 UX UX디자인" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003546278203286" ],
+        "recordid" : [ "alma991003546278203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000013161761" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0015595016" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n2009182603" ],
+        "originatingSystemIDContributor" : [ "n92014051", "nr2007007512", "n81078546", "n92109876" ],
+        "aulast" : [ "Albert" ],
+        "aufirst" : [ "Bill" ],
+        "auinit" : [ "B" ],
+        "au" : [ "Albert, Bill" ],
+        "addau" : [ "알버트, 빌", "툴리스, 톰", "테데스코, 도나", "유호석", "이지훈", "김도균", "Tullis, Tom", "Tedesco, Donna" ],
+        "creatorfull" : [ "$$NAlbert, Bill$$LAlbert$$FBill$$Rauthor" ],
+        "contributorfull" : [ "$$N알버트, 빌$$L알버트$$F빌$$Rcontributor", "$$N툴리스, 톰$$Rcontributor", "$$N테데스코, 도나$$Rcontributor", "$$N유호석$$Rcontributor", "$$N이지훈$$Rcontributor", "$$N김도균$$Rcontributor", "$$NTullis, Tom$$Rcontributor", "$$NTedesco, Donna$$Rcontributor" ],
+        "addtitle" : [ "대규모 온라인 사용성 조사 가이드", "Beyond the usability lab" ],
+        "date" : [ "2013" ],
+        "isbn" : [ "9788993827606" ],
+        "cop" : [ "고양" ],
+        "pub" : [ "지앤선" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "알기 쉬운 UX 디자인 평가 :" ]
+      },
+      "sort" : {
+        "title" : [ "알기 쉬운 UX 디자인 평가 : / 빌 알버트, 톰 툴리스, 도나 테데스코 [공]지음 ; 유호석, 이지훈, 김도균 [공]옮김" ],
+        "author" : [ "Albert, Bill" ],
+        "creationdate" : [ "2013" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.H85 .A4 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003546278203286",
+        "holdId" : "22224352430003286",
+        "holKey" : "HoldingResultKey [mid=22224352430003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.H85 .A4 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.H85+.A4+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.H85 .A4 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003546278203286",
+        "holdId" : "22224352430003286",
+        "holKey" : "HoldingResultKey [mid=22224352430003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.H85 .A4 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.H85+.A4+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003546278203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788993827606,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788993827606&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.H85 .A4 2013",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "004.019",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003778552303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "일상의 UX 디자인 : 인지 기반 UX 디자인의 이론과 사례 " ],
+        "format" : [ "228 p. : 삽화 ; 24 cm." ],
+        "identifier" : [ "$$CISBN$$V9791158393809" ],
+        "creationdate" : [ "2023" ],
+        "creator" : [ "유승헌$$Q유승헌" ],
+        "publisher" : [ "파주 : 위키북스" ],
+        "mms" : [ "991003778552303286" ],
+        "addtitle" : [ "Daily UX design: theories & cases of congnitive UX" ],
+        "series" : [ "UX 시리즈 ; 22$$QUX 시리즈 " ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "사용자 경험", "인터페이스 디자인[interface design]" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003778552303286" ],
+        "recordid" : [ "alma991003778552303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016590767" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0013800649" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "유승헌" ],
+        "au" : [ "유승헌" ],
+        "creatorfull" : [ "$$N유승헌$$L유승헌$$F$$Rauthor" ],
+        "addtitle" : [ "Daily UX design: theories & cases of congnitive UX" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9791158393809" ],
+        "notes" : [ "참고문헌(p.219-223)과 색인(p. 224-228) 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "위키북스" ],
+        "seriestitle" : [ "UX 시리즈 ; 22" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "일상의 UX 디자인 : 인지 기반 UX 디자인의 이론과 사례" ]
+      },
+      "sort" : {
+        "title" : [ "일상의 UX 디자인 : 인지 기반 UX 디자인의 이론과 사례 / 유승헌 지음." ],
+        "author" : [ "유승헌" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "T14 .유57 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003778552303286",
+        "holdId" : "22286239800003286",
+        "holKey" : "HoldingResultKey [mid=22286239800003286, libraryId=117046190003286, locationCode=c3b, callNumber=T14 .유57 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)T14+.%EC%9C%A057+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "T14 .유57 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003778552303286",
+        "holdId" : "22286239800003286",
+        "holKey" : "HoldingResultKey [mid=22286239800003286, libraryId=117046190003286, locationCode=c3b, callNumber=T14 .유57 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)T14+.%EC%9C%A057+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003778552303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791158393809,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791158393809&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "T14 .유57 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.437",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003484477303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "오래가는 UX 디자인 : 모바일 시대의 제품 디자인 기본 원칙 " ],
+        "format" : [ "468 p : 삽화, 사진 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9788979149982" ],
+        "creationdate" : [ "2013" ],
+        "creator" : [ "반준철$$Q반준철" ],
+        "publisher" : [ "서울 : 한빛미디어" ],
+        "mms" : [ "991003484477303286" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "UX 디자인 모바일" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003484477303286" ],
+        "recordid" : [ "alma991003484477303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000171517" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0013452882" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "반준철" ],
+        "au" : [ "반준철" ],
+        "creatorfull" : [ "$$N반준철$$L반준철$$F$$Rauthor" ],
+        "date" : [ "2013" ],
+        "isbn" : [ "9788979149982" ],
+        "notes" : [ "참고문헌 : p. 452-453" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한빛미디어" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "오래가는 UX 디자인 : 모바일 시대의 제품 디자인 기본 원칙" ]
+      },
+      "sort" : {
+        "title" : [ "오래가는 UX 디자인 : 모바일 시대의 제품 디자인 기본 원칙 / 반준철" ],
+        "author" : [ "반준철" ],
+        "creationdate" : [ "2013" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "T14 .반76 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003484477303286",
+        "holdId" : "22200742100003286",
+        "holKey" : "HoldingResultKey [mid=22200742100003286, libraryId=117046190003286, locationCode=c3b, callNumber=T14 .반76 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)T14+.%EB%B0%9876+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "T14 .반76 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003484477303286",
+        "holdId" : "22200742100003286",
+        "holKey" : "HoldingResultKey [mid=22200742100003286, libraryId=117046190003286, locationCode=c3b, callNumber=T14 .반76 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)T14+.%EB%B0%9876+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003484477303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788979149982,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788979149982&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "T14 .반76 2013",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "t000000000014.반000000000076000000002013",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003567076703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "eng;pol" ],
+        "title" : [ "Strategia UX " ],
+        "format" : [ "1 online resource (344 pages)", "text file" ],
+        "identifier" : [ "$$COCLC$$V(OCoLC)1200511258;$$COCLC$$V(OCoLC)on1200511258;$$CISBN$$V9781098125257;$$CISBN$$V1098125258" ],
+        "creationdate" : [ "2017" ],
+        "creator" : [ "Levy, Jaime, author.$$QLevy, Jaime" ],
+        "publisher" : [ "Helion" ],
+        "description" : [ "Strategia wrażeń użytkownika (UX) wymaga umiejętnego połączenia strategii biznesowej oraz projektowania UX. Niestety jak dotąd brakowało łatwego w zastosowaniu modelu łączenia tych dwóch dziedzin w praktyce. Ten niezwykle praktyczny podręcznik zawiera nieskomplikowane narzędzia i techniki strategiczne, które pomogą Twojemu zespołowi i Tobie w tworzeniu innowacyjnych produktów cyfrowych, z których inni faktycznie będą chcieli korzystać.  Bez względu na to, czy jesteś przedsiębiorcą, projektantem UX lub UI, menedżerem produktu, czy też jednym z członków wewnętrznego zespołu przedsiębiorczego, znajdziesz tutaj metody o różnym stopniu zaawansowania, które będziesz mógł z miejsca wykorzystać w codziennej pracy. Autorka przedstawia tu także biznesowe analizy przypadków, kontekst historyczny i przykłady z życia wzięte, a ponadto dokłada zapis rozmów z wybitnymi strategami, którzy wyjaśniają, jak oni widzą zagadnienie strategii UX. Zdefiniuj i zweryfikuj docelową grupę użytkowników z wykorzystaniem prowizorycznych profili klienta oraz technik rozpoznania rynku. Przeprowadź badania i analizę konkurencji w celu lepszego poznania zatłoczonego rynku lub stworzenia na nim jakiejś niepowtarzalnej wartości. Pomóż członkom swojego zespołu skoncentrować się na podstawowej użyteczności produktu oraz modelu biznesowym poprzez prowadzenie uporządkowanych eksperymentów na prototypach. Projektuj lejki UX zwiększające zaangażowanie klientów poprzez łączenie pożądanych działań użytkowników z odpowiednimi wskaźnikami. Jaime Levy jest specjalistką ds. strategii UX, zamieszkałą w Los Angeles. Szefuje agencji konsultingowej JLR Interactive, obsługującej startupy i duże przedsiębiorstwa. Pomaga im przechodzić od pomysłów biznesowych do innowacyjnych i skalowanych rozwiązań internetowych. Jaime prowadzi na całym świecie warsztaty poświęcone zagadnieniom UX, wykłada również na University of Southern California. „Jaime już od 1993 roku zadziwia mnie swoimi zachwycającymi produktami cyfrowymi. Przeczytaj przytaczane przez nią ciekawe historie, zapoznaj się z jej lekcjami, a też będziesz umiał stworzyć coś niesamowitego”.  — Mark Frauenfelder, założyciel firmy Boing Boing, redaktor magazynu „Make”  „Jaime tworzyła przełomowe rozwiązania z zakresu UX na długo przed tym, zanim dziedzinę tę w ogóle nazwano UX. Przeczytaj tę książkę i dowiedz się, jak zejść z drogo swoim klientom i samemu sobie, a także jak tworzyć wartość dla wszystkich, którzy mają kontakt z Twoim produktem lub ..." ],
+        "mms" : [ "991003567076703286" ],
+        "edition" : [ "1st edition" ],
+        "unititle" : [ "UX strategy. Polish" ],
+        "includes" : [ "Levy, Jaime, UX strategy. Polish$$QLevy, Jaime, UX strategy. Polish" ],
+        "version" : [ "0" ],
+        "subject" : [ "User-centered system design", "Human-computer interaction", "User interfaces (Computer systems)", "Web sites -- Design" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003567076703286" ],
+        "recordid" : [ "alma991003567076703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)4100000011317888" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "0.001283612" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2015098684" ],
+        "aulast" : [ "Levy" ],
+        "aufirst" : [ "Jaime" ],
+        "auinit" : [ "J" ],
+        "au" : [ "Levy, Jaime" ],
+        "creatorfull" : [ "$$NLevy, Jaime$$LLevy$$FJaime$$Rauthor" ],
+        "date" : [ "2017" ],
+        "isbn" : [ "9781098125257", "1098125258" ],
+        "abstract" : [ "Strategia wrażeń użytkownika (UX) wymaga umiejętnego połączenia strategii biznesowej oraz projektowania UX. Niestety jak dotąd brakowało łatwego w zastosowaniu modelu łączenia tych dwóch dziedzin w praktyce. Ten niezwykle praktyczny podręcznik zawiera nieskomplikowane narzędzia i techniki strategiczne, które pomogą Twojemu zespołowi i Tobie w tworzeniu innowacyjnych produktów cyfrowych, z których inni faktycznie będą chcieli korzystać.  Bez względu na to, czy jesteś przedsiębiorcą, projektantem UX lub UI, menedżerem produktu, czy też jednym z członków wewnętrznego zespołu przedsiębiorczego, znajdziesz tutaj metody o różnym stopniu zaawansowania, które będziesz mógł z miejsca wykorzystać w codziennej pracy. Autorka przedstawia tu także biznesowe analizy przypadków, kontekst historyczny i przykłady z życia wzięte, a ponadto dokłada zapis rozmów z wybitnymi strategami, którzy wyjaśniają, jak oni widzą zagadnienie strategii UX. Zdefiniuj i zweryfikuj docelową grupę użytkowników z wykorzystaniem prowizorycznych profili klienta oraz technik rozpoznania rynku. Przeprowadź badania i analizę konkurencji w celu lepszego poznania zatłoczonego rynku lub stworzenia na nim jakiejś niepowtarzalnej wartości. Pomóż członkom swojego zespołu skoncentrować się na podstawowej użyteczności produktu oraz modelu biznesowym poprzez prowadzenie uporządkowanych eksperymentów na prototypach. Projektuj lejki UX zwiększające zaangażowanie klientów poprzez łączenie pożądanych działań użytkowników z odpowiednimi wskaźnikami. Jaime Levy jest specjalistką ds. strategii UX, zamieszkałą w Los Angeles. Szefuje agencji konsultingowej JLR Interactive, obsługującej startupy i duże przedsiębiorstwa. Pomaga im przechodzić od pomysłów biznesowych do innowacyjnych i skalowanych rozwiązań internetowych. Jaime prowadzi na całym świecie warsztaty poświęcone zagadnieniom UX, wykłada również na University of Southern California. „Jaime już od 1993 roku zadziwia mnie swoimi zachwycającymi produktami cyfrowymi. Przeczytaj przytaczane przez nią ciekawe historie, zapoznaj się z jej lekcjami, a też będziesz umiał stworzyć coś niesamowitego”.  — Mark Frauenfelder, założyciel firmy Boing Boing, redaktor magazynu „Make”  „Jaime tworzyła przełomowe rozwiązania z zakresu UX na długo przed tym, zanim dziedzinę tę w ogóle nazwano UX. Przeczytaj tę książkę i dowiedz się, jak zejść z drogo swoim klientom i samemu sobie, a także jak tworzyć wartość dla wszystkich, którzy mają kontakt z Twoim produktem lub ..." ],
+        "pub" : [ "Helion" ],
+        "oclcid" : [ "(ocolc)1200511258", "(ocolc)on1200511258" ],
+        "edition" : [ "1st edition" ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Strategia UX" ]
+      },
+      "sort" : {
+        "title" : [ "Strategia UX /" ],
+        "author" : [ "Levy, Jaime, author." ],
+        "creationdate" : [ "2017" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9781098125257,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.9 u83",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003567071803286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "eng;pol" ],
+        "title" : [ "Badanie UX " ],
+        "format" : [ "1 online resource (216 pages)", "text file" ],
+        "identifier" : [ "$$COCLC$$V(OCoLC)1200511500;$$COCLC$$V(OCoLC)on1200511500;$$CISBN$$V9781098125127;$$CISBN$$V1098125126" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "Nunnally, Brad, author.$$QNunnally, Brad" ],
+        "publisher" : [ "Helion" ],
+        "description" : [ "UX pochodzi od słów user experience. Jest to strategia, dzięki której tworzy się udane aplikacje, czyli takie, które lubią użytkownicy. UX wymaga umiejętnego powiązania etapu planowania biznesu z fazą projektowania. Aby zweryfikować decyzje projektowe i potrzeby biznesowe, trzeba przeprowadzić szereg badań. Jest to bardzo ważny element cyklu projektowego, jednak wymaga opanowania określonego zestawu narzędzi i technik. Poza zagadnieniami technicznymi przydaje się wiedza z zakresu psychologii i socjologii. To wszystko sprawia, że badania produktów są uważane za skomplikowane, a zasady ich prowadzenia są osnute aurą tajemniczości.  Dzięki tej niezwykle praktycznej książce przekonasz się, że wprowadzenie strategii UX nie jest magią, a ich poprawne przygotowanie i przeprowadzenie jest kwestią zaznajomienia się z określonym instrumentarium. Nauczysz się stosować narzędzia, dzięki którym skutecznie zrealizujesz program przydatnych badań.  Książkę podzielono na cztery części: krótkie wprowadzenie do tematyki badań UX, planowanie i przygotowania, facylitacja badań oraz prowadzenie analiz i raportowanie. Bardzo szczegółowo opisano, w jaki sposób należy wykonywać badania, wskazano również, czego robić nie wolno. Krótkie ćwiczenia, które znalazły się w każdym rozdziale, z pewnością pomogą w utrwaleniu zdobytej wiedzy.  W tej książce znajdziesz między innymi:  Wprowadzenie do tematyki UX i przegląd zadań przygotowawczych Zasady koordynacji sesji badawczej i doboru potrzebnych technik Techniki improwizacyjne podczas prowadzenia badań Metody współpracy z uczestnikami badań Analizę zebranego materiału badawczego i formułowanie wniosków UX: użytkownik pokocha to „coś”! " ],
+        "mms" : [ "991003567071803286" ],
+        "contributor" : [ "Farkas, David, author.$$QFarkas, David" ],
+        "edition" : [ "1st edition" ],
+        "unititle" : [ "UX research. Polish" ],
+        "includes" : [ "Nunnally, Brad, UX research. Polish$$QNunnally, Brad, UX research. Polish" ],
+        "version" : [ "0" ],
+        "subject" : [ "Research -- Methodology", "Technology -- Research", "Industrial design", "New products" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003567071803286" ],
+        "recordid" : [ "alma991003567071803286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)4100000011317938" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "0.0012783638" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2013042488" ],
+        "originatingSystemIDContributor" : [ "n82247733" ],
+        "aulast" : [ "Nunnally" ],
+        "aufirst" : [ "Brad" ],
+        "auinit" : [ "B" ],
+        "au" : [ "Nunnally, Brad" ],
+        "addau" : [ "Farkas, David" ],
+        "creatorfull" : [ "$$NNunnally, Brad$$LNunnally$$FBrad$$Rauthor" ],
+        "contributorfull" : [ "$$NFarkas, David$$LFarkas$$FDavid$$Rcontributor" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9781098125127", "1098125126" ],
+        "abstract" : [ "UX pochodzi od słów user experience. Jest to strategia, dzięki której tworzy się udane aplikacje, czyli takie, które lubią użytkownicy. UX wymaga umiejętnego powiązania etapu planowania biznesu z fazą projektowania. Aby zweryfikować decyzje projektowe i potrzeby biznesowe, trzeba przeprowadzić szereg badań. Jest to bardzo ważny element cyklu projektowego, jednak wymaga opanowania określonego zestawu narzędzi i technik. Poza zagadnieniami technicznymi przydaje się wiedza z zakresu psychologii i socjologii. To wszystko sprawia, że badania produktów są uważane za skomplikowane, a zasady ich prowadzenia są osnute aurą tajemniczości.  Dzięki tej niezwykle praktycznej książce przekonasz się, że wprowadzenie strategii UX nie jest magią, a ich poprawne przygotowanie i przeprowadzenie jest kwestią zaznajomienia się z określonym instrumentarium. Nauczysz się stosować narzędzia, dzięki którym skutecznie zrealizujesz program przydatnych badań.  Książkę podzielono na cztery części: krótkie wprowadzenie do tematyki badań UX, planowanie i przygotowania, facylitacja badań oraz prowadzenie analiz i raportowanie. Bardzo szczegółowo opisano, w jaki sposób należy wykonywać badania, wskazano również, czego robić nie wolno. Krótkie ćwiczenia, które znalazły się w każdym rozdziale, z pewnością pomogą w utrwaleniu zdobytej wiedzy.  W tej książce znajdziesz między innymi:  Wprowadzenie do tematyki UX i przegląd zadań przygotowawczych Zasady koordynacji sesji badawczej i doboru potrzebnych technik Techniki improwizacyjne podczas prowadzenia badań Metody współpracy z uczestnikami badań Analizę zebranego materiału badawczego i formułowanie wniosków UX: użytkownik pokocha to „coś”!" ],
+        "pub" : [ "Helion" ],
+        "oclcid" : [ "(ocolc)1200511500", "(ocolc)on1200511500" ],
+        "edition" : [ "1st edition" ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Badanie UX" ]
+      },
+      "sort" : {
+        "title" : [ "Badanie UX /" ],
+        "author" : [ "Nunnally, Brad, author." ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9781098125127,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "q\"180.55 m4",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003845203903286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "전략적 UX 라이팅 : 사용자 경험을 위한 마이크로카피 작성법 " ],
+        "format" : [ "207 p. : 삽화 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791192143071" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 유엑스리뷰 : UX ground" ],
+        "mms" : [ "991003845203903286" ],
+        "contributor" : [ "Podmajersky, Torrey$$QPodmajersky, Torrey", "김경애$$Q김경애", "파드마저스키, 토레이$$Q파드마저스키, 토레이" ],
+        "addtitle" : [ "Strategic writing for UX : drive engagement, conversion, and retention with every word" ],
+        "unititle" : [ "Strategic writing for UX. 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "사용자 경험", "웹 기획", "마케팅 전략" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003845203903286" ],
+        "recordid" : [ "alma991003845203903286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016082963" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.0012540271" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n78059182", "nb2020009357" ],
+        "aulast" : [ "Podmajersky", "김경애", "파드마저스키" ],
+        "aufirst" : [ "Torrey", "토레이" ],
+        "auinit" : [ "T", "토" ],
+        "addau" : [ "Podmajersky, Torrey", "김경애", "파드마저스키, 토레이" ],
+        "contributorfull" : [ "$$NPodmajersky, Torrey$$LPodmajersky$$FTorrey$$Rcontributor", "$$N김경애$$Rcontributor", "$$N파드마저스키, 토레이$$Rcontributor" ],
+        "addtitle" : [ "Strategic writing for UX : drive engagement, conversion, and retention with every word" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791192143071" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "유엑스리뷰" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "전략적 UX 라이팅 : 사용자 경험을 위한 마이크로카피 작성법" ]
+      },
+      "sort" : {
+        "title" : [ "전략적 UX 라이팅 : 사용자 경험을 위한 마이크로카피 작성법 / 토레이 파드마저스키 지음 ; 김경애 옮김" ],
+        "author" : [ "Podmajersky, Torrey" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .P63 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003845203903286",
+        "holdId" : "22301536360003286",
+        "holKey" : "HoldingResultKey [mid=22301536360003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .P63 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.P63+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .P63 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003845203903286",
+        "holdId" : "22301536360003286",
+        "holKey" : "HoldingResultKey [mid=22301536360003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .P63 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.P63+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003845203903286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791192143071,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791192143071&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .P63 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.437",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003571579203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "이것이 UX/UI 디자인이다 : 실무 디자인 방법론으로서의 UX/UI 디자인 " ],
+        "format" : [ "290 p : 천연색삽화, 도표 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791158392093" ],
+        "creationdate" : [ "2020" ],
+        "creator" : [ "조성봉$$Q조성봉" ],
+        "publisher" : [ "파주 : 위키북스" ],
+        "mms" : [ "991003571579203286" ],
+        "addtitle" : [ "This is UX/UI Design", "이것이 유엑스/유아이 디자인이다", "실무 디자인 방법론으로서의 유아이/유엑스 디자인" ],
+        "series" : [ "위키북스 UX 시리즈 ; 019$$Q위키북스 UX 시리즈 " ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003571579203286" ],
+        "recordid" : [ "alma991003571579203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015623314" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.00121797" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "조성봉" ],
+        "au" : [ "조성봉" ],
+        "creatorfull" : [ "$$N조성봉$$L조성봉$$F$$Rauthor" ],
+        "addtitle" : [ "This is UX/UI Design" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9791158392093" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "위키북스" ],
+        "seriestitle" : [ "위키북스 UX 시리즈 ; 019" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "이것이 UX/UI 디자인이다 : 실무 디자인 방법론으로서의 UX/UI 디자인" ]
+      },
+      "sort" : {
+        "title" : [ "이것이 UX/UI 디자인이다 : 실무 디자인 방법론으로서의 UX/UI 디자인 / 조성봉 지음" ],
+        "author" : [ "조성봉" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .조54 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003571579203286",
+        "holdId" : "22232712790003286",
+        "holKey" : "HoldingResultKey [mid=22232712790003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .조54 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%EC%A1%B054+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .조54 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003571579203286",
+        "holdId" : "22232712790003286",
+        "holKey" : "HoldingResultKey [mid=22232712790003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .조54 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.%EC%A1%B054+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003571579203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791158392093,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791158392093&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .조54 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "006.7ǂ005.437",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003701057503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "마음을 움직이는 디자인 원리 : 심리학과 행동 경제학을 적용한 행동 변화를 위한 UX 디자인 " ],
+        "format" : [ "368 p. : 천연색삽화 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791158391096" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "Wendel, Stephen$$QWendel, Stephen" ],
+        "publisher" : [ "파주 : 위키북스" ],
+        "mms" : [ "991003701057503286" ],
+        "contributor" : [ "장현순$$Q장현순", "웬델, 스티븐$$Q웬델, 스티븐" ],
+        "addtitle" : [ "Designing for behavior change : applying psychology and behavioral economics" ],
+        "series" : [ "위키북스 UX 시리즈 ; 017$$Q위키북스 UX 시리즈 " ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "사용자 경험", "인터페이스 디자인", "디자인원리 UX 디자인" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003701057503286" ],
+        "recordid" : [ "alma991003701057503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014883104" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "0.0011739112" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2014024296" ],
+        "aulast" : [ "Wendel" ],
+        "aufirst" : [ "Stephen" ],
+        "auinit" : [ "S" ],
+        "au" : [ "Wendel, Stephen" ],
+        "addau" : [ "장현순", "웬델, 스티븐" ],
+        "creatorfull" : [ "$$NWendel, Stephen$$LWendel$$FStephen$$Rauthor" ],
+        "contributorfull" : [ "$$N장현순$$L장현순$$F$$Rcontributor", "$$N웬델, 스티븐$$Rcontributor" ],
+        "addtitle" : [ "Designing for behavior change : applying psychology and behavioral economics" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9791158391096" ],
+        "notes" : [ "참고문헌(p. [352]-366)과 색인(p. 367-368)수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "위키북스" ],
+        "seriestitle" : [ "위키북스 UX 시리즈 ; 017" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "마음을 움직이는 디자인 원리 : 심리학과 행동 경제학을 적용한 행동 변화를 위한 UX 디자인" ]
+      },
+      "sort" : {
+        "title" : [ "마음을 움직이는 디자인 원리 : 심리학과 행동 경제학을 적용한 행동 변화를 위한 UX 디자인 / 스티븐 웬델 지음 ; 장현순 옮김" ],
+        "author" : [ "Wendel, Stephen" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .W46 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003701057503286",
+        "holdId" : "22267931730003286",
+        "holKey" : "HoldingResultKey [mid=22267931730003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .W46 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.W46+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .W46 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003701057503286",
+        "holdId" : "22267931730003286",
+        "holKey" : "HoldingResultKey [mid=22267931730003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .W46 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.W46+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003701057503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791158391096,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791158391096&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .W46 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.437",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003782039903286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "jpn" ],
+        "title" : [ "Intafēsu dezain no oyakusoku : sugureta UX o jitsugensuru tame no 101 no rūru " ],
+        "format" : [ "1 online resource (256 pages) : illustrations." ],
+        "identifier" : [ "$$CISBN$$V9784873118949;$$CISBN$$V4873118948;$$COCLC$$V(OCoLC)1346621071;$$COCLC$$V(OCoLC-P)1346621071" ],
+        "creationdate" : [ "2019" ],
+        "creator" : [ "Grant, Will, author.$$QGrant, Will" ],
+        "publisher" : [ "Tōkyō-to Shinjuku-ku : Orairī Japan" ],
+        "mms" : [ "991003782039903286" ],
+        "contributor" : [ "Musha, Hiroyuki, translator.$$QMusha, Hiroyuki", "Musha, Rumi, translator.$$QMusha, Rumi" ],
+        "edition" : [ "Shohan." ],
+        "unititle" : [ "10 UX principles. Japanese" ],
+        "includes" : [ "Grant, Will, 10 UX principles. Japanese$$QGrant, Will, 10 UX principles. Japanese" ],
+        "place" : [ "Tōkyō-to Shinjuku-ku :" ],
+        "version" : [ "0" ],
+        "subject" : [ "User interfaces (Computer systems)", "Human-computer interaction" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003782039903286" ],
+        "recordid" : [ "alma991003782039903286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)4940000000651469" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "0.001069897" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2023066154" ],
+        "aulast" : [ "Grant" ],
+        "aufirst" : [ "Will" ],
+        "auinit" : [ "W" ],
+        "au" : [ "Grant, Will" ],
+        "addau" : [ "Musha, Hiroyuki", "Musha, Rumi" ],
+        "creatorfull" : [ "$$NGrant, Will$$LGrant$$FWill$$Rauthor" ],
+        "contributorfull" : [ "$$NMusha, Hiroyuki$$LMusha$$FHiroyuki$$Rtranslator", "$$NMusha, Rumi$$Rtranslator" ],
+        "date" : [ "2019" ],
+        "isbn" : [ "9784873118949", "4873118948" ],
+        "cop" : [ "Tōkyō-to Shinjuku-ku" ],
+        "pub" : [ "Orairī Japan" ],
+        "oclcid" : [ "(ocolc)1346621071", "(ocolc-p)1346621071" ],
+        "edition" : [ "Shohan." ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Intafēsu dezain no oyakusoku : sugureta UX o jitsugensuru tame no 101 no rūru" ]
+      },
+      "sort" : {
+        "title" : [ "Intafēsu dezain no oyakusoku : sugureta UX o jitsugensuru tame no 101 no rūru /" ],
+        "author" : [ "Grant, Will, author." ],
+        "creationdate" : [ "2019" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:4873118948,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9784873118949&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.9 u83",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003782037903286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "jpn" ],
+        "title" : [ "Senryakuteki UX raitingu : kotoba de yūzā to soshiki o gōru e michibiku " ],
+        "format" : [ "1 online resource (200 pages)" ],
+        "identifier" : [ "$$CISBN$$V9784873119878;$$CISBN$$V4873119871;$$COCLC$$V(OCoLC)1346671279;$$COCLC$$V(OCoLC-P)1346671279" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "Podmajersky, Torrey, author.$$QPodmajersky, Torrey" ],
+        "publisher" : [ "Tōkyō-to Shinjuku-ku : Orairī Japan" ],
+        "mms" : [ "991003782037903286" ],
+        "contributor" : [ "Nakahashi, Naoya, translator.$$QNakahashi, Naoya", "Matsuba, Yuka, translator.$$QMatsuba, Yuka" ],
+        "edition" : [ "Shohan." ],
+        "unititle" : [ "Strategic writing for UX. Japanese" ],
+        "includes" : [ "Podmajersky, Torrey, Strategic writing for UX. Japanese$$QPodmajersky, Torrey, Strategic writing for UX. Japanese" ],
+        "place" : [ "Tōkyō-to Shinjuku-ku :" ],
+        "version" : [ "0" ],
+        "subject" : [ "User interfaces (Computer systems) -- Design", "Online authorship" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003782037903286" ],
+        "recordid" : [ "alma991003782037903286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)4940000000651489" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "0.001069897" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "nb2020009357" ],
+        "aulast" : [ "Podmajersky" ],
+        "aufirst" : [ "Torrey" ],
+        "auinit" : [ "T" ],
+        "au" : [ "Podmajersky, Torrey" ],
+        "addau" : [ "Nakahashi, Naoya", "Matsuba, Yuka" ],
+        "creatorfull" : [ "$$NPodmajersky, Torrey$$LPodmajersky$$FTorrey$$Rauthor" ],
+        "contributorfull" : [ "$$NNakahashi, Naoya$$LNakahashi$$FNaoya$$Rtranslator", "$$NMatsuba, Yuka$$Rtranslator" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9784873119878", "4873119871" ],
+        "cop" : [ "Tōkyō-to Shinjuku-ku" ],
+        "pub" : [ "Orairī Japan" ],
+        "oclcid" : [ "(ocolc)1346671279", "(ocolc-p)1346671279" ],
+        "edition" : [ "Shohan." ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Senryakuteki UX raitingu : kotoba de yūzā to soshiki o gōru e michibiku" ]
+      },
+      "sort" : {
+        "title" : [ "Senryakuteki UX raitingu : kotoba de yūzā to soshiki o gōru e michibiku /" ],
+        "author" : [ "Podmajersky, Torrey, author." ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:4873119871,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9784873119878&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.9 u83",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003751954103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "pol" ],
+        "title" : [ "Strategia UX : techniki tworzenia innowacyjnych rozwiązań cyfrowych " ],
+        "format" : [ "1 online resource (216 pages) : illustrations" ],
+        "identifier" : [ "$$CISBN$$V9788328382909;$$CISBN$$V8328382903;$$COCLC$$V(OCoLC)1382357700;$$COCLC$$V(OCoLC-P)1382357700" ],
+        "creationdate" : [ "2021" ],
+        "creator" : [ "Levy, Jaime, author.$$QLevy, Jaime" ],
+        "publisher" : [ "Gliwice : Helion" ],
+        "description" : [ "Droga do sukcesu produktu cyfrowego prowadzi przez serce użytkownika. Historia biznesu obfituje w przykłady świetnych pomysłów, które poniosły spektakularną porażkę z powodu zlekceważenia wrażeń użytkownika. Przy opracowywaniu biznesowej strategii rozwoju produktu czy usługi trzeba więc zacząć od zebrania kluczowych informacji o przyszłych użytkownikach, ich potrzebach, preferencjach i przyzwyczajeniach, a także o konkurencyjnych produktach i perspektywach. Okazuje się jednak, że łączenie strategii typowo biznesowych z zasadami projektowania UX jest niełatwym zadaniem. To drugie, zaktualizowane i uzupełnione wydanie praktycznego podręcznika dla przedsiębiorców, projektantów UX i UI, a także menedżerów i strategów produktu. Znalazły się w nim skuteczne narzędzia i techniki strategiczne, które udowodniły swoją przydatność w tworzeniu innowacyjnych produktów cyfrowych. Narzędzia te zostały udostępnione również w formie gotowego przybornika strategii UX. Pokazano tu, w jaki sposób zaplanować i przeprowadzić badania użytkowników, aby wyniki pozwoliły na opracowanie skutecznych strategii produktowych. Całość zawartych w książce materiałów składa się na solidny, przetestowany i skuteczny model praktyk ułatwiających wdrażanie innowacyjnych, udanych produktów cyfrowych." ],
+        "mms" : [ "991003751954103286" ],
+        "contributor" : [ "Gutowski, Maksymilian, translator.$$QGutowski, Maksymilian" ],
+        "edition" : [ "Wydanie II." ],
+        "unititle" : [ "Strategia UX. Polish" ],
+        "includes" : [ "Levy, Jaime, Strategia UX. Polish$$QLevy, Jaime, Strategia UX. Polish" ],
+        "place" : [ "Gliwice :" ],
+        "version" : [ "0" ],
+        "subject" : [ "User-centered system design", "Human-computer interaction", "User interfaces (Computer systems)", "Web sites -- Design" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003751954103286" ],
+        "recordid" : [ "alma991003751954103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)4940000000629299" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "9.907422E-4" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2015098684" ],
+        "aulast" : [ "Levy" ],
+        "aufirst" : [ "Jaime" ],
+        "auinit" : [ "J" ],
+        "au" : [ "Levy, Jaime" ],
+        "addau" : [ "Gutowski, Maksymilian" ],
+        "creatorfull" : [ "$$NLevy, Jaime$$LLevy$$FJaime$$Rauthor" ],
+        "contributorfull" : [ "$$NGutowski, Maksymilian$$LGutowski$$FMaksymilian$$Rtranslator" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9788328382909", "8328382903" ],
+        "abstract" : [ "Droga do sukcesu produktu cyfrowego prowadzi przez serce użytkownika. Historia biznesu obfituje w przykłady świetnych pomysłów, które poniosły spektakularną porażkę z powodu zlekceważenia wrażeń użytkownika. Przy opracowywaniu biznesowej strategii rozwoju produktu czy usługi trzeba więc zacząć od zebrania kluczowych informacji o przyszłych użytkownikach, ich potrzebach, preferencjach i przyzwyczajeniach, a także o konkurencyjnych produktach i perspektywach. Okazuje się jednak, że łączenie strategii typowo biznesowych z zasadami projektowania UX jest niełatwym zadaniem. To drugie, zaktualizowane i uzupełnione wydanie praktycznego podręcznika dla przedsiębiorców, projektantów UX i UI, a także menedżerów i strategów produktu. Znalazły się w nim skuteczne narzędzia i techniki strategiczne, które udowodniły swoją przydatność w tworzeniu innowacyjnych produktów cyfrowych. Narzędzia te zostały udostępnione również w formie gotowego przybornika strategii UX. Pokazano tu, w jaki sposób zaplanować i przeprowadzić badania użytkowników, aby wyniki pozwoliły na opracowanie skutecznych strategii produktowych. Całość zawartych w książce materiałów składa się na solidny, przetestowany i skuteczny model praktyk ułatwiających wdrażanie innowacyjnych, udanych produktów cyfrowych." ],
+        "cop" : [ "Gliwice" ],
+        "pub" : [ "Helion" ],
+        "oclcid" : [ "(ocolc)1382357700", "(ocolc-p)1382357700" ],
+        "edition" : [ "Wydanie II." ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Strategia UX : techniki tworzenia innowacyjnych rozwiązań cyfrowych" ]
+      },
+      "sort" : {
+        "title" : [ "Strategia UX : techniki tworzenia innowacyjnych rozwiązań cyfrowych /" ],
+        "author" : [ "Levy, Jaime, author." ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8328382903,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788328382909&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.9 u83",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003787246603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(하루 5분) UX : UX/UI 디자인 실무를 위한 100가지 레슨 " ],
+        "format" : [ "386 p. : 삽도 ; 20 cm." ],
+        "identifier" : [ "$$CISBN$$V9791192143378" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 유엑스리뷰" ],
+        "mms" : [ "991003787246603286" ],
+        "contributor" : [ "Marsh, Joel$$QMarsh, Joel", "마시, 조엘, 지음$$Q마시, 조엘", "김은지, 옮김$$Q김은지" ],
+        "addtitle" : [ "UX for beginners :", "하루 오분 유엑스" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "User-centered system design", "User interfaces (Computer systems)", "Human-computer interaction" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003787246603286" ],
+        "recordid" : [ "alma991003787246603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016379241" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "9.70317E-4" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nb2017006438" ],
+        "aulast" : [ "Marsh", "마시", "김은지" ],
+        "aufirst" : [ "Joel", "조엘" ],
+        "auinit" : [ "J", "조" ],
+        "addau" : [ "Marsh, Joel", "마시, 조엘", "김은지" ],
+        "contributorfull" : [ "$$NMarsh, Joel$$LMarsh$$FJoel$$Rcontributor", "$$N마시, 조엘$$Rcontributor", "$$N김은지$$Rcontributor" ],
+        "addtitle" : [ "UX for beginners" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791192143378" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "유엑스리뷰" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(하루 5분) UX : UX/UI 디자인 실무를 위한 100가지 레슨" ]
+      },
+      "sort" : {
+        "title" : [ "(하루 5분) UX : UX/UI 디자인 실무를 위한 100가지 레슨 / 조엘 마시 지음 ; 김은지 옮김." ],
+        "author" : [ "Marsh, Joel" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .M37 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003787246603286",
+        "holdId" : "22288045440003286",
+        "holKey" : "HoldingResultKey [mid=22288045440003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .M37 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.M37+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .M37 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003787246603286",
+        "holdId" : "22288045440003286",
+        "holKey" : "HoldingResultKey [mid=22288045440003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .M37 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.M37+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003787246603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791192143378,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791192143378&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .M37 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "004.78",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003798347903286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "ger" ],
+        "title" : [ "Laws of UX : 10 praktische Grundprinzipien für intuitives, menschenzentriertes UX-Design " ],
+        "format" : [ "1 online resource (164 pages) : illustrations" ],
+        "identifier" : [ "$$CISBN$$V9781098169046;$$COCLC$$V(OCoLC)1439830734;$$COCLC$$V(OCoLC-P)1439830734" ],
+        "creationdate" : [ "2024" ],
+        "creator" : [ "Yablonski, Jon, author.$$QYablonski, Jon" ],
+        "publisher" : [ "Heidelberg : dpunkt" ],
+        "description" : [ "UX-Experte Jon Yablonski erklärt Ihnen in diesem Buch, wie Sie Grundprinzipien aus der Psychologie nutzen können, um eine bessere User Experience zu generieren. Statt Benutzer*innen zu zwingen, sich an das Design eines Produkts anzupassen, hilft dieser praktische Leitfaden in der zweiten, aktualisierten und erweiterten Auflage Ihnen dabei, Ihr Design danach auszurichten, wie sich Ihre Kund*innen verhalten und mit digitalen Schnittstellen interagieren, um deren Nutzung einfacher und angenehmer zu gestalten. Dabei greift der Autor auf bewährte Prinzipien aus der psychologischen Forschung zurück und überträgt sie in die Welt des UX-Designs. Er analysiert bekannte Apps und Websites und liefert damit anschauliche Beispiele für die Entwicklung von menschenzentriertem Design. Außerdem lernen Sie, wie Sie diese Prinzipien praktisch für Ihre eigene Arbeit und im Team nutzen können, um Ihren Nutzer*innen das bestmögliche Erlebnis zu bieten. Aus dem Inhalt: • Wie ästhetisch ansprechendes Design positive Reaktionen hervorruft • Welchen Einfluss Erinnerungen, Gewohnheiten und das Arbeitsgedächtnis auf die UX haben • Prognosemodelle wie Fitts’ Gesetz, Jakobs Gesetz und Hicks Gesetz • Ethische Überlegungen zum Einsatz von Psychologie im Design • Rahmenstruktur für die praktische Anwendung im Arbeitsalltag" ],
+        "mms" : [ "991003798347903286" ],
+        "contributor" : [ "Kommer, Isolde, 1967- translator.$$QKommer, Isolde", "Kommer, Christoph, translator.$$QKommer, Christoph" ],
+        "edition" : [ "2., aktualisierte und erweiterte Auflage." ],
+        "unititle" : [ "Laws of UX. German" ],
+        "includes" : [ "Yablonski, Jon, Laws of UX. German$$QYablonski, Jon, Laws of UX. German" ],
+        "place" : [ "Heidelberg :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Human-computer interaction -- Psychological aspects", "User interfaces (Computer systems) -- Design", "User-centered system design" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003798347903286" ],
+        "recordid" : [ "alma991003798347903286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)32320644200041" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "9.579668E-4" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2021039093" ],
+        "originatingSystemIDContributor" : [ "no2014108665", "no2017083212" ],
+        "aulast" : [ "Yablonski" ],
+        "aufirst" : [ "Jon" ],
+        "auinit" : [ "J" ],
+        "au" : [ "Yablonski, Jon" ],
+        "addau" : [ "Kommer, Isolde", "Kommer, Christoph" ],
+        "creatorfull" : [ "$$NYablonski, Jon$$LYablonski$$FJon$$Rauthor" ],
+        "contributorfull" : [ "$$NKommer, Isolde$$LKommer$$FIsolde$$Rtranslator", "$$NKommer, Christoph$$Rtranslator" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9781098169046" ],
+        "abstract" : [ "UX-Experte Jon Yablonski erklärt Ihnen in diesem Buch, wie Sie Grundprinzipien aus der Psychologie nutzen können, um eine bessere User Experience zu generieren. Statt Benutzer*innen zu zwingen, sich an das Design eines Produkts anzupassen, hilft dieser praktische Leitfaden in der zweiten, aktualisierten und erweiterten Auflage Ihnen dabei, Ihr Design danach auszurichten, wie sich Ihre Kund*innen verhalten und mit digitalen Schnittstellen interagieren, um deren Nutzung einfacher und angenehmer zu gestalten. Dabei greift der Autor auf bewährte Prinzipien aus der psychologischen Forschung zurück und überträgt sie in die Welt des UX-Designs. Er analysiert bekannte Apps und Websites und liefert damit anschauliche Beispiele für die Entwicklung von menschenzentriertem Design. Außerdem lernen Sie, wie Sie diese Prinzipien praktisch für Ihre eigene Arbeit und im Team nutzen können, um Ihren Nutzer*innen das bestmögliche Erlebnis zu bieten. Aus dem Inhalt: • Wie ästhetisch ansprechendes Design positive Reaktionen hervorruft • Welchen Einfluss Erinnerungen, Gewohnheiten und das Arbeitsgedächtnis auf die UX haben • Prognosemodelle wie Fitts’ Gesetz, Jakobs Gesetz und Hicks Gesetz • Ethische Überlegungen zum Einsatz von Psychologie im Design • Rahmenstruktur für die praktische Anwendung im Arbeitsalltag" ],
+        "cop" : [ "Heidelberg" ],
+        "pub" : [ "dpunkt" ],
+        "oclcid" : [ "(ocolc)1439830734", "(ocolc-p)1439830734" ],
+        "edition" : [ "2., aktualisierte und erweiterte Auflage." ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Laws of UX : 10 praktische Grundprinzipien für intuitives, menschenzentriertes UX-Design" ]
+      },
+      "sort" : {
+        "title" : [ "Laws of UX : 10 praktische Grundprinzipien für intuitives, menschenzentriertes UX-Design /" ],
+        "author" : [ "Yablonski, Jon, author." ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9781098169046,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9781098169046&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.9 h85",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003681127103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "eng" ],
+        "title" : [ "101 UX principles : actionable solutions for product design success " ],
+        "format" : [ "1 online resource (455 pages)" ],
+        "identifier" : [ "$$CISBN$$V1-80323-051-7;$$COCLC$$V(OCoLC)1319217552;$$COCLC$$V(OCoLC)1319833643;$$COCLC$$V(OCoLC-P)1319833643;$$COCLC$$V(OCoLC)1319344648;$$CISBN$$V1-80323-488-1" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "Grant, Will, author.$$QGrant, Will" ],
+        "publisher" : [ "Packt Publishing" ],
+        "description" : [ "Design is everywhere. Take a look around you right now and consider the products and services we use every day. You'll notice that our computer and phone operating systems, our web browsers, and the apps we use to work, order food, socialize and even date have been designed by UX specialists to offer you the best experiences when using their products and services. Of course, not all online experiences are designed with our best interests in mind. That's exactly why UX design is such an exciting and rewarding field--by learning the logic behind what people engage with and implementing it in your UX work, you can craft intuitive, accessible, and highly functional designs for your digital products. The 2nd edition of 101 UX Principles is the perfect companion when working on digital projects and making the right decisions for your users. From landing pages and checkout basket UIs to startup launch products and enterprise software solutions, a rich user experience design will maximize the success of your product. The book includes an exclusive invitation to join an online UX designers' community, where you can read the book alongside peers and other UX designers, and participate in various challenges and discussions with the author." ],
+        "mms" : [ "991003681127103286" ],
+        "addtitle" : [ "One hundred one UX principles" ],
+        "edition" : [ "Second edition." ],
+        "contents" : [ "101 UX Principles – 2nd edition: Actionable Solutions for Product Design Success" ],
+        "version" : [ "0" ],
+        "subject" : [ "User interfaces (Computer systems)", "Human-computer interaction" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003681127103286" ],
+        "recordid" : [ "alma991003681127103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)22784761700041" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "9.184145E-4" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2023066154" ],
+        "aulast" : [ "Grant" ],
+        "aufirst" : [ "Will" ],
+        "auinit" : [ "W" ],
+        "au" : [ "Grant, Will" ],
+        "creatorfull" : [ "$$NGrant, Will$$LGrant$$FWill$$Rauthor" ],
+        "addtitle" : [ "One hundred one UX principles" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "1-80323-051-7", "1-80323-488-1" ],
+        "abstract" : [ "Design is everywhere. Take a look around you right now and consider the products and services we use every day. You'll notice that our computer and phone operating systems, our web browsers, and the apps we use to work, order food, socialize and even date have been designed by UX specialists to offer you the best experiences when using their products and services. Of course, not all online experiences are designed with our best interests in mind. That's exactly why UX design is such an exciting and rewarding field--by learning the logic behind what people engage with and implementing it in your UX work, you can craft intuitive, accessible, and highly functional designs for your digital products. The 2nd edition of 101 UX Principles is the perfect companion when working on digital projects and making the right decisions for your users. From landing pages and checkout basket UIs to startup launch products and enterprise software solutions, a rich user experience design will maximize the success of your product. The book includes an exclusive invitation to join an online UX designers' community, where you can read the book alongside peers and other UX designers, and participate in various challenges and discussions with the author." ],
+        "pub" : [ "Packt Publishing" ],
+        "oclcid" : [ "(ocolc)1319217552", "(ocolc)1319833643", "(ocolc-p)1319833643", "(ocolc)1319344648" ],
+        "doi" : [ "10.0000/9781803230511" ],
+        "edition" : [ "Second edition." ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "101 UX principles : actionable solutions for product design success" ]
+      },
+      "sort" : {
+        "title" : [ "101 UX principles : actionable solutions for product design success /" ],
+        "author" : [ "Grant, Will, author." ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:1803230517,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=1-80323-051-7&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.9 h85ǂ g736 2022",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003810756603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "AI & UX : 인공지능에 사용자 경험이 필요한 이유 " ],
+        "format" : [ "217 p. : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791161756097" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 에이콘에이콘출판주식회사" ],
+        "mms" : [ "991003810756603286" ],
+        "contributor" : [ "Lew, Gavin$$QLew, Gavin", "Schumacher, Robert M.$$QSchumacher, Robert M.", "송유미$$Q송유미", "루, 개빈$$Q루, 개빈", "슈마허, 로버트 M.$$Q슈마허, 로버트 M.", "Schumacher, Robert$$QSchumacher, Robert", "슈마허, 로버트$$Q슈마허, 로버트" ],
+        "addtitle" : [ "AI and UX : why artificial intelligence needs user experience" ],
+        "series" : [ "에이콘 UX 프로페셔널 시리즈$$Q에이콘 UX 프로페셔널 시리즈" ],
+        "unititle" : [ "AI and UX. 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "인공 지능", "사용자 경험" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003810756603286" ],
+        "recordid" : [ "alma991003810756603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016066263" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "9.094812E-4" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2009043366", "no2009187013" ],
+        "aulast" : [ "Lew", "송유미", "루", "Schumacher", "슈마허" ],
+        "aufirst" : [ "Gavin", "Robert M.", "개빈", "로버트 M.", "Robert", "로버트" ],
+        "auinit" : [ "G", "개", "R", "로" ],
+        "addau" : [ "Lew, Gavin", "Schumacher, Robert M.", "송유미", "루, 개빈", "슈마허, 로버트 M.", "Schumacher, Robert", "슈마허, 로버트" ],
+        "contributorfull" : [ "$$NLew, Gavin$$LLew$$FGavin$$Rcontributor", "$$NSchumacher, Robert M.$$Rcontributor", "$$N송유미$$Rcontributor", "$$N루, 개빈$$Rcontributor", "$$N슈마허, 로버트 M.$$Rcontributor", "$$NSchumacher, Robert$$Rcontributor", "$$N슈마허, 로버트$$Rcontributor" ],
+        "addtitle" : [ "AI and UX : why artificial intelligence needs user experience" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791161756097" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "에이콘에이콘출판주식회사" ],
+        "seriestitle" : [ "에이콘 UX 프로페셔널 시리즈" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "AI & UX : 인공지능에 사용자 경험이 필요한 이유" ]
+      },
+      "sort" : {
+        "title" : [ "AI & UX : 인공지능에 사용자 경험이 필요한 이유 / 개빈 루, 로버트 슈마허 주니어 지음 ; 송유미 옮김" ],
+        "author" : [ "Lew, Gavin" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .L49 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003810756603286",
+        "holdId" : "22293791510003286",
+        "holKey" : "HoldingResultKey [mid=22293791510003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .L49 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.L49+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.U83 .L49 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003810756603286",
+        "holdId" : "22293791510003286",
+        "holKey" : "HoldingResultKey [mid=22293791510003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.U83 .L49 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.U83+.L49+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003810756603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791161756097,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791161756097&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.U83 .L49 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.437",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "69",
+    "CALL_SOLR_GET_IDS_LIST" : "84",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "337",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "17",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "39",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "276",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "61",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "174",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "670",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 725,
+    "COMBINED_SEARCH_TIME" : 734,
+    "PROCESS_COMBINED_RESULTS" : 61,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "eng",
+      "count" : "721"
+    }, {
+      "value" : "kor",
+      "count" : "81"
+    }, {
+      "value" : "ger",
+      "count" : "21"
+    }, {
+      "value" : "jpn",
+      "count" : "18"
+    }, {
+      "value" : "fre",
+      "count" : "12"
+    }, {
+      "value" : "pol",
+      "count" : "8"
+    }, {
+      "value" : "spa",
+      "count" : "4"
+    }, {
+      "value" : "ita",
+      "count" : "2"
+    }, {
+      "value" : "por",
+      "count" : "2"
+    }, {
+      "value" : "chi",
+      "count" : "1"
+    }, {
+      "value" : "cze",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "1999",
+      "count" : "2"
+    }, {
+      "value" : "2026",
+      "count" : "52"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "books",
+      "count" : "787"
+    }, {
+      "value" : "printed_book",
+      "count" : "73"
+    }, {
+      "value" : "journals",
+      "count" : "3"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "User Interfaces Computer Systems",
+      "count" : "207"
+    }, {
+      "value" : "Human Computer Interaction",
+      "count" : "191"
+    }, {
+      "value" : "User Interfaces And Human Computer Interaction",
+      "count" : "148"
+    }, {
+      "value" : "Artificial Intelligence",
+      "count" : "109"
+    }, {
+      "value" : "Computer Networks",
+      "count" : "96"
+    }, {
+      "value" : "Application Software",
+      "count" : "85"
+    }, {
+      "value" : "User Centered System Design",
+      "count" : "77"
+    }, {
+      "value" : "Computer And Information Systems Applications",
+      "count" : "73"
+    }, {
+      "value" : "Software Engineering",
+      "count" : "71"
+    }, {
+      "value" : "Computer Science",
+      "count" : "59"
+    }, {
+      "value" : "Computer Communication Networks",
+      "count" : "56"
+    }, {
+      "value" : "Web Sites Design",
+      "count" : "50"
+    }, {
+      "value" : "Application Software Development",
+      "count" : "47"
+    }, {
+      "value" : "Computer Engineering",
+      "count" : "44"
+    }, {
+      "value" : "Computer Engineering And Networks",
+      "count" : "44"
+    }, {
+      "value" : "Computer Vision",
+      "count" : "44"
+    }, {
+      "value" : "Computers And Education",
+      "count" : "33"
+    }, {
+      "value" : "Education Data Processing",
+      "count" : "29"
+    }, {
+      "value" : "Computer Application In Social And Behavioral Sciences",
+      "count" : "28"
+    }, {
+      "value" : "Social Sciences Data Processing",
+      "count" : "28"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Springerlink Online Service",
+      "count" : "36"
+    }, {
+      "value" : "Marcus Aaron",
+      "count" : "18"
+    }, {
+      "value" : "Rosenzweig Elizabeth",
+      "count" : "15"
+    }, {
+      "value" : "Stephanidis Constantine",
+      "count" : "13"
+    }, {
+      "value" : "Winckler Marco",
+      "count" : "12"
+    }, {
+      "value" : "Gothelf Jeff",
+      "count" : "11"
+    }, {
+      "value" : "Martins Nuno",
+      "count" : "10"
+    }, {
+      "value" : "Seiden Josh",
+      "count" : "10"
+    }, {
+      "value" : "Soares Marcelo M",
+      "count" : "10"
+    }, {
+      "value" : "Brandão Daniel",
+      "count" : "9"
+    }, {
+      "value" : "Kurosu Masaaki",
+      "count" : "9"
+    }, {
+      "value" : "Ntoa Stavroula",
+      "count" : "9"
+    }, {
+      "value" : "Antona Margherita",
+      "count" : "8"
+    }, {
+      "value" : "Schrepp Martin",
+      "count" : "8"
+    }, {
+      "value" : "Levy Jaime",
+      "count" : "7"
+    }, {
+      "value" : "Marsden Gary",
+      "count" : "7"
+    }, {
+      "value" : "Maya Elise Joseph Goteiner Kim Mats Mats Torrey Podmajersky",
+      "count" : "7"
+    }, {
+      "value" : "Yablonski Jon",
+      "count" : "7"
+    }, {
+      "value" : "Bernhaupt Regina",
+      "count" : "6"
+    }, {
+      "value" : "Degen Helmut",
+      "count" : "6"
+    } ]
+  }, {
+    "name" : "newrecords",
+    "values" : [ {
+      "value" : "90 days back",
+      "count" : "21"
+    }, {
+      "value" : "30 days back",
+      "count" : "3"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "79"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "77"
+    }, {
+      "value" : "3286–117046190003286–c2n",
+      "count" : "2"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "79"
+    }, {
+      "value" : "open_access",
+      "count" : "1"
+    }, {
+      "value" : "peer_reviewed",
+      "count" : "1"
+    }, {
+      "value" : "online_resources",
+      "count" : "784"
+    } ]
+  } ],
+  "facetsCacheKey" : 808200349
+}

@@ -1,0 +1,270 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003581476703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "역·도시일체개발 : TOD 46의 매력 [Recipe] " ],
+        "format" : [ "207 p : 삽화(일부천연색), 지도, 설계도; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788962852455" ],
+        "creationdate" : [ "2020" ],
+        "creator" : [ "니켄세케이 역·도시일체개발연구회$$Q니켄세케이 역·도시일체개발연구회" ],
+        "publisher" : [ "고양 : 대가" ],
+        "mms" : [ "991003581476703286" ],
+        "contributor" : [ "정병균, 역$$Q정병균", "김미화, 역$$Q김미화", "日建設計駅まち一体開発研究会$$Q日建設計駅まち一体開発研究会", "일건설계역마치일분개발연구회$$Q일건설계역마치일분개발연구회" ],
+        "addtitle" : [ "Tranist oriented development", "駅まち一体開発 : TOD46の魅力[recipe]", "토드 사십육의 매력" ],
+        "place" : [ "고양 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "도시계획 도시개발 도시디자인" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003581476703286" ],
+        "recordid" : [ "alma991003581476703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015515682" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269725E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "정병균", "김미화" ],
+        "aucorp" : [ "니켄세케이 역·도시일체개발연구회" ],
+        "addau" : [ "정병균", "김미화", "日建設計駅まち一体開発研究会", "일건설계역마치일분개발연구회" ],
+        "contributorfull" : [ "$$N정병균$$L정병균$$F$$Rcontributor", "$$N김미화$$Rcontributor" ],
+        "addtitle" : [ "Tranist oriented development", "駅まち一体開発 : TOD46の魅力[recipe]" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9788962852455" ],
+        "notes" : [ "참고문헌 : p. 206" ],
+        "cop" : [ "고양" ],
+        "pub" : [ "대가" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "역·도시일체개발 : TOD 46의 매력 [Recipe]" ]
+      },
+      "sort" : {
+        "title" : [ "역·도시일체개발 : TOD 46의 매력 [Recipe] / 니켄세케이역·도시일체개발연구회 편저 ; 정병균, 김미화 역" ],
+        "author" : [ "니켄세케이 역·도시일체개발연구회" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "NA9031 .니874 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003581476703286",
+        "holdId" : "22235471970003286",
+        "holKey" : "HoldingResultKey [mid=22235471970003286, libraryId=117046190003286, locationCode=c3b, callNumber=NA9031 .니874 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)NA9031+.%EB%8B%88874+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "NA9031 .니874 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003581476703286",
+        "holdId" : "22235471970003286",
+        "holKey" : "HoldingResultKey [mid=22235471970003286, libraryId=117046190003286, locationCode=c3b, callNumber=NA9031 .니874 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)NA9031+.%EB%8B%88874+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003581476703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788962852455,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788962852455&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "NA9031 .니874 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "711.4",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "24",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "30",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "25",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "7",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "71",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 81,
+    "COMBINED_SEARCH_TIME" : 88,
+    "PROCESS_COMBINED_RESULTS" : 892,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2020",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "도시계획 도시개발 도시디자인",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "日建設計駅まち一体開発研究会",
+      "count" : "1"
+    }, {
+      "value" : "김미화",
+      "count" : "1"
+    }, {
+      "value" : "니켄세케이 역·도시일체개발연구회",
+      "count" : "1"
+    }, {
+      "value" : "일건설계역마치일분개발연구회",
+      "count" : "1"
+    }, {
+      "value" : "정병균",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1473964501
+}

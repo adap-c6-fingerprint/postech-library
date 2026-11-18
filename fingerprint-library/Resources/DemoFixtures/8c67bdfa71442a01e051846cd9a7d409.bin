@@ -1,0 +1,206 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003779738803286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "eng" ],
+        "title" : [ "Cloud-Native Application Architecture : Microservice Development Best Practice " ],
+        "format" : [ "1 online resource (XXI, 382 p. 1 illus.) " ],
+        "identifier" : [ "$$CISBN$$V981-19-9782-9;$$CISBN$$V9789811997815" ],
+        "creationdate" : [ "2024" ],
+        "creator" : [ "FreeWheel Biz-UI Team, author.$$QFreeWheel Biz-UI Team" ],
+        "publisher" : [ "Singapore : Springer Nature Singapore : Imprint: Springer" ],
+        "description" : [ "The authors of this book explore a way to build cloud-native microservice applications, based on years of practice. Presenting a range of real-world scenarios, from design, development, and testing to deployment, the book shows how teams can leverage cloud-native technologies to develop applications, covering the full lifecycle. Further, it consistently combines theory and practice, and comprehensively analyzes how to implement core cloud-native technologies such as container, service mesh, serverless, continuous integration, and deployment. Given its scope, the book offers a valuable asset for all architects, engineers, and technological decision-makers with an interest in microservices and cloud-native technologies." ],
+        "mms" : [ "991003779738803286" ],
+        "edition" : [ "1st ed. 2024." ],
+        "contents" : [ "Chapter 1. Microservices in the Cloud Native Era -- Chapter 2. Microservice Application Design -- Chapter 3. Service Development and Operation -- Chapter 4. Microservice Traffic Management -- Chapter 5. Distributed Transactions -- Chapter 6. Serverless Architecture -- Chapter 7. Service Observability -- Chapter 8. Quality Assurance Practices -- Chapter 9. Continuous Integration and Continuous Deployment." ],
+        "place" : [ "Singapore :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Cloud computing", "Software engineering -- Management", "Computer programs -- Testing", "Computer programming", "Open source software", "Cloud Computing", "Software Management", "Software Testing", "Programming Techniques", "Open Source" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003779738803286" ],
+        "recordid" : [ "alma991003779738803286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)29526914100041" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "4.362911E-6" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aucorp" : [ "FreeWheel Biz-UI Team, author." ],
+        "date" : [ "2024" ],
+        "isbn" : [ "981-19-9782-9", "9789811997815" ],
+        "abstract" : [ "The authors of this book explore a way to build cloud-native microservice applications, based on years of practice. Presenting a range of real-world scenarios, from design, development, and testing to deployment, the book shows how teams can leverage cloud-native technologies to develop applications, covering the full lifecycle. Further, it consistently combines theory and practice, and comprehensively analyzes how to implement core cloud-native technologies such as container, service mesh, serverless, continuous integration, and deployment. Given its scope, the book offers a valuable asset for all architects, engineers, and technological decision-makers with an interest in microservices and cloud-native technologies." ],
+        "cop" : [ "Singapore" ],
+        "pub" : [ "Springer Nature Singapore" ],
+        "oclcid" : [ "(ckb)29526914100041", "(de-he213)978-981-19-9782-2", "(miaapq)ebc31094160", "(au-peel)ebl31094160" ],
+        "doi" : [ "10.1007/978-981-19-9782-2" ],
+        "edition" : [ "1st ed. 2024." ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Cloud-Native Application Architecture : Microservice Development Best Practice" ]
+      },
+      "sort" : {
+        "title" : [ "Cloud-Native Application Architecture : Microservice Development Best Practice /" ],
+        "author" : [ "FreeWheel Biz-UI Team, author." ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9811997829,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=981-19-9782-9&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.76 a65ǂ f744 2024",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "37",
+    "CALL_SOLR_GET_IDS_LIST" : "29",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "24",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "33",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "21",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "3",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "104",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 117,
+    "COMBINED_SEARCH_TIME" : 125,
+    "PROCESS_COMBINED_RESULTS" : 511,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "eng",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "books",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Cloud Computing",
+      "count" : "1"
+    }, {
+      "value" : "Computer Programming",
+      "count" : "1"
+    }, {
+      "value" : "Computer Programs Testing",
+      "count" : "1"
+    }, {
+      "value" : "Open Source",
+      "count" : "1"
+    }, {
+      "value" : "Open Source Software",
+      "count" : "1"
+    }, {
+      "value" : "Programming Techniques",
+      "count" : "1"
+    }, {
+      "value" : "Software Engineering Management",
+      "count" : "1"
+    }, {
+      "value" : "Software Management",
+      "count" : "1"
+    }, {
+      "value" : "Software Testing",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Freewheel Biz Ui Team",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "online_resources",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -966125198
+}

@@ -1,0 +1,261 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000794989703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "eng" ],
+        "title" : [ "Decorative designs in the houses of Chosun Dynasty period " ],
+        "format" : [ "230 p. : ill. (some col.) ; 31 cm." ],
+        "identifier" : [ "$$CLC$$V   89181935" ],
+        "creationdate" : [ "c1988" ],
+        "creator" : [ "Chon, Pyong-ok, 1936-$$QChon, Pyong-ok" ],
+        "publisher" : [ "Seoul : Po Chin Chai" ],
+        "mms" : [ "991000794989703286" ],
+        "edition" : [ "1st ed." ],
+        "unititle" : [ "Chosonjo sidae chutaek ui changsikchok uijang. English" ],
+        "includes" : [ "Chon, Pyong-ok, 1936- Chosonjo sidae chutaek ui changsikchok uijang. English$$QChon, Pyong-ok, 1936- Chosonjo sidae chutaek ui changsikchok uijang. English" ],
+        "place" : [ "Seoul :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Architecture, Domestic -- Korea", "Architecture -- Korea -- Yi dynasty, 1392-1910", "Furniture -- Korea -- History -- Yi dynasty, 1392-1910" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000794989703286" ],
+        "recordid" : [ "alma991000794989703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13418312-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270189E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "Chon" ],
+        "aufirst" : [ "Pyong-ok" ],
+        "auinit" : [ "P" ],
+        "au" : [ "Chon, Pyong-ok" ],
+        "creatorfull" : [ "$$NChon, Pyong-ok$$LChon$$FPyong-ok$$Rauthor" ],
+        "date" : [ "1988", "c1988" ],
+        "cop" : [ "Seoul" ],
+        "pub" : [ "Po Chin Chai" ],
+        "oclcid" : [ "(ptech)b13418312-82postech_inst" ],
+        "lccn" : [ "89181935" ],
+        "edition" : [ "1st ed." ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Decorative designs in the houses of Chosun Dynasty period" ]
+      },
+      "sort" : {
+        "title" : [ "Decorative designs in the houses of Chosun Dynasty period /" ],
+        "author" : [ "Chon, Pyong-ok, 1936-" ],
+        "creationdate" : [ "1988" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "김호길자료실3층 (예약 후 대출)",
+        "subLocationCode" : "c3k",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "NA7453.6.A1 .C4513 1988",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000794989703286",
+        "holdId" : "2291460880003286",
+        "holKey" : "HoldingResultKey [mid=2291460880003286, libraryId=117046190003286, locationCode=c3k, callNumber=NA7453.6.A1 .C4513 1988]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)NA7453.6.A1+.C4513+1988&loc=%EA%B9%80%ED%98%B8%EA%B8%B8%EC%9E%90%EB%A3%8C%EC%8B%A43%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "김호길자료실3층 (예약 후 대출)",
+        "subLocationCode" : "c3k",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "NA7453.6.A1 .C4513 1988",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000794989703286",
+        "holdId" : "2291460880003286",
+        "holKey" : "HoldingResultKey [mid=2291460880003286, libraryId=117046190003286, locationCode=c3k, callNumber=NA7453.6.A1 .C4513 1988]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)NA7453.6.A1+.C4513+1988&loc=%EA%B9%80%ED%98%B8%EA%B8%B8%EC%9E%90%EB%A3%8C%EC%8B%A43%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000794989703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:,OCLC:,LCCN:89181935&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "NA7453.6.A1 .C4513 1988",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "na000000007453.000000000006.a000000000001.c000000004513000000001988",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "24",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "44",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "37",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "7",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "88",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 96,
+    "COMBINED_SEARCH_TIME" : 105,
+    "PROCESS_COMBINED_RESULTS" : 819,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "eng",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "1988",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Architecture Domestic Korea",
+      "count" : "1"
+    }, {
+      "value" : "Architecture Korea Yi Dynasty 1392 1910",
+      "count" : "1"
+    }, {
+      "value" : "Furniture Korea History Yi Dynasty 1392 1910",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Chon Pyong Ok",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3k",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1811034325
+}

@@ -9,6 +9,11 @@ def validate(configuration: str, channel: str, development: str = "", production
              action: str = "build") -> None:
     if channel not in ("automatic", "internal"):
         raise ValueError("POBOOK_BUILD_CHANNEL must be automatic or internal.")
+    # Demo builds replay bundled responses offline, so they must never package relay tokens.
+    if configuration == "Demo":
+        if development or production:
+            raise ValueError("Demo builds must not package relay tokens.")
+        return
     # Archive/install builds must not package the internal relay channel.
     if action in ("install", "archive") and (configuration != "Release" or channel != "automatic"):
         raise ValueError("Archive/install requires Release and POBOOK_BUILD_CHANNEL=automatic; internal is for local builds only.")

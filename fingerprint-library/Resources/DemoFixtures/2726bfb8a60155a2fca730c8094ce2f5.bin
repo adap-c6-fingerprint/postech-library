@@ -1,0 +1,265 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000690009703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(핵심)C/C++ 프로그래밍 " ],
+        "format" : [ "516 p. : 삽화 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788956660820" ],
+        "creationdate" : [ "2007" ],
+        "creator" : [ "홍성식$$Q홍성식" ],
+        "publisher" : [ "서울 : 정일" ],
+        "description" : [ "이 책의 특징. 1) 각 부와 각 장별로 C 및 C++ 언어의 주요 학습내용과 함께 다양한 프로그램을 개발해 두었고 또한 프로그램의 실행결과가 제시되어 있습니다. 2) 객체지향 프로그래밍 언어로는 JAVA나 Visual C++ 등이 있으나 최근에도 지속적으로 확장이 되고 있고 폭넓게 사용되고 있는 C 및 C++를 통해 기능을 쉽고도 빠르게 이해할 수 있게 하고자 노력하였습니다. 3) C++는 윈도우즈 프로그래밍에 적합한 언어이지만 윈도우즈 프로그램을 작성하고자 하면 수많은   코드가 필요하고 규모가 커져서 매우 복잡하므로, C++의 특징과 원리 및 OOP 개념에 입각한 프로그래밍을 효율적으로 학습하기 위하여 콘솔 프로그램으로 실행하였습니다." ],
+        "mms" : [ "991000690009703286" ],
+        "contributor" : [ "이송근$$Q이송근" ],
+        "addtitle" : [ "C/C++ 프로그래밍", "Essential C & C++ Programming" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "C C++ 프로그래밍" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000690009703286" ],
+        "recordid" : [ "alma991000690009703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12530827-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270201E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "nr2007000960" ],
+        "aulast" : [ "홍성식" ],
+        "au" : [ "홍성식" ],
+        "addau" : [ "이송근" ],
+        "creatorfull" : [ "$$N홍성식$$L홍성식$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N이송근$$L이송근$$F$$Rcontributor" ],
+        "date" : [ "2007" ],
+        "isbn" : [ "9788956660820" ],
+        "notes" : [ "참고문헌 수록" ],
+        "abstract" : [ "이 책의 특징. 1) 각 부와 각 장별로 C 및 C++ 언어의 주요 학습내용과 함께 다양한 프로그램을 개발해 두었고 또한 프로그램의 실행결과가 제시되어 있습니다. 2) 객체지향 프로그래밍 언어로는 JAVA나 Visual C++ 등이 있으나 최근에도 지속적으로 확장이 되고 있고 폭넓게 사용되고 있는 C 및 C++를 통해 기능을 쉽고도 빠르게 이해할 수 있게 하고자 노력하였습니다. 3) C++는 윈도우즈 프로그래밍에 적합한 언어이지만 윈도우즈 프로그램을 작성하고자 하면 수많은   코드가 필요하고 규모가 커져서 매우 복잡하므로, C++의 특징과 원리 및 OOP 개념에 입각한 프로그래밍을 효율적으로 학습하기 위하여 콘솔 프로그램으로 실행하였습니다." ],
+        "cop" : [ "서울" ],
+        "pub" : [ "정일" ],
+        "oclcid" : [ "(ptech)b12530827-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(핵심)C/C++ 프로그래밍" ]
+      },
+      "sort" : {
+        "title" : [ "(핵심)C/C++ 프로그래밍 = Essential C & C++ Programming / 홍성식, 이송근 공저" ],
+        "author" : [ "홍성식" ],
+        "creationdate" : [ "2007" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.73.C153 .홍54 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000690009703286",
+        "holdId" : "2290354000003286",
+        "holKey" : "HoldingResultKey [mid=2290354000003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.73.C153 .홍54 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.73.C153+.%ED%99%8D54+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.73.C153 .홍54 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000690009703286",
+        "holdId" : "2290354000003286",
+        "holKey" : "HoldingResultKey [mid=2290354000003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.73.C153 .홍54 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.73.C153+.%ED%99%8D54+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000690009703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788956660820,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788956660820&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.73.C153 .홍54 2007",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa000000000076.000000000073.c000000000153.홍000000000054000000002007",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "22",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "32",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "26",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "73",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 83,
+    "COMBINED_SEARCH_TIME" : 90,
+    "PROCESS_COMBINED_RESULTS" : 835,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2007",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "C C 프로그래밍",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "이송근",
+      "count" : "1"
+    }, {
+      "value" : "홍성식",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -302206727
+}

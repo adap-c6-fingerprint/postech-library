@@ -1,0 +1,201 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003660809503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "chi" ],
+        "title" : [ "JQuery UI shi yong zhe jie mian she ji = JQuery UI " ],
+        "format" : [ "1 online resource (248 pages) : illustrations" ],
+        "identifier" : [ "$$CISBN$$V9789862766460;$$CISBN$$V9862766468;$$COCLC$$V(OCoLC)1300242739;$$COCLC$$V(OCoLC-P)1300242739" ],
+        "creationdate" : [ "2012" ],
+        "creator" : [ "Sarrion, Eric, author.$$QSarrion, Eric" ],
+        "publisher" : [ "Place of publication not identified : GoTop Information, Inc." ],
+        "description" : [ "Detailed summary in vernacular field." ],
+        "mms" : [ "991003660809503286" ],
+        "contributor" : [ "Studio Tib, translator.$$QStudio Tib" ],
+        "edition" : [ "[First edition]." ],
+        "unititle" : [ "JQuery UI. Chinese" ],
+        "includes" : [ "Sarrion, Eric, JQuery UI. Chinese$$QSarrion, Eric, JQuery UI. Chinese" ],
+        "place" : [ "Place of publication not identified] :" ],
+        "version" : [ "0" ],
+        "subject" : [ "JavaScript (Computer program language)", "Query languages (Computer science)", "User interfaces (Computer systems) -- Design", "Web site development" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003660809503286" ],
+        "recordid" : [ "alma991003660809503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)5500000000157833" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "4.362911E-6" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2012082731" ],
+        "aulast" : [ "Sarrion" ],
+        "aufirst" : [ "Eric" ],
+        "auinit" : [ "E" ],
+        "au" : [ "Sarrion, Eric" ],
+        "addau" : [ "Studio Tib, translator." ],
+        "creatorfull" : [ "$$NSarrion, Eric$$LSarrion$$FEric$$Rauthor" ],
+        "date" : [ "2012" ],
+        "isbn" : [ "9789862766460", "9862766468" ],
+        "abstract" : [ "Detailed summary in vernacular field." ],
+        "cop" : [ "Place of publication not identified" ],
+        "pub" : [ "GoTop Information, Inc." ],
+        "oclcid" : [ "(ocolc)1300242739", "(ocolc-p)1300242739" ],
+        "edition" : [ "[First edition]." ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "JQuery UI shi yong zhe jie mian she ji = JQuery UI" ]
+      },
+      "sort" : {
+        "title" : [ "JQuery UI shi yong zhe jie mian she ji = JQuery UI /" ],
+        "author" : [ "Sarrion, Eric, author." ],
+        "creationdate" : [ "2012" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9862766468,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9789862766460&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.73 j39",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "84",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "66",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "65",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "1",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "7",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "169",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 178,
+    "COMBINED_SEARCH_TIME" : 185,
+    "PROCESS_COMBINED_RESULTS" : 521,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "chi",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2012",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "books",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Javascript Computer Program Language",
+      "count" : "1"
+    }, {
+      "value" : "Query Languages Computer Science",
+      "count" : "1"
+    }, {
+      "value" : "User Interfaces Computer Systems Design",
+      "count" : "1"
+    }, {
+      "value" : "Web Site Development",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Sarrion Eric",
+      "count" : "1"
+    }, {
+      "value" : "Studio Tib",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "online_resources",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -764403965
+}

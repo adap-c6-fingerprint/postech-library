@@ -30,7 +30,27 @@ nonisolated struct BookClient: Sendable {
 }
 
 extension BookClient: DependencyKey {
-    static let liveValue = BookClient(
+    #if DEMO
+    static let liveValue = BookClient.demoFallback(recorded: networkValue)
+    #else
+    static let liveValue = networkValue
+    #endif
+
+    /// 오프라인 시연: 녹화한 검색어는 녹화 응답을, 나머지는 번들 데이터셋 검색 결과를 쓴다.
+    static func demoFallback(
+        recorded: BookClient,
+        catalog: @escaping @Sendable () async throws -> DemoCatalog = { try await DemoCatalogLoader.shared.load() }
+    ) -> BookClient {
+        BookClient(search: { request in
+            do {
+                return try await recorded.search(request)
+            } catch is DemoFixtureMissError {
+                return try await catalog().search(request)
+            }
+        })
+    }
+
+    private static let networkValue = BookClient(
         search: { searchRequest in
             @Dependency(\.httpClient) var httpClient
             let result: HTTPResponse

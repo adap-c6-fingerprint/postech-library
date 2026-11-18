@@ -1,0 +1,184 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003945455203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "kor" ],
+        "title" : [ "도시 대 도시! 맞짱 세계지리 수업 : 지리 쌤과 함께 떠나는 별별 도시 여행" ],
+        "format" : [ "1 online resource" ],
+        "identifier" : [ "$$CISBN$$V979-1-168-10293-4;$$CISBN$$V979-1-168-10243-9" ],
+        "creationdate" : [ "2024" ],
+        "creator" : [ "조지욱 외$$Q조지욱 외" ],
+        "publisher" : [ "주니어태학" ],
+        "description" : [ "‘전지적 도시 시점’으로 읽는 뜻밖의 지리! 극단의 두 도시를 알면 지리의 세계가 보인다 가장 더운 도시, 추운 도시? 가장 젊은 도시, 늙은 도시? 노벨상을 주는 도시, 거부하는 도시? 파란 도시, 붉은 도시? 42개 도시, 21가지 세계지리 테마―달라도 너무 다른 지구 도시 이야기 지구상에는 무수히 많은 도시가 있고, 도시마다 제각기 특징이 있다. 어떤 도시는 과연 인간이 살 수 있을까 싶게 덥고, 어떤 도시는 여기도 사람이 사는구나 하고 경이로울 정도로 춥다. 또 지구 가장 북쪽 끝이거나 남쪽 끝에도 도시가 있고, 해발고도 5000미터의 고지대나 (해수면보다도 낮은) 마이너스 430미터의 저지대에도 도시가 있다. 도시에 깃든 역사도 저마다 다양하다. 이렇듯 하나의 도시는 기후, 지형, 인구, 면적, 역사, 문화, 제도 같은 지리적 요소로 이루어져 있으므로, 이런 지리적 테마를 통해 도시를 이해하면 그 나라와 주변 지역을 이해하는 실마리를 얻을 수 있다. 바로 ‘도시로 배우는 세계지리 수업’인 셈이다. 이때 완전히 극단적으로 대비되는 두 도시를 연결해보면 어떨까? 이를테면 지구상에서 가장 추운 도시는 러시아의 오이먀콘이다(1월 평균 기온이 영하 50도). 오이먀콘이 추운 이유는 고위도의 내륙지방에 위치하기 때문인데, 그래서 겨울에 사람이 죽으면 꽁꽁 언 땅에 무덤을 3일 동안이나 파야 한다. 반대로 지구상에서 가장 더운 도시는 이라크의 바스라다(한낮 최고 기온이 무려 50도!). 바스라가 더운 이유는 사막을 만드는 아열대 고압대에 위치해 있기 때문인데, 그래서 해마다 여름이면 에어컨을 작동시킬 전기와 마실 물이 부족해 주민들의 항의 시위가 그치지 않는다. 이처럼 극단적으로 대비되는 특징을 지닌 두 도시를 살펴보면 자연지리적인 조건부터 그곳 사람들의 생활 모습까지 많은 이야기를 할 수 있다. 이 책에는 전 세계 42개 도시가 등장하며, 두 도시가 짝을 이루어 21가지 세계지리 주제가 펼쳐진다. 일 년 중 계절이 정반대인 도시, 시간이 가장 빠른 도시와 가장 늦은 도시, 한류의 도시와 난류의 도시, 홍수의 도시와 가뭄의 도시, 인구가 가장 많은 도시와 가장 적은 도시, 맥주의 도시와 금주의 도시, 사막의 유흥 도시와 유령 도시, 모험의 도시와 명상의 도시, 과거의 도시와 미래의 도시, 분리의 장벽을 없앤 도시와 분리되기를 원하는 도시, 노벨상을 주는 도시와 노벨상을 거부한 도시, 갈등의 도시와 화합의 도시, 붉은 도시와 파란 도시 등등. 독자들은 지리 교사인 저자의 안내에 따라 해발고도가 가장 높은 페루의 라링코나다, 하늘이 가장 맑은 칠레의 안토파가스타, 묘지가 가장 많은 미국의 콜마같이 쉽게 가볼 수 없는 특이한 도시들을 만날 수 있다. 또 지리를 공부할 때 빼놓을 수 없는 게 지도다. 각 주제마다 도시의 위치와 자연지리적 조건을 담은 지도 컷을 넣어 독자들의 이해를 돕는다." ],
+        "mms" : [ "991003945455203286" ],
+        "addtitle" : [ "도시 대 도시! 맞짱 세계지리 수업 " ],
+        "contents" : [ "●1부. 자연지리 영하 71도에서 영상 58도까지, 여기 사람이 살아요 가장 추운 도시 vs 가장 더운 도시 오이먀콘(러시아)_북극보다 추운 혹한 체험 도시 바스라(이라크)_신드바드의 도시는 낮 기온이 무려 50도! 똑같은 ‘적도의 땅’이지만 적도 위의 더운 도시 vs 적도에서도 안 더운 도시 싱가포르(싱가포르)_잘사는 나라지만 더위가 고민이야 키토(에콰도르)_아침은 봄, 한낮은 여름, 저녁은 가을, 밤은 겨울 백두산보다도 높고, 바다보다도 낮은 가장 높은 도시 vs 가장 낮은 도시 라링코나다(페루)_하늘에 가까운 도시에는 산소 대신 금이 있다 예리코(이스라엘)_세 개의 예리코, 신은 가장 낮은 데로 온다 세상의 끝에는 무엇이 있을까 북쪽 끝 도시 vs 남쪽 끝 도시 롱위에아르뷔엔(노르웨이)_지구의 북쪽 끝에 준비해 둔 ‘씨앗의 방주’ 푸에르토윌리엄스(칠레)_남반구의 땅끝마을, 해군 기지와 모계 사회 하루의 차이, 날짜 변경선의 왼쪽과 오른쪽 해가 가장 먼저 뜨는 도시 vs 해가 가장 늦게 뜨는 도시 사우스타라와(키리바시)_시간이 시작되는 곳이지만 남은 시간이 없다 호놀룰루(미국)_아시아인의 피, 땀, 눈물이 서린 화산섬의 도시 남북이 다르면 계절도 반대 겨울 크리스마스의 도시 vs 여름 크리스마스의 도시 로바니에미(핀란드)_눈 덮인 숲속 산타에게 보낸 1,800만 통의 편지 시드니(오스트레일리아)_여름 산타의 도시가 품은 빛과 그늘 바다의 온도가 도시를 만든다 한류의 도시 vs 난류의 도시 안토파가스타(칠레)_세상에서 가장 맑은 도시에서 별을 보다 나르비크(노르웨이)_북극 아래 따뜻한, 야외 스포츠의 도시 무서운 물, 고마운 물 홍수의 도시 vs 가뭄의 도시 마이애미(미국)_물과 사람이 밀려드는 도시 퍼스(오스트레일리아)_메마른 도시의 눈물겨운 물 절약 ●2부. 인문지리 삼천만과 팔백 명, 도시는 무엇으로 사는가 인구가 가장 많은 도시 vs 인구가 가장 적은 도시 충칭(중국)_도시 발전의 원동력, 인구의 힘 바티칸(바티칸시국)_천국의 문을 여는 열쇠 삶에서 가장 중요한 두 가지, 탄생과 죽음 죽은 사람의 도시 vs 태어나는 사람의 도시 콜마(미국)_살아 있는 것 자체가 대단한 침묵의 도시 니아메(니제르)_아이 울음소리가 가장 많이 들리는 곳 술의 두 얼굴 맥주의 도시 vs 금주의 도시 뮌헨(독일)_세계 최대의 맥주 축제, 옥토버페스트 아마다바드(인도)_우리는 술을 마시지 않습니다. 딸꾹?! 지구 정반대, 두 도시의 휴가법 겨울 관광도시 vs 여름 관광도시 하얼빈(중국)_세계 3대 겨울 축제, 얼음축제의 도시 마르델플라타(아르헨티나)_은빛 바다를 보며 즐기는 여름 휴가 사막에 피어오른 욕망의 신기루 사막의 유흥 도시 vs 사막의 유령 도시 라스베이거스(미국)_화려한 ‘대박’의 꿈이 어른거린다 콜만스코프(나미비아)_다이아몬드 외에는 아무것도 없던 곳 모험과 명상 사이, 지금 우리에게 필요한 것은? 모험의 도시 vs 명상의 도시 퀸스타운(뉴질랜드)_여왕의 도시에서 푸른 호수로 뛰어드는 짜릿함 리시케시(인도)_비틀스와 스티브 잡스가 사랑한 도시 사라지거나 태어나거나, 도시는 흐른다 과거의 도시 vs 미래의 도시 마추픽추(페루)_어느 날 갑자기 도시가 사라졌다! 네옴(사우디아라비아)_석유의 나라가 꿈꾸는 ‘탄소 제로’ 도시 ●3부. 지리의 꿈, 힘, 상상 국민이 가장 행복한 정치제도는 무엇일까 대통령의 도시 vs 왕의 도시 워싱턴디시(미국)_세계에서 처음으로 대통령을 뽑은 도시 반다르스리브가완(브루나이)_왕이 세뱃돈을 준다고? 평등과 자유를 향한 길 분리의 벽을 없앤 도시 vs 분리되기를 원하는 도시 소웨토(남아프리카공화국)_“자유가 지배하게 하라” 퀘벡(캐나다)_“나는 기억한다, 우리가 퀘벡인임을” 전쟁과 인류의 복지, 노벨상의 두 얼굴 노벨상을 주는 도시 vs 노벨상을 거부하는 도시 스톡홀름(스웨덴)_‘죽음의 상인’이 남긴 마지막 소원 남딘(베트남)_노벨상은 됐고, 쌀국수나 한 그릇 주세요 이슬람을 둘러싼 세계 갈등의 도시 vs 화합의 도시 니스(프랑스)_아름다운 해변에 감춰진 갈등의 불씨 햄트램크(미국)_7층 케이크 같은 다채로운 다민족 도시 도시에도 색깔이 있다면? 붉은 도시 vs 파란 도시 볼로냐(이탈리아)_세계가 부러워하는 좌파의 도시 셰프샤우엔(모로코)_“고개를 들어 저 하늘을 보라” 초콜릿, 그 달콤쌉싸름한 맛의 비밀 초콜릿 때문에 가난한 도시 vs 초콜릿 덕분에 잘사는 도시 아비장(코트디부아르)_초콜릿은 너무나도 쓰다 암스테르담(네덜란드)_초콜릿은 너무나도 달콤하다" ],
+        "version" : [ "0" ],
+        "subject" : [ "청소년", "청소년 인문/사회/경제" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003945455203286" ],
+        "recordid" : [ "alma991003945455203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)5860000000569319" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "4.3627783E-6" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "조지욱 외" ],
+        "au" : [ "조지욱 외" ],
+        "creatorfull" : [ "$$N조지욱 외$$L조지욱 외$$F$$Rauthor" ],
+        "addtitle" : [ "도시 대 도시! 맞짱 세계지리 수업" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "979-1-168-10293-4", "979-1-168-10243-9" ],
+        "abstract" : [ "‘전지적 도시 시점’으로 읽는 뜻밖의 지리! 극단의 두 도시를 알면 지리의 세계가 보인다 가장 더운 도시, 추운 도시? 가장 젊은 도시, 늙은 도시? 노벨상을 주는 도시, 거부하는 도시? 파란 도시, 붉은 도시? 42개 도시, 21가지 세계지리 테마―달라도 너무 다른 지구 도시 이야기 지구상에는 무수히 많은 도시가 있고, 도시마다 제각기 특징이 있다. 어떤 도시는 과연 인간이 살 수 있을까 싶게 덥고, 어떤 도시는 여기도 사람이 사는구나 하고 경이로울 정도로 춥다. 또 지구 가장 북쪽 끝이거나 남쪽 끝에도 도시가 있고, 해발고도 5000미터의 고지대나 (해수면보다도 낮은) 마이너스 430미터의 저지대에도 도시가 있다. 도시에 깃든 역사도 저마다 다양하다. 이렇듯 하나의 도시는 기후, 지형, 인구, 면적, 역사, 문화, 제도 같은 지리적 요소로 이루어져 있으므로, 이런 지리적 테마를 통해 도시를 이해하면 그 나라와 주변 지역을 이해하는 실마리를 얻을 수 있다. 바로 ‘도시로 배우는 세계지리 수업’인 셈이다. 이때 완전히 극단적으로 대비되는 두 도시를 연결해보면 어떨까? 이를테면 지구상에서 가장 추운 도시는 러시아의 오이먀콘이다(1월 평균 기온이 영하 50도). 오이먀콘이 추운 이유는 고위도의 내륙지방에 위치하기 때문인데, 그래서 겨울에 사람이 죽으면 꽁꽁 언 땅에 무덤을 3일 동안이나 파야 한다. 반대로 지구상에서 가장 더운 도시는 이라크의 바스라다(한낮 최고 기온이 무려 50도!). 바스라가 더운 이유는 사막을 만드는 아열대 고압대에 위치해 있기 때문인데, 그래서 해마다 여름이면 에어컨을 작동시킬 전기와 마실 물이 부족해 주민들의 항의 시위가 그치지 않는다. 이처럼 극단적으로 대비되는 특징을 지닌 두 도시를 살펴보면 자연지리적인 조건부터 그곳 사람들의 생활 모습까지 많은 이야기를 할 수 있다. 이 책에는 전 세계 42개 도시가 등장하며, 두 도시가 짝을 이루어 21가지 세계지리 주제가 펼쳐진다. 일 년 중 계절이 정반대인 도시, 시간이 가장 빠른 도시와 가장 늦은 도시, 한류의 도시와 난류의 도시, 홍수의 도시와 가뭄의 도시, 인구가 가장 많은 도시와 가장 적은 도시, 맥주의 도시와 금주의 도시, 사막의 유흥 도시와 유령 도시, 모험의 도시와 명상의 도시, 과거의 도시와 미래의 도시, 분리의 장벽을 없앤 도시와 분리되기를 원하는 도시, 노벨상을 주는 도시와 노벨상을 거부한 도시, 갈등의 도시와 화합의 도시, 붉은 도시와 파란 도시 등등. 독자들은 지리 교사인 저자의 안내에 따라 해발고도가 가장 높은 페루의 라링코나다, 하늘이 가장 맑은 칠레의 안토파가스타, 묘지가 가장 많은 미국의 콜마같이 쉽게 가볼 수 없는 특이한 도시들을 만날 수 있다. 또 지리를 공부할 때 빼놓을 수 없는 게 지도다. 각 주제마다 도시의 위치와 자연지리적 조건을 담은 지도 컷을 넣어 독자들의 이해를 돕는다." ],
+        "pub" : [ "주니어태학" ],
+        "oclcid" : [ "(ckb)5860000000569319" ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "도시 대 도시! 맞짱 세계지리 수업 : 지리 쌤과 함께 떠나는 별별 도시 여행" ]
+      },
+      "sort" : {
+        "title" : [ "도시 대 도시! 맞짱 세계지리 수업 : 지리 쌤과 함께 떠나는 별별 도시 여행" ],
+        "author" : [ "조지욱 외" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791168102934,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=979-1-168-10293-4&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "910",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "66",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "64",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "2",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "7",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "108",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 124,
+    "COMBINED_SEARCH_TIME" : 130,
+    "PROCESS_COMBINED_RESULTS" : 433,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "books",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "청소년",
+      "count" : "1"
+    }, {
+      "value" : "청소년 인문 사회 경제",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "조지욱 외",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "online_resources",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1517204655
+}

@@ -52,6 +52,14 @@ class ReleaseConfigurationTests(unittest.TestCase):
                     configuration.validate(build, channel, action=action, **tokens)
         configuration.validate("Release", "internal", development="d" * 32, action="build")
 
+    def test_demo_archive_needs_no_tokens_and_rejects_packaged_tokens(self):
+        for action in ["build", "install", "archive"]:
+            configuration.validate("Demo", "automatic", action=action)
+        token = "d" * 32
+        with self.assertRaisesRegex(ValueError, "Demo builds") as result:
+            configuration.validate("Demo", "automatic", development=token, action="archive")
+        self.assertNotIn(token, str(result.exception))
+
     def test_build_phase_reads_archive_action_from_environment(self):
         settings = dict(CONFIGURATION="Release", POBOOK_BUILD_CHANNEL="internal",
                         POBOOK_RELAY_TOKEN_DEVELOPMENT="d" * 32, ACTION="install")

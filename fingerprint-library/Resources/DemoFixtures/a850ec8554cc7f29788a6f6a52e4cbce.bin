@@ -1,0 +1,166 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003859750603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "kor" ],
+        "title" : [ "러닝 랭체인" ],
+        "format" : [ "1 online resource" ],
+        "identifier" : [ "$$CISBN$$V9791169213721;$$CISBN$$V979-1-169-21372-1" ],
+        "creationdate" : [ "2025" ],
+        "creator" : [ "강민혁, 메이오 오신, 누노 캄포스$$Q강민혁, 메이오 오신, 누노 캄포스" ],
+        "publisher" : [ "Hanbit Media, Inc." ],
+        "mms" : [ "991003859750603286" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003859750603286" ],
+        "recordid" : [ "alma991003859750603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)39637097500041" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "1.9935907E-4" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "강민혁" ],
+        "aufirst" : [ "메이오 오신, 누노 캄포스" ],
+        "auinit" : [ "메" ],
+        "au" : [ "강민혁, 메이오 오신, 누노 캄포스" ],
+        "creatorfull" : [ "$$N강민혁, 메이오 오신, 누노 캄포스$$L강민혁$$F메이오 오신, 누노 캄포스$$Rauthor" ],
+        "date" : [ "2025" ],
+        "isbn" : [ "9791169213721", "979-1-169-21372-1" ],
+        "pub" : [ "Hanbit Media, Inc." ],
+        "oclcid" : [ "(caseborm)9791169213721", "(ckb)39637097500041" ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "러닝 랭체인" ]
+      },
+      "sort" : {
+        "title" : [ "러닝 랭체인" ],
+        "author" : [ "강민혁, 메이오 오신, 누노 캄포스" ],
+        "creationdate" : [ "2025" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791169213721,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791169213721&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "14",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "12",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "2",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "8",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "61",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 70,
+    "COMBINED_SEARCH_TIME" : 75,
+    "PROCESS_COMBINED_RESULTS" : 858,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2025",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "books",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "강민혁 메이오 오신 누노 캄포스",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "online_resources",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1388815512
+}

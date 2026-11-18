@@ -1,0 +1,277 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003618979103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "이상문학상 작품집. 제44회(2021) " ],
+        "format" : [ "367 p. : 초상 ; 22 cm" ],
+        "identifier" : [ "$$CISBN$$V9788970124841" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "파주 : 문학사상" ],
+        "mms" : [ "991003618979103286" ],
+        "contributor" : [ "이승우, 1959-$$Q이승우", "박형서, 1972-$$Q박형서", "윤성희, 1973-$$Q윤성희", "장은진, 1976-$$Q장은진", "천운영, 1971-$$Q천운영", "한지수, 1967-$$Q한지수" ],
+        "series" : [ "이상문학상 작품집 ; 제44회(2021)$$Q이상문학상 작품집 " ],
+        "contents" : [ "마음의 부력 / 이승우 -- 97의 세계 / 박형서 -- 블랙홀 / 윤성희 -- 나의 루마니아어 수업 / 장은진 -- 아버지가 되어주오 / 천운영 -- 야(夜)심한 연극반 / 한지수" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "한국 현대 소설", "이상 문학상", "이상문학상 작품집 한국현대소설 한국문학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003618979103286" ],
+        "recordid" : [ "alma991003618979103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015825678" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269725E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "이승우", "박형서", "윤성희", "장은진", "천운영", "한지수" ],
+        "addau" : [ "이승우", "박형서", "윤성희", "장은진", "천운영", "한지수" ],
+        "contributorfull" : [ "$$N이승우$$L이승우$$F$$Rcontributor", "$$N박형서$$Rcontributor", "$$N윤성희$$Rcontributor", "$$N장은진$$Rcontributor", "$$N천운영$$Rcontributor", "$$N한지수$$Rcontributor" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9788970124841" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "문학사상" ],
+        "seriestitle" : [ "이상문학상 작품집 ; 제44회(2021)" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "이상문학상 작품집. 제44회(2021)" ]
+      },
+      "sort" : {
+        "title" : [ "이상문학상 작품집. 제44회(2021) / 이승우, 박형서, 윤성희, 장은진, 천운영, 한지수 지음" ],
+        "author" : [ "이승우, 1959-" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .이52 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003618979103286",
+        "holdId" : "22245882770003286",
+        "holKey" : "HoldingResultKey [mid=22245882770003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .이52 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EC%9D%B452+2021&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .이52 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003618979103286",
+        "holdId" : "22245882770003286",
+        "holKey" : "HoldingResultKey [mid=22245882770003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PL958.66 .이52 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EC%9D%B452+2021&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003618979103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788970124841,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788970124841&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL958.66 .이52 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "895.735",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "24",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "42",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "37",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "87",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 98,
+    "COMBINED_SEARCH_TIME" : 103,
+    "PROCESS_COMBINED_RESULTS" : 604,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "이상 문학상",
+      "count" : "1"
+    }, {
+      "value" : "이상문학상 작품집 한국현대소설 한국문학",
+      "count" : "1"
+    }, {
+      "value" : "한국 현대 소설",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "박형서",
+      "count" : "1"
+    }, {
+      "value" : "윤성희",
+      "count" : "1"
+    }, {
+      "value" : "이승우",
+      "count" : "1"
+    }, {
+      "value" : "장은진",
+      "count" : "1"
+    }, {
+      "value" : "천운영",
+      "count" : "1"
+    }, {
+      "value" : "한지수",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c2sb1",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 281652948
+}

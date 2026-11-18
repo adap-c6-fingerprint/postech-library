@@ -1,0 +1,192 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003567076703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "eng;pol" ],
+        "title" : [ "Strategia UX " ],
+        "format" : [ "1 online resource (344 pages)", "text file" ],
+        "identifier" : [ "$$COCLC$$V(OCoLC)1200511258;$$COCLC$$V(OCoLC)on1200511258;$$CISBN$$V9781098125257;$$CISBN$$V1098125258" ],
+        "creationdate" : [ "2017" ],
+        "creator" : [ "Levy, Jaime, author.$$QLevy, Jaime" ],
+        "publisher" : [ "Helion" ],
+        "description" : [ "Strategia wrażeń użytkownika (UX) wymaga umiejętnego połączenia strategii biznesowej oraz projektowania UX. Niestety jak dotąd brakowało łatwego w zastosowaniu modelu łączenia tych dwóch dziedzin w praktyce. Ten niezwykle praktyczny podręcznik zawiera nieskomplikowane narzędzia i techniki strategiczne, które pomogą Twojemu zespołowi i Tobie w tworzeniu innowacyjnych produktów cyfrowych, z których inni faktycznie będą chcieli korzystać.  Bez względu na to, czy jesteś przedsiębiorcą, projektantem UX lub UI, menedżerem produktu, czy też jednym z członków wewnętrznego zespołu przedsiębiorczego, znajdziesz tutaj metody o różnym stopniu zaawansowania, które będziesz mógł z miejsca wykorzystać w codziennej pracy. Autorka przedstawia tu także biznesowe analizy przypadków, kontekst historyczny i przykłady z życia wzięte, a ponadto dokłada zapis rozmów z wybitnymi strategami, którzy wyjaśniają, jak oni widzą zagadnienie strategii UX. Zdefiniuj i zweryfikuj docelową grupę użytkowników z wykorzystaniem prowizorycznych profili klienta oraz technik rozpoznania rynku. Przeprowadź badania i analizę konkurencji w celu lepszego poznania zatłoczonego rynku lub stworzenia na nim jakiejś niepowtarzalnej wartości. Pomóż członkom swojego zespołu skoncentrować się na podstawowej użyteczności produktu oraz modelu biznesowym poprzez prowadzenie uporządkowanych eksperymentów na prototypach. Projektuj lejki UX zwiększające zaangażowanie klientów poprzez łączenie pożądanych działań użytkowników z odpowiednimi wskaźnikami. Jaime Levy jest specjalistką ds. strategii UX, zamieszkałą w Los Angeles. Szefuje agencji konsultingowej JLR Interactive, obsługującej startupy i duże przedsiębiorstwa. Pomaga im przechodzić od pomysłów biznesowych do innowacyjnych i skalowanych rozwiązań internetowych. Jaime prowadzi na całym świecie warsztaty poświęcone zagadnieniom UX, wykłada również na University of Southern California. „Jaime już od 1993 roku zadziwia mnie swoimi zachwycającymi produktami cyfrowymi. Przeczytaj przytaczane przez nią ciekawe historie, zapoznaj się z jej lekcjami, a też będziesz umiał stworzyć coś niesamowitego”.  — Mark Frauenfelder, założyciel firmy Boing Boing, redaktor magazynu „Make”  „Jaime tworzyła przełomowe rozwiązania z zakresu UX na długo przed tym, zanim dziedzinę tę w ogóle nazwano UX. Przeczytaj tę książkę i dowiedz się, jak zejść z drogo swoim klientom i samemu sobie, a także jak tworzyć wartość dla wszystkich, którzy mają kontakt z Twoim produktem lub ..." ],
+        "mms" : [ "991003567076703286" ],
+        "edition" : [ "1st edition" ],
+        "unititle" : [ "UX strategy. Polish" ],
+        "includes" : [ "Levy, Jaime, UX strategy. Polish$$QLevy, Jaime, UX strategy. Polish" ],
+        "version" : [ "0" ],
+        "subject" : [ "User-centered system design", "Human-computer interaction", "User interfaces (Computer systems)", "Web sites -- Design" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003567076703286" ],
+        "recordid" : [ "alma991003567076703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)4100000011317888" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "4.362911E-6" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2015098684" ],
+        "aulast" : [ "Levy" ],
+        "aufirst" : [ "Jaime" ],
+        "auinit" : [ "J" ],
+        "au" : [ "Levy, Jaime" ],
+        "creatorfull" : [ "$$NLevy, Jaime$$LLevy$$FJaime$$Rauthor" ],
+        "date" : [ "2017" ],
+        "isbn" : [ "9781098125257", "1098125258" ],
+        "abstract" : [ "Strategia wrażeń użytkownika (UX) wymaga umiejętnego połączenia strategii biznesowej oraz projektowania UX. Niestety jak dotąd brakowało łatwego w zastosowaniu modelu łączenia tych dwóch dziedzin w praktyce. Ten niezwykle praktyczny podręcznik zawiera nieskomplikowane narzędzia i techniki strategiczne, które pomogą Twojemu zespołowi i Tobie w tworzeniu innowacyjnych produktów cyfrowych, z których inni faktycznie będą chcieli korzystać.  Bez względu na to, czy jesteś przedsiębiorcą, projektantem UX lub UI, menedżerem produktu, czy też jednym z członków wewnętrznego zespołu przedsiębiorczego, znajdziesz tutaj metody o różnym stopniu zaawansowania, które będziesz mógł z miejsca wykorzystać w codziennej pracy. Autorka przedstawia tu także biznesowe analizy przypadków, kontekst historyczny i przykłady z życia wzięte, a ponadto dokłada zapis rozmów z wybitnymi strategami, którzy wyjaśniają, jak oni widzą zagadnienie strategii UX. Zdefiniuj i zweryfikuj docelową grupę użytkowników z wykorzystaniem prowizorycznych profili klienta oraz technik rozpoznania rynku. Przeprowadź badania i analizę konkurencji w celu lepszego poznania zatłoczonego rynku lub stworzenia na nim jakiejś niepowtarzalnej wartości. Pomóż członkom swojego zespołu skoncentrować się na podstawowej użyteczności produktu oraz modelu biznesowym poprzez prowadzenie uporządkowanych eksperymentów na prototypach. Projektuj lejki UX zwiększające zaangażowanie klientów poprzez łączenie pożądanych działań użytkowników z odpowiednimi wskaźnikami. Jaime Levy jest specjalistką ds. strategii UX, zamieszkałą w Los Angeles. Szefuje agencji konsultingowej JLR Interactive, obsługującej startupy i duże przedsiębiorstwa. Pomaga im przechodzić od pomysłów biznesowych do innowacyjnych i skalowanych rozwiązań internetowych. Jaime prowadzi na całym świecie warsztaty poświęcone zagadnieniom UX, wykłada również na University of Southern California. „Jaime już od 1993 roku zadziwia mnie swoimi zachwycającymi produktami cyfrowymi. Przeczytaj przytaczane przez nią ciekawe historie, zapoznaj się z jej lekcjami, a też będziesz umiał stworzyć coś niesamowitego”.  — Mark Frauenfelder, założyciel firmy Boing Boing, redaktor magazynu „Make”  „Jaime tworzyła przełomowe rozwiązania z zakresu UX na długo przed tym, zanim dziedzinę tę w ogóle nazwano UX. Przeczytaj tę książkę i dowiedz się, jak zejść z drogo swoim klientom i samemu sobie, a także jak tworzyć wartość dla wszystkich, którzy mają kontakt z Twoim produktem lub ..." ],
+        "pub" : [ "Helion" ],
+        "oclcid" : [ "(ocolc)1200511258", "(ocolc)on1200511258" ],
+        "edition" : [ "1st edition" ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Strategia UX" ]
+      },
+      "sort" : {
+        "title" : [ "Strategia UX /" ],
+        "author" : [ "Levy, Jaime, author." ],
+        "creationdate" : [ "2017" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9781098125257,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qa!76.9 u83",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "16",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "14",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "2",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "62",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 72,
+    "COMBINED_SEARCH_TIME" : 79,
+    "PROCESS_COMBINED_RESULTS" : 332,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "eng",
+      "count" : "1"
+    }, {
+      "value" : "pol",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2017",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "books",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Human Computer Interaction",
+      "count" : "1"
+    }, {
+      "value" : "User Centered System Design",
+      "count" : "1"
+    }, {
+      "value" : "User Interfaces Computer Systems",
+      "count" : "1"
+    }, {
+      "value" : "Web Sites Design",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Levy Jaime",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "online_resources",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -544241911
+}

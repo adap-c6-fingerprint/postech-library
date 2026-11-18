@@ -1,0 +1,277 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003619979203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "어둠의 세계 : 무기산업을 둘러싼 부패의 내막과 전쟁 기획자들 " ],
+        "format" : [ "899 p. : 삽화, 도표, 초상 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791190422611" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "파주 : 오월의봄", "Paju : O wol ui Bom" ],
+        "mms" : [ "991003619979203286" ],
+        "contributor" : [ "Feinstein, Andrew$$QFeinstein, Andrew", "조아영$$Q조아영", "이세현$$Q이세현", "파인스타인, 앤드루$$Q파인스타인, 앤드루", "Jo, Ayeong$$QJo, Ayeong", "I, Sehyeon$$QI, Sehyeon" ],
+        "addtitle" : [ "Shadow world : inside the global arms trade" ],
+        "vertitle" : [ "Eodum ui segye" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "무기 산업[武器産業]", "부패(타락)[腐敗]" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003619979203286" ],
+        "recordid" : [ "alma991003619979203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015775935" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270189E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2004109122" ],
+        "aulast" : [ "Feinstein", "조아영", "이세현", "파인스타인" ],
+        "aufirst" : [ "Andrew", "앤드루" ],
+        "auinit" : [ "A", "앤" ],
+        "addau" : [ "Feinstein, Andrew", "조아영", "이세현", "파인스타인, 앤드루" ],
+        "contributorfull" : [ "$$NFeinstein, Andrew$$LFeinstein$$FAndrew$$Rcontributor", "$$N조아영$$Rcontributor", "$$N이세현$$Rcontributor", "$$N파인스타인, 앤드루$$Rcontributor" ],
+        "addtitle" : [ "Shadow world : inside the global arms trade" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9791190422611" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "오월의봄" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "어둠의 세계 : 무기산업을 둘러싼 부패의 내막과 전쟁 기획자들" ]
+      },
+      "sort" : {
+        "title" : [ "어둠의 세계 : 무기산업을 둘러싼 부패의 내막과 전쟁 기획자들 / 앤드루 파인스타인 지음 ; 조아영, 이세현 옮김" ],
+        "author" : [ "Feinstein, Andrew" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD9743.A2 .F45 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003619979203286",
+        "holdId" : "22246062840003286",
+        "holKey" : "HoldingResultKey [mid=22246062840003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD9743.A2 .F45 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD9743.A2+.F45+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD9743.A2 .F45 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003619979203286",
+        "holdId" : "22246062840003286",
+        "holKey" : "HoldingResultKey [mid=22246062840003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD9743.A2 .F45 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD9743.A2+.F45+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003619979203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791190422611,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791190422611&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HD9743.A2 .F45 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "338.47355",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "5",
+    "CALL_SOLR_GET_IDS_LIST" : "25",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "53",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "48",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "8",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "95",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 104,
+    "COMBINED_SEARCH_TIME" : 110,
+    "PROCESS_COMBINED_RESULTS" : 941,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "무기 산업 武器産業 Ksh1998029386",
+      "count" : "1"
+    }, {
+      "value" : "부패 타락 腐敗 Ksh1998026135",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Feinstein Andrew",
+      "count" : "1"
+    }, {
+      "value" : "I Sehyeon",
+      "count" : "1"
+    }, {
+      "value" : "Jo Ayeong",
+      "count" : "1"
+    }, {
+      "value" : "이세현",
+      "count" : "1"
+    }, {
+      "value" : "조아영",
+      "count" : "1"
+    }, {
+      "value" : "파인스타인 앤드루",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1725383534
+}

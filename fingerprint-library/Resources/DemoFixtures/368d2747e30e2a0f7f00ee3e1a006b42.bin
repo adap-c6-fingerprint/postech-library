@@ -1,0 +1,184 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003548406103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "journal" ],
+        "language" : [ "kor" ],
+        "title" : [ "Onŭl ŭi Han'guk (Seoul, Korea : 1983)" ],
+        "format" : [ "1 online resource" ],
+        "identifier" : [ "$$CISSN$$V1227-1632" ],
+        "creationdate" : [ "1983-" ],
+        "publisher" : [ "Sŏul-si : Han'guk Ŏllon Munhwa Chinhŭngwŏn", "서울시 : 한국 언론 문화 진흥원", "Ch'angganho (1983. 2)-" ],
+        "mms" : [ "991003548406103286" ],
+        "contributor" : [ "Han'guk Ŏllon Munhwa Chinhŭngwŏn, issuing body.$$QHan'guk Ŏllon Munhwa Chinhŭngwŏn", "한국 언론 문화 진흥원, issuing body.$$Q한국 언론 문화 진흥원" ],
+        "addtitle" : [ "Korea today" ],
+        "vertitle" : [ "오늘 의 한국 = Korea today." ],
+        "frequency" : [ "Monthly" ],
+        "genre" : [ "History", "Periodicals" ],
+        "relation" : [ "$$Cedition$$VKorea today$$QKorea today", "$$Cform$$VPrint version: Onŭl ŭi Han'guk (Seoul, Korea : 1983)$$QOnŭl ŭi Han'guk (Seoul, Korea : 1983)" ],
+        "unititle" : [ "Onŭl ŭi Han'guk (Seoul, Korea : 1983)", "오늘 의 한국 (Seoul, Korea : 1983)" ],
+        "place" : [ "Sŏul-si :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Korea (South)$$QKorea (South) -- Periodicals", "Korea (South)", "Since 1960" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003548406103286" ],
+        "recordid" : [ "alma991003548406103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "(CKB)3280000000003901" ],
+        "sourcesystem" : [ "CKB" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "4.362911E-6" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDSubject" : [ "sh2008122916", "fst01206791" ],
+        "originatingSystemIDContributor" : [ "no2018127064" ],
+        "addau" : [ "Han'guk Ŏllon Munhwa Chinhŭngwŏn, issuing body." ],
+        "addtitle" : [ "Korea today" ],
+        "date" : [ "1983", "1983-" ],
+        "issn" : [ "1227-1632" ],
+        "cop" : [ "Sŏul T'ŭkpyŏlsi" ],
+        "pub" : [ "Onŭl ŭi Han'guk" ],
+        "oclcid" : [ "(ckb)3280000000003901", "(conser)---83643605-" ],
+        "format" : [ "journal" ],
+        "genre" : [ "journal" ],
+        "ristype" : [ "JOUR" ],
+        "jtitle" : [ "Onŭl ŭi Han'guk (Seoul, Korea : 1983)" ]
+      },
+      "sort" : {
+        "title" : [ "Onŭl ŭi Han'guk (Seoul, Korea : 1983)" ],
+        "author" : [ "Han'guk Ŏllon Munhwa Chinhŭngwŏn, issuing body." ],
+        "creationdate" : [ "1983" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "ds\"922ǂ o575",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "23",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "16",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "14",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "2",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "61",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 71,
+    "COMBINED_SEARCH_TIME" : 77,
+    "PROCESS_COMBINED_RESULTS" : 810,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "1983",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "journals",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Korea South Https Id Oclc Org Worldcat Entity E39qbtfrg3kwbtgw8wmxd4ywry",
+      "count" : "1"
+    }, {
+      "value" : "Korea South Periodicals",
+      "count" : "1"
+    }, {
+      "value" : "Since 1960",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Hanguk Ŏllon Munhwa Chinhŭngwŏn",
+      "count" : "1"
+    }, {
+      "value" : "한국 언론 문화 진흥원",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "online_resources",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1952097495
+}

@@ -16,7 +16,30 @@ nonisolated struct BookHoldingsClient: Sendable {
 extension BookHoldingsClient: DependencyKey {
     private static let cache = BookHoldingsCache()
 
-    static let liveValue = Self(fetch: { recordID in
+    #if DEMO
+    static let liveValue = Self.demoFallback(recorded: networkValue)
+    #else
+    static let liveValue = networkValue
+    #endif
+
+    /// 오프라인 시연: 녹화한 소장 응답(대출 상태 포함)을 우선하고, 없으면 번들 데이터셋의 소장처·청구기호를 쓴다.
+    static func demoFallback(
+        recorded: BookHoldingsClient,
+        catalog: @escaping @Sendable () async throws -> DemoCatalog = { try await DemoCatalogLoader.shared.load() }
+    ) -> Self {
+        Self(fetch: { recordID in
+            do {
+                return try await recorded.fetch(recordID)
+            } catch is DemoFixtureMissError {
+                guard let holdings = try await catalog().holdings(recordID: recordID) else {
+                    throw DemoFixtureMissError()
+                }
+                return holdings
+            }
+        })
+    }
+
+    private static let networkValue = Self(fetch: { recordID in
         @Dependency(\.httpClient) var httpClient
         var relay = BookAPIClient(httpClient: httpClient)
         let configuration = try AppConfiguration.relayConfiguration()

@@ -1,0 +1,23 @@
+{
+  "info" : {
+    "totalResultsLocal" : 0,
+    "totalResultsPC" : -1,
+    "total" : 0,
+    "first" : 1,
+    "last" : 0
+  },
+  "highlights" : { },
+  "docs" : [ ],
+  "timelog" : {
+    "CALL_SOLR_GET_IDS_LIST" : "16",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "0",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "19",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 20,
+    "COMBINED_SEARCH_TIME" : 28,
+    "PROCESS_COMBINED_RESULTS" : 890,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ ],
+  "facetsCacheKey" : -1726812382
+}
