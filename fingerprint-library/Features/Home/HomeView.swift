@@ -128,7 +128,7 @@ struct HomeView: View {
                 .padding(.horizontal, 16)
             } else if !store.showsKulumiCovers, isAtRecommendationEnd,
                       let message = store.recommendationErrorMessage {
-                refreshError(message) { store.send(.retryRecommendationsButtonTapped) }
+                refreshError(message)
             }
         }
     }
@@ -212,13 +212,16 @@ struct HomeView: View {
             .accessibilityLabel("추천 도서 준비 중")
     }
 
-    private func refreshError(_ message: String, retry: @escaping () -> Void) -> some View {
+    // retry가 없으면 문구로만 알린다. 추천 6권은 캐러셀 끝에서 다시 당기면 재시도된다.
+    private func refreshError(_ message: String, retry: (() -> Void)? = nil) -> some View {
         HStack(spacing: 12) {
             Text(message)
                 .foregroundStyle(.secondary)
-            Button("다시 시도", action: retry)
-                .fontWeight(.semibold)
-                .buttonStyle(.borderless)
+            if let retry {
+                Button("다시 시도", action: retry)
+                    .fontWeight(.semibold)
+                    .buttonStyle(.borderless)
+            }
         }
         .font(.footnote)
         .frame(maxWidth: .infinity, alignment: .trailing)
