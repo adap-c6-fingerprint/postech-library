@@ -1,0 +1,272 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003581577703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(설계·생산·공무·안전엔지니어를 위한) 스마트공장 안전성 확보 기술 : 지금의 자동화 설비는 과연 안전할 수 있을까? " ],
+        "format" : [ "619 p : 삽화, 도표 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788942592494" ],
+        "creationdate" : [ "2019" ],
+        "publisher" : [ "파주 : 동화기술" ],
+        "mms" : [ "991003581577703286" ],
+        "contributor" : [ "오승현$$Q오승현", "권대욱$$Q권대욱", "권오헌$$Q권오헌", "김재균$$Q김재균", "백종배$$Q백종배", "이진우$$Q이진우" ],
+        "addtitle" : [ "지금의 자동화 설비는 과연 안전할 수 있을까?" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "공장안전 산업안전 스마트공장" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003581577703286" ],
+        "recordid" : [ "alma991003581577703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000051986967" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n82064359" ],
+        "aulast" : [ "오승현", "권대욱", "권오헌", "김재균", "백종배", "이진우" ],
+        "addau" : [ "오승현", "권대욱", "권오헌", "김재균", "백종배", "이진우" ],
+        "contributorfull" : [ "$$N오승현$$L오승현$$F$$Rcontributor", "$$N권대욱$$Rcontributor", "$$N권오헌$$Rcontributor", "$$N김재균$$Rcontributor", "$$N백종배$$Rcontributor", "$$N이진우$$Rcontributor" ],
+        "addtitle" : [ "지금의 자동화 설비는 과연 안전할 수 있을까?" ],
+        "date" : [ "2019" ],
+        "isbn" : [ "9788942592494" ],
+        "notes" : [ "참고문헌 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "동화기술" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(설계·생산·공무·안전엔지니어를 위한) 스마트공장 안전성 확보 기술 : 지금의 자동화 설비는 과연 안전할 수 있을까?" ]
+      },
+      "sort" : {
+        "title" : [ "(설계·생산·공무·안전엔지니어를 위한) 스마트공장 안전성 확보 기술 : 지금의 자동화 설비는 과연 안전할 수 있을까? / 이진우 [외] 저" ],
+        "author" : [ "오승현" ],
+        "creationdate" : [ "2019" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TJ213 .스32 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003581577703286",
+        "holdId" : "22235502310003286",
+        "holKey" : "HoldingResultKey [mid=22235502310003286, libraryId=117046190003286, locationCode=c3b, callNumber=TJ213 .스32 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TJ213+.%EC%8A%A432+2019&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TJ213 .스32 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003581577703286",
+        "holdId" : "22235502310003286",
+        "holKey" : "HoldingResultKey [mid=22235502310003286, libraryId=117046190003286, locationCode=c3b, callNumber=TJ213 .스32 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TJ213+.%EC%8A%A432+2019&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003581577703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788942592494,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788942592494&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TJ213 .스32 2019",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tj000000000213.스000000000032000000002019",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "35",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "29",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "15",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "89",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 101,
+    "COMBINED_SEARCH_TIME" : 109,
+    "PROCESS_COMBINED_RESULTS" : 717,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2019",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "공장안전 산업안전 스마트공장",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "권대욱",
+      "count" : "1"
+    }, {
+      "value" : "권오헌",
+      "count" : "1"
+    }, {
+      "value" : "김재균",
+      "count" : "1"
+    }, {
+      "value" : "백종배",
+      "count" : "1"
+    }, {
+      "value" : "오승현",
+      "count" : "1"
+    }, {
+      "value" : "이진우",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 641519639
+}

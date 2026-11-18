@@ -1,0 +1,257 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000915859703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "세계 꿈의 도서관 / " ],
+        "format" : [ "223 p. :  채색삽도 ;  30 cm." ],
+        "identifier" : [ "$$CISBN$$V9788961092524" ],
+        "creationdate" : [ "2014" ],
+        "creator" : [ "청수영내 淸水玲奈$$Q청수영내" ],
+        "publisher" : [ "서울 : 지식여행" ],
+        "mms" : [ "991000915859703286" ],
+        "contributor" : [ "윤희육$$Q윤희육", "시미즈 레이나$$Q시미즈 레이나" ],
+        "addtitle" : [ "世界の夢の圖書館", "37 Wonderful Libraries around the world", "세계노몽노도서관" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000915859703286" ],
+        "recordid" : [ "alma991000915859703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b14540423-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.526969E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "청수영내" ],
+        "au" : [ "청수영내" ],
+        "addau" : [ "윤희육", "시미즈 레이나" ],
+        "creatorfull" : [ "$$N청수영내$$L청수영내$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N윤희육$$L윤희육$$F$$Rcontributor", "$$N시미즈 레이나$$Rcontributor" ],
+        "date" : [ "2014" ],
+        "isbn" : [ "9788961092524" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "지식여행," ],
+        "oclcid" : [ "(ptech)b14540423-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "세계 꿈의 도서관 /" ]
+      },
+      "sort" : {
+        "title" : [ "세계 꿈의 도서관 /  시미즈 레이나 외 지음 ; 윤희육 옮김." ],
+        "author" : [ "청수영내 淸水玲奈" ],
+        "creationdate" : [ "2014" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "Z679 .청56 2014",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000915859703286",
+        "holdId" : "2292823950003286",
+        "holKey" : "HoldingResultKey [mid=2292823950003286, libraryId=117046190003286, locationCode=c3b, callNumber=Z679 .청56 2014]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)Z679+.%EC%B2%AD56+2014&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "Z679 .청56 2014",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000915859703286",
+        "holdId" : "2292823950003286",
+        "holKey" : "HoldingResultKey [mid=2292823950003286, libraryId=117046190003286, locationCode=c3b, callNumber=Z679 .청56 2014]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)Z679+.%EC%B2%AD56+2014&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000915859703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788961092524,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788961092524&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "Z679 .청56 2014",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "022 .3",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "112",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "106",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "157",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 168,
+    "COMBINED_SEARCH_TIME" : 176,
+    "PROCESS_COMBINED_RESULTS" : 904,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2014",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "시미즈 레이나",
+      "count" : "1"
+    }, {
+      "value" : "윤희육",
+      "count" : "1"
+    }, {
+      "value" : "청수영내",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 212865804
+}

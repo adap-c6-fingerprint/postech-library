@@ -1,0 +1,261 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003772455603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "한미 국방경영 " ],
+        "format" : [ "2책 : 삽화, 도표 ; 25 cm" ],
+        "identifier" : [ "$$CISBN$$V9791197501548 (v.상);$$CISBN$$V9791197501555 (v.하);$$CISBN$$V9791197501531 (세트)" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : GDC Media" ],
+        "mms" : [ "991003772455603286" ],
+        "contributor" : [ "최수동$$Q최수동" ],
+        "addtitle" : [ "Defense management" ],
+        "contents" : [ "상. 국방조직과 국방예산 (466 p.) -- 하. 군사력 건설과 작전기획 비교 (576 p.)" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "군사행정", "국방" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003772455603286" ],
+        "recordid" : [ "alma991003772455603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016385096" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n86116177" ],
+        "aulast" : [ "최수동" ],
+        "addau" : [ "최수동" ],
+        "contributorfull" : [ "$$N최수동$$L최수동$$F$$Rcontributor" ],
+        "addtitle" : [ "Defense management" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791197501548", "9791197501555", "9791197501531" ],
+        "notes" : [ "각 장마다 참고문헌과 색인(V상:p. 437-444, V하:p. 531-540)수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "GDC Media" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "한미 국방경영" ]
+      },
+      "sort" : {
+        "title" : [ "한미 국방경영 / 최수동 지음" ],
+        "author" : [ "최수동" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "UA853.K6 .최56 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003772455603286",
+        "holdId" : "22284900370003286",
+        "holKey" : "HoldingResultKey [mid=22284900370003286, libraryId=117046190003286, locationCode=c3b, callNumber=UA853.K6 .최56 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)UA853.K6+.%EC%B5%9C56+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "UA853.K6 .최56 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003772455603286",
+        "holdId" : "22284900370003286",
+        "holKey" : "HoldingResultKey [mid=22284900370003286, libraryId=117046190003286, locationCode=c3b, callNumber=UA853.K6 .최56 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)UA853.K6+.%EC%B5%9C56+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003772455603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791197501548,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791197501548 (v.상)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "UA853.K6 .최56 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "355.6",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "351",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "87",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "81",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "461",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 469,
+    "COMBINED_SEARCH_TIME" : 477,
+    "PROCESS_COMBINED_RESULTS" : 547,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "국방",
+      "count" : "1"
+    }, {
+      "value" : "군사행정",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "최수동",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 961202515
+}

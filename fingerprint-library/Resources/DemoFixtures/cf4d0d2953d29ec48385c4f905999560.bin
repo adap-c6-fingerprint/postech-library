@@ -1,0 +1,258 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003815255403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "우주 기술의 파괴적 혁신: 이제 제5차 산업혁명이다" ],
+        "format" : [ "287p.: 천연색 삽화; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9791191679182" ],
+        "creationdate" : [ "2023" ],
+        "creator" : [ "김승조, 지음$$Q김승조" ],
+        "publisher" : [ "서울: 텍스트북스TextBook" ],
+        "mms" : [ "991003815255403286" ],
+        "addtitle" : [ "Disruptive innovation in space technology" ],
+        "place" : [ "서울:" ],
+        "version" : [ "0" ],
+        "subject" : [ "우주", "우주 과학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003815255403286" ],
+        "recordid" : [ "alma991003815255403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016848464" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "김승조" ],
+        "au" : [ "김승조" ],
+        "creatorfull" : [ "$$N김승조$$L김승조$$F$$Rauthor" ],
+        "addtitle" : [ "Disruptive innovation in space technology" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9791191679182" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "텍스트북스TextBook" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "우주 기술의 파괴적 혁신: 이제 제5차 산업혁명이다" ]
+      },
+      "sort" : {
+        "title" : [ "우주 기술의 파괴적 혁신: 이제 제5차 산업혁명이다/ 김승조 지음" ],
+        "author" : [ "김승조, 지음" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB500 .김57 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003815255403286",
+        "holdId" : "22294911130003286",
+        "holKey" : "HoldingResultKey [mid=22294911130003286, libraryId=117046190003286, locationCode=c3b, callNumber=QB500 .김57 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB500+.%EA%B9%8057+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB500 .김57 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003815255403286",
+        "holdId" : "22294911130003286",
+        "holKey" : "HoldingResultKey [mid=22294911130003286, libraryId=117046190003286, locationCode=c3b, callNumber=QB500 .김57 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB500+.%EA%B9%8057+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003815255403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791191679182,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791191679182&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QB500 .김57 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "523.1",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "17",
+    "CALL_SOLR_GET_IDS_LIST" : "23",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "35",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "11",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "30",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "7",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "86",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 95,
+    "COMBINED_SEARCH_TIME" : 101,
+    "PROCESS_COMBINED_RESULTS" : 439,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2023",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "우주",
+      "count" : "1"
+    }, {
+      "value" : "우주 과학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김승조",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1034594743
+}

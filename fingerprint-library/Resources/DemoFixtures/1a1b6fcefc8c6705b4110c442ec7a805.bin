@@ -1,0 +1,259 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003328271303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(만화로 배우는)곤충의 진화 " ],
+        "format" : [ "352 p. : 삽화  ; 23cm" ],
+        "identifier" : [ "$$CISBN$$V9791157842940" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "김도윤$$Q김도윤" ],
+        "publisher" : [ "서울 : 한빛비즈" ],
+        "description" : [ "김도윤 작가는 곤충 덕후가 확실하다. 그리고 과학 천재다. 지구상에서 가장 번성한 생물인 곤충을 쉽고 재미있게 설명해주는 아이디어가 번뜩이는 명작이다. _장영철 충우곤충박물관장" ],
+        "mms" : [ "991003328271303286" ],
+        "series" : [ "한빛비즈 교양툰$$Q한빛비즈 교양툰" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "만화 곤충강[昆蟲綱] 진화" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003328271303286" ],
+        "recordid" : [ "alma991003328271303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000336059" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n83166846" ],
+        "aulast" : [ "김도윤" ],
+        "au" : [ "김도윤" ],
+        "creatorfull" : [ "$$N김도윤$$L김도윤$$F$$Rauthor" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9791157842940" ],
+        "notes" : [ "참고문헌 : p. 348-351" ],
+        "abstract" : [ "김도윤 작가는 곤충 덕후가 확실하다. 그리고 과학 천재다. 지구상에서 가장 번성한 생물인 곤충을 쉽고 재미있게 설명해주는 아이디어가 번뜩이는 명작이다. _장영철 충우곤충박물관장" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한빛비즈" ],
+        "seriestitle" : [ "한빛비즈 교양툰" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(만화로 배우는)곤충의 진화" ]
+      },
+      "sort" : {
+        "title" : [ "(만화로 배우는)곤충의 진화 / 김도윤" ],
+        "author" : [ "김도윤" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QL468.7 .김25 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003328271303286",
+        "holdId" : "22150040440003286",
+        "holKey" : "HoldingResultKey [mid=22150040440003286, libraryId=117046190003286, locationCode=c3b, callNumber=QL468.7 .김25 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QL468.7+.%EA%B9%8025+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QL468.7 .김25 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003328271303286",
+        "holdId" : "22150040440003286",
+        "holKey" : "HoldingResultKey [mid=22150040440003286, libraryId=117046190003286, locationCode=c3b, callNumber=QL468.7 .김25 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QL468.7+.%EA%B9%8025+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003328271303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791157842940,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791157842940&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QL468.7 .김25 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "ql000000000468.000000000007.김000000000025000000002018",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "30",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "90",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "84",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "141",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 152,
+    "COMBINED_SEARCH_TIME" : 159,
+    "PROCESS_COMBINED_RESULTS" : 818,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2018",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "만화 곤충강 昆蟲綱 진화",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김도윤",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1781253721
+}

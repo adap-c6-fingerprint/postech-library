@@ -1,0 +1,278 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003575376203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "프리드버그 선형대수학 " ],
+        "format" : [ "616 p : 삽화 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9791156644910" ],
+        "creationdate" : [ "2020" ],
+        "creator" : [ "Friedberg, Stephen H.$$QFriedberg, Stephen H." ],
+        "publisher" : [ "서울 : 한빛아카데미" ],
+        "mms" : [ "991003575376203286" ],
+        "contributor" : [ "Insel, Arnold J.$$QInsel, Arnold J.", "Spence, Lawrence E.$$QSpence, Lawrence E.", "한빛수학교재연구소$$Q한빛수학교재연구소", "프리드버그, 스티븐 H$$Q프리드버그, 스티븐 H", "인셀, 아놀드 J$$Q인셀, 아놀드 J", "스펜스, 로렌스 E$$Q스펜스, 로렌스 E", "심형보$$Q심형보" ],
+        "addtitle" : [ "선형대수학", "Linear Algebra" ],
+        "edition" : [ "5판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003575376203286" ],
+        "recordid" : [ "alma991003575376203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015606620" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n78045727" ],
+        "originatingSystemIDContributor" : [ "n78045728", "n78045729" ],
+        "aulast" : [ "Friedberg" ],
+        "aufirst" : [ "Stephen H." ],
+        "auinit" : [ "S" ],
+        "au" : [ "Friedberg, Stephen H." ],
+        "addau" : [ "Insel, Arnold J.", "Spence, Lawrence E.", "한빛수학교재연구소", "프리드버그, 스티븐 H", "인셀, 아놀드 J", "스펜스, 로렌스 E", "심형보" ],
+        "creatorfull" : [ "$$NFriedberg, Stephen H.$$LFriedberg$$FStephen H.$$Rauthor" ],
+        "contributorfull" : [ "$$NInsel, Arnold J.$$LInsel$$FArnold J.$$Rcontributor", "$$NSpence, Lawrence E.$$Rcontributor", "$$N프리드버그, 스티븐 H$$Rcontributor", "$$N인셀, 아놀드 J$$Rcontributor", "$$N스펜스, 로렌스 E$$Rcontributor", "$$N심형보$$Rcontributor" ],
+        "addtitle" : [ "선형대수학", "Linear Algebra" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9791156644910" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한빛아카데미" ],
+        "edition" : [ "5판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "프리드버그 선형대수학" ]
+      },
+      "sort" : {
+        "title" : [ "프리드버그 선형대수학 / 스티븐 H. 프리드버그, 아놀드 J. 인셀, 로렌스 E. 스펜스 지음 ; 한빛수학교재연구소 옮김" ],
+        "author" : [ "Friedberg, Stephen H." ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA184 .F75 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003575376203286",
+        "holdId" : "22233851800003286",
+        "holKey" : "HoldingResultKey [mid=22233851800003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA184 .F75 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA184+.F75+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA184 .F75 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003575376203286",
+        "holdId" : "22233851800003286",
+        "holKey" : "HoldingResultKey [mid=22233851800003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA184 .F75 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA184+.F75+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003575376203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791156644910,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791156644910&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA184 .F75 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "512.5",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "31",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "26",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "15",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "86",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 100,
+    "COMBINED_SEARCH_TIME" : 106,
+    "PROCESS_COMBINED_RESULTS" : 728,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2020",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Friedberg Stephen H",
+      "count" : "1"
+    }, {
+      "value" : "Insel Arnold J",
+      "count" : "1"
+    }, {
+      "value" : "Spence Lawrence E",
+      "count" : "1"
+    }, {
+      "value" : "스펜스 로렌스 E",
+      "count" : "1"
+    }, {
+      "value" : "심형보",
+      "count" : "1"
+    }, {
+      "value" : "인셀 아놀드 J",
+      "count" : "1"
+    }, {
+      "value" : "프리드버그 스티븐 H",
+      "count" : "1"
+    }, {
+      "value" : "한빛수학교재연구소",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 19018612
+}

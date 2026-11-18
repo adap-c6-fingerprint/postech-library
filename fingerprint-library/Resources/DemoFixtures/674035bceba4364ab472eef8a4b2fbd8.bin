@@ -1,0 +1,286 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000634949703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "국방발전, 어떻게 할 것인가" ],
+        "format" : [ "395 p. : 삽도 ; 25 cm" ],
+        "identifier" : [ "$$CISBN$$V8987417689" ],
+        "creationdate" : [ "2004" ],
+        "creator" : [ "황동준$$Q황동준" ],
+        "publisher" : [ "서울 : 한국국방연구원" ],
+        "mms" : [ "991000634949703286" ],
+        "contributor" : [ "황동준$$Q황동준", "전경만$$Q전경만", "김창수$$Q김창수", "임길섭$$Q임길섭", "박주현$$Q박주현", "정주성$$Q정주성", "최광표$$Q최광표", "조영진$$Q조영진", "최성빈$$Q최성빈", "정구돈$$Q정구돈", "독고순$$Q독고순", "한국국방연구원$$Q한국국방연구원" ],
+        "contents" : [ "자주국방을 위한 제언/황동준. - 중장기 안보비전과 한국형 국방전략/전경만. - 한미동맹의 안정적 발전을 위한 제안/김창수. - 자주적 방위체제 구축을 지향한 중장기 군사력 발전방향/임길섭. - 자주국방을 위한 적정국방비 규모와 필요성/박주현. - 한국 병역정책의 바람직한 진로/정주성. - 공정하고 투명한 군 인사관리 혁신방향/최광표. - 국방민간인력 운영의 활성화 방향과 과제/조영진. - 군사기술 선진화 방안/최성빈. - 국방정보화 비전 및 소요/정구돈. - 병영 근무 환경 발전 연구 : 병사 삶의 질을 중심으로/독고순" ],
+        "relatedwork" : [ "황동준/ 자주국방을 위한 제언$$Q황동준/ 자주국방을 위한 제언", "전경만/ 중장기 안보비전과 한국형 국방전략$$Q전경만/ 중장기 안보비전과 한국형 국방전략", "김창수/ 한미동맹의 안정적 발전을 위한 제안$$Q김창수/ 한미동맹의 안정적 발전을 위한 제안", "임길섭/ 자주적 방위체제 구축을 지향한 중장기 군사력 발전방향$$Q임길섭/ 자주적 방위체제 구축을 지향한 중장기 군사력 발전방향", "박주현/ 자주국방을 위한 적정국방비 규모와 필요성$$Q박주현/ 자주국방을 위한 적정국방비 규모와 필요성", "정주성/ 한국 병역정책의 바람직한 진로$$Q정주성/ 한국 병역정책의 바람직한 진로", "최광표/ 공정하고 투명한 군 인사관리 혁신방향$$Q최광표/ 공정하고 투명한 군 인사관리 혁신방향", "조영진/ 국방민간인력 운영의 활성화 방향과 과제$$Q조영진/ 국방민간인력 운영의 활성화 방향과 과제", "최성빈/ 군사기술 선진화 방안$$Q최성빈/ 군사기술 선진화 방안", "정구돈/ 국방정보화 비전 및 소요$$Q정구돈/ 국방정보화 비전 및 소요", "독고순/ 병영 근무 환경 발전 연구 : 병사 삶의 질을 중심으로$$Q독고순/ 병영 근무 환경 발전 연구 : 병사 삶의 질을 중심으로" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000634949703286" ],
+        "recordid" : [ "alma991000634949703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12289632-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.526969E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n88267398" ],
+        "aulast" : [ "황동준" ],
+        "au" : [ "황동준" ],
+        "addau" : [ "황동준", "전경만", "김창수", "임길섭", "박주현", "정주성", "최광표", "조영진", "최성빈", "정구돈", "독고순", "한국국방연구원" ],
+        "creatorfull" : [ "$$N황동준$$L황동준$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N황동준$$L황동준/$$F$$Rcontributor", "$$N전경만$$Rcontributor", "$$N김창수$$Rcontributor", "$$N임길섭$$Rcontributor", "$$N박주현$$Rcontributor", "$$N정주성$$Rcontributor", "$$N최광표$$Rcontributor", "$$N조영진$$Rcontributor", "$$N최성빈$$Rcontributor", "$$N정구돈$$Rcontributor", "$$N독고순$$Rcontributor" ],
+        "date" : [ "2004" ],
+        "isbn" : [ "8987417689" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국국방연구원" ],
+        "oclcid" : [ "(ptech)b12289632-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "국방발전, 어떻게 할 것인가" ]
+      },
+      "sort" : {
+        "title" : [ "국방발전, 어떻게 할 것인가/ 황동준 편" ],
+        "author" : [ "황동준" ],
+        "creationdate" : [ "2004" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "U24 .황25 2004",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000634949703286",
+        "holdId" : "2292892420003286",
+        "holKey" : "HoldingResultKey [mid=2292892420003286, libraryId=117046190003286, locationCode=c3b, callNumber=U24 .황25 2004]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)U24+.%ED%99%A925+2004&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "U24 .황25 2004",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000634949703286",
+        "holdId" : "2292892420003286",
+        "holKey" : "HoldingResultKey [mid=2292892420003286, libraryId=117046190003286, locationCode=c3b, callNumber=U24 .황25 2004]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)U24+.%ED%99%A925+2004&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000634949703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8987417689,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8987417689&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "U24 .황25 2004",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "355.033551",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "48",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "42",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "100",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 115,
+    "COMBINED_SEARCH_TIME" : 123,
+    "PROCESS_COMBINED_RESULTS" : 901,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2004",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김창수",
+      "count" : "1"
+    }, {
+      "value" : "독고순",
+      "count" : "1"
+    }, {
+      "value" : "박주현",
+      "count" : "1"
+    }, {
+      "value" : "임길섭",
+      "count" : "1"
+    }, {
+      "value" : "전경만",
+      "count" : "1"
+    }, {
+      "value" : "정구돈",
+      "count" : "1"
+    }, {
+      "value" : "정주성",
+      "count" : "1"
+    }, {
+      "value" : "조영진",
+      "count" : "1"
+    }, {
+      "value" : "최광표",
+      "count" : "1"
+    }, {
+      "value" : "최성빈",
+      "count" : "1"
+    }, {
+      "value" : "한국국방연구원",
+      "count" : "1"
+    }, {
+      "value" : "황동준",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 859081076
+}

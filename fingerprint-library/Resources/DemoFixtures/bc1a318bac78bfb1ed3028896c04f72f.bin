@@ -1,0 +1,279 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003800455403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "그림으로 이해하는 서버 구조와 기술 " ],
+        "format" : [ "240 p. : 채색삽도 ; 23 cm." ],
+        "identifier" : [ "$$CISBN$$V9791140713998" ],
+        "creationdate" : [ "2024" ],
+        "creator" : [ "횡전일휘 横田一輝, 1965-$$Q횡전일휘" ],
+        "publisher" : [ "서울 : 길벗" ],
+        "mms" : [ "991003800455403286" ],
+        "contributor" : [ "遠藤有貴$$Q遠藤有貴", "김성훈$$Q김성훈", "요코타 카즈키$$Q요코타 카즈키", "Yokota, Kazuki$$QYokota, Kazuki", "엔도 유키$$Q엔도 유키", "Endo, Yuuki$$QEndo, Yuuki" ],
+        "addtitle" : [ "서버, 쉽고 재미있게 시작하자!", "서버의 기본 개념부터 네트워크, 보안, 장애 대책까지 그림으로 한눈에 파악하는 서버 구조와 기술!", "サーバーのしくみと技術がこれ1冊でしっかりわかる本", "Server no shikumi to gijutsu ga kore 1satsu de shikkari wakaru hon" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "서버구조 서버시스템" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003800455403286" ],
+        "recordid" : [ "alma991003800455403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000017029095" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n81028867" ],
+        "aulast" : [ "횡전일휘" ],
+        "aufirst" : [ "Kazuki", "Yuuki" ],
+        "auinit" : [ "K", "Y" ],
+        "au" : [ "횡전일휘" ],
+        "addau" : [ "遠藤有貴", "김성훈", "요코타 카즈키", "Yokota, Kazuki", "엔도 유키", "Endo, Yuuki" ],
+        "creatorfull" : [ "$$N횡전일휘$$L횡전일휘$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N遠藤有貴$$L遠藤有貴$$F$$Rcontributor", "$$N김성훈$$Rcontributor", "$$N요코타 카즈키$$Rcontributor", "$$NYokota, Kazuki$$Rcontributor", "$$N엔도 유키$$Rcontributor", "$$NEndo, Yuuki$$Rcontributor" ],
+        "addtitle" : [ "서버, 쉽고 재미있게 시작하자!", "서버의 기본 개념부터 네트워크, 보안, 장애 대책까지 그림으로 한눈에 파악하는 서버 구조와 기술!", "サーバーのしくみと技術がこれ1冊でしっかりわかる本", "Server no shikumi to gijutsu ga kore 1satsu de shikkari wakaru hon" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9791140713998" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "길벗" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "그림으로 이해하는 서버 구조와 기술" ]
+      },
+      "sort" : {
+        "title" : [ "그림으로 이해하는 서버 구조와 기술 = Structure and technology of server/ 요코타 카즈키, 엔도 유키 [공]지음 ; 김성훈 옮김." ],
+        "author" : [ "횡전일휘 横田一輝, 1965-" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.76.O63 .횡74 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003800455403286",
+        "holdId" : "22291231250003286",
+        "holKey" : "HoldingResultKey [mid=22291231250003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.76.O63 .횡74 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.76.O63+.%ED%9A%A174+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.76.O63 .횡74 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003800455403286",
+        "holdId" : "22291231250003286",
+        "holKey" : "HoldingResultKey [mid=22291231250003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.76.O63 .횡74 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.76.O63+.%ED%9A%A174+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003800455403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791140713998,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791140713998&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.76.O63 .횡74 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.43",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "39",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "31",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "8",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "90",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 101,
+    "COMBINED_SEARCH_TIME" : 109,
+    "PROCESS_COMBINED_RESULTS" : 472,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "서버구조 서버시스템",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Endo Yuuki",
+      "count" : "1"
+    }, {
+      "value" : "Yokota Kazuki",
+      "count" : "1"
+    }, {
+      "value" : "遠藤有貴",
+      "count" : "1"
+    }, {
+      "value" : "김성훈",
+      "count" : "1"
+    }, {
+      "value" : "엔도 유키",
+      "count" : "1"
+    }, {
+      "value" : "요코타 카즈키",
+      "count" : "1"
+    }, {
+      "value" : "횡전일휘",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -2010759185
+}

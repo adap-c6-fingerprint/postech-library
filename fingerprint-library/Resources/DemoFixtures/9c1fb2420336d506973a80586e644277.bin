@@ -1,0 +1,259 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003290974203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "온라인 대학 교육 " ],
+        "format" : [ "xvi, 89 p. ; 19 cm" ],
+        "identifier" : [ "$$CISBN$$V9791130441047;$$CISBN$$V9791130441009 (세트)" ],
+        "creationdate" : [ "2015" ],
+        "creator" : [ "이정기$$Q이정기" ],
+        "publisher" : [ "서울 : 커뮤니케이션북스" ],
+        "mms" : [ "991003290974203286" ],
+        "series" : [ "커뮤니케이션이해총서$$Q커뮤니케이션이해총서" ],
+        "contents" : [ "온라인 대학 교육의 개념 -- OCW -- MOOC -- 블렌디드 러닝의 개념 -- 블렌디드 러닝의 사례와 설계 -- 블렌디드 러닝의 효과 -- 플립 러닝의 개념 -- 플립 러닝의 사례와 설계 -- 플립 러닝의 효과 -- 온라인 교육 콘텐츠와 저작권" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "대학 교육[大學敎育]", "온라인 교육[--敎育]" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003290974203286" ],
+        "recordid" : [ "alma991003290974203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000013912850" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "이정기" ],
+        "au" : [ "이정기" ],
+        "creatorfull" : [ "$$N이정기$$L이정기$$F$$Rauthor" ],
+        "date" : [ "2015" ],
+        "isbn" : [ "9791130441047", "9791130441009" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "커뮤니케이션북스" ],
+        "seriestitle" : [ "커뮤니케이션이해총서" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "온라인 대학 교육" ]
+      },
+      "sort" : {
+        "title" : [ "온라인 대학 교육 / 이정기 지음" ],
+        "author" : [ "이정기" ],
+        "creationdate" : [ "2015" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LC5808.K6 .이74 2015",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003290974203286",
+        "holdId" : "22134331580003286",
+        "holKey" : "HoldingResultKey [mid=22134331580003286, libraryId=117046190003286, locationCode=c3b, callNumber=LC5808.K6 .이74 2015]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LC5808.K6+.%EC%9D%B474+2015&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LC5808.K6 .이74 2015",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003290974203286",
+        "holdId" : "22134331580003286",
+        "holKey" : "HoldingResultKey [mid=22134331580003286, libraryId=117046190003286, locationCode=c3b, callNumber=LC5808.K6 .이74 2015]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LC5808.K6+.%EC%9D%B474+2015&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003290974203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791130441047,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791130441047&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "LC5808.K6 .이74 2015",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "378.1734",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "29",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "45",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "39",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "96",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 108,
+    "COMBINED_SEARCH_TIME" : 115,
+    "PROCESS_COMBINED_RESULTS" : 534,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2015",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "대학 교육 大學敎育",
+      "count" : "1"
+    }, {
+      "value" : "온라인 교육 敎育",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "이정기",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 483474114
+}

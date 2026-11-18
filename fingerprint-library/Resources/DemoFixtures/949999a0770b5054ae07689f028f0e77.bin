@@ -38,7 +38,7 @@
         "originalsourceid" : [ "b13640367-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "4.6206286E-4" ],
+        "score" : [ "4.620001E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -189,21 +189,21 @@
   } ],
   "timelog" : {
     "BUILD_RESULTS_RETRIVE_FROM_DB" : "5",
-    "CALL_SOLR_GET_IDS_LIST" : "473",
-    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "46",
-    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "32",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
     "RETRIVE_FROM_DB_COURSE_INFO" : "1",
     "RETRIVE_FROM_DB_RECORDS" : "2",
     "RETRIVE_FROM_DB_RELATIONS" : "1",
-    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "41",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "27",
     "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
-    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "6",
-    "PRIMA_LOCAL_SEARCH_TOTAL" : "537",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "8",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "76",
     "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
-    "BUILD_COMBINED_RESULTS_MAP" : 548,
-    "COMBINED_SEARCH_TIME" : 553,
-    "PROCESS_COMBINED_RESULTS" : 298,
-    "FEATURED_SEARCH_TIME" : 0
+    "BUILD_COMBINED_RESULTS_MAP" : 85,
+    "COMBINED_SEARCH_TIME" : 92,
+    "PROCESS_COMBINED_RESULTS" : 373,
+    "FEATURED_SEARCH_TIME" : 1
   },
   "facets" : [ {
     "name" : "lang",

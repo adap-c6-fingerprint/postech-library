@@ -1,0 +1,278 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003725056303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "전자기학 " ],
+        "format" : [ "576 p. : 삽화 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9791156644286" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 한빛아카데미" ],
+        "mms" : [ "991003725056303286" ],
+        "contributor" : [ "Adams, Arlon T.$$QAdams, Arlon T.", "이재균$$Q이재균", "유태훈$$Q유태훈", "아담스, 아론 T.$$Q아담스, 아론 T.", "Lee, Jay Kyoon$$QLee, Jay Kyoon" ],
+        "addtitle" : [ "Electromagnetics" ],
+        "edition" : [ "2vks" ],
+        "series" : [ "IT COOKBOOK$$QIT COOKBOOK" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "전기 자기학", "전기 전자 공학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003725056303286" ],
+        "recordid" : [ "alma991003725056303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016625010" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no2002048022" ],
+        "aulast" : [ "Adams", "이재균", "유태훈", "아담스", "Lee" ],
+        "aufirst" : [ "Arlon T.", "아론 T.", "Jay Kyoon" ],
+        "auinit" : [ "A", "아", "J" ],
+        "addau" : [ "Adams, Arlon T.", "이재균", "유태훈", "아담스, 아론 T.", "Lee, Jay Kyoon" ],
+        "contributorfull" : [ "$$NAdams, Arlon T.$$LAdams$$FArlon T.$$Rcontributor", "$$N이재균$$Rcontributor", "$$N유태훈$$Rcontributor", "$$N아담스, 아론 T.$$Rcontributor", "$$NLee, Jay Kyoon$$Rcontributor" ],
+        "addtitle" : [ "Electromagnetics" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791156644286" ],
+        "notes" : [ "참고문헌(p. 566)과 색인(p. 567-576)수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한빛아카데미" ],
+        "edition" : [ "2vks" ],
+        "seriestitle" : [ "IT COOKBOOK" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "전자기학" ]
+      },
+      "sort" : {
+        "title" : [ "전자기학 / Arlon T  Adams, Jay Kyoon Lee(이재균) 지음 ; 유태훈 옮김" ],
+        "author" : [ "Adams, Arlon T." ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QC760 .A33 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003725056303286",
+        "holdId" : "22273581520003286",
+        "holKey" : "HoldingResultKey [mid=22273581520003286, libraryId=117046190003286, locationCode=c3b, callNumber=QC760 .A33 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QC760+.A33+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QC760 .A33 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003725056303286",
+        "holdId" : "22273581520003286",
+        "holKey" : "HoldingResultKey [mid=22273581520003286, libraryId=117046190003286, locationCode=c3b, callNumber=QC760 .A33 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QC760+.A33+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003725056303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791156644286,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791156644286&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QC760 .A33 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qc000000000760.a000000000033000000002022",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "25",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "67",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "61",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "112",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 122,
+    "COMBINED_SEARCH_TIME" : 127,
+    "PROCESS_COMBINED_RESULTS" : 639,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "전기 자기학",
+      "count" : "1"
+    }, {
+      "value" : "전기 전자 공학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Adams Arlon T",
+      "count" : "1"
+    }, {
+      "value" : "Lee Jay Kyoon",
+      "count" : "1"
+    }, {
+      "value" : "아담스 아론 T",
+      "count" : "1"
+    }, {
+      "value" : "유태훈",
+      "count" : "1"
+    }, {
+      "value" : "이재균",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -970939317
+}

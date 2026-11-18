@@ -1,0 +1,319 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003778551103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "한국어교육을 위한 대조 연구 : 한국어와 중국어 대조 " ],
+        "format" : [ "791 p. ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791165873462;$$CISBN$$V9791155164242 (세트)" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "파주 : 보고사" ],
+        "mms" : [ "991003778551103286" ],
+        "contributor" : [ "원미진, 1966-$$Q원미진", "정이한$$Q정이한", "설산$$Q설산", "유인박, 1995-$$Q유인박", "지립군$$Q지립군", "남선희$$Q남선희", "손붕위$$Q손붕위", "유정영$$Q유정영", "이신희$$Q이신희", "왕욱요$$Q왕욱요", "이우천$$Q이우천", "쥐신$$Q쥐신", "심묘$$Q심묘", "여란결$$Q여란결", "서준동$$Q서준동", "무양$$Q무양", "옥지령$$Q옥지령", "刘人博, 1995-$$Q刘人博", "류런보, 1995-$$Q류런보", "국흠$$Q국흠" ],
+        "series" : [ "한국 언어·문학·문화 총서 ; 11$$Q한국 언어·문학·문화 총서 " ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "비교 언어학", "한국어", "중국어" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003778551103286" ],
+        "recordid" : [ "alma991003778551103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016570475" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "원미진", "정이한", "설산", "유인박", "지립군", "남선희", "손붕위", "유정영", "이신희", "왕욱요", "이우천", "쥐신", "심묘", "여란결", "서준동", "무양", "옥지령", "刘人博", "류런보", "국흠" ],
+        "addau" : [ "원미진", "정이한", "설산", "유인박", "지립군", "남선희", "손붕위", "유정영", "이신희", "왕욱요", "이우천", "쥐신", "심묘", "여란결", "서준동", "무양", "옥지령", "刘人博", "류런보", "국흠" ],
+        "contributorfull" : [ "$$N원미진$$L원미진$$F$$Rcontributor", "$$N정이한$$Rcontributor", "$$N설산$$Rcontributor", "$$N유인박$$Rcontributor", "$$N지립군$$Rcontributor", "$$N남선희$$Rcontributor", "$$N손붕위$$Rcontributor", "$$N유정영$$Rcontributor", "$$N이신희$$Rcontributor", "$$N왕욱요$$Rcontributor", "$$N이우천$$Rcontributor", "$$N쥐신$$Rcontributor", "$$N심묘$$Rcontributor", "$$N여란결$$Rcontributor", "$$N서준동$$Rcontributor", "$$N무양$$Rcontributor", "$$N옥지령$$Rcontributor", "$$N刘人博$$Rcontributor", "$$N류런보$$Rcontributor", "$$N국흠$$Rcontributor" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791165873462", "9791155164242" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "보고사" ],
+        "seriestitle" : [ "한국 언어·문학·문화 총서 ; 11" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "한국어교육을 위한 대조 연구 : 한국어와 중국어 대조" ]
+      },
+      "sort" : {
+        "title" : [ "한국어교육을 위한 대조 연구 : 한국어와 중국어 대조 / 저자: 원미진, 정이한, 설산, 유인박, 지립군, 남선희, 손붕위, 유정영, 이신희, 왕욱요, 이우천, 국흠, 심묘, 여란결, 서준동, 무양, 옥지령" ],
+        "author" : [ "원미진, 1966-" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL911.3 .한161 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003778551103286",
+        "holdId" : "22286239450003286",
+        "holKey" : "HoldingResultKey [mid=22286239450003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL911.3 .한161 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL911.3+.%ED%95%9C161+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL911.3 .한161 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003778551103286",
+        "holdId" : "22286239450003286",
+        "holKey" : "HoldingResultKey [mid=22286239450003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL911.3 .한161 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL911.3+.%ED%95%9C161+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003778551103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791165873462,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791165873462&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL911.3 .한161 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "410",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "29",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "55",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "50",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "14",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "112",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 125,
+    "COMBINED_SEARCH_TIME" : 133,
+    "PROCESS_COMBINED_RESULTS" : 292,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "비교 언어학",
+      "count" : "1"
+    }, {
+      "value" : "중국어",
+      "count" : "1"
+    }, {
+      "value" : "한국어",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "刘人博",
+      "count" : "1"
+    }, {
+      "value" : "국흠",
+      "count" : "1"
+    }, {
+      "value" : "남선희",
+      "count" : "1"
+    }, {
+      "value" : "류런보",
+      "count" : "1"
+    }, {
+      "value" : "무양",
+      "count" : "1"
+    }, {
+      "value" : "서준동",
+      "count" : "1"
+    }, {
+      "value" : "설산",
+      "count" : "1"
+    }, {
+      "value" : "손붕위",
+      "count" : "1"
+    }, {
+      "value" : "심묘",
+      "count" : "1"
+    }, {
+      "value" : "여란결",
+      "count" : "1"
+    }, {
+      "value" : "옥지령",
+      "count" : "1"
+    }, {
+      "value" : "왕욱요",
+      "count" : "1"
+    }, {
+      "value" : "원미진",
+      "count" : "1"
+    }, {
+      "value" : "유인박",
+      "count" : "1"
+    }, {
+      "value" : "유정영",
+      "count" : "1"
+    }, {
+      "value" : "이신희",
+      "count" : "1"
+    }, {
+      "value" : "이우천",
+      "count" : "1"
+    }, {
+      "value" : "정이한",
+      "count" : "1"
+    }, {
+      "value" : "쥐신",
+      "count" : "1"
+    }, {
+      "value" : "지립군",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -13631761
+}

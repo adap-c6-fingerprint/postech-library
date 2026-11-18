@@ -1,0 +1,266 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991002557509703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "eng" ],
+        "title" : [ "Chemical engineering : a new introduction " ],
+        "format" : [ "xi, 265 p. : ill. ; 27 cm. " ],
+        "identifier" : [ "$$CLC$$V  2011012921 ;$$CISBN$$V9781107011892 (hardback) :;$$CISBN$$V9781107669376 (pbk.) " ],
+        "creationdate" : [ "2012. " ],
+        "creator" : [ "Denn, Morton M., 1939- $$QDenn, Morton M." ],
+        "publisher" : [ "Cambridge ; New York : Cambridge University Press" ],
+        "description" : [ "\"Chemical Engineering: An Introduction is designed to enable the student to explore a broad range of activities in which a modern cheical engineer might be involved by focusing on mass and energy balances in liquid-phase processes. Thus, in one semester, the student addresses such problems as the design of a feedback level controller, membrane separation, and hemodialysis, optimal design of a process with chemical reaction and separation, washout in a bioreactor, kinetic and mass transfer limits in a two-phase reactor, and the use of the membrane reactor to overcome equilibrium limits on conversion. Mathematics is employed as a language, but the mathematics is at the most elementary level and serves to reinforce what the student has already studied; nothing more than basic differential and integral calculus is required, together with elementary chemistry. Students using this text will understand what they can expect to do as chemical engineering graduates, and they will appreciate why they need the courses that follow in the core curriculum\"-- Provided by publisher. " ],
+        "mms" : [ "991002557509703286" ],
+        "series" : [ "Cambridge series in chemical engineering $$QCambridge series in chemical engineering " ],
+        "place" : [ "Cambridge ; New York :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Chemical engineering. ", "TECHNOLOGY & ENGINEERING / Chemical & Biochemical" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991002557509703286" ],
+        "recordid" : [ "alma991002557509703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b1363530x-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n50041581" ],
+        "aulast" : [ "Denn" ],
+        "aufirst" : [ "Morton M." ],
+        "auinit" : [ "M" ],
+        "au" : [ "Denn, Morton M." ],
+        "creatorfull" : [ "$$NDenn, Morton M.$$LDenn$$FMorton M.$$Rauthor" ],
+        "date" : [ "2012", "2012. " ],
+        "isbn" : [ "9781107011892", "9781107669376" ],
+        "notes" : [ "Includes bibliographical references and index." ],
+        "abstract" : [ "\"Chemical Engineering: An Introduction is designed to enable the student to explore a broad range of activities in which a modern cheical engineer might be involved by focusing on mass and energy balances in liquid-phase processes. Thus, in one semester, the student addresses such problems as the design of a feedback level controller, membrane separation, and hemodialysis, optimal design of a process with chemical reaction and separation, washout in a bioreactor, kinetic and mass transfer limits in a two-phase reactor, and the use of the membrane reactor to overcome equilibrium limits on conversion. Mathematics is employed as a language, but the mathematics is at the most elementary level and serves to reinforce what the student has already studied; nothing more than basic differential and integral calculus is required, together with elementary chemistry. Students using this text will understand what they can expect to do as chemical engineering graduates, and they will appreciate why they need the courses that follow in the core curriculum\"-- Provided by publisher." ],
+        "cop" : [ "Cambridge" ],
+        "pub" : [ "Cambridge University Press" ],
+        "oclcid" : [ "(ptech)b1363530x-82postech_inst" ],
+        "lccn" : [ "2011012921" ],
+        "seriestitle" : [ "Cambridge series in chemical engineering" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Chemical engineering : a new introduction" ]
+      },
+      "sort" : {
+        "title" : [ "Chemical engineering : a new introduction /" ],
+        "author" : [ "Denn, Morton M., 1939-" ],
+        "creationdate" : [ "2012" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TP155 .D359 2012",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991002557509703286",
+        "holdId" : "2290065770003286",
+        "holKey" : "HoldingResultKey [mid=2290065770003286, libraryId=117046190003286, locationCode=c3b, callNumber=TP155 .D359 2012]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TP155+.D359+2012&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TP155 .D359 2012",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991002557509703286",
+        "holdId" : "2290065770003286",
+        "holKey" : "HoldingResultKey [mid=2290065770003286, libraryId=117046190003286, locationCode=c3b, callNumber=TP155 .D359 2012]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TP155+.D359+2012&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991002557509703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9781107011892,OCLC:,LCCN:2011012921&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9781107011892 (hardback) :&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TP155 .D359 2012",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tp\"155ǂ d359 2011",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "25",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "68",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "62",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "13",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "120",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 133,
+    "COMBINED_SEARCH_TIME" : 142,
+    "PROCESS_COMBINED_RESULTS" : 714,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "eng",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2012",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Chemical Engineering",
+      "count" : "1"
+    }, {
+      "value" : "Technology Engineering Chemical Biochemical",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Denn Morton M",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 208270966
+}

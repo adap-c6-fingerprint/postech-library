@@ -1,0 +1,272 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003652516403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "eng" ],
+        "title" : [ "Shigley's mechanical engineering design " ],
+        "format" : [ "xix,  1095 p. : ill. (some col.) ; 25 cm" ],
+        "identifier" : [ "$$CLC$$V  2018023098;$$CISBN$$V9781260407648;$$CISBN$$V9780073398211 (alk. paper);$$CISBN$$V0073398217 (alk. paper)" ],
+        "creationdate" : [ "2020" ],
+        "creator" : [ "Budynas, Richard G. (Richard Gordon), author.$$QBudynas, Richard G." ],
+        "publisher" : [ "New York, NY : McGraw-Hill Education" ],
+        "mms" : [ "991003652516403286" ],
+        "contributor" : [ "Nisbett, J. Keith, author.$$QNisbett, J. Keith", "Shigley, Joseph Edward.$$QShigley, Joseph Edward." ],
+        "addtitle" : [ "Mechanical engineering design" ],
+        "edition" : [ "Eleventh edition." ],
+        "relatedwork" : [ "Shigley, Joseph Edward. Mechanical engineering design.$$QShigley, Joseph Edward. Mechanical engineering design." ],
+        "place" : [ "New York, NY :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Machine design" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003652516403286" ],
+        "recordid" : [ "alma991003652516403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000018697564" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n88628992" ],
+        "originatingSystemIDContributor" : [ "n2006057180" ],
+        "aulast" : [ "Budynas" ],
+        "aufirst" : [ "Richard G." ],
+        "auinit" : [ "R" ],
+        "au" : [ "Budynas, Richard G." ],
+        "addau" : [ "Nisbett, J. Keith", "Shigley, Joseph Edward." ],
+        "creatorfull" : [ "$$NBudynas, Richard G.$$LBudynas$$FRichard G.$$Rauthor" ],
+        "contributorfull" : [ "$$NNisbett, J. Keith$$LNisbett$$FJ. Keith$$Rcontributor", "$$NShigley, Joseph Edward.$$Rcontributor" ],
+        "addtitle" : [ "Mechanical engineering design" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9781260407648", "9780073398211", "0073398217" ],
+        "cop" : [ "New York, NY" ],
+        "pub" : [ "McGraw-Hill Education" ],
+        "lccn" : [ "2018023098" ],
+        "edition" : [ "Eleventh edition." ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Shigley's mechanical engineering design" ]
+      },
+      "sort" : {
+        "title" : [ "Shigley's mechanical engineering design /" ],
+        "author" : [ "Budynas, Richard G. (Richard Gordon), author." ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TJ230 .S5 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003652516403286",
+        "holdId" : "22253356350003286",
+        "holKey" : "HoldingResultKey [mid=22253356350003286, libraryId=117046190003286, locationCode=c3b, callNumber=TJ230 .S5 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TJ230+.S5+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TJ230 .S5 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003652516403286",
+        "holdId" : "22253356350003286",
+        "holKey" : "HoldingResultKey [mid=22253356350003286, libraryId=117046190003286, locationCode=c3b, callNumber=TJ230 .S5 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TJ230+.S5+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003652516403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9781260407648,OCLC:,LCCN:2018023098&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9781260407648&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TJ230 .S5 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tj\"230ǂ s5 2020",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "30",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "47",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "40",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "7",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "99",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 108,
+    "COMBINED_SEARCH_TIME" : 117,
+    "PROCESS_COMBINED_RESULTS" : 888,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "eng",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2020",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Machine Design",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Budynas Richard G",
+      "count" : "1"
+    }, {
+      "value" : "Nisbett J Keith",
+      "count" : "1"
+    }, {
+      "value" : "Shigley Joseph Edward",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1490561542
+}

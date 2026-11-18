@@ -1,0 +1,305 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003778550803286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "불교와 함께한 종교 연구 : 범재 이민용 선생 팔순 기념 문집 " ],
+        "format" : [ "365 p. : 삽화, 초상 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791166290961;$$CISBN$$V9788997472321 (세트)" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 모시는사람들" ],
+        "mms" : [ "991003778550803286" ],
+        "contributor" : [ "송현주, 1961-$$Q송현주", "조명제, 1964-$$Q조명제", "최성규$$Q최성규", "민순의, 1969-$$Q민순의", "윤승용, 1952-$$Q윤승용", "최유진, 1954-$$Q최유진", "장석만, 1955-$$Q장석만", "허남린, 1957-$$Q허남린", "박규태$$Q박규태", "하정현, 1963-$$Q하정현", "이진구, 1961-$$Q이진구", "정진홍$$Q정진홍", "이혜숙$$Q이혜숙", "김태연, 1976-$$Q김태연", "범재 팔순기념문집편찬위원회$$Q범재 팔순기념문집편찬위원회" ],
+        "series" : [ "한국종교문화연구소 종교문화비평총서 ; 09$$Q한국종교문화연구소 종교문화비평총서 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "이민용, 李珉容, 1941-", "종교학", "한국 불교사" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003778550803286" ],
+        "recordid" : [ "alma991003778550803286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016246599" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2004070692", "nr94025421" ],
+        "aulast" : [ "송현주", "조명제", "최성규", "민순의", "윤승용", "최유진", "장석만", "허남린", "박규태", "하정현", "이진구", "정진홍", "이혜숙", "김태연" ],
+        "addau" : [ "송현주", "조명제", "최성규", "민순의", "윤승용", "최유진", "장석만", "허남린", "박규태", "하정현", "이진구", "정진홍", "이혜숙", "김태연", "범재 팔순기념문집편찬위원회" ],
+        "contributorfull" : [ "$$N송현주$$L송현주$$F$$Rcontributor", "$$N조명제$$Rcontributor", "$$N최성규$$Rcontributor", "$$N민순의$$Rcontributor", "$$N윤승용$$Rcontributor", "$$N최유진$$Rcontributor", "$$N장석만$$Rcontributor", "$$N허남린$$Rcontributor", "$$N박규태$$Rcontributor", "$$N하정현$$Rcontributor", "$$N이진구$$Rcontributor", "$$N정진홍$$Rcontributor", "$$N이혜숙$$Rcontributor", "$$N김태연$$Rcontributor" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791166290961", "9788997472321" ],
+        "notes" : [ "참고문헌 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "모시는사람들" ],
+        "seriestitle" : [ "한국종교문화연구소 종교문화비평총서 ; 09" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "불교와 함께한 종교 연구 : 범재 이민용 선생 팔순 기념 문집" ]
+      },
+      "sort" : {
+        "title" : [ "불교와 함께한 종교 연구 : 범재 이민용 선생 팔순 기념 문집 / 범재 팔순기념문집편찬위원회, 송현주, 조명제, 최성규, 민순의, 윤승용, 최유진, 장석만, 허남린, 박규태, 하정현, 이진구, 정진홍, 이혜숙, 김태연 엮음" ],
+        "author" : [ "송현주, 1961-" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "BQ658 .이38 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003778550803286",
+        "holdId" : "22286239350003286",
+        "holKey" : "HoldingResultKey [mid=22286239350003286, libraryId=117046190003286, locationCode=c3b, callNumber=BQ658 .이38 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)BQ658+.%EC%9D%B438+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "BQ658 .이38 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003778550803286",
+        "holdId" : "22286239350003286",
+        "holKey" : "HoldingResultKey [mid=22286239350003286, libraryId=117046190003286, locationCode=c3b, callNumber=BQ658 .이38 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)BQ658+.%EC%9D%B438+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003778550803286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791166290961,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791166290961&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "BQ658 .이38 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "294.309519",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "65",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "60",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "118",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 128,
+    "COMBINED_SEARCH_TIME" : 138,
+    "PROCESS_COMBINED_RESULTS" : 868,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "이민용 李珉容 1941 Kac201512123",
+      "count" : "1"
+    }, {
+      "value" : "종교학",
+      "count" : "1"
+    }, {
+      "value" : "한국 불교사",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김태연",
+      "count" : "1"
+    }, {
+      "value" : "민순의",
+      "count" : "1"
+    }, {
+      "value" : "박규태",
+      "count" : "1"
+    }, {
+      "value" : "범재 팔순기념문집편찬위원회",
+      "count" : "1"
+    }, {
+      "value" : "송현주",
+      "count" : "1"
+    }, {
+      "value" : "윤승용",
+      "count" : "1"
+    }, {
+      "value" : "이진구",
+      "count" : "1"
+    }, {
+      "value" : "이혜숙",
+      "count" : "1"
+    }, {
+      "value" : "장석만",
+      "count" : "1"
+    }, {
+      "value" : "정진홍",
+      "count" : "1"
+    }, {
+      "value" : "조명제",
+      "count" : "1"
+    }, {
+      "value" : "최성규",
+      "count" : "1"
+    }, {
+      "value" : "최유진",
+      "count" : "1"
+    }, {
+      "value" : "하정현",
+      "count" : "1"
+    }, {
+      "value" : "허남린",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1655078919
+}

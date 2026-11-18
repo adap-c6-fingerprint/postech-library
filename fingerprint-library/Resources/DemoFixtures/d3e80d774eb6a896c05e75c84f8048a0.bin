@@ -1,0 +1,271 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003434779503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "인지심리학 : 마음, 연구, 일상경험 연결 " ],
+        "format" : [ "499 p : 삽화, 사진 ; 28 cm" ],
+        "identifier" : [ "$$CISBN$$V9788962183870" ],
+        "creationdate" : [ "2016" ],
+        "creator" : [ "Goldstein, E. Bruce$$QGoldstein, E. Bruce" ],
+        "publisher" : [ "서울 : 센게이지러닝코리아" ],
+        "mms" : [ "991003434779503286" ],
+        "contributor" : [ "도경수$$Q도경수", "박태진$$Q박태진", "조양석$$Q조양석" ],
+        "addtitle" : [ "Cognitive Psychology : Connecting Mind, Research, and Everyday Experience" ],
+        "edition" : [ "제4판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "인지심리학 마음 연구 일상경험" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003434779503286" ],
+        "recordid" : [ "alma991003434779503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000288156" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "Goldstein" ],
+        "aufirst" : [ "E. Bruce" ],
+        "auinit" : [ "E" ],
+        "au" : [ "Goldstein, E. Bruce" ],
+        "addau" : [ "도경수", "박태진", "조양석" ],
+        "creatorfull" : [ "$$NGoldstein, E. Bruce$$LGoldstein$$FE. Bruce$$Rauthor" ],
+        "contributorfull" : [ "$$N도경수$$L도경수$$F$$Rcontributor", "$$N박태진$$Rcontributor", "$$N조양석$$Rcontributor" ],
+        "addtitle" : [ "Cognitive Psychology : Connecting Mind, Research, and Everyday Experience" ],
+        "date" : [ "2016" ],
+        "isbn" : [ "9788962183870" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "센게이지러닝코리아" ],
+        "edition" : [ "제4판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "인지심리학 : 마음, 연구, 일상경험 연결" ]
+      },
+      "sort" : {
+        "title" : [ "인지심리학 : 마음, 연구, 일상경험 연결 / E. Bruce Goldstein ; 도경수, 박태진, 조양석" ],
+        "author" : [ "Goldstein, E. Bruce" ],
+        "creationdate" : [ "2016" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "BF201 .G65 2016",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003434779503286",
+        "holdId" : "22185612900003286",
+        "holKey" : "HoldingResultKey [mid=22185612900003286, libraryId=117046190003286, locationCode=c3b, callNumber=BF201 .G65 2016]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)BF201+.G65+2016&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "BF201 .G65 2016",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003434779503286",
+        "holdId" : "22185612900003286",
+        "holKey" : "HoldingResultKey [mid=22185612900003286, libraryId=117046190003286, locationCode=c3b, callNumber=BF201 .G65 2016]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)BF201+.G65+2016&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003434779503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788962183870,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788962183870&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "BF201 .G65 2016",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "bf000000000201.g000000000065000000002016",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "13",
+    "CALL_SOLR_GET_IDS_LIST" : "36",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "50",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "6",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "45",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "114",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 126,
+    "COMBINED_SEARCH_TIME" : 133,
+    "PROCESS_COMBINED_RESULTS" : 168,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2016",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "인지심리학 마음 연구 일상경험",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Goldstein E Bruce",
+      "count" : "1"
+    }, {
+      "value" : "도경수",
+      "count" : "1"
+    }, {
+      "value" : "박태진",
+      "count" : "1"
+    }, {
+      "value" : "조양석",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1407531626
+}

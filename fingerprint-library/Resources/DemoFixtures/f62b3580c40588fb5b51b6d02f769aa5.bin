@@ -1,0 +1,312 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003957947903286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "통합 임상 분자생물학 = 이론편 " ],
+        "format" : [ "viii, 293 p. : 천연색삽화, 도표, 초상 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9791162603413" ],
+        "creationdate" : [ "2024" ],
+        "publisher" : [ "서울 : 정문각" ],
+        "mms" : [ "991003957947903286" ],
+        "contributor" : [ "강희규, 1967-$$Q강희규", "권기상$$Q권기상", "권순일, 1960-$$Q권순일", "권혁우$$Q권혁우", "김동운$$Q김동운", "김병원, 1962-$$Q김병원", "김수원, 1971-$$Q김수원", "김예운, 1979-$$Q김예운", "김윤식, 1968-$$Q김윤식", "김은정, 1973-$$Q김은정", "김정호, 1987-$$Q김정호", "김종완, 1981-$$Q김종완", "박성배$$Q박성배", "박지애, 1979-$$Q박지애", "엄용빈, 1970-$$Q엄용빈", "유민, 1957-$$Q유민", "유성률, 1973-$$Q유성률", "윤경아, 1968-$$Q윤경아", "이인수, 1977-$$Q이인수", "이지웅, 1978-$$Q이지웅", "이태희$$Q이태희", "장연희$$Q장연희", "정경태, 1963-$$Q정경태", "정상봉$$Q정상봉", "정석률, 1973-$$Q정석률", "조윤경, 1966-$$Q조윤경", "최연임, 1980-$$Q최연임", "현성희, 1963-$$Q현성희", "홍승복, 1968-$$Q홍승복" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "분자생물학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003957947903286" ],
+        "recordid" : [ "alma991003957947903286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "991003957947903286" ],
+        "sourcesystem" : [ "OCLC_PARTNERS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n85176925", "n85047598" ],
+        "aulast" : [ "강희규", "권기상", "권순일", "권혁우", "김동운", "김병원", "김수원", "김예운", "김윤식", "김은정", "김정호", "김종완", "박성배", "박지애", "엄용빈", "유민", "유성률", "윤경아", "이인수", "이지웅", "이태희", "장연희", "정경태", "정상봉", "정석률", "조윤경", "최연임", "현성희", "홍승복" ],
+        "addau" : [ "강희규", "권기상", "권순일", "권혁우", "김동운", "김병원", "김수원", "김예운", "김윤식", "김은정", "김정호", "김종완", "박성배", "박지애", "엄용빈", "유민", "유성률", "윤경아", "이인수", "이지웅", "이태희", "장연희", "정경태", "정상봉", "정석률", "조윤경", "최연임", "현성희", "홍승복" ],
+        "contributorfull" : [ "$$N강희규$$L강희규$$F$$Rcontributor", "$$N권기상$$Rcontributor", "$$N권순일$$Rcontributor", "$$N권혁우$$Rcontributor", "$$N김동운$$Rcontributor", "$$N김병원$$Rcontributor", "$$N김수원$$Rcontributor", "$$N김예운$$Rcontributor", "$$N김윤식$$Rcontributor", "$$N김은정$$Rcontributor", "$$N김정호$$Rcontributor", "$$N김종완$$Rcontributor", "$$N박성배$$Rcontributor", "$$N박지애$$Rcontributor", "$$N엄용빈$$Rcontributor", "$$N유민$$Rcontributor", "$$N유성률$$Rcontributor", "$$N윤경아$$Rcontributor", "$$N이인수$$Rcontributor", "$$N이지웅$$Rcontributor", "$$N이태희$$Rcontributor", "$$N장연희$$Rcontributor", "$$N정경태$$Rcontributor", "$$N정상봉$$Rcontributor", "$$N정석률$$Rcontributor", "$$N조윤경$$Rcontributor", "$$N최연임$$Rcontributor", "$$N현성희$$Rcontributor", "$$N홍승복$$Rcontributor" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9791162603413" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "정문각" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "통합 임상 분자생물학 = 이론편" ]
+      },
+      "sort" : {
+        "title" : [ "통합 임상 분자생물학 = Clinical molecular biology. 이론편 / 저자: 강희규 [외]" ],
+        "author" : [ "강희규, 1967-" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QH506 .통92 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003957947903286",
+        "holdId" : "22327073330003286",
+        "holKey" : "HoldingResultKey [mid=22327073330003286, libraryId=117046190003286, locationCode=c3b, callNumber=QH506 .통92 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QH506+.%ED%86%B592+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QH506 .통92 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003957947903286",
+        "holdId" : "22327073330003286",
+        "holKey" : "HoldingResultKey [mid=22327073330003286, libraryId=117046190003286, locationCode=c3b, callNumber=QH506 .통92 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QH506+.%ED%86%B592+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003957947903286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791162603413,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791162603413&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QH506 .통92 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qh\"506",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "40",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "35",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "13",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "94",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 105,
+    "COMBINED_SEARCH_TIME" : 112,
+    "PROCESS_COMBINED_RESULTS" : 870,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "분자생물학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "강희규",
+      "count" : "1"
+    }, {
+      "value" : "권기상",
+      "count" : "1"
+    }, {
+      "value" : "권순일",
+      "count" : "1"
+    }, {
+      "value" : "권혁우",
+      "count" : "1"
+    }, {
+      "value" : "김동운",
+      "count" : "1"
+    }, {
+      "value" : "김병원",
+      "count" : "1"
+    }, {
+      "value" : "김수원",
+      "count" : "1"
+    }, {
+      "value" : "김예운",
+      "count" : "1"
+    }, {
+      "value" : "김윤식",
+      "count" : "1"
+    }, {
+      "value" : "김은정",
+      "count" : "1"
+    }, {
+      "value" : "김정호",
+      "count" : "1"
+    }, {
+      "value" : "김종완",
+      "count" : "1"
+    }, {
+      "value" : "박성배",
+      "count" : "1"
+    }, {
+      "value" : "박지애",
+      "count" : "1"
+    }, {
+      "value" : "엄용빈",
+      "count" : "1"
+    }, {
+      "value" : "유민",
+      "count" : "1"
+    }, {
+      "value" : "유성률",
+      "count" : "1"
+    }, {
+      "value" : "윤경아",
+      "count" : "1"
+    }, {
+      "value" : "이인수",
+      "count" : "1"
+    }, {
+      "value" : "이지웅",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1919789743
+}

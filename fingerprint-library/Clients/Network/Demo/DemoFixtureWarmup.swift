@@ -36,9 +36,21 @@ enum DemoFixtureWarmup {
             return
         }
         for book in dataset.allBooks {
-            await recordCover(of: book)
+            await recordDetail(of: book)
         }
-        logger.notice("recorded dataset covers: \(dataset.bookCount) books")
+        logger.notice("recorded dataset books: \(dataset.bookCount) books")
+    }
+
+    /// 상세 화면이 보내는 요청(표지, 책등, 책 소개, 소장·대출 상태)을 녹화한다.
+    private static func recordDetail(of book: Book) async {
+        @Dependency(\.bookDetailClient) var bookDetailClient
+        @Dependency(\.bookHoldingsClient) var bookHoldingsClient
+        await recordCover(of: book)
+        if let isbn = book.isbn { _ = try? await BookCoverPipeline.spineImage(isbn: isbn) }
+        if let isbn13 = BookISBN.isbn13(from: book.isbn) { _ = try? await bookDetailClient.fetchDescription(isbn13) }
+        if let recordID = BookHoldingsClient.recordID(for: book) {
+            _ = try? await bookHoldingsClient.fetch(recordID)
+        }
     }
 
     private static func recordCover(of book: Book) async {
@@ -51,8 +63,6 @@ enum DemoFixtureWarmup {
 
     static func run(queries: [String]) async {
         @Dependency(\.bookClient) var bookClient
-        @Dependency(\.bookDetailClient) var bookDetailClient
-        @Dependency(\.bookHoldingsClient) var bookHoldingsClient
         for query in queries {
             let books: [Book]
             do {
@@ -62,13 +72,7 @@ enum DemoFixtureWarmup {
                 continue
             }
             for book in books {
-                let isbn13 = BookISBN.isbn13(from: book.isbn)
-                await recordCover(of: book)
-                if let isbn = book.isbn { _ = try? await BookCoverPipeline.spineImage(isbn: isbn) }
-                if let isbn13 { _ = try? await bookDetailClient.fetchDescription(isbn13) }
-                if let recordID = BookHoldingsClient.recordID(for: book) {
-                    _ = try? await bookHoldingsClient.fetch(recordID)
-                }
+                await recordDetail(of: book)
             }
             logger.notice("recorded \(query, privacy: .public): \(books.count) books")
         }

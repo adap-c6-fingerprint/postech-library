@@ -1,0 +1,302 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003785756003286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "유체역학 " ],
+        "format" : [ "xvii, 855 p. : 삽화, 도표 ; 28 cm" ],
+        "identifier" : [ "$$CISBN$$V9791185475998" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 퍼스트북" ],
+        "mms" : [ "991003785756003286" ],
+        "contributor" : [ "Munson, Bruce Roy, 1940-$$QMunson, Bruce Roy", "Young, Donald F.$$QYoung, Donald F.", "Okiishi, T. H. (Theodore Hisao), 1939-$$QOkiishi, T. H.", "Gerhart, Andrew L.$$QGerhart, Andrew L.", "Hochstein, John I.$$QHochstein, John I.", "Gerhart, Philip M.$$QGerhart, Philip M.", "박원규$$Q박원규", "강동진$$Q강동진", "주원구$$Q주원구", "정신규$$Q정신규", "한만배$$Q한만배", "신승원$$Q신승원", "이상욱$$Q이상욱", "장경식$$Q장경식", "이진$$Q이진" ],
+        "addtitle" : [ "Munson, Young, and Okiishi's Fundamentals of fluid mechanics (9th ed., SI version)" ],
+        "relation" : [ "$$Corig_language$$VMunson, Young, and Okiishi's fundamentals of fluid mechanics. 9th ed., SI version. Hoboken, NJ. : Wiley, 2020.$$QMunson, Young, and Okiishi's fundamentals of fluid mechanics." ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Fluid mechanics" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003785756003286" ],
+        "recordid" : [ "alma991003785756003286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016526219" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n88667128", "n85815065", "no2016138062", "nr97021591", "nr99000394", "n84008397", "n91037256", "n87133188", "n2006042578" ],
+        "aulast" : [ "Munson", "Young", "Okiishi", "Hochstein", "Gerhart", "박원규", "강동진", "주원구", "정신규", "한만배", "신승원", "이상욱", "장경식", "이진" ],
+        "aufirst" : [ "Bruce Roy", "Donald F.", "T. H.", "Andrew L.", "John I.", "Philip M." ],
+        "auinit" : [ "B", "D", "T", "A", "J", "P" ],
+        "addau" : [ "Munson, Bruce Roy", "Young, Donald F.", "Okiishi, T. H.", "Gerhart, Andrew L.", "Hochstein, John I.", "Gerhart, Philip M.", "박원규", "강동진", "주원구", "정신규", "한만배", "신승원", "이상욱", "장경식", "이진" ],
+        "contributorfull" : [ "$$NMunson, Bruce Roy$$LMunson$$FBruce Roy$$Rcontributor", "$$NYoung, Donald F.$$Rcontributor", "$$NOkiishi, T. H.$$Rcontributor", "$$NGerhart, Andrew L.$$Rcontributor", "$$NHochstein, John I.$$Rcontributor", "$$NGerhart, Philip M.$$Rcontributor", "$$N박원규$$Rcontributor", "$$N강동진$$Rcontributor", "$$N주원구$$Rcontributor", "$$N정신규$$Rcontributor", "$$N한만배$$Rcontributor", "$$N신승원$$Rcontributor", "$$N이상욱$$Rcontributor", "$$N장경식$$Rcontributor", "$$N이진$$Rcontributor" ],
+        "addtitle" : [ "Munson, Young, and Okiishi's Fundamentals of fluid mechanics" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791185475998" ],
+        "notes" : [ "참고문헌(각 장) 및 색인수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "퍼스트북" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "유체역학" ]
+      },
+      "sort" : {
+        "title" : [ "유체역학 / Andrew L. Gerhart, John I. Hochstein, Philip M. Gerhart [지음] ; 박원규 [외] 옮김" ],
+        "author" : [ "Munson, Bruce Roy, 1940-" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TA357 .G474 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003785756003286",
+        "holdId" : "22287630570003286",
+        "holKey" : "HoldingResultKey [mid=22287630570003286, libraryId=117046190003286, locationCode=c3b, callNumber=TA357 .G474 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TA357+.G474+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TA357 .G474 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003785756003286",
+        "holdId" : "22287630570003286",
+        "holKey" : "HoldingResultKey [mid=22287630570003286, libraryId=117046190003286, locationCode=c3b, callNumber=TA357 .G474 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TA357+.G474+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003785756003286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791185475998,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791185475998&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TA357 .G474 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "620.1 06",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "31",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "26",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "84",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 93,
+    "COMBINED_SEARCH_TIME" : 99,
+    "PROCESS_COMBINED_RESULTS" : 409,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Fluid Mechanics",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Gerhart Andrew L",
+      "count" : "1"
+    }, {
+      "value" : "Gerhart Philip M",
+      "count" : "1"
+    }, {
+      "value" : "Hochstein John I",
+      "count" : "1"
+    }, {
+      "value" : "Munson Bruce Roy",
+      "count" : "1"
+    }, {
+      "value" : "Okiishi T H",
+      "count" : "1"
+    }, {
+      "value" : "Young Donald F",
+      "count" : "1"
+    }, {
+      "value" : "강동진",
+      "count" : "1"
+    }, {
+      "value" : "박원규",
+      "count" : "1"
+    }, {
+      "value" : "신승원",
+      "count" : "1"
+    }, {
+      "value" : "이상욱",
+      "count" : "1"
+    }, {
+      "value" : "이진",
+      "count" : "1"
+    }, {
+      "value" : "장경식",
+      "count" : "1"
+    }, {
+      "value" : "정신규",
+      "count" : "1"
+    }, {
+      "value" : "주원구",
+      "count" : "1"
+    }, {
+      "value" : "한만배",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 667415547
+}

@@ -1,0 +1,296 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000802169703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "리튬이차전지의 원리 및 응용 " ],
+        "format" : [ "xii, 503 p. : 삽화 ; 25 cm" ],
+        "identifier" : [ "$$CISBN$$V9788972838784 :" ],
+        "creationdate" : [ "2010" ],
+        "creator" : [ "박정기$$Q박정기" ],
+        "publisher" : [ "서울 : 홍릉과학출판사" ],
+        "mms" : [ "991000802169703286" ],
+        "contributor" : [ "강기석$$Q강기석", "김동원$$Q김동원", "김성수$$Q김성수", "김재국$$Q김재국", "도칠훈$$Q도칠훈", "박홍규$$Q박홍규", "송승완$$Q송승완", "이상영$$Q이상영", "이성만$$Q이성만", "이영기$$Q이영기", "이용민$$Q이용민", "이창우$$Q이창우", "한규승$$Q한규승", "홍영식$$Q홍영식" ],
+        "addtitle" : [ "Principles and applications of lithium secondary batteries" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000802169703286" ],
+        "recordid" : [ "alma991000802169703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13430129-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "nr92008463" ],
+        "originatingSystemIDContributor" : [ "n82029765", "n82007990", "n88199170", "nr93037712", "n82064798", "n82269744", "nr93001402", "n82128412", "nr2001039074" ],
+        "aulast" : [ "박정기" ],
+        "au" : [ "박정기" ],
+        "addau" : [ "강기석", "김동원", "김성수", "김재국", "도칠훈", "박홍규", "송승완", "이상영", "이성만", "이영기", "이용민", "이창우", "한규승", "홍영식" ],
+        "creatorfull" : [ "$$N박정기$$L박정기$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N강기석$$L강기석$$F$$Rcontributor", "$$N김동원$$Rcontributor", "$$N김성수$$Rcontributor", "$$N김재국$$Rcontributor", "$$N도칠훈$$Rcontributor", "$$N박홍규$$Rcontributor", "$$N송승완$$Rcontributor", "$$N이상영$$Rcontributor", "$$N이성만$$Rcontributor", "$$N이영기$$Rcontributor", "$$N이용민$$Rcontributor", "$$N이창우$$Rcontributor", "$$N한규승$$Rcontributor", "$$N홍영식$$Rcontributor" ],
+        "date" : [ "2010" ],
+        "isbn" : [ "9788972838784" ],
+        "notes" : [ "참고문헌 본문내 분산수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "홍릉과학출판사" ],
+        "oclcid" : [ "(ptech)b13430129-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "리튬이차전지의 원리 및 응용" ]
+      },
+      "sort" : {
+        "title" : [ "리튬이차전지의 원리 및 응용 = Principles and applications of lithium secondary batteries / 대표저자: 박정기" ],
+        "author" : [ "박정기" ],
+        "creationdate" : [ "2010" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK2945.L58 .박74 2010",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000802169703286",
+        "holdId" : "2296725240003286",
+        "holKey" : "HoldingResultKey [mid=2296725240003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK2945.L58 .박74 2010]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK2945.L58+.%EB%B0%9574+2010&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK2945.L58 .박74 2010",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000802169703286",
+        "holdId" : "2296725240003286",
+        "holKey" : "HoldingResultKey [mid=2296725240003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK2945.L58 .박74 2010]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK2945.L58+.%EB%B0%9574+2010&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000802169703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788972838784,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788972838784 :&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TK2945.L58 .박74 2010",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tk000000002945.l000000000058.박000000000074000000002010",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "37",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "52",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "45",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "7",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "114",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 125,
+    "COMBINED_SEARCH_TIME" : 131,
+    "PROCESS_COMBINED_RESULTS" : 610,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2010",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "강기석",
+      "count" : "1"
+    }, {
+      "value" : "김동원",
+      "count" : "1"
+    }, {
+      "value" : "김성수",
+      "count" : "1"
+    }, {
+      "value" : "김재국",
+      "count" : "1"
+    }, {
+      "value" : "도칠훈",
+      "count" : "1"
+    }, {
+      "value" : "박정기",
+      "count" : "1"
+    }, {
+      "value" : "박홍규",
+      "count" : "1"
+    }, {
+      "value" : "송승완",
+      "count" : "1"
+    }, {
+      "value" : "이상영",
+      "count" : "1"
+    }, {
+      "value" : "이성만",
+      "count" : "1"
+    }, {
+      "value" : "이영기",
+      "count" : "1"
+    }, {
+      "value" : "이용민",
+      "count" : "1"
+    }, {
+      "value" : "이창우",
+      "count" : "1"
+    }, {
+      "value" : "한규승",
+      "count" : "1"
+    }, {
+      "value" : "홍영식",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1001485671
+}

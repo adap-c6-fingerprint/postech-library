@@ -1,0 +1,316 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003246579603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "왓슨 분자생물학 " ],
+        "format" : [ "896 p. ; 30 cm" ],
+        "identifier" : [ "$$CISBN$$V9788968240164" ],
+        "creationdate" : [ "2014" ],
+        "publisher" : [ "서울 : 바이오사이언스" ],
+        "mms" : [ "991003246579603286" ],
+        "contributor" : [ "Watson, James Dewey$$QWatson, James Dewey", "Baker, Tania A.$$QBaker, Tania A.", "Bell, Stephen P.$$QBell, Stephen P.", "Gann, Alexander$$QGann, Alexander", "Levine, Michael$$QLevine, Michael", "Losick, Richard$$QLosick, Richard", "양재섭$$Q양재섭", "강선철$$Q강선철", "김군도$$Q김군도", "김남우$$Q김남우", "김상해$$Q김상해", "김현희$$Q김현희", "박은정$$Q박은정", "배영석$$Q배영석", "백상기$$Q백상기", "송종태$$Q송종태", "이준규$$Q이준규", "장종수$$Q장종수", "전성호$$Q전성호", "정계준$$Q정계준", "왓슨, 제임스 듀이$$Q왓슨, 제임스 듀이", "베이커, 태니어 A.$$Q베이커, 태니어 A.", "벨, 스티븐 P.$$Q벨, 스티븐 P.", "간, 알렉산더$$Q간, 알렉산더", "레바인, 마이클$$Q레바인, 마이클", "로식, 리처드$$Q로식, 리처드" ],
+        "addtitle" : [ "Molecular biology of the gene (7th ed.)" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "분자생물학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003246579603286" ],
+        "recordid" : [ "alma991003246579603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "991003246579603286" ],
+        "sourcesystem" : [ "KERIS (KORMARC)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr98014769", "n80037588", "n2004052238", "n90719420", "n84020823", "nr2002023165", "n2008181829" ],
+        "aulast" : [ "Watson", "Baker", "Bell", "Gann", "Levine", "Losick", "양재섭", "강선철", "김군도", "김남우", "김상해", "김현희", "박은정", "배영석", "백상기", "송종태", "이준규", "장종수", "전성호", "정계준", "왓슨", "베이커", "벨", "간", "레바인", "로식" ],
+        "aufirst" : [ "James Dewey", "Tania A.", "Stephen P.", "Alexander", "Michael", "Richard", "제임스 듀이", "태니어 A.", "스티븐 P.", "알렉산더", "마이클", "리처드" ],
+        "auinit" : [ "J", "T", "S", "A", "M", "R", "제", "태", "스", "알", "마", "리" ],
+        "addau" : [ "Watson, James Dewey", "Baker, Tania A.", "Bell, Stephen P.", "Gann, Alexander", "Levine, Michael", "Losick, Richard", "양재섭", "강선철", "김군도", "김남우", "김상해", "김현희", "박은정", "배영석", "백상기", "송종태", "이준규", "장종수", "전성호", "정계준", "왓슨, 제임스 듀이", "베이커, 태니어 A.", "벨, 스티븐 P.", "간, 알렉산더", "레바인, 마이클", "로식, 리처드" ],
+        "contributorfull" : [ "$$NWatson, James Dewey$$LWatson$$FJames Dewey$$Rcontributor", "$$NBaker, Tania A.$$Rcontributor", "$$NBell, Stephen P.$$Rcontributor", "$$NGann, Alexander$$Rcontributor", "$$NLevine, Michael$$Rcontributor", "$$NLosick, Richard$$Rcontributor", "$$N양재섭$$Rcontributor", "$$N강선철$$Rcontributor", "$$N김군도$$Rcontributor", "$$N김남우$$Rcontributor", "$$N김상해$$Rcontributor", "$$N김현희$$Rcontributor", "$$N박은정$$Rcontributor", "$$N배영석$$Rcontributor", "$$N백상기$$Rcontributor", "$$N송종태$$Rcontributor", "$$N이준규$$Rcontributor", "$$N장종수$$Rcontributor", "$$N전성호$$Rcontributor", "$$N정계준$$Rcontributor", "$$N왓슨, 제임스 듀이$$Rcontributor", "$$N베이커, 태니어 A.$$Rcontributor", "$$N벨, 스티븐 P.$$Rcontributor", "$$N간, 알렉산더$$Rcontributor", "$$N레바인, 마이클$$Rcontributor", "$$N로식, 리처드$$Rcontributor" ],
+        "addtitle" : [ "Molecular biology of the gene" ],
+        "date" : [ "2014" ],
+        "isbn" : [ "9788968240164" ],
+        "notes" : [ "참고문헌과 색인수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "바이오사이언스" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "왓슨 분자생물학" ]
+      },
+      "sort" : {
+        "title" : [ "왓슨 분자생물학 / Watson 외 지음 ; 양재섭 외 옮김" ],
+        "author" : [ "Watson, James Dewey" ],
+        "creationdate" : [ "2014" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QH506 .M6627 2014",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003246579603286",
+        "holdId" : "22111032930003286",
+        "holKey" : "HoldingResultKey [mid=22111032930003286, libraryId=117046190003286, locationCode=c3b, callNumber=QH506 .M6627 2014]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QH506+.M6627+2014&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QH506 .M6627 2014",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003246579603286",
+        "holdId" : "22111032930003286",
+        "holKey" : "HoldingResultKey [mid=22111032930003286, libraryId=117046190003286, locationCode=c3b, callNumber=QH506 .M6627 2014]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QH506+.M6627+2014&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003246579603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788968240164,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788968240164&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QH506 .M6627 2014",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qh000000000506.m000000006627000000002014",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "10",
+    "CALL_SOLR_GET_IDS_LIST" : "46",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "63",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "57",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "13",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "136",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 150,
+    "COMBINED_SEARCH_TIME" : 157,
+    "PROCESS_COMBINED_RESULTS" : 262,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2014",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "분자생물학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Baker Tania A",
+      "count" : "1"
+    }, {
+      "value" : "Bell Stephen P",
+      "count" : "1"
+    }, {
+      "value" : "Gann Alexander",
+      "count" : "1"
+    }, {
+      "value" : "Levine Michael",
+      "count" : "1"
+    }, {
+      "value" : "Losick Richard",
+      "count" : "1"
+    }, {
+      "value" : "Watson James Dewey",
+      "count" : "1"
+    }, {
+      "value" : "간 알렉산더",
+      "count" : "1"
+    }, {
+      "value" : "강선철",
+      "count" : "1"
+    }, {
+      "value" : "김군도",
+      "count" : "1"
+    }, {
+      "value" : "김남우",
+      "count" : "1"
+    }, {
+      "value" : "김상해",
+      "count" : "1"
+    }, {
+      "value" : "김현희",
+      "count" : "1"
+    }, {
+      "value" : "레바인 마이클",
+      "count" : "1"
+    }, {
+      "value" : "로식 리처드",
+      "count" : "1"
+    }, {
+      "value" : "박은정",
+      "count" : "1"
+    }, {
+      "value" : "배영석",
+      "count" : "1"
+    }, {
+      "value" : "백상기",
+      "count" : "1"
+    }, {
+      "value" : "베이커 태니어 A",
+      "count" : "1"
+    }, {
+      "value" : "벨 스티븐 P",
+      "count" : "1"
+    }, {
+      "value" : "송종태",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -2053009804
+}

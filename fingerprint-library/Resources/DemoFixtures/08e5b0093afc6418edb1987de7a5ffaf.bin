@@ -1,0 +1,280 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003777352203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "데이터 익명화를 위한 파이프라인 : 데이터를 안전하고 책임감 있게 사용하는 비식별화 방법 " ],
+        "format" : [ "164 p. : 삽화 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791162245514" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "Arbuckle, Luk$$QArbuckle, Luk" ],
+        "publisher" : [ "서울 : 한빛미디어" ],
+        "mms" : [ "991003777352203286" ],
+        "contributor" : [ "Arbuckle, Luk$$QArbuckle, Luk", "Emam, Khaled El$$QEmam, Khaled El", "이창현$$Q이창현", "아버클, 루크$$Q아버클, 루크", "에맘, 칼리드 엘$$Q에맘, 칼리드 엘" ],
+        "addtitle" : [ "Building an anonymization pipeline : creating safe data" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "데이터 보안", "정보 보안", "데이터과학 데이터보안 보안 정보보안 데이터익명화 파이프라인" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003777352203286" ],
+        "recordid" : [ "alma991003777352203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016170257" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2014027263" ],
+        "originatingSystemIDContributor" : [ "no2014027263", "n97079347" ],
+        "aulast" : [ "Arbuckle" ],
+        "aufirst" : [ "Luk" ],
+        "auinit" : [ "L" ],
+        "au" : [ "Arbuckle, Luk" ],
+        "addau" : [ "Arbuckle, Luk", "Emam, Khaled El", "이창현", "아버클, 루크", "에맘, 칼리드 엘" ],
+        "creatorfull" : [ "$$NArbuckle, Luk$$LArbuckle$$FLuk$$Rauthor" ],
+        "contributorfull" : [ "$$NArbuckle, Luk$$LArbuckle$$FLuk$$Rcontributor", "$$NEmam, Khaled El$$Rcontributor", "$$N이창현$$Rcontributor", "$$N아버클, 루크$$Rcontributor", "$$N에맘, 칼리드 엘$$Rcontributor" ],
+        "addtitle" : [ "Building an anonymization pipeline : creating safe data" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791162245514" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한빛미디어" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "데이터 익명화를 위한 파이프라인 : 데이터를 안전하고 책임감 있게 사용하는 비식별화 방법" ]
+      },
+      "sort" : {
+        "title" : [ "데이터 익명화를 위한 파이프라인 : 데이터를 안전하고 책임감 있게 사용하는 비식별화 방법 / 루크 아버클, 칼리드 엘 에맘 지음 ; 이창현 옮김" ],
+        "author" : [ "Arbuckle, Luk" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.A25 .A73 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003777352203286",
+        "holdId" : "22285919730003286",
+        "holKey" : "HoldingResultKey [mid=22285919730003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.A25 .A73 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.A25+.A73+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.9.A25 .A73 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003777352203286",
+        "holdId" : "22285919730003286",
+        "holKey" : "HoldingResultKey [mid=22285919730003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.9.A25 .A73 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.9.A25+.A73+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003777352203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791162245514,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791162245514&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.9.A25 .A73 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.8",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "89",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "74",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "15",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "135",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 144,
+    "COMBINED_SEARCH_TIME" : 151,
+    "PROCESS_COMBINED_RESULTS" : 243,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "데이터 보안",
+      "count" : "1"
+    }, {
+      "value" : "데이터과학 데이터보안 보안 정보보안 데이터익명화 파이프라인",
+      "count" : "1"
+    }, {
+      "value" : "정보 보안",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Arbuckle Luk",
+      "count" : "1"
+    }, {
+      "value" : "Emam Khaled El",
+      "count" : "1"
+    }, {
+      "value" : "아버클 루크",
+      "count" : "1"
+    }, {
+      "value" : "에맘 칼리드 엘",
+      "count" : "1"
+    }, {
+      "value" : "이창현",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -978491986
+}

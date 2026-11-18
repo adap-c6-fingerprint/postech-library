@@ -1,0 +1,288 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003735255203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "로보틱스 알고리듬 : 중고등학생을 위한 입문서 " ],
+        "format" : [ "379 p. : 삽화(일부천연색), 도표 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791161757254" ],
+        "creationdate" : [ "2023" ],
+        "creator" : [ "Ben-Ari, Mordechai, 1948-$$QBen-Ari, Mordechai" ],
+        "publisher" : [ "서울 : 에이콘" ],
+        "mms" : [ "991003735255203286" ],
+        "contributor" : [ "Mondada, Francesco$$QMondada, Francesco", "Mondada, Francesco, 공저$$QMondada, Francesco", "김동현, 역$$Q김동현", "벤 아리, 모르데하이$$Q벤 아리, 모르데하이", "몬다다, 프란체스코$$Q몬다다, 프란체스코" ],
+        "addtitle" : [ "Elements of Robotics", "중고등학생을 위한 입문서" ],
+        "series" : [ "에이콘 데이터 과학 시리즈$$Q에이콘 데이터 과학 시리즈" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Algorithms", "Artificial intelligence", "Automation", "Robotics", "인공지능 로보틱스" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003735255203286" ],
+        "recordid" : [ "alma991003735255203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016735417" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n82018896" ],
+        "originatingSystemIDContributor" : [ "n85314957", "n99831117" ],
+        "aulast" : [ "Ben-Ari" ],
+        "aufirst" : [ "Mordechai" ],
+        "auinit" : [ "M" ],
+        "au" : [ "Ben-Ari, Mordechai" ],
+        "addau" : [ "Mondada, Francesco", "김동현", "벤 아리, 모르데하이", "몬다다, 프란체스코" ],
+        "creatorfull" : [ "$$NBen-Ari, Mordechai$$LBen-Ari$$FMordechai$$Rauthor" ],
+        "contributorfull" : [ "$$NMondada, Francesco$$LMondada$$FFrancesco$$Rcontributor", "$$NMondada, Francesco$$Rcontributor", "$$N김동현$$Rcontributor", "$$N벤 아리, 모르데하이$$Rcontributor", "$$N몬다다, 프란체스코$$Rcontributor" ],
+        "addtitle" : [ "Elements of Robotics" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9791161757254" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "에이콘" ],
+        "seriestitle" : [ "에이콘 데이터 과학 시리즈" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "로보틱스 알고리듬 : 중고등학생을 위한 입문서" ]
+      },
+      "sort" : {
+        "title" : [ "로보틱스 알고리듬 : 중고등학생을 위한 입문서 / 모르데하이 벤 아리, 프란체스코 몬다다 [공]지음 ; 김동현 옮김" ],
+        "author" : [ "Ben-Ari, Mordechai, 1948-" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TJ211 .B46 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003735255203286",
+        "holdId" : "22276241000003286",
+        "holKey" : "HoldingResultKey [mid=22276241000003286, libraryId=117046190003286, locationCode=c3b, callNumber=TJ211 .B46 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TJ211+.B46+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TJ211 .B46 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003735255203286",
+        "holdId" : "22276241000003286",
+        "holKey" : "HoldingResultKey [mid=22276241000003286, libraryId=117046190003286, locationCode=c3b, callNumber=TJ211 .B46 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TJ211+.B46+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003735255203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791161757254,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791161757254&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TJ211 .B46 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "006.3",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "80",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "76",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "4",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "133",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 143,
+    "COMBINED_SEARCH_TIME" : 150,
+    "PROCESS_COMBINED_RESULTS" : 241,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2023",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Algorithms",
+      "count" : "1"
+    }, {
+      "value" : "Artificial Intelligence",
+      "count" : "1"
+    }, {
+      "value" : "Automation",
+      "count" : "1"
+    }, {
+      "value" : "Robotics",
+      "count" : "1"
+    }, {
+      "value" : "인공지능 로보틱스",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Ben Ari Mordechai",
+      "count" : "1"
+    }, {
+      "value" : "Mondada Francesco",
+      "count" : "1"
+    }, {
+      "value" : "김동현",
+      "count" : "1"
+    }, {
+      "value" : "몬다다 프란체스코",
+      "count" : "1"
+    }, {
+      "value" : "벤 아리 모르데하이",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 924515118
+}

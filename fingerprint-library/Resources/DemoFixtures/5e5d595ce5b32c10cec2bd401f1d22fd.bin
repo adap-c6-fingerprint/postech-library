@@ -1,0 +1,305 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003581277603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "경영학으로의 초대 " ],
+        "format" : [ "334 p : 삽화, 사진 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788968442162" ],
+        "creationdate" : [ "2020" ],
+        "publisher" : [ "서울 : 한경사" ],
+        "mms" : [ "991003581277603286" ],
+        "contributor" : [ "강승완$$Q강승완", "김산월$$Q김산월", "김한얼$$Q김한얼", "김희진$$Q김희진", "송보미$$Q송보미", "심형섭$$Q심형섭", "유진영$$Q유진영", "이용주$$Q이용주", "이재람$$Q이재람", "이호승$$Q이호승", "전성민$$Q전성민", "전성주$$Q전성주", "조성준$$Q조성준", "최명철$$Q최명철", "최성섭$$Q최성섭", "한주희$$Q한주희", "황성식$$Q황성식" ],
+        "addtitle" : [ "실제 강의를 바탕으로 한 살아있는 경영학 입문, 경영 원리를 분야별로 소개한 경영학 입문서" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "경영학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003581277603286" ],
+        "recordid" : [ "alma991003581277603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000370563" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr00000734", "n2003070172", "n85329867" ],
+        "aulast" : [ "강승완", "김산월", "김한얼", "김희진", "송보미", "심형섭", "유진영", "이용주", "이재람", "이호승", "전성민", "전성주", "조성준", "최명철", "최성섭", "한주희", "황성식" ],
+        "addau" : [ "강승완", "김산월", "김한얼", "김희진", "송보미", "심형섭", "유진영", "이용주", "이재람", "이호승", "전성민", "전성주", "조성준", "최명철", "최성섭", "한주희", "황성식" ],
+        "contributorfull" : [ "$$N강승완$$L강승완$$F$$Rcontributor", "$$N김산월$$Rcontributor", "$$N김한얼$$Rcontributor", "$$N김희진$$Rcontributor", "$$N송보미$$Rcontributor", "$$N심형섭$$Rcontributor", "$$N유진영$$Rcontributor", "$$N이용주$$Rcontributor", "$$N이재람$$Rcontributor", "$$N이호승$$Rcontributor", "$$N전성민$$Rcontributor", "$$N전성주$$Rcontributor", "$$N조성준$$Rcontributor", "$$N최명철$$Rcontributor", "$$N최성섭$$Rcontributor", "$$N한주희$$Rcontributor", "$$N황성식$$Rcontributor" ],
+        "addtitle" : [ "실제 강의를 바탕으로 한 살아있는 경영학 입문, 경영 원리를 분야별로 소개한 경영학 입문서" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9788968442162" ],
+        "notes" : [ "참고문헌 : p. 322-325" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한경사" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "경영학으로의 초대" ]
+      },
+      "sort" : {
+        "title" : [ "경영학으로의 초대 / 강승완, 김산월, 김한얼, 김희진, 송보미, 심형섭, 유진영, 이용주, 이재람, 이호승, 전성민, 전성주, 조성준, 최명철, 최성섭, 한주희, 황성식" ],
+        "author" : [ "강승완" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD31 .경64 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003581277603286",
+        "holdId" : "22235402310003286",
+        "holKey" : "HoldingResultKey [mid=22235402310003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD31 .경64 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD31+.%EA%B2%BD64+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD31 .경64 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003581277603286",
+        "holdId" : "22235402310003286",
+        "holKey" : "HoldingResultKey [mid=22235402310003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD31 .경64 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD31+.%EA%B2%BD64+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003581277603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788968442162,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788968442162&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HD31 .경64 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "hd000000000031.경000000000064000000002020",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "44",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "38",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "17",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "103",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 113,
+    "COMBINED_SEARCH_TIME" : 120,
+    "PROCESS_COMBINED_RESULTS" : 828,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2020",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "경영학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "강승완",
+      "count" : "1"
+    }, {
+      "value" : "김산월",
+      "count" : "1"
+    }, {
+      "value" : "김한얼",
+      "count" : "1"
+    }, {
+      "value" : "김희진",
+      "count" : "1"
+    }, {
+      "value" : "송보미",
+      "count" : "1"
+    }, {
+      "value" : "심형섭",
+      "count" : "1"
+    }, {
+      "value" : "유진영",
+      "count" : "1"
+    }, {
+      "value" : "이용주",
+      "count" : "1"
+    }, {
+      "value" : "이재람",
+      "count" : "1"
+    }, {
+      "value" : "이호승",
+      "count" : "1"
+    }, {
+      "value" : "전성민",
+      "count" : "1"
+    }, {
+      "value" : "전성주",
+      "count" : "1"
+    }, {
+      "value" : "조성준",
+      "count" : "1"
+    }, {
+      "value" : "최명철",
+      "count" : "1"
+    }, {
+      "value" : "최성섭",
+      "count" : "1"
+    }, {
+      "value" : "한주희",
+      "count" : "1"
+    }, {
+      "value" : "황성식",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 321269365
+}

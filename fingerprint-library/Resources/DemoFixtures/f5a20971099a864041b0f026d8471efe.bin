@@ -1,0 +1,277 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991001737999703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "eng" ],
+        "title" : [ "Coulson & Richardson's chemical engineering. Vol. 6, Chemical engineering design " ],
+        "format" : [ "xxv, 1038 p. : ill. ; 25 cm. " ],
+        "identifier" : [ "$$CLC$$V  2005282334 ;$$CISBN$$V0750665386 (pbk.) " ],
+        "creationdate" : [ "2005. " ],
+        "creator" : [ "Sinnott, R. K. $$QSinnott, R. K. " ],
+        "publisher" : [ "Oxford : Elsevier Butterworth-Heinemann" ],
+        "mms" : [ "991001737999703286" ],
+        "contributor" : [ "Coulson, J. M. (John Metcalfe).$$QCoulson, J. M.", "Richardson, J. F. (John Francis).$$QRichardson, J. F." ],
+        "addtitle" : [ "Chemical engineering design " ],
+        "edition" : [ "4th ed. " ],
+        "relation" : [ "$$Cform$$VChemical engineering design$$Z991003222341603286" ],
+        "relatedwork" : [ "Coulson, J. M. (John Metcalfe). Chemical engineering. $$QCoulson, J. M. (John Metcalfe). Chemical engineering. ", "Richardson, J. F. (John Francis). Chemical engineering. $$QRichardson, J. F. (John Francis). Chemical engineering. " ],
+        "place" : [ "Oxford :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Chemical engineering. " ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991001737999703286" ],
+        "recordid" : [ "alma991001737999703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12110577-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no94024094" ],
+        "aulast" : [ "Sinnott" ],
+        "aufirst" : [ "R. K." ],
+        "auinit" : [ "R" ],
+        "au" : [ "Sinnott, R. K." ],
+        "addau" : [ "Coulson, J. M.", "Richardson, J. F." ],
+        "creatorfull" : [ "$$NSinnott, R. K. $$LSinnott$$FR. K.$$Rauthor" ],
+        "contributorfull" : [ "$$NCoulson, J. M.$$LCoulson$$FJ. M.$$Rcontributor", "$$NRichardson, J. F.$$Rcontributor" ],
+        "addtitle" : [ "Chemical engineering design" ],
+        "date" : [ "2022", "2005. " ],
+        "isbn" : [ "0750665386" ],
+        "notes" : [ "Includes bibliographical references and index." ],
+        "cop" : [ "Oxford" ],
+        "pub" : [ "Elsevier Butterworth-Heinemann" ],
+        "oclcid" : [ "(ptech)b12110577-82postech_inst" ],
+        "lccn" : [ "2005282334" ],
+        "edition" : [ "4th ed." ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Coulson & Richardson's chemical engineering. Vol. 6, Chemical engineering design" ]
+      },
+      "sort" : {
+        "title" : [ "Coulson & Richardson's chemical engineering. Vol. 6, Chemical engineering design /" ],
+        "author" : [ "Sinnott, R. K." ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TP155 .S469 2005",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991001737999703286",
+        "holdId" : "2294294090003286",
+        "holKey" : "HoldingResultKey [mid=2294294090003286, libraryId=117046190003286, locationCode=c3b, callNumber=TP155 .S469 2005]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TP155+.S469+2005&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TP155 .S469 2005",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991001737999703286",
+        "holdId" : "2294294090003286",
+        "holKey" : "HoldingResultKey [mid=2294294090003286, libraryId=117046190003286, locationCode=c3b, callNumber=TP155 .S469 2005]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TP155+.S469+2005&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991001737999703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:0750665386,OCLC:,LCCN:2005282334&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=0750665386 (pbk.)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TP155 .S469 2005",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "660",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "17",
+    "CALL_SOLR_GET_IDS_LIST" : "33",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "88",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "83",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "152",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 162,
+    "COMBINED_SEARCH_TIME" : 167,
+    "PROCESS_COMBINED_RESULTS" : 757,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "eng",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2005",
+      "count" : "1"
+    }, {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Chemical Engineering",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Coulson J M",
+      "count" : "1"
+    }, {
+      "value" : "Richardson J F",
+      "count" : "1"
+    }, {
+      "value" : "Sinnott R K",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1055471884
+}

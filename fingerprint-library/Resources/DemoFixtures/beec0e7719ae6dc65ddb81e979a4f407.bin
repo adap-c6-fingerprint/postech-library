@@ -1,0 +1,284 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003631778703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "금속물리야금학 " ],
+        "format" : [ "xiii, 734 p. : 삽화, 도표 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788962183061" ],
+        "creationdate" : [ "2013" ],
+        "publisher" : [ "서울 : 센게이지러닝코리아" ],
+        "mms" : [ "991003631778703286" ],
+        "contributor" : [ "Abbaschian, Reza$$QAbbaschian, Reza", "Abbaschian, Lara$$QAbbaschian, Lara", "Reed-Hill, Robert E.$$QReed-Hill, Robert E.", "강정윤, 1953-$$Q강정윤", "강남현, 1970-$$Q강남현", "남원종, 1957-$$Q남원종", "안용식, 1959-$$Q안용식" ],
+        "addtitle" : [ "Physical  metallurgy principles (4th ed.)" ],
+        "edition" : [ "제4판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "야금학", "금속 조직학", "물리 야금학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003631778703286" ],
+        "recordid" : [ "alma991003631778703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000013119970" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n91090180", "n91080805", "nb2009020634" ],
+        "aulast" : [ "Abbaschian", "Reed-Hill", "강정윤", "강남현", "남원종", "안용식" ],
+        "aufirst" : [ "Reza", "Lara", "Robert E." ],
+        "auinit" : [ "L", "R" ],
+        "addau" : [ "Abbaschian, Reza", "Abbaschian, Lara", "Reed-Hill, Robert E.", "강정윤", "강남현", "남원종", "안용식" ],
+        "contributorfull" : [ "$$NAbbaschian, Reza$$LAbbaschian$$FReza$$Rcontributor", "$$NAbbaschian, Lara$$Rcontributor", "$$NReed-Hill, Robert E.$$Rcontributor", "$$N강정윤$$Rcontributor", "$$N강남현$$Rcontributor", "$$N남원종$$Rcontributor", "$$N안용식$$Rcontributor" ],
+        "addtitle" : [ "Physical  metallurgy principles" ],
+        "date" : [ "2013" ],
+        "isbn" : [ "9788962183061" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "센게이지러닝코리아" ],
+        "edition" : [ "제4판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "금속물리야금학" ]
+      },
+      "sort" : {
+        "title" : [ "금속물리야금학 / Reza Abbaschian, Lara Abbaschian, Robert E. Reed-Hill 지음 ; 강정윤, 강남현, 남원종, 안용식 옮김" ],
+        "author" : [ "Abbaschian, Reza" ],
+        "creationdate" : [ "2013" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TN690 .A23 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003631778703286",
+        "holdId" : "22249092660003286",
+        "holKey" : "HoldingResultKey [mid=22249092660003286, libraryId=117046190003286, locationCode=c3b, callNumber=TN690 .A23 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TN690+.A23+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TN690 .A23 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003631778703286",
+        "holdId" : "22249092660003286",
+        "holKey" : "HoldingResultKey [mid=22249092660003286, libraryId=117046190003286, locationCode=c3b, callNumber=TN690 .A23 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TN690+.A23+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003631778703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788962183061,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788962183061&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TN690 .A23 2013",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "669.9",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "18",
+    "CALL_SOLR_GET_IDS_LIST" : "29",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "32",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "11",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "27",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "94",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 103,
+    "COMBINED_SEARCH_TIME" : 111,
+    "PROCESS_COMBINED_RESULTS" : 848,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2013",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "금속 조직학",
+      "count" : "1"
+    }, {
+      "value" : "물리 야금학",
+      "count" : "1"
+    }, {
+      "value" : "야금학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Abbaschian Lara",
+      "count" : "1"
+    }, {
+      "value" : "Abbaschian Reza",
+      "count" : "1"
+    }, {
+      "value" : "Reed Hill Robert E",
+      "count" : "1"
+    }, {
+      "value" : "강남현",
+      "count" : "1"
+    }, {
+      "value" : "강정윤",
+      "count" : "1"
+    }, {
+      "value" : "남원종",
+      "count" : "1"
+    }, {
+      "value" : "안용식",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1258993396
+}

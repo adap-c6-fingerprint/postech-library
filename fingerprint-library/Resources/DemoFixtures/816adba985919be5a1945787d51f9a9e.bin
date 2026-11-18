@@ -1,0 +1,283 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000985719703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "공공 커뮤니케이션 캠페인" ],
+        "format" : [ "xiii, 552 p.: 삽화, 표; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791130435831" ],
+        "creationdate" : [ "2015" ],
+        "creator" : [ "Rice, Ronald E.$$QRice, Ronald E." ],
+        "publisher" : [ "서울: 커뮤니케이션북스" ],
+        "mms" : [ "991000985719703286" ],
+        "contributor" : [ "Atkin, Charles K.$$QAtkin, Charles K.", "라이스, 로럴드$$Q라이스, 로럴드", "앳킨, 찰스$$Q앳킨, 찰스", "백혜진$$Q백혜진" ],
+        "addtitle" : [ "Public communication campaigns" ],
+        "place" : [ "서울:" ],
+        "version" : [ "0" ],
+        "subject" : [ "Publicity", "Advertising, Public service", "Public relations", "Advocacy advertising" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000985719703286" ],
+        "recordid" : [ "alma991000985719703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b1480055x-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n81025306" ],
+        "originatingSystemIDContributor" : [ "n82116599" ],
+        "aulast" : [ "Rice" ],
+        "aufirst" : [ "Ronald E." ],
+        "auinit" : [ "R" ],
+        "au" : [ "Rice, Ronald E." ],
+        "addau" : [ "Atkin, Charles K.", "라이스, 로럴드", "앳킨, 찰스", "백혜진" ],
+        "creatorfull" : [ "$$NRice, Ronald E.$$LRice$$FRonald E.$$Rauthor" ],
+        "contributorfull" : [ "$$NAtkin, Charles K.$$LAtkin$$FCharles K.$$Rcontributor", "$$N라이스, 로럴드$$Rcontributor", "$$N앳킨, 찰스$$Rcontributor", "$$N백혜진$$Rcontributor" ],
+        "date" : [ "2015" ],
+        "isbn" : [ "9791130435831" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "커뮤니케이션북스" ],
+        "oclcid" : [ "(ptech)b1480055x-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "공공 커뮤니케이션 캠페인" ]
+      },
+      "sort" : {
+        "title" : [ "공공 커뮤니케이션 캠페인/ 로럴드 라이스, 찰스 앳킨 엮음; 백혜진 옮김" ],
+        "author" : [ "Rice, Ronald E." ],
+        "creationdate" : [ "2015" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HM1226 .P83 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000985719703286",
+        "holdId" : "2293927390003286",
+        "holKey" : "HoldingResultKey [mid=2293927390003286, libraryId=117046190003286, locationCode=c3b, callNumber=HM1226 .P83 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HM1226+.P83+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HM1226 .P83 2013",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000985719703286",
+        "holdId" : "2293927390003286",
+        "holKey" : "HoldingResultKey [mid=2293927390003286, libraryId=117046190003286, locationCode=c3b, callNumber=HM1226 .P83 2013]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HM1226+.P83+2013&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000985719703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791130435831,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791130435831&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HM1226 .P83 2013",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "659",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "54",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "47",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "7",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "25",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "116",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 128,
+    "COMBINED_SEARCH_TIME" : 136,
+    "PROCESS_COMBINED_RESULTS" : 797,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2015",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Advertising Public Service",
+      "count" : "1"
+    }, {
+      "value" : "Advocacy Advertising",
+      "count" : "1"
+    }, {
+      "value" : "Public Relations",
+      "count" : "1"
+    }, {
+      "value" : "Publicity",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Atkin Charles K",
+      "count" : "1"
+    }, {
+      "value" : "Rice Ronald E",
+      "count" : "1"
+    }, {
+      "value" : "라이스 로럴드",
+      "count" : "1"
+    }, {
+      "value" : "백혜진",
+      "count" : "1"
+    }, {
+      "value" : "앳킨 찰스",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 699465686
+}

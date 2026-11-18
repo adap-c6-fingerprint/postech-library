@@ -1,0 +1,319 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003299979803286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "원자력, 우리의 미래인가 : 에너지 전환의 시대, 원자력을 논하다 " ],
+        "format" : [ "383 p. : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791159099410" ],
+        "creationdate" : [ "2018" ],
+        "publisher" : [ "파주 : 교보문고" ],
+        "mms" : [ "991003299979803286" ],
+        "contributor" : [ "Elliott, David$$QElliott, David", "엘리엇, 데이비드$$Q엘리엇, 데이비드", "이지민$$Q이지민", "Scurlock, Jonathan$$QScurlock, Jonathan", "Herring, Horace$$QHerring, Horace", "Butler, Gregg$$QButler, Gregg", "McGlynn, Grace$$QMcGlynn, Grace", "Allen, Paul$$QAllen, Paul", "Kid, Stephen W.$$QKid, Stephen W.", "Fairlie, Ian$$QFairlie, Ian", "Lowry, David$$QLowry, David", "Mitchell, Catherine$$QMitchell, Catherine", "Woodman, Bridge$$QWoodman, Bridge", "Froggatt, Antony$$QFroggatt, Antony", "Boyle, Godfrey$$QBoyle, Godfrey", "Nuttall, William J.$$QNuttall, William J.", "스컬록, 조너선$$Q스컬록, 조너선", "허링, 호리스$$Q허링, 호리스", "버틀러, 그렉$$Q버틀러, 그렉", "맥글린, 그레이스$$Q맥글린, 그레이스", "앨런, 폴$$Q앨런, 폴", "키드, 스티븐 W.$$Q키드, 스티븐 W.", "페어리, 이언$$Q페어리, 이언", "로리, 데이비드$$Q로리, 데이비드", "미첼, 캐서린$$Q미첼, 캐서린", "우드먼, 브리짓$$Q우드먼, 브리짓", "프로갓, 앤터니$$Q프로갓, 앤터니", "보일, 고프리$$Q보일, 고프리", "너톨, 윌리엄 J.$$Q너톨, 윌리엄 J." ],
+        "addtitle" : [ "Nuclear or not? : does nuclear power have a place in a sustainable energy future?" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "원자력[原子力]", "에너지 정책[--政策]" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003299979803286" ],
+        "recordid" : [ "alma991003299979803286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014933472" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n50043154", "nb2009023895", "nb2015011739", "nb2013012491", "n88620023", "no2005094079", "nr2004036975", "n84172985", "n2024029596", "n89133012" ],
+        "aulast" : [ "Elliott", "이지민", "Scurlock", "Herring", "Butler", "McGlynn", "Allen", "Kid", "Fairlie", "Lowry", "Mitchell", "Woodman", "Froggatt", "Boyle", "Nuttall", "스컬록", "허링", "버틀러", "맥글린", "앨런", "키드", "페어리", "로리", "미첼", "우드먼", "프로갓", "보일", "너톨" ],
+        "aufirst" : [ "Jonathan", "Horace", "Gregg", "Grace", "Paul", "Stephen W.", "Ian", "David", "Catherine", "Bridge", "Antony", "Godfrey", "William J.", "조너선", "호리스", "그렉", "그레이스", "폴", "스티븐 W.", "이언", "데이비드", "캐서린", "브리짓", "앤터니", "고프리", "윌리엄 J." ],
+        "auinit" : [ "J", "H", "P", "S", "I", "D", "C", "B", "A", "G", "W", "조", "호", "그", "폴", "스", "이", "데", "캐", "브", "앤", "고", "윌" ],
+        "addau" : [ "Elliott, David", "엘리엇, 데이비드", "이지민", "Scurlock, Jonathan", "Herring, Horace", "Butler, Gregg", "McGlynn, Grace", "Allen, Paul", "Kid, Stephen W.", "Fairlie, Ian", "Lowry, David", "Mitchell, Catherine", "Woodman, Bridge", "Froggatt, Antony", "Boyle, Godfrey", "Nuttall, William J.", "스컬록, 조너선", "허링, 호리스", "버틀러, 그렉", "맥글린, 그레이스", "앨런, 폴", "키드, 스티븐 W.", "페어리, 이언", "로리, 데이비드", "미첼, 캐서린", "우드먼, 브리짓", "프로갓, 앤터니", "보일, 고프리", "너톨, 윌리엄 J." ],
+        "contributorfull" : [ "$$NElliott, David$$LElliott$$FDavid$$Rcontributor", "$$N엘리엇, 데이비드$$Rcontributor", "$$N이지민$$Rcontributor", "$$NScurlock, Jonathan$$Rcontributor", "$$NHerring, Horace$$Rcontributor", "$$NButler, Gregg$$Rcontributor", "$$NMcGlynn, Grace$$Rcontributor", "$$NAllen, Paul$$Rcontributor", "$$NKid, Stephen W.$$Rcontributor", "$$NFairlie, Ian$$Rcontributor", "$$NLowry, David$$Rcontributor", "$$NMitchell, Catherine$$Rcontributor", "$$NWoodman, Bridge$$Rcontributor", "$$NFroggatt, Antony$$Rcontributor", "$$NBoyle, Godfrey$$Rcontributor", "$$NNuttall, William J.$$Rcontributor", "$$N스컬록, 조너선$$Rcontributor", "$$N허링, 호리스$$Rcontributor", "$$N버틀러, 그렉$$Rcontributor", "$$N맥글린, 그레이스$$Rcontributor", "$$N앨런, 폴$$Rcontributor", "$$N키드, 스티븐 W.$$Rcontributor", "$$N페어리, 이언$$Rcontributor", "$$N로리, 데이비드$$Rcontributor", "$$N미첼, 캐서린$$Rcontributor", "$$N우드먼, 브리짓$$Rcontributor", "$$N프로갓, 앤터니$$Rcontributor", "$$N보일, 고프리$$Rcontributor", "$$N너톨, 윌리엄 J.$$Rcontributor" ],
+        "addtitle" : [ "Nuclear or not? : does nuclear power have a place in a sustainable energy future?" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9791159099410" ],
+        "notes" : [ "참고문헌 및 더 읽을거리: p. 365-383" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "교보문고" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "원자력, 우리의 미래인가 : 에너지 전환의 시대, 원자력을 논하다" ]
+      },
+      "sort" : {
+        "title" : [ "원자력, 우리의 미래인가 : 에너지 전환의 시대, 원자력을 논하다 / 데이비드 엘리엇 엮음 ; 이지민 옮김" ],
+        "author" : [ "Elliott, David" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD9698.G72 .N84 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003299979803286",
+        "holdId" : "22140262690003286",
+        "holKey" : "HoldingResultKey [mid=22140262690003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD9698.G72 .N84 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD9698.G72+.N84+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD9698.G72 .N84 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003299979803286",
+        "holdId" : "22140262690003286",
+        "holKey" : "HoldingResultKey [mid=22140262690003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD9698.G72 .N84 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD9698.G72+.N84+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003299979803286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791159099410,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791159099410&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HD9698.G72 .N84 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "333.79240941",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "11",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "43",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "5",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "37",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "13",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "99",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 110,
+    "COMBINED_SEARCH_TIME" : 117,
+    "PROCESS_COMBINED_RESULTS" : 763,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2018",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "에너지 정책 政策",
+      "count" : "1"
+    }, {
+      "value" : "원자력 原子力",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Allen Paul",
+      "count" : "1"
+    }, {
+      "value" : "Boyle Godfrey",
+      "count" : "1"
+    }, {
+      "value" : "Butler Gregg",
+      "count" : "1"
+    }, {
+      "value" : "Elliott David",
+      "count" : "1"
+    }, {
+      "value" : "Fairlie Ian",
+      "count" : "1"
+    }, {
+      "value" : "Froggatt Antony",
+      "count" : "1"
+    }, {
+      "value" : "Herring Horace",
+      "count" : "1"
+    }, {
+      "value" : "Kid Stephen W",
+      "count" : "1"
+    }, {
+      "value" : "Lowry David",
+      "count" : "1"
+    }, {
+      "value" : "Mcglynn Grace",
+      "count" : "1"
+    }, {
+      "value" : "Mitchell Catherine",
+      "count" : "1"
+    }, {
+      "value" : "Nuttall William J",
+      "count" : "1"
+    }, {
+      "value" : "Scurlock Jonathan",
+      "count" : "1"
+    }, {
+      "value" : "Woodman Bridge",
+      "count" : "1"
+    }, {
+      "value" : "너톨 윌리엄 J",
+      "count" : "1"
+    }, {
+      "value" : "로리 데이비드",
+      "count" : "1"
+    }, {
+      "value" : "맥글린 그레이스",
+      "count" : "1"
+    }, {
+      "value" : "미첼 캐서린",
+      "count" : "1"
+    }, {
+      "value" : "버틀러 그렉",
+      "count" : "1"
+    }, {
+      "value" : "보일 고프리",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -946895656
+}

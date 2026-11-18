@@ -1,0 +1,319 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003737852803286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(AutoML 창시자가 알려주는) 자동머신러닝 " ],
+        "format" : [ "374 p. : 천연색삽화, 도표 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791161755960" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 에이콘에이콘출판주식회사" ],
+        "mms" : [ "991003737852803286" ],
+        "contributor" : [ "Hutter, Frank$$QHutter, Frank", "Kotthoff, Lars$$QKotthoff, Lars", "Vanschoren, Joaquin$$QVanschoren, Joaquin", "Feurer, Matthias$$QFeurer, Matthias", "Elsken, Thomas$$QElsken, Thomas", "Metzen, Jan Hendrik$$QMetzen, Jan Hendrik", "Thornton, Chris$$QThornton, Chris", "Hoos, Holger H.$$QHoos, Holger H.", "Leyton-Brown, Kevin$$QLeyton-Brown, Kevin", "Komer, Brent$$QKomer, Brent", "Bergstra, James$$QBergstra, James", "Eliasmith, Chris$$QEliasmith, Chris", "Klein, Aaron$$QKlein, Aaron", "Eggensperger, Katharina$$QEggensperger, Katharina", "Springenberg, Jost Tobias$$QSpringenberg, Jost Tobias", "Blum, Manuel$$QBlum, Manuel", "Mendoza, Hector$$QMendoza, Hector", "Urban, Matthias$$QUrban, Matthias", "Burkart, Michael$$QBurkart, Michael", "Dippel, Maximilian$$QDippel, Maximilian", "Lindauer, Marius$$QLindauer, Marius", "Olson, Randal S.$$QOlson, Randal S.", "Moore, Jason H.$$QMoore, Jason H.", "Steinruecken, Christian$$QSteinruecken, Christian", "smith, Emma$$Qsmith, Emma", "Janz, David$$QJanz, David", "Lloyd, james$$QLloyd, james", "Ghahramani, Zoubin$$QGhahramani, Zoubin", "Guyon, isabelle$$QGuyon, isabelle", "Sun-Hosoya, Lisheng$$QSun-Hosoya, Lisheng", "Boulle, Marc$$QBoulle, Marc", "Escalante, Hugo Jair$$QEscalante, Hugo Jair", "Escalera, Sergio$$QEscalera, Sergio", "Liu, Zhengying$$QLiu, Zhengying", "Jajetic, Damir$$QJajetic, Damir", "Ray, Bisakha$$QRay, Bisakha", "Saeed, Mehreen$$QSaeed, Mehreen", "Sebag, Michele$$QSebag, Michele", "Statnikov, Alexander$$QStatnikov, Alexander", "Tu, Wei-Wei$$QTu, Wei-Wei", "Viegas, Evelyne$$QViegas, Evelyne", "이기홍$$Q이기홍", "허터, 프랭크$$Q허터, 프랭크", "코토프, 라스$$Q코토프, 라스", "반쇼렌, 호아킨$$Q반쇼렌, 호아킨", "페러, 마티아스$$Q페러, 마티아스", "엘스켄, 토마스$$Q엘스켄, 토마스", "멧젠, 얀 헨드릭$$Q멧젠, 얀 헨드릭", "손턴, 크리스$$Q손턴, 크리스", "후스, 홀거$$Q후스, 홀거", "레이튼 브라운, 케빈$$Q레이튼 브라운, 케빈", "코머, 브렌트$$Q코머, 브렌트", "베르흐스트라, 제임스$$Q베르흐스트라, 제임스", "엘라이아스미스, 크리스$$Q엘라이아스미스, 크리스", "클라인, 아론$$Q클라인, 아론", "에겐스페르거, 카타리나$$Q에겐스페르거, 카타리나", "스프링베르크, 요스트 토비아스$$Q스프링베르크, 요스트 토비아스", "블럼, 마누엘$$Q블럼, 마누엘", "멘도자, 헥터$$Q멘도자, 헥터", "어반, 마티아스$$Q어반, 마티아스", "버카트, 마이클$$Q버카트, 마이클", "디펠, 막시밀리안$$Q디펠, 막시밀리안", "린도어, 마리우스$$Q린도어, 마리우스", "랜달, 올슨$$Q랜달, 올슨", "무어, 제이슨$$Q무어, 제이슨", "스테인루켄, 크리스티안$$Q스테인루켄, 크리스티안", "스미스, 엠마$$Q스미스, 엠마", "얀츠, 데이비드$$Q얀츠, 데이비드", "로이드, 제임스$$Q로이드, 제임스", "가라마니, 주빈$$Q가라마니, 주빈", "귀용, 이사벨$$Q귀용, 이사벨", "선호소야, 리셩$$Q선호소야, 리셩", "보울, 마크$$Q보울, 마크", "에스칼란테, 휴고 자이르$$Q에스칼란테, 휴고 자이르", "에스칼레라, 세르히오$$Q에스칼레라, 세르히오", "리우, 정잉$$Q리우, 정잉", "자제티치, 다미르$$Q자제티치, 다미르", "레이, 비사카$$Q레이, 비사카", "사이드, 메흐린$$Q사이드, 메흐린", "세바그, 미셸$$Q세바그, 미셸", "스타트니코프, 알레간더$$Q스타트니코프, 알레간더", "투, 웨이웨이$$Q투, 웨이웨이", "비에가스, 에블린$$Q비에가스, 에블린" ],
+        "addtitle" : [ "Automated machine learning : methods, systems, challenges" ],
+        "series" : [ "에이콘 데이터 과학 시리즈$$Q에이콘 데이터 과학 시리즈" ],
+        "unititle" : [ "Automated machine learning. 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "기계 학습[機械學習]" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003737852803286" ],
+        "recordid" : [ "alma991003737852803286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016022616" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n95043667", "n2001012781", "n2024003507", "no2012000796", "nr98030616", "nb2007010928", "nb2017001619", "n98044660", "no2008066836", "n94120005", "nb2011010359", "no2004010667", "no2001096533", "n83173726", "n2002154108", "n2008200192", "no2019119805", "nb2006018237", "nb2021010254" ],
+        "aulast" : [ "Hutter", "Kotthoff", "Vanschoren", "Feurer", "Elsken", "Metzen", "Thornton", "Hoos", "Leyton-Brown", "Komer", "Bergstra", "Eliasmith", "Klein", "Eggensperger", "Springenberg", "Blum", "Mendoza", "Urban", "Burkart", "Dippel", "Lindauer", "Olson", "Moore", "Steinruecken", "smith", "Janz", "Lloyd", "Ghahramani", "Guyon", "Sun-Hosoya", "Boulle", "Escalante", "Escalera", "Liu", "Jajetic", "Ray", "Saeed", "Sebag", "Statnikov", "Tu", "Viegas", "이기홍", "허터", "코토프", "반쇼렌", "페러", "엘스켄", "멧젠", "손턴", "후스", "레이튼브라운", "코머", "베르흐스트라", "엘라이아스미스", "클라인", "에겐스페르거", "스프링베르크", "블럼", "멘도자", "어반", "버카트", "디펠", "린도어", "랜달", "무어", "스테인루켄", "스미스", "얀츠", "로이드", "가라마니", "귀용", "선호소야", "보울", "에스칼란테", "에스칼레라", "리우", "자제티치", "레이", "사이드", "세바그", "스타트니코프", "투", "비에가스" ],
+        "aufirst" : [ "Frank", "Lars", "Joaquin", "Thomas", "Jan Hendrik", "Holger H.", "Kevin", "Brent", "James", "Chris", "Aaron", "Katharina", "Jost Tobias", "Manuel", "Hector", "Matthias", "Michael", "Maximilian", "Marius", "Randal S.", "Jason H.", "Christian", "Emma", "David", "james", "Zoubin", "isabelle", "Lisheng", "Marc", "Hugo Jair", "Sergio", "Zhengying", "Damir", "Bisakha", "Mehreen", "Michele", "Alexander", "Wei-Wei", "Evelyne", "프랭크", "라스", "호아킨", "토마스", "얀 헨드릭", "홀거", "케빈", "브렌트", "크리스", "아론", "카타리나", "요스트 토비아스", "마누엘", "헥터", "마티아스", "마이클", "막시밀리안", "마리우스", "올슨", "제이슨", "크리스티안", "엠마", "데이비드", "제임스", "주빈", "이사벨", "리셩", "마크", "휴고 자이르", "세르히오", "정잉", "다미르", "비사카", "메흐린", "미셸", "알레간더", "웨이웨이", "에블린" ],
+        "auinit" : [ "F", "T", "K", "R", "J", "C", "j", "i", "L", "H", "S", "Z", "D", "B", "M", "A", "W", "E", "프", "라", "호", "토", "얀", "홀", "케", "브", "아", "카", "요", "헥", "막", "올", "크", "엠", "데", "제", "주", "이", "리", "마", "휴", "세", "정", "다", "비", "메", "미", "알", "웨", "에" ],
+        "addau" : [ "Hutter, Frank", "Kotthoff, Lars", "Vanschoren, Joaquin", "Feurer, Matthias", "Elsken, Thomas", "Metzen, Jan Hendrik", "Thornton, Chris", "Hoos, Holger H.", "Leyton-Brown, Kevin", "Komer, Brent", "Bergstra, James", "Eliasmith, Chris", "Klein, Aaron", "Eggensperger, Katharina", "Springenberg, Jost Tobias", "Blum, Manuel", "Mendoza, Hector", "Urban, Matthias", "Burkart, Michael", "Dippel, Maximilian", "Lindauer, Marius", "Olson, Randal S.", "Moore, Jason H.", "Steinruecken, Christian", "smith, Emma", "Janz, David", "Lloyd, james", "Ghahramani, Zoubin", "Guyon, isabelle", "Sun-Hosoya, Lisheng", "Boulle, Marc", "Escalante, Hugo Jair", "Escalera, Sergio", "Liu, Zhengying", "Jajetic, Damir", "Ray, Bisakha", "Saeed, Mehreen", "Sebag, Michele", "Statnikov, Alexander", "Tu, Wei-Wei", "Viegas, Evelyne", "이기홍", "허터, 프랭크", "코토프, 라스", "반쇼렌, 호아킨", "페러, 마티아스", "엘스켄, 토마스", "멧젠, 얀 헨드릭", "손턴, 크리스", "후스, 홀거", "레이튼 브라운, 케빈", "코머, 브렌트", "베르흐스트라, 제임스", "엘라이아스미스, 크리스", "클라인, 아론", "에겐스페르거, 카타리나", "스프링베르크, 요스트 토비아스", "블럼, 마누엘", "멘도자, 헥터", "어반, 마티아스", "버카트, 마이클", "디펠, 막시밀리안", "린도어, 마리우스", "랜달, 올슨", "무어, 제이슨", "스테인루켄, 크리스티안", "스미스, 엠마", "얀츠, 데이비드", "로이드, 제임스", "가라마니, 주빈", "귀용, 이사벨", "선호소야, 리셩", "보울, 마크", "에스칼란테, 휴고 자이르", "에스칼레라, 세르히오", "리우, 정잉", "자제티치, 다미르", "레이, 비사카", "사이드, 메흐린", "세바그, 미셸", "스타트니코프, 알레간더", "투, 웨이웨이", "비에가스, 에블린" ],
+        "contributorfull" : [ "$$NHutter, Frank$$LHutter$$FFrank$$Rcontributor", "$$NKotthoff, Lars$$Rcontributor", "$$NVanschoren, Joaquin$$Rcontributor", "$$NFeurer, Matthias$$Rcontributor", "$$NElsken, Thomas$$Rcontributor", "$$NMetzen, Jan Hendrik$$Rcontributor", "$$NThornton, Chris$$Rcontributor", "$$NHoos, Holger H.$$Rcontributor", "$$NLeyton-Brown, Kevin$$Rcontributor", "$$NKomer, Brent$$Rcontributor", "$$NBergstra, James$$Rcontributor", "$$NEliasmith, Chris$$Rcontributor", "$$NKlein, Aaron$$Rcontributor", "$$NEggensperger, Katharina$$Rcontributor", "$$NSpringenberg, Jost Tobias$$Rcontributor", "$$NBlum, Manuel$$Rcontributor", "$$NMendoza, Hector$$Rcontributor", "$$NUrban, Matthias$$Rcontributor", "$$NBurkart, Michael$$Rcontributor", "$$NDippel, Maximilian$$Rcontributor", "$$NLindauer, Marius$$Rcontributor", "$$NOlson, Randal S.$$Rcontributor", "$$NMoore, Jason H.$$Rcontributor", "$$NSteinruecken, Christian$$Rcontributor", "$$Nsmith, Emma$$Rcontributor", "$$NJanz, David$$Rcontributor", "$$NLloyd, james$$Rcontributor", "$$NGhahramani, Zoubin$$Rcontributor", "$$NGuyon, isabelle$$Rcontributor", "$$NSun-Hosoya, Lisheng$$Rcontributor", "$$NBoulle, Marc$$Rcontributor", "$$NEscalante, Hugo Jair$$Rcontributor", "$$NEscalera, Sergio$$Rcontributor", "$$NLiu, Zhengying$$Rcontributor", "$$NJajetic, Damir$$Rcontributor", "$$NRay, Bisakha$$Rcontributor", "$$NSaeed, Mehreen$$Rcontributor", "$$NSebag, Michele$$Rcontributor", "$$NStatnikov, Alexander$$Rcontributor", "$$NTu, Wei-Wei$$Rcontributor", "$$NViegas, Evelyne$$Rcontributor", "$$N이기홍$$Rcontributor", "$$N허터, 프랭크$$Rcontributor", "$$N코토프, 라스$$Rcontributor", "$$N반쇼렌, 호아킨$$Rcontributor", "$$N페러, 마티아스$$Rcontributor", "$$N엘스켄, 토마스$$Rcontributor", "$$N멧젠, 얀 헨드릭$$Rcontributor", "$$N손턴, 크리스$$Rcontributor", "$$N후스, 홀거$$Rcontributor", "$$N레이튼 브라운, 케빈$$Rcontributor", "$$N코머, 브렌트$$Rcontributor", "$$N베르흐스트라, 제임스$$Rcontributor", "$$N엘라이아스미스, 크리스$$Rcontributor", "$$N클라인, 아론$$Rcontributor", "$$N에겐스페르거, 카타리나$$Rcontributor", "$$N스프링베르크, 요스트 토비아스$$Rcontributor", "$$N블럼, 마누엘$$Rcontributor", "$$N멘도자, 헥터$$Rcontributor", "$$N어반, 마티아스$$Rcontributor", "$$N버카트, 마이클$$Rcontributor", "$$N디펠, 막시밀리안$$Rcontributor", "$$N린도어, 마리우스$$Rcontributor", "$$N랜달, 올슨$$Rcontributor", "$$N무어, 제이슨$$Rcontributor", "$$N스테인루켄, 크리스티안$$Rcontributor", "$$N스미스, 엠마$$Rcontributor", "$$N얀츠, 데이비드$$Rcontributor", "$$N로이드, 제임스$$Rcontributor", "$$N가라마니, 주빈$$Rcontributor", "$$N귀용, 이사벨$$Rcontributor", "$$N선호소야, 리셩$$Rcontributor", "$$N보울, 마크$$Rcontributor", "$$N에스칼란테, 휴고 자이르$$Rcontributor", "$$N에스칼레라, 세르히오$$Rcontributor", "$$N리우, 정잉$$Rcontributor", "$$N자제티치, 다미르$$Rcontributor", "$$N레이, 비사카$$Rcontributor", "$$N사이드, 메흐린$$Rcontributor", "$$N세바그, 미셸$$Rcontributor", "$$N스타트니코프, 알레간더$$Rcontributor", "$$N투, 웨이웨이$$Rcontributor", "$$N비에가스, 에블린$$Rcontributor" ],
+        "addtitle" : [ "Automated machine learning : methods, systems, challenges" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791161755960" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "에이콘에이콘출판주식회사" ],
+        "seriestitle" : [ "에이콘 데이터 과학 시리즈" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(AutoML 창시자가 알려주는) 자동머신러닝" ]
+      },
+      "sort" : {
+        "title" : [ "(AutoML 창시자가 알려주는) 자동머신러닝 / 프랭크 허터, 라스 코토프, 호아킨 반쇼렌, 마티아스 페러, 토마스 엘스켄, 얀 헨드릭 멧젠, 크리스 손턴, 홀거 후스, 케빈 레이튼 브라운, 브렌트 코머, 제임스 베르흐스트라, 크리스 엘라이아스미스, 아론 클라인, 카타리나 에겐스페르거, 요스트 토비아스 스프링베르크, 마누엘 블럼, 헥터 멘도자, 마티아스 어반, 마이클 버카트, 막시밀리안 디펠, 마리우스 린도어, 랜달 올슨, 제이슨 무어, 크리스티안 스테인루켄, 엠마 스미스, 데이비드 얀츠, 제임스 로이드, 주빈 가라마니, 이사벨 귀용, 리셩 선호소야, 마크 보울, 휴고 자이르 에스칼란테, 세르히오 에스칼레라, 정잉 리우, 다미르 자제티치, 비사카 레이, 메흐린 사이드, 미셸 세바그, 알레간더 스타트니코프, 웨이웨이 투, 에블린 비에가스 편저 ; 이기홍 옮김" ],
+        "author" : [ "Hutter, Frank" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "Q325.5 .H88 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003737852803286",
+        "holdId" : "22277671450003286",
+        "holKey" : "HoldingResultKey [mid=22277671450003286, libraryId=117046190003286, locationCode=c3b, callNumber=Q325.5 .H88 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)Q325.5+.H88+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "Q325.5 .H88 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003737852803286",
+        "holdId" : "22277671450003286",
+        "holKey" : "HoldingResultKey [mid=22277671450003286, libraryId=117046190003286, locationCode=c3b, callNumber=Q325.5 .H88 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)Q325.5+.H88+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003737852803286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791161755960,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791161755960&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "Q325.5 .H88 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "006.3",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "13",
+    "CALL_SOLR_GET_IDS_LIST" : "29",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "69",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "6",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "63",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "20",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "137",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 155,
+    "COMBINED_SEARCH_TIME" : 162,
+    "PROCESS_COMBINED_RESULTS" : 985,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "기계 학습 機械學習 Ksh2016000029",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Bergstra James",
+      "count" : "1"
+    }, {
+      "value" : "Blum Manuel",
+      "count" : "1"
+    }, {
+      "value" : "Boulle Marc",
+      "count" : "1"
+    }, {
+      "value" : "Burkart Michael",
+      "count" : "1"
+    }, {
+      "value" : "Dippel Maximilian",
+      "count" : "1"
+    }, {
+      "value" : "Eggensperger Katharina",
+      "count" : "1"
+    }, {
+      "value" : "Eliasmith Chris",
+      "count" : "1"
+    }, {
+      "value" : "Elsken Thomas",
+      "count" : "1"
+    }, {
+      "value" : "Escalante Hugo Jair",
+      "count" : "1"
+    }, {
+      "value" : "Escalera Sergio",
+      "count" : "1"
+    }, {
+      "value" : "Feurer Matthias",
+      "count" : "1"
+    }, {
+      "value" : "Ghahramani Zoubin",
+      "count" : "1"
+    }, {
+      "value" : "Guyon Isabelle",
+      "count" : "1"
+    }, {
+      "value" : "Hoos Holger H",
+      "count" : "1"
+    }, {
+      "value" : "Hutter Frank",
+      "count" : "1"
+    }, {
+      "value" : "Jajetic Damir",
+      "count" : "1"
+    }, {
+      "value" : "Janz David",
+      "count" : "1"
+    }, {
+      "value" : "Klein Aaron",
+      "count" : "1"
+    }, {
+      "value" : "Komer Brent",
+      "count" : "1"
+    }, {
+      "value" : "Kotthoff Lars",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1669528727
+}

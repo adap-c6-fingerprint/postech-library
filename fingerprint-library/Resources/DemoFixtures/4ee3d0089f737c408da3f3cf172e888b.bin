@@ -1,0 +1,302 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003732757303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "지리학 연구방법론 " ],
+        "format" : [ "832 p. : 삽화 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788962919493" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 푸른길" ],
+        "mms" : [ "991003732757303286" ],
+        "contributor" : [ "Clifford, N. J. (Nicholas J.)$$QClifford, N. J.", "Cope, Meghan$$QCope, Meghan", "Gillespie, Thomas W.$$QGillespie, Thomas W.", "French, Shaun$$QFrench, Shaun", "이재열$$Q이재열", "김영호$$Q김영호", "김영훈$$Q김영훈", "손정렬$$Q손정렬", "이광률$$Q이광률", "이승철$$Q이승철", "정관용$$Q정관용", "정수열$$Q정수열", "홍성연$$Q홍성연", "김대현$$Q김대현", "박정재$$Q박정재" ],
+        "addtitle" : [ "Key methods in geography" ],
+        "unititle" : [ "Key methods in geography. Korean" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Geography -- Research -- Methodology" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003732757303286" ],
+        "recordid" : [ "alma991003732757303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000058570959" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n93013434", "n82269486", "no2010107700", "n88026733", "no2023039574", "nr97009628", "n82140971", "n88099168", "nb2009020964" ],
+        "aulast" : [ "Clifford", "Cope", "Gillespie", "French", "이재열", "김영호", "김영훈", "손정렬", "이광률", "이승철", "정관용", "정수열", "홍성연", "김대현", "박정재" ],
+        "aufirst" : [ "N. J.", "Meghan", "Thomas W.", "Shaun" ],
+        "auinit" : [ "N", "M", "T", "S" ],
+        "addau" : [ "Clifford, N. J.", "Cope, Meghan", "Gillespie, Thomas W.", "French, Shaun", "이재열", "김영호", "김영훈", "손정렬", "이광률", "이승철", "정관용", "정수열", "홍성연", "김대현", "박정재" ],
+        "contributorfull" : [ "$$NClifford, N. J.$$LClifford$$FN. J.$$Rcontributor", "$$NCope, Meghan$$Rcontributor", "$$NGillespie, Thomas W.$$Rcontributor", "$$NFrench, Shaun$$Rcontributor", "$$N이재열$$Rcontributor", "$$N김영호$$Rcontributor", "$$N김영훈$$Rcontributor", "$$N손정렬$$Rcontributor", "$$N이광률$$Rcontributor", "$$N이승철$$Rcontributor", "$$N정관용$$Rcontributor", "$$N정수열$$Rcontributor", "$$N홍성연$$Rcontributor", "$$N김대현$$Rcontributor", "$$N박정재$$Rcontributor" ],
+        "addtitle" : [ "Key methods in geography" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9788962919493" ],
+        "notes" : [ "참고문헌과 색인수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "푸른길" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "지리학 연구방법론" ]
+      },
+      "sort" : {
+        "title" : [ "지리학 연구방법론 / 니컬러스 클리퍼드 [외] 엮음 ; 이건학 외 옮김" ],
+        "author" : [ "Clifford, N. J. (Nicholas J.)" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "G74 .C55 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003732757303286",
+        "holdId" : "22275631720003286",
+        "holKey" : "HoldingResultKey [mid=22275631720003286, libraryId=117046190003286, locationCode=c3b, callNumber=G74 .C55 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)G74+.C55+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "G74 .C55 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003732757303286",
+        "holdId" : "22275631720003286",
+        "holKey" : "HoldingResultKey [mid=22275631720003286, libraryId=117046190003286, locationCode=c3b, callNumber=G74 .C55 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)G74+.C55+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003732757303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788962919493,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788962919493&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "G74 .C55 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "910.72",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "36",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "31",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "87",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 98,
+    "COMBINED_SEARCH_TIME" : 105,
+    "PROCESS_COMBINED_RESULTS" : 912,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Geography Research Methodology",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Clifford N J",
+      "count" : "1"
+    }, {
+      "value" : "Cope Meghan",
+      "count" : "1"
+    }, {
+      "value" : "French Shaun",
+      "count" : "1"
+    }, {
+      "value" : "Gillespie Thomas W",
+      "count" : "1"
+    }, {
+      "value" : "김대현",
+      "count" : "1"
+    }, {
+      "value" : "김영호",
+      "count" : "1"
+    }, {
+      "value" : "김영훈",
+      "count" : "1"
+    }, {
+      "value" : "박정재",
+      "count" : "1"
+    }, {
+      "value" : "손정렬",
+      "count" : "1"
+    }, {
+      "value" : "이광률",
+      "count" : "1"
+    }, {
+      "value" : "이승철",
+      "count" : "1"
+    }, {
+      "value" : "이재열",
+      "count" : "1"
+    }, {
+      "value" : "정관용",
+      "count" : "1"
+    }, {
+      "value" : "정수열",
+      "count" : "1"
+    }, {
+      "value" : "홍성연",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -513183753
+}

@@ -1,0 +1,277 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991002492479703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "eng" ],
+        "title" : [ "Risk and Safety Analysis of Nuclear Systems " ],
+        "format" : [ "xxi, 477 P. : ill. ; 25 cm. " ],
+        "identifier" : [ "$$CLC$$V  2010049603 ;$$CISBN$$V9780470907566 (hardback) :" ],
+        "creationdate" : [ "2011 " ],
+        "creator" : [ "Lee, John C., 1941- $$QLee, John C." ],
+        "publisher" : [ "Hoboken, New Jersey : Wiley" ],
+        "description" : [ "\"The book has been developed in conjunction with NERS 462, a course offered every year to seniors and graduate students in the University of Michigan NERS program.  The first half of the book covers the principles of risk analysis, the techniques used to develop and update a reliability data base, the reliability of multi-component systems, Markov methods used to analyze the unavailability of systems with repairs, fault trees and event trees used in probabilistic risk assessments (PRAs), and failure modes of systems. All of this material is general enough that it could be used in non-nuclear applications, although there is an emphasis placed on the analysis of nuclear systems.  The second half of the book covers the safety analysis of nuclear energy systems, an analysis of major accidents and incidents that occurred in commercial nuclear plants, applications of PRA techniques to the safety analysis of nuclear power plants (focusing on a major PRA study for five nuclear power plants), practical PRA examples, and emerging techniques in the structure of dynamic event trees and fault trees that can provide a more realistic representation of complex sequences of events. The book concludes with a discussion on passive safety features of advanced nuclear energy systems under development and approaches taken for risk-informed regulations for nuclear plants\"-- Provided by publisher. ", "\"The first half of the book covers the principles of risk analysis, the techniques used to develop and update a reliability data base, the reliability of multi-component systems, Markov methods used to analyze the unavailability of systems with repairs, fault trees and event trees used in probabilistic risk assessments (PRAs), and failure modes of systems. All of this material is general enough that it could be used in non-nuclear applications, although there is an emphasis placed on the analysis of nuclear systems. The second half of the book covers the safety analysis of nuclear energy systems, an analysis of major accidents and incidents that occurred in commercial nuclear plants, applications of PRA techniques to the safety analysis of nuclear power plants (focusing on a major PRA study for five nuclear power plants), practical PRA examples, and emerging techniques in the structure of dynamic event trees and fault trees that can provide a more realistic representation of complex sequences of events\"-- Provided by publisher. " ],
+        "mms" : [ "991002492479703286" ],
+        "contributor" : [ "McCormick, Norman J., 1938- author. $$QMcCormick, Norman J." ],
+        "relation" : [ "$$Cform$$VRisk and safety analysis of nuclear systems$$Z991003253849203286" ],
+        "place" : [ "Hoboken, New Jersey :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Nuclear facilities -- Security measures. ", "Nuclear engineering -- Safety measures. ", "Nuclear engineering -- Risk assessment. ", "TECHNOLOGY & ENGINEERING / Chemical & Biochemical" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991002492479703286" ],
+        "recordid" : [ "alma991002492479703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13455758-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n2010077579" ],
+        "originatingSystemIDContributor" : [ "n81023572" ],
+        "aulast" : [ "Lee" ],
+        "aufirst" : [ "John C." ],
+        "auinit" : [ "J" ],
+        "au" : [ "Lee, John C." ],
+        "addau" : [ "McCormick, Norman J." ],
+        "creatorfull" : [ "$$NLee, John C.$$LLee$$FJohn C.$$Rauthor" ],
+        "contributorfull" : [ "$$NMcCormick, Norman J.$$LMcCormick$$FNorman J.$$Rcontributor" ],
+        "date" : [ "2011 - 2011", "2011 " ],
+        "isbn" : [ "9780470907566" ],
+        "abstract" : [ "\"The book has been developed in conjunction with NERS 462, a course offered every year to seniors and graduate students in the University of Michigan NERS program.  The first half of the book covers the principles of risk analysis, the techniques used to develop and update a reliability data base, the reliability of multi-component systems, Markov methods used to analyze the unavailability of systems with repairs, fault trees and event trees used in probabilistic risk assessments (PRAs), and failure modes of systems. All of this material is general enough that it could be used in non-nuclear applications, although there is an emphasis placed on the analysis of nuclear systems.  The second half of the book covers the safety analysis of nuclear energy systems, an analysis of major accidents and incidents that occurred in commercial nuclear plants, applications of PRA techniques to the safety analysis of nuclear power plants (focusing on a major PRA study for five nuclear power plants), practical PRA examples, and emerging techniques in the structure of dynamic event trees and fault trees that can provide a more realistic representation of complex sequences of events. The book concludes with a discussion on passive safety features of advanced nuclear energy systems under development and approaches taken for risk-informed regulations for nuclear plants\"-- Provided by publisher.", "\"The first half of the book covers the principles of risk analysis, the techniques used to develop and update a reliability data base, the reliability of multi-component systems, Markov methods used to analyze the unavailability of systems with repairs, fault trees and event trees used in probabilistic risk assessments (PRAs), and failure modes of systems. All of this material is general enough that it could be used in non-nuclear applications, although there is an emphasis placed on the analysis of nuclear systems. The second half of the book covers the safety analysis of nuclear energy systems, an analysis of major accidents and incidents that occurred in commercial nuclear plants, applications of PRA techniques to the safety analysis of nuclear power plants (focusing on a major PRA study for five nuclear power plants), practical PRA examples, and emerging techniques in the structure of dynamic event trees and fault trees that can provide a more realistic representation of complex sequences of events\"-- Provided by publisher." ],
+        "cop" : [ "Hoboken, New Jersey" ],
+        "pub" : [ "Wiley" ],
+        "oclcid" : [ "(ptech)b13455758-82postech_inst" ],
+        "lccn" : [ "2010049603" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Risk and Safety Analysis of Nuclear Systems" ]
+      },
+      "sort" : {
+        "title" : [ "Risk and Safety Analysis of Nuclear Systems /" ],
+        "author" : [ "Lee, John C., 1941-" ],
+        "creationdate" : [ "2011" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK9152 .L44 2011",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991002492479703286",
+        "holdId" : "2291769120003286",
+        "holKey" : "HoldingResultKey [mid=2291769120003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK9152 .L44 2011]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK9152+.L44+2011&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK9152 .L44 2011",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991002492479703286",
+        "holdId" : "2291769120003286",
+        "holKey" : "HoldingResultKey [mid=2291769120003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK9152 .L44 2011]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK9152+.L44+2011&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991002492479703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9780470907566,OCLC:,LCCN:2010049603&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9780470907566 (hardback) :&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TK9152 .L44 2011",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tk#9152ǂ l44 2011",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "18",
+    "CALL_SOLR_GET_IDS_LIST" : "30",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "44",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "39",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "105",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 114,
+    "COMBINED_SEARCH_TIME" : 121,
+    "PROCESS_COMBINED_RESULTS" : 880,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "eng",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2011",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Nuclear Engineering Risk Assessment",
+      "count" : "1"
+    }, {
+      "value" : "Nuclear Engineering Safety Measures",
+      "count" : "1"
+    }, {
+      "value" : "Nuclear Facilities Security Measures",
+      "count" : "1"
+    }, {
+      "value" : "Technology Engineering Chemical Biochemical",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Lee John C",
+      "count" : "1"
+    }, {
+      "value" : "Mccormick Norman J",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1467559320
+}

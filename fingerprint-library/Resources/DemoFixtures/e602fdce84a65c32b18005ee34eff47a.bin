@@ -1,0 +1,319 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003813557503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "전기화학의 이해 " ],
+        "format" : [ "xxix, 894 p. : 삽화, 도표 ; 25 cm" ],
+        "identifier" : [ "$$CISBN$$V9791191679199" ],
+        "creationdate" : [ "2024" ],
+        "publisher" : [ "서울 : 텍스트북스" ],
+        "mms" : [ "991003813557503286" ],
+        "contributor" : [ "Bard, Allen J., 1933-$$QBard, Allen J.", "Faulkner, Larry R.$$QFaulkner, Larry R.", "강순형$$Q강순형", "권성중$$Q권성중", "김규원$$Q김규원", "김동원$$Q김동원", "김병권$$Q김병권", "김양래$$Q김양래", "김재엽$$Q김재엽", "남기민$$Q남기민", "박준희$$Q박준희", "박현서$$Q박현서", "변혜령$$Q변혜령", "석정돈$$Q석정돈", "신헌철$$Q신헌철", "심욱$$Q심욱", "안현서$$Q안현서", "이영미$$Q이영미", "이종목$$Q이종목", "이호춘$$Q이호춘", "이흥찬$$Q이흥찬", "장병용$$Q장병용", "장진호$$Q장진호", "조성기$$Q조성기", "조원일$$Q조원일", "최인수$$Q최인수", "한국전기화학회$$Q한국전기화학회", "바드, 알렌 J., 1933-$$Q바드, 알렌 J." ],
+        "addtitle" : [ "Electrochemical methods : fundamentals and applications (2nd ed.)" ],
+        "edition" : [ "제2판, 수정판" ],
+        "unititle" : [ "Electrochemical methods. 2nd ed.. 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "전기 화학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003813557503286" ],
+        "recordid" : [ "alma991003813557503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016903000" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n78062418", "n84023048", "nr98040394", "nr93037712", "n2004050131", "no2001096356", "nr98012663" ],
+        "aulast" : [ "Bard", "Faulkner", "강순형", "권성중", "김규원", "김동원", "김병권", "김양래", "김재엽", "남기민", "박준희", "박현서", "변혜령", "석정돈", "신헌철", "심욱", "안현서", "이영미", "이종목", "이호춘", "이흥찬", "장병용", "장진호", "조성기", "조원일", "최인수", "바드" ],
+        "aufirst" : [ "Allen J.", "Larry R.", "알렌 J." ],
+        "auinit" : [ "A", "L", "알" ],
+        "addau" : [ "Bard, Allen J.", "Faulkner, Larry R.", "강순형", "권성중", "김규원", "김동원", "김병권", "김양래", "김재엽", "남기민", "박준희", "박현서", "변혜령", "석정돈", "신헌철", "심욱", "안현서", "이영미", "이종목", "이호춘", "이흥찬", "장병용", "장진호", "조성기", "조원일", "최인수", "한국전기화학회", "바드, 알렌 J." ],
+        "contributorfull" : [ "$$NBard, Allen J.$$LBard$$FAllen J.$$Rcontributor", "$$NFaulkner, Larry R.$$Rcontributor", "$$N강순형$$Rcontributor", "$$N권성중$$Rcontributor", "$$N김규원$$Rcontributor", "$$N김동원$$Rcontributor", "$$N김병권$$Rcontributor", "$$N김양래$$Rcontributor", "$$N김재엽$$Rcontributor", "$$N남기민$$Rcontributor", "$$N박준희$$Rcontributor", "$$N박현서$$Rcontributor", "$$N변혜령$$Rcontributor", "$$N석정돈$$Rcontributor", "$$N신헌철$$Rcontributor", "$$N심욱$$Rcontributor", "$$N안현서$$Rcontributor", "$$N이영미$$Rcontributor", "$$N이종목$$Rcontributor", "$$N이호춘$$Rcontributor", "$$N이흥찬$$Rcontributor", "$$N장병용$$Rcontributor", "$$N장진호$$Rcontributor", "$$N조성기$$Rcontributor", "$$N조원일$$Rcontributor", "$$N최인수$$Rcontributor", "$$N바드, 알렌 J.$$Rcontributor" ],
+        "addtitle" : [ "Electrochemical methods : fundamentals and applications" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9791191679199" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "텍스트북스" ],
+        "edition" : [ "제2판, 수정판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "전기화학의 이해" ]
+      },
+      "sort" : {
+        "title" : [ "전기화학의 이해 / 지은이: Allen J. Bard, Larry R. Faulkner ; 옮긴이: 한국전기화학회, 강순형, 권성중, 김규원, 김동원, 김병권, 김양래, 김재엽, 남기민, 박준희, 박현서, 변혜령, 석정돈, 신헌철, 심욱, 안현서, 이영미, 이종목, 이호춘, 이흥찬, 장병용, 장진호, 조성기, 조원일, 최인수" ],
+        "author" : [ "Bard, Allen J., 1933-" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD553 .B37 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003813557503286",
+        "holdId" : "22294531760003286",
+        "holKey" : "HoldingResultKey [mid=22294531760003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD553 .B37 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD553+.B37+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD553 .B37 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003813557503286",
+        "holdId" : "22294531760003286",
+        "holKey" : "HoldingResultKey [mid=22294531760003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD553 .B37 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD553+.B37+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003813557503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791191679199,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791191679199&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QD553 .B37 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "541.37",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "40",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "35",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "25",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "106",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 120,
+    "COMBINED_SEARCH_TIME" : 126,
+    "PROCESS_COMBINED_RESULTS" : 690,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "전기 화학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Bard Allen J",
+      "count" : "1"
+    }, {
+      "value" : "Faulkner Larry R",
+      "count" : "1"
+    }, {
+      "value" : "강순형",
+      "count" : "1"
+    }, {
+      "value" : "권성중",
+      "count" : "1"
+    }, {
+      "value" : "김규원",
+      "count" : "1"
+    }, {
+      "value" : "김동원",
+      "count" : "1"
+    }, {
+      "value" : "김병권",
+      "count" : "1"
+    }, {
+      "value" : "김양래",
+      "count" : "1"
+    }, {
+      "value" : "김재엽",
+      "count" : "1"
+    }, {
+      "value" : "남기민",
+      "count" : "1"
+    }, {
+      "value" : "바드 알렌 J",
+      "count" : "1"
+    }, {
+      "value" : "박준희",
+      "count" : "1"
+    }, {
+      "value" : "박현서",
+      "count" : "1"
+    }, {
+      "value" : "변혜령",
+      "count" : "1"
+    }, {
+      "value" : "석정돈",
+      "count" : "1"
+    }, {
+      "value" : "신헌철",
+      "count" : "1"
+    }, {
+      "value" : "심욱",
+      "count" : "1"
+    }, {
+      "value" : "안현서",
+      "count" : "1"
+    }, {
+      "value" : "이영미",
+      "count" : "1"
+    }, {
+      "value" : "이종목",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1713144879
+}

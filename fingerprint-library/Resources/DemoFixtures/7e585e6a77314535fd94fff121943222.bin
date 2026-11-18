@@ -1,0 +1,318 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003631779103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "세계사의 탄생 : 전통과 주제와 서술 방식 " ],
+        "format" : [ "537 p. : 삽화, 도표, 지도 ; 22 cm" ],
+        "identifier" : [ "$$CISBN$$V9788967220297;$$CISBN$$V9788967220280 (세트)" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "서울 : 소와당", "Seoul : Sowadang" ],
+        "mms" : [ "991003631779103286" ],
+        "contributor" : [ "Christian, David, 1946-$$QChristian, David", "Hughes-Warrington, Marnie$$QHughes-Warrington, Marnie", "Sachsenmaier, Dominic$$QSachsenmaier, Dominic", "Lang, Michael$$QLang, Michael", "Northrup, David, 1941-$$QNorthrup, David", "Clossey, Luke$$QClossey, Luke", "Headrick, Daniel R., 1941-$$QHeadrick, Daniel R.", "Goudsblom, Johan, 1932-$$QGoudsblom, Johan", "Maynes, Mary Jo, 1949-$$QMaynes, Mary Jo", "Waltner, Ann, 1949-$$QWaltner, Ann", "Wiesner-Hanks, Merry E., 1952-$$QWiesner-Hanks, Merry E.", "Goody, Jack, 1919-2015$$QGoody, Jack", "Manning, Patrick$$QManning, Patrick", "류충기$$Q류충기", "크리스천, 데이비드, 1946-$$Q크리스천, 데이비드", "마니 휴스-워링턴$$Q마니 휴스-워링턴", "작센마이어, 도미닉$$Q작센마이어, 도미닉", "랭, 마이클$$Q랭, 마이클", "노스럽, 데이비드, 1941-$$Q노스럽, 데이비드", "Northrup, David R., 1941-$$QNorthrup, David R.", "노스럽, 데이비드 R., 1941-$$Q노스럽, 데이비드 R.", "클로시, 루크$$Q클로시, 루크", "헤드릭, 대니얼 R., 1941-$$Q헤드릭, 대니얼 R.", "Headrick, Daniel, 1941-$$QHeadrick, Daniel", "헤드릭, 대니얼, 1941-$$Q헤드릭, 대니얼", "하우드스블롬, 요한, 1932-$$Q하우드스블롬, 요한", "메인스, 메리 조, 1949-$$Q메인스, 메리 조", "월트너, 앤, 1949-$$Q월트너, 앤", "위스너-행크스, 메리 E., 1952-$$Q위스너-행크스, 메리 E.", "Wiesner-Hanks, Merry, 1952-$$QWiesner-Hanks, Merry", "위스너-행크스, 메리, 1952-$$Q위스너-행크스, 메리", "구디, 잭, 1919-2015$$Q구디, 잭", "매닝, 패트릭$$Q매닝, 패트릭", "Ryu, Chunggi$$QRyu, Chunggi" ],
+        "addtitle" : [ "Cambridge world history : introducing world history, to 10,000 BCE. Vol.1" ],
+        "vertitle" : [ "Segyesa ui tansaeng" ],
+        "series" : [ "Cambridge world history ; 01$$QCambridge world history ", "케임브리지 세계사 ; 01$$Q케임브리지 세계사 ", "케임브리지 세계사 = Cambridge world history ; 01$$Q케임브리지 세계사 = Cambridge world history " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "세계사" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003631779103286" ],
+        "recordid" : [ "alma991003631779103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015834898" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no00085176", "n96041735", "nb2001039089", "n88015245", "no2016047634", "n96115443" ],
+        "aulast" : [ "Christian", "Hughes-Warrington", "Sachsenmaier", "Lang", "Clossey", "Goudsblom", "Maynes", "Waltner", "Goody", "Manning", "류충기", "크리스천", "마니휴스-워링턴", "작센마이어", "랭", "Northrup", "노스럽", "클로시", "Headrick", "헤드릭", "하우드스블롬", "메인스", "월트너", "Wiesner-Hanks", "위스너-행크스", "구디", "매닝" ],
+        "aufirst" : [ "Marnie", "Dominic", "Michael", "David", "Luke", "Daniel R.", "Johan", "Mary Jo", "Ann", "Merry E.", "Jack", "Patrick", "도미닉", "마이클", "데이비드", "David R.", "데이비드 R.", "루크", "대니얼 R.", "Daniel", "대니얼", "요한", "메리 조", "앤", "메리 E.", "Merry", "메리", "잭", "패트릭" ],
+        "auinit" : [ "L", "A", "J", "P", "도", "마", "데", "루", "D", "대", "요", "앤", "M", "메", "잭", "패" ],
+        "addau" : [ "Christian, David", "Hughes-Warrington, Marnie", "Sachsenmaier, Dominic", "Lang, Michael", "Northrup, David", "Clossey, Luke", "Headrick, Daniel R.", "Goudsblom, Johan", "Maynes, Mary Jo", "Waltner, Ann", "Wiesner-Hanks, Merry E.", "Goody, Jack", "Manning, Patrick", "류충기", "크리스천, 데이비드", "마니 휴스-워링턴", "작센마이어, 도미닉", "랭, 마이클", "노스럽, 데이비드", "Northrup, David R.", "노스럽, 데이비드 R.", "클로시, 루크", "헤드릭, 대니얼 R.", "Headrick, Daniel", "헤드릭, 대니얼", "하우드스블롬, 요한", "메인스, 메리 조", "월트너, 앤", "위스너-행크스, 메리 E.", "Wiesner-Hanks, Merry", "위스너-행크스, 메리", "구디, 잭", "매닝, 패트릭" ],
+        "contributorfull" : [ "$$NChristian, David$$LChristian$$FDavid$$Rcontributor", "$$NHughes-Warrington, Marnie$$Rcontributor", "$$NSachsenmaier, Dominic$$Rcontributor", "$$NLang, Michael$$Rcontributor", "$$NNorthrup, David$$Rcontributor", "$$NClossey, Luke$$Rcontributor", "$$NHeadrick, Daniel R.$$Rcontributor", "$$NGoudsblom, Johan$$Rcontributor", "$$NMaynes, Mary Jo$$Rcontributor", "$$NWaltner, Ann$$Rcontributor", "$$NWiesner-Hanks, Merry E.$$Rcontributor", "$$NGoody, Jack$$Rcontributor", "$$NManning, Patrick$$Rcontributor", "$$N류충기$$Rcontributor", "$$N크리스천, 데이비드$$Rcontributor", "$$N마니 휴스-워링턴$$Rcontributor", "$$N작센마이어, 도미닉$$Rcontributor", "$$N랭, 마이클$$Rcontributor", "$$N노스럽, 데이비드$$Rcontributor", "$$NNorthrup, David R.$$Rcontributor", "$$N노스럽, 데이비드 R.$$Rcontributor", "$$N클로시, 루크$$Rcontributor", "$$N헤드릭, 대니얼 R.$$Rcontributor", "$$NHeadrick, Daniel$$Rcontributor", "$$N헤드릭, 대니얼$$Rcontributor", "$$N하우드스블롬, 요한$$Rcontributor", "$$N메인스, 메리 조$$Rcontributor", "$$N월트너, 앤$$Rcontributor", "$$N위스너-행크스, 메리 E.$$Rcontributor", "$$NWiesner-Hanks, Merry$$Rcontributor", "$$N위스너-행크스, 메리$$Rcontributor", "$$N구디, 잭$$Rcontributor", "$$N매닝, 패트릭$$Rcontributor" ],
+        "addtitle" : [ "Cambridge world history : introducing world history, to 10,000 BCE. Vol.1" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9788967220297", "9788967220280" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "소와당" ],
+        "seriestitle" : [ "케임브리지 세계사 = Cambridge world history ; 01" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "세계사의 탄생 : 전통과 주제와 서술 방식" ]
+      },
+      "sort" : {
+        "title" : [ "세계사의 탄생 : 전통과 주제와 서술 방식 / 저자: 데이비드 크리스천, 마니 휴스-워링턴, 도미닉 작센마이어, 마이클 랭, 데이비드 노스럽, 루크 클로시, 대니얼 헤드릭, 요한 하우드스블롬, 메리 조 메인스, 앤 월트너, 메리 위스너-행크스, 잭 구디, 패트릭 매닝 ; 번역: 류충기" ],
+        "author" : [ "Christian, David, 1946-" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "D20 .C45",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003631779103286",
+        "holdId" : "22249092780003286",
+        "holKey" : "HoldingResultKey [mid=22249092780003286, libraryId=117046190003286, locationCode=c3b, callNumber=D20 .C45]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)D20+.C45&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "D20 .C45",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003631779103286",
+        "holdId" : "22249092780003286",
+        "holKey" : "HoldingResultKey [mid=22249092780003286, libraryId=117046190003286, locationCode=c3b, callNumber=D20 .C45]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)D20+.C45&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003631779103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788967220297,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788967220297&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "D20 .C45",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "909",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "12",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "32",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "6",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "27",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "19",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "97",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 112,
+    "COMBINED_SEARCH_TIME" : 121,
+    "PROCESS_COMBINED_RESULTS" : 484,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "세계사",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Christian David",
+      "count" : "1"
+    }, {
+      "value" : "Clossey Luke",
+      "count" : "1"
+    }, {
+      "value" : "Goody Jack",
+      "count" : "1"
+    }, {
+      "value" : "Goudsblom Johan",
+      "count" : "1"
+    }, {
+      "value" : "Headrick Daniel",
+      "count" : "1"
+    }, {
+      "value" : "Headrick Daniel R",
+      "count" : "1"
+    }, {
+      "value" : "Hughes Warrington Marnie",
+      "count" : "1"
+    }, {
+      "value" : "Lang Michael",
+      "count" : "1"
+    }, {
+      "value" : "Manning Patrick",
+      "count" : "1"
+    }, {
+      "value" : "Maynes Mary Jo",
+      "count" : "1"
+    }, {
+      "value" : "Northrup David",
+      "count" : "1"
+    }, {
+      "value" : "Northrup David R",
+      "count" : "1"
+    }, {
+      "value" : "Ryu Chunggi",
+      "count" : "1"
+    }, {
+      "value" : "Sachsenmaier Dominic",
+      "count" : "1"
+    }, {
+      "value" : "Waltner Ann",
+      "count" : "1"
+    }, {
+      "value" : "Wiesner Hanks Merry",
+      "count" : "1"
+    }, {
+      "value" : "Wiesner Hanks Merry E",
+      "count" : "1"
+    }, {
+      "value" : "구디 잭",
+      "count" : "1"
+    }, {
+      "value" : "노스럽 데이비드",
+      "count" : "1"
+    }, {
+      "value" : "노스럽 데이비드 R",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1847193723
+}

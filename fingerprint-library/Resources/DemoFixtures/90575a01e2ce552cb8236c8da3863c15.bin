@@ -1,0 +1,280 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003818758003286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "코스모스 씽킹 : 우주를 이해하면 보이는 일상의 본질 " ],
+        "format" : [ "366 p. : 삽화 ; 22 cm." ],
+        "identifier" : [ "$$CISBN$$V9791198853905" ],
+        "creationdate" : [ "2024" ],
+        "publisher" : [ "고양 : 알토북스" ],
+        "mms" : [ "991003818758003286" ],
+        "contributor" : [ "BossB$$QBossB", "이정미$$Q이정미", "후지타 아키미$$Q후지타 아키미", "보스비$$Q보스비", "천문물리학자BossB$$Q천문물리학자BossB", "Tenmon butsuri gakusha BossB$$QTenmon butsuri gakusha BossB", "등전아키미$$Q등전아키미" ],
+        "addtitle" : [ "宇宙思考 : 宇宙を知れば, 視点が増える視点が増えれば, モノゴトの本質が見えてくる", "Uchu shikou", "Cosmos thinking", "원서 대등표제 : Comose, essence, perspectives" ],
+        "place" : [ "고양 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "스페이스(우주)[space]", "코스모스(우주)[cosmos]", "천문학 우주" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003818758003286" ],
+        "recordid" : [ "alma991003818758003286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000017111637" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "이정미", "후지타아키미", "등전아키미" ],
+        "addau" : [ "BossB", "이정미", "후지타 아키미", "보스비", "천문물리학자BossB", "Tenmon butsuri gakusha BossB", "등전아키미" ],
+        "contributorfull" : [ "$$NBossB$$Rcontributor", "$$N이정미$$Rcontributor", "$$N후지타 아키미$$Rcontributor", "$$N보스비$$Rcontributor", "$$N천문물리학자BossB$$Rcontributor", "$$NTenmon butsuri gakusha BossB$$Rcontributor", "$$N등전아키미$$Rcontributor" ],
+        "addtitle" : [ "宇宙思考 : 宇宙を知れば, 視点が増える視点が増えれば, モノゴトの本質が見えてくる", "Uchu shikou", "Cosmos thinking", "Comose, essence, perspectives" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9791198853905" ],
+        "notes" : [ "참고자료: p. 363-366" ],
+        "cop" : [ "고양" ],
+        "pub" : [ "알토북스" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "코스모스 씽킹 : 우주를 이해하면 보이는 일상의 본질" ]
+      },
+      "sort" : {
+        "title" : [ "코스모스 씽킹 : 우주를 이해하면 보이는 일상의 본질 / BossB 지음 ; 이정미 옮김." ],
+        "author" : [ "BossB" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB43.3 .등74 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003818758003286",
+        "holdId" : "22295625910003286",
+        "holKey" : "HoldingResultKey [mid=22295625910003286, libraryId=117046190003286, locationCode=c3b, callNumber=QB43.3 .등74 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB43.3+.%EB%93%B174+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB43.3 .등74 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003818758003286",
+        "holdId" : "22295625910003286",
+        "holKey" : "HoldingResultKey [mid=22295625910003286, libraryId=117046190003286, locationCode=c3b, callNumber=QB43.3 .등74 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB43.3+.%EB%93%B174+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003818758003286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791198853905,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791198853905&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QB43.3 .등74 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qb000000000043.000000000003.등000000000074000000002024",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "41",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "32",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "26",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "17",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "102",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 114,
+    "COMBINED_SEARCH_TIME" : 121,
+    "PROCESS_COMBINED_RESULTS" : 673,
+    "FEATURED_SEARCH_TIME" : 2
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "스페이스 우주 Space",
+      "count" : "1"
+    }, {
+      "value" : "천문학 우주",
+      "count" : "1"
+    }, {
+      "value" : "코스모스 우주 Cosmos",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Bossb",
+      "count" : "1"
+    }, {
+      "value" : "Tenmon Butsuri Gakusha Bossb",
+      "count" : "1"
+    }, {
+      "value" : "등전아키미",
+      "count" : "1"
+    }, {
+      "value" : "보스비",
+      "count" : "1"
+    }, {
+      "value" : "이정미",
+      "count" : "1"
+    }, {
+      "value" : "천문물리학자bossb",
+      "count" : "1"
+    }, {
+      "value" : "후지타 아키미",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 558936562
+}

@@ -1,0 +1,261 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003297979403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "고백, 손짓, 연결 : 가혹한 세상 속 만화가 건네는 위로 " ],
+        "format" : [ "225 p. : 삽화 ; cm" ],
+        "identifier" : [ "$$CISBN$$V9791189099053" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "김민섭$$Q김민섭" ],
+        "publisher" : [ "서울 : 요다" ],
+        "description" : [ "인생의 힘겨운 순간마다 만화가 늘 곁에 있었다! 무엇이 좋다, 하고 싶다, 라는 말은 사실 쉽게 나오지 않는다. 우리는 10대나 20대, 가슴 벅차게 꿈꾸던 그 무엇을 어느 깊숙한 곳에 간직한 채 묻어두기도 한다. 정대만은 용기를 냈고 그 진심은 그 자리에 선 모두에게 그대로 가서 닿았다. 그 장면이 더욱 가슴에 남는 것은, 정대만의 고백을 그저 지긋이 바라보는 것만으로 아무런 질책 없이 받아들여 주는 '안 선생님' 과 같은 어른이 있기 때문이다." ],
+        "mms" : [ "991003297979403286" ],
+        "contributor" : [ "짠짠맨$$Q짠짠맨" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "고백 손짓 연결 만화" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003297979403286" ],
+        "recordid" : [ "alma991003297979403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000330419" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "김민섭" ],
+        "au" : [ "김민섭" ],
+        "addau" : [ "짠짠맨" ],
+        "creatorfull" : [ "$$N김민섭$$L김민섭$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N짠짠맨$$L짠짠맨$$F$$Rcontributor" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9791189099053" ],
+        "abstract" : [ "인생의 힘겨운 순간마다 만화가 늘 곁에 있었다! 무엇이 좋다, 하고 싶다, 라는 말은 사실 쉽게 나오지 않는다. 우리는 10대나 20대, 가슴 벅차게 꿈꾸던 그 무엇을 어느 깊숙한 곳에 간직한 채 묻어두기도 한다. 정대만은 용기를 냈고 그 진심은 그 자리에 선 모두에게 그대로 가서 닿았다. 그 장면이 더욱 가슴에 남는 것은, 정대만의 고백을 그저 지긋이 바라보는 것만으로 아무런 질책 없이 받아들여 주는 '안 선생님' 과 같은 어른이 있기 때문이다." ],
+        "cop" : [ "서울" ],
+        "pub" : [ "요다" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "고백, 손짓, 연결 : 가혹한 세상 속 만화가 건네는 위로" ]
+      },
+      "sort" : {
+        "title" : [ "고백, 손짓, 연결 : 가혹한 세상 속 만화가 건네는 위로 / 김민섭 ; 짠짠맨" ],
+        "author" : [ "김민섭" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL980.3 .김38 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003297979403286",
+        "holdId" : "22139582870003286",
+        "holKey" : "HoldingResultKey [mid=22139582870003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL980.3 .김38 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL980.3+.%EA%B9%8038+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL980.3 .김38 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003297979403286",
+        "holdId" : "22139582870003286",
+        "holKey" : "HoldingResultKey [mid=22139582870003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL980.3 .김38 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL980.3+.%EA%B9%8038+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003297979403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791189099053,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791189099053&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL980.3 .김38 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000000980.000000000003.김000000000038000000002018",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "29",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "51",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "45",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "103",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 113,
+    "COMBINED_SEARCH_TIME" : 120,
+    "PROCESS_COMBINED_RESULTS" : 401,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2018",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "고백 손짓 연결 만화",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김민섭",
+      "count" : "1"
+    }, {
+      "value" : "짠짠맨",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1446644706
+}

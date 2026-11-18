@@ -1,0 +1,274 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003425678203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(지리와 지명의) 세계사 도감 " ],
+        "format" : [ "2책 (314 ; 285 p) : 천연색삽화, 지도, 초상 ; 22 cm" ],
+        "identifier" : [ "$$CISBN$$V9788994597867 (v.1);$$CISBN$$V9788994597874 (v.2);$$CISBN$$V9788994597652 (세트)" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "궁기정승 宮崎正勝$$Q궁기정승" ],
+        "publisher" : [ "서울 : 이다미디어" ],
+        "mms" : [ "991003425678203286" ],
+        "contributor" : [ "노윤주$$Q노윤주", "박해리$$Q박해리", "미야자키 마사카츠$$Q미야자키 마사카츠", "Miyazaki, Masakatsu$$QMiyazaki, Masakatsu" ],
+        "addtitle" : [ "地圖と地名で讀む世界史", "지도토 지명데 독무 세계사" ],
+        "series" : [ "지도로 읽는다$$Q지도로 읽는다" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "세계사" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003425678203286" ],
+        "recordid" : [ "alma991003425678203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014814235" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "궁기정승" ],
+        "aufirst" : [ "Masakatsu" ],
+        "auinit" : [ "M" ],
+        "au" : [ "궁기정승" ],
+        "addau" : [ "노윤주", "박해리", "미야자키 마사카츠", "Miyazaki, Masakatsu" ],
+        "creatorfull" : [ "$$N궁기정승$$L궁기정승$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N노윤주$$L노윤주$$F$$Rcontributor", "$$N박해리$$Rcontributor", "$$N미야자키 마사카츠$$Rcontributor", "$$NMiyazaki, Masakatsu$$Rcontributor" ],
+        "addtitle" : [ "地圖と地名で讀む世界史" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9788994597867", "9788994597874", "9788994597652" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "이다미디어" ],
+        "seriestitle" : [ "지도로 읽는다" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(지리와 지명의) 세계사 도감" ]
+      },
+      "sort" : {
+        "title" : [ "(지리와 지명의) 세계사 도감 / 미야자키 마사카츠 지음 ; 노윤주 옮김 ; 박해리 지도 일러스트" ],
+        "author" : [ "궁기정승 宮崎正勝" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "D21.3 .궁18 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003425678203286",
+        "holdId" : "22185752450003286",
+        "holKey" : "HoldingResultKey [mid=22185752450003286, libraryId=117046190003286, locationCode=c3b, callNumber=D21.3 .궁18 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)D21.3+.%EA%B6%8118+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "D21.3 .궁18 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003425678203286",
+        "holdId" : "22185752450003286",
+        "holKey" : "HoldingResultKey [mid=22185752450003286, libraryId=117046190003286, locationCode=c3b, callNumber=D21.3 .궁18 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)D21.3+.%EA%B6%8118+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003425678203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788994597867,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788994597867 (v.1)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "D21.3 .궁18 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "909",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "46",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "40",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "14",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "102",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 112,
+    "COMBINED_SEARCH_TIME" : 119,
+    "PROCESS_COMBINED_RESULTS" : 758,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2018",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "세계사",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Miyazaki Masakatsu",
+      "count" : "1"
+    }, {
+      "value" : "궁기정승",
+      "count" : "1"
+    }, {
+      "value" : "노윤주",
+      "count" : "1"
+    }, {
+      "value" : "미야자키 마사카츠",
+      "count" : "1"
+    }, {
+      "value" : "박해리",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 313520597
+}

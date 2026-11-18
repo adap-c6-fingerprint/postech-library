@@ -1,0 +1,301 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003686970803286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "근대 한국종교, 세계와 만나다 " ],
+        "format" : [ "365 p. ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9791166290343;$$CISBN$$V9791188765072 (set)" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "서울 : 모시는사람들" ],
+        "mms" : [ "991003686970803286" ],
+        "contributor" : [ "김민영, 1961-$$Q김민영", "김봉곤, 1959-$$Q김봉곤", "김석근, 1959-$$Q김석근", "박맹수, 1955-$$Q박맹수", "야규 마코토, 1975-$$Q야규 마코토", "원영상, 1965-$$Q원영상", "이우진, 1934-$$Q이우진", "이주연, 1979-$$Q이주연", "조성환, 1970-$$Q조성환", "허남진, 1973-$$Q허남진", "원광대학교. 원불교사상연구원$$Q원광대학교. 원불교사상연구원", "Yagyu, Makoto, 1975-$$QYagyu, Makoto", "유생진, 1975-$$Q유생진" ],
+        "series" : [ "종교와 공공성 총서 ; 4$$Q종교와 공공성 총서 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "한국 종교", "종교사", "원불교" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003686970803286" ],
+        "recordid" : [ "alma991003686970803286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015862548" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n80141640" ],
+        "aulast" : [ "김민영", "김봉곤", "김석근", "박맹수", "야규마코토", "원영상", "이우진", "이주연", "조성환", "허남진", "Yagyu", "유생진" ],
+        "aufirst" : [ "Makoto" ],
+        "auinit" : [ "M" ],
+        "addau" : [ "김민영", "김봉곤", "김석근", "박맹수", "야규 마코토", "원영상", "이우진", "이주연", "조성환", "허남진", "원광대학교. 원불교사상연구원", "Yagyu, Makoto", "유생진" ],
+        "contributorfull" : [ "$$N김민영$$L김민영$$F$$Rcontributor", "$$N김봉곤$$Rcontributor", "$$N김석근$$Rcontributor", "$$N박맹수$$Rcontributor", "$$N야규 마코토$$Rcontributor", "$$N원영상$$Rcontributor", "$$N이우진$$Rcontributor", "$$N이주연$$Rcontributor", "$$N조성환$$Rcontributor", "$$N허남진$$Rcontributor", "$$NYagyu, Makoto$$Rcontributor", "$$N유생진$$Rcontributor" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9791166290343", "9791188765072" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "모시는사람들" ],
+        "seriestitle" : [ "종교와 공공성 총서 ; 4" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "근대 한국종교, 세계와 만나다" ]
+      },
+      "sort" : {
+        "title" : [ "근대 한국종교, 세계와 만나다 / 원광대학교 원불교사상연구원 편 ; 지은이: 김민영, 김봉곤, 김석근, 박맹수, 야규 마코토, 원영상, 이우진, 이주연, 조성환, 허남진" ],
+        "author" : [ "김민영, 1961-" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "BL2230 .원15 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003686970803286",
+        "holdId" : "22263821980003286",
+        "holKey" : "HoldingResultKey [mid=22263821980003286, libraryId=117046190003286, locationCode=c3b, callNumber=BL2230 .원15 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)BL2230+.%EC%9B%9015+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "BL2230 .원15 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003686970803286",
+        "holdId" : "22263821980003286",
+        "holKey" : "HoldingResultKey [mid=22263821980003286, libraryId=117046190003286, locationCode=c3b, callNumber=BL2230 .원15 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)BL2230+.%EC%9B%9015+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003686970803286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791166290343,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791166290343&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "BL2230 .원15 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "200.9519",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "32",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "42",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "38",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "4",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "98",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 110,
+    "COMBINED_SEARCH_TIME" : 117,
+    "PROCESS_COMBINED_RESULTS" : 927,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "원불교",
+      "count" : "1"
+    }, {
+      "value" : "종교사",
+      "count" : "1"
+    }, {
+      "value" : "한국 종교",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Yagyu Makoto",
+      "count" : "1"
+    }, {
+      "value" : "김민영",
+      "count" : "1"
+    }, {
+      "value" : "김봉곤",
+      "count" : "1"
+    }, {
+      "value" : "김석근",
+      "count" : "1"
+    }, {
+      "value" : "박맹수",
+      "count" : "1"
+    }, {
+      "value" : "야규 마코토",
+      "count" : "1"
+    }, {
+      "value" : "원광대학교 원불교사상연구원",
+      "count" : "1"
+    }, {
+      "value" : "원영상",
+      "count" : "1"
+    }, {
+      "value" : "유생진",
+      "count" : "1"
+    }, {
+      "value" : "이우진",
+      "count" : "1"
+    }, {
+      "value" : "이주연",
+      "count" : "1"
+    }, {
+      "value" : "조성환",
+      "count" : "1"
+    }, {
+      "value" : "허남진",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1338493715
+}

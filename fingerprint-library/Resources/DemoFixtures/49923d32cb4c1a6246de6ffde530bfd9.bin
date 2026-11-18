@@ -1,0 +1,308 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003687273603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "Kreyszig 공업수학 " ],
+        "format" : [ "2책 : 삽화, 도표 ; 28 cm" ],
+        "identifier" : [ "$$CISBN$$V9791191679045 (상);$$CISBN$$V9791191679052 (하);$$CISBN$$V9791191679038 (세트)" ],
+        "creationdate" : [ "2022" ],
+        "publisher" : [ "서울 : 텍스트북스" ],
+        "mms" : [ "991003687273603286" ],
+        "contributor" : [ "Kreyszig, Erwin, 1922-2008$$QKreyszig, Erwin", "서진헌, 1952-$$Q서진헌", "심형보$$Q심형보", "이상구, 1959-$$Q이상구", "유일, 1958-$$Q유일", "배현덕, 1954-$$Q배현덕", "양영균, 1954-$$Q양영균", "김희택$$Q김희택", "이성철$$Q이성철", "허건수, 1959-$$Q허건수", "한광희$$Q한광희", "함운철, 1956-$$Q함운철", "최항석$$Q최항석", "박제남, 1960-$$Q박제남", "최향석$$Q최향석", "크레이스지그, 어윈, 1922-2008$$Q크레이스지그, 어윈", "크레이지그, 어윈, 1922-2008$$Q크레이지그, 어윈" ],
+        "addtitle" : [ "Advanced engineering mathematics (10th ed.)", "상미분방정식·선형대수·벡터미적분", "Fourier 해석·편미분방정식·복소해석·수치해석·최적화, 그래프", "크레이스지그 공업수학" ],
+        "contents" : [ "상. 상미분방정식·선형대수·벡터미적분 -- 하. Fourier 해석·편미분방정식·복소해석·수치해석·최적화, 그래프" ],
+        "unititle" : [ "Advanced engineering mathematics (10th ed.). 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "공업 수학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003687273603286" ],
+        "recordid" : [ "alma991003687273603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016152300" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "Kreyszig", "서진헌", "심형보", "이상구", "유일", "배현덕", "양영균", "김희택", "이성철", "허건수", "한광희", "함운철", "최항석", "박제남", "최향석", "크레이스지그", "크레이지그" ],
+        "aufirst" : [ "Erwin", "어윈" ],
+        "auinit" : [ "E", "어" ],
+        "addau" : [ "Kreyszig, Erwin", "서진헌", "심형보", "이상구", "유일", "배현덕", "양영균", "김희택", "이성철", "허건수", "한광희", "함운철", "최항석", "박제남", "최향석", "크레이스지그, 어윈", "크레이지그, 어윈" ],
+        "contributorfull" : [ "$$NKreyszig, Erwin$$LKreyszig$$FErwin$$Rcontributor", "$$N서진헌$$Rcontributor", "$$N심형보$$Rcontributor", "$$N이상구$$Rcontributor", "$$N유일$$Rcontributor", "$$N배현덕$$Rcontributor", "$$N양영균$$Rcontributor", "$$N김희택$$Rcontributor", "$$N이성철$$Rcontributor", "$$N허건수$$Rcontributor", "$$N한광희$$Rcontributor", "$$N함운철$$Rcontributor", "$$N최항석$$Rcontributor", "$$N박제남$$Rcontributor", "$$N최향석$$Rcontributor", "$$N크레이스지그, 어윈$$Rcontributor", "$$N크레이지그, 어윈$$Rcontributor" ],
+        "addtitle" : [ "Advanced engineering mathematics" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791191679045", "9791191679052", "9791191679038" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "텍스트북스" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Kreyszig 공업수학" ]
+      },
+      "sort" : {
+        "title" : [ "Kreyszig 공업수학 / Erwin Kreyszig ; 서진헌, 심형보, 이상구, 유일, 배현덕, 양영균, 김희택, 이성철, 허건수, 한광희, 함운철, 최향석, 박제남 공역, 박대현 감수" ],
+        "author" : [ "Kreyszig, Erwin, 1922-2008" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA401 .K74 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003687273603286",
+        "holdId" : "22263912860003286",
+        "holKey" : "HoldingResultKey [mid=22263912860003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA401 .K74 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA401+.K74+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA401 .K74 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003687273603286",
+        "holdId" : "22263912860003286",
+        "holKey" : "HoldingResultKey [mid=22263912860003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA401 .K74 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA401+.K74+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003687273603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791191679045,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791191679045 (상)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA401 .K74 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "620.00151",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "10",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "78",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "73",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "17",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "137",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 148,
+    "COMBINED_SEARCH_TIME" : 154,
+    "PROCESS_COMBINED_RESULTS" : 352,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "공업 수학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Kreyszig Erwin",
+      "count" : "1"
+    }, {
+      "value" : "김희택",
+      "count" : "1"
+    }, {
+      "value" : "박제남",
+      "count" : "1"
+    }, {
+      "value" : "배현덕",
+      "count" : "1"
+    }, {
+      "value" : "서진헌",
+      "count" : "1"
+    }, {
+      "value" : "심형보",
+      "count" : "1"
+    }, {
+      "value" : "양영균",
+      "count" : "1"
+    }, {
+      "value" : "유일",
+      "count" : "1"
+    }, {
+      "value" : "이상구",
+      "count" : "1"
+    }, {
+      "value" : "이성철",
+      "count" : "1"
+    }, {
+      "value" : "최항석",
+      "count" : "1"
+    }, {
+      "value" : "최향석",
+      "count" : "1"
+    }, {
+      "value" : "크레이스지그 어윈",
+      "count" : "1"
+    }, {
+      "value" : "크레이지그 어윈",
+      "count" : "1"
+    }, {
+      "value" : "한광희",
+      "count" : "1"
+    }, {
+      "value" : "함운철",
+      "count" : "1"
+    }, {
+      "value" : "허건수",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -431438966
+}

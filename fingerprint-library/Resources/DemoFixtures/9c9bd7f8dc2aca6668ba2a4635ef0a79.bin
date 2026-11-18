@@ -1,0 +1,270 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003813757903286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "오늘은 오늘의 하루 " ],
+        "format" : [ "250 p. ; 21 cm" ],
+        "identifier" : [ "$$CISBN$$V9791170611837" ],
+        "creationdate" : [ "2024" ],
+        "publisher" : [ "파주 : 북다 : 교보문고" ],
+        "mms" : [ "991003813757903286" ],
+        "contributor" : [ "조웅연$$Q조웅연", "조찬희$$Q조찬희", "송한별$$Q송한별", "온하나$$Q온하나", "김민솔$$Q김민솔" ],
+        "addtitle" : [ "표제관련정보 2024 교보문고 스토리대상 청소년 단편 수상작품집" ],
+        "series" : [ "북다 청소년 문학; 2$$Q북다 청소년 문학" ],
+        "contents" : [ "무지개 너머, 덴마크/ 조찬희 -- 한여름의 체육 시간/ 온하나 -- 별비가 내리는 날/ 송한별 -- 오늘의 경수/ 조웅연 -- 꺼지지 않는 빛을 따라/ 김민솔" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "한국문학 한국소설 단편소설" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003813757903286" ],
+        "recordid" : [ "alma991003813757903286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000017107066" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "조웅연", "조찬희", "송한별", "온하나", "김민솔" ],
+        "addau" : [ "조웅연", "조찬희", "송한별", "온하나", "김민솔" ],
+        "contributorfull" : [ "$$N조찬희$$L조찬희$$F$$Rcontributor", "$$N조웅연$$Rcontributor", "$$N조찬희$$Rcontributor", "$$N송한별$$Rcontributor", "$$N온하나$$Rcontributor", "$$N김민솔$$Rcontributor" ],
+        "addtitle" : [ "2024 교보문고 스토리대상 청소년 단편 수상작품집" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9791170611837" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "북다" ],
+        "seriestitle" : [ "북다 청소년 문학; 2" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "오늘은 오늘의 하루" ]
+      },
+      "sort" : {
+        "title" : [ "오늘은 오늘의 하루 / 지은이: 조찬희 [외]" ],
+        "author" : [ "조찬희" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .오197 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003813757903286",
+        "holdId" : "22294591850003286",
+        "holKey" : "HoldingResultKey [mid=22294591850003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL958.66 .오197 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EC%98%A4197+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL958.66 .오197 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003813757903286",
+        "holdId" : "22294591850003286",
+        "holKey" : "HoldingResultKey [mid=22294591850003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL958.66 .오197 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL958.66+.%EC%98%A4197+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003813757903286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791170611837,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791170611837&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL958.66 .오197 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000000958.000000000066.오000000000197000000002024",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "37",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "32",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "8",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "83",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 91,
+    "COMBINED_SEARCH_TIME" : 97,
+    "PROCESS_COMBINED_RESULTS" : 768,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "한국문학 한국소설 단편소설",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김민솔",
+      "count" : "1"
+    }, {
+      "value" : "송한별",
+      "count" : "1"
+    }, {
+      "value" : "온하나",
+      "count" : "1"
+    }, {
+      "value" : "조웅연",
+      "count" : "1"
+    }, {
+      "value" : "조찬희",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -2003564371
+}

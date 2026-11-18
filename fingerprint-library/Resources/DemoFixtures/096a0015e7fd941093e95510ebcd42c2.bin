@@ -1,0 +1,278 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003530374203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "고분자 재료의 기본 원리 " ],
+        "format" : [ "455 p : 삽도, 도표 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9791158080792" ],
+        "creationdate" : [ "2016" ],
+        "creator" : [ "Brazel, Christopher S$$QBrazel, Christopher S" ],
+        "publisher" : [ "파주 : 자유아카데미" ],
+        "mms" : [ "991003530374203286" ],
+        "contributor" : [ "이영관$$Q이영관", "윤호규$$Q윤호규", "김성룡$$Q김성룡", "김종학$$Q김종학", "브래즐, 크리스토퍼 S$$Q브래즐, 크리스토퍼 S", "로젠, 스티븐 L$$Q로젠, 스티븐 L", "Rosen, Stephen L$$QRosen, Stephen L" ],
+        "addtitle" : [ "Fundamental Principles of Polymeric Materials -- 3rd ed" ],
+        "edition" : [ "제3판" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003530374203286" ],
+        "recordid" : [ "alma991003530374203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014120024" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n79048519", "n85320394", "nr2002045206" ],
+        "aulast" : [ "Brazel" ],
+        "aufirst" : [ "Christopher S" ],
+        "auinit" : [ "C" ],
+        "au" : [ "Brazel, Christopher S" ],
+        "addau" : [ "이영관", "윤호규", "김성룡", "김종학", "브래즐, 크리스토퍼 S", "로젠, 스티븐 L", "Rosen, Stephen L" ],
+        "creatorfull" : [ "$$NBrazel, Christopher S$$LBrazel$$FChristopher S$$Rauthor" ],
+        "contributorfull" : [ "$$N이영관$$L이영관$$F$$Rcontributor", "$$N윤호규$$Rcontributor", "$$N김성룡$$Rcontributor", "$$N김종학$$Rcontributor", "$$N브래즐, 크리스토퍼 S$$Rcontributor", "$$N로젠, 스티븐 L$$Rcontributor", "$$NRosen, Stephen L$$Rcontributor" ],
+        "addtitle" : [ "Fundamental Principles of Polymeric Materials -- 3rd ed" ],
+        "date" : [ "2016" ],
+        "isbn" : [ "9791158080792" ],
+        "notes" : [ "각 장마다 참고문헌 수록", "찾아보기 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "자유아카데미" ],
+        "edition" : [ "제3판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "고분자 재료의 기본 원리" ]
+      },
+      "sort" : {
+        "title" : [ "고분자 재료의 기본 원리 / Christopher S. Brazel, Stephen L. Rosen [공]지음 ; 이영관 [외]옮김" ],
+        "author" : [ "Brazel, Christopher S" ],
+        "creationdate" : [ "2016" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TA455.P58 .B73 2016",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003530374203286",
+        "holdId" : "22218681160003286",
+        "holKey" : "HoldingResultKey [mid=22218681160003286, libraryId=117046190003286, locationCode=c3b, callNumber=TA455.P58 .B73 2016]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TA455.P58+.B73+2016&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TA455.P58 .B73 2016",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003530374203286",
+        "holdId" : "22218681160003286",
+        "holKey" : "HoldingResultKey [mid=22218681160003286, libraryId=117046190003286, locationCode=c3b, callNumber=TA455.P58 .B73 2016]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TA455.P58+.B73+2016&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003530374203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791158080792,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791158080792&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TA455.P58 .B73 2016",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "668.9",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "13",
+    "CALL_SOLR_GET_IDS_LIST" : "30",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "41",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "3",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "3",
+    "RETRIVE_FROM_DB_RECORDS" : "5",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "35",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "16",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "105",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 116,
+    "COMBINED_SEARCH_TIME" : 136,
+    "PROCESS_COMBINED_RESULTS" : 196,
+    "FEATURED_SEARCH_TIME" : 4
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2016",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Brazel Christopher S",
+      "count" : "1"
+    }, {
+      "value" : "Rosen Stephen L",
+      "count" : "1"
+    }, {
+      "value" : "김성룡",
+      "count" : "1"
+    }, {
+      "value" : "김종학",
+      "count" : "1"
+    }, {
+      "value" : "로젠 스티븐 L",
+      "count" : "1"
+    }, {
+      "value" : "브래즐 크리스토퍼 S",
+      "count" : "1"
+    }, {
+      "value" : "윤호규",
+      "count" : "1"
+    }, {
+      "value" : "이영관",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 2117869139
+}

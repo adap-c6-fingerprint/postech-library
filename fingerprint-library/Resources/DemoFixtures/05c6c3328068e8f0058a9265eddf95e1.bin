@@ -1,0 +1,282 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003687264403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(만화로 쉽게 배우는) 물리[역학] " ],
+        "format" : [ "231 p. : 전부삽화 ; 24 cm." ],
+        "identifier" : [ "$$CISBN$$V9788931587784" ],
+        "creationdate" : [ "2019" ],
+        "creator" : [ "신전영웅 (新田英雄)$$Q신전영웅" ],
+        "publisher" : [ "파주 : BM성안당" ],
+        "mms" : [ "991003687264403286" ],
+        "contributor" : [ "Nitta Hideo$$QNitta Hideo", "Takatsu Keita$$QTakatsu Keita", "이창미$$Q이창미", "이춘우$$Q이춘우", "고진게이타 (高津ケイタ)$$Q고진게이타", "닛타 히데오, 1957-$$Q닛타 히데오", "다카쓰 게이타$$Q다카쓰 게이타" ],
+        "addtitle" : [ "(The)Comic guide to mechanics", "マンガでわかる物理 力學編", "자연 현상의 원리나 구조를 이해하고 싶은 이를 위한" ],
+        "series" : [ "BM성안당 ; 7593$$QBM성안당 " ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "역학(물리학)" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003687264403286" ],
+        "recordid" : [ "alma991003687264403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000010996458" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n83142551", "n2009019291" ],
+        "aulast" : [ "신전영웅" ],
+        "au" : [ "신전영웅" ],
+        "addau" : [ "Nitta Hideo", "Takatsu Keita", "이창미", "이춘우", "고진게이타", "닛타 히데오", "다카쓰 게이타" ],
+        "creatorfull" : [ "$$N신전영웅$$L신전영웅$$F$$Rauthor" ],
+        "contributorfull" : [ "$$NNitta Hideo$$LNitta Hideo$$F$$Rcontributor", "$$NTakatsu Keita$$Rcontributor", "$$N이창미$$Rcontributor", "$$N이춘우$$Rcontributor", "$$N고진게이타$$Rcontributor", "$$N닛타 히데오$$Rcontributor", "$$N다카쓰 게이타$$Rcontributor" ],
+        "addtitle" : [ "(The)Comic guide to mechanics", "マンガでわかる物理 力學編", "자연 현상의 원리나 구조를 이해하고 싶은 이를 위한" ],
+        "date" : [ "2019" ],
+        "isbn" : [ "9788931587784" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "BM성안당" ],
+        "seriestitle" : [ "BM성안당 ; 7593" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(만화로 쉽게 배우는) 물리[역학]" ]
+      },
+      "sort" : {
+        "title" : [ "(만화로 쉽게 배우는) 물리[역학] / Nitta Hideo 지음 ; Takatsu Keita 그림 ; 이창미 옮김." ],
+        "author" : [ "신전영웅 (新田英雄)" ],
+        "creationdate" : [ "2019" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA807 .신74 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003687264403286",
+        "holdId" : "22263910100003286",
+        "holKey" : "HoldingResultKey [mid=22263910100003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA807 .신74 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA807+.%EC%8B%A074+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA807 .신74 2007",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003687264403286",
+        "holdId" : "22263910100003286",
+        "holKey" : "HoldingResultKey [mid=22263910100003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA807 .신74 2007]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA807+.%EC%8B%A074+2007&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003687264403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788931587784,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788931587784&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA807 .신74 2007",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "530",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "47",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "41",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "14",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "98",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 111,
+    "COMBINED_SEARCH_TIME" : 117,
+    "PROCESS_COMBINED_RESULTS" : 267,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2019",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "역학 물리학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Nitta Hideo",
+      "count" : "1"
+    }, {
+      "value" : "Takatsu Keita",
+      "count" : "1"
+    }, {
+      "value" : "고진게이타",
+      "count" : "1"
+    }, {
+      "value" : "닛타 히데오",
+      "count" : "1"
+    }, {
+      "value" : "다카쓰 게이타",
+      "count" : "1"
+    }, {
+      "value" : "신전영웅",
+      "count" : "1"
+    }, {
+      "value" : "이창미",
+      "count" : "1"
+    }, {
+      "value" : "이춘우",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 661477550
+}

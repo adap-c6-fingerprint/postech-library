@@ -1,0 +1,292 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003699450803286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "의학사의 새 물결  : 한눈에 보는 서양 의료 연구사 " ],
+        "format" : [ "782 p. : 삽도 ; 23 cm." ],
+        "identifier" : [ "$$CISBN$$V9791166290886;$$CISBN$$V9791166290824 (세트)" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "Huisman, Frank$$QHuisman, Frank" ],
+        "publisher" : [ "서울 : 모시는사람들" ],
+        "mms" : [ "991003699450803286" ],
+        "contributor" : [ "Wamer, John Harley$$QWamer, John Harley", "신지혜$$Q신지혜", "이상덕$$Q이상덕", "이향아$$Q이향아", "장하원$$Q장하원", "조정은$$Q조정은", "경희대학교 인문학연구원 HK+통합의료인문학연구단$$Q경희대학교 인문학연구원 HK+통합의료인문학연구단", "하위스만, 프랭크$$Q하위스만, 프랭크", "워너, 존 할리$$Q워너, 존 할리" ],
+        "addtitle" : [ "Locating medical history : the stories and their meanings" ],
+        "series" : [ "통합의료인문학 번역총서 ; 1$$Q통합의료인문학 번역총서 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Medicine -- Historiography" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003699450803286" ],
+        "recordid" : [ "alma991003699450803286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016066443" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n93005715" ],
+        "originatingSystemIDContributor" : [ "n79102075" ],
+        "aulast" : [ "Huisman" ],
+        "aufirst" : [ "Frank" ],
+        "auinit" : [ "F" ],
+        "au" : [ "Huisman, Frank" ],
+        "addau" : [ "Wamer, John Harley", "신지혜", "이상덕", "이향아", "장하원", "조정은", "경희대학교 인문학연구원 HK+통합의료인문학연구단", "하위스만, 프랭크", "워너, 존 할리" ],
+        "creatorfull" : [ "$$NHuisman, Frank$$LHuisman$$FFrank$$Rauthor" ],
+        "contributorfull" : [ "$$NWamer, John Harley$$LWamer$$FJohn Harley$$Rcontributor", "$$N신지혜$$Rcontributor", "$$N이상덕$$Rcontributor", "$$N이향아$$Rcontributor", "$$N장하원$$Rcontributor", "$$N조정은$$Rcontributor", "$$N하위스만, 프랭크$$Rcontributor", "$$N워너, 존 할리$$Rcontributor" ],
+        "addtitle" : [ "Locating medical history : the stories and their meanings" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791166290886", "9791166290824" ],
+        "notes" : [ "서지적 각주와 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "모시는사람들" ],
+        "seriestitle" : [ "통합의료인문학 번역총서 ; 1" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "의학사의 새 물결  : 한눈에 보는 서양 의료 연구사" ]
+      },
+      "sort" : {
+        "title" : [ "의학사의 새 물결  : 한눈에 보는 서양 의료 연구사 / 프랭크 하위스만, 존 할리 워너 지음 ; 신지혜 [외] 옮김." ],
+        "author" : [ "Huisman, Frank" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "R133 .H85 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003699450803286",
+        "holdId" : "22267479570003286",
+        "holKey" : "HoldingResultKey [mid=22267479570003286, libraryId=117046190003286, locationCode=c3b, callNumber=R133 .H85 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)R133+.H85+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "R133 .H85 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003699450803286",
+        "holdId" : "22267479570003286",
+        "holKey" : "HoldingResultKey [mid=22267479570003286, libraryId=117046190003286, locationCode=c3b, callNumber=R133 .H85 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)R133+.H85+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003699450803286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791166290886,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791166290886&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "R133 .H85 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "610 .722",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "37",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "32",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "88",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 98,
+    "COMBINED_SEARCH_TIME" : 105,
+    "PROCESS_COMBINED_RESULTS" : 345,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Medicine Historiography",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Huisman Frank",
+      "count" : "1"
+    }, {
+      "value" : "Wamer John Harley",
+      "count" : "1"
+    }, {
+      "value" : "경희대학교 인문학연구원 Hk 통합의료인문학연구단",
+      "count" : "1"
+    }, {
+      "value" : "신지혜",
+      "count" : "1"
+    }, {
+      "value" : "워너 존 할리",
+      "count" : "1"
+    }, {
+      "value" : "이상덕",
+      "count" : "1"
+    }, {
+      "value" : "이향아",
+      "count" : "1"
+    }, {
+      "value" : "장하원",
+      "count" : "1"
+    }, {
+      "value" : "조정은",
+      "count" : "1"
+    }, {
+      "value" : "하위스만 프랭크",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1646305352
+}

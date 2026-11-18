@@ -1,0 +1,282 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003952645503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "벌거벗은 세계사 : 벗겼다, 서로를 불타오르게 한 사건들, 라이벌편 " ],
+        "format" : [ "407 p. : 삽화(일부천연색), 지도, 초상 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9791170613657" ],
+        "creationdate" : [ "2026" ],
+        "creator" : [ "tvN. 벌거벗은 세계사 제작팀$$QtvN. 벌거벗은 세계사 제작팀" ],
+        "publisher" : [ "파주 : 교보문고" ],
+        "mms" : [ "991003952645503286" ],
+        "contributor" : [ "구지훈$$Q구지훈", "김봉중, 1959-$$Q김봉중", "박정규$$Q박정규", "박현도$$Q박현도", "우정아, 1974-$$Q우정아", "임석재, 1961-$$Q임석재", "임승휘, 1965-$$Q임승휘", "하상응$$Q하상응" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "세계사", "세계사 사건 라이벌" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003952645503286" ],
+        "recordid" : [ "alma991003952645503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000017411799" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "구지훈", "김봉중", "박정규", "박현도", "우정아", "임석재", "임승휘", "하상응" ],
+        "aucorp" : [ "tvN. 벌거벗은 세계사 제작팀" ],
+        "addau" : [ "구지훈", "김봉중", "박정규", "박현도", "우정아", "임석재", "임승휘", "하상응" ],
+        "contributorfull" : [ "$$N구지훈$$L구지훈$$F$$Rcontributor", "$$N김봉중$$Rcontributor", "$$N박정규$$Rcontributor", "$$N박현도$$Rcontributor", "$$N우정아$$Rcontributor", "$$N임석재$$Rcontributor", "$$N임승휘$$Rcontributor", "$$N하상응$$Rcontributor" ],
+        "date" : [ "2026" ],
+        "isbn" : [ "9791170613657" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "교보문고" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "벌거벗은 세계사 : 벗겼다, 서로를 불타오르게 한 사건들, 라이벌편" ]
+      },
+      "sort" : {
+        "title" : [ "벌거벗은 세계사 : 벗겼다, 서로를 불타오르게 한 사건들, 라이벌편 / tvN <벌거벗은 세계사> 제작팀 지음" ],
+        "author" : [ "tvN. 벌거벗은 세계사 제작팀" ],
+        "creationdate" : [ "2026" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "D21 .벌14 2026",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003952645503286",
+        "holdId" : "22326144990003286",
+        "holKey" : "HoldingResultKey [mid=22326144990003286, libraryId=117046190003286, locationCode=c3b, callNumber=D21 .벌14 2026]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)D21+.%EB%B2%8C14+2026&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "D21 .벌14 2026",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003952645503286",
+        "holdId" : "22326144990003286",
+        "holKey" : "HoldingResultKey [mid=22326144990003286, libraryId=117046190003286, locationCode=c3b, callNumber=D21 .벌14 2026]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)D21+.%EB%B2%8C14+2026&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003952645503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791170613657,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791170613657&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "D21 .벌14 2026",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "909",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "47",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "41",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "96",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 106,
+    "COMBINED_SEARCH_TIME" : 113,
+    "PROCESS_COMBINED_RESULTS" : 619,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2026",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "세계사",
+      "count" : "1"
+    }, {
+      "value" : "세계사 사건 라이벌",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Tvn 벌거벗은 세계사 제작팀",
+      "count" : "1"
+    }, {
+      "value" : "구지훈",
+      "count" : "1"
+    }, {
+      "value" : "김봉중",
+      "count" : "1"
+    }, {
+      "value" : "박정규",
+      "count" : "1"
+    }, {
+      "value" : "박현도",
+      "count" : "1"
+    }, {
+      "value" : "우정아",
+      "count" : "1"
+    }, {
+      "value" : "임석재",
+      "count" : "1"
+    }, {
+      "value" : "임승휘",
+      "count" : "1"
+    }, {
+      "value" : "하상응",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 774113043
+}

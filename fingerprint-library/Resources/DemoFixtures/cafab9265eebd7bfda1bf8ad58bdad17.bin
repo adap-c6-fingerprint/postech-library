@@ -1,0 +1,271 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003624379403286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "정원의 쓸모: 흙 묻은 손이 마음을 어루만지다" ],
+        "format" : [ "358 p. ; 22 cm." ],
+        "identifier" : [ "$$CISBN$$V9791155813478" ],
+        "creationdate" : [ "2021" ],
+        "creator" : [ "Stuart-Smith, Sue$$QStuart-Smith, Sue" ],
+        "publisher" : [ "파주 : 윌북" ],
+        "description" : [ "정원에 관한 책 중 가장 독창적이다. 선데이 타임스. 매혹적이다. 간명하고 우아한 연구를 통해, 녹색 자연이 어떻게 정신을 풍요롭게 만드는지 알려준다. 특별한 책이다. 옵서버" ],
+        "mms" : [ "991003624379403286" ],
+        "contributor" : [ "고정아$$Q고정아", "스튜어트 스미스, 수$$Q스튜어트 스미스, 수" ],
+        "addtitle" : [ "The Well Gardened Mind", "Well Gardened Mind" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "정원 쓸모 원예치료" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003624379403286" ],
+        "recordid" : [ "alma991003624379403286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015801853" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "nb2012017731" ],
+        "originatingSystemIDContributor" : [ "no2008043944" ],
+        "aulast" : [ "Stuart-Smith" ],
+        "aufirst" : [ "Sue" ],
+        "auinit" : [ "S" ],
+        "au" : [ "Stuart-Smith, Sue" ],
+        "addau" : [ "고정아", "스튜어트 스미스, 수" ],
+        "creatorfull" : [ "$$NStuart-Smith, Sue$$LStuart-Smith$$FSue$$Rauthor" ],
+        "contributorfull" : [ "$$N고정아$$L고정아$$F$$Rcontributor", "$$N스튜어트 스미스, 수$$Rcontributor" ],
+        "addtitle" : [ "The Well Gardened Mind", "Well Gardened Mind" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9791155813478" ],
+        "notes" : [ "참고문헌 : p. 356-358" ],
+        "abstract" : [ "정원에 관한 책 중 가장 독창적이다. 선데이 타임스. 매혹적이다. 간명하고 우아한 연구를 통해, 녹색 자연이 어떻게 정신을 풍요롭게 만드는지 알려준다. 특별한 책이다. 옵서버" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "윌북" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "정원의 쓸모: 흙 묻은 손이 마음을 어루만지다" ]
+      },
+      "sort" : {
+        "title" : [ "정원의 쓸모: 흙 묻은 손이 마음을 어루만지다/ 수 스튜어트 스미스 지음; 고정아 옮김." ],
+        "author" : [ "Stuart-Smith, Sue" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "RM735.7.G37 .S78 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003624379403286",
+        "holdId" : "22247232860003286",
+        "holKey" : "HoldingResultKey [mid=22247232860003286, libraryId=117046190003286, locationCode=c3b, callNumber=RM735.7.G37 .S78 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)RM735.7.G37+.S78+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "RM735.7.G37 .S78 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003624379403286",
+        "holdId" : "22247232860003286",
+        "holKey" : "HoldingResultKey [mid=22247232860003286, libraryId=117046190003286, locationCode=c3b, callNumber=RM735.7.G37 .S78 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)RM735.7.G37+.S78+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003624379403286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791155813478,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791155813478&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "RM735.7.G37 .S78 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "615.8515",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "41",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "37",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "4",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "89",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 97,
+    "COMBINED_SEARCH_TIME" : 105,
+    "PROCESS_COMBINED_RESULTS" : 730,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "정원 쓸모 원예치료",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Stuart Smith Sue",
+      "count" : "1"
+    }, {
+      "value" : "고정아",
+      "count" : "1"
+    }, {
+      "value" : "스튜어트 스미스 수",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1121659664
+}

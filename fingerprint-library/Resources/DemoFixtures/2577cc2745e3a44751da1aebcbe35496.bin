@@ -1,0 +1,260 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000829689703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(데미덱)영어회화사전 : 바로 찾아 바로 쓰는 현지표현 " ],
+        "format" : [ "697 p. ; 25 cm." ],
+        "identifier" : [ "$$CISBN$$V9788917213522" ],
+        "creationdate" : [ "2012" ],
+        "creator" : [ "DemiDec$$QDemiDec" ],
+        "publisher" : [ "서울 : YBM시사영어사" ],
+        "description" : [ "“제대로 된 영어를 말하고 싶은 여러분에겐 제대로 된 영어회화책 한 권이면 충분합니다!” 한국인이 쓴 책에서 현재영어를 기대할 수 있을까요? 이름만 대도 누구나 아는 국내의 유명 영어 전문가가 쓴 책으로 열심히 공부한 후 해외에 나갔는데도 여러분이 쓰는 영어 표현을 현지인들이 전혀 못 알아듣는 경우가 있습니다. 현지인들이 일상생활에서 전혀 사용하지 않는 교과서식 영이이기 때문입니다." ],
+        "mms" : [ "991000829689703286" ],
+        "contributor" : [ "데미덱$$Q데미덱" ],
+        "addtitle" : [ "영어회화사전", "바로 찾아 바로 쓰는 현지표현", "하버드 두뇌들이 직접 쓴 데미덱 영어회화사전" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "데미덱 영어회화사전" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000829689703286" ],
+        "recordid" : [ "alma991000829689703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13551012-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.526969E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aucorp" : [ "DemiDec" ],
+        "addau" : [ "데미덱" ],
+        "date" : [ "2012" ],
+        "isbn" : [ "9788917213522" ],
+        "abstract" : [ "“제대로 된 영어를 말하고 싶은 여러분에겐 제대로 된 영어회화책 한 권이면 충분합니다!” 한국인이 쓴 책에서 현재영어를 기대할 수 있을까요? 이름만 대도 누구나 아는 국내의 유명 영어 전문가가 쓴 책으로 열심히 공부한 후 해외에 나갔는데도 여러분이 쓰는 영어 표현을 현지인들이 전혀 못 알아듣는 경우가 있습니다. 현지인들이 일상생활에서 전혀 사용하지 않는 교과서식 영이이기 때문입니다." ],
+        "cop" : [ "서울" ],
+        "pub" : [ "YBM시사영어사" ],
+        "oclcid" : [ "(ptech)b13551012-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(데미덱)영어회화사전 : 바로 찾아 바로 쓰는 현지표현" ]
+      },
+      "sort" : {
+        "title" : [ "(데미덱)영어회화사전 : 바로 찾아 바로 쓰는 현지표현 / DemiDec 저" ],
+        "author" : [ "DemiDec" ],
+        "creationdate" : [ "2012" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PE1131 .D46 2012",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000829689703286",
+        "holdId" : "2288785510003286",
+        "holKey" : "HoldingResultKey [mid=2288785510003286, libraryId=117046190003286, locationCode=c3b, callNumber=PE1131 .D46 2012]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PE1131+.D46+2012&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PE1131 .D46 2012",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000829689703286",
+        "holdId" : "2288785510003286",
+        "holKey" : "HoldingResultKey [mid=2288785510003286, libraryId=117046190003286, locationCode=c3b, callNumber=PE1131 .D46 2012]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PE1131+.D46+2012&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000829689703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788917213522,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788917213522&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PE1131 .D46 2012",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "428.34",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "44",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "39",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "8",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "90",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 101,
+    "COMBINED_SEARCH_TIME" : 107,
+    "PROCESS_COMBINED_RESULTS" : 562,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2012",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "데미덱 영어회화사전",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Demidec",
+      "count" : "1"
+    }, {
+      "value" : "데미덱",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1211726725
+}

@@ -1,0 +1,317 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003777758003286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "옥스퍼드 세계도시문명사 " ],
+        "format" : [ "4책 : 삽화, 지도 ; 21 cm" ],
+        "identifier" : [ "$$CISBN$$V9791192913056(v.1);$$CISBN$$V9791192913063(v.2);$$CISBN$$V9791192913070(v.3);$$CISBN$$V9791192913087v.(4);$$CISBN$$V9791192913049(세트)" ],
+        "creationdate" : [ "2023" ],
+        "publisher" : [ "서울 : 책과함께" ],
+        "mms" : [ "991003777758003286" ],
+        "contributor" : [ "McMahon, Augusta$$QMcMahon, Augusta", "Wallace-Hadrill, Andrew$$QWallace-Hadrill, Andrew", "MacDonald, Kevin$$QMacDonald, Kevin", "Petrie, Cameron A.$$QPetrie, Cameron A.", "Ligt, Luuk de$$QLigt, Luuk de", "Baird, Jennifer A.$$QBaird, Jennifer A.", "Clark, Peter, 1944-$$QClark, Peter", "민유기$$Q민유기", "Hein, Carla$$QHein, Carla", "Corfiel, Penelope J.$$QCorfiel, Penelope J.", "민유기, 1970-$$Q민유기", "Mcmahon, Augusta$$QMcmahon, Augusta", "Osborne, Robin$$QOsborne, Robin", "Wallace-Hardrill, Andrew$$QWallace-Hardrill, Andrew", "Mattingly, David$$QMattingly, David", "McDonald, Kevin$$QMcDonald, Kevin", "Petre, Cameron A.$$QPetre, Cameron A.", "Steinhardt, Nancy S.$$QSteinhardt, Nancy S.", "Stone, David L.$$QStone, David L.", "Ligt, Luke de$$QLigt, Luke de", "Liverani, Mario$$QLiverani, Mario", "Baird Jennifer A$$QBaird Jennifer A", "Laurence, Ray$$QLaurence, Ray", "Boone, Marc$$QBoone, Marc", "Blonde, Bruno$$QBlonde, Bruno", "Damme, Lija Van$$QDamme, Lija Van", "Valerian, Dominique$$QValerian, Dominique", "Boyar, Ebru$$QBoyar, Ebru", "Weerdt, Hilde De$$QWeerdt, Hilde De", "Rowe, William T.$$QRowe, William T.", "James, McClain$$QJames, McClain", "Blusse, Leonard$$QBlusse, Leonard", "Fernandez-Armesto, Felipe$$QFernandez-Armesto, Felipe", "Bavel, Bas Van$$QBavel, Bas Van", "Bosker, Maarten$$QBosker, Maarten", "Buringh, Eltojo$$QBuringh, Eltojo", "Zanden, Jan Luiten van$$QZanden, Jan Luiten van", "Winter, Anne$$QWinter, Anne", "Blockmans, Wim$$QBlockmans, Wim", "Hart, Marjoleit't$$QHart, Marjoleit't", "Burke, Peter$$QBurke, Peter", "Lees, Anderew$$QLees, Anderew", "Lees, Lynn Hollen$$QLees, Lynn Hollen", "Gilbert, Alan$$QGilbert, Alan", "Abbott, Carl$$QAbbott, Carl", "Stapleton, Kristin$$QStapleton, Kristin", "Waley, Paul$$QWaley, Paul", "Kidambi, Prashant$$QKidambi, Prashant", "Dick, Howard$$QDick, Howard", "Rimmer, Peter J.$$QRimmer, Peter J.", "Volalit, Mercedes$$QVolalit, Mercedes", "al-Asad, Mohammand$$Qal-Asad, Mohammand", "Freund, Bill$$QFreund, Bill", "Hung Ho-fung$$QHung Ho-fung", "Zhan Shaohua$$QZhan Shaohua", "Lucassen, Leo$$QLucassen, Leo", "Melosi, Martin V.$$QMelosi, Martin V.", "Hietala, Marjatta$$QHietala, Marjatta", "Clark Peter$$QClark Peter", "Salmi, Hannu$$QSalmi, Hannu", "Metcalf, Thomas R.$$QMetcalf, Thomas R.", "Xiangming Chen$$QXiangming Chen", "Fitts, Henry$$QFitts, Henry", "Jauhiainen, Jussi S.$$QJauhiainen, Jussi S.", "맥마흔, 오거스타$$Q맥마흔, 오거스타", "오즈번, 로빈$$Q오즈번, 로빈", "월리스-하드릴, 앤드루$$Q월리스-하드릴, 앤드루", "매팅리, 데이비드$$Q매팅리, 데이비드", "맥도널드, 케빈$$Q맥도널드, 케빈", "페트리, 캐머런 A.$$Q페트리, 캐머런 A.", "스타인하트, 낸시 S.$$Q스타인하트, 낸시 S.", "스톤, 데이비드 L.$$Q스톤, 데이비드 L.", "리히트, 루크 드$$Q리히트, 루크 드", "리베라니, 마리오$$Q리베라니, 마리오", "베어드, 제니퍼 A.$$Q베어드, 제니퍼 A.", "로런스, 레이$$Q로런스, 레이", "클라크, 피터$$Q클라크, 피터" ],
+        "addtitle" : [ "(The) Oxford handbook of cities in world history" ],
+        "contents" : [ "1 초기도시 -- 2 전근대 도시 -- 3 근현대도시Ⅰ -- 4 근현대도시Ⅱ" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "도시문명 도시발전" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003777758003286" ],
+        "recordid" : [ "alma991003777758003286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016676083" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n80091713", "n81134180", "n92083959", "n94042354", "n79004616", "n94059407", "n85148099", "n82018159", "n79007480", "n85321387", "n85041866", "n83311191", "nb2011011509", "no2007013222", "n92094064", "no2007073335", "no2010022660", "n2019015162", "nr88005345", "n84226720", "nb2010012213", "n88286149", "n84032252", "n82258470", "n85216455", "n50002733", "n2008042851", "no2009126360" ],
+        "aulast" : [ "McMahon", "Wallace-Hadrill", "MacDonald", "Petrie", "Baird", "Clark", "Hein", "Corfiel", "민유기", "Mcmahon", "Osborne", "Wallace-Hardrill", "Mattingly", "McDonald", "Petre", "Steinhardt", "Stone", "Ligt", "Liverani", "BairdJenniferA", "Laurence", "Boone", "Blonde", "Damme", "Valerian", "Boyar", "Weerdt", "Rowe", "James", "Blusse", "Fernandez-Armesto", "Bavel", "Bosker", "Buringh", "Zanden", "Winter", "Blockmans", "Hart", "Burke", "Lees", "Gilbert", "Abbott", "Stapleton", "Waley", "Kidambi", "Dick", "Rimmer", "Volalit", "al-Asad", "Freund", "HungHo-fung", "ZhanShaohua", "Lucassen", "Melosi", "Hietala", "ClarkPeter", "Salmi", "Metcalf", "XiangmingChen", "Fitts", "Jauhiainen", "맥마흔", "오즈번", "월리스-하드릴", "매팅리", "맥도널드", "페트리", "스타인하트", "스톤", "리히트", "리베라니", "베어드", "로런스", "클라크" ],
+        "aufirst" : [ "Luuk de", "Jennifer A.", "Carla", "Penelope J.", "Augusta", "Robin", "Andrew", "David", "Kevin", "Cameron A.", "Nancy S.", "David L.", "Luke de", "Mario", "Ray", "Marc", "Bruno", "Lija Van", "Dominique", "Ebru", "Hilde De", "William T.", "McClain", "Leonard", "Felipe", "Bas Van", "Maarten", "Eltojo", "Jan Luiten van", "Anne", "Wim", "Marjoleit't", "Peter", "Anderew", "Lynn Hollen", "Alan", "Carl", "Kristin", "Paul", "Prashant", "Howard", "Peter J.", "Mercedes", "Mohammand", "Bill", "Leo", "Martin V.", "Marjatta", "Hannu", "Thomas R.", "Henry", "Jussi S.", "오거스타", "로빈", "앤드루", "데이비드", "케빈", "캐머런 A.", "낸시 S.", "데이비드 L.", "루크 드", "마리오", "제니퍼 A.", "레이", "피터" ],
+        "auinit" : [ "N", "R", "D", "F", "E", "W", "A", "C", "K", "P", "B", "L", "M", "T", "H", "J", "오", "로", "앤", "케", "캐", "낸", "데", "루", "마", "제", "레", "피" ],
+        "addau" : [ "McMahon, Augusta", "Wallace-Hadrill, Andrew", "MacDonald, Kevin", "Petrie, Cameron A.", "Ligt, Luuk de", "Baird, Jennifer A.", "Clark, Peter", "Hein, Carla", "Corfiel, Penelope J.", "민유기", "Mcmahon, Augusta", "Osborne, Robin", "Wallace-Hardrill, Andrew", "Mattingly, David", "McDonald, Kevin", "Petre, Cameron A.", "Steinhardt, Nancy S.", "Stone, David L.", "Ligt, Luke de", "Liverani, Mario", "Baird Jennifer A", "Laurence, Ray", "Boone, Marc", "Blonde, Bruno", "Damme, Lija Van", "Valerian, Dominique", "Boyar, Ebru", "Weerdt, Hilde De", "Rowe, William T.", "James, McClain", "Blusse, Leonard", "Fernandez-Armesto, Felipe", "Bavel, Bas Van", "Bosker, Maarten", "Buringh, Eltojo", "Zanden, Jan Luiten van", "Winter, Anne", "Blockmans, Wim", "Hart, Marjoleit't", "Burke, Peter", "Lees, Anderew", "Lees, Lynn Hollen", "Gilbert, Alan", "Abbott, Carl", "Stapleton, Kristin", "Waley, Paul", "Kidambi, Prashant", "Dick, Howard", "Rimmer, Peter J.", "Volalit, Mercedes", "al-Asad, Mohammand", "Freund, Bill", "Hung Ho-fung", "Zhan Shaohua", "Lucassen, Leo", "Melosi, Martin V.", "Hietala, Marjatta", "Clark Peter", "Salmi, Hannu", "Metcalf, Thomas R.", "Xiangming Chen", "Fitts, Henry", "Jauhiainen, Jussi S.", "맥마흔, 오거스타", "오즈번, 로빈", "월리스-하드릴, 앤드루", "매팅리, 데이비드", "맥도널드, 케빈", "페트리, 캐머런 A.", "스타인하트, 낸시 S.", "스톤, 데이비드 L.", "리히트, 루크 드", "리베라니, 마리오", "베어드, 제니퍼 A.", "로런스, 레이", "클라크, 피터" ],
+        "contributorfull" : [ "$$NMcMahon, Augusta$$LMcMahon$$FAugusta$$Rcontributor", "$$NWallace-Hadrill, Andrew$$Rcontributor", "$$NMacDonald, Kevin$$Rcontributor", "$$NPetrie, Cameron A.$$Rcontributor", "$$NLigt, Luuk de$$Rcontributor", "$$NBaird, Jennifer A.$$Rcontributor", "$$NClark, Peter$$Rcontributor", "$$NHein, Carla$$Rcontributor", "$$NCorfiel, Penelope J.$$Rcontributor", "$$N민유기$$Rcontributor", "$$NMcmahon, Augusta$$Rcontributor", "$$NOsborne, Robin$$Rcontributor", "$$NWallace-Hardrill, Andrew$$Rcontributor", "$$NMattingly, David$$Rcontributor", "$$NMcDonald, Kevin$$Rcontributor", "$$NPetre, Cameron A.$$Rcontributor", "$$NSteinhardt, Nancy S.$$Rcontributor", "$$NStone, David L.$$Rcontributor", "$$NLigt, Luke de$$Rcontributor", "$$NLiverani, Mario$$Rcontributor", "$$NBaird Jennifer A$$Rcontributor", "$$NLaurence, Ray$$Rcontributor", "$$NBoone, Marc$$Rcontributor", "$$NBlonde, Bruno$$Rcontributor", "$$NDamme, Lija Van$$Rcontributor", "$$NValerian, Dominique$$Rcontributor", "$$NBoyar, Ebru$$Rcontributor", "$$NWeerdt, Hilde De$$Rcontributor", "$$NRowe, William T.$$Rcontributor", "$$NJames, McClain$$Rcontributor", "$$NBlusse, Leonard$$Rcontributor", "$$NFernandez-Armesto, Felipe$$Rcontributor", "$$NBavel, Bas Van$$Rcontributor", "$$NBosker, Maarten$$Rcontributor", "$$NBuringh, Eltojo$$Rcontributor", "$$NZanden, Jan Luiten van$$Rcontributor", "$$NWinter, Anne$$Rcontributor", "$$NBlockmans, Wim$$Rcontributor", "$$NHart, Marjoleit't$$Rcontributor", "$$NBurke, Peter$$Rcontributor", "$$NLees, Anderew$$Rcontributor", "$$NLees, Lynn Hollen$$Rcontributor", "$$NGilbert, Alan$$Rcontributor", "$$NAbbott, Carl$$Rcontributor", "$$NStapleton, Kristin$$Rcontributor", "$$NWaley, Paul$$Rcontributor", "$$NKidambi, Prashant$$Rcontributor", "$$NDick, Howard$$Rcontributor", "$$NRimmer, Peter J.$$Rcontributor", "$$NVolalit, Mercedes$$Rcontributor", "$$Nal-Asad, Mohammand$$Rcontributor", "$$NFreund, Bill$$Rcontributor", "$$NHung Ho-fung$$Rcontributor", "$$NZhan Shaohua$$Rcontributor", "$$NLucassen, Leo$$Rcontributor", "$$NMelosi, Martin V.$$Rcontributor", "$$NHietala, Marjatta$$Rcontributor", "$$NClark Peter$$Rcontributor", "$$NSalmi, Hannu$$Rcontributor", "$$NMetcalf, Thomas R.$$Rcontributor", "$$NXiangming Chen$$Rcontributor", "$$NFitts, Henry$$Rcontributor", "$$NJauhiainen, Jussi S.$$Rcontributor", "$$N맥마흔, 오거스타$$Rcontributor", "$$N오즈번, 로빈$$Rcontributor", "$$N월리스-하드릴, 앤드루$$Rcontributor", "$$N매팅리, 데이비드$$Rcontributor", "$$N맥도널드, 케빈$$Rcontributor", "$$N페트리, 캐머런 A.$$Rcontributor", "$$N스타인하트, 낸시 S.$$Rcontributor", "$$N스톤, 데이비드 L.$$Rcontributor", "$$N리히트, 루크 드$$Rcontributor", "$$N리베라니, 마리오$$Rcontributor", "$$N베어드, 제니퍼 A.$$Rcontributor", "$$N로런스, 레이$$Rcontributor", "$$N클라크, 피터$$Rcontributor" ],
+        "addtitle" : [ "(The) Oxford handbook of cities in world history" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9791192913056", "9791192913063", "9791192913070", "9791192913087v", "9791192913049" ],
+        "notes" : [ "서지적, 설명적 각주 수록", "각 장마다 참고문헌 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "책과함께" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "옥스퍼드 세계도시문명사" ]
+      },
+      "sort" : {
+        "title" : [ "옥스퍼드 세계도시문명사 / 피터 클라크 총괄편집 ; 민유기 옮김" ],
+        "author" : [ "McMahon, Augusta" ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HT111 .옥57 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003777758003286",
+        "holdId" : "22286121910003286",
+        "holKey" : "HoldingResultKey [mid=22286121910003286, libraryId=117046190003286, locationCode=c3b, callNumber=HT111 .옥57 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HT111+.%EC%98%A557+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HT111 .옥57 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003777758003286",
+        "holdId" : "22286121910003286",
+        "holKey" : "HoldingResultKey [mid=22286121910003286, libraryId=117046190003286, locationCode=c3b, callNumber=HT111 .옥57 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HT111+.%EC%98%A557+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003777758003286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791192913056(v.1),OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791192913056(v.1)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HT111 .옥57 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "307.7609",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "15",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "49",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "8",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "43",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "23",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "118",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 140,
+    "COMBINED_SEARCH_TIME" : 146,
+    "PROCESS_COMBINED_RESULTS" : 809,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2023",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "도시문명 도시발전",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Abbott Carl",
+      "count" : "1"
+    }, {
+      "value" : "Al Asad Mohammand",
+      "count" : "1"
+    }, {
+      "value" : "Baird Jennifer A",
+      "count" : "1"
+    }, {
+      "value" : "Bavel Bas Van",
+      "count" : "1"
+    }, {
+      "value" : "Blockmans Wim",
+      "count" : "1"
+    }, {
+      "value" : "Blonde Bruno",
+      "count" : "1"
+    }, {
+      "value" : "Blusse Leonard",
+      "count" : "1"
+    }, {
+      "value" : "Boone Marc",
+      "count" : "1"
+    }, {
+      "value" : "Bosker Maarten",
+      "count" : "1"
+    }, {
+      "value" : "Boyar Ebru",
+      "count" : "1"
+    }, {
+      "value" : "Buringh Eltojo",
+      "count" : "1"
+    }, {
+      "value" : "Burke Peter",
+      "count" : "1"
+    }, {
+      "value" : "Clark Peter",
+      "count" : "1"
+    }, {
+      "value" : "Corfiel Penelope J",
+      "count" : "1"
+    }, {
+      "value" : "Damme Lija Van",
+      "count" : "1"
+    }, {
+      "value" : "Dick Howard",
+      "count" : "1"
+    }, {
+      "value" : "Fernandez Armesto Felipe",
+      "count" : "1"
+    }, {
+      "value" : "Fitts Henry",
+      "count" : "1"
+    }, {
+      "value" : "Freund Bill",
+      "count" : "1"
+    }, {
+      "value" : "Gilbert Alan",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -2037597190
+}

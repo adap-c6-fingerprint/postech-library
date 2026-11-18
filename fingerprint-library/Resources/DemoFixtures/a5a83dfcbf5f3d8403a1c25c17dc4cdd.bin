@@ -1,0 +1,281 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000929669703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "자연에 대한 온전한 이해 : 이론 물리학, 옴에서 아인슈타인까지 " ],
+        "format" : [ "4책 : 삽화, 지도, 초상 ; 24 cm" ],
+        "identifier" : [ "$$CISBN$$V9788968171024 (1);$$CISBN$$V9788968171031 (2);$$CISBN$$V9788968171048 (3);$$CISBN$$V9788968171055 (4);$$CISBN$$V9788968171017 (세트)" ],
+        "creationdate" : [ "2013-2015" ],
+        "creator" : [ "Jungnickel, Christa$$QJungnickel, Christa" ],
+        "publisher" : [ "서울 : 한국문화사" ],
+        "mms" : [ "991000929669703286" ],
+        "contributor" : [ "구자현, 1966-$$Q구자현", "McCormmach, Russell$$QMcCormmach, Russell", "융니켈, 크리스타$$Q융니켈, 크리스타", "맥코마크, 러셀$$Q맥코마크, 러셀" ],
+        "addtitle" : [ "Intellectual mastery of nature", "수학의 횃불, 1800년̃1870년", "이제는 막강해 진 이론 물리학" ],
+        "series" : [ "한국연구재단 학술명저번역총서. 서양편 ; 725-728$$Q한국연구재단 학술명저번역총서." ],
+        "contents" : [ "1-2. 수학의 횃불, 1800년̃1870년 -- 3-4. 이제는 막강해 진 이론 물리학" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "물리학 이론물리학 아인슈타인 자연" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000929669703286" ],
+        "recordid" : [ "alma991000929669703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b14578372-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n85069005" ],
+        "originatingSystemIDContributor" : [ "n81068794" ],
+        "aulast" : [ "Jungnickel" ],
+        "aufirst" : [ "Christa" ],
+        "auinit" : [ "C" ],
+        "au" : [ "Jungnickel, Christa" ],
+        "addau" : [ "구자현", "McCormmach, Russell", "융니켈, 크리스타", "맥코마크, 러셀" ],
+        "creatorfull" : [ "$$NJungnickel, Christa$$LJungnickel$$FChrista$$Rauthor" ],
+        "contributorfull" : [ "$$N구자현$$L구자현$$F$$Rcontributor", "$$NMcCormmach, Russell$$Rcontributor", "$$N융니켈, 크리스타$$Rcontributor", "$$N맥코마크, 러셀$$Rcontributor" ],
+        "date" : [ "2013 - 2015", "2013-2015" ],
+        "isbn" : [ "9788968171024", "9788968171031", "9788968171048", "9788968171055", "9788968171017" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한국문화사" ],
+        "oclcid" : [ "(ptech)b14578372-82postech_inst" ],
+        "seriestitle" : [ "한국연구재단 학술명저번역총서. 서양편 ; 725-728" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "자연에 대한 온전한 이해 : 이론 물리학, 옴에서 아인슈타인까지" ]
+      },
+      "sort" : {
+        "title" : [ "자연에 대한 온전한 이해 : 이론 물리학, 옴에서 아인슈타인까지 / 크리스타 융니켈, 러셀 맥코마크 [공]지음 ; 구자현 옮김" ],
+        "author" : [ "Jungnickel, Christa" ],
+        "creationdate" : [ "2013" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QC7 .J86",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000929669703286",
+        "holdId" : "2294447300003286",
+        "holKey" : "HoldingResultKey [mid=2294447300003286, libraryId=117046190003286, locationCode=c3b, callNumber=QC7 .J86]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QC7+.J86&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QC7 .J86",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000929669703286",
+        "holdId" : "2294447300003286",
+        "holKey" : "HoldingResultKey [mid=2294447300003286, libraryId=117046190003286, locationCode=c3b, callNumber=QC7 .J86]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QC7+.J86&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000929669703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788968171024,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788968171024 (1)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QC7 .J86",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "530.09",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "31",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "66",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "0",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "60",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "119",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 129,
+    "COMBINED_SEARCH_TIME" : 135,
+    "PROCESS_COMBINED_RESULTS" : 349,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2013",
+      "count" : "1"
+    }, {
+      "value" : "2015",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "물리학 이론물리학 아인슈타인 자연",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Jungnickel Christa",
+      "count" : "1"
+    }, {
+      "value" : "Mccormmach Russell",
+      "count" : "1"
+    }, {
+      "value" : "구자현",
+      "count" : "1"
+    }, {
+      "value" : "맥코마크 러셀",
+      "count" : "1"
+    }, {
+      "value" : "융니켈 크리스타",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1091003686
+}

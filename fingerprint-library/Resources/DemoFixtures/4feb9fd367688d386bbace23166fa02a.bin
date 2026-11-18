@@ -1,0 +1,293 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003664570503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(Atkins') 물리화학 " ],
+        "format" : [ "xxiii, 858 p. : 천연색삽화, 도표 ; 29 cm." ],
+        "identifier" : [ "$$CISBN$$V9791159095788" ],
+        "creationdate" : [ "2020" ],
+        "publisher" : [ "파주 : 교보문고" ],
+        "mms" : [ "991003664570503286" ],
+        "contributor" : [ "Peter Atkins$$QPeter Atkins", "Julio de Paula$$QJulio de Paula", "James Keeler$$QJames Keeler", "안운선$$Q안운선", "Atkins, P. W. (Peter William), 1940-$$QAtkins, P. W.", "피터 앳킨스$$Q피터 앳킨스", "앳킨스, 피터$$Q앳킨스, 피터", "De Paula, Julio$$QDe Paula, Julio", "줄리오 드 파올라$$Q줄리오 드 파올라", "드 파올라, 줄리오$$Q드 파올라, 줄리오", "Keeler, James$$QKeeler, James" ],
+        "addtitle" : [ "Atkins' Physical chemistry (11th ed.)", "Physical chemistry", "앳킨스 물리화학" ],
+        "genre" : [ "Textbooks" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Chemistry, Physical and theoretical$$QChemistry, Physical and theoretical -- Textbooks", "물리 화학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003664570503286" ],
+        "recordid" : [ "alma991003664570503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015537424" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n50027000", "nb2001069264", "nb2003044851" ],
+        "aulast" : [ "안운선", "Atkins", "앳킨스", "DePaula", "드파올라", "Keeler" ],
+        "aufirst" : [ "P. W.", "피터", "Julio", "줄리오", "James" ],
+        "auinit" : [ "P", "피", "줄", "J" ],
+        "addau" : [ "Peter Atkins", "Julio de Paula", "James Keeler", "안운선", "Atkins, P. W.", "피터 앳킨스", "앳킨스, 피터", "De Paula, Julio", "줄리오 드 파올라", "드 파올라, 줄리오", "Keeler, James" ],
+        "contributorfull" : [ "$$NPeter Atkins$$Rcontributor", "$$NJulio de Paula$$Rcontributor", "$$NJames Keeler$$Rcontributor", "$$N안운선$$Rcontributor", "$$NAtkins, P. W.$$Rcontributor", "$$N피터 앳킨스$$Rcontributor", "$$N앳킨스, 피터$$Rcontributor", "$$NDe Paula, Julio$$Rcontributor", "$$N줄리오 드 파올라$$Rcontributor", "$$N드 파올라, 줄리오$$Rcontributor", "$$NKeeler, James$$Rcontributor" ],
+        "addtitle" : [ "Atkins' Physical chemistry", "Physical chemistry" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9791159095788" ],
+        "notes" : [ "서지적 각주 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "교보문고" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(Atkins') 물리화학" ]
+      },
+      "sort" : {
+        "title" : [ "(Atkins') 물리화학 / Peter Atkins, Julio de Paula, James Keeler [공]지음 ; 안운선 옮김." ],
+        "author" : [ "Peter Atkins" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD453.3 .A85 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003664570503286",
+        "holdId" : "22257438020003286",
+        "holKey" : "HoldingResultKey [mid=22257438020003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD453.3 .A85 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD453.3+.A85+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD453.3 .A85 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003664570503286",
+        "holdId" : "22257438020003286",
+        "holKey" : "HoldingResultKey [mid=22257438020003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD453.3 .A85 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD453.3+.A85+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003664570503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791159095788,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791159095788&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QD453.3 .A85 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qd000000000453.000000000003.a000000000085000000002020",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "11",
+    "CALL_SOLR_GET_IDS_LIST" : "25",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "34",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "28",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "86",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 95,
+    "COMBINED_SEARCH_TIME" : 102,
+    "PROCESS_COMBINED_RESULTS" : 902,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2020",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Chemistry Physical And Theoretical Textbooks",
+      "count" : "1"
+    }, {
+      "value" : "물리 화학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Atkins P W",
+      "count" : "1"
+    }, {
+      "value" : "De Paula Julio",
+      "count" : "1"
+    }, {
+      "value" : "James Keeler",
+      "count" : "1"
+    }, {
+      "value" : "Julio De Paula",
+      "count" : "1"
+    }, {
+      "value" : "Keeler James",
+      "count" : "1"
+    }, {
+      "value" : "Peter Atkins",
+      "count" : "1"
+    }, {
+      "value" : "드 파올라 줄리오",
+      "count" : "1"
+    }, {
+      "value" : "안운선",
+      "count" : "1"
+    }, {
+      "value" : "앳킨스 피터",
+      "count" : "1"
+    }, {
+      "value" : "줄리오 드 파올라",
+      "count" : "1"
+    }, {
+      "value" : "피터 앳킨스",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1785657012
+}

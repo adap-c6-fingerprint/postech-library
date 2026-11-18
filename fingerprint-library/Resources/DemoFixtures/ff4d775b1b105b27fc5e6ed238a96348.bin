@@ -1,0 +1,290 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003582178703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "SWEET한 융합교육 " ],
+        "format" : [ "223 p : 삽화 ; 25 cm" ],
+        "identifier" : [ "$$CISBN$$V9791165520250" ],
+        "creationdate" : [ "2019" ],
+        "creator" : [ "경인교육대학교 교육연구원$$Q경인교육대학교 교육연구원" ],
+        "publisher" : [ "서울 : 지식과감성#" ],
+        "mms" : [ "991003582178703286" ],
+        "contributor" : [ "허경$$Q허경", "심우민$$Q심우민", "이희연$$Q이희연", "오창근$$Q오창근", "이춘식$$Q이춘식", "윤성준$$Q윤성준", "여상인$$Q여상인", "이지영$$Q이지영", "김호$$Q김호", "박인기$$Q박인기" ],
+        "addtitle" : [ "스윗한 융합교육" ],
+        "series" : [ "경인학술총서 ; 3$$Q경인학술총서 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "교육학 융합교육" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003582178703286" ],
+        "recordid" : [ "alma991003582178703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015571251" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n89118333" ],
+        "aulast" : [ "허경", "심우민", "이희연", "오창근", "이춘식", "윤성준", "여상인", "이지영", "김호", "박인기" ],
+        "aucorp" : [ "경인교육대학교 교육연구원" ],
+        "addau" : [ "허경", "심우민", "이희연", "오창근", "이춘식", "윤성준", "여상인", "이지영", "김호", "박인기" ],
+        "contributorfull" : [ "$$N허경$$L허경$$F$$Rcontributor", "$$N심우민$$Rcontributor", "$$N이희연$$Rcontributor", "$$N오창근$$Rcontributor", "$$N이춘식$$Rcontributor", "$$N윤성준$$Rcontributor", "$$N여상인$$Rcontributor", "$$N이지영$$Rcontributor", "$$N김호$$Rcontributor", "$$N박인기$$Rcontributor" ],
+        "date" : [ "2019" ],
+        "isbn" : [ "9791165520250" ],
+        "notes" : [ "각 장마다 참고문헌 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "지식과감성#" ],
+        "seriestitle" : [ "경인학술총서 ; 3" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "SWEET한 융합교육" ]
+      },
+      "sort" : {
+        "title" : [ "SWEET한 융합교육 / 경인교육대학교 교육연구원 지음" ],
+        "author" : [ "경인교육대학교 교육연구원" ],
+        "creationdate" : [ "2019" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB1025.3 .경68 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003582178703286",
+        "holdId" : "22235512610003286",
+        "holKey" : "HoldingResultKey [mid=22235512610003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB1025.3 .경68 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB1025.3+.%EA%B2%BD68+2019&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB1025.3 .경68 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003582178703286",
+        "holdId" : "22235512610003286",
+        "holKey" : "HoldingResultKey [mid=22235512610003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB1025.3 .경68 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB1025.3+.%EA%B2%BD68+2019&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003582178703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791165520250,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791165520250&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "LB1025.3 .경68 2019",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "lb000000001025.000000000003.경000000000068000000002019",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "34",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "100",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "95",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "14",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "162",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 171,
+    "COMBINED_SEARCH_TIME" : 178,
+    "PROCESS_COMBINED_RESULTS" : 800,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2019",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "교육학 융합교육",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "경인교육대학교 교육연구원",
+      "count" : "1"
+    }, {
+      "value" : "김호",
+      "count" : "1"
+    }, {
+      "value" : "박인기",
+      "count" : "1"
+    }, {
+      "value" : "심우민",
+      "count" : "1"
+    }, {
+      "value" : "여상인",
+      "count" : "1"
+    }, {
+      "value" : "오창근",
+      "count" : "1"
+    }, {
+      "value" : "윤성준",
+      "count" : "1"
+    }, {
+      "value" : "이지영",
+      "count" : "1"
+    }, {
+      "value" : "이춘식",
+      "count" : "1"
+    }, {
+      "value" : "이희연",
+      "count" : "1"
+    }, {
+      "value" : "허경",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1636206707
+}

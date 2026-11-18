@@ -1,0 +1,272 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003829056003286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(맛있고, 재밌고, 독특한) 전 세계의 시장" ],
+        "format" : [ "85 p.: 삽도,지도; 30 cm" ],
+        "identifier" : [ "$$CISBN$$V9788925574400" ],
+        "creationdate" : [ "2024" ],
+        "publisher" : [ "서울: 주니어RHK: 알에이치코리아" ],
+        "mms" : [ "991003829056003286" ],
+        "contributor" : [ "바하레바, 마리야$$Q바하레바, 마리야", "데스니츠카야, 안나$$Q데스니츠카야, 안나", "최현아$$Q최현아", "Bakhareva, Maria$$QBakhareva, Maria", "Desnitskaya, Anna$$QDesnitskaya, Anna" ],
+        "addtitle" : [ "Markte in aller Welt", "Around the World in 24 Farmers` Markets" ],
+        "series" : [ "베스트 지식 그림책; 13$$Q베스트 지식 그림책" ],
+        "place" : [ "서울:" ],
+        "version" : [ "0" ],
+        "subject" : [ "세계사 세계문화 지리 초등사회 어린이상식 아동" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003829056003286" ],
+        "recordid" : [ "alma991003829056003286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000063391020" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2018057275" ],
+        "aulast" : [ "바하레바", "데스니츠카야", "최현아", "Bakhareva", "Desnitskaya" ],
+        "aufirst" : [ "마리야", "안나", "Maria", "Anna" ],
+        "auinit" : [ "마", "안", "M", "A" ],
+        "addau" : [ "바하레바, 마리야", "데스니츠카야, 안나", "최현아", "Bakhareva, Maria", "Desnitskaya, Anna" ],
+        "contributorfull" : [ "$$NBakhareva, Maria$$LBakhareva$$FMaria$$Rcontributor", "$$N바하레바, 마리야$$Rcontributor", "$$N데스니츠카야, 안나$$Rcontributor", "$$N최현아$$Rcontributor", "$$NBakhareva, Maria$$Rcontributor", "$$NDesnitskaya, Anna$$Rcontributor" ],
+        "addtitle" : [ "Markte in aller Welt", "Around the World in 24 Farmers` Markets" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9788925574400" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "주니어RHK" ],
+        "seriestitle" : [ "베스트 지식 그림책; 13" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(맛있고, 재밌고, 독특한) 전 세계의 시장" ]
+      },
+      "sort" : {
+        "title" : [ "(맛있고, 재밌고, 독특한) 전 세계의 시장/ 마리야 바하레바 글; 안나 데스니츠카야 그림; 최현아 옮김" ],
+        "author" : [ "Bakhareva, Maria" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5470 .B35 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003829056003286",
+        "holdId" : "22297382670003286",
+        "holKey" : "HoldingResultKey [mid=22297382670003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5470 .B35 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5470+.B35+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HF5470 .B35 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003829056003286",
+        "holdId" : "22297382670003286",
+        "holKey" : "HoldingResultKey [mid=22297382670003286, libraryId=117046190003286, locationCode=c3b, callNumber=HF5470 .B35 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HF5470+.B35+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003829056003286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788925574400,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788925574400&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HF5470 .B35 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "hf000000005470.b000000000035000000002024",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "35",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "48",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "43",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "8",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "103",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 113,
+    "COMBINED_SEARCH_TIME" : 119,
+    "PROCESS_COMBINED_RESULTS" : 177,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "세계사 세계문화 지리 초등사회 어린이상식 아동",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Bakhareva Maria",
+      "count" : "1"
+    }, {
+      "value" : "Desnitskaya Anna",
+      "count" : "1"
+    }, {
+      "value" : "데스니츠카야 안나",
+      "count" : "1"
+    }, {
+      "value" : "바하레바 마리야",
+      "count" : "1"
+    }, {
+      "value" : "최현아",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 717604937
+}

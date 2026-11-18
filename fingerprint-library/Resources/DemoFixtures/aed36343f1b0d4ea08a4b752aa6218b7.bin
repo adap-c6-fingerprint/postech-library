@@ -1,0 +1,278 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000738429703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "고분자화학 " ],
+        "format" : [ "x, 217 p. : 삽도 ; 23 cm", "(The)chemistry of polymers. -- 3rd ed. 0854046844" ],
+        "identifier" : [ "$$CISBN$$V9788973387786" ],
+        "creationdate" : [ "2009" ],
+        "creator" : [ "Nicholson, John W.$$QNicholson, John W." ],
+        "publisher" : [ "파주 : 자유아카데미" ],
+        "mms" : [ "991000738429703286" ],
+        "contributor" : [ "김형수$$Q김형수", "원종옥$$Q원종옥", "이원목$$Q이원목", "장우동$$Q장우동" ],
+        "addtitle" : [ "Chemistry of polymers" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Polymers", "Polymerization" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000738429703286" ],
+        "recordid" : [ "alma991000738429703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12976313-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.526969E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n85347103" ],
+        "originatingSystemIDContributor" : [ "no2007154245", "n79029020" ],
+        "aulast" : [ "Nicholson" ],
+        "aufirst" : [ "John W." ],
+        "auinit" : [ "J" ],
+        "au" : [ "Nicholson, John W." ],
+        "addau" : [ "김형수", "원종옥", "이원목", "장우동" ],
+        "creatorfull" : [ "$$NNicholson, John W.$$LNicholson$$FJohn W.$$Rauthor" ],
+        "contributorfull" : [ "$$N김형수$$L김형수$$F$$Rcontributor", "$$N원종옥$$Rcontributor", "$$N이원목$$Rcontributor", "$$N장우동$$Rcontributor" ],
+        "date" : [ "2009" ],
+        "isbn" : [ "9788973387786" ],
+        "notes" : [ "참고문헌  및 색인(p. [205]-217) 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "자유아카데미" ],
+        "oclcid" : [ "(ptech)b12976313-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "고분자화학" ]
+      },
+      "sort" : {
+        "title" : [ "고분자화학 / John W. Nicholson 지음 ; 김형수 [외]역" ],
+        "author" : [ "Nicholson, John W." ],
+        "creationdate" : [ "2009" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD381 .N53 2009",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000738429703286",
+        "holdId" : "2296901520003286",
+        "holKey" : "HoldingResultKey [mid=2296901520003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD381 .N53 2009]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD381+.N53+2009&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD381 .N53 2009",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000738429703286",
+        "holdId" : "2296901520003286",
+        "holKey" : "HoldingResultKey [mid=2296901520003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD381 .N53 2009]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD381+.N53+2009&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000738429703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788973387786,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788973387786&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QD381 .N53 2009",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qd\"381ǂ n53 2006",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "57",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "50",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "7",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "14",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "111",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 122,
+    "COMBINED_SEARCH_TIME" : 129,
+    "PROCESS_COMBINED_RESULTS" : 877,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2009",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Polymerization",
+      "count" : "1"
+    }, {
+      "value" : "Polymers",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Nicholson John W",
+      "count" : "1"
+    }, {
+      "value" : "김형수",
+      "count" : "1"
+    }, {
+      "value" : "원종옥",
+      "count" : "1"
+    }, {
+      "value" : "이원목",
+      "count" : "1"
+    }, {
+      "value" : "장우동",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1636417908
+}

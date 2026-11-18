@@ -1,0 +1,306 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003714050303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "투자론 : 가치투자와 자산운용 " ],
+        "format" : [ "xv, 822 p. : 도표 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9791186674789" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "파주 : Jiphil Media지필미디어" ],
+        "mms" : [ "991003714050303286" ],
+        "contributor" : [ "Jordan, Bradford D.$$QJordan, Bradford D.", "Miller, Thomas W., 1955-$$QMiller, Thomas W.", "Dolvin, Steven D.$$QDolvin, Steven D.", "김범, 1968-$$Q김범", "김솔, 1976-$$Q김솔", "김진산, 1971-$$Q김진산", "박기봉, 1971-$$Q박기봉", "이민환, 1963-$$Q이민환", "이상휘, 1969-$$Q이상휘", "정재만$$Q정재만", "정찬식, 1975-$$Q정찬식", "CFA$$QCFA", "조단, 브래포드 D.$$Q조단, 브래포드 D.", "밀러, 토마스 W., 1955-$$Q밀러, 토마스 W.", "밀러, 토마스 W. Jr., 1955-$$Q밀러, 토마스 W. Jr.", "돌빈, 스티븐 D.$$Q돌빈, 스티븐 D." ],
+        "addtitle" : [ "Fundamentals of investments : valuation and management (8th ed.)" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "투자론[投資論]", "자산 운용[資産運用]" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003714050303286" ],
+        "recordid" : [ "alma991003714050303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015802250" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2010065143", "n90641560", "n2001102188" ],
+        "aulast" : [ "Jordan", "Miller", "Dolvin", "김범", "김솔", "김진산", "박기봉", "이민환", "이상휘", "정재만", "정찬식", "조단", "밀러", "돌빈" ],
+        "aufirst" : [ "Bradford D.", "Thomas W.", "Steven D.", "브래포드 D.", "토마스 W.", "토마스 W. Jr.", "스티븐 D." ],
+        "auinit" : [ "B", "T", "S", "브", "토", "스" ],
+        "addau" : [ "Jordan, Bradford D.", "Miller, Thomas W.", "Dolvin, Steven D.", "김범", "김솔", "김진산", "박기봉", "이민환", "이상휘", "정재만", "정찬식", "CFA", "조단, 브래포드 D.", "밀러, 토마스 W.", "밀러, 토마스 W. Jr.", "돌빈, 스티븐 D." ],
+        "contributorfull" : [ "$$NJordan, Bradford D.$$LJordan$$FBradford D.$$Rcontributor", "$$NMiller, Thomas W.$$Rcontributor", "$$NDolvin, Steven D.$$Rcontributor", "$$N김범$$Rcontributor", "$$N김솔$$Rcontributor", "$$N김진산$$Rcontributor", "$$N박기봉$$Rcontributor", "$$N이민환$$Rcontributor", "$$N이상휘$$Rcontributor", "$$N정재만$$Rcontributor", "$$N정찬식$$Rcontributor", "$$N조단, 브래포드 D.$$Rcontributor", "$$N밀러, 토마스 W.$$Rcontributor", "$$N밀러, 토마스 W. Jr.$$Rcontributor", "$$N돌빈, 스티븐 D.$$Rcontributor" ],
+        "addtitle" : [ "Fundamentals of investments : valuation and management" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9791186674789" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "Jiphil Media지필미디어" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "투자론 : 가치투자와 자산운용" ]
+      },
+      "sort" : {
+        "title" : [ "투자론 : 가치투자와 자산운용 / Bradford D. Jordan, Thomas W. Miler Jr., Steven D. Dolvin, CFA 지음 ; 김범, 김솔, 김진산, 박기봉, 이민환, 이상휘, 정재만, 정찬식 옮김" ],
+        "author" : [ "Jordan, Bradford D." ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HG4521 .J67 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003714050303286",
+        "holdId" : "22271039710003286",
+        "holKey" : "HoldingResultKey [mid=22271039710003286, libraryId=117046190003286, locationCode=c3b, callNumber=HG4521 .J67 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HG4521+.J67+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HG4521 .J67 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003714050303286",
+        "holdId" : "22271039710003286",
+        "holKey" : "HoldingResultKey [mid=22271039710003286, libraryId=117046190003286, locationCode=c3b, callNumber=HG4521 .J67 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HG4521+.J67+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003714050303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791186674789,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791186674789&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HG4521 .J67 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "332.6",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "32",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "43",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "38",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "98",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 109,
+    "COMBINED_SEARCH_TIME" : 117,
+    "PROCESS_COMBINED_RESULTS" : 882,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "자산 운용 資産運用 Ksh1998010911",
+      "count" : "1"
+    }, {
+      "value" : "투자론 投資論 Ksh2002031254",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Cfa",
+      "count" : "1"
+    }, {
+      "value" : "Dolvin Steven D",
+      "count" : "1"
+    }, {
+      "value" : "Jordan Bradford D",
+      "count" : "1"
+    }, {
+      "value" : "Miller Thomas W",
+      "count" : "1"
+    }, {
+      "value" : "김범",
+      "count" : "1"
+    }, {
+      "value" : "김솔",
+      "count" : "1"
+    }, {
+      "value" : "김진산",
+      "count" : "1"
+    }, {
+      "value" : "돌빈 스티븐 D",
+      "count" : "1"
+    }, {
+      "value" : "밀러 토마스 W",
+      "count" : "1"
+    }, {
+      "value" : "밀러 토마스 W Jr",
+      "count" : "1"
+    }, {
+      "value" : "박기봉",
+      "count" : "1"
+    }, {
+      "value" : "이민환",
+      "count" : "1"
+    }, {
+      "value" : "이상휘",
+      "count" : "1"
+    }, {
+      "value" : "정재만",
+      "count" : "1"
+    }, {
+      "value" : "정찬식",
+      "count" : "1"
+    }, {
+      "value" : "조단 브래포드 D",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -842225435
+}

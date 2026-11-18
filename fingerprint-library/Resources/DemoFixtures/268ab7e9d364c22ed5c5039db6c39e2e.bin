@@ -1,0 +1,320 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003884674503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(Campbell) 생명과학 : 개념과 현상의 이해 " ],
+        "format" : [ "xxii, 785 p. : 천연색삽화, 도표 ; 28 cm." ],
+        "identifier" : [ "$$CISBN$$V9789813352070" ],
+        "creationdate" : [ "2025" ],
+        "publisher" : [ "파주 : 교문사" ],
+        "mms" : [ "991003884674503286" ],
+        "contributor" : [ "Martha R. Tayler$$QMartha R. Tayler", "Eric J. Simon$$QEric J. Simon", "Jean L. Dickey$$QJean L. Dickey", "Kelly A. Hogan$$QKelly A. Hogan", "김명원$$Q김명원", "김창미$$Q김창미", "박돈하$$Q박돈하", "심문정$$Q심문정", "이서은$$Q이서은", "이영원$$Q이영원", "이유$$Q이유", "하영미$$Q하영미", "Taylor, Martha R.$$QTaylor, Martha R.", "테일러, 마사 R.$$Q테일러, 마사 R.", "Simon, Eric J. (Erivc Jeffrey), 1967-$$QSimon, Eric J.", "시몬, 에릭 J.$$Q시몬, 에릭 J.", "Simon, Eric Jeffrey$$QSimon, Eric Jeffrey", "시몬, 에릭 제프리$$Q시몬, 에릭 제프리", "Dickey, Jean L.$$QDickey, Jean L.", "딕키, 진 L.$$Q딕키, 진 L.", "Hogan, Kelly A.$$QHogan, Kelly A.", "호간, 켈리 A.$$Q호간, 켈리 A." ],
+        "addtitle" : [ "Campbell biology : concepts & connections (10th ed., global ed.)", "캠벨 생명과학" ],
+        "edition" : [ "제10판 전면 수정판" ],
+        "place" : [ "파주] :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Campbell, Neil A., 1946-2004 Biology", "생명 과학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003884674503286" ],
+        "recordid" : [ "alma991003884674503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000017324164" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no98097794", "nb2017000670", "n94083043", "nb2010004413", "nr94015067" ],
+        "aulast" : [ "김명원", "김창미", "박돈하", "심문정", "이서은", "이영원", "이유", "하영미", "Taylor", "테일러", "Simon", "시몬", "Dickey", "딕키", "Hogan", "호간" ],
+        "aufirst" : [ "Martha R.", "마사 R.", "Eric J.", "에릭 J.", "Eric Jeffrey", "에릭 제프리", "Jean L.", "진 L.", "Kelly A.", "켈리 A." ],
+        "auinit" : [ "M", "마", "E", "에", "J", "진", "K", "켈" ],
+        "addau" : [ "Martha R. Tayler", "Eric J. Simon", "Jean L. Dickey", "Kelly A. Hogan", "김명원", "김창미", "박돈하", "심문정", "이서은", "이영원", "이유", "하영미", "Taylor, Martha R.", "테일러, 마사 R.", "Simon, Eric J.", "시몬, 에릭 J.", "Simon, Eric Jeffrey", "시몬, 에릭 제프리", "Dickey, Jean L.", "딕키, 진 L.", "Hogan, Kelly A.", "호간, 켈리 A." ],
+        "contributorfull" : [ "$$NMartha R. Tayler$$Rcontributor", "$$NEric J. Simon$$Rcontributor", "$$NJean L. Dickey$$Rcontributor", "$$NKelly A. Hogan$$Rcontributor", "$$N김명원$$Rcontributor", "$$N김창미$$Rcontributor", "$$N박돈하$$Rcontributor", "$$N심문정$$Rcontributor", "$$N이서은$$Rcontributor", "$$N이영원$$Rcontributor", "$$N이유$$Rcontributor", "$$N하영미$$Rcontributor", "$$NTaylor, Martha R.$$Rcontributor", "$$N테일러, 마사 R.$$Rcontributor", "$$NSimon, Eric J.$$Rcontributor", "$$N시몬, 에릭 J.$$Rcontributor", "$$NSimon, Eric Jeffrey$$Rcontributor", "$$N시몬, 에릭 제프리$$Rcontributor", "$$NDickey, Jean L.$$Rcontributor", "$$N딕키, 진 L.$$Rcontributor", "$$NHogan, Kelly A.$$Rcontributor", "$$N호간, 켈리 A.$$Rcontributor" ],
+        "addtitle" : [ "Campbell biology : concepts & connections" ],
+        "date" : [ "2025" ],
+        "isbn" : [ "9789813352070" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "교문사" ],
+        "edition" : [ "제10판 전면 수정판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(Campbell) 생명과학 : 개념과 현상의 이해" ]
+      },
+      "sort" : {
+        "title" : [ "(Campbell) 생명과학 : 개념과 현상의 이해 / Martha R. Taylor, Eric J. Simon, Jean L. Dickey, Kelly A. Hogan [공]지음 ; 김명원,  김창미, 박돈하, 심문정, 이서은, 이영원, 이유, 하영미 [공]옮김." ],
+        "author" : [ "Martha R. Tayler" ],
+        "creationdate" : [ "2025" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QH308.2 .C34 2025",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003884674503286",
+        "holdId" : "22309065330003286",
+        "holKey" : "HoldingResultKey [mid=22309065330003286, libraryId=117046190003286, locationCode=c3b, callNumber=QH308.2 .C34 2025]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QH308.2+.C34+2025&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QH308.2 .C34 2025",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003884674503286",
+        "holdId" : "22309065330003286",
+        "holKey" : "HoldingResultKey [mid=22309065330003286, libraryId=117046190003286, locationCode=c3b, callNumber=QH308.2 .C34 2025]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QH308.2+.C34+2025&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003884674503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9789813352070,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9789813352070&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QH308.2 .C34 2025",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qh000000000308.000000000002.c000000000034000000002025",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "31",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "38",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "32",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "14",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "96",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 108,
+    "COMBINED_SEARCH_TIME" : 114,
+    "PROCESS_COMBINED_RESULTS" : 434,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2025",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Campbell Neil A 1946 2004 Biology",
+      "count" : "1"
+    }, {
+      "value" : "생명 과학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Dickey Jean L",
+      "count" : "1"
+    }, {
+      "value" : "Eric J Simon",
+      "count" : "1"
+    }, {
+      "value" : "Hogan Kelly A",
+      "count" : "1"
+    }, {
+      "value" : "Jean L Dickey",
+      "count" : "1"
+    }, {
+      "value" : "Kelly A Hogan",
+      "count" : "1"
+    }, {
+      "value" : "Martha R Tayler",
+      "count" : "1"
+    }, {
+      "value" : "Simon Eric J",
+      "count" : "1"
+    }, {
+      "value" : "Simon Eric Jeffrey",
+      "count" : "1"
+    }, {
+      "value" : "Taylor Martha R",
+      "count" : "1"
+    }, {
+      "value" : "김명원",
+      "count" : "1"
+    }, {
+      "value" : "김창미",
+      "count" : "1"
+    }, {
+      "value" : "딕키 진 L",
+      "count" : "1"
+    }, {
+      "value" : "박돈하",
+      "count" : "1"
+    }, {
+      "value" : "시몬 에릭 J",
+      "count" : "1"
+    }, {
+      "value" : "시몬 에릭 제프리",
+      "count" : "1"
+    }, {
+      "value" : "심문정",
+      "count" : "1"
+    }, {
+      "value" : "이서은",
+      "count" : "1"
+    }, {
+      "value" : "이영원",
+      "count" : "1"
+    }, {
+      "value" : "이유",
+      "count" : "1"
+    }, {
+      "value" : "테일러 마사 R",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1765020783
+}

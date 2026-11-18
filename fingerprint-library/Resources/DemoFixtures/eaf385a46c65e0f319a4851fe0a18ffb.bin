@@ -1,0 +1,316 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003801757303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "설득의 심리학 " ],
+        "format" : [ "4책. ; 21 cm." ],
+        "identifier" : [ "$$CISBN$$V9788950950002 (v.1);$$CISBN$$V9788950952341 (v.2);$$CISBN$$V9788950950026 (v.3);$$CISBN$$V9788950932531 (v.4)" ],
+        "creationdate" : [ "2023" ],
+        "creator" : [ "Cialdini, Robert B.$$QCialdini, Robert B." ],
+        "publisher" : [ "파주 : 21세기북스북이십일 21세기북스" ],
+        "mms" : [ "991003801757303286" ],
+        "contributor" : [ "황혜숙$$Q황혜숙", "임상훈$$Q임상훈", "김경일$$Q김경일", "윤미나$$Q윤미나", "김혜린$$Q김혜린", "이주현$$Q이주현", "김은령$$Q김은령", "김호$$Q김호", "마틴, 스티비$$Q마틴, 스티비", "골드스타인, 노아$$Q골드스타인, 노아", "치알디니, 로버트 B.$$Q치알디니, 로버트 B.", "치알디니, 로버트$$Q치알디니, 로버트", "Noah J. Goldstein$$QNoah J. Goldstein", "Robert B. Cialdini$$QRobert B. Cialdini", "Cialdini, Steve J. Martin$$QCialdini, Steve J. Martin" ],
+        "addtitle" : [ "Influence, new and expanded (New and expanded ed.)", "Pre-suasion : A Revolutionary Way to Influnence and Persuade by Robert Cialdini", "YES! 10th Anniversary edition", "(The) small big : the small changes that can make a big difference when persuading others" ],
+        "edition" : [ "개정 6판, 2판, 개정2판." ],
+        "series" : [ "KI신서 ; 10906$$QKI신서 ", "KI신서 ; 10906 ; 10996 ; 10907 ; 10997$$QKI신서 " ],
+        "contents" : [ "v.1 . 사람의 마음을 사로잡는 7가지 불변의 원칙 (678 p.)-- v.2 . 절대 거절할 수 없는 설득 프레임 (454 p.)-- v.3 . YES를 끌어내는 설득의 60가지 비밀 (327 p.)-- v.4 . 작은 시도로 큰 변화를 만드는 스몰 빅의 힘 (339 p.)" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "설득", "심리학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003801757303286" ],
+        "recordid" : [ "alma991003801757303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016806907" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n83159410" ],
+        "originatingSystemIDContributor" : [ "no2010208804", "n84014750", "n80029299" ],
+        "aulast" : [ "Cialdini" ],
+        "aufirst" : [ "Robert B." ],
+        "auinit" : [ "R" ],
+        "au" : [ "Cialdini, Robert B." ],
+        "addau" : [ "황혜숙", "임상훈", "김경일", "윤미나", "김혜린", "이주현", "김은령", "김호", "마틴, 스티비", "골드스타인, 노아", "치알디니, 로버트 B.", "치알디니, 로버트", "Noah J. Goldstein", "Robert B. Cialdini", "Cialdini, Steve J. Martin" ],
+        "creatorfull" : [ "$$NCialdini, Robert B.$$LCialdini$$FRobert B.$$Rauthor" ],
+        "contributorfull" : [ "$$N황혜숙$$L황혜숙$$F$$Rcontributor", "$$N임상훈$$Rcontributor", "$$N김경일$$Rcontributor", "$$N윤미나$$Rcontributor", "$$N김혜린$$Rcontributor", "$$N이주현$$Rcontributor", "$$N김은령$$Rcontributor", "$$N김호$$Rcontributor", "$$N마틴, 스티비$$Rcontributor", "$$N골드스타인, 노아$$Rcontributor", "$$N치알디니, 로버트 B.$$Rcontributor", "$$N치알디니, 로버트$$Rcontributor", "$$NNoah J. Goldstein$$Rcontributor", "$$NRobert B. Cialdini$$Rcontributor", "$$NCialdini, Steve J. Martin$$Rcontributor" ],
+        "addtitle" : [ "Influence, new and expanded", "Pre-suasion : A Revolutionary Way to Influnence and Persuade by Robert Cialdini", "YES! 10th Anniversary edition", "(The) small big : the small changes that can make a big difference when persuading others" ],
+        "date" : [ "2023" ],
+        "isbn" : [ "9788950950002", "9788950952341", "9788950950026", "9788950932531" ],
+        "notes" : [ "참고문헌 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "21세기북스북이십일 21세기북스" ],
+        "edition" : [ "개정 6판, 2판, 개정2판." ],
+        "seriestitle" : [ "KI신서 ; 10906 ; 10996 ; 10907 ; 10997" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "설득의 심리학" ]
+      },
+      "sort" : {
+        "title" : [ "설득의 심리학 / 로버트 치알디니, 스티브 마틴, 노아 골드스타인 지음 ; 황혜숙, 임상훈 옮김." ],
+        "author" : [ "Cialdini, Robert B." ],
+        "creationdate" : [ "2023" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "BF637.P4 .C425 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003801757303286",
+        "holdId" : "22291611690003286",
+        "holKey" : "HoldingResultKey [mid=22291611690003286, libraryId=117046190003286, locationCode=c3b, callNumber=BF637.P4 .C425 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)BF637.P4+.C425+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "BF637.P4 .C425 2023",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003801757303286",
+        "holdId" : "22291611690003286",
+        "holKey" : "HoldingResultKey [mid=22291611690003286, libraryId=117046190003286, locationCode=c3b, callNumber=BF637.P4 .C425 2023]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)BF637.P4+.C425+2023&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003801757303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788950950002,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788950950002 (v.1)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "BF637.P4 .C425 2023",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "bf000000000637.p000000000004.c000000000425000000002023",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "10",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "35",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "30",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "87",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 99,
+    "COMBINED_SEARCH_TIME" : 106,
+    "PROCESS_COMBINED_RESULTS" : 790,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2023",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "설득",
+      "count" : "1"
+    }, {
+      "value" : "심리학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Cialdini Robert B",
+      "count" : "1"
+    }, {
+      "value" : "Cialdini Steve J Martin",
+      "count" : "1"
+    }, {
+      "value" : "Noah J Goldstein",
+      "count" : "1"
+    }, {
+      "value" : "Robert B Cialdini",
+      "count" : "1"
+    }, {
+      "value" : "골드스타인 노아",
+      "count" : "1"
+    }, {
+      "value" : "김경일",
+      "count" : "1"
+    }, {
+      "value" : "김은령",
+      "count" : "1"
+    }, {
+      "value" : "김혜린",
+      "count" : "1"
+    }, {
+      "value" : "김호",
+      "count" : "1"
+    }, {
+      "value" : "마틴 스티비",
+      "count" : "1"
+    }, {
+      "value" : "윤미나",
+      "count" : "1"
+    }, {
+      "value" : "이주현",
+      "count" : "1"
+    }, {
+      "value" : "임상훈",
+      "count" : "1"
+    }, {
+      "value" : "치알디니 로버트",
+      "count" : "1"
+    }, {
+      "value" : "치알디니 로버트 B",
+      "count" : "1"
+    }, {
+      "value" : "황혜숙",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 611185140
+}

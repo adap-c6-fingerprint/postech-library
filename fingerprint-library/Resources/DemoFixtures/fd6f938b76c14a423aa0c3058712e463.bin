@@ -1,0 +1,274 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003781849903286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "양자역학 " ],
+        "format" : [ "xv, 512 p. : 삽화, 도표 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788993543810" ],
+        "creationdate" : [ "2024" ],
+        "creator" : [ "Griffiths, David J$$QGriffiths, David J" ],
+        "publisher" : [ "서울 : 텍스트북스textbooks" ],
+        "mms" : [ "991003781849903286" ],
+        "contributor" : [ "Schroeter, Darrell F.$$QSchroeter, Darrell F.", "최준곤$$Q최준곤", "그리피스, 데이비드 J., 1942-$$Q그리피스, 데이비드 J.", "슈뢰터, 대럴 F.$$Q슈뢰터, 대럴 F." ],
+        "addtitle" : [ "Introduction to quantum mechanics (3rd ed.)", "Quantum mechanics" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "과학 함수 방정식 수식화 물리학 동역학 자연과학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003781849903286" ],
+        "recordid" : [ "alma991003781849903286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016833789" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n2002093857" ],
+        "originatingSystemIDContributor" : [ "no2018031173" ],
+        "aulast" : [ "Griffiths" ],
+        "aufirst" : [ "David J" ],
+        "auinit" : [ "D" ],
+        "au" : [ "Griffiths, David J" ],
+        "addau" : [ "Schroeter, Darrell F.", "최준곤", "그리피스, 데이비드 J.", "슈뢰터, 대럴 F." ],
+        "creatorfull" : [ "$$NGriffiths, David J$$LGriffiths$$FDavid J$$Rauthor" ],
+        "contributorfull" : [ "$$NSchroeter, Darrell F.$$LSchroeter$$FDarrell F.$$Rcontributor", "$$N최준곤$$Rcontributor", "$$N그리피스, 데이비드 J.$$Rcontributor", "$$N슈뢰터, 대럴 F.$$Rcontributor" ],
+        "addtitle" : [ "Introduction to quantum mechanics", "Quantum mechanics" ],
+        "date" : [ "2024" ],
+        "isbn" : [ "9788993543810" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "텍스트북스textbooks" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "양자역학" ]
+      },
+      "sort" : {
+        "title" : [ "양자역학 / David J. Griffiths, Darrell F. Schroeter 저 ; 최준곤 옮김" ],
+        "author" : [ "Griffiths, David J" ],
+        "creationdate" : [ "2024" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QC174.12 .G75 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003781849903286",
+        "holdId" : "22286857810003286",
+        "holKey" : "HoldingResultKey [mid=22286857810003286, libraryId=117046190003286, locationCode=c3b, callNumber=QC174.12 .G75 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QC174.12+.G75+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QC174.12 .G75 2024",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003781849903286",
+        "holdId" : "22286857810003286",
+        "holKey" : "HoldingResultKey [mid=22286857810003286, libraryId=117046190003286, locationCode=c3b, callNumber=QC174.12 .G75 2024]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QC174.12+.G75+2024&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003781849903286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788993543810,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788993543810&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QC174.12 .G75 2024",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "530.12",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "29",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "37",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "3",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "31",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "89",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 100,
+    "COMBINED_SEARCH_TIME" : 108,
+    "PROCESS_COMBINED_RESULTS" : 260,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2024",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "과학 함수 방정식 수식화 물리학 동역학 자연과학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Griffiths David J",
+      "count" : "1"
+    }, {
+      "value" : "Schroeter Darrell F",
+      "count" : "1"
+    }, {
+      "value" : "그리피스 데이비드 J",
+      "count" : "1"
+    }, {
+      "value" : "슈뢰터 대럴 F",
+      "count" : "1"
+    }, {
+      "value" : "최준곤",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1104789755
+}

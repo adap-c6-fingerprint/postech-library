@@ -1,0 +1,284 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003735241103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "설득 커뮤니케이션 " ],
+        "format" : [ "571 p. : 천연색삽화, 도표 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788999725098" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "서울 : 학지사" ],
+        "mms" : [ "991003735241103286" ],
+        "contributor" : [ "박준성$$Q박준성", "문광수, 1978-$$Q문광수", "박은미$$Q박은미", "소용준, 1979-$$Q소용준", "이병창$$Q이병창", "함진선, 1977-$$Q함진선", "DeVito, Joseph A.$$QDeVito, Joseph A.", "드비토, 조셉 A.$$Q드비토, 조셉 A." ],
+        "addtitle" : [ "Essentials of human communication (10th ed.)" ],
+        "unititle" : [ "Essentials of human communication. 10th ed.. 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "커뮤니케이션[communication]", "설득" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003735241103286" ],
+        "recordid" : [ "alma991003735241103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015959349" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n79096710", "nr97009803" ],
+        "aulast" : [ "박준성", "문광수", "박은미", "소용준", "이병창", "함진선", "DeVito", "드비토" ],
+        "aufirst" : [ "Joseph A.", "조셉 A." ],
+        "auinit" : [ "J", "조" ],
+        "addau" : [ "박준성", "문광수", "박은미", "소용준", "이병창", "함진선", "DeVito, Joseph A.", "드비토, 조셉 A." ],
+        "contributorfull" : [ "$$NDeVito, Joseph A.$$LDeVito$$FJoseph A.$$Rcontributor", "$$N박준성$$Rcontributor", "$$N문광수$$Rcontributor", "$$N박은미$$Rcontributor", "$$N소용준$$Rcontributor", "$$N이병창$$Rcontributor", "$$N함진선$$Rcontributor", "$$NDeVito, Joseph A.$$Rcontributor", "$$N드비토, 조셉 A.$$Rcontributor" ],
+        "addtitle" : [ "Essentials of human communication" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9788999725098" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "학지사" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "설득 커뮤니케이션" ]
+      },
+      "sort" : {
+        "title" : [ "설득 커뮤니케이션 / Joseph A. DeVito 저 ; 박준성, 문광수, 박은미, 소용준, 이병창, 함진선 공역" ],
+        "author" : [ "DeVito, Joseph A." ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "P90 .D48 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003735241103286",
+        "holdId" : "22276236090003286",
+        "holKey" : "HoldingResultKey [mid=22276236090003286, libraryId=117046190003286, locationCode=c3b, callNumber=P90 .D48 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)P90+.D48+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "P90 .D48 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003735241103286",
+        "holdId" : "22276236090003286",
+        "holKey" : "HoldingResultKey [mid=22276236090003286, libraryId=117046190003286, locationCode=c3b, callNumber=P90 .D48 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)P90+.D48+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003735241103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788999725098,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788999725098&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "P90 .D48 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "302.2",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "37",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "32",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "13",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "89",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 100,
+    "COMBINED_SEARCH_TIME" : 107,
+    "PROCESS_COMBINED_RESULTS" : 669,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "설득",
+      "count" : "1"
+    }, {
+      "value" : "커뮤니케이션 Communication Ksh1998000134",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Devito Joseph A",
+      "count" : "1"
+    }, {
+      "value" : "드비토 조셉 A",
+      "count" : "1"
+    }, {
+      "value" : "문광수",
+      "count" : "1"
+    }, {
+      "value" : "박은미",
+      "count" : "1"
+    }, {
+      "value" : "박준성",
+      "count" : "1"
+    }, {
+      "value" : "소용준",
+      "count" : "1"
+    }, {
+      "value" : "이병창",
+      "count" : "1"
+    }, {
+      "value" : "함진선",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1949479764
+}

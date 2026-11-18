@@ -1,0 +1,276 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003434877503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "7일 공부법 : 공부머리를 뛰어넘는 최강의 합격전략 " ],
+        "format" : [ "182 p : 삽화 ; 18cm" ],
+        "identifier" : [ "$$CISBN$$V9788950973131" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "영목수명 鈴木秀明$$Q영목수명" ],
+        "publisher" : [ "파주 : 북이십일 21세기북스" ],
+        "mms" : [ "991003434877503286" ],
+        "contributor" : [ "김현영$$Q김현영", "천호진$$Q천호진", "스즈키 히데아키$$Q스즈키 히데아키", "Suzuki, Hideaki$$QSuzuki, Hideaki" ],
+        "series" : [ "KI신서 ; 7266$$QKI신서 " ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "공부법", "공부법 공부머리 최강 합격전략" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003434877503286" ],
+        "recordid" : [ "alma991003434877503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014679067" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr96010070", "n84220321", "n80143940" ],
+        "aulast" : [ "영목수명" ],
+        "aufirst" : [ "Hideaki" ],
+        "auinit" : [ "H" ],
+        "au" : [ "영목수명" ],
+        "addau" : [ "김현영", "천호진", "스즈키 히데아키", "Suzuki, Hideaki" ],
+        "creatorfull" : [ "$$N영목수명$$L영목수명$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N김현영$$L김현영$$F$$Rcontributor", "$$N천호진$$Rcontributor", "$$N스즈키 히데아키$$Rcontributor", "$$NSuzuki, Hideaki$$Rcontributor" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9788950973131" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "북이십일 21세기북스" ],
+        "seriestitle" : [ "KI신서 ; 7266" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "7일 공부법 : 공부머리를 뛰어넘는 최강의 합격전략" ]
+      },
+      "sort" : {
+        "title" : [ "7일 공부법 : 공부머리를 뛰어넘는 최강의 합격전략 / 스즈키 히데아키 지음 ; 김현영 옮김" ],
+        "author" : [ "영목수명 鈴木秀明" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB1049 .영35 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003434877503286",
+        "holdId" : "22185750430003286",
+        "holKey" : "HoldingResultKey [mid=22185750430003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB1049 .영35 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB1049+.%EC%98%8135+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB1049 .영35 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003434877503286",
+        "holdId" : "22185750430003286",
+        "holKey" : "HoldingResultKey [mid=22185750430003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB1049 .영35 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB1049+.%EC%98%8135+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003434877503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788950973131,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788950973131&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "LB1049 .영35 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "371.30281",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "41",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "41",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "36",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "106",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 115,
+    "COMBINED_SEARCH_TIME" : 124,
+    "PROCESS_COMBINED_RESULTS" : 654,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2018",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "공부법",
+      "count" : "1"
+    }, {
+      "value" : "공부법 공부머리 최강 합격전략",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Suzuki Hideaki",
+      "count" : "1"
+    }, {
+      "value" : "김현영",
+      "count" : "1"
+    }, {
+      "value" : "스즈키 히데아키",
+      "count" : "1"
+    }, {
+      "value" : "영목수명",
+      "count" : "1"
+    }, {
+      "value" : "천호진",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1679302635
+}

@@ -1,0 +1,283 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000528809703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(체계적인)화학공정설계 " ],
+        "format" : [ "2책 : 삽도 ; 26 cm", "Systematic methods of chemical process design" ],
+        "identifier" : [ "$$CISBN$$V8989019788 ;$$CISBN$$V8989019796 ;$$CISBN$$V898901977x(전2권)" ],
+        "creationdate" : [ "2002" ],
+        "creator" : [ "Biegler, Lorenz T.$$QBiegler, Lorenz T." ],
+        "publisher" : [ "서울 : 아진" ],
+        "mms" : [ "991000528809703286" ],
+        "contributor" : [ "Biegler, Lorenz T$$QBiegler, Lorenz T", "Grossmann, Ignacio E$$QGrossmann, Ignacio E", "Westerberg, Arthur W$$QWesterberg, Arthur W", "그로스만, 이그나시오 E$$Q그로스만, 이그나시오 E", "웨스트버그, 아더 W$$Q웨스트버그, 아더 W", "문일$$Q문일", "이인범$$Q이인범" ],
+        "addtitle" : [ "화학공정설계" ],
+        "edition" : [ "개정판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "화학 공정 설계" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000528809703286" ],
+        "recordid" : [ "alma991000528809703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10854800-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270169E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n95034571" ],
+        "originatingSystemIDContributor" : [ "n91007139", "n78067063", "n95034571" ],
+        "aulast" : [ "Biegler" ],
+        "aufirst" : [ "Lorenz T." ],
+        "auinit" : [ "L" ],
+        "au" : [ "Biegler, Lorenz T." ],
+        "addau" : [ "Biegler, Lorenz T", "Grossmann, Ignacio E", "Westerberg, Arthur W", "그로스만, 이그나시오 E", "웨스트버그, 아더 W", "문일", "이인범" ],
+        "creatorfull" : [ "$$NBiegler, Lorenz T.$$LBiegler$$FLorenz T.$$Rauthor" ],
+        "contributorfull" : [ "$$NBiegler, Lorenz T$$LBiegler$$FLorenz T$$Rcontributor", "$$NGrossmann, Ignacio E$$Rcontributor", "$$NWesterberg, Arthur W$$Rcontributor", "$$N그로스만, 이그나시오 E$$Rcontributor", "$$N웨스트버그, 아더 W$$Rcontributor", "$$N문일$$Rcontributor", "$$N이인범$$Rcontributor" ],
+        "date" : [ "2002" ],
+        "isbn" : [ "8989019788", "8989019796", "898901977x" ],
+        "notes" : [ "참고문헌 및 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "아진" ],
+        "oclcid" : [ "(ptech)b10854800-82postech_inst" ],
+        "edition" : [ "개정판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(체계적인)화학공정설계" ]
+      },
+      "sort" : {
+        "title" : [ "(체계적인)화학공정설계 / Lorenz T. Biegler ; Ignacio E. Grossmann ; Arthur W. Westerberg [공저] ; 문일 ; 이인범 [공역]" ],
+        "author" : [ "Biegler, Lorenz T." ],
+        "creationdate" : [ "2002" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TP155.7 .B54 2002",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000528809703286",
+        "holdId" : "2290565830003286",
+        "holKey" : "HoldingResultKey [mid=2290565830003286, libraryId=117046190003286, locationCode=c3b, callNumber=TP155.7 .B54 2002]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TP155.7+.B54+2002&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TP155.7 .B54 2002",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000528809703286",
+        "holdId" : "2290565830003286",
+        "holKey" : "HoldingResultKey [mid=2290565830003286, libraryId=117046190003286, locationCode=c3b, callNumber=TP155.7 .B54 2002]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TP155.7+.B54+2002&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000528809703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8989019788,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8989019788&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TP155.7 .B54 2002",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "tp000000000155.000000000007.b000000000054000000002002",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "32",
+    "CALL_SOLR_GET_IDS_LIST" : "29",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "45",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "27",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "39",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "121",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 130,
+    "COMBINED_SEARCH_TIME" : 137,
+    "PROCESS_COMBINED_RESULTS" : 417,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2002",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "화학 공정 설계",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Biegler Lorenz T",
+      "count" : "1"
+    }, {
+      "value" : "Grossmann Ignacio E",
+      "count" : "1"
+    }, {
+      "value" : "Westerberg Arthur W",
+      "count" : "1"
+    }, {
+      "value" : "그로스만 이그나시오 E",
+      "count" : "1"
+    }, {
+      "value" : "문일",
+      "count" : "1"
+    }, {
+      "value" : "웨스트버그 아더 W",
+      "count" : "1"
+    }, {
+      "value" : "이인범",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1673448109
+}

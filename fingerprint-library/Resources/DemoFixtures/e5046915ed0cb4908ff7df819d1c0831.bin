@@ -1,0 +1,320 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003491159603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(맥머리의) 유기화학 " ],
+        "format" : [ "1219 p : 천연색삽화, 도표 ; 28 cm" ],
+        "identifier" : [ "$$CISBN$$V9788962184297" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "McMurry, John, 1942-$$QMcMurry, John" ],
+        "publisher" : [ "서울 : 센게이지러닝코리아" ],
+        "mms" : [ "991003491159603286" ],
+        "contributor" : [ "손상준$$Q손상준", "박정민$$Q박정민", "심원보$$Q심원보", "최흥진$$Q최흥진", "구인선$$Q구인선", "김윤희$$Q김윤희", "강은주$$Q강은주", "김학원$$Q김학원", "이진호$$Q이진호", "윤철민$$Q윤철민", "이민재$$Q이민재", "김형수$$Q김형수", "윤기종$$Q윤기종", "한만소$$Q한만소", "이용균$$Q이용균", "송주현$$Q송주현", "정대일$$Q정대일", "서성용$$Q서성용", "박두한$$Q박두한", "김지흥$$Q김지흥", "정동준$$Q정동준", "하동수$$Q하동수", "신은주$$Q신은주", "최대옥$$Q최대옥", "장두옥$$Q장두옥", "김성철$$Q김성철", "이용록$$Q이용록", "채규윤$$Q채규윤", "김보미$$Q김보미", "김택현$$Q김택현", "김형진$$Q김형진", "오종훈$$Q오종훈", "정규관$$Q정규관", "조훈$$Q조훈", "김영준$$Q김영준", "권효식$$Q권효식", "김민$$Q김민", "정노희$$Q정노희", "정용석$$Q정용석", "윤국로$$Q윤국로", "최성호$$Q최성호", "화학교재연구회$$Q화학교재연구회", "McMurry, John E., 1942-$$QMcMurry, John E.", "맥머리, 존 E, 1942-$$Q맥머리, 존 E" ],
+        "addtitle" : [ "Organic chemistry (9th ed.)" ],
+        "edition" : [ "9판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "유기 화학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003491159603286" ],
+        "recordid" : [ "alma991003491159603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014754725" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no00047906", "n85018554", "n85187238", "nr95033534", "n2004062011", "n79029020", "n86117312", "n86117752", "no2008122005" ],
+        "aulast" : [ "McMurry" ],
+        "aufirst" : [ "John" ],
+        "auinit" : [ "J" ],
+        "au" : [ "McMurry, John" ],
+        "addau" : [ "손상준", "박정민", "심원보", "최흥진", "구인선", "김윤희", "강은주", "김학원", "이진호", "윤철민", "이민재", "김형수", "윤기종", "한만소", "이용균", "송주현", "정대일", "서성용", "박두한", "김지흥", "정동준", "하동수", "신은주", "최대옥", "장두옥", "김성철", "이용록", "채규윤", "김보미", "김택현", "김형진", "오종훈", "정규관", "조훈", "김영준", "권효식", "김민", "정노희", "정용석", "윤국로", "최성호", "화학교재연구회", "McMurry, John E.", "맥머리, 존 E" ],
+        "creatorfull" : [ "$$NMcMurry, John$$LMcMurry$$FJohn$$Rauthor" ],
+        "contributorfull" : [ "$$N손상준$$L손상준$$F$$Rcontributor", "$$N박정민$$Rcontributor", "$$N심원보$$Rcontributor", "$$N최흥진$$Rcontributor", "$$N구인선$$Rcontributor", "$$N김윤희$$Rcontributor", "$$N강은주$$Rcontributor", "$$N김학원$$Rcontributor", "$$N이진호$$Rcontributor", "$$N윤철민$$Rcontributor", "$$N이민재$$Rcontributor", "$$N김형수$$Rcontributor", "$$N윤기종$$Rcontributor", "$$N한만소$$Rcontributor", "$$N이용균$$Rcontributor", "$$N송주현$$Rcontributor", "$$N정대일$$Rcontributor", "$$N서성용$$Rcontributor", "$$N박두한$$Rcontributor", "$$N김지흥$$Rcontributor", "$$N정동준$$Rcontributor", "$$N하동수$$Rcontributor", "$$N신은주$$Rcontributor", "$$N최대옥$$Rcontributor", "$$N장두옥$$Rcontributor", "$$N김성철$$Rcontributor", "$$N이용록$$Rcontributor", "$$N채규윤$$Rcontributor", "$$N김보미$$Rcontributor", "$$N김택현$$Rcontributor", "$$N김형진$$Rcontributor", "$$N오종훈$$Rcontributor", "$$N정규관$$Rcontributor", "$$N조훈$$Rcontributor", "$$N김영준$$Rcontributor", "$$N권효식$$Rcontributor", "$$N김민$$Rcontributor", "$$N정노희$$Rcontributor", "$$N정용석$$Rcontributor", "$$N윤국로$$Rcontributor", "$$N최성호$$Rcontributor", "$$NMcMurry, John E.$$Rcontributor", "$$N맥머리, 존 E$$Rcontributor" ],
+        "addtitle" : [ "Organic chemistry" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9788962184297" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "센게이지러닝코리아" ],
+        "edition" : [ "9판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(맥머리의) 유기화학" ]
+      },
+      "sort" : {
+        "title" : [ "(맥머리의) 유기화학 / 지은이 : John E. McMurry ; 옮긴이: 화학교재연구회, 손상준, 박정민, 심원보, 최흥진, 구인선, 김윤희, 강은주, 김학원, 이진호, 윤철민, 이민재, 김형수, 윤기종, 한만소, 이용균, 송주현, 정대일, 서성용, 박두한, 김지흥, 정동준, 하동수, 신은주, 최대옥, 장두옥, 김성철, 이용록, 채규윤, 김보미, 김택현, 김형진, 오종훈, 정규관, 조훈, 김영준, 권효식, 김민, 정노희, 정용석, 윤국로, 최성호" ],
+        "author" : [ "McMurry, John, 1942-" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD251.3 .M364 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003491159603286",
+        "holdId" : "22202666630003286",
+        "holKey" : "HoldingResultKey [mid=22202666630003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD251.3 .M364 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD251.3+.M364+2019&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD251.3 .M364 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003491159603286",
+        "holdId" : "22202666630003286",
+        "holKey" : "HoldingResultKey [mid=22202666630003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD251.3 .M364 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD251.3+.M364+2019&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003491159603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788962184297,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788962184297&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QD251.3 .M364 2019",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "547",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "11",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "44",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "5",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "38",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "19",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "106",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 123,
+    "COMBINED_SEARCH_TIME" : 131,
+    "PROCESS_COMBINED_RESULTS" : 804,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2018",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "유기 화학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Mcmurry John",
+      "count" : "1"
+    }, {
+      "value" : "Mcmurry John E",
+      "count" : "1"
+    }, {
+      "value" : "강은주",
+      "count" : "1"
+    }, {
+      "value" : "구인선",
+      "count" : "1"
+    }, {
+      "value" : "권효식",
+      "count" : "1"
+    }, {
+      "value" : "김민",
+      "count" : "1"
+    }, {
+      "value" : "김보미",
+      "count" : "1"
+    }, {
+      "value" : "김성철",
+      "count" : "1"
+    }, {
+      "value" : "김영준",
+      "count" : "1"
+    }, {
+      "value" : "김윤희",
+      "count" : "1"
+    }, {
+      "value" : "김지흥",
+      "count" : "1"
+    }, {
+      "value" : "김택현",
+      "count" : "1"
+    }, {
+      "value" : "김학원",
+      "count" : "1"
+    }, {
+      "value" : "김형수",
+      "count" : "1"
+    }, {
+      "value" : "김형진",
+      "count" : "1"
+    }, {
+      "value" : "맥머리 존 E",
+      "count" : "1"
+    }, {
+      "value" : "박두한",
+      "count" : "1"
+    }, {
+      "value" : "박정민",
+      "count" : "1"
+    }, {
+      "value" : "서성용",
+      "count" : "1"
+    }, {
+      "value" : "손상준",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1943404442
+}

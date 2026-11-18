@@ -1,0 +1,281 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003810055303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "재료과학과 공학 " ],
+        "format" : [ "xi, 975 p. : 천연색삽화, 도표 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9791162263044" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "서울 : 시그마프레스" ],
+        "mms" : [ "991003810055303286" ],
+        "contributor" : [ "Callister, William D., Jr., 1940-$$QCallister, William D.", "Rethwisch, David G.$$QRethwisch, David G.", "박인규, 1953-$$Q박인규", "이재갑, 1954-$$Q이재갑", "김용석, 1957-$$Q김용석", "칼리스터, 윌리엄 D., Jr., 1940-$$Q칼리스터, 윌리엄 D.", "레스위시, 데이비드 G.$$Q레스위시, 데이비드 G." ],
+        "addtitle" : [ "Callister's materials science and engineering (10th ed.)" ],
+        "unititle" : [ "Callister's materials science and engineering. 10th ed.. 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "재료 과학", "재료 공학" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003810055303286" ],
+        "recordid" : [ "alma991003810055303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016631268" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n93084146", "n84040646" ],
+        "aulast" : [ "Callister", "Rethwisch", "박인규", "이재갑", "김용석", "칼리스터", "레스위시" ],
+        "aufirst" : [ "William D.", "David G.", "윌리엄 D.", "데이비드 G." ],
+        "auinit" : [ "W", "D", "윌", "데" ],
+        "addau" : [ "Callister, William D.", "Rethwisch, David G.", "박인규", "이재갑", "김용석", "칼리스터, 윌리엄 D.", "레스위시, 데이비드 G." ],
+        "contributorfull" : [ "$$NCallister, William D.$$LCallister$$FWilliam D.$$Rcontributor", "$$NRethwisch, David G.$$Rcontributor", "$$N박인규$$Rcontributor", "$$N이재갑$$Rcontributor", "$$N김용석$$Rcontributor", "$$N칼리스터, 윌리엄 D.$$Rcontributor", "$$N레스위시, 데이비드 G.$$Rcontributor" ],
+        "addtitle" : [ "Callister's materials science and engineering" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9791162263044" ],
+        "notes" : [ "참고문헌과 색인 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "시그마프레스" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "재료과학과 공학" ]
+      },
+      "sort" : {
+        "title" : [ "재료과학과 공학 / 저자: William D. Callister, David G. Rethwisch ; 역자: 박인규, 이재갑, 김용석" ],
+        "author" : [ "Callister, William D., Jr., 1940-" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TA403 .C23 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003810055303286",
+        "holdId" : "22293581060003286",
+        "holKey" : "HoldingResultKey [mid=22293581060003286, libraryId=117046190003286, locationCode=c3b, callNumber=TA403 .C23 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TA403+.C23+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TA403 .C23 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003810055303286",
+        "holdId" : "22293581060003286",
+        "holKey" : "HoldingResultKey [mid=22293581060003286, libraryId=117046190003286, locationCode=c3b, callNumber=TA403 .C23 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TA403+.C23+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003810055303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791162263044,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791162263044&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TA403 .C23 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "620.11",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "43",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "37",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "95",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 108,
+    "COMBINED_SEARCH_TIME" : 115,
+    "PROCESS_COMBINED_RESULTS" : 214,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "재료 공학",
+      "count" : "1"
+    }, {
+      "value" : "재료 과학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Callister William D",
+      "count" : "1"
+    }, {
+      "value" : "Rethwisch David G",
+      "count" : "1"
+    }, {
+      "value" : "김용석",
+      "count" : "1"
+    }, {
+      "value" : "레스위시 데이비드 G",
+      "count" : "1"
+    }, {
+      "value" : "박인규",
+      "count" : "1"
+    }, {
+      "value" : "이재갑",
+      "count" : "1"
+    }, {
+      "value" : "칼리스터 윌리엄 D",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 707813901
+}

@@ -1,0 +1,286 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003832121303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "비즈니스 모델의 혁신 : 성공 기업을 위한 10가지 혁신 전략 " ],
+        "format" : [ "275 p. : 천연색삽화 ; 19 x 25 cm" ],
+        "identifier" : [ "$$CISBN$$V9788960533691" ],
+        "creationdate" : [ "2015" ],
+        "publisher" : [ "파주 : 마로니에북스" ],
+        "mms" : [ "991003832121303286" ],
+        "contributor" : [ "Keeley, Larry$$QKeeley, Larry", "Pikkel, Ryan$$QPikkel, Ryan", "Quinn, Brian$$QQuinn, Brian", "Walters, Helen$$QWalters, Helen", "유효상, 1960-$$Q유효상", "킬리, 래리$$Q킬리, 래리", "피켈, 라이언$$Q피켈, 라이언", "퀸, 브라이언$$Q퀸, 브라이언", "월터스, 헬렌$$Q월터스, 헬렌" ],
+        "addtitle" : [ "Ten types of innovation : the discipline of building breakthroughs" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "비즈니스 모델[business model]", "경영 혁신" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003832121303286" ],
+        "recordid" : [ "alma991003832121303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000013782552" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5270163E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2001015235", "no2013131033", "n87119493", "nb2015017519" ],
+        "aulast" : [ "Keeley", "Pikkel", "Quinn", "Walters", "유효상", "킬리", "피켈", "퀸", "월터스" ],
+        "aufirst" : [ "Larry", "Ryan", "Brian", "Helen", "래리", "라이언", "브라이언", "헬렌" ],
+        "auinit" : [ "L", "R", "B", "H", "래", "라", "브", "헬" ],
+        "addau" : [ "Keeley, Larry", "Pikkel, Ryan", "Quinn, Brian", "Walters, Helen", "유효상", "킬리, 래리", "피켈, 라이언", "퀸, 브라이언", "월터스, 헬렌" ],
+        "contributorfull" : [ "$$NKeeley, Larry$$LKeeley$$FLarry$$Rcontributor", "$$NPikkel, Ryan$$Rcontributor", "$$NQuinn, Brian$$Rcontributor", "$$NWalters, Helen$$Rcontributor", "$$N유효상$$Rcontributor", "$$N킬리, 래리$$Rcontributor", "$$N피켈, 라이언$$Rcontributor", "$$N퀸, 브라이언$$Rcontributor", "$$N월터스, 헬렌$$Rcontributor" ],
+        "addtitle" : [ "Ten types of innovation : the discipline of building breakthroughs" ],
+        "date" : [ "2015" ],
+        "isbn" : [ "9788960533691" ],
+        "notes" : [ "참고문헌: p. 252-255" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "마로니에북스" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "비즈니스 모델의 혁신 : 성공 기업을 위한 10가지 혁신 전략" ]
+      },
+      "sort" : {
+        "title" : [ "비즈니스 모델의 혁신 : 성공 기업을 위한 10가지 혁신 전략 / 래리 킬리, 라이언 피켈, 브라이언 퀸, 헬렌 월터스 지음 ; 유효상 옮김" ],
+        "author" : [ "Keeley, Larry" ],
+        "creationdate" : [ "2015" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD30.28 .K44 2015",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003832121303286",
+        "holdId" : "22298440060003286",
+        "holKey" : "HoldingResultKey [mid=22298440060003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD30.28 .K44 2015]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD30.28+.K44+2015&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "HD30.28 .K44 2015",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003832121303286",
+        "holdId" : "22298440060003286",
+        "holKey" : "HoldingResultKey [mid=22298440060003286, libraryId=117046190003286, locationCode=c3b, callNumber=HD30.28 .K44 2015]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)HD30.28+.K44+2015&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003832121303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788960533691,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788960533691&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "HD30.28 .K44 2015",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "658.401",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "11",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "34",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "3",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "5",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "28",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "15",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "91",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 100,
+    "COMBINED_SEARCH_TIME" : 111,
+    "PROCESS_COMBINED_RESULTS" : 227,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2015",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "경영 혁신",
+      "count" : "1"
+    }, {
+      "value" : "비즈니스 모델 Business Model Ksh2005016006",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Keeley Larry",
+      "count" : "1"
+    }, {
+      "value" : "Pikkel Ryan",
+      "count" : "1"
+    }, {
+      "value" : "Quinn Brian",
+      "count" : "1"
+    }, {
+      "value" : "Walters Helen",
+      "count" : "1"
+    }, {
+      "value" : "월터스 헬렌",
+      "count" : "1"
+    }, {
+      "value" : "유효상",
+      "count" : "1"
+    }, {
+      "value" : "퀸 브라이언",
+      "count" : "1"
+    }, {
+      "value" : "킬리 래리",
+      "count" : "1"
+    }, {
+      "value" : "피켈 라이언",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 132801837
+}

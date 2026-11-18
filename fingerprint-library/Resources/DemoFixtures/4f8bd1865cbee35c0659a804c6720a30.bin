@@ -1,0 +1,293 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003843521603286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "수학의 중력 : 일반상대성이론부터 양자중력까지, 우주를 지배하는 수학의 최전선 " ],
+        "format" : [ "344p. : 삽도 ; 21 cm." ],
+        "identifier" : [ "$$CISBN$$V9788990247919" ],
+        "creationdate" : [ "2025" ],
+        "creator" : [ "Nadis, Steven J.$$QNadis, Steven J." ],
+        "publisher" : [ "파주 : 동녘사이언스" ],
+        "mms" : [ "991003843521603286" ],
+        "contributor" : [ "구성동$$Q구성동", "백우진$$Q백우진", "야우싱퉁$$Q야우싱퉁", "Yau, Shing-Tung$$QYau, Shing-Tung", "네이디스, 스티브$$Q네이디스, 스티브" ],
+        "addtitle" : [ "(The) gravity of math : how geometry rules the universe" ],
+        "genre" : [ "Popular works" ],
+        "place" : [ "파주 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Gravitation$$QGravitation -- Popular works", "Gravitation -- Mathematics$$QGravitation -- Mathematics -- Popular works", "Gravitation -- History$$QGravitation -- History -- Popular works", "General relativity (Physics) -- Mathematics$$QGeneral relativity (Physics) -- Mathematics -- Popular works", "General relativity (Physics) -- History$$QGeneral relativity (Physics) -- History -- Popular works", "Black holes (Astronomy) -- Mathematics$$QBlack holes (Astronomy) -- Mathematics -- Popular works" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003843521603286" ],
+        "recordid" : [ "alma991003843521603286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000017216082" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n79120825" ],
+        "aulast" : [ "Nadis" ],
+        "aufirst" : [ "Steven J." ],
+        "auinit" : [ "S" ],
+        "au" : [ "Nadis, Steven J." ],
+        "addau" : [ "구성동", "백우진", "야우싱퉁", "Yau, Shing-Tung", "네이디스, 스티브" ],
+        "creatorfull" : [ "$$NNadis, Steven J.$$LNadis$$FSteven J.$$Rauthor" ],
+        "contributorfull" : [ "$$N구성동$$L구성동$$F$$Rcontributor", "$$N백우진$$Rcontributor", "$$N야우싱퉁$$Rcontributor", "$$NYau, Shing-Tung$$Rcontributor", "$$N네이디스, 스티브$$Rcontributor" ],
+        "addtitle" : [ "(The) gravity of math : how geometry rules the universe" ],
+        "date" : [ "2025" ],
+        "isbn" : [ "9788990247919" ],
+        "notes" : [ "주(p. 313-334) 및 찾아보기 수록" ],
+        "cop" : [ "파주" ],
+        "pub" : [ "동녘사이언스" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "수학의 중력 : 일반상대성이론부터 양자중력까지, 우주를 지배하는 수학의 최전선" ]
+      },
+      "sort" : {
+        "title" : [ "수학의 중력 : 일반상대성이론부터 양자중력까지, 우주를 지배하는 수학의 최전선 / 야우싱퉁, 스티브 네이디스 지음 ; 박초월 옮김." ],
+        "author" : [ "Nadis, Steven J." ],
+        "creationdate" : [ "2025" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QC178 .N33 2025",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003843521603286",
+        "holdId" : "22301254530003286",
+        "holKey" : "HoldingResultKey [mid=22301254530003286, libraryId=117046190003286, locationCode=c3b, callNumber=QC178 .N33 2025]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QC178+.N33+2025&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QC178 .N33 2025",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003843521603286",
+        "holdId" : "22301254530003286",
+        "holKey" : "HoldingResultKey [mid=22301254530003286, libraryId=117046190003286, locationCode=c3b, callNumber=QC178 .N33 2025]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QC178+.N33+2025&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003843521603286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788990247919,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788990247919&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QC178 .N33 2025",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "530.11",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "242",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "54",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "48",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "316",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 327,
+    "COMBINED_SEARCH_TIME" : 334,
+    "PROCESS_COMBINED_RESULTS" : 537,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2025",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Black Holes Astronomy Mathematics Popular Works",
+      "count" : "1"
+    }, {
+      "value" : "General Relativity Physics History Popular Works",
+      "count" : "1"
+    }, {
+      "value" : "General Relativity Physics Mathematics Popular Works",
+      "count" : "1"
+    }, {
+      "value" : "Gravitation History Popular Works",
+      "count" : "1"
+    }, {
+      "value" : "Gravitation Mathematics Popular Works",
+      "count" : "1"
+    }, {
+      "value" : "Gravitation Popular Works",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Nadis Steven J",
+      "count" : "1"
+    }, {
+      "value" : "Yau Shing Tung",
+      "count" : "1"
+    }, {
+      "value" : "구성동",
+      "count" : "1"
+    }, {
+      "value" : "네이디스 스티브",
+      "count" : "1"
+    }, {
+      "value" : "백우진",
+      "count" : "1"
+    }, {
+      "value" : "야우싱퉁",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -412668690
+}

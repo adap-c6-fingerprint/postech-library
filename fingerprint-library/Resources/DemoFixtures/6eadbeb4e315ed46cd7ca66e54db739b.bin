@@ -1,0 +1,276 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000913649703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(옥스토비의) 일반화학 " ],
+        "format" : [ "xxxv, 1239 p. : 천연색삽화 ; 30 cm" ],
+        "identifier" : [ "$$CISBN$$V9788992603720" ],
+        "creationdate" : [ "2014" ],
+        "creator" : [ "Oxtoby, David W.$$QOxtoby, David W." ],
+        "publisher" : [ "서울 : 사이플러스 : Science Plus" ],
+        "mms" : [ "991000913649703286" ],
+        "contributor" : [ "Gillis, H. P.$$QGillis, H. P.", "Campion , Alan$$QCampion , Alan", "옥스토비, 데이비드 W.$$Q옥스토비, 데이비드 W.", "자일리스, H. P.$$Q자일리스, H. P.", "캠피온, 앨런$$Q캠피온, 앨런", "화학교재연구회$$Q화학교재연구회" ],
+        "addtitle" : [ "Principles of modern chemistry.", "일반화학" ],
+        "edition" : [ "제7판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000913649703286" ],
+        "recordid" : [ "alma991000913649703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b14538131-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.526969E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n85043251" ],
+        "originatingSystemIDContributor" : [ "n98111992", "n84175802" ],
+        "aulast" : [ "Oxtoby" ],
+        "aufirst" : [ "David W." ],
+        "auinit" : [ "D" ],
+        "au" : [ "Oxtoby, David W." ],
+        "addau" : [ "Gillis, H. P.", "Campion , Alan", "옥스토비, 데이비드 W.", "자일리스, H. P.", "캠피온, 앨런", "화학교재연구회" ],
+        "creatorfull" : [ "$$NOxtoby, David W.$$LOxtoby$$FDavid W.$$Rauthor" ],
+        "contributorfull" : [ "$$NGillis, H. P.$$LGillis$$FH. P.$$Rcontributor", "$$NCampion , Alan$$Rcontributor", "$$N옥스토비, 데이비드 W.$$Rcontributor", "$$N자일리스, H. P.$$Rcontributor", "$$N캠피온, 앨런$$Rcontributor" ],
+        "date" : [ "2014" ],
+        "isbn" : [ "9788992603720" ],
+        "notes" : [ "서지적 각주 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "사이플러스" ],
+        "oclcid" : [ "(ptech)b14538131-82postech_inst" ],
+        "edition" : [ "제7판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(옥스토비의) 일반화학" ]
+      },
+      "sort" : {
+        "title" : [ "(옥스토비의) 일반화학 / David W. Oxtoby, H. P. Gillis, Alan Campion [공]지음 ; 화학교재연구회 옮김" ],
+        "author" : [ "Oxtoby, David W." ],
+        "creationdate" : [ "2014" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD31.2 .O98 2014",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000913649703286",
+        "holdId" : "2293281500003286",
+        "holKey" : "HoldingResultKey [mid=2293281500003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD31.2 .O98 2014]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD31.2+.O98+2014&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD31.2 .O98 2014",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000913649703286",
+        "holdId" : "2293281500003286",
+        "holKey" : "HoldingResultKey [mid=2293281500003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD31.2 .O98 2014]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD31.2+.O98+2014&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000913649703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788992603720,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788992603720&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QD31.2 .O98 2014",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qd000000000031.000000000002.o000000000098000000002014",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "40",
+    "CALL_SOLR_GET_IDS_LIST" : "25",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "83",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "32",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "77",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "162",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 1,
+    "BUILD_COMBINED_RESULTS_MAP" : 173,
+    "COMBINED_SEARCH_TIME" : 180,
+    "PROCESS_COMBINED_RESULTS" : 691,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2014",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Campion Alan",
+      "count" : "1"
+    }, {
+      "value" : "Gillis H P",
+      "count" : "1"
+    }, {
+      "value" : "Oxtoby David W",
+      "count" : "1"
+    }, {
+      "value" : "옥스토비 데이비드 W",
+      "count" : "1"
+    }, {
+      "value" : "자일리스 H P",
+      "count" : "1"
+    }, {
+      "value" : "캠피온 앨런",
+      "count" : "1"
+    }, {
+      "value" : "화학교재연구회",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 77284333
+}

@@ -1,0 +1,321 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003841811003286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(Beer의) 재료역학 " ],
+        "format" : [ "xix, 883 p. : 삽화, 도표 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9791132110910" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "Ferdinand P. Beer$$QFerdinand P. Beer" ],
+        "publisher" : [ "서울 : 맥그로힐에듀케이션코리아 유한회사" ],
+        "mms" : [ "991003841811003286" ],
+        "contributor" : [ "Beer, Ferdinand Pierre, 1915-2003$$QBeer, Ferdinand Pierre", "Johnston, E. Russell, Jr., 1925-2010$$QJohnston, E. Russell", "DeWolf, John T., Jr.$$QDeWolf, John T.", "Mazurek, David F.$$QMazurek, David F.", "Sanghi, Sanjeev$$QSanghi, Sanjeev", "고승기, 1958-$$Q고승기", "강정호, 1965-$$Q강정호", "김선진, 1960-$$Q김선진", "김연직, 1960-$$Q김연직", "이동진, 1977-$$Q이동진", "이명규, 1974-$$Q이명규", "이준성, 1963-$$Q이준성", "최동휘, 1989-$$Q최동휘", "비어, 페르디난드 P., 1915-2003$$Q비어, 페르디난드 P.", "Beer, Ferdinand P., 1915-2003$$QBeer, Ferdinand P.", "베르, 페르디난드 P., 1915-2003$$Q베르, 페르디난드 P.", "존스턴, E. 러셀, Jr. 1925-2010$$Q존스턴, E. 러셀", "데울프, 존 T., Jr.$$Q데울프, 존 T.", "마주렉, 데이비드 F.$$Q마주렉, 데이비드 F.", "상하이, 산지부$$Q상하이, 산지부" ],
+        "unititle" : [ "Mechanics of materials (8th ed.). Korean" ],
+        "includes" : [ "Ferdinand P. Beer Mechanics of materials (8th ed.). Korean$$QFerdinand P. Beer Mechanics of materials (8th ed.). Korean" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Strength of materials", "Structural analysis (Engineering)" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003841811003286" ],
+        "recordid" : [ "alma991003841811003286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016151518" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n50008142", "no2012125805" ],
+        "aulast" : [ "Ferdinand P. Beer" ],
+        "aufirst" : [ "Ferdinand Pierre", "E. Russell", "John T.", "David F.", "Sanjeev", "Ferdinand P.", "페르디난드 P.", "E. 러셀", "존 T.", "데이비드 F.", "산지부" ],
+        "auinit" : [ "J", "D", "S", "F", "페", "E", "존", "데", "산" ],
+        "au" : [ "Ferdinand P. Beer" ],
+        "addau" : [ "Beer, Ferdinand Pierre", "Johnston, E. Russell", "DeWolf, John T.", "Mazurek, David F.", "Sanghi, Sanjeev", "고승기", "강정호", "김선진", "김연직", "이동진", "이명규", "이준성", "최동휘", "비어, 페르디난드 P.", "Beer, Ferdinand P.", "베르, 페르디난드 P.", "존스턴, E. 러셀", "데울프, 존 T.", "마주렉, 데이비드 F.", "상하이, 산지부" ],
+        "creatorfull" : [ "$$NFerdinand P. Beer$$LFerdinand P. Beer$$F$$Rauthor" ],
+        "contributorfull" : [ "$$NBeer, Ferdinand Pierre$$LBeer$$FFerdinand Pierre$$Rcontributor", "$$NJohnston, E. Russell$$Rcontributor", "$$NDeWolf, John T.$$Rcontributor", "$$NMazurek, David F.$$Rcontributor", "$$NSanghi, Sanjeev$$Rcontributor", "$$N고승기$$Rcontributor", "$$N강정호$$Rcontributor", "$$N김선진$$Rcontributor", "$$N김연직$$Rcontributor", "$$N이동진$$Rcontributor", "$$N이명규$$Rcontributor", "$$N이준성$$Rcontributor", "$$N최동휘$$Rcontributor", "$$N비어, 페르디난드 P.$$Rcontributor", "$$NBeer, Ferdinand P.$$Rcontributor", "$$N베르, 페르디난드 P.$$Rcontributor", "$$N존스턴, E. 러셀$$Rcontributor", "$$N데울프, 존 T.$$Rcontributor", "$$N마주렉, 데이비드 F.$$Rcontributor", "$$N상하이, 산지부$$Rcontributor" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9791132110910" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "맥그로힐에듀케이션코리아 유한회사" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(Beer의) 재료역학" ]
+      },
+      "sort" : {
+        "title" : [ "(Beer의) 재료역학 / 저자: Ferdinand P  Beer 외 ; 역자: 고승기 외" ],
+        "author" : [ "Ferdinand P. Beer" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TA405 .B39 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003841811003286",
+        "holdId" : "22300961590003286",
+        "holKey" : "HoldingResultKey [mid=22300961590003286, libraryId=117046190003286, locationCode=c3b, callNumber=TA405 .B39 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TA405+.B39+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TA405 .B39 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003841811003286",
+        "holdId" : "22300961590003286",
+        "holKey" : "HoldingResultKey [mid=22300961590003286, libraryId=117046190003286, locationCode=c3b, callNumber=TA405 .B39 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TA405+.B39+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003841811003286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791132110910,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791132110910&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TA405 .B39 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "620.11",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "9",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "61",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "4",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "56",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "12",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "112",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 122,
+    "COMBINED_SEARCH_TIME" : 127,
+    "PROCESS_COMBINED_RESULTS" : 938,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Strength Of Materials",
+      "count" : "1"
+    }, {
+      "value" : "Structural Analysis Engineering",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Beer Ferdinand P",
+      "count" : "1"
+    }, {
+      "value" : "Beer Ferdinand Pierre",
+      "count" : "1"
+    }, {
+      "value" : "Dewolf John T",
+      "count" : "1"
+    }, {
+      "value" : "Ferdinand P Beer",
+      "count" : "1"
+    }, {
+      "value" : "Johnston E Russell",
+      "count" : "1"
+    }, {
+      "value" : "Mazurek David F",
+      "count" : "1"
+    }, {
+      "value" : "Sanghi Sanjeev",
+      "count" : "1"
+    }, {
+      "value" : "강정호",
+      "count" : "1"
+    }, {
+      "value" : "고승기",
+      "count" : "1"
+    }, {
+      "value" : "김선진",
+      "count" : "1"
+    }, {
+      "value" : "김연직",
+      "count" : "1"
+    }, {
+      "value" : "데울프 존 T",
+      "count" : "1"
+    }, {
+      "value" : "마주렉 데이비드 F",
+      "count" : "1"
+    }, {
+      "value" : "베르 페르디난드 P",
+      "count" : "1"
+    }, {
+      "value" : "비어 페르디난드 P",
+      "count" : "1"
+    }, {
+      "value" : "상하이 산지부",
+      "count" : "1"
+    }, {
+      "value" : "이동진",
+      "count" : "1"
+    }, {
+      "value" : "이명규",
+      "count" : "1"
+    }, {
+      "value" : "이준성",
+      "count" : "1"
+    }, {
+      "value" : "존스턴 E 러셀",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1294040858
+}

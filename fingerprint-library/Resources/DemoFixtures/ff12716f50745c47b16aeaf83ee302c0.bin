@@ -1,0 +1,315 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003359676103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(줌달의) 일반화학 " ],
+        "format" : [ "1139 p. : 천연색삽화, 도표 ; 28 cm" ],
+        "identifier" : [ "$$CISBN$$V9788962184327" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "Zumdahl, Steven S.$$QZumdahl, Steven S." ],
+        "publisher" : [ "서울 : 센게이지러닝코리아 : 사이플러스" ],
+        "mms" : [ "991003359676103286" ],
+        "contributor" : [ "Zumdahl, Susan A.$$QZumdahl, Susan A.", "백경구$$Q백경구", "전상일$$Q전상일", "정진승$$Q정진승", "최석정$$Q최석정", "김강진$$Q김강진", "장호겸$$Q장호겸", "조봉래$$Q조봉래", "하덕찬$$Q하덕찬", "이석우$$Q이석우", "김형수$$Q김형수", "윤용수$$Q윤용수", "이철태$$Q이철태", "정일현$$Q정일현", "홍인권$$Q홍인권", "김정균$$Q김정균", "김종식$$Q김종식", "김효준$$Q김효준", "윤진환$$Q윤진환", "이용규$$Q이용규", "이재욱$$Q이재욱", "정대일$$Q정대일", "최순규$$Q최순규", "강용철$$Q강용철", "김진연$$Q김진연", "이동국$$Q이동국", "조은범$$Q조은범", "윤미경$$Q윤미경", "이윤경$$Q이윤경", "김종현$$Q김종현", "노동윤$$Q노동윤", "이철우$$Q이철우", "채영기$$Q채영기", "정혁$$Q정혁", "하동수$$Q하동수", "신은주$$Q신은주", "곽지훈$$Q곽지훈", "고중숙$$Q고중숙", "표명호$$Q표명호", "최대옥$$Q최대옥", "장효원$$Q장효원", "송재희$$Q송재희", "심상덕$$Q심상덕", "최원호$$Q최원호", "화학교재연구회$$Q화학교재연구회" ],
+        "addtitle" : [ "Chemistry (9th ed.)" ],
+        "edition" : [ "9판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003359676103286" ],
+        "recordid" : [ "alma991003359676103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014779958" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n85295640" ],
+        "originatingSystemIDContributor" : [ "no00047906", "nr96004179", "n82246389", "n83046165", "n87852778", "n78026698", "n79029020", "n00004384" ],
+        "aulast" : [ "Zumdahl" ],
+        "aufirst" : [ "Steven S." ],
+        "auinit" : [ "S" ],
+        "au" : [ "Zumdahl, Steven S." ],
+        "addau" : [ "Zumdahl, Susan A.", "백경구", "전상일", "정진승", "최석정", "김강진", "장호겸", "조봉래", "하덕찬", "이석우", "김형수", "윤용수", "이철태", "정일현", "홍인권", "김정균", "김종식", "김효준", "윤진환", "이용규", "이재욱", "정대일", "최순규", "강용철", "김진연", "이동국", "조은범", "윤미경", "이윤경", "김종현", "노동윤", "이철우", "채영기", "정혁", "하동수", "신은주", "곽지훈", "고중숙", "표명호", "최대옥", "장효원", "송재희", "심상덕", "최원호", "화학교재연구회" ],
+        "creatorfull" : [ "$$NZumdahl, Steven S.$$LZumdahl$$FSteven S.$$Rauthor" ],
+        "contributorfull" : [ "$$NZumdahl, Susan A.$$LZumdahl$$FSusan A.$$Rcontributor", "$$N백경구$$Rcontributor", "$$N전상일$$Rcontributor", "$$N정진승$$Rcontributor", "$$N최석정$$Rcontributor", "$$N김강진$$Rcontributor", "$$N장호겸$$Rcontributor", "$$N조봉래$$Rcontributor", "$$N하덕찬$$Rcontributor", "$$N이석우$$Rcontributor", "$$N김형수$$Rcontributor", "$$N윤용수$$Rcontributor", "$$N이철태$$Rcontributor", "$$N정일현$$Rcontributor", "$$N홍인권$$Rcontributor", "$$N김정균$$Rcontributor", "$$N김종식$$Rcontributor", "$$N김효준$$Rcontributor", "$$N윤진환$$Rcontributor", "$$N이용규$$Rcontributor", "$$N이재욱$$Rcontributor", "$$N정대일$$Rcontributor", "$$N최순규$$Rcontributor", "$$N강용철$$Rcontributor", "$$N김진연$$Rcontributor", "$$N이동국$$Rcontributor", "$$N조은범$$Rcontributor", "$$N윤미경$$Rcontributor", "$$N이윤경$$Rcontributor", "$$N김종현$$Rcontributor", "$$N노동윤$$Rcontributor", "$$N이철우$$Rcontributor", "$$N채영기$$Rcontributor", "$$N정혁$$Rcontributor", "$$N하동수$$Rcontributor", "$$N신은주$$Rcontributor", "$$N곽지훈$$Rcontributor", "$$N고중숙$$Rcontributor", "$$N표명호$$Rcontributor", "$$N최대옥$$Rcontributor", "$$N장효원$$Rcontributor", "$$N송재희$$Rcontributor", "$$N심상덕$$Rcontributor", "$$N최원호$$Rcontributor" ],
+        "addtitle" : [ "Chemistry" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9788962184327" ],
+        "notes" : [ "색인:p.1133-1139" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "센게이지러닝코리아" ],
+        "edition" : [ "9판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(줌달의) 일반화학" ]
+      },
+      "sort" : {
+        "title" : [ "(줌달의) 일반화학 / Steven S. Zumdahl, Susan A. Zumdahl 지음; 화학교재연구회 옮김" ],
+        "author" : [ "Zumdahl, Steven S." ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD31.2 .Z862 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003359676103286",
+        "holdId" : "22162561710003286",
+        "holKey" : "HoldingResultKey [mid=22162561710003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD31.2 .Z862 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD31.2+.Z862+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QD31.2 .Z862 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003359676103286",
+        "holdId" : "22162561710003286",
+        "holKey" : "HoldingResultKey [mid=22162561710003286, libraryId=117046190003286, locationCode=c3b, callNumber=QD31.2 .Z862 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QD31.2+.Z862+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003359676103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788962184327,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788962184327&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QD31.2 .Z862 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qd000000000031.000000000002.z000000000862000000002018",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "11",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "55",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "5",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "49",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "15",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "111",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 130,
+    "COMBINED_SEARCH_TIME" : 138,
+    "PROCESS_COMBINED_RESULTS" : 364,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2018",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Zumdahl Steven S",
+      "count" : "1"
+    }, {
+      "value" : "Zumdahl Susan A",
+      "count" : "1"
+    }, {
+      "value" : "강용철",
+      "count" : "1"
+    }, {
+      "value" : "고중숙",
+      "count" : "1"
+    }, {
+      "value" : "곽지훈",
+      "count" : "1"
+    }, {
+      "value" : "김강진",
+      "count" : "1"
+    }, {
+      "value" : "김정균",
+      "count" : "1"
+    }, {
+      "value" : "김종식",
+      "count" : "1"
+    }, {
+      "value" : "김종현",
+      "count" : "1"
+    }, {
+      "value" : "김진연",
+      "count" : "1"
+    }, {
+      "value" : "김형수",
+      "count" : "1"
+    }, {
+      "value" : "김효준",
+      "count" : "1"
+    }, {
+      "value" : "노동윤",
+      "count" : "1"
+    }, {
+      "value" : "백경구",
+      "count" : "1"
+    }, {
+      "value" : "송재희",
+      "count" : "1"
+    }, {
+      "value" : "신은주",
+      "count" : "1"
+    }, {
+      "value" : "심상덕",
+      "count" : "1"
+    }, {
+      "value" : "윤미경",
+      "count" : "1"
+    }, {
+      "value" : "윤용수",
+      "count" : "1"
+    }, {
+      "value" : "윤진환",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1169261548
+}

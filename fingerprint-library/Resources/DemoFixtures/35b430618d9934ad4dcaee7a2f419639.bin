@@ -1,0 +1,269 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003494179103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "종의 기원 " ],
+        "format" : [ "655 p ; 20 cm" ],
+        "identifier" : [ "$$CISBN$$V9791189198862;$$CISBN$$V9791189198855(세트)" ],
+        "creationdate" : [ "2019" ],
+        "creator" : [ "Darwin, Charles Robert$$QDarwin, Charles Robert" ],
+        "publisher" : [ "서울 : 사이언스북스" ],
+        "mms" : [ "991003494179103286" ],
+        "contributor" : [ "다윈, 찰스 로버트$$Q다윈, 찰스 로버트", "장대익$$Q장대익" ],
+        "addtitle" : [ "On the Origin of Species" ],
+        "series" : [ "드디어 다윈 ; 1$$Q드디어 다윈 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "종의기원" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003494179103286" ],
+        "recordid" : [ "alma991003494179103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000355030" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "3.696001E-4" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no2010141917" ],
+        "aulast" : [ "Darwin" ],
+        "aufirst" : [ "Charles Robert" ],
+        "auinit" : [ "C" ],
+        "au" : [ "Darwin, Charles Robert" ],
+        "addau" : [ "다윈, 찰스 로버트", "장대익" ],
+        "creatorfull" : [ "$$NDarwin, Charles Robert$$LDarwin$$FCharles Robert$$Rauthor" ],
+        "contributorfull" : [ "$$N다윈, 찰스 로버트$$L다윈$$F찰스 로버트$$Rcontributor", "$$N장대익$$Rcontributor" ],
+        "addtitle" : [ "On the Origin of Species" ],
+        "date" : [ "2019" ],
+        "isbn" : [ "9791189198862", "9791189198855" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "사이언스북스" ],
+        "seriestitle" : [ "드디어 다윈 ; 1" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "종의 기원" ]
+      },
+      "sort" : {
+        "title" : [ "종의 기원 / 찰스 로버트 다윈 ; 장대익" ],
+        "author" : [ "Darwin, Charles Robert" ],
+        "creationdate" : [ "2019" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "원형서가 (2F) B: 과학 & SF & 여행",
+        "subLocationCode" : "c2sb2",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QH365 .D37 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003494179103286",
+        "holdId" : "22203812780003286",
+        "holKey" : "HoldingResultKey [mid=22203812780003286, libraryId=117046190003286, locationCode=c2sb2, callNumber=QH365 .D37 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QH365+.D37+2019&loc=Special+Collection%282F%29+B",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "원형서가 (2F) B: 과학 & SF & 여행",
+        "subLocationCode" : "c2sb2",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QH365 .D37 2019",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003494179103286",
+        "holdId" : "22203812780003286",
+        "holKey" : "HoldingResultKey [mid=22203812780003286, libraryId=117046190003286, locationCode=c2sb2, callNumber=QH365 .D37 2019]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QH365+.D37+2019&loc=Special+Collection%282F%29+B",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003494179103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791189198862,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791189198862&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QH365 .D37 2019",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qh000000000365.d000000000037000000002019",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "6",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "42",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "37",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "9",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "87",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 96,
+    "COMBINED_SEARCH_TIME" : 102,
+    "PROCESS_COMBINED_RESULTS" : 747,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2019",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "종의기원",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Darwin Charles Robert",
+      "count" : "1"
+    }, {
+      "value" : "다윈 찰스 로버트",
+      "count" : "1"
+    }, {
+      "value" : "장대익",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c2sb2",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 977429160
+}

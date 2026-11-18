@@ -1,0 +1,288 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003735245503286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(스포츠에서의) 움직임 분석과 운동 조절 " ],
+        "format" : [ "xviii, 334 p. : 천연색삽화, 도표; 26 cm." ],
+        "identifier" : [ "$$CISBN$$V9791190322324" ],
+        "creationdate" : [ "2021" ],
+        "creator" : [ "Bosch, Frans$$QBosch, Frans" ],
+        "publisher" : [ "서울 : 한미의학" ],
+        "mms" : [ "991003735245503286" ],
+        "contributor" : [ "박일봉, 1974-$$Q박일봉", "장은욱, 1981-$$Q장은욱", "정연창, 1982-$$Q정연창", "임병권$$Q임병권", "보쉬, 프란스$$Q보쉬, 프란스", "Frans Bosch$$QFrans Bosch" ],
+        "addtitle" : [ "2022년도 대한민국학술원 선정 교육부 우수학술도서", "Anatomy of Agility : movement analysis in sport" ],
+        "unititle" : [ "Anatomy of Agility. 한국어." ],
+        "includes" : [ "Bosch, Frans Anatomy of Agility. 한국어.$$QBosch, Frans Anatomy of Agility. 한국어." ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "스포츠[sports]", "스포츠 과학", "동작" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003735245503286" ],
+        "recordid" : [ "alma991003735245503286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015994872" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.52697E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "no2005002176" ],
+        "aulast" : [ "Bosch" ],
+        "aufirst" : [ "Frans" ],
+        "auinit" : [ "F" ],
+        "au" : [ "Bosch, Frans" ],
+        "addau" : [ "박일봉", "장은욱", "정연창", "임병권", "보쉬, 프란스", "Frans Bosch" ],
+        "creatorfull" : [ "$$NBosch, Frans$$LBosch$$FFrans$$Rauthor" ],
+        "contributorfull" : [ "$$N박일봉$$L박일봉$$F$$Rcontributor", "$$N장은욱$$Rcontributor", "$$N정연창$$Rcontributor", "$$N임병권$$Rcontributor", "$$N보쉬, 프란스$$Rcontributor", "$$NFrans Bosch$$Rcontributor" ],
+        "addtitle" : [ "2022년도 대한민국학술원 선정 교육부 우수학술도서", "Anatomy of Agility : movement analysis in sport" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9791190322324" ],
+        "notes" : [ "참고문헌(p. 323-332)및 색인(p. 333-334)수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한미의학" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(스포츠에서의) 움직임 분석과 운동 조절" ]
+      },
+      "sort" : {
+        "title" : [ "(스포츠에서의) 움직임 분석과 운동 조절 / Frans Bosch 지음; 박일봉 [외] 공옮김." ],
+        "author" : [ "Bosch, Frans" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QP303 .B67 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003735245503286",
+        "holdId" : "22276238300003286",
+        "holKey" : "HoldingResultKey [mid=22276238300003286, libraryId=117046190003286, locationCode=c3b, callNumber=QP303 .B67 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QP303+.B67+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QP303 .B67 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003735245503286",
+        "holdId" : "22276238300003286",
+        "holKey" : "HoldingResultKey [mid=22276238300003286, libraryId=117046190003286, locationCode=c3b, callNumber=QP303 .B67 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QP303+.B67+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003735245503286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791190322324,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791190322324&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QP303 .B67 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "796.01",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "28",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "34",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "2",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "29",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "13",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "86",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 96,
+    "COMBINED_SEARCH_TIME" : 104,
+    "PROCESS_COMBINED_RESULTS" : 548,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2021",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "동작",
+      "count" : "1"
+    }, {
+      "value" : "스포츠 Sports Ksh1998001007",
+      "count" : "1"
+    }, {
+      "value" : "스포츠 과학",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Bosch Frans",
+      "count" : "1"
+    }, {
+      "value" : "Frans Bosch",
+      "count" : "1"
+    }, {
+      "value" : "박일봉",
+      "count" : "1"
+    }, {
+      "value" : "보쉬 프란스",
+      "count" : "1"
+    }, {
+      "value" : "임병권",
+      "count" : "1"
+    }, {
+      "value" : "장은욱",
+      "count" : "1"
+    }, {
+      "value" : "정연창",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -827679700
+}

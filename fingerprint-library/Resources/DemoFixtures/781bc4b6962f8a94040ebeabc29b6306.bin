@@ -1,0 +1,287 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003584678303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(학생 성공을 위한) 대학교육 성과관리 " ],
+        "format" : [ "555 p : 삽화 ; 26 cm" ],
+        "identifier" : [ "$$CISBN$$V9788999721854" ],
+        "creationdate" : [ "2020" ],
+        "publisher" : [ "서울 : 학지사" ],
+        "mms" : [ "991003584678303286" ],
+        "contributor" : [ "이석열$$Q이석열", "이영학$$Q이영학", "이훈병$$Q이훈병", "김경언$$Q김경언", "김누리$$Q김누리", "변수연$$Q변수연", "신재영$$Q신재영", "오세원$$Q오세원", "이종일$$Q이종일", "이태희$$Q이태희", "정재민$$Q정재민" ],
+        "addtitle" : [ "대학이 살아남기 위해서는 학생이 성공해야 한다!", "Performance Management in Higher Education for Student Success" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "대학교육 학습관리" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003584678303286" ],
+        "recordid" : [ "alma991003584678303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000379660" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5269698E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n83161168", "n85176925", "nr94005761" ],
+        "aulast" : [ "이석열", "이영학", "이훈병", "김경언", "김누리", "변수연", "신재영", "오세원", "이종일", "이태희", "정재민" ],
+        "addau" : [ "이석열", "이영학", "이훈병", "김경언", "김누리", "변수연", "신재영", "오세원", "이종일", "이태희", "정재민" ],
+        "contributorfull" : [ "$$N이석열$$L이석열$$F$$Rcontributor", "$$N이영학$$Rcontributor", "$$N이훈병$$Rcontributor", "$$N김경언$$Rcontributor", "$$N김누리$$Rcontributor", "$$N변수연$$Rcontributor", "$$N신재영$$Rcontributor", "$$N오세원$$Rcontributor", "$$N이종일$$Rcontributor", "$$N이태희$$Rcontributor", "$$N정재민$$Rcontributor" ],
+        "addtitle" : [ "대학이 살아남기 위해서는 학생이 성공해야 한다!", "Performance Management in Higher Education for Student Success" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9788999721854" ],
+        "notes" : [ "참고문헌 : p. 543-549" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "학지사" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(학생 성공을 위한) 대학교육 성과관리" ]
+      },
+      "sort" : {
+        "title" : [ "(학생 성공을 위한) 대학교육 성과관리 / 이석열, 이영학, 이훈병, 김경언, 김누리, 변수연, 신재영, 오세원, 이종일, 이태희, 정재민" ],
+        "author" : [ "이석열" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB2341 .학53 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003584678303286",
+        "holdId" : "22236432490003286",
+        "holKey" : "HoldingResultKey [mid=22236432490003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB2341 .학53 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB2341+.%ED%95%9953+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "LB2341 .학53 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003584678303286",
+        "holdId" : "22236432490003286",
+        "holKey" : "HoldingResultKey [mid=22236432490003286, libraryId=117046190003286, locationCode=c3b, callNumber=LB2341 .학53 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)LB2341+.%ED%95%9953+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003584678303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788999721854,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788999721854&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "LB2341 .학53 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "lb000000002341.학000000000053000000002020",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "8",
+    "CALL_SOLR_GET_IDS_LIST" : "26",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "32",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "27",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "82",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 97,
+    "COMBINED_SEARCH_TIME" : 104,
+    "PROCESS_COMBINED_RESULTS" : 569,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2020",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "대학교육 학습관리",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "김경언",
+      "count" : "1"
+    }, {
+      "value" : "김누리",
+      "count" : "1"
+    }, {
+      "value" : "변수연",
+      "count" : "1"
+    }, {
+      "value" : "신재영",
+      "count" : "1"
+    }, {
+      "value" : "오세원",
+      "count" : "1"
+    }, {
+      "value" : "이석열",
+      "count" : "1"
+    }, {
+      "value" : "이영학",
+      "count" : "1"
+    }, {
+      "value" : "이종일",
+      "count" : "1"
+    }, {
+      "value" : "이태희",
+      "count" : "1"
+    }, {
+      "value" : "이훈병",
+      "count" : "1"
+    }, {
+      "value" : "정재민",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -535575238
+}

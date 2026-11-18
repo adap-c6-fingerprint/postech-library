@@ -1,0 +1,280 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003701055303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "2030 반도체 지정학 : 21세기 지정학 리스크 속 어떻게 반도체 초강국이 될 것인가 " ],
+        "format" : [ "355 p. : 삽화 ; 23 cm" ],
+        "identifier" : [ "$$CISBN$$V9788931558937" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "태전태언, 太田泰彦, 1961-$$Q태전태언" ],
+        "publisher" : [ "서울 : BM성안당" ],
+        "mms" : [ "991003701055303286" ],
+        "contributor" : [ "임재덕$$Q임재덕", "강유종$$Q강유종", "오타 야스히코, 1961-$$Q오타 야스히코", "Ota, Yasuhiko, 1961-$$QOta, Yasuhiko" ],
+        "addtitle" : [ "이천삼십 반도체 지정학", "이공삼공 반도체 지정학" ],
+        "series" : [ "BM성안당 ; 5893$$QBM성안당 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "반도체", "반도체 산업", "반도체 반도체산업 지정학 반도체강국 경제전망" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003701055303286" ],
+        "recordid" : [ "alma991003701055303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000016399067" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "1.5270158E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "no2024138931" ],
+        "aulast" : [ "태전태언" ],
+        "aufirst" : [ "Yasuhiko" ],
+        "auinit" : [ "Y" ],
+        "au" : [ "태전태언" ],
+        "addau" : [ "임재덕", "강유종", "오타 야스히코", "Ota, Yasuhiko" ],
+        "creatorfull" : [ "$$N태전태언$$L태전태언$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N임재덕$$L임재덕$$F$$Rcontributor", "$$N강유종$$Rcontributor", "$$N오타 야스히코$$Rcontributor", "$$NOta, Yasuhiko$$Rcontributor" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9788931558937" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "BM성안당" ],
+        "seriestitle" : [ "BM성안당 ; 5893" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "2030 반도체 지정학 : 21세기 지정학 리스크 속 어떻게 반도체 초강국이 될 것인가" ]
+      },
+      "sort" : {
+        "title" : [ "2030 반도체 지정학 : 21세기 지정학 리스크 속 어떻게 반도체 초강국이 될 것인가 / 오타 야스히코 지음 ; 임재덕 옮김" ],
+        "author" : [ "태전태언, 太田泰彦, 1961-" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK7871.85 .태74 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003701055303286",
+        "holdId" : "22267931050003286",
+        "holKey" : "HoldingResultKey [mid=22267931050003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK7871.85 .태74 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK7871.85+.%ED%83%9C74+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "TK7871.85 .태74 2022",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003701055303286",
+        "holdId" : "22267931050003286",
+        "holKey" : "HoldingResultKey [mid=22267931050003286, libraryId=117046190003286, locationCode=c3b, callNumber=TK7871.85 .태74 2022]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)TK7871.85+.%ED%83%9C74+2022&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003701055303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788931558937,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788931558937&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "TK7871.85 .태74 2022",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "621.38152",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "27",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "56",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
+    "RETRIVE_FROM_DB_RECORDS" : "3",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "50",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "6",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "10",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "106",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 117,
+    "COMBINED_SEARCH_TIME" : 124,
+    "PROCESS_COMBINED_RESULTS" : 813,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "반도체",
+      "count" : "1"
+    }, {
+      "value" : "반도체 반도체산업 지정학 반도체강국 경제전망",
+      "count" : "1"
+    }, {
+      "value" : "반도체 산업",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Ota Yasuhiko",
+      "count" : "1"
+    }, {
+      "value" : "강유종",
+      "count" : "1"
+    }, {
+      "value" : "오타 야스히코",
+      "count" : "1"
+    }, {
+      "value" : "임재덕",
+      "count" : "1"
+    }, {
+      "value" : "태전태언",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 31956236
+}
