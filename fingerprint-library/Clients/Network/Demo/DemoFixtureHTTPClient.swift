@@ -99,7 +99,8 @@ extension HTTPClient {
 }
 
 #if DEBUG
-/// 녹화 전용. 성공 응답만 저장하고, 같은 요청은 마지막 응답으로 덮어쓴다.
+/// 녹화 전용. 성공 응답과 "없음"을 뜻하는 4xx(예: Yes24 미등록 404)를 저장하고, 같은 요청은 마지막 응답으로 덮어쓴다.
+/// 일시적인 실패(429, 5xx)는 저장하지 않는다.
 nonisolated final class DemoFixtureRecorder: @unchecked Sendable {
     private let directory: URL
     private let lock = NSLock()
@@ -108,9 +109,13 @@ nonisolated final class DemoFixtureRecorder: @unchecked Sendable {
         self.directory = directory
     }
 
+    static func isRecordable(_ statusCode: Int) -> Bool {
+        (200..<300).contains(statusCode) || [404, 410].contains(statusCode)
+    }
+
     func record(_ request: URLRequest, data: Data, response: URLResponse) {
         guard
-            let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode),
+            let http = response as? HTTPURLResponse, Self.isRecordable(http.statusCode),
             let key = DemoFixtureKey.make(for: request)
         else { return }
         lock.withLock {

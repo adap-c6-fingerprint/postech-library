@@ -38,7 +38,7 @@
         "originalsourceid" : [ "000047499310" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "1.0136902" ],
+        "score" : [ "1.0135885" ],
         "isDedup" : false
       },
       "addata" : {
@@ -213,7 +213,7 @@
         "originalsourceid" : [ "b13420999-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "1.0086854" ],
+        "score" : [ "1.0089855" ],
         "isDedup" : false
       },
       "addata" : {
@@ -391,7 +391,7 @@
         "originalsourceid" : [ "000014986786" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.84204996" ],
+        "score" : [ "0.8419755" ],
         "isDedup" : false
       },
       "addata" : {
@@ -566,7 +566,7 @@
         "originalsourceid" : [ "b10683963-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.79518753" ],
+        "score" : [ "0.7954537" ],
         "isDedup" : false
       },
       "addata" : {
@@ -729,7 +729,7 @@
         "originalsourceid" : [ "b10683951-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.79518753" ],
+        "score" : [ "0.7954537" ],
         "isDedup" : false
       },
       "addata" : {
@@ -892,7 +892,7 @@
         "originalsourceid" : [ "b10683987-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.74233115" ],
+        "score" : [ "0.74259204" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1055,7 +1055,7 @@
         "originalsourceid" : [ "b10683975-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.74233115" ],
+        "score" : [ "0.74259204" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1220,7 +1220,7 @@
         "originalsourceid" : [ "000015515682" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.74160326" ],
+        "score" : [ "0.7417673" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1397,7 +1397,7 @@
         "originalsourceid" : [ "b1277988x-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.7072583" ],
+        "score" : [ "0.7072176" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1575,7 +1575,7 @@
         "originalsourceid" : [ "b12082703-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.6948403" ],
+        "score" : [ "0.6951347" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1750,7 +1750,7 @@
         "originalsourceid" : [ "b12719882-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.601312" ],
+        "score" : [ "0.60126936" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1918,7 +1918,7 @@
         "originalsourceid" : [ "b13214056-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.5363863" ],
+        "score" : [ "0.5364004" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2097,7 +2097,7 @@
         "originalsourceid" : [ "000016690559" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.520861" ],
+        "score" : [ "0.52085364" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2279,7 +2279,7 @@
         "originalsourceid" : [ "000016768889" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.51863444" ],
+        "score" : [ "0.518591" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2455,7 +2455,7 @@
         "originalsourceid" : [ "b12348478-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.51482093" ],
+        "score" : [ "0.51481164" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2634,7 +2634,7 @@
         "originalsourceid" : [ "b13421001-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.5079226" ],
+        "score" : [ "0.50811124" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2815,7 +2815,7 @@
         "originalsourceid" : [ "000000317689" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.50089765" ],
+        "score" : [ "0.50087637" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2993,7 +2993,7 @@
         "originalsourceid" : [ "b12991776-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.49228978" ],
+        "score" : [ "0.4924769" ],
         "isDedup" : false
       },
       "addata" : {
@@ -3170,7 +3170,7 @@
         "originalsourceid" : [ "000059212289" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.47091544" ],
+        "score" : [ "0.47086468" ],
         "isDedup" : false
       },
       "addata" : {
@@ -3347,7 +3347,7 @@
         "originalsourceid" : [ "000016880664" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.46762878" ],
+        "score" : [ "0.46758413" ],
         "isDedup" : false
       },
       "addata" : {
@@ -3496,22 +3496,22 @@
     }
   } ],
   "timelog" : {
-    "BUILD_RESULTS_RETRIVE_FROM_DB" : "78",
-    "CALL_SOLR_GET_IDS_LIST" : "74",
-    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "462",
-    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "40",
-    "RETRIVE_FROM_DB_COURSE_INFO" : "1",
-    "RETRIVE_FROM_DB_RECORDS" : "27",
-    "RETRIVE_FROM_DB_RELATIONS" : "1",
-    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "386",
-    "SET_AVAILABILTY_HOLDING_DEDUPS" : "76",
-    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "184",
-    "PRIMA_LOCAL_SEARCH_TOTAL" : "803",
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "56",
+    "CALL_SOLR_GET_IDS_LIST" : "101",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "457",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "15",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "28",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "382",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "75",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "162",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "782",
     "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
-    "BUILD_COMBINED_RESULTS_MAP" : 862,
-    "COMBINED_SEARCH_TIME" : 872,
+    "BUILD_COMBINED_RESULTS_MAP" : 832,
+    "COMBINED_SEARCH_TIME" : 840,
     "PROCESS_COMBINED_RESULTS" : 0,
-    "FEATURED_SEARCH_TIME" : 1
+    "FEATURED_SEARCH_TIME" : 0
   },
   "facets" : [ {
     "name" : "lang",

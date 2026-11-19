@@ -20,9 +20,18 @@ enum DemoFixtureWarmup {
         guard environment["POBOOK_DEMO_RECORD_DIR"]?.isEmpty == false else { return }
         let queries = (environment["POBOOK_DEMO_RECORD_QUERIES"] ?? "").split(separator: "|").map { String($0) }
         let includesDatasetCovers = environment["POBOOK_DEMO_RECORD_DATASET_COVERS"] == "1"
-        guard !queries.isEmpty || includesDatasetCovers else { return }
+        let includesDatasetSpines = environment["POBOOK_DEMO_RECORD_DATASET_SPINES"] == "1"
+        let includesDatasetDescriptions = environment["POBOOK_DEMO_RECORD_DATASET_DESCRIPTIONS"] == "1"
+        guard !queries.isEmpty || includesDatasetCovers || includesDatasetSpines || includesDatasetDescriptions
+                || environment["POBOOK_DEMO_RECORD_DESCRIPTION_ISBNS"]?.isEmpty == false
+        else { return }
         Task {
             if includesDatasetCovers { await recordDatasetCovers() }
+            if includesDatasetSpines { await recordDatasetSpines() }
+            if includesDatasetDescriptions { await recordDatasetDescriptions() }
+            if let isbns = environment["POBOOK_DEMO_RECORD_DESCRIPTION_ISBNS"], !isbns.isEmpty {
+                await recordDescriptions(isbns: isbns.split(separator: "|").map(String.init))
+            }
             if !queries.isEmpty { await run(queries: queries) }
             logger.notice("demo fixture warmup finished")
         }
@@ -41,12 +50,72 @@ enum DemoFixtureWarmup {
         logger.notice("recorded dataset books: \(dataset.bookCount) books")
     }
 
+    /// 도착 화면의 책등만 다시 녹화한다. 이미 받은 책등은 기기 파일에서 읽으므로 빠진 것만 요청한다.
+    static func recordDatasetSpines() async {
+        @Dependency(\.recommendationDatasetClient) var datasetClient
+        guard let dataset = try? await datasetClient.load() else {
+            logger.error("dataset load failed")
+            return
+        }
+        var failed = 0
+        for book in dataset.allBooks where await !recordSpine(of: book) { failed += 1 }
+        logger.notice("recorded dataset spines: \(dataset.bookCount) books, failed \(failed)")
+    }
+
+    /// 책 소개만 다시 녹화한다. Yes24 미등록(404) 응답도 저장해 데모에서 "정보 없음"으로 보이게 한다.
+    static func recordDatasetDescriptions() async {
+        @Dependency(\.recommendationDatasetClient) var datasetClient
+        @Dependency(\.bookDetailClient) var bookDetailClient
+        guard let dataset = try? await datasetClient.load() else {
+            logger.error("dataset load failed")
+            return
+        }
+        for book in dataset.allBooks {
+            guard let isbn13 = BookISBN.isbn13(from: book.isbn) else { continue }
+            _ = try? await bookDetailClient.fetchDescription(isbn13)
+        }
+        logger.notice("recorded dataset descriptions: \(dataset.bookCount) books")
+    }
+
+    /// 누락 검사에서 빠진 책 소개만 다시 받는다. 실패 사유를 로그로 남긴다.
+    static func recordDescriptions(isbns: [String]) async {
+        @Dependency(\.bookDetailClient) var bookDetailClient
+        var failed = 0
+        for isbn13 in isbns {
+            do {
+                _ = try await bookDetailClient.fetchDescription(isbn13)
+            } catch {
+                failed += 1
+                logger.error("description failed: \(isbn13, privacy: .public) \(String(describing: error), privacy: .public)")
+            }
+        }
+        logger.notice("recorded descriptions: \(isbns.count) books, failed \(failed)")
+    }
+
+    /// 이미지 서버가 일시적으로 실패하면 책등이 녹화되지 않으므로 몇 번 더 시도한다.
+    @discardableResult
+    private static func recordSpine(of book: Book) async -> Bool {
+        guard let isbn = book.isbn, BookISBN.isbn13(from: isbn) != nil else { return true }
+        for attempt in 0..<4 {
+            do {
+                _ = try await BookCoverPipeline.spineImage(isbn: isbn)
+                return true
+            } catch RecommendationCacheStore.CacheError.invalidImage {
+                return true // Yes24에 책등이 없는 책
+            } catch {
+                try? await Task.sleep(for: .seconds(1 + attempt))
+            }
+        }
+        logger.error("spine failed: \(isbn, privacy: .public)")
+        return false
+    }
+
     /// 상세 화면이 보내는 요청(표지, 책등, 책 소개, 소장·대출 상태)을 녹화한다.
     private static func recordDetail(of book: Book) async {
         @Dependency(\.bookDetailClient) var bookDetailClient
         @Dependency(\.bookHoldingsClient) var bookHoldingsClient
         await recordCover(of: book)
-        if let isbn = book.isbn { _ = try? await BookCoverPipeline.spineImage(isbn: isbn) }
+        await recordSpine(of: book)
         if let isbn13 = BookISBN.isbn13(from: book.isbn) { _ = try? await bookDetailClient.fetchDescription(isbn13) }
         if let recordID = BookHoldingsClient.recordID(for: book) {
             _ = try? await bookHoldingsClient.fetch(recordID)

@@ -1,0 +1,277 @@
+{
+  "info" : {
+    "totalResultsLocal" : 1,
+    "totalResultsPC" : -1,
+    "total" : 1,
+    "first" : 1,
+    "last" : 1
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000732639703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(실전)윈도우 디버깅 : 애플리케이션부터 시스템 프로그래밍까지 윈도우 프로그래밍 오류 분석과 툴 활용 기법 " ],
+        "format" : [ "xxxi, 808 p. : 삽화 ; 25 cm", "Advanced windows debugging" ],
+        "identifier" : [ "$$CISBN$$V9788960770614" ],
+        "creationdate" : [ "2008" ],
+        "publisher" : [ "의왕 : 에이콘출판" ],
+        "mms" : [ "991000732639703286" ],
+        "contributor" : [ "Hewardt, Mario$$QHewardt, Mario", "Pravat, Daniel$$QPravat, Daniel", "김점갑$$Q김점갑", "휴와츠, 마리오$$Q휴와츠, 마리오", "프라바트, 다니엘$$Q프라바트, 다니엘" ],
+        "addtitle" : [ "애플리케이션부터 시스템 프로그래밍까지 윈도우 프로그래밍 오류 분석과 툴 활용 기법", "윈도우 디버깅", "Advanced windows debugging" ],
+        "place" : [ "의왕 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "MS 윈도우[MS Windows]", "디버그[debug]", "윈도우 디버깅 애플리케이션 시스템 프로그래밍" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000732639703286" ],
+        "recordid" : [ "alma991000732639703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12939122-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.5268162E-5" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n2007051106", "n2007051108" ],
+        "aulast" : [ "Hewardt", "Pravat", "김점갑", "휴와츠", "프라바트" ],
+        "aufirst" : [ "Mario", "Daniel", "마리오", "다니엘" ],
+        "auinit" : [ "M", "D", "마", "다" ],
+        "addau" : [ "Hewardt, Mario", "Pravat, Daniel", "김점갑", "휴와츠, 마리오", "프라바트, 다니엘" ],
+        "contributorfull" : [ "$$NHewardt, Mario$$LHewardt$$FMario$$Rcontributor", "$$NPravat, Daniel$$Rcontributor", "$$N김점갑$$Rcontributor", "$$N휴와츠, 마리오$$Rcontributor", "$$N프라바트, 다니엘$$Rcontributor" ],
+        "date" : [ "2008" ],
+        "isbn" : [ "9788960770614" ],
+        "notes" : [ "색인수록" ],
+        "cop" : [ "의왕" ],
+        "pub" : [ "에이콘출판" ],
+        "oclcid" : [ "(ptech)b12939122-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(실전)윈도우 디버깅 : 애플리케이션부터 시스템 프로그래밍까지 윈도우 프로그래밍 오류 분석과 툴 활용 기법" ]
+      },
+      "sort" : {
+        "title" : [ "(실전)윈도우 디버깅 : 애플리케이션부터 시스템 프로그래밍까지 윈도우 프로그래밍 오류 분석과 툴 활용 기법 / Mario Hewardt, Daniel Pravat [같이]지음 ; 김점갑 옮김" ],
+        "author" : [ "Hewardt, Mario" ],
+        "creationdate" : [ "2008" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.76.O63 .H497 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000732639703286",
+        "holdId" : "22110580070003286",
+        "holKey" : "HoldingResultKey [mid=22110580070003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.76.O63 .H497 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.76.O63+.H497+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QA76.76.O63 .H497 2008",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000732639703286",
+        "holdId" : "22110580070003286",
+        "holKey" : "HoldingResultKey [mid=22110580070003286, libraryId=117046190003286, locationCode=c3b, callNumber=QA76.76.O63 .H497 2008]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QA76.76.O63+.H497+2008&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000732639703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788960770614,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788960770614&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QA76.76.O63 .H497 2008",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "005.43",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "7",
+    "CALL_SOLR_GET_IDS_LIST" : "31",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "39",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "1",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "2",
+    "RETRIVE_FROM_DB_RECORDS" : "2",
+    "RETRIVE_FROM_DB_RELATIONS" : "1",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "34",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "5",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "11",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "92",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 102,
+    "COMBINED_SEARCH_TIME" : 109,
+    "PROCESS_COMBINED_RESULTS" : 831,
+    "FEATURED_SEARCH_TIME" : 0
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "2008",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Ms 윈도우 Ms Windows",
+      "count" : "1"
+    }, {
+      "value" : "디버그 Debug",
+      "count" : "1"
+    }, {
+      "value" : "윈도우 디버깅 애플리케이션 시스템 프로그래밍",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Hewardt Mario",
+      "count" : "1"
+    }, {
+      "value" : "Pravat Daniel",
+      "count" : "1"
+    }, {
+      "value" : "김점갑",
+      "count" : "1"
+    }, {
+      "value" : "프라바트 다니엘",
+      "count" : "1"
+    }, {
+      "value" : "휴와츠 마리오",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : -1748994893
+}

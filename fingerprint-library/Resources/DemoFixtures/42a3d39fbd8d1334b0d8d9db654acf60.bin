@@ -1,8 +1,8 @@
 {
   "info" : {
-    "totalResultsLocal" : 9234,
+    "totalResultsLocal" : 9241,
     "totalResultsPC" : -1,
-    "total" : 9234,
+    "total" : 9241,
     "first" : 1,
     "last" : 20
   },
@@ -38,7 +38,7 @@
         "originalsourceid" : [ "991003239277703286" ],
         "sourcesystem" : [ "KERIS (KORMARC)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.83638716" ],
+        "score" : [ "0.8367233" ],
         "isDedup" : false
       },
       "addata" : {
@@ -213,7 +213,7 @@
         "originalsourceid" : [ "000014951549" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.77287614" ],
+        "score" : [ "0.7729994" ],
         "isDedup" : false
       },
       "addata" : {
@@ -388,7 +388,7 @@
         "originalsourceid" : [ "000016614096" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.7624166" ],
+        "score" : [ "0.7625217" ],
         "isDedup" : false
       },
       "addata" : {
@@ -561,7 +561,7 @@
         "originalsourceid" : [ "b10118299-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.7564982" ],
+        "score" : [ "0.7566763" ],
         "isDedup" : false
       },
       "addata" : {
@@ -724,7 +724,7 @@
         "originalsourceid" : [ "b12076211-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.7551551" ],
+        "score" : [ "0.755271" ],
         "isDedup" : false
       },
       "addata" : {
@@ -899,7 +899,7 @@
         "originalsourceid" : [ "b10620667-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.69563115" ],
+        "score" : [ "0.69574374" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1059,7 +1059,7 @@
         "originalsourceid" : [ "b10190922-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.686275" ],
+        "score" : [ "0.6864762" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1221,7 +1221,7 @@
         "originalsourceid" : [ "b13643885-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.68602765" ],
+        "score" : [ "0.6860952" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1392,7 +1392,7 @@
         "originalsourceid" : [ "b10060790-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.67074174" ],
+        "score" : [ "0.67090034" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1556,7 +1556,7 @@
         "originalsourceid" : [ "000015677054" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.64312243" ],
+        "score" : [ "0.64326656" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1734,7 +1734,7 @@
         "originalsourceid" : [ "000015401715" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.6431121" ],
+        "score" : [ "0.6432384" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1908,7 +1908,7 @@
         "originalsourceid" : [ "b10774075-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.6308099" ],
+        "score" : [ "0.63107085" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2081,7 +2081,7 @@
         "originalsourceid" : [ "000012699951" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.61061215" ],
+        "score" : [ "0.6106723" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2255,7 +2255,7 @@
         "originalsourceid" : [ "b10027889-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.59387755" ],
+        "score" : [ "0.59421605" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2419,7 +2419,7 @@
         "originalsourceid" : [ "000065859956" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.5712656" ],
+        "score" : [ "0.5713296" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2595,7 +2595,7 @@
         "originalsourceid" : [ "b14692144-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.56948256" ],
+        "score" : [ "0.56955844" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2775,7 +2775,7 @@
         "originalsourceid" : [ "b14536717-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.563672" ],
+        "score" : [ "0.5637876" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2954,7 +2954,7 @@
         "originalsourceid" : [ "b10739877-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.5592437" ],
+        "score" : [ "0.55942976" ],
         "isDedup" : false
       },
       "addata" : {
@@ -3131,7 +3131,7 @@
         "originalsourceid" : [ "000015825678" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.5388962" ],
+        "score" : [ "0.5389782" ],
         "isDedup" : false
       },
       "addata" : {
@@ -3304,7 +3304,7 @@
         "originalsourceid" : [ "b12456214-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.53733814" ],
+        "score" : [ "0.5376072" ],
         "isDedup" : false
       },
       "addata" : {
@@ -3453,28 +3453,28 @@
     }
   } ],
   "timelog" : {
-    "BUILD_RESULTS_RETRIVE_FROM_DB" : "63",
-    "CALL_SOLR_GET_IDS_LIST" : "140",
-    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "429",
-    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "18",
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "54",
+    "CALL_SOLR_GET_IDS_LIST" : "165",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "530",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "15",
     "RETRIVE_FROM_DB_COURSE_INFO" : "2",
-    "RETRIVE_FROM_DB_RECORDS" : "32",
-    "RETRIVE_FROM_DB_RELATIONS" : "3",
-    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "341",
-    "SET_AVAILABILTY_HOLDING_DEDUPS" : "88",
-    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "198",
-    "PRIMA_LOCAL_SEARCH_TOTAL" : "835",
+    "RETRIVE_FROM_DB_RECORDS" : "26",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "437",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "93",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "189",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "945",
     "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
-    "BUILD_COMBINED_RESULTS_MAP" : 1591,
-    "COMBINED_SEARCH_TIME" : 1601,
-    "PROCESS_COMBINED_RESULTS" : 1,
-    "FEATURED_SEARCH_TIME" : 1
+    "BUILD_COMBINED_RESULTS_MAP" : 976,
+    "COMBINED_SEARCH_TIME" : 984,
+    "PROCESS_COMBINED_RESULTS" : 0,
+    "FEATURED_SEARCH_TIME" : 0
   },
   "facets" : [ {
     "name" : "lang",
     "values" : [ {
       "value" : "kor",
-      "count" : "8746"
+      "count" : "8753"
     }, {
       "value" : "eng",
       "count" : "425"
@@ -3516,13 +3516,13 @@
       "count" : "2"
     }, {
       "value" : "2026",
-      "count" : "120"
+      "count" : "126"
     } ]
   }, {
     "name" : "rtype",
     "values" : [ {
       "value" : "printed_book",
-      "count" : "8656"
+      "count" : "8663"
     }, {
       "value" : "books",
       "count" : "409"
@@ -3578,6 +3578,9 @@
       "value" : "일본 현대 소설",
       "count" : "28"
     }, {
+      "value" : "한국문학",
+      "count" : "28"
+    }, {
       "value" : "한국문학 에세이",
       "count" : "28"
     }, {
@@ -3585,9 +3588,6 @@
       "count" : "27"
     }, {
       "value" : "한국 문학",
-      "count" : "27"
-    }, {
-      "value" : "한국문학",
       "count" : "27"
     }, {
       "value" : "문학 평론",
@@ -3621,7 +3621,7 @@
       "count" : "31"
     }, {
       "value" : "박완서",
-      "count" : "29"
+      "count" : "30"
     }, {
       "value" : "김난주",
       "count" : "26"
@@ -3660,25 +3660,25 @@
     "name" : "newrecords",
     "values" : [ {
       "value" : "90 days back",
-      "count" : "110"
+      "count" : "117"
     }, {
       "value" : "30 days back",
-      "count" : "71"
+      "count" : "77"
     }, {
       "value" : "07 days back",
-      "count" : "3"
+      "count" : "2"
     } ]
   }, {
     "name" : "library",
     "values" : [ {
       "value" : "3286–117046190003286",
-      "count" : "8655"
+      "count" : "8662"
     } ]
   }, {
     "name" : "location_code",
     "values" : [ {
       "value" : "3286–117046190003286–c3b",
-      "count" : "7321"
+      "count" : "7322"
     }, {
       "value" : "3286–117046190003286–c2sb1",
       "count" : "807"
@@ -3687,7 +3687,7 @@
       "count" : "235"
     }, {
       "value" : "3286–117046190003286–c2n",
-      "count" : "170"
+      "count" : "176"
     }, {
       "value" : "3286–117046190003286–c2sb2",
       "count" : "129"
@@ -3741,7 +3741,7 @@
     "name" : "tlevel",
     "values" : [ {
       "value" : "available_p",
-      "count" : "8655"
+      "count" : "8662"
     }, {
       "value" : "open_access",
       "count" : "1"

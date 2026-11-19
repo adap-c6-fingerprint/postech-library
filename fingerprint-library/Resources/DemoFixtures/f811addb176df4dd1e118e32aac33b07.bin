@@ -1,8 +1,8 @@
 {
   "info" : {
-    "totalResultsLocal" : 3856,
+    "totalResultsLocal" : 3859,
     "totalResultsPC" : -1,
-    "total" : 3856,
+    "total" : 3859,
     "first" : 1,
     "last" : 20
   },
@@ -47,7 +47,7 @@
         "originalsourceid" : [ "(CKB)5850000000650619" ],
         "sourcesystem" : [ "JP-MeKC" ],
         "sourceformat" : [ "MARC21" ],
-        "score" : [ "0.0021038053" ],
+        "score" : [ "0.0021042228" ],
         "isDedup" : false
       },
       "addata" : {
@@ -159,7 +159,7 @@
         "originalsourceid" : [ "b11117035-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "MARC21" ],
-        "score" : [ "0.0019315451" ],
+        "score" : [ "0.001931944" ],
         "isDedup" : false
       },
       "addata" : {
@@ -338,7 +338,7 @@
         "originalsourceid" : [ "000015775935" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.0014067421" ],
+        "score" : [ "0.0014070931" ],
         "isDedup" : false
       },
       "addata" : {
@@ -516,7 +516,7 @@
         "originalsourceid" : [ "000017114949" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.0013137198" ],
+        "score" : [ "0.0013137026" ],
         "isDedup" : false
       },
       "addata" : {
@@ -697,7 +697,7 @@
         "originalsourceid" : [ "000015736655" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.0012500302" ],
+        "score" : [ "0.0012503396" ],
         "isDedup" : false
       },
       "addata" : {
@@ -880,7 +880,7 @@
         "originalsourceid" : [ "(CKB)3280000000003901" ],
         "sourcesystem" : [ "CKB" ],
         "sourceformat" : [ "MARC21" ],
-        "score" : [ "0.0011952581" ],
+        "score" : [ "0.0011954679" ],
         "isDedup" : false
       },
       "addata" : {
@@ -981,7 +981,7 @@
         "originalsourceid" : [ "000052973619" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "0.0010933186" ],
+        "score" : [ "0.0010935862" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1155,7 +1155,7 @@
         "originalsourceid" : [ "000015623314" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "9.061455E-4" ],
+        "score" : [ "9.0636103E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1330,7 +1330,7 @@
         "originalsourceid" : [ "000016258828" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "8.9486444E-4" ],
+        "score" : [ "8.948692E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1507,7 +1507,7 @@
         "originalsourceid" : [ "991000000000240358" ],
         "sourcesystem" : [ "SFX" ],
         "sourceformat" : [ "MARC21" ],
-        "score" : [ "8.8157644E-4" ],
+        "score" : [ "8.817562E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1614,7 +1614,7 @@
         "originalsourceid" : [ "b13646953-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "8.7255565E-4" ],
+        "score" : [ "8.725098E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1796,7 +1796,7 @@
         "originalsourceid" : [ "(CKB)5500000000157833" ],
         "sourcesystem" : [ "CKB" ],
         "sourceformat" : [ "MARC21" ],
-        "score" : [ "8.4045297E-4" ],
+        "score" : [ "8.406424E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -1913,7 +1913,7 @@
         "originalsourceid" : [ "000014163486" ],
         "sourcesystem" : [ "KERIS (KORMARC)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "8.3726365E-4" ],
+        "score" : [ "8.374726E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2091,7 +2091,7 @@
         "originalsourceid" : [ "b1345450x-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "8.0986193E-4" ],
+        "score" : [ "8.100274E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2270,7 +2270,7 @@
         "originalsourceid" : [ "991003248479603286" ],
         "sourcesystem" : [ "KERIS (KORMARC)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "8.007765E-4" ],
+        "score" : [ "8.0097123E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2447,7 +2447,7 @@
         "originalsourceid" : [ "b13418312-82postech_inst" ],
         "sourcesystem" : [ "ILS" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "7.4629154E-4" ],
+        "score" : [ "7.4643735E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2622,7 +2622,7 @@
         "originalsourceid" : [ "(CKB)4100000007878167" ],
         "sourcesystem" : [ "EBC" ],
         "sourceformat" : [ "MARC21" ],
-        "score" : [ "7.1971974E-4" ],
+        "score" : [ "7.198221E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2742,7 +2742,7 @@
         "originalsourceid" : [ "(CKB)29526914100041" ],
         "sourcesystem" : [ "CKB" ],
         "sourceformat" : [ "MARC21" ],
-        "score" : [ "6.867258E-4" ],
+        "score" : [ "6.868676E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2857,7 +2857,7 @@
         "originalsourceid" : [ "(CKB)3710000000212931" ],
         "sourcesystem" : [ "CKB" ],
         "sourceformat" : [ "MARC21" ],
-        "score" : [ "6.5446727E-4" ],
+        "score" : [ "6.54601E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -2978,7 +2978,7 @@
         "originalsourceid" : [ "000014535734" ],
         "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
         "sourceformat" : [ "KORMARC" ],
-        "score" : [ "6.5235473E-4" ],
+        "score" : [ "6.5251376E-4" ],
         "isDedup" : false
       },
       "addata" : {
@@ -3133,28 +3133,28 @@
     }
   } ],
   "timelog" : {
-    "BUILD_RESULTS_RETRIVE_FROM_DB" : "81",
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "67",
     "CALL_SOLR_GET_IDS_LIST" : "123",
-    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "334",
-    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "18",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "315",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "16",
     "RETRIVE_FROM_DB_COURSE_INFO" : "2",
-    "RETRIVE_FROM_DB_RECORDS" : "49",
-    "RETRIVE_FROM_DB_RELATIONS" : "3",
-    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "243",
-    "SET_AVAILABILTY_HOLDING_DEDUPS" : "91",
-    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "212",
-    "PRIMA_LOCAL_SEARCH_TOTAL" : "755",
+    "RETRIVE_FROM_DB_RECORDS" : "33",
+    "RETRIVE_FROM_DB_RELATIONS" : "4",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "244",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "71",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "207",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "718",
     "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
-    "BUILD_COMBINED_RESULTS_MAP" : 819,
-    "COMBINED_SEARCH_TIME" : 826,
-    "PROCESS_COMBINED_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 759,
+    "COMBINED_SEARCH_TIME" : 768,
+    "PROCESS_COMBINED_RESULTS" : 368,
     "FEATURED_SEARCH_TIME" : 1
   },
   "facets" : [ {
     "name" : "lang",
     "values" : [ {
       "value" : "eng",
-      "count" : "3098"
+      "count" : "3101"
     }, {
       "value" : "spa",
       "count" : "269"
@@ -3226,7 +3226,7 @@
     "name" : "rtype",
     "values" : [ {
       "value" : "books",
-      "count" : "2719"
+      "count" : "2722"
     }, {
       "value" : "journals",
       "count" : "1031"
@@ -3244,13 +3244,13 @@
       "count" : "201"
     }, {
       "value" : "Turkey",
-      "count" : "170"
+      "count" : "171"
     }, {
       "value" : "User Interfaces Computer Systems",
       "count" : "163"
     }, {
       "value" : "Australia",
-      "count" : "146"
+      "count" : "149"
     }, {
       "value" : "France",
       "count" : "139"
@@ -3403,13 +3403,13 @@
       "count" : "132"
     }, {
       "value" : "open_access",
-      "count" : "584"
+      "count" : "587"
     }, {
       "value" : "peer_reviewed",
       "count" : "666"
     }, {
       "value" : "online_resources",
-      "count" : "3722"
+      "count" : "3725"
     } ]
   } ],
   "facetsCacheKey" : 1983391374

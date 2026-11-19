@@ -1,0 +1,1252 @@
+{
+  "info" : {
+    "totalResultsLocal" : 7,
+    "totalResultsPC" : -1,
+    "total" : 7,
+    "first" : 1,
+    "last" : 7
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003794555103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "동물농장 " ],
+        "format" : [ "204 p. ; cm" ],
+        "identifier" : [ "$$CISBN$$V9788931022193" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "서울 : 문예출판사" ],
+        "description" : [ "절대적으로 최고의 작품. 볼테르나 스위프트의 작품과 견줄 만하다. 《뉴요커》. 《동물농장》은 지금도 현대 역사의 어두운 면에 대한 훌륭한 풍자다. 맬컴 브래드버리" ],
+        "mms" : [ "991003794555103286" ],
+        "contributor" : [ "Orwell, George$$QOrwell, George", "오웰, 조지$$Q오웰, 조지", "김승욱$$Q김승욱" ],
+        "addtitle" : [ "Animal Farm" ],
+        "series" : [ "에디터스 컬렉션$$Q에디터스 컬렉션" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "동물농장" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003794555103286" ],
+        "recordid" : [ "alma991003794555103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000000402102" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "4.4211206" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n86825720" ],
+        "aulast" : [ "Orwell", "오웰", "김승욱" ],
+        "aufirst" : [ "George", "조지" ],
+        "auinit" : [ "G", "조" ],
+        "addau" : [ "Orwell, George", "오웰, 조지", "김승욱" ],
+        "contributorfull" : [ "$$NOrwell, George$$LOrwell$$FGeorge$$Rcontributor", "$$N오웰, 조지$$Rcontributor", "$$N김승욱$$Rcontributor" ],
+        "addtitle" : [ "Animal Farm" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9788931022193" ],
+        "abstract" : [ "절대적으로 최고의 작품. 볼테르나 스위프트의 작품과 견줄 만하다. 《뉴요커》. 《동물농장》은 지금도 현대 역사의 어두운 면에 대한 훌륭한 풍자다. 맬컴 브래드버리" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "문예출판사" ],
+        "seriestitle" : [ "에디터스 컬렉션" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "동물농장" ]
+      },
+      "sort" : {
+        "title" : [ "동물농장 / 조지 오웰 ; 김승욱" ],
+        "author" : [ "Orwell, George" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PR6029.R8 .O79 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003794555103286",
+        "holdId" : "22289661180003286",
+        "holKey" : "HoldingResultKey [mid=22289661180003286, libraryId=117046190003286, locationCode=c3b, callNumber=PR6029.R8 .O79 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PR6029.R8+.O79+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PR6029.R8 .O79 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003794555103286",
+        "holdId" : "22289661180003286",
+        "holKey" : "HoldingResultKey [mid=22289661180003286, libraryId=117046190003286, locationCode=c3b, callNumber=PR6029.R8 .O79 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PR6029.R8+.O79+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003794555103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788931022193,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788931022193&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PR6029.R8 .O79 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pr000000006029.r000000000008.o000000000079000000002021",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000455609703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "동물농장 / " ],
+        "format" : [ "160 p. ;  23 cm.", "Orwell, George", "Animal farm" ],
+        "identifier" : [ "$$CISBN$$V893746005X;$$CISBN$$V8937460009(세트)" ],
+        "creationdate" : [ "1998" ],
+        "creator" : [ "Orwell, George$$QOrwell, George" ],
+        "publisher" : [ "서울 : 민음사" ],
+        "mms" : [ "991000455609703286" ],
+        "contributor" : [ "도정일$$Q도정일", "Blair, Eric Arther$$QBlair, Eric Arther", "오웰, 조지$$Q오웰, 조지" ],
+        "series" : [ "세계문학전집 ;  5$$Q세계문학전집 ; ", "세계문학전집(민음사) ;  5$$Q세계문학전집(민음사) ; " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000455609703286" ],
+        "recordid" : [ "alma991000455609703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10748829-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.2920294" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr96042659" ],
+        "aulast" : [ "Orwell" ],
+        "aufirst" : [ "George" ],
+        "auinit" : [ "G" ],
+        "au" : [ "Orwell, George" ],
+        "addau" : [ "도정일", "Blair, Eric Arther", "오웰, 조지" ],
+        "creatorfull" : [ "$$NOrwell, George$$LOrwell$$FGeorge$$Rauthor" ],
+        "contributorfull" : [ "$$N도정일$$L도정일$$F$$Rcontributor", "$$NBlair, Eric Arther$$Rcontributor", "$$N오웰, 조지$$Rcontributor" ],
+        "date" : [ "1998" ],
+        "isbn" : [ "893746005X", "8937460009" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "민음사," ],
+        "oclcid" : [ "(ptech)b10748829-82postech_inst", "ocm190720" ],
+        "seriestitle" : [ "세계문학전집 ;  5" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "동물농장 /" ]
+      },
+      "sort" : {
+        "title" : [ "동물농장 /  조지 오웰 지음 ;  도정일 옮김." ],
+        "author" : [ "Orwell, George" ],
+        "creationdate" : [ "1998" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PN6065.K8 .세141",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000455609703286",
+        "holdId" : "2293201600003286",
+        "holKey" : "HoldingResultKey [mid=2293201600003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PN6065.K8 .세141]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PN6065.K8+.%EC%84%B8141&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "unavailable",
+        "subLocation" : "원형서가 (2F) A: 문학&예술",
+        "subLocationCode" : "c2sb1",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PN6065.K8 .세141",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000455609703286",
+        "holdId" : "2293201600003286",
+        "holKey" : "HoldingResultKey [mid=2293201600003286, libraryId=117046190003286, locationCode=c2sb1, callNumber=PN6065.K8 .세141]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PN6065.K8+.%EC%84%B8141&loc=Special+Collection%282F%29+A",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "unavailable" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000455609703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:893746005X,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=893746005X&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PN6065.K8 .세141",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "823.914",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000007319703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "동물농장 / " ],
+        "format" : [ "187 p. ;  19 cm.", "Orwell, George  Animal farm" ],
+        "creationdate" : [ "1986" ],
+        "publisher" : [ "서울 : 문예출판사 " ],
+        "mms" : [ "991000007319703286" ],
+        "contributor" : [ "오웰, 조지$$Q오웰, 조지", "김병익$$Q김병익", "Orwell, George$$QOrwell, George" ],
+        "addtitle" : [ "Animal  farm" ],
+        "series" : [ "문예교양선서$$Q문예교양선서" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000007319703286" ],
+        "recordid" : [ "alma991000007319703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10007544-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.2920294" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n81012393" ],
+        "aulast" : [ "오웰", "김병익", "Orwell" ],
+        "aufirst" : [ "조지", "George" ],
+        "auinit" : [ "조", "G" ],
+        "addau" : [ "오웰, 조지", "김병익", "Orwell, George" ],
+        "contributorfull" : [ "$$N오웰, 조지$$L오웰$$F조지$$Rcontributor", "$$N김병익$$Rcontributor", "$$NOrwell, George$$Rcontributor" ],
+        "date" : [ "1986" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "문예출판사 ," ],
+        "oclcid" : [ "(ptech)b10007544-82postech_inst", "ocm770" ],
+        "seriestitle" : [ "문예교양선서" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "동물농장 /" ]
+      },
+      "sort" : {
+        "title" : [ "동물농장 /  조지 오웰 [저] ;  김 병익 역." ],
+        "author" : [ "오웰, 조지" ],
+        "creationdate" : [ "1986" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PR6029.R8 .A5 1944",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000007319703286",
+        "holdId" : "2294923180003286",
+        "holKey" : "HoldingResultKey [mid=2294923180003286, libraryId=117046190003286, locationCode=c3b, callNumber=PR6029.R8 .A5 1944]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PR6029.R8+.A5+1944&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PR6029.R8 .A5 1944",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000007319703286",
+        "holdId" : "2294923180003286",
+        "holKey" : "HoldingResultKey [mid=2294923180003286, libraryId=117046190003286, locationCode=c3b, callNumber=PR6029.R8 .A5 1944]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PR6029.R8+.A5+1944&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000007319703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PR6029.R8 .A5 1944",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pr#6029",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000098349703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "eng" ],
+        "title" : [ "Animal Farm :  a fairy story / " ],
+        "format" : [ "259 p. ;   18 cm." ],
+        "creationdate" : [ "1981" ],
+        "publisher" : [ "서울 : 계원출판사 " ],
+        "mms" : [ "991000098349703286" ],
+        "contributor" : [ "Orwell, George$$QOrwell, George" ],
+        "addtitle" : [ "동물농장" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000098349703286" ],
+        "recordid" : [ "alma991000098349703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10122436-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.16469848" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "Orwell" ],
+        "aufirst" : [ "George" ],
+        "auinit" : [ "G" ],
+        "addau" : [ "Orwell, George" ],
+        "contributorfull" : [ "$$NOrwell, George$$LOrwell$$FGeorge$$Rcontributor" ],
+        "date" : [ "1981" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "계원출판사 ," ],
+        "oclcid" : [ "(ptech)b10122436-82postech_inst", "ocm23810" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Animal Farm :  a fairy story /" ]
+      },
+      "sort" : {
+        "title" : [ "Animal Farm :  a fairy story /  George Orwell [저] ;  이 정기 역" ],
+        "author" : [ "Orwell, George" ],
+        "creationdate" : [ "1981" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PR6029.R8 .A5 1981",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000098349703286",
+        "holdId" : "2294626590003286",
+        "holKey" : "HoldingResultKey [mid=2294626590003286, libraryId=117046190003286, locationCode=c3b, callNumber=PR6029.R8 .A5 1981]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PR6029.R8+.A5+1981&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PR6029.R8 .A5 1981",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000098349703286",
+        "holdId" : "2294626590003286",
+        "holKey" : "HoldingResultKey [mid=2294626590003286, libraryId=117046190003286, locationCode=c3b, callNumber=PR6029.R8 .A5 1981]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PR6029.R8+.A5+1981&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000098349703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PR6029.R8 .A5 1981",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pr#6029 r8",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000123079703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "eng" ],
+        "title" : [ "Animal Farm = " ],
+        "format" : [ "201 p. ;   19 cm." ],
+        "creationdate" : [ "1987" ],
+        "publisher" : [ "서울 : 시사영어사" ],
+        "mms" : [ "991000123079703286" ],
+        "contributor" : [ "Orwell, George  저$$QOrwell, George ", "시사영어사.  편집국  역$$Q시사영어사.  편집국 " ],
+        "addtitle" : [ "동물 농장" ],
+        "series" : [ "영한대역문고 ;   12$$Q영한대역문고 ;  " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000123079703286" ],
+        "recordid" : [ "alma991000123079703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10154231-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.09607412" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n82217268" ],
+        "aulast" : [ "Orwell" ],
+        "aufirst" : [ "George" ],
+        "auinit" : [ "G" ],
+        "addau" : [ "Orwell, George", "시사영어사.  편집국  역" ],
+        "contributorfull" : [ "$$NOrwell, George $$LOrwell$$FGeorge$$Rcontributor" ],
+        "date" : [ "1987" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "시사영어사," ],
+        "oclcid" : [ "(ptech)b10154231-82postech_inst", "ocm31176" ],
+        "seriestitle" : [ "영한대역문고 ;   12" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "Animal Farm =" ]
+      },
+      "sort" : {
+        "title" : [ "Animal Farm =  동물 농장 /  George Orwell 저 ;  시사영어사 편집국 역." ],
+        "author" : [ "Orwell, George  저" ],
+        "creationdate" : [ "1987" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PE1130.K8 .영92",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000123079703286",
+        "holdId" : "2288919310003286",
+        "holKey" : "HoldingResultKey [mid=2288919310003286, libraryId=117046190003286, locationCode=c3b, callNumber=PE1130.K8 .영92]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PE1130.K8+.%EC%98%8192&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PE1130.K8 .영92",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000123079703286",
+        "holdId" : "2288919310003286",
+        "holKey" : "HoldingResultKey [mid=2288919310003286, libraryId=117046190003286, locationCode=c3b, callNumber=PE1130.K8 .영92]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PE1130.K8+.%EC%98%8192&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000123079703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PE1130.K8 .영92",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pe#1130 k8",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003350378203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "마부작침 : 국민성우 안지환의 도끼 갈아 바늘 만들기 " ],
+        "format" : [ "231 p. : 삽화 ; 19 cm." ],
+        "identifier" : [ "$$CISBN$$V9791196036751" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "안지환, 1969-$$Q안지환" ],
+        "publisher" : [ "서울 : 코스모스출판사" ],
+        "mms" : [ "991003350378203286" ],
+        "addtitle" : [ "쥐약을 품고 다니던 젊은이는 어떻게 18년간 <TV 동물농장>의 목소리가 되었나?" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "성우[聲優]", "수기(글)[手記]" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003350378203286" ],
+        "recordid" : [ "alma991003350378203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014806690" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.08841599" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "안지환" ],
+        "au" : [ "안지환" ],
+        "creatorfull" : [ "$$N안지환$$L안지환$$F$$Rauthor" ],
+        "addtitle" : [ "쥐약을 품고 다니던 젊은이는 어떻게 18년간 <TV 동물농장>의 목소리가 되었나?" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9791196036751" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "코스모스출판사" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "마부작침 : 국민성우 안지환의 도끼 갈아 바늘 만들기" ]
+      },
+      "sort" : {
+        "title" : [ "마부작침 : 국민성우 안지환의 도끼 갈아 바늘 만들기 / 안지환 지음." ],
+        "author" : [ "안지환, 1969-" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PN1990.8 .안78 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003350378203286",
+        "holdId" : "22157212440003286",
+        "holKey" : "HoldingResultKey [mid=22157212440003286, libraryId=117046190003286, locationCode=c3b, callNumber=PN1990.8 .안78 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PN1990.8+.%EC%95%8878+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PN1990.8 .안78 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003350378203286",
+        "holdId" : "22157212440003286",
+        "holKey" : "HoldingResultKey [mid=22157212440003286, libraryId=117046190003286, locationCode=c3b, callNumber=PN1990.8 .안78 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PN1990.8+.%EC%95%8878+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003350378203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791196036751,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791196036751&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PN1990.8 .안78 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "811.87",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003946135303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "eng" ],
+        "title" : [ "동물농장ㅣ세계문학 053" ],
+        "identifier" : [ "$$CISBN$$V9788932962467" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "조지 오웰$$Q조지 오웰" ],
+        "publisher" : [ "열린책들" ],
+        "mms" : [ "991003946135303286" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003946135303286" ],
+        "recordid" : [ "alma991003946135303286" ],
+        "sourceid" : "alma",
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "0.06390511" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "au" : [ "조지 오웰" ],
+        "creatorfull" : [ "$$N조지 오웰$$Rauthor" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9788932962467" ],
+        "pub" : [ "열린책들" ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "동물농장ㅣ세계문학 053" ]
+      },
+      "sort" : {
+        "title" : [ "동물농장ㅣ세계문학 053" ],
+        "author" : [ "조지 오웰" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788932962467,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788932962467&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "68",
+    "CALL_SOLR_GET_IDS_LIST" : "58",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "143",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "5",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "50",
+    "RETRIVE_FROM_DB_RECORDS" : "8",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "110",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "33",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "55",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "329",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 352,
+    "COMBINED_SEARCH_TIME" : 358,
+    "PROCESS_COMBINED_RESULTS" : 408,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "4"
+    }, {
+      "value" : "eng",
+      "count" : "3"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "1981",
+      "count" : "1"
+    }, {
+      "value" : "2022",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "6"
+    }, {
+      "value" : "books",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "동물농장",
+      "count" : "1"
+    }, {
+      "value" : "성우 聲優",
+      "count" : "1"
+    }, {
+      "value" : "수기 글 手記",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "Orwell George",
+      "count" : "5"
+    }, {
+      "value" : "오웰 조지",
+      "count" : "3"
+    }, {
+      "value" : "Blair Eric Arther",
+      "count" : "1"
+    }, {
+      "value" : "김병익",
+      "count" : "1"
+    }, {
+      "value" : "김승욱",
+      "count" : "1"
+    }, {
+      "value" : "도정일",
+      "count" : "1"
+    }, {
+      "value" : "시사영어사 편집국",
+      "count" : "1"
+    }, {
+      "value" : "안지환",
+      "count" : "1"
+    }, {
+      "value" : "조지 오웰",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "6"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "5"
+    }, {
+      "value" : "3286–117046190003286–c2sb1",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "6"
+    }, {
+      "value" : "online_resources",
+      "count" : "1"
+    } ]
+  } ],
+  "facetsCacheKey" : 1370037301
+}

@@ -1,0 +1,2543 @@
+{
+  "info" : {
+    "totalResultsLocal" : 14,
+    "totalResultsPC" : -1,
+    "total" : 14,
+    "first" : 1,
+    "last" : 14
+  },
+  "highlights" : {
+    "termsUnion" : [ ]
+  },
+  "docs" : [ {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000968939703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "어린왕자 " ],
+        "format" : [ "342 p. : 삽도, 삽화 ; 20cm." ],
+        "identifier" : [ "$$CISBN$$V9791195632695" ],
+        "creationdate" : [ "2016" ],
+        "creator" : [ "Antoine-Marie de Saint-Exupery$$QAntoine-Marie de Saint-Exupery" ],
+        "publisher" : [ "서울 : 새움" ],
+        "mms" : [ "991000968939703286" ],
+        "contributor" : [ "앙투안 드 생텍쥐페리$$Q앙투안 드 생텍쥐페리", "생텍쥐페리$$Q생텍쥐페리", "이정서$$Q이정서" ],
+        "addtitle" : [ "(Le)Petit prince" ],
+        "edition" : [ "개정판" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000968939703286" ],
+        "recordid" : [ "alma991000968939703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b14754836-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.1968492" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "앙투안드생텍쥐페리", "생텍쥐페리", "이정서" ],
+        "au" : [ "Antoine-Marie de Saint-Exupery" ],
+        "addau" : [ "앙투안 드 생텍쥐페리", "생텍쥐페리", "이정서" ],
+        "creatorfull" : [ "$$NAntoine-Marie de Saint-Exupery$$Rauthor" ],
+        "contributorfull" : [ "$$N앙투안 드 생텍쥐페리$$L앙투안 드 생텍쥐페리$$F$$Rcontributor", "$$N생텍쥐페리$$Rcontributor", "$$N이정서$$Rcontributor" ],
+        "date" : [ "2016" ],
+        "isbn" : [ "9791195632695" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "새움" ],
+        "oclcid" : [ "(ptech)b14754836-82postech_inst" ],
+        "edition" : [ "개정판" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "어린왕자" ]
+      },
+      "sort" : {
+        "title" : [ "어린왕자 / 앙투안 드 생텍쥐페리 ; 이정서 옮김" ],
+        "author" : [ "Antoine-Marie de Saint-Exupery" ],
+        "creationdate" : [ "2016" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A21 .P4 2016",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000968939703286",
+        "holdId" : "2295978980003286",
+        "holKey" : "HoldingResultKey [mid=2295978980003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A21 .P4 2016]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A21+.P4+2016&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A21 .P4 2016",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000968939703286",
+        "holdId" : "2295978980003286",
+        "holKey" : "HoldingResultKey [mid=2295978980003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A21 .P4 2016]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A21+.P4+2016&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000968939703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791195632695,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791195632695&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PQ2637.A21 .P4 2016",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pq000000002637.a000000000021.p000000000004000000002016",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000150699703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "어린왕자 " ],
+        "format" : [ "112 p. : 삽도 ; 22 cm.", "De Saint-Exupery, Antoine Petit Prince" ],
+        "creationdate" : [ "1986" ],
+        "publisher" : [ "서울 : 문성당 " ],
+        "mms" : [ "991000150699703286" ],
+        "contributor" : [ "쎙 떽쥐빼리$$Q쎙 떽쥐빼리", "방곤$$Q방곤", "De Saint-Exupery, Antoine$$QDe Saint-Exupery, Antoine" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000150699703286" ],
+        "recordid" : [ "alma991000150699703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b1018773x-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "1.1968492" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "방곤", "DeSaint-Exupery" ],
+        "aufirst" : [ "Antoine" ],
+        "auinit" : [ "A" ],
+        "addau" : [ "쎙 떽쥐빼리", "방곤", "De Saint-Exupery, Antoine" ],
+        "contributorfull" : [ "$$N쎙 떽쥐빼리$$Rcontributor", "$$N방곤$$Rcontributor", "$$NDe Saint-Exupery, Antoine$$Rcontributor" ],
+        "date" : [ "1986" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "문성당" ],
+        "oclcid" : [ "(ptech)b1018773x-82postech_inst", "ocm42438" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "어린왕자" ]
+      },
+      "sort" : {
+        "title" : [ "어린왕자 / 쎙 떽쥐빼리 지음 ; 방 곤 옮김" ],
+        "author" : [ "쎙 떽쥐빼리" ],
+        "creationdate" : [ "1986" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A21 .P4 1986",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000150699703286",
+        "holdId" : "2294563560003286",
+        "holKey" : "HoldingResultKey [mid=2294563560003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A21 .P4 1986]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A21+.P4+1986&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A21 .P4 1986",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000150699703286",
+        "holdId" : "2294563560003286",
+        "holKey" : "HoldingResultKey [mid=2294563560003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A21 .P4 1986]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A21+.P4+1986&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000150699703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PQ2637.A21 .P4 1986",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pq#2637 a21",
+        "callNumberBrowseField" : "LOC_CL"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000805019703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "지구별 어른, 어린왕자를 만나다 = 아직 어른이 되기 두려운 그대에게 건네는 위로, 그리고 가슴 따뜻한 격려 " ],
+        "format" : [ "275 p. : 삽화 ; 20cm.", "(Le)Petit prince" ],
+        "identifier" : [ "$$CISBN$$V9788957978764" ],
+        "creationdate" : [ "2011" ],
+        "creator" : [ "Saint-Exupery, Antoune de$$QSaint-Exupery, Antoune de" ],
+        "publisher" : [ "서울 : 지식의숲넥서스" ],
+        "description" : [ "지금의 자리에 서고 보니 젊음은 무릎이 깨져도 다시 일어설 수 있는 특권이라고 생각됩니다. 고통 속에서 태어난 진주처럼 누구나 절망과 슬픔을 이겨내야 비로소 희망과 기쁨을 맛볼 수 있습니다. 어린왕자는 그런 젊은이들에게 순수함으로 위로와 격려를 전하며 새롭게 나아갈 수 있는 용기를 줍니다. 비록 지금의 현실이 너무 힘들더라도 ‘젊음’이라는 특권을 가지고 항상 도전하는 인생을 살길 응원합니다. _이어령(전 문화부 장관)" ],
+        "mms" : [ "991000805019703286" ],
+        "contributor" : [ "생텍쥐페리, 앙투안 드$$Q생텍쥐페리, 앙투안 드", "정희재$$Q정희재" ],
+        "addtitle" : [ "Petit prince", "Grown Earthling Meets the Little Prince" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "지구별 어른 어린왕자" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000805019703286" ],
+        "recordid" : [ "alma991000805019703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b13457779-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.6508583" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "Saint-Exupery" ],
+        "aufirst" : [ "Antoune de" ],
+        "auinit" : [ "A" ],
+        "au" : [ "Saint-Exupery, Antoune de" ],
+        "addau" : [ "생텍쥐페리, 앙투안 드", "정희재" ],
+        "creatorfull" : [ "$$NSaint-Exupery, Antoune de$$LSaint-Exupery$$FAntoune de$$Rauthor" ],
+        "contributorfull" : [ "$$N생텍쥐페리, 앙투안 드$$L생텍쥐페리$$F앙투안 드$$Rcontributor", "$$N정희재$$Rcontributor" ],
+        "date" : [ "2011" ],
+        "isbn" : [ "9788957978764" ],
+        "abstract" : [ "지금의 자리에 서고 보니 젊음은 무릎이 깨져도 다시 일어설 수 있는 특권이라고 생각됩니다. 고통 속에서 태어난 진주처럼 누구나 절망과 슬픔을 이겨내야 비로소 희망과 기쁨을 맛볼 수 있습니다. 어린왕자는 그런 젊은이들에게 순수함으로 위로와 격려를 전하며 새롭게 나아갈 수 있는 용기를 줍니다. 비록 지금의 현실이 너무 힘들더라도 ‘젊음’이라는 특권을 가지고 항상 도전하는 인생을 살길 응원합니다. _이어령(전 문화부 장관)" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "지식의숲넥서스" ],
+        "oclcid" : [ "(ptech)b13457779-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "지구별 어른, 어린왕자를 만나다 = 아직 어른이 되기 두려운 그대에게 건네는 위로, 그리고 가슴 따뜻한 격려" ]
+      },
+      "sort" : {
+        "title" : [ "지구별 어른, 어린왕자를 만나다 = (A)Grown Earthling Meets the Little Prince : 아직 어른이 되기 두려운 그대에게 건네는 위로, 그리고 가슴 따뜻한 격려 / 생텍쥐페리 ; 정희재" ],
+        "author" : [ "Saint-Exupery, Antoune de" ],
+        "creationdate" : [ "2011" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A274 .지16 2011",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000805019703286",
+        "holdId" : "2296328740003286",
+        "holKey" : "HoldingResultKey [mid=2296328740003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A274 .지16 2011]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A274+.%EC%A7%8016+2011&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A274 .지16 2011",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000805019703286",
+        "holdId" : "2296328740003286",
+        "holKey" : "HoldingResultKey [mid=2296328740003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A274 .지16 2011]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A274+.%EC%A7%8016+2011&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000805019703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788957978764,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788957978764&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PQ2637.A274 .지16 2011",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "895.745",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000384709703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(CD-ROM과 함께 떠나는) 어린왕자의 별자리여행 / " ],
+        "format" : [ "도판[4장], 415 p. :  삽도 ;  23cm +  CD-ROM 1매." ],
+        "identifier" : [ "$$CISBN$$V8986865483 " ],
+        "creationdate" : [ "1999" ],
+        "creator" : [ "김상구$$Q김상구" ],
+        "publisher" : [ "서울 : 한승" ],
+        "mms" : [ "991000384709703286" ],
+        "addtitle" : [ "CD-ROM과 함께 떠나는 어린왕자의 별자리여행" ],
+        "series" : [ "한승유레카 ;  18$$Q한승유레카 ; " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000384709703286" ],
+        "recordid" : [ "alma991000384709703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10638775-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.41502434" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "김상구" ],
+        "au" : [ "김상구" ],
+        "creatorfull" : [ "$$N김상구$$L김상구$$F$$Rauthor" ],
+        "date" : [ "1999 - 1998", "1999" ],
+        "isbn" : [ "8986865483" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "한승," ],
+        "oclcid" : [ "(ptech)b10638775-82postech_inst", "ocm164973" ],
+        "seriestitle" : [ "한승유레카 ;  18" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(CD-ROM과 함께 떠나는) 어린왕자의 별자리여행 /" ]
+      },
+      "sort" : {
+        "title" : [ "(CD-ROM과 함께 떠나는) 어린왕자의 별자리여행 /  김상구 지음." ],
+        "author" : [ "김상구" ],
+        "creationdate" : [ "1999" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB802 .김52 1999",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000384709703286",
+        "holdId" : "2290237920003286",
+        "holKey" : "HoldingResultKey [mid=2290237920003286, libraryId=117046190003286, locationCode=c3b, callNumber=QB802 .김52 1999]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB802+.%EA%B9%8052+1999&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB802 .김52 1999",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000384709703286",
+        "holdId" : "2290237920003286",
+        "holKey" : "HoldingResultKey [mid=2290237920003286, libraryId=117046190003286, locationCode=c3b, callNumber=QB802 .김52 1999]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB802+.%EA%B9%8052+1999&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      }, {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "딸림자료2층",
+        "subLocationCode" : "c3a",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "QB802 .김52 1999",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000384709703286",
+        "holdId" : "2290237940003286",
+        "holKey" : "HoldingResultKey [mid=2290237940003286, libraryId=117046190003286, locationCode=c3a, callNumber=QB802 .김52 1999]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)QB802+.%EA%B9%8052+1999&loc=%EB%94%B8%EB%A6%BC%EC%9E%90%EB%A3%8C2%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:1"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : true,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : true,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000384709703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        }, {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000384709703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:1"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8986865483,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8986865483&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "QB802 .김52 1999",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "qb000000000802.김000000000052000000001999",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003735242203286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "납골당의 어린왕자 " ],
+        "format" : [ "12책 ; 19 cm" ],
+        "identifier" : [ "$$CISBN$$V9791160850628(1);$$CISBN$$V9791160850857(2);$$CISBN$$V9791160850864(3);$$CISBN$$V9791160853131(4);$$CISBN$$V9791160853148(5);$$CISBN$$V9791160855135(6);$$CISBN$$V9791160855142(7);$$CISBN$$V9791160857986(8);$$CISBN$$V9791160857993(9);$$CISBN$$V9791160857740(10);$$CISBN$$V9791160857757(11);$$CISBN$$V9791160858501(12);$$CISBN$$V9791160850635(세트)" ],
+        "creationdate" : [ "2017" ],
+        "publisher" : [ "과천 : 이미지프레임" ],
+        "mms" : [ "991003735242203286" ],
+        "contributor" : [ "퉁구스카$$Q퉁구스카", "노뉴$$Q노뉴", "MARCH$$QMARCH" ],
+        "place" : [ "과천 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003735242203286" ],
+        "recordid" : [ "alma991003735242203286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015588923" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.23347533" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "aulast" : [ "노뉴", "MARCH" ],
+        "addau" : [ "퉁구스카", "노뉴", "MARCH" ],
+        "contributorfull" : [ "$$N퉁구스카$$Rcontributor", "$$N노뉴$$Rcontributor", "$$NMARCH$$Rcontributor" ],
+        "date" : [ "2017 - 2022", "2017" ],
+        "isbn" : [ "9791160850628", "9791160850857", "9791160850864", "9791160853131", "9791160853148", "9791160855135", "9791160855142", "9791160857986", "9791160857993", "9791160857740", "9791160857757", "9791160858501", "9791160850635" ],
+        "cop" : [ "과천" ],
+        "pub" : [ "이미지프레임" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "납골당의 어린왕자" ]
+      },
+      "sort" : {
+        "title" : [ "납골당의 어린왕자 / 퉁구스카 지음 ; 노뉴 [등] 표지그림" ],
+        "author" : [ "퉁구스카" ],
+        "creationdate" : [ "2017" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL994.828.K8784 .납15",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003735242203286",
+        "holdId" : "22276237470003286",
+        "holKey" : "HoldingResultKey [mid=22276237470003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL994.828.K8784 .납15]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL994.828.K8784+.%EB%82%A915&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL994.828.K8784 .납15",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003735242203286",
+        "holdId" : "22276237470003286",
+        "holKey" : "HoldingResultKey [mid=22276237470003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL994.828.K8784 .납15]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL994.828.K8784+.%EB%82%A915&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003735242203286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791160850628(1),OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791160850628(1)&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL994.828.K8784 .납15",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pl000000000994.000000000828.k000000008784.납000000000015",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000263759703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "눈먼 어린왕자 / " ],
+        "format" : [ "229 p. ;  22 cm.", "Couderc, Claude  Un Amour Clair-Obscur" ],
+        "identifier" : [ "$$CISBN$$V8980430043" ],
+        "creationdate" : [ "1995" ],
+        "publisher" : [ "서울 : 그린 " ],
+        "mms" : [ "991000263759703286" ],
+        "contributor" : [ "쿠데르크, 클로드$$Q쿠데르크, 클로드", "이미숙  옮김$$Q이미숙 " ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000263759703286" ],
+        "recordid" : [ "alma991000263759703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b10420472-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.23347533" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n81100819" ],
+        "aulast" : [ "쿠데르크", "이미숙" ],
+        "aufirst" : [ "클로드" ],
+        "auinit" : [ "클" ],
+        "addau" : [ "쿠데르크, 클로드", "이미숙" ],
+        "contributorfull" : [ "$$N쿠데르크, 클로드$$L쿠데르크$$F클로드$$Rcontributor", "$$N이미숙 $$Rcontributor" ],
+        "date" : [ "1995" ],
+        "isbn" : [ "8980430043" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "그린 ," ],
+        "oclcid" : [ "(ptech)b10420472-82postech_inst", "ocm118487" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "눈먼 어린왕자 /" ]
+      },
+      "sort" : {
+        "title" : [ "눈먼 어린왕자 /  클로드 쿠데르크 ;  이미숙 옮김." ],
+        "author" : [ "쿠데르크, 클로드" ],
+        "creationdate" : [ "1995" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PC3402 .C68 1995",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000263759703286",
+        "holdId" : "2290565360003286",
+        "holKey" : "HoldingResultKey [mid=2290565360003286, libraryId=117046190003286, locationCode=c3b, callNumber=PC3402 .C68 1995]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PC3402+.C68+1995&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PC3402 .C68 1995",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000263759703286",
+        "holdId" : "2290565360003286",
+        "holKey" : "HoldingResultKey [mid=2290565360003286, libraryId=117046190003286, locationCode=c3b, callNumber=PC3402 .C68 1995]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PC3402+.C68+1995&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000263759703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8980430043,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8980430043&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PC3402 .C68 1995",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "pc000000003402.c000000000068000000001995",
+        "callNumberBrowseField" : "LOCAL_CL_09X"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003293279803286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "어린 왕자와의 일주일 " ],
+        "format" : [ "351 p. : 삽화 ; 20 cm" ],
+        "identifier" : [ "$$CISBN$$V9791196369507" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "독고$$Q독고" ],
+        "publisher" : [ "서울 : 프로작북스" ],
+        "mms" : [ "991003293279803286" ],
+        "contributor" : [ "신은정$$Q신은정" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "Saint-Exupéry, Antoine de, 1900-1944 Petit prince" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003293279803286" ],
+        "recordid" : [ "alma991003293279803286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000042512413" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.20429093" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDSubject" : [ "n87116210" ],
+        "aulast" : [ "신은정" ],
+        "au" : [ "독고" ],
+        "addau" : [ "신은정" ],
+        "creatorfull" : [ "$$N독고$$Rauthor" ],
+        "contributorfull" : [ "$$N신은정$$L신은정$$F$$Rcontributor" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9791196369507" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "프로작북스" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "어린 왕자와의 일주일" ]
+      },
+      "sort" : {
+        "title" : [ "어린 왕자와의 일주일 = (Une) semaine avec le petit prince / 독고 지음 ; 신은정 삽화" ],
+        "author" : [ "독고" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL980.3. 장883 .어298 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003293279803286",
+        "holdId" : "22134982990003286",
+        "holKey" : "HoldingResultKey [mid=22134982990003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL980.3. 장883 .어298 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL980.3.+%EC%9E%A5883+.%EC%96%B4298+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL980.3. 장883 .어298 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003293279803286",
+        "holdId" : "22134982990003286",
+        "holKey" : "HoldingResultKey [mid=22134982990003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL980.3. 장883 .어298 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL980.3.+%EC%9E%A5883+.%EC%96%B4298+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003293279803286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791196369507,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791196369507&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL980.3. 장883 .어298 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "843",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003570073303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor;eng" ],
+        "title" : [ "나도 이제 영어로 읽는다 : 어린 왕자 편 " ],
+        "format" : [ "373 p : 천연색삽화 ; 19 cm" ],
+        "identifier" : [ "$$CISBN$$V9791197005619;$$CISBN$$V9791197005602 (세트)" ],
+        "creationdate" : [ "2020" ],
+        "creator" : [ "Saint-Exupery, Antoine de, 1900-1944$$QSaint-Exupery, Antoine de" ],
+        "publisher" : [ "부산 : 동행" ],
+        "mms" : [ "991003570073303286" ],
+        "contributor" : [ "Oh, Steve$$QOh, Steve", "생텍쥐페리, 앙투안 드$$Q생텍쥐페리, 앙투안 드" ],
+        "addtitle" : [ "사전 없이도 읽을 수 있는 단계별 영어원서", "(Le) Petit Prince", "Petit Prince" ],
+        "series" : [ "단계별 영어 원서$$Q단계별 영어 원서" ],
+        "place" : [ "부산 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "영어학습 영어대본 프랑스소설" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003570073303286" ],
+        "recordid" : [ "alma991003570073303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015598107" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.1751065" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n80126188" ],
+        "aulast" : [ "Saint-Exupery" ],
+        "aufirst" : [ "Antoine de" ],
+        "auinit" : [ "A" ],
+        "au" : [ "Saint-Exupery, Antoine de" ],
+        "addau" : [ "Oh, Steve", "생텍쥐페리, 앙투안 드" ],
+        "creatorfull" : [ "$$NSaint-Exupery, Antoine de$$LSaint-Exupery$$FAntoine de$$Rauthor" ],
+        "contributorfull" : [ "$$NOh, Steve$$LOh$$FSteve$$Rcontributor", "$$N생텍쥐페리, 앙투안 드$$Rcontributor" ],
+        "addtitle" : [ "사전 없이도 읽을 수 있는 단계별 영어원서", "(Le) Petit Prince", "Petit Prince" ],
+        "date" : [ "2020" ],
+        "isbn" : [ "9791197005619", "9791197005602" ],
+        "cop" : [ "부산" ],
+        "pub" : [ "동행" ],
+        "seriestitle" : [ "단계별 영어 원서" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "나도 이제 영어로 읽는다 : 어린 왕자 편" ]
+      },
+      "sort" : {
+        "title" : [ "나도 이제 영어로 읽는다 : 어린 왕자 편 / 앙투안 드 생텍쥐페리 지음 ; Steve Oh 영어번역" ],
+        "author" : [ "Saint-Exupery, Antoine de, 1900-1944" ],
+        "creationdate" : [ "2020" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A274 .P48 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003570073303286",
+        "holdId" : "22232250900003286",
+        "holKey" : "HoldingResultKey [mid=22232250900003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A274 .P48 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A274+.P48+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A274 .P48 2020",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003570073303286",
+        "holdId" : "22232250900003286",
+        "holKey" : "HoldingResultKey [mid=22232250900003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A274 .P48 2020]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A274+.P48+2020&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003570073303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791197005619,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791197005619&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PQ2637.A274 .P48 2020",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "843.9",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991000611179703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "(어린 왕자의)영문법 길들이기 " ],
+        "format" : [ "286 p. : 삽도 ; 23 cm + 녹음 카세트 2개" ],
+        "identifier" : [ "$$CISBN$$V8982205861" ],
+        "creationdate" : [ "2005" ],
+        "creator" : [ "이재웅$$Q이재웅" ],
+        "publisher" : [ "서울 : 넥서스English" ],
+        "mms" : [ "991000611179703286" ],
+        "addtitle" : [ "The little prince english clinic", "영문법 길들이기" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "영문법[英文法]" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991000611179703286" ],
+        "recordid" : [ "alma991000611179703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "b12100274-82postech_inst" ],
+        "sourcesystem" : [ "ILS" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.1751065" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n88291228" ],
+        "aulast" : [ "이재웅" ],
+        "au" : [ "이재웅" ],
+        "creatorfull" : [ "$$N이재웅$$L이재웅$$F$$Rauthor" ],
+        "date" : [ "2005" ],
+        "isbn" : [ "8982205861" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "넥서스English" ],
+        "oclcid" : [ "(ptech)b12100274-82postech_inst" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "(어린 왕자의)영문법 길들이기" ],
+        "url" : [ "http://www.riss4u.net/keris_abstoc.jsp?no=09990773" ]
+      },
+      "sort" : {
+        "title" : [ "(어린 왕자의)영문법 길들이기 = The little prince english clinic / 이재웅 지음" ],
+        "author" : [ "이재웅" ],
+        "creationdate" : [ "2005" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "딸림자료2층",
+        "subLocationCode" : "c3a",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PE1112 .이73 2005",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000611179703286",
+        "holdId" : "2289204400003286",
+        "holKey" : "HoldingResultKey [mid=2289204400003286, libraryId=117046190003286, locationCode=c3a, callNumber=PE1112 .이73 2005]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PE1112+.%EC%9D%B473+2005&loc=%EB%94%B8%EB%A6%BC%EC%9E%90%EB%A3%8C2%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "딸림자료2층",
+        "subLocationCode" : "c3a",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PE1112 .이73 2005",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000611179703286",
+        "holdId" : "2289204400003286",
+        "holKey" : "HoldingResultKey [mid=2289204400003286, libraryId=117046190003286, locationCode=c3a, callNumber=PE1112 .이73 2005]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PE1112+.%EC%9D%B473+2005&loc=%EB%94%B8%EB%A6%BC%EC%9E%90%EB%A3%8C2%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      }, {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PE1112 .이73 2005",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991000611179703286",
+        "holdId" : "2289204370003286",
+        "holKey" : "HoldingResultKey [mid=2289204370003286, libraryId=117046190003286, locationCode=c3b, callNumber=PE1112 .이73 2005]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PE1112+.%EC%9D%B473+2005&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:1"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : true,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : true,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000611179703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        }, {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991000611179703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:1"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:8982205861,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=8982205861&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "linktorsrc",
+        "linkURL" : "http://www.riss4u.net/keris_abstoc.jsp?no=09990773",
+        "displayLabel" : "Table of Contents"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PE1112 .이73 2005",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "425",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003781854103286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "어린 왕자 : 1943년 오리지널 초판본 표지디자인 " ],
+        "format" : [ "149 p. : 삽화(일부천연색) ; 19 cm" ],
+        "identifier" : [ "$$CISBN$$V9791164455300" ],
+        "creationdate" : [ "2021" ],
+        "publisher" : [ "서울 : 더스토리 : 미르북컴퍼니" ],
+        "mms" : [ "991003781854103286" ],
+        "contributor" : [ "Saint Exupéry, Antoine de, 1900-1944$$QSaint Exupéry, Antoine de", "김미정$$Q김미정", "생텍쥐페리, 앙투안 드, 1900-1944$$Q생텍쥐페리, 앙투안 드" ],
+        "addtitle" : [ "Petit prince" ],
+        "unititle" : [ "Petit prince. 한국어" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "프랑스 소설" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003781854103286" ],
+        "recordid" : [ "alma991003781854103286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014935648" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.1459221" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "n80126188" ],
+        "aulast" : [ "SaintExupéry", "김미정", "생텍쥐페리" ],
+        "aufirst" : [ "Antoine de", "앙투안 드" ],
+        "auinit" : [ "A", "앙" ],
+        "addau" : [ "Saint Exupéry, Antoine de", "김미정", "생텍쥐페리, 앙투안 드" ],
+        "contributorfull" : [ "$$NSaint Exupéry, Antoine de$$LSaint Exupéry$$FAntoine de$$Rcontributor", "$$N김미정$$Rcontributor", "$$N생텍쥐페리, 앙투안 드$$Rcontributor" ],
+        "addtitle" : [ "Petit prince" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9791164455300" ],
+        "notes" : [ "\"작가 연보\" 수록" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "더스토리" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "어린 왕자 : 1943년 오리지널 초판본 표지디자인" ]
+      },
+      "sort" : {
+        "title" : [ "어린 왕자 : 1943년 오리지널 초판본 표지디자인 / 앙투안 드 생텍쥐페리 지음 ; 김미정 옮김" ],
+        "author" : [ "Saint Exupéry, Antoine de, 1900-1944" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A21 .P4 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003781854103286",
+        "holdId" : "22286859430003286",
+        "holKey" : "HoldingResultKey [mid=22286859430003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A21 .P4 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A21+.P4+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PQ2637.A21 .P4 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003781854103286",
+        "holdId" : "22286859430003286",
+        "holKey" : "HoldingResultKey [mid=22286859430003286, libraryId=117046190003286, locationCode=c3b, callNumber=PQ2637.A21 .P4 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PQ2637.A21+.P4+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003781854103286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791164455300,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791164455300&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PQ2637.A21 .P4 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "843.912",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003491164303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "어린왕자의 눈 : 인생에서 중요한 것을 알아보는 지혜 " ],
+        "format" : [ "279 p : 천연색삽화 ; 21 cm" ],
+        "identifier" : [ "$$CISBN$$V9788968331688" ],
+        "creationdate" : [ "2018" ],
+        "creator" : [ "주보송 周保松$$Q주보송" ],
+        "publisher" : [ "서울 : 블랙피쉬 : 백도씨" ],
+        "mms" : [ "991003491164303286" ],
+        "contributor" : [ "최지희$$Q최지희" ],
+        "addtitle" : [ "小王子的領悟", "소왕자적영오" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003491164303286" ],
+        "recordid" : [ "alma991003491164303286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000014724771" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.1459221" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDContributor" : [ "nr2006029583" ],
+        "aulast" : [ "주보송" ],
+        "au" : [ "주보송" ],
+        "addau" : [ "최지희" ],
+        "creatorfull" : [ "$$N주보송$$L주보송$$F$$Rauthor" ],
+        "contributorfull" : [ "$$N최지희$$L최지희$$F$$Rcontributor" ],
+        "addtitle" : [ "小王子的領悟" ],
+        "date" : [ "2018" ],
+        "isbn" : [ "9788968331688" ],
+        "notes" : [ "참고문헌 : p. 273-279" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "블랙피쉬" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "어린왕자의 눈 : 인생에서 중요한 것을 알아보는 지혜" ]
+      },
+      "sort" : {
+        "title" : [ "어린왕자의 눈 : 인생에서 중요한 것을 알아보는 지혜 / 저우바오쑹 지음 ; 최지희 옮김" ],
+        "author" : [ "주보송 周保松" ],
+        "creationdate" : [ "2018" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "B29 .주45 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003491164303286",
+        "holdId" : "22202667970003286",
+        "holKey" : "HoldingResultKey [mid=22202667970003286, libraryId=117046190003286, locationCode=c3b, callNumber=B29 .주45 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)B29+.%EC%A3%BC45+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "B29 .주45 2018",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003491164303286",
+        "holdId" : "22202667970003286",
+        "holKey" : "HoldingResultKey [mid=22202667970003286, libraryId=117046190003286, locationCode=c3b, callNumber=B29 .주45 2018]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)B29+.%EC%A3%BC45+2018&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003491164303286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788968331688,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788968331688&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "B29 .주45 2018",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "170.44",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003647840703286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "Printed_Book" ],
+        "language" : [ "kor" ],
+        "title" : [ "비닐봉투가 먹어치운 대왕고래 : 어린왕자의 푸른별 여행 이야기 " ],
+        "format" : [ "159 p. : 삽화 ; 20 cm." ],
+        "identifier" : [ "$$CISBN$$V9791196816841" ],
+        "creationdate" : [ "2021" ],
+        "creator" : [ "김영훈$$Q김영훈" ],
+        "publisher" : [ "서울 : 생각굽기" ],
+        "mms" : [ "991003647840703286" ],
+        "place" : [ "서울 :" ],
+        "version" : [ "0" ],
+        "subject" : [ "한국 현대 소설" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003647840703286" ],
+        "recordid" : [ "alma991003647840703286" ],
+        "sourceid" : "alma",
+        "originalsourceid" : [ "000015849945" ],
+        "sourcesystem" : [ "KERIS (KORMARC & MARC21)" ],
+        "sourceformat" : [ "KORMARC" ],
+        "score" : [ "0.116737664" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "originatingSystemIDAuthor" : [ "n88026733" ],
+        "aulast" : [ "김영훈" ],
+        "au" : [ "김영훈" ],
+        "creatorfull" : [ "$$N김영훈$$L김영훈$$F$$Rauthor" ],
+        "date" : [ "2021" ],
+        "isbn" : [ "9791196816841" ],
+        "cop" : [ "서울" ],
+        "pub" : [ "생각굽기" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "비닐봉투가 먹어치운 대왕고래 : 어린왕자의 푸른별 여행 이야기" ]
+      },
+      "sort" : {
+        "title" : [ "비닐봉투가 먹어치운 대왕고래 : 어린왕자의 푸른별 여행 이야기 / 김영훈 지음." ],
+        "author" : [ "김영훈" ],
+        "creationdate" : [ "2021" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL959.55.김64 .비198 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003647840703286",
+        "holdId" : "22252965910003286",
+        "holKey" : "HoldingResultKey [mid=22252965910003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL959.55.김64 .비198 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL959.55.%EA%B9%8064+.%EB%B9%84198+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      },
+      "holding" : [ {
+        "isValidUser" : true,
+        "organization" : "82POSTECH_INST",
+        "libraryCode" : "MAIN",
+        "availabilityStatus" : "available",
+        "subLocation" : "단행본3층",
+        "subLocationCode" : "c3b",
+        "mainLocation" : "박태준학술정보관",
+        "callNumber" : "PL959.55.김64 .비198 2021",
+        "callNumberType" : "0",
+        "holdingURL" : "OVP",
+        "adaptorid" : "ALMA_01",
+        "ilsApiId" : "991003647840703286",
+        "holdId" : "22252965910003286",
+        "holKey" : "HoldingResultKey [mid=22252965910003286, libraryId=117046190003286, locationCode=c3b, callNumber=PL959.55.김64 .비198 2021]",
+        "matchForHoldings" : [ {
+          "matchOn" : "MainLocation",
+          "holdingRecord" : "852##b"
+        } ],
+        "stackMapUrl" : "https://postechlibrary.github.io/postechlibrary-map/?cn=)PL959.55.%EA%B9%8064+.%EB%B9%84198+2021&loc=%EB%8B%A8%ED%96%89%EB%B3%B83%EC%B8%B5",
+        "relatedTitle" : null,
+        "translateRelatedTitle" : null,
+        "yearFilter" : null,
+        "volumeFilter" : null,
+        "singleUnavailableItemProcessType" : null,
+        "boundWith" : false,
+        "@id" : "_:0"
+      } ],
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-P" ],
+      "serviceMode" : [ "ovp" ],
+      "availability" : [ "available_in_library" ],
+      "availabilityLinks" : [ "detailsgetit1" ],
+      "availabilityLinksUrl" : [ ],
+      "displayedAvailability" : null,
+      "displayLocation" : true,
+      "additionalLocations" : false,
+      "titleRequestableAtItemLevel" : false,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : false,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ {
+        "category" : "Alma-P",
+        "links" : [ {
+          "isLinktoOnline" : false,
+          "getItTabText" : "service_getit",
+          "adaptorid" : "ALMA_01",
+          "ilsApiId" : "991003647840703286",
+          "link" : "OVP",
+          "inst4opac" : "82POSTECH_INST",
+          "displayText" : null,
+          "@id" : "_:0"
+        } ]
+      } ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9791196816841,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9791196816841&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "PL959.55.김64 .비198 2021",
+        "callNumberBrowseField" : "0"
+      },
+      "bibVirtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : true,
+        "callNumber" : "811.37",
+        "callNumberBrowseField" : "DEWEY_DECIMAL_CLASSIFICATION"
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003946231903286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "eng" ],
+        "title" : [ "어린 왕자(개정판)" ],
+        "identifier" : [ "$$CISBN$$V9788931021318" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "앙투안 드 생텍쥐페리$$Q앙투안 드 생텍쥐페리" ],
+        "publisher" : [ "문예출판사" ],
+        "mms" : [ "991003946231903286" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003946231903286" ],
+        "recordid" : [ "alma991003946231903286" ],
+        "sourceid" : "alma",
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "0.06670724" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "au" : [ "앙투안 드 생텍쥐페리" ],
+        "creatorfull" : [ "$$N앙투안 드 생텍쥐페리$$Rauthor" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9788931021318" ],
+        "pub" : [ "문예출판사" ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "어린 왕자(개정판)" ]
+      },
+      "sort" : {
+        "title" : [ "어린 왕자(개정판)" ],
+        "author" : [ "앙투안 드 생텍쥐페리" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788931021318,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788931021318&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      }
+    }
+  }, {
+    "context" : "L",
+    "adaptor" : "Local Search Engine",
+    "@id" : "https://ap01.alma.exlibrisgroup.com/primaws/rest/pub/pnxs/L/991003946033303286",
+    "pnx" : {
+      "display" : {
+        "source" : [ "Alma" ],
+        "type" : [ "book" ],
+        "language" : [ "eng" ],
+        "title" : [ "어린 왕자: 0629 에디션" ],
+        "identifier" : [ "$$CISBN$$V9788931021240" ],
+        "creationdate" : [ "2022" ],
+        "creator" : [ "앙투안 드 생텍쥐페리$$Q앙투안 드 생텍쥐페리" ],
+        "publisher" : [ "문예출판사" ],
+        "mms" : [ "991003946033303286" ],
+        "version" : [ "0" ]
+      },
+      "control" : {
+        "sourcerecordid" : [ "991003946033303286" ],
+        "recordid" : [ "alma991003946033303286" ],
+        "sourceid" : "alma",
+        "sourceformat" : [ "MARC21" ],
+        "score" : [ "0.06670724" ],
+        "isDedup" : false
+      },
+      "addata" : {
+        "au" : [ "앙투안 드 생텍쥐페리" ],
+        "creatorfull" : [ "$$N앙투안 드 생텍쥐페리$$Rauthor" ],
+        "date" : [ "2022" ],
+        "isbn" : [ "9788931021240" ],
+        "pub" : [ "문예출판사" ],
+        "format" : [ "book" ],
+        "genre" : [ "book" ],
+        "ristype" : [ "BOOK" ],
+        "btitle" : [ "어린 왕자: 0629 에디션" ]
+      },
+      "sort" : {
+        "title" : [ "어린 왕자: 0629 에디션" ],
+        "author" : [ "앙투안 드 생텍쥐페리" ],
+        "creationdate" : [ "2022" ]
+      },
+      "facets" : {
+        "frbrtype" : [ "6" ]
+      }
+    },
+    "delivery" : {
+      "bestlocation" : null,
+      "holding" : null,
+      "electronicServices" : null,
+      "additionalElectronicServices" : null,
+      "filteredByGroupServices" : null,
+      "quickAccessService" : null,
+      "deliveryCategory" : [ "Alma-E" ],
+      "serviceMode" : [ "Viewit" ],
+      "availability" : [ "not_restricted" ],
+      "availabilityLinks" : null,
+      "availabilityLinksUrl" : null,
+      "displayedAvailability" : "Not available",
+      "displayLocation" : null,
+      "additionalLocations" : null,
+      "titleRequestableAtItemLevel" : null,
+      "physicalItemTextCodes" : null,
+      "feDisplayOtherLocations" : null,
+      "almaInstitutionsList" : [ ],
+      "recordInstitutionCode" : null,
+      "recordOwner" : "82POSTECH_INST",
+      "hasFilteredServices" : null,
+      "digitalAuxiliaryMode" : false,
+      "digitalAuxiliaryThumbnail" : false,
+      "hideResourceSharing" : false,
+      "sharedDigitalCandidates" : null,
+      "consolidatedCoverage" : null,
+      "electronicContextObjectId" : null,
+      "almaOpenurl" : null,
+      "GetIt1" : [ ],
+      "physicalServiceId" : null,
+      "link" : [ {
+        "@id" : ":_0",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://proxy-ap.hosted.exlibrisgroup.com/exl_rewrite/books.google.com/books?bibkeys=ISBN:9788931021240,OCLC:,LCCN:&jscmd=viewapi&callback=updateGBSCover",
+        "displayLabel" : "thumbnail"
+      }, {
+        "@id" : ":_1",
+        "linkType" : "thumbnail",
+        "linkURL" : "https://local.4libs.org/apps/summon/PrimoBookCover.php?isbn=9788931021240&institute=82KC-P",
+        "displayLabel" : "thumbnail"
+      } ],
+      "hasD" : null
+    },
+    "enrichment" : {
+      "virtualBrowseObject" : {
+        "isVirtualBrowseEnabled" : false,
+        "callNumber" : "",
+        "callNumberBrowseField" : ""
+      }
+    }
+  } ],
+  "timelog" : {
+    "BUILD_RESULTS_RETRIVE_FROM_DB" : "145",
+    "CALL_SOLR_GET_IDS_LIST" : "50",
+    "PRIMA_LOCAL_SEARCH_SET_AVALIABILITY" : "488",
+    "RETRIVE_COLLECTION_DISCOVERY_INFO" : "32",
+    "RETRIVE_FROM_DB_COURSE_INFO" : "61",
+    "RETRIVE_FROM_DB_RECORDS" : "44",
+    "RETRIVE_FROM_DB_RELATIONS" : "2",
+    "SET_AVAILABILTY_GET_LIBRARY_DETAILS" : "376",
+    "SET_AVAILABILTY_HOLDING_DEDUPS" : "112",
+    "PRIMA_LOCAL_INFO_FACETS_BUILD_DOCS_HIGHLIGHTS" : "140",
+    "PRIMA_LOCAL_SEARCH_TOTAL" : "829",
+    "BUILD_BLEND_AND_CACHE_RESULTS" : 0,
+    "BUILD_COMBINED_RESULTS_MAP" : 864,
+    "COMBINED_SEARCH_TIME" : 873,
+    "PROCESS_COMBINED_RESULTS" : 152,
+    "FEATURED_SEARCH_TIME" : 1
+  },
+  "facets" : [ {
+    "name" : "lang",
+    "values" : [ {
+      "value" : "kor",
+      "count" : "12"
+    }, {
+      "value" : "eng",
+      "count" : "3"
+    } ]
+  }, {
+    "name" : "creationdate",
+    "values" : [ {
+      "value" : "1986",
+      "count" : "1"
+    }, {
+      "value" : "2022",
+      "count" : "3"
+    } ]
+  }, {
+    "name" : "rtype",
+    "values" : [ {
+      "value" : "printed_book",
+      "count" : "12"
+    }, {
+      "value" : "books",
+      "count" : "2"
+    } ]
+  }, {
+    "name" : "topic",
+    "values" : [ {
+      "value" : "Saint Exupéry Antoine De 1900 1944 Petit Prince",
+      "count" : "1"
+    }, {
+      "value" : "영문법 英文法",
+      "count" : "1"
+    }, {
+      "value" : "영어학습 영어대본 프랑스소설",
+      "count" : "1"
+    }, {
+      "value" : "지구별 어른 어린왕자",
+      "count" : "1"
+    }, {
+      "value" : "프랑스 소설",
+      "count" : "1"
+    }, {
+      "value" : "한국 현대 소설",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "creator",
+    "values" : [ {
+      "value" : "생텍쥐페리 앙투안 드",
+      "count" : "3"
+    }, {
+      "value" : "앙투안 드 생텍쥐페리",
+      "count" : "3"
+    }, {
+      "value" : "Antoine Marie De Saint Exupery",
+      "count" : "1"
+    }, {
+      "value" : "De Saint Exupery Antoine",
+      "count" : "1"
+    }, {
+      "value" : "March",
+      "count" : "1"
+    }, {
+      "value" : "Oh Steve",
+      "count" : "1"
+    }, {
+      "value" : "Saint Exupery Antoine De",
+      "count" : "1"
+    }, {
+      "value" : "Saint Exupery Antoune De",
+      "count" : "1"
+    }, {
+      "value" : "Saint Exupéry Antoine De",
+      "count" : "1"
+    }, {
+      "value" : "김미정",
+      "count" : "1"
+    }, {
+      "value" : "김상구",
+      "count" : "1"
+    }, {
+      "value" : "김영훈",
+      "count" : "1"
+    }, {
+      "value" : "노뉴",
+      "count" : "1"
+    }, {
+      "value" : "독고",
+      "count" : "1"
+    }, {
+      "value" : "방곤",
+      "count" : "1"
+    }, {
+      "value" : "생텍쥐페리",
+      "count" : "1"
+    }, {
+      "value" : "신은정",
+      "count" : "1"
+    }, {
+      "value" : "쎙 떽쥐빼리",
+      "count" : "1"
+    }, {
+      "value" : "이미숙",
+      "count" : "1"
+    }, {
+      "value" : "이재웅",
+      "count" : "1"
+    } ]
+  }, {
+    "name" : "library",
+    "values" : [ {
+      "value" : "3286–117046190003286",
+      "count" : "12"
+    } ]
+  }, {
+    "name" : "location_code",
+    "values" : [ {
+      "value" : "3286–117046190003286–c3b",
+      "count" : "12"
+    }, {
+      "value" : "3286–117046190003286–c3a",
+      "count" : "2"
+    } ]
+  }, {
+    "name" : "tlevel",
+    "values" : [ {
+      "value" : "available_p",
+      "count" : "12"
+    }, {
+      "value" : "online_resources",
+      "count" : "2"
+    } ]
+  } ],
+  "facetsCacheKey" : 1853650449
+}
